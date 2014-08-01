@@ -1,10 +1,10 @@
 {
   "name": "alinex-validator",
   "version": "0.0.0",
-  "description": "",
+  "description": "Validator with additional sanitize of simple and complex values.",
   "copyright": "Alexander Schilling 2014",
   "private": false,
-  "keywords": [],
+  "keywords": ["check", "validate", "sanitize"],
   "homepage": "http://alinex.github.io/node-validator/",
   "repository": {
     "type": "git",
@@ -26,9 +26,12 @@
   "directories": {
     "lib": "./lib"
   },
-  "dependencies": {},
+  "dependencies": {
+    "debug": "1.x"
+  },
   "devDependencies": {
-    "alinex-make": "0.2.x"
+    "alinex-make": "0.2.x",
+    "chai": "1.x"
   },
   "optionalDependencies": {},
   "engines": {
