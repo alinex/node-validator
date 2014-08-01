@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>README.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="doc-style.css" />
+  <script src="doc-filelist.js"></script>
+  <script>
+    var relativeDir = "", thisFile = "home/alex/a3/node-validator/README.md", defaultSidebar = true;
+  </script>
+  <script src="doc-script.js"></script>
+  <script src="fileSearch.js"></script>
+  <script src="goToLine.js"></script>
+  <link rel="stylesheet" href="fileSearch.css" />
+  <link rel="stylesheet" href="goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#package%3A%20alinex-validator">Package: alinex-validator</a>
+      </div>
+      <div class="heading h2">
+        <a href="#install">Install</a>
+      </div>
+      <div class="heading h2">
+        <a href="#usage">Usage</a>
+      </div>
+      <div class="heading h3">
+        <a href="#only%20test">Only test</a>
+      </div>
+      <div class="heading h3">
+        <a href="#get%20description">Get description</a>
+      </div>
+      <div class="heading h2">
+        <a href="#type">Type</a>
+      </div>
+      <div class="heading h3">
+        <a href="#type.boolean">type.boolean</a>
+      </div>
+      <div class="heading h3">
+        <a href="#integer">integer</a>
+      </div>
+      <div class="heading h3">
+        <a href="#float">float</a>
+      </div>
+      <div class="heading h3">
+        <a href="#string">string</a>
+      </div>
+      <div class="heading h3">
+        <a href="#list">list</a>
+      </div>
+      <div class="heading h3">
+        <a href="#enum">enum</a>
+      </div>
+      <div class="heading h3">
+        <a href="#set">set</a>
+      </div>
+      <div class="heading h3">
+        <a href="#hash">hash</a>
+      </div>
+      <div class="heading h2">
+        <a href="#license">License</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="docs markdown">
+<div class="pilwrap" id="package%3A%20alinex-validator">
+  <h1>
+    <a href="#package%3A%20alinex-validator" name="package%3A%20alinex-validator" class="pilcrow">&#182;</a>
+    Package: alinex-validator
+  </h1>
+</div>
+
+
+<p><a href="https://travis-ci.org/alinex/node-validator"><img src="https://travis-ci.org/alinex/node-validator.svg?branch=master" alt="Build Status" title="" /></a>
+<a href="https://coveralls.io/r/alinex/node-validator?branch=master"><img src="https://coveralls.io/repos/alinex/node-validator/badge.png?branch=master" alt="Coverage Status" title="" /></a>
+<a href="https://gemnasium.com/alinex/node-validator"><img src="https://gemnasium.com/alinex/node-validator.png" alt="Dependency Status" title="" /></a></p>
+
+<p>This module will help validating complex structures. And may be used for all
+external information.</p>
+
+<ul>
+<li>check value against options configuration</li>
+<li>understandable errors</li>
+<li>easy checking of values</li>
+<li>may check complex structures</li>
+<li>can give a human readable description</li>
+</ul>
+
+<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
+following the code standards defined there.</p>
+
+
+<div class="pilwrap" id="install">
+  <h2>
+    <a href="#install" name="install" class="pilcrow">&#182;</a>
+    Install
+  </h2>
+</div>
+
+
+<p>The easiest way is to let npm add the module directly:</p>
+
+
+<div class="highlight"><pre><code><span class="o">&gt;</span> <span class="nx">npm</span> <span class="nx">install</span> <span class="nx">alinex</span><span class="o">-</span><span class="nx">validator</span> <span class="o">--</span><span class="nx">save</span>
+</code></pre></div>
+
+
+
+<p><a href="https://nodei.co/npm/alinex-validator/"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
+
+
+<div class="pilwrap" id="usage">
+  <h2>
+    <a href="#usage" name="usage" class="pilcrow">&#182;</a>
+    Usage
+  </h2>
+</div>
+
+
+<p>To use the validator you have to first include it:</p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">validator</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;alinex-validator&#39;</span><span class="p">);</span>
+</code></pre></div>
+
+
+
+<p>Most checks are synchronous and may be called synchronously or asynchronously.
+Only if an asynchronous check is called synchronously it will throw an Error.</p>
+
+<p>Synchronous call:</p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+  <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">minvalue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">maxvalue</span><span class="o">:</span> <span class="mi">100</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>Asynchronous call:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+  <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">minvalue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">maxvalue</span><span class="o">:</span> <span class="mi">100</span>
+  <span class="p">}</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// error handling</span>
+  <span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
+    <span class="c1">// do something with value</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>The checks are split up into several packages to load on demand.</p>
+
+
+<div class="pilwrap" id="only%20test">
+  <h3>
+    <a href="#only%20test" name="only%20test" class="pilcrow">&#182;</a>
+    Only test
+  </h3>
+</div>
+
+
+<p>If you won't change the value it is possible to call a simplified form:</p>
+
+
+<div class="highlight"><pre><code><span class="k">if</span> <span class="p">(</span><span class="nx">Validator</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+  <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">minvalue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">maxvalue</span><span class="o">:</span> <span class="mi">100</span>
+  <span class="p">}</span>
+<span class="p">}))</span> <span class="p">{</span>
+  <span class="c1">// do something</span>
+<span class="p">};</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="get%20description">
+  <h3>
+    <a href="#get%20description" name="get%20description" class="pilcrow">&#182;</a>
+    Get description
+  </h3>
+</div>
+
+
+<p>This method may be used to get a human readable description of how a value
+has to be to validate.</p>
+
+
+<div class="highlight"><pre><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">describe</span><span class="p">({</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+  <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">minvalue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nx">maxvalue</span><span class="o">:</span> <span class="mi">100</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="type">
+  <h2>
+    <a href="#type" name="type" class="pilcrow">&#182;</a>
+    Type
+  </h2>
+</div>
+
+
+<p>This package contains the basic checks which consists of some of the basic
+language types with different options.</p>
+
+
+<div class="pilwrap" id="type.boolean">
+  <h3>
+    <a href="#type.boolean" name="type.boolean" class="pilcrow">&#182;</a>
+    type.boolean
+  </h3>
+</div>
+
+
+<p>The value has to be a boolean. The value will be true for 1, 'true', 'on',
+'yes' and it will be considered as false for 0, 'false', 'off', 'no', '.
+Other values are not allowed.</p>
+
+<p><strong>Options:</strong> None</p>
+
+<p><strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;verboseMode&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.boolean&#39;</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="integer">
+  <h3>
+    <a href="#integer" name="integer" class="pilcrow">&#182;</a>
+    integer
+  </h3>
+</div>
+
+
+
+<div class="pilwrap" id="float">
+  <h3>
+    <a href="#float" name="float" class="pilcrow">&#182;</a>
+    float
+  </h3>
+</div>
+
+
+
+<div class="pilwrap" id="string">
+  <h3>
+    <a href="#string" name="string" class="pilcrow">&#182;</a>
+    string
+  </h3>
+</div>
+
+
+
+<div class="pilwrap" id="list">
+  <h3>
+    <a href="#list" name="list" class="pilcrow">&#182;</a>
+    list
+  </h3>
+</div>
+
+
+
+<div class="pilwrap" id="enum">
+  <h3>
+    <a href="#enum" name="enum" class="pilcrow">&#182;</a>
+    enum
+  </h3>
+</div>
+
+
+
+<div class="pilwrap" id="set">
+  <h3>
+    <a href="#set" name="set" class="pilcrow">&#182;</a>
+    set
+  </h3>
+</div>
+
+
+
+<div class="pilwrap" id="hash">
+  <h3>
+    <a href="#hash" name="hash" class="pilcrow">&#182;</a>
+    hash
+  </h3>
+</div>
+
+
+
+<div class="pilwrap" id="license">
+  <h2>
+    <a href="#license" name="license" class="pilcrow">&#182;</a>
+    License
+  </h2>
+</div>
+
+
+<p>Copyright 2014 Alexander Schilling</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<blockquote>
+  <p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</blockquote>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p></div>
+  </div>
+</body>
+</html>

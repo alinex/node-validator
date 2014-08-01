@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>index.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/index.coffee", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+  <script src="../fileSearch.js"></script>
+  <script src="../goToLine.js"></script>
+  <link rel="stylesheet" href="../fileSearch.css" />
+  <link rel="stylesheet" href="../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#validator">Validator</a>
+      </div>
+      <div class="heading h2">
+        <a href="#get%20the%20type%20functions">Get the type functions</a>
+      </div>
+      <div class="heading h2">
+        <a href="#check%20if%20value%20is%20valid">Check if value is valid</a>
+      </div>
+      <div class="heading h2">
+        <a href="#check%20value%20and%20sanitize">Check value and sanitize</a>
+      </div>
+      <div class="heading h2">
+        <a href="#check%20if%20value%20is%20valid">Check if value is valid</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="validator">
+  <h1>
+    <a href="#validator" name="validator" class="pilcrow">&#182;</a>
+    Validator
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="get%20the%20type%20functions">
+  <h2>
+    <a href="#get%20the%20type%20functions" name="get%20the%20type%20functions" class="pilcrow">&#182;</a>
+    Get the type functions
+  </h2>
+</div>
+
+
+<p>This small helper will load the package and return the specific type hash.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">getType = </span><span class="nf">(name) -&gt;</span>
+  <span class="p">[</span><span class="nx">group</span><span class="p">,</span> <span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="nx">name</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\./</span>
+  <span class="nv">mod = </span><span class="nx">require</span> <span class="s">&quot;./</span><span class="si">#{</span><span class="nx">group</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">mod</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="check%20if%20value%20is%20valid">
+  <h2>
+    <a href="#check%20if%20value%20is%20valid" name="check%20if%20value%20is%20valid" class="pilcrow">&#182;</a>
+    Check if value is valid
+  </h2>
+</div>
+
+
+<p>This will check the given value against the checks defined in the options.
+It will only give a value of true or false to the callback.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.is = </span><span class="nf">(name, value, options, cb) -&gt;</span>
+  <span class="nx">exports</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nf">(err) -&gt;</span>
+    <span class="nx">cb</span> <span class="o">not</span> <span class="nx">err</span><span class="o">?</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="check%20value%20and%20sanitize">
+  <h2>
+    <a href="#check%20value%20and%20sanitize" name="check%20value%20and%20sanitize" class="pilcrow">&#182;</a>
+    Check value and sanitize
+  </h2>
+</div>
+
+
+<p>This will check the given value, sanitize it and return the new value or an
+Error to the callback.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.check = </span><span class="nf">(name, value, options, cb) -&gt;</span>
+  <span class="nx">getType</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">check</span><span class="p">).</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">cb</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="check%20if%20value%20is%20valid">
+  <h2>
+    <a href="#check%20if%20value%20is%20valid" name="check%20if%20value%20is%20valid" class="pilcrow">&#182;</a>
+    Check if value is valid
+  </h2>
+</div>
+
+
+<p>This will directly return the description of how the value has to be.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.describe = </span><span class="nf">(options) -&gt;</span>
+  <span class="nx">getType</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">check</span><span class="p">).</span><span class="nx">describe</span> <span class="nx">options</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
