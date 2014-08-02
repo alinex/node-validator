@@ -35,6 +35,14 @@ To use the validator you have to first include it:
 
     var validator = require('alinex-validator');
 
+All checks are called with:
+
+- a `name` which should specify where the value comes from and is used in error
+  reporting.
+- the `value` to check
+- an `options` array which specifies what to check
+- and optionally a `callback` function
+
 Most checks are synchronous and may be called synchronously or asynchronously.
 Only if an asynchronous check is called synchronously it will throw an Error.
 
@@ -94,7 +102,7 @@ has to be to validate.
     });
 
 
-Type
+Type checks
 -------------------------------------------------
 This package contains the basic checks which consists of some of the basic
 language types with different options.
@@ -113,13 +121,20 @@ __Example:__
       type: 'type.boolean'
     });
 
-### integer
-### float
-### string
-### list
-### enum
-### set
-### hash
+### type.string
+
+This will test for strings and have lots of sanitize and optimization filters
+and also different check settings to use.
+
+__Sanitize options:__
+__Validate options:__
+
+### type.integer
+### type.float
+### type.list
+### type.enum
+### type.set
+### type.hash
 
 
 License

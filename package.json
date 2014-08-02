@@ -4,7 +4,11 @@
   "description": "Validator with additional sanitize of simple and complex values.",
   "copyright": "Alexander Schilling 2014",
   "private": false,
-  "keywords": ["check", "validate", "sanitize"],
+  "keywords": [
+    "check",
+    "validate",
+    "sanitize"
+  ],
   "homepage": "http://alinex.github.io/node-validator/",
   "repository": {
     "type": "git",
@@ -31,7 +35,8 @@
   },
   "devDependencies": {
     "alinex-make": "0.2.x",
-    "chai": "1.x"
+    "chai": "1.x",
+    "alinex-error": "~0.2.2"
   },
   "optionalDependencies": {},
   "engines": {
