@@ -51,13 +51,13 @@ exports.boolean =
 # - `stripTags` - remove all html tags
 # - `trim` - strip whitespace from the beginning and end
 # - `crop` - crop text after number of characters
+# - `lowercase` - set to `true` or `first`
+# - `uppercase` - set to `true` or `first`
 #
 # Check options:
 #
 # - `minLength` - minimum text length in characters
 # - `maxLength` - maximum text length in characters
-# - `whitelist` - characters which are allowed (as one text string)
-# - `blacklist` - characters which are disallowed (as one text string)
 # - `values` - array of possible values (complete text)
 # - `startsWith` - start of text
 # - `endsWith` - end of text
@@ -78,13 +78,55 @@ exports.string =
     if options.replace?
       for [pattern, replace] in options.replace
         value = value.replace pattern, replace
-    if options.stripTags
+    if options.stripTags?
       value = value.replace /<\/?[^>]+(>|$)/g, ''
-    if options.trim
+    if options.trim?
       value = value.trim()
-    if options.crop
+    if options.crop?
       value = value.substring 0, options.crop
+    if options.lowercase? and options.lowercase is true
+      value = value.toLowerCase()
+    if options.uppercase? and options.uppercase is true
+      value = value.toUpperCase()
+    if options.lowercase? and options.lowercase is 'first'
+      value = value.charAt(0).toLowerCase() + value[1..]
+    if options.uppercase? and options.uppercase is 'first'
+      value = value.charAt(0).toUpperCase() + value[1..]
     # validate
+    if options.minlength? and value.length < options.minlength
+      return done new Error("The given string '#{value}' is too short for
+        #{name}, at most #{options.minlength} characters are needed."), null, cb
+    if options.maxlength? and value.length > options.maxlength
+      return done new Error("The given string '#{value}' is too long for
+        #{name}, at least #{options.maxlength} characters are allowed."), null, cb
+    if options.values? and not (value in options.values)
+      return done new Error("The given string '#{value}' is not in the list of
+        allowed phrases (#{options.values}) for #{name}."), null, cb
+    if options.startsWith? and value[..options.startsWith.length-1] isnt options.startsWith
+      return done new Error("The given string '#{value}' should start with
+        '#{options.startsWith}' for #{name}."), null, cb
+    if options.endsWith? and value[value.length-options.endsWith.length..] isnt options.endsWith
+      return done new Error("The given string '#{value}' should end with
+        '#{options.endsWith}' for #{name}."), null, cb
+    if options.match?
+      if options.match instanceof RegExp and not value.match options.match
+        return done new Error("The given string '#{value}' should match against
+          '#{options.match}' for #{name}."), null, cb
+      else if not ~value.indexOf options.match
+        return done new Error("The given string '#{value}' should contain
+          '#{options.match}' for #{name}."), null, cb
+    if options.matchNot?
+      if options.matchNot instanceof RegExp and value.matchNot options.match
+        return done new Error("The given string '#{value}' shouldn't match against
+          '#{options.matchNot}' for #{name}."), null, cb
+      else if ~value.indexOf options.matchNot
+        return done new Error("The given string '#{value}' shouldn't contain
+          '#{options.matchNot}' for #{name}."), null, cb
+
+# - `match` - string or regular expression which have to be matched
+#   (or list of expressions)
+# - `matchNot` - string or regular expression which is not allowed to
+#   match (or list of expressions)
 
 
 

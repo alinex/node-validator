@@ -126,3 +126,123 @@ describe "Type checks", ->
         options:
           stripTags: true
       testEqual "the <b>best</b>", options, "the best"
+    it "should support lowercase option", ->
+      options =
+        check: 'type.string'
+        options:
+          lowercase: true
+      testEqual "HELLo", options, "hello"
+    it "should support lowercase of first character", ->
+      options =
+        check: 'type.string'
+        options:
+          lowercase: 'first'
+      testEqual "HELLo", options, "hELLo"
+    it "should support uppercase option", ->
+      options =
+        check: 'type.string'
+        options:
+          uppercase: true
+      testEqual "hello", options, "HELLO"
+    it "should support uppercase of first character", ->
+      options =
+        check: 'type.string'
+        options:
+          uppercase: 'first'
+      testEqual "hello", options, "Hello"
+    it "should support minlength option", ->
+      options =
+        check: 'type.string'
+        options:
+          minlength: 5
+      testEqual "hello", options, "hello"
+      testEqual "hello to everybody", options, "hello to everybody"
+    it "should fail for minlength on too long strings", ->
+      options =
+        check: 'type.string'
+        options:
+          minlength: 5
+      testFail "", options
+      testFail "123", options
+    it "should support maxlength option", ->
+      options =
+        check: 'type.string'
+        options:
+          maxlength: 5
+      testEqual "", options, ""
+      testEqual "123", options, "123"
+      testEqual "hello", options, "hello"
+    it "should fail for maxlength on too long strings", ->
+      options =
+        check: 'type.string'
+        options:
+          maxlength: 4
+      testFail "hello", options
+      testFail "hello to everybody", options
+    it "should support values option", ->
+      options =
+        check: 'type.string'
+        options:
+          values: ['one', 'two', 'three']
+      testEqual "one", options, "one"
+    it "should fail for values option", ->
+      options =
+        check: 'type.string'
+        options:
+          values: ['one', 'two', 'three']
+      testFail "", options
+      testFail "nine", options
+      testFail "bananas", options
+    it "should support startsWith option", ->
+      options =
+        check: 'type.string'
+        options:
+          startsWith: 'he'
+      testEqual "hello", options, "hello"
+      testEqual "hero", options, "hero"
+    it "should fail for startsWith option", ->
+      options =
+        check: 'type.string'
+        options:
+          startsWith: 'he'
+      testFail "ciao", options
+      testFail "", options
+    it "should support endsWith option", ->
+      options =
+        check: 'type.string'
+        options:
+          endsWith: 'lo'
+      testEqual "hello", options, "hello"
+    it "should fail for endsWith option", ->
+      options =
+        check: 'type.string'
+        options:
+          endsWith: 'he'
+      testFail "ciao", options
+      testFail "", options
+
+    it "should support match option", ->
+      options =
+        check: 'type.string'
+        options:
+          match: 'll'
+      testEqual "hello", options, "hello"
+    it "should fail for match option", ->
+      options =
+        check: 'type.string'
+        options:
+          match: 'll'
+      testFail "ciao", options
+    it "should support matchNot option", ->
+      options =
+        check: 'type.string'
+        options:
+          matchNot: 'll'
+      testEqual "ciao", options, "ciao"
+    it "should fail for matchNot option", ->
+      options =
+        check: 'type.string'
+        options:
+          matchNot: 'll'
+      testFail "hello", options
+

@@ -127,7 +127,28 @@ This will test for strings and have lots of sanitize and optimization filters
 and also different check settings to use.
 
 __Sanitize options:__
+
+- `allowControls` - keep control characters in string instead of
+  stripping them (but keep \\r\\n)
+- `replace` - list of replacements: string (only single replacement) or
+  regular expressions and replacements as inner array
+- `stripTags` - remove all html tags
+- `trim` - strip whitespace from the beginning and end
+- `crop` - crop text after number of characters
+- `lowercase` - set to `true` or `first`
+- `uppercase` - set to `true` or `first`
+
 __Validate options:__
+
+- `minLength` - minimum text length in characters
+- `maxLength` - maximum text length in characters
+- `values` - array of possible values (complete text)
+- `startsWith` - start of text
+- `endsWith` - end of text
+- `match` - string or regular expression which have to be matched
+  (or list of expressions)
+- `matchNot` - string or regular expression which is not allowed to
+  match (or list of expressions)
 
 ### type.integer
 ### type.float
