@@ -110,7 +110,8 @@ language types with different options.
 ### type.boolean
 
 The value has to be a boolean. The value will be true for 1, 'true', 'on',
-'yes' and it will be considered as false for 0, 'false', 'off', 'no', '.
+'yes' and it will be considered as false for 0, 'false', 'off', 'no', null and
+undefined.
 Other values are not allowed.
 
 __Options:__ None
@@ -128,15 +129,17 @@ and also different check settings to use.
 
 __Sanitize options:__
 
+- `optional` - the value must not be present (will return null)
+- `tostring` - convert objects to string, first
 - `allowControls` - keep control characters in string instead of
   stripping them (but keep \\r\\n)
-- `replace` - list of replacements: string (only single replacement) or
-  regular expressions and replacements as inner array
 - `stripTags` - remove all html tags
+- `lowerCase` - set to `true` or `first`
+- `upperCase` - set to `true` or `first`
+- `replace` - replacement or list with each replacement to contain of [search,
+  replacement text] while search may be a string or RegExp
 - `trim` - strip whitespace from the beginning and end
 - `crop` - crop text after number of characters
-- `lowercase` - set to `true` or `first`
-- `uppercase` - set to `true` or `first`
 
 __Validate options:__
 

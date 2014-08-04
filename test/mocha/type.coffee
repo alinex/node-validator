@@ -35,6 +35,9 @@ describe "Type checks", ->
     it "should match real booleans", ->
       testTrue true, options
       testFalse false, options
+    it "should be false on undefined", ->
+      testFalse null, options
+      testFalse undefined, options
     it "should match numbers", ->
       testTrue 1, options
       testFalse 0, options
@@ -62,7 +65,6 @@ describe "Type checks", ->
       testFail -1, options
       testFail 0.1, options
     it "should fail on other types", ->
-      testFail null, options
       testFail [], options
       testFail (new Error '????'), options
       testFail {}, options
@@ -78,12 +80,27 @@ describe "Type checks", ->
       testEqual 'hello', options, 'hello'
       testEqual '1', options, '1'
       testEqual '', options, ''
-    it "should match string objects", ->
+    it "should fail on other objects", ->
       testFail 1, options
       testFail null, options
       testFail [], options
       testFail (new Error '????'), options
       testFail {}, options
+    it "should support optional option", ->
+      options =
+        check: 'type.string'
+        options:
+          optional: true
+      testEqual null, options, null
+      testEqual undefined, options, null
+    it "should support tostring option", ->
+      options =
+        check: 'type.string'
+        options:
+          tostring: true
+      testEqual [], options, ''
+      testEqual {}, options, '[object Object]'
+      testEqual (new Error 'test'), options, 'Error: test'
     it "should support trim option", ->
       options =
         check: 'type.string'
@@ -104,6 +121,13 @@ describe "Type checks", ->
       options =
         check: 'type.string'
         options:
+          replace: [/a/g, 'o']
+      testEqual 'great', options, 'greot'
+      testEqual 'aligator', options, 'oligotor'
+    it "should support multi replace option", ->
+      options =
+        check: 'type.string'
+        options:
           replace: [
             [/a/g, 'o']
             ['m', 'n']
@@ -112,6 +136,7 @@ describe "Type checks", ->
       testEqual 'aligator', options, 'oligotor'
       testEqual 'meet', options, 'neet'
       testEqual 'meet me', options, 'neet me'
+      testEqual 'great meal', options, 'greot neol'
     it "should strip control characters", ->
       testEqual "123\x00456789", options, "123456789"
     it "should support allowControls option", ->
@@ -130,45 +155,45 @@ describe "Type checks", ->
       options =
         check: 'type.string'
         options:
-          lowercase: true
+          lowerCase: true
       testEqual "HELLo", options, "hello"
     it "should support lowercase of first character", ->
       options =
         check: 'type.string'
         options:
-          lowercase: 'first'
+          lowerCase: 'first'
       testEqual "HELLo", options, "hELLo"
     it "should support uppercase option", ->
       options =
         check: 'type.string'
         options:
-          uppercase: true
+          upperCase: true
       testEqual "hello", options, "HELLO"
     it "should support uppercase of first character", ->
       options =
         check: 'type.string'
         options:
-          uppercase: 'first'
+          upperCase: 'first'
       testEqual "hello", options, "Hello"
     it "should support minlength option", ->
       options =
         check: 'type.string'
         options:
-          minlength: 5
+          minLength: 5
       testEqual "hello", options, "hello"
       testEqual "hello to everybody", options, "hello to everybody"
     it "should fail for minlength on too long strings", ->
       options =
         check: 'type.string'
         options:
-          minlength: 5
+          minLength: 5
       testFail "", options
       testFail "123", options
     it "should support maxlength option", ->
       options =
         check: 'type.string'
         options:
-          maxlength: 5
+          maxLength: 5
       testEqual "", options, ""
       testEqual "123", options, "123"
       testEqual "hello", options, "hello"
@@ -176,7 +201,7 @@ describe "Type checks", ->
       options =
         check: 'type.string'
         options:
-          maxlength: 4
+          maxLength: 4
       testFail "hello", options
       testFail "hello to everybody", options
     it "should support values option", ->
@@ -220,12 +245,17 @@ describe "Type checks", ->
           endsWith: 'he'
       testFail "ciao", options
       testFail "", options
-
     it "should support match option", ->
       options =
         check: 'type.string'
         options:
           match: 'll'
+      testEqual "hello", options, "hello"
+    it "should support multi match option", ->
+      options =
+        check: 'type.string'
+        options:
+          match: [ 'he', 'll' ]
       testEqual "hello", options, "hello"
     it "should fail for match option", ->
       options =
@@ -238,6 +268,12 @@ describe "Type checks", ->
         check: 'type.string'
         options:
           matchNot: 'll'
+      testEqual "ciao", options, "ciao"
+    it "should support multi matchNot option", ->
+      options =
+        check: 'type.string'
+        options:
+          matchNot: ['ll', 'pp']
       testEqual "ciao", options, "ciao"
     it "should fail for matchNot option", ->
       options =
