@@ -129,7 +129,6 @@ and also different check settings to use.
 
 __Sanitize options:__
 
-- `optional` - the value must not be present (will return null)
 - `tostring` - convert objects to string, first
 - `allowControls` - keep control characters in string instead of
   stripping them (but keep \\r\\n)
@@ -143,6 +142,7 @@ __Sanitize options:__
 
 __Validate options:__
 
+- `optional` - the value must not be present (will return null)
 - `minLength` - minimum text length in characters
 - `maxLength` - maximum text length in characters
 - `values` - array of possible values (complete text)
@@ -154,6 +154,24 @@ __Validate options:__
   match (or list of expressions)
 
 ### type.integer
+
+To test for integer values which may be sanitized.
+
+__Sanitize options:__
+
+- `sanitize` - (bool) remove invalid characters
+- `round` - (bool) rounding of float can be set to true for arithmetic rounding
+  or use `floor` or `ceil` for the corresponding methods
+
+__Validate options:__
+
+- `optional` - the value must not be present (will return null)
+- `min` - (integer) the smalles allowed number
+- `max` - (integer) the biggest allowed number
+- `type` - (integer|string) the integer is of given type
+  (4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')
+- `unsigned` - (bool) the integer has to be positive
+
 ### type.float
 ### type.list
 ### type.enum

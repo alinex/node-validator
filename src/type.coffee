@@ -49,7 +49,6 @@ exports.boolean =
 # -------------------------------------------------
 # Sanitize options allowed:
 #
-# - `optional` - the value must not be present (will return null)
 # - `tostring` - convert objects to string, first
 # - `allowControls` - keep control characters in string instead of
 #   stripping them (but keep \\r\\n)
@@ -63,6 +62,7 @@ exports.boolean =
 #
 # Check options:
 #
+# - `optional` - the value must not be present (will return null)
 # - `minLength` - minimum text length in characters
 # - `maxLength` - maximum text length in characters
 # - `values` - array of possible values (complete text)
@@ -222,31 +222,92 @@ exports.string =
 
 # Integer value
 # -------------------------------------------------
-
-integerMax =
-  4: 7 # (Math.pow 2, 4-1)-1
-  8: 127 # (Math.pow 2, 8-1)-1
-  byte: 127
-  16: 32767
-  short: 32767
-  32: 2147483647
-  long : 2147483647
-  64: 9223372036854775807
-  quad: 9223372036854775807
-
+#
+# Sanitize options allowed:
+#
 # - `sanitize` - (bool) remove invalid characters
+# - `round` - (bool) rounding of float can be set to true for arithmetic rounding
+#   or use `floor` or `ceil` for the corresponding methods
+#
+# Check options:
+#
+# - `optional` - the value must not be present (will return null)
+# - `min` - (integer) the smalles allowed number
+# - `max` - (integer) the biggest allowed number
 # - `type` - (integer|string) the integer is of given type
-#   (4, 8, 16, 32, 64, 'byte', 'short','long','quad')
+#   (4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')
 # - `unsigned` - (bool) the integer has to be positive
-# - `minRange` - (integer) the smalles allowed number
-# - `maxRange` - (integer) the biggest allowed number
-# - `allowFloat` - (bool) integer in float notation allowed
-# - `round` - (bool) arithmetic rounding of float
-# - `allowOctal` - (bool) true to accept also octal numbers starting with
-#   with '0'
-# - `allowHex` - (bool) true to accept also hexadecimal numbers starting
-#    with '0x' or '0X'
+
+integerTypes =
+  byte: 8
+  short: 16
+  long : 32
+  safe: 53
+  quad: 64
+
 exports.integer =
-  check: (name, value, options, cb) ->
+  check: (name, value, options = {}, cb) ->
+    debug "String check '#{value}' for #{name}", options
+    unless value?
+      return done null, null, cb if options.optional
+      return done new Error("A value is needed for #{name}."), null, cb
+    # sanitize
+    if typeof value is 'string'
+      if options.sanitize
+        if options.round?
+          value = value.replace /^.*?(-?\d+\.\d*).*?$/, '$1'
+        else
+          value = value.replace /^.*?(-?\d+).*?$/, '$1'
+      if value.length
+        value = Number value
+    if options.round
+      value = switch options.round
+        when 'ceil' then Math.ceil value
+        when 'floor' then Math.floor value
+        else Math.round value
+    # validate
+    unless value is (value | 0)
+      return done new Error("The given value '#{value}' is no integer as needed
+        for #{name}."), null, cb
+    if options.min? and value < options.min
+      return done new Error("The value is to low, it has to be at least
+        '#{options.min}' for #{name}."), null, cb
+    if options.max? and value > options.max
+      return done new Error("The value is to high, it has to be'#{options.max}'
+        or lower for #{name}."), null, cb
+    if options.type
+      type = integerTypes[options.type] ? options.type
+      unit = integerTypes[options.type] ? 'byte'
+      unsigned = if options.unsigned then 1 else 0
+      max = (Math.pow 2, type-1+unsigned)-1
+      min = (unsigned-1) * max - 1 + unsigned
+      if value < min or value > max
+        return done new Error("The value is out of range for #{options.type}
+          #{unit}-integer for #{name}."), null, cb
+    return done null, value, cb
   describe: (options) ->
+    text = ''
+    if options.sanitize
+      text += "Invalid characters will be removed from text. "
+    if options.round
+      type = switch options.round
+        when 'to ceil' then Math.ceil value
+        when 'to floor' then Math.floor value
+        else 'arithḿetic'
+      text += "Value will be rounded #{type}. "
+    if options.min? and options.max?
+      text += "The value should be between #{options.min} and #{options.max}. "
+    else if options.min?
+      text += "The value should be greater than #{options.min}. "
+    else if options.max?
+      text += "The value should be lower than #{options.max}. "
+    if options.type?
+      type = integerTypes[options.type] ? options.type
+      unit = integerTypes[options.type] ? 'byte'
+      unsigned = if options.unsigned then 'unsigned' else 'signed'
+      text += "Only values in the range of a #{unsigned} #{type}#{unit}-integer
+        are allowed. "
+    if options.optional
+      text += "The setting is optional. "
+    text.trim()
 

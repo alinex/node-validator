@@ -281,4 +281,134 @@ describe "Type checks", ->
         options:
           matchNot: 'll'
       testFail "hello", options
+    it "should give description", ->
+      testDesc options
 
+  describe "for integer", ->
+
+    options =
+      check: 'type.integer'
+
+    it "should match integer objects", ->
+      testEqual 1, options, 1
+      testEqual -12, options, -12
+      testEqual 3678, options, 3678
+    it "should fail on other objects", ->
+      testFail 15.3, options
+      testFail '', options
+      testFail null, options
+      testFail [], options
+      testFail (new Error '????'), options
+      testFail {}, options
+    it "should support optional option", ->
+      options =
+        check: 'type.integer'
+        options:
+          optional: true
+      testEqual null, options, null
+      testEqual undefined, options, null
+    it "should support sanitize option", ->
+      options =
+        check: 'type.integer'
+        options:
+          sanitize: true
+      testEqual 'go4now', options, 4
+      testEqual '15kg', options, 15
+      testEqual '-18.6%', options, -18
+    it "should fail with sanitize option", ->
+      options =
+        check: 'type.integer'
+        options:
+          sanitize: true
+      testFail 'gonow', options
+      testFail 'one', options
+    it "should support round option", ->
+      options =
+        check: 'type.integer'
+        options:
+          sanitize: true
+          round: true
+      testEqual 13.5, options, 14
+      testEqual -9.49, options, -9
+      testEqual '+18.6', options, 19
+    it "should support round (floor) option", ->
+      options =
+        check: 'type.integer'
+        options:
+          sanitize: true
+          round: 'floor'
+      testEqual 13.5, options, 13
+      testEqual -9.49, options, -10
+      testEqual '+18.6', options, 18
+    it "should support round (ceil) option", ->
+      options =
+        check: 'type.integer'
+        options:
+          sanitize: true
+          round: 'ceil'
+      testEqual 13.5, options, 14
+      testEqual -9.49, options, -9
+      testEqual '+18.2', options, 19
+    it "should support min option", ->
+      options =
+        check: 'type.integer'
+        options:
+          min: -2
+      testEqual 6, options, 6
+      testEqual 0, options, 0
+      testEqual -2, options, -2
+    it "should fail for min option", ->
+      options =
+        check: 'type.integer'
+        options:
+          min: -2
+      testFail -8, options
+    it "should support max option", ->
+      options =
+        check: 'type.integer'
+        options:
+          max: 12
+      testEqual 6, options, 6
+      testEqual 0, options, 0
+      testEqual -2, options, -2
+      testEqual 12, options, 12
+    it "should fail for max option", ->
+      options =
+        check: 'type.integer'
+        options:
+          max: -2
+      testFail 100, options
+      testFail -1, options
+    it "should support type option", ->
+      options =
+        check: 'type.integer'
+        options:
+          type: 'byte'
+      testEqual 6, options, 6
+      testEqual -128, options, -128
+      testEqual 127, options, 127
+    it "should fail for type option", ->
+      options =
+        check: 'type.integer'
+        options:
+          type: 'byte'
+      testFail 128, options
+      testFail -129, options
+    it "should support type option", ->
+      options =
+        check: 'type.integer'
+        options:
+          type: 'byte'
+          unsigned: true
+      testEqual 254, options, 254
+      testEqual 0, options, 0
+    it "should fail for type option", ->
+      options =
+        check: 'type.integer'
+        options:
+          type: 'byte'
+          unsigned: true
+      testFail 256, options
+      testFail -1, options
+    it "should give description", ->
+      testDesc options
