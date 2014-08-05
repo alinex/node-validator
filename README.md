@@ -173,6 +173,21 @@ __Validate options:__
 - `unsigned` - (bool) the integer has to be positive
 
 ### type.float
+
+Nearly the same as for integer values but here are floats allowed, too.
+
+__Sanitize options:__
+
+- `sanitize` - (bool) remove invalid characters
+- `round` - (int) number of decimal digits to round to
+
+__Check options:__
+
+- `optional` - the value must not be present (will return null)
+- `min` - (numeric) the smalles allowed number
+- `max` - (numeric) the biggest allowed number
+
+
 ### type.list
 ### type.enum
 ### type.set

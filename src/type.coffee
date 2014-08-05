@@ -247,7 +247,7 @@ integerTypes =
 
 exports.integer =
   check: (name, value, options = {}, cb) ->
-    debug "String check '#{value}' for #{name}", options
+    debug "Integer check '#{value}' for #{name}", options
     unless value?
       return done null, null, cb if options.optional
       return done new Error("A value is needed for #{name}."), null, cb
@@ -255,7 +255,7 @@ exports.integer =
     if typeof value is 'string'
       if options.sanitize
         if options.round?
-          value = value.replace /^.*?(-?\d+\.\d*).*?$/, '$1'
+          value = value.replace /^.*?(-?\d+\.?\d*).*?$/, '$1'
         else
           value = value.replace /^.*?(-?\d+).*?$/, '$1'
       if value.length
@@ -311,24 +311,61 @@ exports.integer =
       text += "The setting is optional. "
     text.trim()
 
-###
-Check for foating point number.
+# Float value
+# -------------------------------------------------
+#
+# Sanitize options allowed:
+#
+# - `sanitize` - (bool) remove invalid characters
+# - `round` - (int) number of decimal digits to round to
+#
+# Check options:
+#
+# - `optional` - the value must not be present (will return null)
+# - `min` - (numeric) the smalles allowed number
+# - `max` - (numeric) the biggest allowed number
+exports.float =
+  check: (name, value, options = {}, cb) ->
+    debug "Float check '#{value}' for #{name}", options
+    unless value?
+      return done null, null, cb if options.optional
+      return done new Error("A value is needed for #{name}."), null, cb
+    # sanitize
+    if typeof value is 'string'
+      if options.sanitize
+        value = value.replace /^.*?(-?\d+\.?\d*).*?$/, '$1'
+      if value.length
+        value = Number value
+    if options.round?
+      exp = Math.pow 10, options.round
+      value = Math.round(value * exp) / exp
+    # validate
+    unless not isNaN(parseFloat value) and isFinite value
+      return done new Error("The given value '#{value}' is no number as needed
+        for #{name}."), null, cb
+    if options.min? and value < options.min
+      return done new Error("The value is to low, it has to be at least
+        '#{options.min}' for #{name}."), null, cb
+    if options.max? and value > options.max
+      return done new Error("The value is to high, it has to be'#{options.max}'
+        or lower for #{name}."), null, cb
+    return done null, value, cb
+  describe: (options) ->
+    text = ''
+    if options.sanitize
+      text += "Invalid characters will be removed from text. "
+    if options.round?
+      text += "Value will be rounded arithmetic to #{options.round} digits. "
+    if options.min? and options.max?
+      text += "The value should be between #{options.min} and #{options.max}. "
+    else if options.min?
+      text += "The value should be greater than #{options.min}. "
+    else if options.max?
+      text += "The value should be lower than #{options.max}. "
+    if options.optional
+      text += "The setting is optional. "
+    text.trim()
 
-<b>Options:</b>
-- \c decimal - sign used as decimal separator
-- \c sanitize - remove invalid characters
-- \c round - (int) number of decimal digits to round to
-- \c unsigned - (bool) the integer has to be positive
-- \c minRange - (numeric) the smalles allowed number
-- \c maxRange - (numeric) the biggest allowed number
-
-@param mixed   $value    value to be checked
-@param string  $name     readable origin identification
-@param array   $options  specific settings
-
-@return integer
-@throws Exception if not valid
-###
 
 ###
 Check for array.

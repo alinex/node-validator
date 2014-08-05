@@ -292,7 +292,7 @@ describe "Type checks", ->
     it "should match integer objects", ->
       testEqual 1, options, 1
       testEqual -12, options, -12
-      testEqual 3678, options, 3678
+      testEqual '3678', options, 3678
     it "should fail on other objects", ->
       testFail 15.3, options
       testFail '', options
@@ -409,6 +409,87 @@ describe "Type checks", ->
           type: 'byte'
           unsigned: true
       testFail 256, options
+      testFail -1, options
+    it "should give description", ->
+      testDesc options
+
+
+  describe "for float", ->
+
+    options =
+      check: 'type.float'
+
+    it "should match float objects", ->
+      testEqual 1.0, options, 1
+      testEqual -12.3, options, -12.3
+      testEqual '3678.999', options, 3678.999
+      testEqual 10, options, 10
+    it "should fail on other objects", ->
+      testFail '', options
+      testFail null, options
+      testFail [], options
+      testFail (new Error '????'), options
+      testFail {}, options
+    it "should support optional option", ->
+      options =
+        check: 'type.float'
+        options:
+          optional: true
+      testEqual null, options, null
+      testEqual undefined, options, null
+    it "should support sanitize option", ->
+      options =
+        check: 'type.float'
+        options:
+          sanitize: true
+      testEqual 'go4now', options, 4
+      testEqual '15.8kg', options, 15.8
+      testEqual '-18.6%', options, -18.6
+    it "should fail with sanitize option", ->
+      options =
+        check: 'type.float'
+        options:
+          sanitize: true
+      testFail 'gonow', options
+      testFail 'one', options
+    it "should support round option", ->
+      options =
+        check: 'type.float'
+        options:
+          sanitize: true
+          round: 1
+      testEqual 13.5, options, 13.5
+      testEqual -9.49, options, -9.5
+      testEqual '+18.6', options, 18.6
+    it "should support min option", ->
+      options =
+        check: 'type.float'
+        options:
+          min: -2
+      testEqual 6, options, 6
+      testEqual 0, options, 0
+      testEqual -2, options, -2
+    it "should fail for min option", ->
+      options =
+        check: 'type.float'
+        options:
+          min: -2
+      testFail -8, options
+    it "should support max option", ->
+      options =
+        check: 'type.float'
+        options:
+          max: 12
+      testEqual 6, options, 6
+      testEqual 0, options, 0
+      testEqual -2, options, -2
+      testEqual 12, options, 12
+    it "should fail for max option", ->
+      options =
+        check: 'type.float'
+        options:
+          max: -2
+      testFail 100, options
       testFail -1, options
     it "should give description", ->
       testDesc options
