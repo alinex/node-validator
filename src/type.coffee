@@ -40,7 +40,7 @@ exports.boolean =
       else
         return done new Error("No boolean value given for #{name}."), null, cb
     done new Error("The value '#{value}' is no boolean for #{name}."), null, cb
-  describe: (options) ->
+  describe: (options = {}) ->
     "The value has to be a boolean. The value will be true for 1, 'true', 'on',
     'yes' and it will be considered as false for 0, 'false', 'off', 'no', '.
     Other values are not allowed."
@@ -160,7 +160,7 @@ exports.string =
           '#{options.matchNot}' for #{name}."), null, cb
     return done null, value, cb
   describe: (options = {}) ->
-    text = ''
+    text = 'This should be text entry. '
     if options.tostring
       text += "Objects will be converted to their string representation. "
     remove = []
@@ -285,8 +285,8 @@ exports.integer =
         return done new Error("The value is out of range for #{options.type}
           #{unit}-integer for #{name}."), null, cb
     return done null, value, cb
-  describe: (options) ->
-    text = ''
+  describe: (options = {}) ->
+    text = 'An integer value is needed, here. '
     if options.sanitize
       text += "Invalid characters will be removed from text. "
     if options.round
@@ -350,8 +350,8 @@ exports.float =
       return done new Error("The value is to high, it has to be'#{options.max}'
         or lower for #{name}."), null, cb
     return done null, value, cb
-  describe: (options) ->
-    text = ''
+  describe: (options = {}) ->
+    text = 'A numeric value (float) is needed. '
     if options.sanitize
       text += "Invalid characters will be removed from text. "
     if options.round?
@@ -367,17 +367,75 @@ exports.float =
     text.trim()
 
 
+# Array
+# -------------------------------------------------
+#
+# Sanitize options:
+#
+# - `delimiter` - allow value text with specified list separator
+#   (it can also be an regular expression)
+#
+# Check options:
+#
+# - `optional` - the value must not be present (will return null)
+exports.array =
+  check: (name, value, options = {}, cb) ->
+    debug "Array check for #{name}", options
+    unless value?
+      return done null, null, cb if options.optional
+      return done new Error("A value is needed for #{name}."), null, cb
+    if typeof value is 'string' and options.delimiter?
+      value = value.split options.delimiter
+    # validate
+    unless Array.isArray value
+      return done new Error("The value for #{name} has to be an array."), null, cb
+    return done null, value, cb
+
+  describe: (options = {}) ->
+    text = 'Here a list or array have to be given. '
+
+    if options.optional
+      text += "The setting is optional. "
+    text.trim()
+
+
+# Object
+# -------------------------------------------------
+#
+# Sanitize options:
+#
+#
+# Check options:
+#
+# - `optional` - the value must not be present (will return null)
+exports.object =
+  check: (name, value, options = {}, cb) ->
+    debug "Object check for #{name}", options
+    unless value?
+      return done null, null, cb if options.optional
+      return done new Error("A value is needed for #{name}."), null, cb
+    # validate
+    if typeof value isnt 'object' or value instanceof Array
+      return done new Error("The value for #{name} has to be an object."), null, cb
+    return done null, value, cb
+
+  describe: (options = {}) ->
+    text = 'Here an object have to be given. '
+
+    if options.optional
+      text += "The setting is optional. "
+    text.trim()
+
 ###
 Check for array.
 
 <b>Allowed options:</b>
-- \c delimiter - allow value text with specified list separator
-(it can also be an regular expression)
 - \c notEmpty - set to true if an empty array is not valid
-- \c mandatoryKeys - the list of elements which are mandatory
-- \c allowedKeys - gives a list of elements which are also allowed
 - \c minLength - minimum number of entries
 - \c maxLength - maximum number of entries
+
+- \c mandatoryKeys - the list of elements which are mandatory
+- \c allowedKeys - gives a list of elements which are also allowed
 - \c keySpec - validators for each entry, use '' to specify for all
 entries. This is specifgied by a the key with an array of validator
 function as string, options array.
@@ -391,6 +449,7 @@ All mandatory keys are automatically allowed keys if given, too.
 @return boolean
 @throws Exception if not valid
 ###
+
 
 ###
 Check for enumerated values.

@@ -22,6 +22,10 @@ describe "Type checks", ->
     expect validator.check('test', value, options)
     , value
     .to.equal result
+  testDeep = (value, options, result) ->
+    expect validator.check('test', value, options)
+    , value
+    .to.deep.equal result
   testDesc = (options) ->
     desc = validator.describe options
     expect(desc).to.be.a 'string'
@@ -491,5 +495,63 @@ describe "Type checks", ->
           max: -2
       testFail 100, options
       testFail -1, options
+    it "should give description", ->
+      testDesc options
+
+  describe "for array", ->
+
+    options =
+      check: 'type.array'
+
+    it "should match array objects", ->
+      testDeep [1,2,3], options, [1,2,3]
+      testDeep ['one','two'], options, ['one','two']
+      testDeep [], options, []
+      testDeep new Array(), options, []
+    it "should fail on other objects", ->
+      testFail '', options
+      testFail null, options
+      testFail 16, options
+      testFail (new Error '????'), options
+      testFail {}, options
+    it "should support optional option", ->
+      options =
+        check: 'type.array'
+        options:
+          optional: true
+      testEqual null, options, null
+      testEqual undefined, options, null
+    it "should support delimiter option", ->
+      options =
+        check: 'type.array'
+        options:
+          delimiter: ','
+      testDeep '1,2,3', options, ['1','2','3']
+    it "should give description", ->
+      testDesc options
+
+  describe "for object", ->
+
+    options =
+      check: 'type.object'
+
+    it "should match an object", ->
+      testDeep {one:1,two:2,three:3}, options, {one:1,two:2,three:3}
+      testDeep {}, options, {}
+      testDeep new Object(), options, {}
+    it "should fail on other elements", ->
+      testFail '', options
+      testFail null, options
+      testFail 16, options
+      testFail (new Error '????'), options
+      testFail [], options
+      testFail new Array(), options
+    it "should support optional option", ->
+      options =
+        check: 'type.object'
+        options:
+          optional: true
+      testEqual null, options, null
+      testEqual undefined, options, null
     it "should give description", ->
       testDesc options
