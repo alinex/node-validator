@@ -51,8 +51,8 @@ Synchronous call:
     var value = Validator.check('test', value, {
       type: 'type.integer',
       options: {
-        minvalue: 0,
-        maxvalue: 100
+        min: 0,
+        max: 100
       }
     });
 
@@ -61,8 +61,8 @@ Asynchronous call:
     Validator.check('test', value, {
       type: 'type.integer',
       options: {
-        minvalue: 0,
-        maxvalue: 100
+        min: 0,
+        max: 100
       }
     }, function(err, value) {
       if (err) {

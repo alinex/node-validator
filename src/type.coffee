@@ -311,3 +311,66 @@ exports.integer =
       text += "The setting is optional. "
     text.trim()
 
+###
+Check for foating point number.
+
+<b>Options:</b>
+- \c decimal - sign used as decimal separator
+- \c sanitize - remove invalid characters
+- \c round - (int) number of decimal digits to round to
+- \c unsigned - (bool) the integer has to be positive
+- \c minRange - (numeric) the smalles allowed number
+- \c maxRange - (numeric) the biggest allowed number
+
+@param mixed   $value    value to be checked
+@param string  $name     readable origin identification
+@param array   $options  specific settings
+
+@return integer
+@throws Exception if not valid
+###
+
+###
+Check for array.
+
+<b>Allowed options:</b>
+- \c delimiter - allow value text with specified list separator
+(it can also be an regular expression)
+- \c notEmpty - set to true if an empty array is not valid
+- \c mandatoryKeys - the list of elements which are mandatory
+- \c allowedKeys - gives a list of elements which are also allowed
+- \c minLength - minimum number of entries
+- \c maxLength - maximum number of entries
+- \c keySpec - validators for each entry, use '' to specify for all
+entries. This is specifgied by a the key with an array of validator
+function as string, options array.
+
+All mandatory keys are automatically allowed keys if given, too.
+
+@param mixed   $value    value to be checked
+@param string  $name     readable variable identification
+@param array   $options  specific settings
+
+@return boolean
+@throws Exception if not valid
+###
+
+###
+Check for enumerated values.
+
+A readable name is given and converted mostly in numeric values.
+
+<b>Options:</b>
+- \c values - list of possible values as hash with codes
+- \c allowList - true if multiple entries can be selected
+- \c delimiter - select the list separator for given value
+(it can also be an regular expression)
+
+@param mixed   $value    value to be checked
+@param string  $name     readable variable identification
+@param array   $options  specific settings
+
+@return mixed  entry code or list of codes for option allowList
+@throws Exception if not valid
+###
+
