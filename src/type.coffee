@@ -158,6 +158,7 @@ exports.string =
       else if ~value.indexOf options.matchNot
         return done new Error("The given string '#{value}' shouldn't contain
           '#{options.matchNot}' for #{name}."), null, cb
+    # done return resulting value
     return done null, value, cb
   describe: (options = {}) ->
     text = 'This should be text entry. '
@@ -284,6 +285,7 @@ exports.integer =
       if value < min or value > max
         return done new Error("The value is out of range for #{options.type}
           #{unit}-integer for #{name}."), null, cb
+    # done return resulting value
     return done null, value, cb
   describe: (options = {}) ->
     text = 'An integer value is needed, here. '
@@ -349,6 +351,7 @@ exports.float =
     if options.max? and value > options.max
       return done new Error("The value is to high, it has to be'#{options.max}'
         or lower for #{name}."), null, cb
+    # done return resulting value
     return done null, value, cb
   describe: (options = {}) ->
     text = 'A numeric value (float) is needed. '
@@ -377,6 +380,9 @@ exports.float =
 #
 # Check options:
 #
+# - `notEmpty` - set to true if an empty array is not valid
+# - `minLength` - minimum number of entries
+# - `maxLength` - maximum number of entries
 # - `optional` - the value must not be present (will return null)
 exports.array =
   check: (name, value, options = {}, cb) ->
@@ -389,6 +395,55 @@ exports.array =
     # validate
     unless Array.isArray value
       return done new Error("The value for #{name} has to be an array."), null, cb
+    if options.notEmpty and value.length is 0
+      return done new Error("An empty array/list is not allowed for #{name}."), null, cb
+    if options.minLength? and options.minLength is options.maxLength and (
+      value.length isnt options.minLength)
+      return done new Error("Exactly #{options.minLength} entries are required
+        for #{name}. "), null, cb
+    else if options.minLength? and options.minLength > value.length
+      return done new Error("At least #{options.minLength} entries are required
+        in list for #{name}. "), null, cb
+    else if options.maxLength? and options.maxLength < value.length
+      return done new Error("Not more than #{options.maxLength} entries are allowed in list
+        for #{name}. "), null, cb
+    if options.entries?
+      if cb?
+        # run async
+        return async.each [0..value.length-1], (i, cb) ->
+          check = options.entries.check
+          suboptions = options.entries.options
+          # use specific call for each entry
+          if options.entries[i]?
+            check = options.entries[i].check
+            suboptions = options.entries[i].options
+          # run subcheck
+          validator.check "name[#{i}]", subvalue,
+            check: check
+            options: suboptions
+          , (err, result) ->
+            # check response
+            return cb err if err
+            value[i] = result
+            cb()
+        , (err) -> cb err, value
+      #run sync
+      for subvalue, i in value
+        check = options.entries.check
+        suboptions = options.entries.options
+        # use specific call for each entry
+        if options.entries[i]?
+          check = options.entries[i].check
+          suboptions = options.entries[i].options
+        # run subcheck
+        result = validator.check "name[#{i}]", subvalue,
+          check: check
+          options: suboptions
+        # check response
+        if result instanceof Error
+          return done result, value
+        value[i] = result
+    # done return resulting value
     return done null, value, cb
 
   describe: (options = {}) ->
@@ -402,21 +457,42 @@ exports.array =
 # Object
 # -------------------------------------------------
 #
-# Sanitize options:
-#
-#
 # Check options:
 #
 # - `optional` - the value must not be present (will return null)
+# - `instanceOf` - only objects of given class type are allowed
+# - `mandatoryKeys` - the list of elements which are mandatory
+# - `allowedKeys` - gives a list of elements which are also allowed
 exports.object =
   check: (name, value, options = {}, cb) ->
     debug "Object check for #{name}", options
     unless value?
       return done null, null, cb if options.optional
       return done new Error("A value is needed for #{name}."), null, cb
+    # add mandatory keys to allowed keys
+    allowedKeys = []
+    allowedKeys = allowedKeys.concat options.allowedKeys if options.allowedKeys?
+    if options.mandatoryKeys?
+      for entry in options.mandatoryKeys
+        allowedKeys.push entry unless allowedKeys[entry]
     # validate
+    if options.instanceOf?
+      unless value instanceof options.instanceOf
+        return done new Error("#{name} needs an object of #{options.instanceOf}
+          as value."), null, cb
+      return done null, value, cb
     if typeof value isnt 'object' or value instanceof Array
       return done new Error("The value for #{name} has to be an object."), null, cb
+    if allowedKeys.length
+      for key of value
+        unless key in allowedKeys
+          return done new Error("The key #{key} is not allowed for #{name}."), null, cb
+    if options.mandatoryKeys?
+      for key in options.mandatoryKeys
+        keys = Object.keys value
+        unless key in keys
+          return done new Error("The key #{key} is missing for #{name}."), null, cb
+    # done return resulting value
     return done null, value, cb
 
   describe: (options = {}) ->
@@ -427,15 +503,6 @@ exports.object =
     text.trim()
 
 ###
-Check for array.
-
-<b>Allowed options:</b>
-- \c notEmpty - set to true if an empty array is not valid
-- \c minLength - minimum number of entries
-- \c maxLength - maximum number of entries
-
-- \c mandatoryKeys - the list of elements which are mandatory
-- \c allowedKeys - gives a list of elements which are also allowed
 - \c keySpec - validators for each entry, use '' to specify for all
 entries. This is specifgied by a the key with an array of validator
 function as string, options array.

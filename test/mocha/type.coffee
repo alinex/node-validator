@@ -26,6 +26,10 @@ describe "Type checks", ->
     expect validator.check('test', value, options)
     , value
     .to.deep.equal result
+  testInstance = (value, options, result) ->
+    expect validator.check('test', value, options)
+    , value
+    .to.be.an.instanceof result
   testDesc = (options) ->
     desc = validator.describe options
     expect(desc).to.be.a 'string'
@@ -521,12 +525,91 @@ describe "Type checks", ->
           optional: true
       testEqual null, options, null
       testEqual undefined, options, null
+    it "should support notEmpty option", ->
+      options =
+        check: 'type.array'
+        options:
+          notEmpty: true
+      testDeep [1,2,3], options, [1,2,3]
+      testDeep ['one','two'], options, ['one','two']
+    it "should fail for notEmpty option", ->
+      options =
+        check: 'type.array'
+        options:
+          notEmpty: true
+      testFail [], options
+      testFail new Array(), options
     it "should support delimiter option", ->
       options =
         check: 'type.array'
         options:
           delimiter: ','
       testDeep '1,2,3', options, ['1','2','3']
+    it "should support minLength option", ->
+      options =
+        check: 'type.array'
+        options:
+          minLength: 2
+      testDeep [1,2,3], options, [1,2,3]
+      testDeep ['one','two'], options, ['one','two']
+    it "should fail for minLength option", ->
+      options =
+        check: 'type.array'
+        options:
+          minLength: 2
+      testFail [], options
+      testFail new Array(), options
+      testFail [1], options
+    it "should support maxLength option", ->
+      options =
+        check: 'type.array'
+        options:
+          maxLength: 2
+      testDeep [1], options, [1]
+      testDeep ['one','two'], options, ['one','two']
+      testDeep [], options, []
+      testDeep new Array(), options, []
+    it "should fail for maxLength option", ->
+      options =
+        check: 'type.array'
+        options:
+          maxLength: 2
+      testFail [1,2,3], options
+    it "should support exact length option", ->
+      options =
+        check: 'type.array'
+        options:
+          minLength: 2
+          maxLength: 2
+      testDeep [1,2], options, [1,2]
+    it "should fail for exact length option", ->
+      options =
+        check: 'type.array'
+        options:
+          minLength: 2
+          maxLength: 2
+      testFail [1,2,3], options
+      testFail [1], options
+    it "should support subchecks", ->
+      options =
+        check: 'type.array'
+        options:
+          entries:
+            check: 'type.integer'
+            2:
+              check: 'type.float'
+      testDeep [1,2.0], options, [1,2]
+      testDeep [], options, []
+    it "should fail for subchecks", ->
+      options =
+        check: 'type.array'
+        options:
+          entries:
+            check: 'type.integer'
+            2:
+              check: 'type.float'
+      testFail ['one'], options
+      testFail [1,'two'], options
     it "should give description", ->
       testDesc options
 
@@ -553,5 +636,58 @@ describe "Type checks", ->
           optional: true
       testEqual null, options, null
       testEqual undefined, options, null
+    it "should support instanceOf option", ->
+      options =
+        check: 'type.object'
+        options:
+          instanceOf: Date
+      testInstance new Date(), options, Date
+    it "should fail for instanceOf option", ->
+      options =
+        check: 'type.object'
+        options:
+          instanceOf: Date
+      testFail new Object(), options
+      testFail [], options
+    it "should support allowedKeys option", ->
+      options =
+        check: 'type.object'
+        options:
+          allowedKeys: ['one','two']
+      testDeep { one:1, two:2 }, options, { one:1, two:2 }
+      testDeep {}, options, {}
+    it "should fail for allowedKeys option", ->
+      options =
+        check: 'type.object'
+        options:
+          allowedKeys: ['one','two']
+      testFail { one:1, two:2, three:3 }, options
+    it "should support mandatoryKeys option", ->
+      options =
+        check: 'type.object'
+        options:
+          allowedKeys: ['one','two']
+          mandatoryKeys: ['three']
+      testDeep { one:1, two:2, three:3 }, options, { one:1, two:2, three:3 }
+      testDeep { three:3 }, options, { three:3 }
+    it "should fail for mandatoryKeys option", ->
+      options =
+        check: 'type.object'
+        options:
+          allowedKeys: ['one','two']
+          mandatoryKeys: ['three']
+      testFail { one:1, two:2, four:3 }, options
+      testFail { one:1, two:2 }, options
+      testFail {}, options
+
+    it "should support mandatoryKeys option", ->
+      options =
+        check: 'type.object'
+        options:
+          keys:
+            one:
+              check: 'type.integer'
+      testDeep { one:1, two:2, three:3 }, options, { one:1, two:2, three:3 }
+      testDeep { three:3 }, options, { three:3 }
     it "should give description", ->
       testDesc options
