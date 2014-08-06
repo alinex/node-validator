@@ -97,23 +97,20 @@ describe "Type checks", ->
     it "should support optional option", ->
       options =
         check: 'type.string'
-        options:
-          optional: true
+        optional: true
       testEqual null, options, null
       testEqual undefined, options, null
     it "should support tostring option", ->
       options =
         check: 'type.string'
-        options:
-          tostring: true
+        tostring: true
       testEqual [], options, ''
       testEqual {}, options, '[object Object]'
       testEqual (new Error 'test'), options, 'Error: test'
     it "should support trim option", ->
       options =
         check: 'type.string'
-        options:
-          trim: true
+        trim: true
       testEqual '  hello', options, 'hello'
       testEqual 'hello  ', options, 'hello'
       testEqual '  hello  ', options, 'hello'
@@ -121,25 +118,22 @@ describe "Type checks", ->
     it "should support crop option", ->
       options =
         check: 'type.string'
-        options:
-          crop: 8
+        crop: 8
       testEqual '123456789', options, '12345678'
       testEqual '123', options, '123'
     it "should support replace option", ->
       options =
         check: 'type.string'
-        options:
-          replace: [/a/g, 'o']
+        replace: [/a/g, 'o']
       testEqual 'great', options, 'greot'
       testEqual 'aligator', options, 'oligotor'
     it "should support multi replace option", ->
       options =
         check: 'type.string'
-        options:
-          replace: [
-            [/a/g, 'o']
-            ['m', 'n']
-          ]
+        replace: [
+          [/a/g, 'o']
+          ['m', 'n']
+        ]
       testEqual 'great', options, 'greot'
       testEqual 'aligator', options, 'oligotor'
       testEqual 'meet', options, 'neet'
@@ -150,144 +144,122 @@ describe "Type checks", ->
     it "should support allowControls option", ->
       options =
         check: 'type.string'
-        options:
-          allowControls: true
+        allowControls: true
       testEqual "123\x00456789", options, "123\x00456789"
     it "should support stripTags option", ->
       options =
         check: 'type.string'
-        options:
-          stripTags: true
+        stripTags: true
       testEqual "the <b>best</b>", options, "the best"
     it "should support lowercase option", ->
       options =
         check: 'type.string'
-        options:
-          lowerCase: true
+        lowerCase: true
       testEqual "HELLo", options, "hello"
     it "should support lowercase of first character", ->
       options =
         check: 'type.string'
-        options:
-          lowerCase: 'first'
+        lowerCase: 'first'
       testEqual "HELLo", options, "hELLo"
     it "should support uppercase option", ->
       options =
         check: 'type.string'
-        options:
-          upperCase: true
+        upperCase: true
       testEqual "hello", options, "HELLO"
     it "should support uppercase of first character", ->
       options =
         check: 'type.string'
-        options:
-          upperCase: 'first'
+        upperCase: 'first'
       testEqual "hello", options, "Hello"
     it "should support minlength option", ->
       options =
         check: 'type.string'
-        options:
-          minLength: 5
+        minLength: 5
       testEqual "hello", options, "hello"
       testEqual "hello to everybody", options, "hello to everybody"
     it "should fail for minlength on too long strings", ->
       options =
         check: 'type.string'
-        options:
-          minLength: 5
+        minLength: 5
       testFail "", options
       testFail "123", options
     it "should support maxlength option", ->
       options =
         check: 'type.string'
-        options:
-          maxLength: 5
+        maxLength: 5
       testEqual "", options, ""
       testEqual "123", options, "123"
       testEqual "hello", options, "hello"
     it "should fail for maxlength on too long strings", ->
       options =
         check: 'type.string'
-        options:
-          maxLength: 4
+        maxLength: 4
       testFail "hello", options
       testFail "hello to everybody", options
     it "should support values option", ->
       options =
         check: 'type.string'
-        options:
-          values: ['one', 'two', 'three']
+        values: ['one', 'two', 'three']
       testEqual "one", options, "one"
     it "should fail for values option", ->
       options =
         check: 'type.string'
-        options:
-          values: ['one', 'two', 'three']
+        values: ['one', 'two', 'three']
       testFail "", options
       testFail "nine", options
       testFail "bananas", options
     it "should support startsWith option", ->
       options =
         check: 'type.string'
-        options:
-          startsWith: 'he'
+        startsWith: 'he'
       testEqual "hello", options, "hello"
       testEqual "hero", options, "hero"
     it "should fail for startsWith option", ->
       options =
         check: 'type.string'
-        options:
-          startsWith: 'he'
+        startsWith: 'he'
       testFail "ciao", options
       testFail "", options
     it "should support endsWith option", ->
       options =
         check: 'type.string'
-        options:
-          endsWith: 'lo'
+        endsWith: 'lo'
       testEqual "hello", options, "hello"
     it "should fail for endsWith option", ->
       options =
         check: 'type.string'
-        options:
-          endsWith: 'he'
+        endsWith: 'he'
       testFail "ciao", options
       testFail "", options
     it "should support match option", ->
       options =
         check: 'type.string'
-        options:
-          match: 'll'
+        match: 'll'
       testEqual "hello", options, "hello"
     it "should support multi match option", ->
       options =
         check: 'type.string'
-        options:
-          match: [ 'he', 'll' ]
+        match: [ 'he', 'll' ]
       testEqual "hello", options, "hello"
     it "should fail for match option", ->
       options =
         check: 'type.string'
-        options:
-          match: 'll'
+        match: 'll'
       testFail "ciao", options
     it "should support matchNot option", ->
       options =
         check: 'type.string'
-        options:
-          matchNot: 'll'
+        matchNot: 'll'
       testEqual "ciao", options, "ciao"
     it "should support multi matchNot option", ->
       options =
         check: 'type.string'
-        options:
-          matchNot: ['ll', 'pp']
+        matchNot: ['ll', 'pp']
       testEqual "ciao", options, "ciao"
     it "should fail for matchNot option", ->
       options =
         check: 'type.string'
-        options:
-          matchNot: 'll'
+        matchNot: 'll'
       testFail "hello", options
     it "should give description", ->
       testDesc options
@@ -311,71 +283,62 @@ describe "Type checks", ->
     it "should support optional option", ->
       options =
         check: 'type.integer'
-        options:
-          optional: true
+        optional: true
       testEqual null, options, null
       testEqual undefined, options, null
     it "should support sanitize option", ->
       options =
         check: 'type.integer'
-        options:
-          sanitize: true
+        sanitize: true
       testEqual 'go4now', options, 4
       testEqual '15kg', options, 15
       testEqual '-18.6%', options, -18
     it "should fail with sanitize option", ->
       options =
         check: 'type.integer'
-        options:
-          sanitize: true
+        sanitize: true
       testFail 'gonow', options
       testFail 'one', options
     it "should support round option", ->
       options =
         check: 'type.integer'
-        options:
-          sanitize: true
-          round: true
+        sanitize: true
+        round: true
       testEqual 13.5, options, 14
       testEqual -9.49, options, -9
       testEqual '+18.6', options, 19
     it "should support round (floor) option", ->
       options =
         check: 'type.integer'
-        options:
-          sanitize: true
-          round: 'floor'
+        sanitize: true
+        round: 'floor'
       testEqual 13.5, options, 13
       testEqual -9.49, options, -10
       testEqual '+18.6', options, 18
     it "should support round (ceil) option", ->
       options =
         check: 'type.integer'
-        options:
-          sanitize: true
-          round: 'ceil'
+        sanitize: true
+        round: 'ceil'
       testEqual 13.5, options, 14
       testEqual -9.49, options, -9
       testEqual '+18.2', options, 19
     it "should support min option", ->
       options =
         check: 'type.integer'
-        options:
-          min: -2
+        min: -2
       testEqual 6, options, 6
       testEqual 0, options, 0
       testEqual -2, options, -2
     it "should fail for min option", ->
       options =
         check: 'type.integer'
-        options:
-          min: -2
+        min: -2
       testFail -8, options
     it "should support max option", ->
       options =
         check: 'type.integer'
-        options:
-          max: 12
+        max: 12
       testEqual 6, options, 6
       testEqual 0, options, 0
       testEqual -2, options, -2
@@ -383,39 +346,34 @@ describe "Type checks", ->
     it "should fail for max option", ->
       options =
         check: 'type.integer'
-        options:
-          max: -2
+        max: -2
       testFail 100, options
       testFail -1, options
     it "should support type option", ->
       options =
         check: 'type.integer'
-        options:
-          type: 'byte'
+        type: 'byte'
       testEqual 6, options, 6
       testEqual -128, options, -128
       testEqual 127, options, 127
     it "should fail for type option", ->
       options =
         check: 'type.integer'
-        options:
-          type: 'byte'
+        type: 'byte'
       testFail 128, options
       testFail -129, options
     it "should support type option", ->
       options =
         check: 'type.integer'
-        options:
-          type: 'byte'
-          unsigned: true
+        type: 'byte'
+        unsigned: true
       testEqual 254, options, 254
       testEqual 0, options, 0
     it "should fail for type option", ->
       options =
         check: 'type.integer'
-        options:
-          type: 'byte'
-          unsigned: true
+        type: 'byte'
+        unsigned: true
       testFail 256, options
       testFail -1, options
     it "should give description", ->
@@ -441,53 +399,46 @@ describe "Type checks", ->
     it "should support optional option", ->
       options =
         check: 'type.float'
-        options:
-          optional: true
+        optional: true
       testEqual null, options, null
       testEqual undefined, options, null
     it "should support sanitize option", ->
       options =
         check: 'type.float'
-        options:
-          sanitize: true
+        sanitize: true
       testEqual 'go4now', options, 4
       testEqual '15.8kg', options, 15.8
       testEqual '-18.6%', options, -18.6
     it "should fail with sanitize option", ->
       options =
         check: 'type.float'
-        options:
-          sanitize: true
+        sanitize: true
       testFail 'gonow', options
       testFail 'one', options
     it "should support round option", ->
       options =
         check: 'type.float'
-        options:
-          sanitize: true
-          round: 1
+        sanitize: true
+        round: 1
       testEqual 13.5, options, 13.5
       testEqual -9.49, options, -9.5
       testEqual '+18.6', options, 18.6
     it "should support min option", ->
       options =
         check: 'type.float'
-        options:
-          min: -2
+        min: -2
       testEqual 6, options, 6
       testEqual 0, options, 0
       testEqual -2, options, -2
     it "should fail for min option", ->
       options =
         check: 'type.float'
-        options:
-          min: -2
+        min: -2
       testFail -8, options
     it "should support max option", ->
       options =
         check: 'type.float'
-        options:
-          max: 12
+        max: 12
       testEqual 6, options, 6
       testEqual 0, options, 0
       testEqual -2, options, -2
@@ -495,8 +446,7 @@ describe "Type checks", ->
     it "should fail for max option", ->
       options =
         check: 'type.float'
-        options:
-          max: -2
+        max: -2
       testFail 100, options
       testFail -1, options
     it "should give description", ->
@@ -521,50 +471,43 @@ describe "Type checks", ->
     it "should support optional option", ->
       options =
         check: 'type.array'
-        options:
-          optional: true
+        optional: true
       testEqual null, options, null
       testEqual undefined, options, null
     it "should support notEmpty option", ->
       options =
         check: 'type.array'
-        options:
-          notEmpty: true
+        notEmpty: true
       testDeep [1,2,3], options, [1,2,3]
       testDeep ['one','two'], options, ['one','two']
     it "should fail for notEmpty option", ->
       options =
         check: 'type.array'
-        options:
-          notEmpty: true
+        notEmpty: true
       testFail [], options
       testFail new Array(), options
     it "should support delimiter option", ->
       options =
         check: 'type.array'
-        options:
-          delimiter: ','
+        delimiter: ','
       testDeep '1,2,3', options, ['1','2','3']
     it "should support minLength option", ->
       options =
         check: 'type.array'
-        options:
-          minLength: 2
+        minLength: 2
       testDeep [1,2,3], options, [1,2,3]
       testDeep ['one','two'], options, ['one','two']
     it "should fail for minLength option", ->
       options =
         check: 'type.array'
-        options:
-          minLength: 2
+        minLength: 2
       testFail [], options
       testFail new Array(), options
       testFail [1], options
     it "should support maxLength option", ->
       options =
         check: 'type.array'
-        options:
-          maxLength: 2
+        maxLength: 2
       testDeep [1], options, [1]
       testDeep ['one','two'], options, ['one','two']
       testDeep [], options, []
@@ -572,44 +515,45 @@ describe "Type checks", ->
     it "should fail for maxLength option", ->
       options =
         check: 'type.array'
-        options:
-          maxLength: 2
+        maxLength: 2
       testFail [1,2,3], options
     it "should support exact length option", ->
       options =
         check: 'type.array'
-        options:
-          minLength: 2
-          maxLength: 2
+        minLength: 2
+        maxLength: 2
       testDeep [1,2], options, [1,2]
     it "should fail for exact length option", ->
       options =
         check: 'type.array'
-        options:
-          minLength: 2
-          maxLength: 2
+        minLength: 2
+        maxLength: 2
       testFail [1,2,3], options
       testFail [1], options
     it "should support subchecks", ->
       options =
         check: 'type.array'
-        options:
-          entries:
-            check: 'type.integer'
-            2:
-              check: 'type.float'
-      testDeep [1,2.0], options, [1,2]
+        entries:
+          check: 'type.integer'
+      testDeep [1,2], options, [1,2]
       testDeep [], options, []
     it "should fail for subchecks", ->
       options =
         check: 'type.array'
-        options:
-          entries:
-            check: 'type.integer'
-            2:
-              check: 'type.float'
+        entries:
+          check: 'type.integer'
       testFail ['one'], options
       testFail [1,'two'], options
+    it "should support different subchecks", ->
+      options =
+        check: 'type.array'
+        entries: [
+          check: 'type.integer'
+        ,
+          check: 'type.float'
+        ]
+      testDeep [1,2.0], options, [1,2]
+      testDeep [], options, []
     it "should give description", ->
       testDesc options
 
@@ -632,50 +576,43 @@ describe "Type checks", ->
     it "should support optional option", ->
       options =
         check: 'type.object'
-        options:
-          optional: true
+        optional: true
       testEqual null, options, null
       testEqual undefined, options, null
     it "should support instanceOf option", ->
       options =
         check: 'type.object'
-        options:
-          instanceOf: Date
+        instanceOf: Date
       testInstance new Date(), options, Date
     it "should fail for instanceOf option", ->
       options =
         check: 'type.object'
-        options:
-          instanceOf: Date
+        instanceOf: Date
       testFail new Object(), options
       testFail [], options
     it "should support allowedKeys option", ->
       options =
         check: 'type.object'
-        options:
-          allowedKeys: ['one','two']
+        allowedKeys: ['one','two']
       testDeep { one:1, two:2 }, options, { one:1, two:2 }
       testDeep {}, options, {}
     it "should fail for allowedKeys option", ->
       options =
         check: 'type.object'
-        options:
-          allowedKeys: ['one','two']
+        allowedKeys: ['one','two']
       testFail { one:1, two:2, three:3 }, options
     it "should support mandatoryKeys option", ->
       options =
         check: 'type.object'
-        options:
-          allowedKeys: ['one','two']
-          mandatoryKeys: ['three']
+        allowedKeys: ['one','two']
+        mandatoryKeys: ['three']
       testDeep { one:1, two:2, three:3 }, options, { one:1, two:2, three:3 }
       testDeep { three:3 }, options, { three:3 }
     it "should fail for mandatoryKeys option", ->
       options =
         check: 'type.object'
-        options:
-          allowedKeys: ['one','two']
-          mandatoryKeys: ['three']
+        allowedKeys: ['one','two']
+        mandatoryKeys: ['three']
       testFail { one:1, two:2, four:3 }, options
       testFail { one:1, two:2 }, options
       testFail {}, options
@@ -683,10 +620,9 @@ describe "Type checks", ->
     it "should support mandatoryKeys option", ->
       options =
         check: 'type.object'
-        options:
-          keys:
-            one:
-              check: 'type.integer'
+        keys:
+          one:
+            check: 'type.integer'
       testDeep { one:1, two:2, three:3 }, options, { one:1, two:2, three:3 }
       testDeep { three:3 }, options, { three:3 }
     it "should give description", ->

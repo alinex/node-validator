@@ -411,17 +411,12 @@ exports.array =
       if cb?
         # run async
         return async.each [0..value.length-1], (i, cb) ->
-          check = options.entries.check
-          suboptions = options.entries.options
-          # use specific call for each entry
-          if options.entries[i]?
-            check = options.entries[i].check
-            suboptions = options.entries[i].options
+          suboptions = if Array.isArray options.entries
+            options.entries[i]
+          else
+            options.entries
           # run subcheck
-          validator.check "name[#{i}]", subvalue,
-            check: check
-            options: suboptions
-          , (err, result) ->
+          validator.check "name[#{i}]", subvalue, suboptions, (err, result) ->
             # check response
             return cb err if err
             value[i] = result
@@ -429,16 +424,12 @@ exports.array =
         , (err) -> cb err, value
       #run sync
       for subvalue, i in value
-        check = options.entries.check
-        suboptions = options.entries.options
-        # use specific call for each entry
-        if options.entries[i]?
-          check = options.entries[i].check
-          suboptions = options.entries[i].options
+        suboptions = if Array.isArray options.entries
+          options.entries[i]
+        else
+          options.entries
         # run subcheck
-        result = validator.check "name[#{i}]", subvalue,
-          check: check
-          options: suboptions
+        result = validator.check "name[#{i}]", subvalue, suboptions
         # check response
         if result instanceof Error
           return done result, value

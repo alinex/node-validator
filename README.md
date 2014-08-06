@@ -49,21 +49,17 @@ Only if an asynchronous check is called synchronously it will throw an Error.
 Synchronous call:
 
     var value = Validator.check('test', value, {
-      type: 'type.integer',
-      options: {
-        min: 0,
-        max: 100
-      }
+      check: 'type.integer',
+      min: 0,
+      max: 100
     });
 
 Asynchronous call:
 
     Validator.check('test', value, {
-      type: 'type.integer',
-      options: {
-        min: 0,
-        max: 100
-      }
+      check: 'type.integer',
+      min: 0,
+      max: 100
     }, function(err, value) {
       if (err) {
         // error handling
@@ -79,11 +75,9 @@ The checks are split up into several packages to load on demand.
 If you won't change the value it is possible to call a simplified form:
 
     if (Validator.is('test', value, {
-      type: 'type.integer',
-      options: {
-        minvalue: 0,
-        maxvalue: 100
-      }
+      check: 'type.integer',
+      minvalue: 0,
+      maxvalue: 100
     })) {
       // do something
     };
@@ -94,11 +88,9 @@ This method may be used to get a human readable description of how a value
 has to be to validate.
 
     console.log Validator.describe({
-      type: 'type.integer',
-      options: {
-        minvalue: 0,
-        maxvalue: 100
-      }
+      check: 'type.integer',
+      minvalue: 0,
+      maxvalue: 100
     });
 
 
@@ -119,7 +111,7 @@ __Options:__ None
 __Example:__
 
     var value = Validator.check('verboseMode', value, {
-      type: 'type.boolean'
+      check: 'type.boolean'
     });
 
 ### type.string
@@ -187,8 +179,13 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
+### type.array
 
-### type.list
+### type.object
+
+
+
+
 ### type.enum
 ### type.set
 ### type.hash
