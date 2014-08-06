@@ -31,6 +31,21 @@
       <div class="heading h2">
         <a href="#boolean%20value">Boolean value</a>
       </div>
+      <div class="heading h2">
+        <a href="#string%20value">String value</a>
+      </div>
+      <div class="heading h2">
+        <a href="#integer%20value">Integer value</a>
+      </div>
+      <div class="heading h2">
+        <a href="#float%20value">Float value</a>
+      </div>
+      <div class="heading h2">
+        <a href="#array">Array</a>
+      </div>
+      <div class="heading h2">
+        <a href="#object">Object</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -48,6 +63,7 @@
 
         </td>
         <td class="code highlight"><div class="highlight"><pre><span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:type&#39;</span><span class="p">)</span>
+<span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;./index&#39;</span>
 
 
 </pre></div>
@@ -83,11 +99,18 @@
   </h2>
 </div>
 
+
+<p>No options allowed.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">exports.boolean =</span>
   <span class="nv">check: </span><span class="nf">(name, value, options, cb) -&gt;</span>
-    <span class="nx">debug</span> <span class="s">&quot;Check &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">options</span>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+      <span class="nx">debug</span> <span class="s">&quot;Boolean check &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="k">else</span>
+      <span class="nx">debug</span> <span class="s">&quot;Boolean check </span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s"> for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">cb</span>
     <span class="k">switch</span> <span class="k">typeof</span> <span class="nx">value</span>
       <span class="k">when</span> <span class="s">&#39;boolean&#39;</span>
         <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
@@ -103,11 +126,994 @@
             <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">cb</span>
           <span class="k">when</span> <span class="mi">0</span>
             <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">cb</span>
+      <span class="k">else</span>
+        <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;No boolean value given for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
     <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no boolean for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
-  <span class="nv">describe: </span><span class="nf">(options) -&gt;</span>
+  <span class="nv">describe: </span><span class="nf">(options = {}) -&gt;</span>
     <span class="s">&quot;The value has to be a boolean. The value will be true for 1, &#39;true&#39;, &#39;on&#39;,</span>
 <span class="s">    &#39;yes&#39; and it will be considered as false for 0, &#39;false&#39;, &#39;off&#39;, &#39;no&#39;, &#39;.</span>
 <span class="s">    Other values are not allowed.&quot;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="string%20value">
+  <h2>
+    <a href="#string%20value" name="string%20value" class="pilcrow">&#182;</a>
+    String value
+  </h2>
+</div>
+
+
+<p>Sanitize options allowed:</p>
+
+<ul>
+<li><code>tostring</code> - convert objects to string, first</li>
+<li><code>allowControls</code> - keep control characters in string instead of
+stripping them (but keep \r\n)</li>
+<li><code>stripTags</code> - remove all html tags</li>
+<li><code>lowerCase</code> - set to <code>true</code> or <code>first</code></li>
+<li><code>upperCase</code> - set to <code>true</code> or <code>first</code></li>
+<li><code>replace</code> - replacements (list): string (only single replacement) or
+regular expressions and replacements as inner array</li>
+<li><code>trim</code> - strip whitespace from the beginning and end</li>
+<li><code>crop</code> - crop text after number of characters</li>
+</ul>
+
+<p>Check options:</p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>minLength</code> - minimum text length in characters</li>
+<li><code>maxLength</code> - maximum text length in characters</li>
+<li><code>values</code> - array of possible values (complete text)</li>
+<li><code>startsWith</code> - start of text</li>
+<li><code>endsWith</code> - end of text</li>
+<li><code>match</code> - string or regular expression which have to be matched
+(or list of expressions)</li>
+<li><code>matchNot</code> - string or regular expression which is not allowed to
+match (or list of expressions)</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.string =</span>
+  <span class="nv">check: </span><span class="nf">(name, value, options = {}, cb) -&gt;</span>
+    <span class="nx">debug</span> <span class="s">&quot;String check &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">options</span>
+    <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;A value is needed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tostring</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span>
+      <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>first check input type</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;A string is needed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s"> but got</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>{typeof value} instead."), null, cb
+sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">    unless options.allowControls</span>
+<span class="s">      value = value.replace /[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, &#39;&#39;</span>
+<span class="s">    if options.stripTags?</span>
+<span class="s">      value = value.replace /&lt;\/?[^&gt;]+(&gt;|$)/g, &#39;&#39;</span>
+<span class="s">    if options.lowerCase? and options.lowerCase is true</span>
+<span class="s">      value = value.toLowerCase()</span>
+<span class="s">    if options.upperCase? and options.upperCase is true</span>
+<span class="s">      value = value.toUpperCase()</span>
+<span class="s">    if options.lowerCase? and options.lowerCase is &#39;first&#39;</span>
+<span class="s">      value = value.charAt(0).toLowerCase() + value[1..]</span>
+<span class="s">    if options.upperCase? and options.upperCase is &#39;first&#39;</span>
+<span class="s">      value = value.charAt(0).toUpperCase() + value[1..]</span>
+<span class="s">    if options.replace?</span>
+<span class="s">      if Array.isArray options.replace[0]</span>
+<span class="s">        for [pattern, replace] in options.replace</span>
+<span class="s">          value = value.replace pattern, replace</span>
+<span class="s">      else</span>
+<span class="s">        [pattern, replace] = options.replace</span>
+<span class="s">        value = value.replace pattern, replace</span>
+<span class="s">    if options.trim</span>
+<span class="s">      value = value.trim()</span>
+<span class="s">    if options.crop?</span>
+<span class="s">      value = value.substring 0, options.crop</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">    if options.minLength? and value.length &lt; options.minLength</span>
+<span class="s">      return done new Error(&quot;</span><span class="nx">The</span> <span class="nx">given</span> <span class="nx">string</span> <span class="s">&#39;#{value}&#39;</span> <span class="o">is</span> <span class="nx">too</span> <span class="nx">short</span> <span class="k">for</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>{name}, at most #{options.minlength} characters are needed."), null, cb</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is too long for</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>{name}, at least #{options.maxlength} characters are allowed."), null, cb</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">    if options.values? and not (value in options.values)</span>
+<span class="s">      return done new Error(&quot;</span><span class="nx">The</span> <span class="nx">given</span> <span class="nx">string</span> <span class="s">&#39;#{value}&#39;</span> <span class="o">is</span> <span class="o">not</span> <span class="k">in</span> <span class="nx">the</span> <span class="nx">list</span> <span class="k">of</span>
+        <span class="nx">allowed</span> <span class="nx">phrases</span> <span class="p">(</span><span class="c1">#{options.values}) for #{name}.&quot;), null, cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">[..</span><span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">isnt</span> <span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should start with</span>
+<span class="s">        &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">[</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="p">.</span><span class="nx">length</span><span class="p">..]</span> <span class="o">isnt</span> <span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should end with</span>
+<span class="s">        &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="o">?</span>
+      <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+        <span class="nv">success = </span><span class="kc">true</span>
+        <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+          <span class="k">if</span> <span class="nx">match</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+            <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="nx">match</span>
+          <span class="k">else</span>
+            <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">match</span>
+        <span class="k">unless</span> <span class="nx">success</span>
+          <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should match against</span>
+<span class="s">            &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+        <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should match against</span>
+<span class="s">          &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="o">not</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+        <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should contain</span>
+<span class="s">          &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="o">?</span>
+      <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+        <span class="nv">success = </span><span class="kc">true</span>
+        <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+          <span class="k">if</span> <span class="nx">match</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+            <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="nx">match</span>
+          <span class="k">else</span>
+            <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">not</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">match</span>
+        <span class="k">unless</span> <span class="nx">success</span>
+          <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; shouldn&#39;t match against</span>
+<span class="s">            &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">matchNot</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+        <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; shouldn&#39;t match against</span>
+<span class="s">          &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+        <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; shouldn&#39;t contain</span>
+<span class="s">          &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="nv">describe: </span><span class="nf">(options = {}) -&gt;</span>
+    <span class="nv">text = </span><span class="s">&#39;This should be text entry. &#39;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tostring</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Objects will be converted to their string representation. &quot;</span>
+    <span class="nv">remove = </span><span class="p">[]</span>
+    <span class="nx">remove</span><span class="p">.</span><span class="nx">push</span> <span class="s">&quot;Control characters&quot;</span> <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowControls</span>
+    <span class="nx">remove</span><span class="p">.</span><span class="nx">push</span> <span class="s">&quot;HTML Tags&quot;</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">stripTags</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">remove</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span><span class="si">}</span><span class="s"> will be removed. &quot;</span> <span class="k">if</span> <span class="nx">remove</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The following replacements will take place: &quot;</span>
+      <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="p">[</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">replace</span><span class="p">]</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span>
+          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">pattern</span><span class="si">}</span><span class="s"> =&gt; </span><span class="si">#{</span><span class="nx">replace</span><span class="si">}</span><span class="s">, &quot;</span>
+        <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/, $/</span><span class="p">,</span> <span class="s">&#39;. &#39;</span>
+      <span class="k">else</span>
+        <span class="p">[</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">replace</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">pattern</span><span class="si">}</span><span class="s"> =&gt; </span><span class="si">#{</span><span class="nx">replace</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">trim</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Whitespace will be removed at start and end of the text. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">crop</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text will be cropped after </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">crop</span><span class="si">}</span><span class="s"> characters. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span> <span class="o">is</span> <span class="kc">true</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text will get lower case. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span> <span class="o">is</span> <span class="kc">true</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text will get upper case. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span> <span class="o">is</span> <span class="s">&#39;first&#39;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The first letter will get lower case. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span> <span class="o">is</span> <span class="s">&#39;first&#39;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The first letter will get upper case. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be at least </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be not more than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">values</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only the values: </span><span class="si">#{</span><span class="nx">values</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span><span class="si">}</span><span class="s"> are allowed. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to start with </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="si">}</span><span class="s">... &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to end with ...</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text should match: &quot;</span>
+      <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+        <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&#39;, &quot;</span>
+        <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/, $/</span><span class="p">,</span> <span class="s">&#39;. &#39;</span>
+      <span class="k">else</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text shouldn&#39;t match: &quot;</span>
+      <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+        <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&#39;, &quot;</span>
+        <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/, $/</span><span class="p">,</span> <span class="s">&#39;. &#39;</span>
+      <span class="k">else</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The setting is optional. &quot;</span>
+    <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="integer%20value">
+  <h2>
+    <a href="#integer%20value" name="integer%20value" class="pilcrow">&#182;</a>
+    Integer value
+  </h2>
+</div>
+
+
+<p>Sanitize options allowed:</p>
+
+<ul>
+<li><code>sanitize</code> - (bool) remove invalid characters</li>
+<li><code>round</code> - (bool) rounding of float can be set to true for arithmetic rounding
+or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+</ul>
+
+<p>Check options:</p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>min</code> - (integer) the smalles allowed number</li>
+<li><code>max</code> - (integer) the biggest allowed number</li>
+<li><code>type</code> - (integer|string) the integer is of given type
+(4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')</li>
+<li><code>unsigned</code> - (bool) the integer has to be positive</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nv">integerTypes =</span>
+  <span class="nv">byte: </span><span class="mi">8</span>
+  <span class="nv">short: </span><span class="mi">16</span>
+  <span class="nv">long : </span><span class="mi">32</span>
+  <span class="nv">safe: </span><span class="mi">53</span>
+  <span class="nv">quad: </span><span class="mi">64</span>
+
+<span class="nv">exports.integer =</span>
+  <span class="nv">check: </span><span class="nf">(name, value, options = {}, cb) -&gt;</span>
+    <span class="nx">debug</span> <span class="s">&quot;Integer check &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">options</span>
+    <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;A value is needed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sanitize</span>
+        <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span><span class="o">?</span>
+          <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/^.*?(-?\d+\.?\d*).*?$/</span><span class="p">,</span> <span class="s">&#39;$1&#39;</span>
+        <span class="k">else</span>
+          <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/^.*?(-?\d+).*?$/</span><span class="p">,</span> <span class="s">&#39;$1&#39;</span>
+      <span class="k">if</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span>
+        <span class="nv">value = </span><span class="nb">Number</span> <span class="nx">value</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+      <span class="nv">value = </span><span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+        <span class="k">when</span> <span class="s">&#39;ceil&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">value</span>
+        <span class="k">when</span> <span class="s">&#39;floor&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="nx">value</span>
+        <span class="k">else</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">unless</span> <span class="nx">value</span> <span class="o">is</span> <span class="p">(</span><span class="nx">value</span> <span class="o">|</span> <span class="mi">0</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no integer as needed</span>
+<span class="s">        for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&lt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The value is to low, it has to be at least</span>
+<span class="s">        &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The value is to high, it has to be&#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">&#39;</span>
+<span class="s">        or lower for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">type</span>
+      <span class="nv">type = </span><span class="nx">integerTypes</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="p">]</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">type</span>
+      <span class="nv">unit = </span><span class="nx">integerTypes</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="p">]</span> <span class="o">?</span> <span class="s">&#39;byte&#39;</span>
+      <span class="nv">unsigned = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">unsigned</span> <span class="k">then</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
+      <span class="nv">max = </span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">type</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="nx">unsigned</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+      <span class="nv">min = </span><span class="p">(</span><span class="nx">unsigned</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">max</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">unsigned</span>
+      <span class="k">if</span> <span class="nx">value</span> <span class="o">&lt;</span> <span class="nx">min</span> <span class="o">or</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="nx">max</span>
+        <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The value is out of range for </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s"></span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>{unit}-integer for #{name}."), null, cb
+done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">    return done null, value, cb</span>
+<span class="s">  describe: (options = {}) -&gt;</span>
+<span class="s">    text = &#39;An integer value is needed, here. &#39;</span>
+<span class="s">    if options.sanitize</span>
+<span class="s">      text += &quot;</span><span class="nx">Invalid</span> <span class="nx">characters</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">removed</span> <span class="nx">from</span> <span class="nx">text</span><span class="p">.</span> <span class="s">&quot;</span>
+<span class="s">    if options.round</span>
+<span class="s">      type = switch options.round</span>
+<span class="s">        when &#39;to ceil&#39; then Math.ceil value</span>
+<span class="s">        when &#39;to floor&#39; then Math.floor value</span>
+<span class="s">        else &#39;arithḿetic&#39;</span>
+<span class="s">      text += &quot;</span><span class="nx">Value</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">rounded</span> <span class="c1">#{type}. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s"> and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be greater than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be lower than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="o">?</span>
+      <span class="nv">type = </span><span class="nx">integerTypes</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="p">]</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">type</span>
+      <span class="nv">unit = </span><span class="nx">integerTypes</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="p">]</span> <span class="o">?</span> <span class="s">&#39;byte&#39;</span>
+      <span class="nv">unsigned = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">unsigned</span> <span class="k">then</span> <span class="s">&#39;unsigned&#39;</span> <span class="k">else</span> <span class="s">&#39;signed&#39;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only values in the range of a </span><span class="si">#{</span><span class="nx">unsigned</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">type</span><span class="si">}#{</span><span class="nx">unit</span><span class="si">}</span><span class="s">-integer</span>
+<span class="s">        are allowed. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The setting is optional. &quot;</span>
+    <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="float%20value">
+  <h2>
+    <a href="#float%20value" name="float%20value" class="pilcrow">&#182;</a>
+    Float value
+  </h2>
+</div>
+
+
+<p>Sanitize options allowed:</p>
+
+<ul>
+<li><code>sanitize</code> - (bool) remove invalid characters</li>
+<li><code>round</code> - (int) number of decimal digits to round to</li>
+</ul>
+
+<p>Check options:</p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>min</code> - (numeric) the smalles allowed number</li>
+<li><code>max</code> - (numeric) the biggest allowed number</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.float =</span>
+  <span class="nv">check: </span><span class="nf">(name, value, options = {}, cb) -&gt;</span>
+    <span class="nx">debug</span> <span class="s">&quot;Float check &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">options</span>
+    <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;A value is needed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sanitize</span>
+        <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/^.*?(-?\d+\.?\d*).*?$/</span><span class="p">,</span> <span class="s">&#39;$1&#39;</span>
+      <span class="k">if</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span>
+        <span class="nv">value = </span><span class="nb">Number</span> <span class="nx">value</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span><span class="o">?</span>
+      <span class="nv">exp = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+      <span class="nv">value = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">value</span> <span class="o">*</span> <span class="nx">exp</span><span class="p">)</span> <span class="o">/</span> <span class="nx">exp</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">unless</span> <span class="o">not</span> <span class="nb">isNaN</span><span class="p">(</span><span class="nb">parseFloat</span> <span class="nx">value</span><span class="p">)</span> <span class="o">and</span> <span class="nb">isFinite</span> <span class="nx">value</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no number as needed</span>
+<span class="s">        for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&lt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The value is to low, it has to be at least</span>
+<span class="s">        &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The value is to high, it has to be&#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">&#39;</span>
+<span class="s">        or lower for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="nv">describe: </span><span class="nf">(options = {}) -&gt;</span>
+    <span class="nv">text = </span><span class="s">&#39;A numeric value (float) is needed. &#39;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sanitize</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Invalid characters will be removed from text. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Value will be rounded arithmetic to </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">round</span><span class="si">}</span><span class="s"> digits. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s"> and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be greater than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be lower than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The setting is optional. &quot;</span>
+    <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="array">
+  <h2>
+    <a href="#array" name="array" class="pilcrow">&#182;</a>
+    Array
+  </h2>
+</div>
+
+
+<p>Sanitize options:</p>
+
+<ul>
+<li><code>delimiter</code> - allow value text with specified list separator
+(it can also be an regular expression)</li>
+</ul>
+
+<p>Check options:</p>
+
+<ul>
+<li><code>notEmpty</code> - set to true if an empty array is not valid</li>
+<li><code>minLength</code> - minimum number of entries</li>
+<li><code>maxLength</code> - maximum number of entries</li>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+</ul>
+
+<p>Validating children:</p>
+
+<ul>
+<li><code>èntries</code> - specification for all entries or as array for each element</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.array =</span>
+  <span class="nv">check: </span><span class="nf">(name, value, options = {}, cb) -&gt;</span>
+    <span class="nx">debug</span> <span class="s">&quot;Array check for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">options</span>
+    <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;A value is needed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">delimiter</span><span class="o">?</span>
+      <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">split</span> <span class="nx">options</span><span class="p">.</span><span class="nx">delimiter</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">unless</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">value</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The value for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s"> has to be an array.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">notEmpty</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">0</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;An empty array/list is not allowed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span> <span class="o">is</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span> <span class="o">and</span> <span class="p">(</span>
+      <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">isnt</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="p">)</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;Exactly </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> entries are required</span>
+<span class="s">        for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">. &quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span> <span class="o">&gt;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;At least </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> entries are required</span>
+<span class="s">        in list for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">. &quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span> <span class="o">&lt;</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;Not more than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"> entries are allowed in list</span>
+<span class="s">        for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">. &quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+      <span class="k">if</span> <span class="nx">cb</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>run async</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">return</span> <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nf">(i, cb) -&gt;</span>
+          <span class="nv">suboptions = </span><span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+          <span class="k">else</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
+<p>run subcheck</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&quot;name[</span><span class="si">#{</span><span class="nx">i</span><span class="si">}</span><span class="s">]&quot;</span><span class="p">,</span> <span class="nx">subvalue</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+<p>check response</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+            <span class="nx">value</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
+            <span class="nx">cb</span><span class="p">()</span>
+        <span class="p">,</span> <span class="nf">(err) -&gt;</span> <span class="nx">cb</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>run sync</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">for</span> <span class="nx">subvalue</span><span class="p">,</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">value</span>
+        <span class="nv">suboptions = </span><span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+        <span class="k">else</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+        <span class="k">continue</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+</div>
+<p>run subcheck</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nv">result = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&quot;name[</span><span class="si">#{</span><span class="nx">i</span><span class="si">}</span><span class="s">]&quot;</span><span class="p">,</span> <span class="nx">subvalue</span><span class="p">,</span> <span class="nx">suboptions</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>check response</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">return</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span> <span class="k">instanceof</span> <span class="nb">Error</span>
+        <span class="nx">value</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+
+  <span class="nv">describe: </span><span class="nf">(options = {}) -&gt;</span>
+    <span class="nv">text = </span><span class="s">&#39;Here a list or array have to be given. &#39;</span>
+
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The setting is optional. &quot;</span>
+    <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="object">
+  <h2>
+    <a href="#object" name="object" class="pilcrow">&#182;</a>
+    Object
+  </h2>
+</div>
+
+
+<p>Check options:</p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>instanceOf</code> - only objects of given class type are allowed</li>
+<li><code>mandatoryKeys</code> - the list of elements which are mandatory</li>
+<li><code>allowedKeys</code> - gives a list of elements which are also allowed</li>
+</ul>
+
+<p>Validating children:</p>
+
+<ul>
+<li><code>keys</code> - specification for entries</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.object =</span>
+  <span class="nv">check: </span><span class="nf">(name, value, options = {}, cb) -&gt;</span>
+    <span class="nx">debug</span> <span class="s">&quot;Object check for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">options</span>
+    <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;A value is needed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+</div>
+<p>add mandatory keys to allowed keys</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">allowedKeys = </span><span class="p">[]</span>
+    <span class="nv">allowedKeys = </span><span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="o">?</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
+      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span>
+        <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">entry</span> <span class="k">unless</span> <span class="nx">allowedKeys</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="o">?</span>
+      <span class="k">unless</span> <span class="nx">value</span> <span class="k">instanceof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span>
+        <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s"> needs an object of </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="si">}</span><span class="s"></span>
+<span class="s">          as value.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">isnt</span> <span class="s">&#39;object&#39;</span> <span class="o">or</span> <span class="nx">value</span> <span class="k">instanceof</span> <span class="nb">Array</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The value for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s"> has to be an object.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">length</span>
+      <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">value</span>
+        <span class="k">unless</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">allowedKeys</span>
+          <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The key </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> is not allowed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
+      <span class="k">for</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span>
+        <span class="nv">keys = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span>
+        <span class="k">unless</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">keys</span>
+          <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The key </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> is missing for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">keys</span><span class="o">?</span>
+      <span class="k">if</span> <span class="nx">cb</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+</div>
+<p>run async</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">return</span> <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(key, cb) -&gt;</span>
+          <span class="nv">suboptions = </span><span class="nx">options</span><span class="p">.</span><span class="nx">keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+          <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+</div>
+<p>run subcheck</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&quot;name.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">subvalue</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+</div>
+<p>check response</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+            <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+            <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
+            <span class="nx">cb</span><span class="p">()</span>
+        <span class="p">,</span> <span class="nf">(err) -&gt;</span> <span class="nx">cb</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+</div>
+<p>run sync</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">subvalue</span> <span class="k">of</span> <span class="nx">value</span>
+        <span class="nv">suboptions = </span><span class="nx">options</span><span class="p">.</span><span class="nx">keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+        <span class="k">continue</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+</div>
+<p>run subcheck</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nv">result = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&quot;name.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">subvalue</span><span class="p">,</span> <span class="nx">suboptions</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+</div>
+<p>check response</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">return</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span> <span class="k">instanceof</span> <span class="nb">Error</span>
+        <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+</div>
+<p>done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+
+  <span class="nv">describe: </span><span class="nf">(options = {}) -&gt;</span>
+    <span class="nv">text = </span><span class="s">&#39;Here an object have to be given. &#39;</span>
+
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The setting is optional. &quot;</span>
+    <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><ul>
+<li>\c keySpec - validators for each entry, use '' to specify for all
+entries. This is specifgied by a the key with an array of validator
+function as string, options array.</li>
+</ul>
+  </div>
+  <div class="body"><p>All mandatory keys are automatically allowed keys if given, too.</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">mixed</span>
+      <span>$value    value to be checked</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">string</span>
+      <span>$name     readable variable identification</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">array</span>
+      <span>$options  specific settings</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span>boolean</span>
+    </div>
+    <div class="dox_tag_title">throws</div>
+    <div class="dox_tag_detail">
+      <span>Exception if not valid</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+</div>
+<div class="dox">
+  <div class="summary"><p>Check for enumerated values.</p>
+  </div>
+  <div class="body"><p>A readable name is given and converted mostly in numeric values.</p>
+
+<p><b>Options:</b>
+- \c values - list of possible values as hash with codes
+- \c allowList - true if multiple entries can be selected
+- \c delimiter - select the list separator for given value
+(it can also be an regular expression)</p>
+  </div>
+  <div class="details">
+    <div class="dox_tag_title">Params</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">mixed</span>
+      <span>$value    value to be checked</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">string</span>
+      <span>$name     readable variable identification</span>
+    </div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name">array</span>
+      <span>$options  specific settings</span>
+    </div>
+    <div class="dox_tag_title">Returns</div>
+    <div class="dox_tag_detail">
+      <span class="dox_tag_name"></span>
+      <span>mixed  entry code or list of codes for option allowList</span>
+    </div>
+    <div class="dox_tag_title">throws</div>
+    <div class="dox_tag_detail">
+      <span>Exception if not valid</span>
+    </div>
+  </div>
+</div>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 </pre></div>
         </td>
       </tr>

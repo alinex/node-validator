@@ -38,31 +38,25 @@
         <a href="#get%20description">Get description</a>
       </div>
       <div class="heading h2">
-        <a href="#type">Type</a>
+        <a href="#type%20checks">Type checks</a>
       </div>
       <div class="heading h3">
         <a href="#type.boolean">type.boolean</a>
       </div>
       <div class="heading h3">
-        <a href="#integer">integer</a>
+        <a href="#type.string">type.string</a>
       </div>
       <div class="heading h3">
-        <a href="#float">float</a>
+        <a href="#type.integer">type.integer</a>
       </div>
       <div class="heading h3">
-        <a href="#string">string</a>
+        <a href="#type.float">type.float</a>
       </div>
       <div class="heading h3">
-        <a href="#list">list</a>
+        <a href="#type.array">type.array</a>
       </div>
       <div class="heading h3">
-        <a href="#enum">enum</a>
-      </div>
-      <div class="heading h3">
-        <a href="#set">set</a>
-      </div>
-      <div class="heading h3">
-        <a href="#hash">hash</a>
+        <a href="#type.object">type.object</a>
       </div>
       <div class="heading h2">
         <a href="#license">License</a>
@@ -133,6 +127,16 @@ following the code standards defined there.</p>
 
 
 
+<p>All checks are called with:</p>
+
+<ul>
+<li>a <code>name</code> which should specify where the value comes from and is used in error
+reporting.</li>
+<li>the <code>value</code> to check</li>
+<li>an <code>options</code> array which specifies what to check</li>
+<li>and optionally a <code>callback</code> function</li>
+</ul>
+
 <p>Most checks are synchronous and may be called synchronously or asynchronously.
 Only if an asynchronous check is called synchronously it will throw an Error.</p>
 
@@ -140,11 +144,9 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 
 
 <div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
-  <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">minvalue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">maxvalue</span><span class="o">:</span> <span class="mi">100</span>
-  <span class="p">}</span>
+  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+  <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
 <span class="p">});</span>
 </code></pre></div>
 
@@ -154,11 +156,9 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 
 
 <div class="highlight"><pre><code><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
-  <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">minvalue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">maxvalue</span><span class="o">:</span> <span class="mi">100</span>
-  <span class="p">}</span>
+  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+  <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
 <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// error handling</span>
@@ -185,11 +185,9 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 
 
 <div class="highlight"><pre><code><span class="k">if</span> <span class="p">(</span><span class="nx">Validator</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
-  <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">minvalue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">maxvalue</span><span class="o">:</span> <span class="mi">100</span>
-  <span class="p">}</span>
+  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+  <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
 <span class="p">}))</span> <span class="p">{</span>
   <span class="c1">// do something</span>
 <span class="p">};</span>
@@ -211,21 +209,19 @@ has to be to validate.</p>
 
 
 <div class="highlight"><pre><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">describe</span><span class="p">({</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
-  <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
-    <span class="nx">minvalue</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">maxvalue</span><span class="o">:</span> <span class="mi">100</span>
-  <span class="p">}</span>
+  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+  <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
 <span class="p">});</span>
 </code></pre></div>
 
 
 
 
-<div class="pilwrap" id="type">
+<div class="pilwrap" id="type%20checks">
   <h2>
-    <a href="#type" name="type" class="pilcrow">&#182;</a>
-    Type
+    <a href="#type%20checks" name="type%20checks" class="pilcrow">&#182;</a>
+    Type checks
   </h2>
 </div>
 
@@ -243,7 +239,8 @@ language types with different options.</p>
 
 
 <p>The value has to be a boolean. The value will be true for 1, 'true', 'on',
-'yes' and it will be considered as false for 0, 'false', 'off', 'no', '.
+'yes' and it will be considered as false for 0, 'false', 'off', 'no', null and
+undefined.
 Other values are not allowed.</p>
 
 <p><strong>Options:</strong> None</p>
@@ -252,74 +249,164 @@ Other values are not allowed.</p>
 
 
 <div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;verboseMode&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;type.boolean&#39;</span>
+  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.boolean&#39;</span>
 <span class="p">});</span>
 </code></pre></div>
 
 
 
 
-<div class="pilwrap" id="integer">
+<div class="pilwrap" id="type.string">
   <h3>
-    <a href="#integer" name="integer" class="pilcrow">&#182;</a>
-    integer
+    <a href="#type.string" name="type.string" class="pilcrow">&#182;</a>
+    type.string
   </h3>
 </div>
 
 
+<p>This will test for strings and have lots of sanitize and optimization filters
+and also different check settings to use.</p>
 
-<div class="pilwrap" id="float">
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>tostring</code> - convert objects to string, first</li>
+<li><code>allowControls</code> - keep control characters in string instead of
+stripping them (but keep \r\n)</li>
+<li><code>stripTags</code> - remove all html tags</li>
+<li><code>lowerCase</code> - set to <code>true</code> or <code>first</code></li>
+<li><code>upperCase</code> - set to <code>true</code> or <code>first</code></li>
+<li><code>replace</code> - replacement or list with each replacement to contain of [search,
+replacement text] while search may be a string or RegExp</li>
+<li><code>trim</code> - strip whitespace from the beginning and end</li>
+<li><code>crop</code> - crop text after number of characters</li>
+</ul>
+
+<p><strong>Validate options:</strong></p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>minLength</code> - minimum text length in characters</li>
+<li><code>maxLength</code> - maximum text length in characters</li>
+<li><code>values</code> - array of possible values (complete text)</li>
+<li><code>startsWith</code> - start of text</li>
+<li><code>endsWith</code> - end of text</li>
+<li><code>match</code> - string or regular expression which have to be matched
+(or list of expressions)</li>
+<li><code>matchNot</code> - string or regular expression which is not allowed to
+match (or list of expressions)</li>
+</ul>
+
+
+<div class="pilwrap" id="type.integer">
   <h3>
-    <a href="#float" name="float" class="pilcrow">&#182;</a>
-    float
+    <a href="#type.integer" name="type.integer" class="pilcrow">&#182;</a>
+    type.integer
   </h3>
 </div>
 
 
+<p>To test for integer values which may be sanitized.</p>
 
-<div class="pilwrap" id="string">
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>sanitize</code> - (bool) remove invalid characters</li>
+<li><code>round</code> - (bool) rounding of float can be set to true for arithmetic rounding
+or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+</ul>
+
+<p><strong>Validate options:</strong></p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>min</code> - (integer) the smalles allowed number</li>
+<li><code>max</code> - (integer) the biggest allowed number</li>
+<li><code>type</code> - (integer|string) the integer is of given type
+(4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')</li>
+<li><code>unsigned</code> - (bool) the integer has to be positive</li>
+</ul>
+
+
+<div class="pilwrap" id="type.float">
   <h3>
-    <a href="#string" name="string" class="pilcrow">&#182;</a>
-    string
+    <a href="#type.float" name="type.float" class="pilcrow">&#182;</a>
+    type.float
   </h3>
 </div>
 
 
+<p>Nearly the same as for integer values but here are floats allowed, too.</p>
 
-<div class="pilwrap" id="list">
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>sanitize</code> - (bool) remove invalid characters</li>
+<li><code>round</code> - (int) number of decimal digits to round to</li>
+</ul>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>min</code> - (numeric) the smalles allowed number</li>
+<li><code>max</code> - (numeric) the biggest allowed number</li>
+</ul>
+
+
+<div class="pilwrap" id="type.array">
   <h3>
-    <a href="#list" name="list" class="pilcrow">&#182;</a>
-    list
+    <a href="#type.array" name="type.array" class="pilcrow">&#182;</a>
+    type.array
   </h3>
 </div>
 
 
+<p><strong>Sanitize options:</strong></p>
 
-<div class="pilwrap" id="enum">
+<ul>
+<li><code>delimiter</code> - allow value text with specified list separator
+(it can also be an regular expression)</li>
+</ul>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>notEmpty</code> - set to true if an empty array is not valid</li>
+<li><code>minLength</code> - minimum number of entries</li>
+<li><code>maxLength</code> - maximum number of entries</li>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+</ul>
+
+<p><strong>Validating children:</strong></p>
+
+<ul>
+<li><code>èntries</code> - specification for all entries or as array for each element</li>
+</ul>
+
+
+<div class="pilwrap" id="type.object">
   <h3>
-    <a href="#enum" name="enum" class="pilcrow">&#182;</a>
-    enum
+    <a href="#type.object" name="type.object" class="pilcrow">&#182;</a>
+    type.object
   </h3>
 </div>
 
 
+<p><strong>Check options:</strong></p>
 
-<div class="pilwrap" id="set">
-  <h3>
-    <a href="#set" name="set" class="pilcrow">&#182;</a>
-    set
-  </h3>
-</div>
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>instanceOf</code> - only objects of given class type are allowed</li>
+<li><code>mandatoryKeys</code> - the list of elements which are mandatory</li>
+<li><code>allowedKeys</code> - gives a list of elements which are also allowed</li>
+</ul>
 
+<p><strong>Validating children:</strong></p>
 
-
-<div class="pilwrap" id="hash">
-  <h3>
-    <a href="#hash" name="hash" class="pilcrow">&#182;</a>
-    hash
-  </h3>
-</div>
-
+<ul>
+<li><code>keys</code> - specification for entries</li>
+</ul>
 
 
 <div class="pilwrap" id="license">

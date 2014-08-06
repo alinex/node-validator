@@ -93,8 +93,9 @@ It will only give a value of true or false to the callback.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">exports.is = </span><span class="nf">(name, value, options, cb) -&gt;</span>
-  <span class="nx">exports</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nf">(err) -&gt;</span>
+  <span class="o">not</span> <span class="nx">exports</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nf">(err) -&gt;</span>
     <span class="nx">cb</span> <span class="o">not</span> <span class="nx">err</span><span class="o">?</span>
+    <span class="o">not</span> <span class="nx">err</span><span class="o">?</span>
 
 
 </pre></div>
