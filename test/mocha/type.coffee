@@ -616,8 +616,7 @@ describe "Type checks", ->
       testFail { one:1, two:2, four:3 }, options
       testFail { one:1, two:2 }, options
       testFail {}, options
-
-    it "should support mandatoryKeys option", ->
+    it "should support subchecks", ->
       options =
         check: 'type.object'
         keys:
@@ -625,5 +624,13 @@ describe "Type checks", ->
             check: 'type.integer'
       testDeep { one:1, two:2, three:3 }, options, { one:1, two:2, three:3 }
       testDeep { three:3 }, options, { three:3 }
+    it "should fail on subchecks", ->
+      options =
+        check: 'type.object'
+        keys:
+          one:
+            check: 'type.integer'
+      testFail { one:1.1, two:2, three:3 }, options
+      testFail { two:2, three:3, one:'nnn' }, options
     it "should give description", ->
       testDesc options

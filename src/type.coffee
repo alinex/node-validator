@@ -384,6 +384,10 @@ exports.float =
 # - `minLength` - minimum number of entries
 # - `maxLength` - maximum number of entries
 # - `optional` - the value must not be present (will return null)
+#
+# Validating children:
+#
+# - `èntries` - specification for all entries or as array for each element
 exports.array =
   check: (name, value, options = {}, cb) ->
     debug "Array check for #{name}", options
@@ -415,6 +419,7 @@ exports.array =
             options.entries[i]
           else
             options.entries
+          return cb() unless suboptions?
           # run subcheck
           validator.check "name[#{i}]", subvalue, suboptions, (err, result) ->
             # check response
@@ -428,11 +433,11 @@ exports.array =
           options.entries[i]
         else
           options.entries
+        continue unless suboptions?
         # run subcheck
         result = validator.check "name[#{i}]", subvalue, suboptions
         # check response
-        if result instanceof Error
-          return done result, value
+        return result if result instanceof Error
         value[i] = result
     # done return resulting value
     return done null, value, cb
@@ -454,6 +459,10 @@ exports.array =
 # - `instanceOf` - only objects of given class type are allowed
 # - `mandatoryKeys` - the list of elements which are mandatory
 # - `allowedKeys` - gives a list of elements which are also allowed
+#
+# Validating children:
+#
+# - `keys` - specification for entries
 exports.object =
   check: (name, value, options = {}, cb) ->
     debug "Object check for #{name}", options
@@ -483,6 +492,28 @@ exports.object =
         keys = Object.keys value
         unless key in keys
           return done new Error("The key #{key} is missing for #{name}."), null, cb
+    if options.keys?
+      if cb?
+        # run async
+        return async.each Object.keys value, (key, cb) ->
+          suboptions = options.keys[key]
+          return cb() unless suboptions?
+          # run subcheck
+          validator.check "name.#{key}", subvalue, suboptions, (err, result) ->
+            # check response
+            return cb err if err
+            value[key] = result
+            cb()
+        , (err) -> cb err, value
+      #run sync
+      for key, subvalue of value
+        suboptions = options.keys[key]
+        continue unless suboptions?
+        # run subcheck
+        result = validator.check "name.#{key}", subvalue, suboptions
+        # check response
+        return result if result instanceof Error
+        value[key] = result
     # done return resulting value
     return done null, value, cb
 

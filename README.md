@@ -76,8 +76,8 @@ If you won't change the value it is possible to call a simplified form:
 
     if (Validator.is('test', value, {
       check: 'type.integer',
-      minvalue: 0,
-      maxvalue: 100
+      min: 0,
+      max: 100
     })) {
       // do something
     };
@@ -89,8 +89,8 @@ has to be to validate.
 
     console.log Validator.describe({
       check: 'type.integer',
-      minvalue: 0,
-      maxvalue: 100
+      min: 0,
+      max: 100
     });
 
 
@@ -181,14 +181,34 @@ __Check options:__
 
 ### type.array
 
+__Sanitize options:__
+
+- `delimiter` - allow value text with specified list separator
+  (it can also be an regular expression)
+
+__Check options:__
+
+- `notEmpty` - set to true if an empty array is not valid
+- `minLength` - minimum number of entries
+- `maxLength` - maximum number of entries
+- `optional` - the value must not be present (will return null)
+
+__Validating children:__
+
+- `èntries` - specification for all entries or as array for each element
+
 ### type.object
 
+__Check options:__
 
+- `optional` - the value must not be present (will return null)
+- `instanceOf` - only objects of given class type are allowed
+- `mandatoryKeys` - the list of elements which are mandatory
+- `allowedKeys` - gives a list of elements which are also allowed
 
+__Validating children:__
 
-### type.enum
-### type.set
-### type.hash
+- `keys` - specification for entries
 
 
 License
