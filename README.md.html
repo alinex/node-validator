@@ -59,6 +59,12 @@
         <a href="#type.object">type.object</a>
       </div>
       <div class="heading h2">
+        <a href="#date%20checks">Date checks</a>
+      </div>
+      <div class="heading h3">
+        <a href="#date.interval">date.interval</a>
+      </div>
+      <div class="heading h2">
         <a href="#license">License</a>
       </div>
     </div>
@@ -405,7 +411,41 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p><strong>Validating children:</strong></p>
 
 <ul>
-<li><code>keys</code> - specification for entries</li>
+<li><code>entries</code> - specification for all entries or specific to the key name</li>
+</ul>
+
+
+<div class="pilwrap" id="date%20checks">
+  <h2>
+    <a href="#date%20checks" name="date%20checks" class="pilcrow">&#182;</a>
+    Date checks
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id="date.interval">
+  <h3>
+    <a href="#date.interval" name="date.interval" class="pilcrow">&#182;</a>
+    date.interval
+  </h3>
+</div>
+
+
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>unit</code> - (string) type of unit to convert if not integer given</li>
+<li><code>round</code> - (bool) rounding of float can be set to true for arithmetic rounding
+or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+</ul>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>min</code> - (integer) the smalles allowed number</li>
+<li><code>max</code> - (integer) the biggest allowed number</li>
 </ul>
 
 

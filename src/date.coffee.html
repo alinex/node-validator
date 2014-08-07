@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>date.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/date.coffee", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+  <script src="../fileSearch.js"></script>
+  <script src="../goToLine.js"></script>
+  <link rel="stylesheet" href="../fileSearch.css" />
+  <link rel="stylesheet" href="../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#validator%20for%20simple%20types">Validator for simple types</a>
+      </div>
+      <div class="heading h2">
+        <a href="#send%20value%20and%20return%20it">Send value and return it</a>
+      </div>
+      <div class="heading h2">
+        <a href="#interval">Interval</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="validator%20for%20simple%20types">
+  <h1>
+    <a href="#validator%20for%20simple%20types" name="validator%20for%20simple%20types" class="pilcrow">&#182;</a>
+    Validator for simple types
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:date&#39;</span><span class="p">)</span>
+<span class="p">{</span><span class="nx">number</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
+<span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;./index&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="send%20value%20and%20return%20it">
+  <h2>
+    <a href="#send%20value%20and%20return%20it" name="send%20value%20and%20return%20it" class="pilcrow">&#182;</a>
+    Send value and return it
+  </h2>
+</div>
+
+
+<p>This helps supporting both return values and callbacks at the same time.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">done = </span><span class="nf">(err, value, cb = -&gt;) -&gt;</span>
+  <span class="nx">cb</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">value</span>
+  <span class="nx">err</span> <span class="o">?</span> <span class="nx">value</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="interval">
+  <h2>
+    <a href="#interval" name="interval" class="pilcrow">&#182;</a>
+    Interval
+  </h2>
+</div>
+
+
+<p>Sanitize options allowed:</p>
+
+<ul>
+<li><code>unit</code> - (string) type of unit to convert if not integer given</li>
+<li><code>round</code> - (bool) rounding of float can be set to true for arithmetic rounding
+or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+</ul>
+
+<p>Check options:</p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>min</code> - (integer) the smalles allowed number</li>
+<li><code>max</code> - (integer) the biggest allowed number</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.interval =</span>
+  <span class="nv">check: </span><span class="nf">(name, value, options = {}, cb) -&gt;</span>
+    <span class="nx">debug</span> <span class="s">&quot;Interval check &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">options</span>
+    <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;A value is needed for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;value&#39;</span><span class="p">,</span> <span class="nx">value</span>
+      <span class="nv">parsed = </span><span class="nx">number</span><span class="p">.</span><span class="nx">parseMSeconds</span> <span class="nx">value</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="s">&#39;parsed&#39;</span><span class="p">,</span> <span class="nx">parsed</span>
+      <span class="k">if</span> <span class="nb">isNaN</span> <span class="nx">parsed</span>
+        <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not parse able as</span>
+<span class="s">          interval for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+      <span class="nv">unit = </span><span class="nx">options</span><span class="p">.</span><span class="nx">unit</span> <span class="o">?</span> <span class="s">&#39;ms&#39;</span>
+      <span class="k">unless</span> <span class="nx">unit</span> <span class="o">is</span> <span class="s">&#39;ms&#39;</span>
+        <span class="nx">parsed</span> <span class="o">/=</span> <span class="k">switch</span> <span class="nx">unit</span>
+          <span class="k">when</span> <span class="s">&#39;s&#39;</span>
+            <span class="mi">1000</span>
+          <span class="k">when</span> <span class="s">&#39;m&#39;</span>
+            <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span>
+          <span class="k">when</span> <span class="s">&#39;h&#39;</span>
+            <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>
+          <span class="k">when</span> <span class="s">&#39;d&#39;</span>
+            <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+
+<div class="highlight"><pre><code> <span class="nx">parsed</span> <span class="o">/=</span> <span class="mi">1000</span> <span class="nx">unless</span> <span class="nx">unit</span> <span class="nx">is</span> <span class="s1">&#39;ms&#39;</span>
+ <span class="nx">parsed</span> <span class="o">/=</span> <span class="mi">60</span> <span class="nx">unless</span> <span class="nx">unit</span> <span class="k">in</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="s1">&#39;ms&#39;</span><span class="p">]</span>
+ <span class="nx">parsed</span> <span class="o">/=</span> <span class="mi">60</span> <span class="nx">unless</span> <span class="nx">unit</span> <span class="k">in</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">]</span>
+ <span class="nx">parsed</span> <span class="o">/=</span> <span class="mi">24</span> <span class="nx">unless</span> <span class="nx">unit</span> <span class="k">in</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">]</span>
+</code></pre></div>
+
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nv">value = </span><span class="nx">parsed</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+      <span class="nv">value = </span><span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+        <span class="k">when</span> <span class="s">&#39;ceil&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">value</span>
+        <span class="k">when</span> <span class="s">&#39;floor&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="nx">value</span>
+        <span class="k">else</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">suboptions =</span>
+      <span class="nv">check: </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span><span class="o">?</span> <span class="k">then</span> <span class="s">&#39;type.integer&#39;</span> <span class="k">else</span> <span class="s">&#39;type.float&#39;</span>
+    <span class="nv">suboptions.min = </span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span>
+    <span class="nv">suboptions.max = </span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+    <span class="nv">value = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">suboptions</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="nv">describe: </span><span class="nf">(options = {}) -&gt;</span>
+    <span class="nv">text = </span><span class="s">&#39;An time interval is needed, here. &#39;</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;If defined as a text you may use a combination of values with the</span>
+<span class="s">      units: ms, s, m, h, d. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">unit</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The result will be given as the number of </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">unit</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+      <span class="nv">type = </span><span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+        <span class="k">when</span> <span class="s">&#39;to ceil&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">value</span>
+        <span class="k">when</span> <span class="s">&#39;to floor&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="nx">value</span>
+        <span class="k">else</span> <span class="s">&#39;arithḿetic&#39;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Value will be rounded </span><span class="si">#{</span><span class="nx">type</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s"> and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be greater than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be lower than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The setting is optional. &quot;</span>
+    <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

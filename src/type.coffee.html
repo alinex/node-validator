@@ -823,8 +823,29 @@ done return resulting value</p>
     <span class="k">return</span> <span class="nx">done</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
 
   <span class="nv">describe: </span><span class="nf">(options = {}) -&gt;</span>
-    <span class="nv">text = </span><span class="s">&#39;Here a list or array have to be given. &#39;</span>
-
+    <span class="nv">text = </span><span class="s">&#39;Here a list have to be given. &#39;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">notEmpty</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It&#39;s not allowed to be empty. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">delimiter</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;You may also give a single text using &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">delimiter</span><span class="si">}</span><span class="s">&#39; as</span>
+<span class="s">        for the individual entries. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The number of entries have to be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"></span>
+<span class="s">        and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;At least </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> elements should be given. &quot;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Not more than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"> elements are allowed. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+      <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Entries should contain:&quot;</span>
+        <span class="k">for</span> <span class="nx">entry</span><span class="p">,</span> <span class="nx">num</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+          <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span>
+            <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n</span><span class="si">#{</span><span class="nx">num</span><span class="si">}</span><span class="s">. </span><span class="si">#{</span><span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span><span class="si">}</span><span class="s"> &quot;</span>
+          <span class="k">else</span>
+            <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n</span><span class="si">#{</span><span class="nx">num</span><span class="si">}</span><span class="s">. Free input without specification. &quot;</span>
+      <span class="k">else</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;All entries should be:\n&gt; </span><span class="si">#{</span><span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="si">}</span><span class="s"> &quot;</span>
     <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The setting is optional. &quot;</span>
     <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
@@ -856,7 +877,7 @@ done return resulting value</p>
 <p>Validating children:</p>
 
 <ul>
-<li><code>keys</code> - specification for entries</li>
+<li><code>entries</code> - specification for entries</li>
 </ul>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -911,7 +932,7 @@ done return resulting value</p>
         <span class="nv">keys = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span>
         <span class="k">unless</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">keys</span>
           <span class="k">return</span> <span class="nx">done</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s">&quot;The key </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> is missing for </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
-    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">keys</span><span class="o">?</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
       <span class="k">if</span> <span class="nx">cb</span><span class="o">?</span>
 
 </pre></div>
@@ -926,7 +947,10 @@ done return resulting value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">return</span> <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(key, cb) -&gt;</span>
-          <span class="nv">suboptions = </span><span class="nx">options</span><span class="p">.</span><span class="nx">keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+          <span class="nv">suboptions = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+          <span class="k">else</span>
+            <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
           <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
 
 </pre></div>
@@ -970,7 +994,10 @@ done return resulting value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">subvalue</span> <span class="k">of</span> <span class="nx">value</span>
-        <span class="nv">suboptions = </span><span class="nx">options</span><span class="p">.</span><span class="nx">keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+        <span class="nv">suboptions = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+        <span class="k">else</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
         <span class="k">continue</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
 
 </pre></div>
@@ -1015,7 +1042,22 @@ done return resulting value</p>
 
   <span class="nv">describe: </span><span class="nf">(options = {}) -&gt;</span>
     <span class="nv">text = </span><span class="s">&#39;Here an object have to be given. &#39;</span>
-
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The keys </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="si">}</span><span class="s"> have to be included. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The keys </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="si">}</span><span class="s"> are optional. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="o">?</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The object has to be an instance of </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;All entries should be:\n&gt; </span><span class="si">#{</span><span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="si">}</span><span class="s"> &quot;</span>
+      <span class="k">else</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Entries should contain:&quot;</span>
+        <span class="k">for</span> <span class="nx">entry</span><span class="p">,</span> <span class="nx">num</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+          <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span><span class="o">?</span>
+            <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> - </span><span class="si">#{</span><span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span><span class="si">}</span><span class="s"> &quot;</span>
+          <span class="k">else</span>
+            <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> - Free input without specification. &quot;</span>
     <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The setting is optional. &quot;</span>
     <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
