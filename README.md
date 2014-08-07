@@ -208,7 +208,7 @@ __Check options:__
 
 __Validating children:__
 
-- `keys` - specification for entries
+- `entries` - specification for all entries or specific to the key name
 
 
 License

@@ -443,8 +443,29 @@ exports.array =
     return done null, value, cb
 
   describe: (options = {}) ->
-    text = 'Here a list or array have to be given. '
-
+    text = 'Here a list have to be given. '
+    if options.notEmpty
+      text += "It's not allowed to be empty. "
+    if options.delimiter?
+      text += "You may also give a single text using '#{options.delimiter}' as
+        for the individual entries. "
+    if options.minLength? and options.maxLength?
+      text += "The number of entries have to be between #{options.minLength}
+        and #{options.maxLength}. "
+    else if options.minLength?
+      text += "At least #{options.minLength} elements should be given. "
+    else if options.maxLength?
+      text += "Not more than #{options.maxLength} elements are allowed. "
+    if options.entries?
+      if Array.isArray options.entries
+        text += "Entries should contain:"
+        for entry, num in options.entries
+          if options.entries[num]
+            text += "\n#{num}. #{validator.describe options.entries[num]} "
+          else
+            text += "\n#{num}. Free input without specification. "
+      else
+        text += "All entries should be:\n> #{validator.describe options.entries} "
     if options.optional
       text += "The setting is optional. "
     text.trim()
@@ -462,7 +483,7 @@ exports.array =
 #
 # Validating children:
 #
-# - `keys` - specification for entries
+# - `entries` - specification for entries
 exports.object =
   check: (name, value, options = {}, cb) ->
     debug "Object check for #{name}", options
@@ -492,11 +513,14 @@ exports.object =
         keys = Object.keys value
         unless key in keys
           return done new Error("The key #{key} is missing for #{name}."), null, cb
-    if options.keys?
+    if options.entries?
       if cb?
         # run async
         return async.each Object.keys value, (key, cb) ->
-          suboptions = options.keys[key]
+          suboptions = if options.entries.check?
+            options.entries
+          else
+            options.entries[key]
           return cb() unless suboptions?
           # run subcheck
           validator.check "name.#{key}", subvalue, suboptions, (err, result) ->
@@ -507,7 +531,10 @@ exports.object =
         , (err) -> cb err, value
       #run sync
       for key, subvalue of value
-        suboptions = options.keys[key]
+        suboptions = if options.entries.check?
+          options.entries
+        else
+          options.entries[key]
         continue unless suboptions?
         # run subcheck
         result = validator.check "name.#{key}", subvalue, suboptions
@@ -519,7 +546,22 @@ exports.object =
 
   describe: (options = {}) ->
     text = 'Here an object have to be given. '
-
+    if options.mandatoryKeys?
+      text += "The keys #{options.mandatoryKeys} have to be included. "
+    if options.allowedKeys?
+      text += "The keys #{options.allowedKeys} are optional. "
+    if options.instanceOf?
+      text += "The object has to be an instance of #{options.instanceOf}. "
+    if options.entries?
+      if options.entries.check?
+        text += "All entries should be:\n> #{validator.describe options.entries} "
+      else
+        text += "Entries should contain:"
+        for entry, num in options.entries
+          if options.entries[key]?
+            text += "\n- #{key} - #{validator.describe options.entries[key]} "
+          else
+            text += "\n- #{key} - Free input without specification. "
     if options.optional
       text += "The setting is optional. "
     text.trim()

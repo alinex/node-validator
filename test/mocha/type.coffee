@@ -619,7 +619,7 @@ describe "Type checks", ->
     it "should support subchecks", ->
       options =
         check: 'type.object'
-        keys:
+        entries:
           one:
             check: 'type.integer'
       testDeep { one:1, two:2, three:3 }, options, { one:1, two:2, three:3 }
@@ -627,7 +627,7 @@ describe "Type checks", ->
     it "should fail on subchecks", ->
       options =
         check: 'type.object'
-        keys:
+        entries:
           one:
             check: 'type.integer'
       testFail { one:1.1, two:2, three:3 }, options
