@@ -4,6 +4,12 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.0.2 (2014-08-07)
+-------------------------------------------------
+- Fixed date.interval checks.
+- Basically running date.interval check with some small errors.
+- Added describe texts for array and object options.
+
 Version 0.0.1 (2014-08-06)
 -------------------------------------------------
 - Finished array and object checks.
