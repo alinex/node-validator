@@ -211,6 +211,24 @@ __Validating children:__
 - `entries` - specification for all entries or specific to the key name
 
 
+Date checks
+-------------------------------------------------
+
+### date.interval
+
+__Sanitize options:__
+
+- `unit` - (string) type of unit to convert if not integer given
+- `round` - (bool) rounding of float can be set to true for arithmetic rounding
+  or use `floor` or `ceil` for the corresponding methods
+
+__Check options:__
+
+- `optional` - the value must not be present (will return null)
+- `min` - (integer) the smalles allowed number
+- `max` - (integer) the biggest allowed number
+
+
 License
 -------------------------------------------------
 
