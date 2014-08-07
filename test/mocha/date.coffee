@@ -35,7 +35,7 @@ describe "Date checks", ->
     expect(desc).to.be.a 'string'
     expect(desc).to.have.length.of.at.least 10
 
-  describe.only "for interval", ->
+  describe "for interval", ->
 
     options =
       check: 'date.interval'
@@ -48,6 +48,7 @@ describe "Date checks", ->
       testEqual '12ms', options, 12
       testEqual '1s', options, 1000
       testEqual '1m', options, 60000
+      testEqual '+18.6s', options, 18600
     it "should fail on other objects", ->
       testFail 'hello', options
       testFail null, options
@@ -60,27 +61,33 @@ describe "Date checks", ->
         optional: true
       testEqual null, options, null
       testEqual undefined, options, null
+    it "should support unit option", ->
+      options =
+        check: 'date.interval'
+        unit: 's'
+      testEqual '1600ms', options, 1.6
+      testEqual '+18.6s', options, 18.6
     it "should support round option", ->
       options =
         check: 'date.interval'
+        unit: 's'
         round: true
       testEqual 13.5, options, 14
-      testEqual -9.49, options, -9
-      testEqual '+18.6', options, 19
+      testEqual '+18.6s', options, 19
     it "should support round (floor) option", ->
       options =
         check: 'date.interval'
+        unit: 's'
         round: 'floor'
       testEqual 13.5, options, 13
-      testEqual -9.49, options, -10
-      testEqual '+18.6', options, 18
+      testEqual '+18.6s', options, 18
     it "should support round (ceil) option", ->
       options =
         check: 'date.interval'
+        unit: 's'
         round: 'ceil'
       testEqual 13.5, options, 14
-      testEqual -9.49, options, -9
-      testEqual '+18.2', options, 19
+      testEqual '+18.2s', options, 19
     it "should support min option", ->
       options =
         check: 'date.interval'

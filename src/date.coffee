@@ -34,15 +34,27 @@ exports.interval =
       return done new Error("A value is needed for #{name}."), null, cb
     # sanitize
     if typeof value is 'string'
+      console.log 'value', value
       parsed = number.parseMSeconds value
+      console.log 'parsed', parsed
       if isNaN parsed
         return done new Error("The given value '#{value}' is not parse able as
           interval for #{name}."), null, cb
       unit = options.unit ? 'ms'
-      parsed /= 1000 unless unit is 'ms'
-      parsed /= 60 unless unit in ['s','ms']
-      parsed /= 60 unless unit in ['s','ms','m']
-      parsed /= 24 unless unit in ['s','ms','m', 'h']
+      unless unit is 'ms'
+        parsed /= switch unit
+          when 's'
+            1000
+          when 'm'
+            1000 * 60
+          when 'h'
+            1000 * 60 * 60
+          when 'd'
+            1000 * 60 * 60 * 24
+#      parsed /= 1000 unless unit is 'ms'
+#      parsed /= 60 unless unit in ['s','ms']
+#      parsed /= 60 unless unit in ['s','ms','m']
+#      parsed /= 24 unless unit in ['s','ms','m', 'h']
       value = parsed
     if options.round
       value = switch options.round
