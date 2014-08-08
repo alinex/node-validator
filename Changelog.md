@@ -4,6 +4,12 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.0.3 (2014-08-08)
+-------------------------------------------------
+- Added async module.
+- Make it possible to not define allowed keys but only the mandatory keys and other may exist.
+- Removed debugging console output.
+
 Version 0.0.2 (2014-08-07)
 -------------------------------------------------
 - Fixed date.interval checks.
