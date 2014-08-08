@@ -34,9 +34,7 @@ exports.interval =
       return done new Error("A value is needed for #{name}."), null, cb
     # sanitize
     if typeof value is 'string'
-      console.log 'value', value
       parsed = number.parseMSeconds value
-      console.log 'parsed', parsed
       if isNaN parsed
         return done new Error("The given value '#{value}' is not parse able as
           interval for #{name}."), null, cb
