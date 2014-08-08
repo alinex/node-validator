@@ -235,6 +235,15 @@ __Validating children:__
 
 - `entries` - specification for all entries or specific to the key name
 
+### type.any
+
+This is used to give some alternatives from which at least one check have to
+succeed. The first one succeeding will work.
+
+__Option:__
+
+- `list` - (array) with different check alternatives
+
 
 Date checks
 -------------------------------------------------
