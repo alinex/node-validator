@@ -37,7 +37,7 @@ To use the validator you have to first include it:
 
 All checks are called with:
 
-- a `name` which should specify where the value comes from and is used in error
+- a `source` which should specify where the value comes from and is used in error
   reporting.
 - the `value` to check
 - an `options` array which specifies what to check
@@ -92,6 +92,31 @@ has to be to validate.
       min: 0,
       max: 100
     });
+
+
+Descriptive reporting
+-------------------------------------------------
+To get even more descriptive reporting it is possible to set a title and abstract
+for the given field in the configuration. This will be used in error reporting
+and `describe()` calls.
+
+    Validator.check('test', value, {
+      check: 'type.float',
+      title: 'Overall Timeout',
+      description: 'time in milliseconds the whole test may take',
+      min: 500
+    }, function(err, value) {
+      if (err) {
+        // there will be the error
+      } else  {
+        // do something with value
+      }
+    });
+
+This may result in the following error:
+
+> Failed: The value is to low, it has to be at least 500 in test.timeout for "Overall Timeout".
+> It should contain the time in milliseconds the whole test may take.
 
 
 Type checks

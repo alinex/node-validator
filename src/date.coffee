@@ -28,17 +28,17 @@ done = (err, value, cb = ->) ->
 # - `min` - (integer) the smalles allowed number
 # - `max` - (integer) the biggest allowed number
 exports.interval =
-  check: (name, value, options = {}, cb) ->
-    debug "Interval check '#{value}' for #{name}", util.inspect(options).grey
+  check: (source, value, options = {}, cb) ->
+    debug "Interval check '#{value}' in #{source}", util.inspect(options).grey
     unless value?
       return done null, null, cb if options.optional
-      return done new Error("A value is needed for #{name}."), null, cb
+      return done validator.error("A value is needed", source, options), null, cb
     # sanitize
     if typeof value is 'string'
       parsed = number.parseMSeconds value
       if isNaN parsed
-        return done new Error("The given value '#{value}' is not parse able as
-          interval for #{name}."), null, cb
+        return done validator.error("The given value '#{value}' is not parse able as
+          interval", source, options), null, cb
       unit = options.unit ? 'ms'
       unless unit is 'ms'
         parsed /= switch unit
@@ -57,13 +57,15 @@ exports.interval =
         when 'floor' then Math.floor value
         else Math.round value
     if typeof value isnt 'number'
-      return done new Error("A number should be given for #{name}."), null, cb
+      return done validator.error("A number should be given", source, options), null, cb
     # validate
     suboptions =
       check: if options.round? then 'type.integer' else 'type.float'
+    suboptions.title = options.title if options.title?
+    suboptions.description = options.description if options.description?
     suboptions.min = options.min if options.min?
     suboptions.max = options.max if options.max?
-    value = validator.check name, value, suboptions
+    value = validator.check source, value, suboptions
     # done return resulting value
     return done null, value, cb
   describe: (options = {}) ->
