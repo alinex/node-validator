@@ -38,11 +38,25 @@ exports.describe = (options) ->
 # -------------------------------------------------
 # This is used internally only.
 # This will contain the title and description from the configuration if there.
-exports.error = (message, source = "unknown", options) ->
-  text = "#{message} in #{source}"
-  text += " for \"#{options.title}\"" if options.title?
-  text += "."
-  text += "\nIt should contain #{options.description}." if options.description?
-  debug "Failed: #{text}"
-  new Error text
+exports.error = (err, source = "unknown", options, value) ->
+  if err
+    unless err instanceof Error
+      text = "#{err} in #{source}"
+      text += " for \"#{options.title}\"" if options.title?
+      text += "."
+      text += "\nIt should contain #{options.description}." if options.description?
+      err = new Error text
+    debug "Failed: #{err.message}"
+  else
+    debug "Succeeded with '#{value}' in #{source}"
+  err
 
+# Send value or error
+# -------------------------------------------------
+# This is used internally only.
+# This helps supporting both return values and callbacks at the same time.
+# This will contain the title and description from the configuration if there.
+exports.result = (err, source, options, value, cb = ->) ->
+  err = exports.error err, source, options, value
+  cb err, value
+  err ? value

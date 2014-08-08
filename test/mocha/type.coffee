@@ -635,7 +635,7 @@ describe "Type checks", ->
     it "should give description", ->
       testDesc options
 
-  describe.only "for array", ->
+  describe "for array", ->
 
     options =
       check: 'type.any'

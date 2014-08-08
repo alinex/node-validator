@@ -6,13 +6,6 @@ util = require 'util'
 {number} = require 'alinex-util'
 validator = require './index'
 
-# Send value and return it
-# -------------------------------------------------
-# This helps supporting both return values and callbacks at the same time.
-done = (err, value, cb = ->) ->
-  cb err, value
-  err ? value
-
 # Interval
 # -------------------------------------------------
 #
@@ -31,14 +24,14 @@ exports.interval =
   check: (source, value, options = {}, cb) ->
     debug "Interval check '#{value}' in #{source}", util.inspect(options).grey
     unless value?
-      return done null, null, cb if options.optional
-      return done validator.error("A value is needed", source, options), null, cb
+      return validator.result null, source, options, null, cb if options.optional
+      return validator.result "A value is needed", source, options, null, cb
     # sanitize
     if typeof value is 'string'
       parsed = number.parseMSeconds value
       if isNaN parsed
-        return done validator.error("The given value '#{value}' is not parse able as
-          interval", source, options), null, cb
+        return validator.result "The given value '#{value}' is not parse able as
+          interval", source, options, null, cb
       unit = options.unit ? 'ms'
       unless unit is 'ms'
         parsed /= switch unit
@@ -57,7 +50,7 @@ exports.interval =
         when 'floor' then Math.floor value
         else Math.round value
     if typeof value isnt 'number'
-      return done validator.error("A number should be given", source, options), null, cb
+      return validator.result "A number should be given", source, options, null, cb
     # validate
     suboptions =
       check: if options.round? then 'type.integer' else 'type.float'
@@ -67,7 +60,7 @@ exports.interval =
     suboptions.max = options.max if options.max?
     value = validator.check source, value, suboptions
     # done return resulting value
-    return done null, value, cb
+    return validator.result null, source, options, value, cb
   describe: (options = {}) ->
     text = 'An time interval is needed, here. '
     text += "If defined as a text you may use a combination of values with the
