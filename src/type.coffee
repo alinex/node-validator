@@ -504,7 +504,7 @@ exports.object =
       return done null, value, cb
     if typeof value isnt 'object' or value instanceof Array
       return done new Error("The value for #{name} has to be an object."), null, cb
-    if allowedKeys.length
+    if options.allowedKeys?
       for key of value
         unless key in allowedKeys
           return done new Error("The key #{key} is not allowed for #{name}."), null, cb
