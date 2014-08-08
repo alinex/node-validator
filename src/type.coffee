@@ -2,6 +2,7 @@
 # =================================================
 
 debug = require('debug')('validator:type')
+async = require 'async'
 validator = require './index'
 
 # Send value and return it
