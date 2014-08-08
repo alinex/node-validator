@@ -460,7 +460,7 @@ exports.array =
       text += "Not more than #{options.maxLength} elements are allowed. "
     if options.entries?
       if Array.isArray options.entries
-        text += "Entries should contain:"
+        text += "Entries should contain:\n"
         for entry, num in options.entries
           if options.entries[num]
             text += "\n#{num}. #{validator.describe options.entries[num]} "
@@ -545,7 +545,6 @@ exports.object =
         value[key] = result
     # done return resulting value
     return done null, value, cb
-
   describe: (options = {}) ->
     text = 'Here an object have to be given. '
     if options.mandatoryKeys?
@@ -558,7 +557,7 @@ exports.object =
       if options.entries.check?
         text += "All entries should be:\n> #{validator.describe options.entries} "
       else
-        text += "Entries should contain:"
+        text += "Entries should contain:\n"
         for entry, num in options.entries
           if options.entries[key]?
             text += "\n- #{key} - #{validator.describe options.entries[key]} "
@@ -566,5 +565,40 @@ exports.object =
             text += "\n- #{key} - Free input without specification. "
     if options.optional
       text += "The setting is optional. "
+    text.trim()
+
+# Alternatives
+# -------------------------------------------------
+exports.any =
+  check: (source, value, options = {}, cb) ->
+    debug "Check multiple alternatives for #{source}", util.inspect(options).grey
+    if cb?
+      # run async
+      return async.map options.list, (suboptions, cb) ->
+        return cb new Error "Undefined" unless suboptions?
+        # run subcheck
+        validator.check "#{source}.#{key}", value[key], suboptions, (err, result) ->
+          cb null, err if err
+          cb null, result
+      , (err, results) ->
+        # check response
+        for result in results
+          unless result instanceof Error
+            cb null, result
+        cb validator.error("None of the alternatives are matched", source, options)
+    #run sync
+    for suboptions in options.list
+      continue unless suboptions?
+      # run subcheck
+      result = validator.check source, value, suboptions
+      # check response
+      unless result instanceof Error
+        return done null, result, cb
+    # done without success
+    return done validator.error("None of the alternatives are matched", source, options), null, cb
+  describe: (options = {}) ->
+    text = "Here one of the following checks have to succeed:\n"
+    for entry in options.list
+      text += "\n- #{validator.describe entry} "
     text.trim()
 

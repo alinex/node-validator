@@ -634,3 +634,28 @@ describe "Type checks", ->
       testFail { two:2, three:3, one:'nnn' }, options
     it "should give description", ->
       testDesc options
+
+  describe.only "for array", ->
+
+    options =
+      check: 'type.any'
+      list: [
+        check: 'type.integer'
+      ,
+        check: 'type.boolean'
+      ]
+
+    it "should match any selection", ->
+      testTrue true, options
+      testFalse false, options
+      testEqual 1, options, 1
+      testEqual -12, options, -12
+      testEqual '3678', options, 3678
+    it "should fail for any selection", ->
+      testFail 15.3, options
+      testFail '', options
+      testFail [], options
+      testFail (new Error '????'), options
+      testFail {}, options
+    it "should give description", ->
+      testDesc options
