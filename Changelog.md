@@ -4,6 +4,14 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.1.0 (2014-08-08)
+-------------------------------------------------
+- Added short documentation of type.any check.
+- Changed structure to use central result method with better debugging.
+- Added type.any for alternative checks.
+- Added possibility to give title and description for error reporting of values.
+- Fixed some async problems and added typecheck to date.interval.
+
 Version 0.0.3 (2014-08-08)
 -------------------------------------------------
 - Added async module.
