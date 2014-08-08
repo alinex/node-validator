@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "home/alex/a3/node-validator/README.md", defaultSidebar = true;
+    var relativeDir = "", thisFile = "home/alex/a3/node-validator/READMEmd", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
   <script src="fileSearch.js"></script>
@@ -38,6 +38,9 @@
         <a href="#get%20description">Get description</a>
       </div>
       <div class="heading h2">
+        <a href="#descriptive%20reporting">Descriptive reporting</a>
+      </div>
+      <div class="heading h2">
         <a href="#type%20checks">Type checks</a>
       </div>
       <div class="heading h3">
@@ -57,6 +60,9 @@
       </div>
       <div class="heading h3">
         <a href="#type.object">type.object</a>
+      </div>
+      <div class="heading h3">
+        <a href="#type.any">type.any</a>
       </div>
       <div class="heading h2">
         <a href="#date%20checks">Date checks</a>
@@ -79,9 +85,9 @@
 </div>
 
 
-<p><a href="https://travis-ci.org/alinex/node-validator"><img src="https://travis-ci.org/alinex/node-validator.svg?branch=master" alt="Build Status" title="" /></a>
-<a href="https://coveralls.io/r/alinex/node-validator?branch=master"><img src="https://coveralls.io/repos/alinex/node-validator/badge.png?branch=master" alt="Coverage Status" title="" /></a>
-<a href="https://gemnasium.com/alinex/node-validator"><img src="https://gemnasium.com/alinex/node-validator.png" alt="Dependency Status" title="" /></a></p>
+<p><a href="https://travis-ci.org/alinex/node-validator.html"><img src="https://travis-ci.org/alinex/node-validator.svg?branch=master" alt="Build Status" title="" /></a>
+<a href="https://coveralls.io/r/alinex/node-validator.html?branch=master"><img src="https://coveralls.io/repos/alinex/node-validator/badge.png?branch=master" alt="Coverage Status" title="" /></a>
+<a href="https://gemnasium.com/alinex/node-validator.html"><img src="https://gemnasium.com/alinex/node-validator.png" alt="Dependency Status" title="" /></a></p>
 
 <p>This module will help validating complex structures. And may be used for all
 external information.</p>
@@ -94,7 +100,7 @@ external information.</p>
 <li>can give a human readable description</li>
 </ul>
 
-<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
+<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex.html">Alinex Universe</a>
 following the code standards defined there.</p>
 
 
@@ -114,7 +120,7 @@ following the code standards defined there.</p>
 
 
 
-<p><a href="https://nodei.co/npm/alinex-validator/"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
+<p><a href="https://nodei.co/npm/alinex-validator/.html"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
 
 
 <div class="pilwrap" id="usage">
@@ -136,7 +142,7 @@ following the code standards defined there.</p>
 <p>All checks are called with:</p>
 
 <ul>
-<li>a <code>name</code> which should specify where the value comes from and is used in error
+<li>a <code>source</code> which should specify where the value comes from and is used in error
 reporting.</li>
 <li>the <code>value</code> to check</li>
 <li>an <code>options</code> array which specifies what to check</li>
@@ -222,6 +228,43 @@ has to be to validate.</p>
 </code></pre></div>
 
 
+
+
+<div class="pilwrap" id="descriptive%20reporting">
+  <h2>
+    <a href="#descriptive%20reporting" name="descriptive%20reporting" class="pilcrow">&#182;</a>
+    Descriptive reporting
+  </h2>
+</div>
+
+
+<p>To get even more descriptive reporting it is possible to set a title and abstract
+for the given field in the configuration. This will be used in error reporting
+and <code>describe()</code> calls.</p>
+
+
+<div class="highlight"><pre><code><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.float&#39;</span><span class="p">,</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Overall Timeout&#39;</span><span class="p">,</span>
+  <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;time in milliseconds the whole test may take&#39;</span><span class="p">,</span>
+  <span class="nx">min</span><span class="o">:</span> <span class="mi">500</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// there will be the error</span>
+  <span class="p">}</span> <span class="k">else</span>  <span class="p">{</span>
+    <span class="c1">// do something with value</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>This may result in the following error:</p>
+
+<blockquote>
+  <p>Failed: The value is to low, it has to be at least 500 in test.timeout for "Overall Timeout".
+  It should contain the time in milliseconds the whole test may take.</p>
+</blockquote>
 
 
 <div class="pilwrap" id="type%20checks">
@@ -415,6 +458,24 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 </ul>
 
 
+<div class="pilwrap" id="type.any">
+  <h3>
+    <a href="#type.any" name="type.any" class="pilcrow">&#182;</a>
+    type.any
+  </h3>
+</div>
+
+
+<p>This is used to give some alternatives from which at least one check have to
+succeed. The first one succeeding will work.</p>
+
+<p><strong>Option:</strong></p>
+
+<ul>
+<li><code>list</code> - (array) with different check alternatives</li>
+</ul>
+
+
 <div class="pilwrap" id="date%20checks">
   <h2>
     <a href="#date%20checks" name="date%20checks" class="pilcrow">&#182;</a>
@@ -464,7 +525,7 @@ you may not use this file except in compliance with the License.
 You may obtain a copy of the License at</p>
 
 <blockquote>
-  <p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+  <p><a href="http://www.apache.org/licenses/LICENSE-2.0.html">http://www.apache.org/licenses/LICENSE-2.0</a></p>
 </blockquote>
 
 <p>Unless required by applicable law or agreed to in writing, software
