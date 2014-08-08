@@ -2,6 +2,7 @@
 # =================================================
 
 debug = require('debug')('validator:date')
+util = require 'util'
 {number} = require 'alinex-util'
 validator = require './index'
 
@@ -28,7 +29,7 @@ done = (err, value, cb = ->) ->
 # - `max` - (integer) the biggest allowed number
 exports.interval =
   check: (name, value, options = {}, cb) ->
-    debug "Interval check '#{value}' for #{name}", options
+    debug "Interval check '#{value}' for #{name}", util.inspect(options).grey
     unless value?
       return done null, null, cb if options.optional
       return done new Error("A value is needed for #{name}."), null, cb
@@ -49,16 +50,14 @@ exports.interval =
             1000 * 60 * 60
           when 'd'
             1000 * 60 * 60 * 24
-#      parsed /= 1000 unless unit is 'ms'
-#      parsed /= 60 unless unit in ['s','ms']
-#      parsed /= 60 unless unit in ['s','ms','m']
-#      parsed /= 24 unless unit in ['s','ms','m', 'h']
       value = parsed
     if options.round
       value = switch options.round
         when 'ceil' then Math.ceil value
         when 'floor' then Math.floor value
         else Math.round value
+    if typeof value isnt 'number'
+      return done new Error("A number should be given for #{name}."), null, cb
     # validate
     suboptions =
       check: if options.round? then 'type.integer' else 'type.float'

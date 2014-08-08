@@ -4,6 +4,7 @@
 debug = require('debug')('validator:type')
 async = require 'async'
 validator = require './index'
+util = require 'util'
 
 # Send value and return it
 # -------------------------------------------------
@@ -75,7 +76,7 @@ exports.boolean =
 #   match (or list of expressions)
 exports.string =
   check: (name, value, options = {}, cb) ->
-    debug "String check '#{value}' for #{name}", options
+    debug "String check '#{value}' for #{name}", util.inspect(options).grey
     unless value?
       return done null, null, cb if options.optional
       return done new Error("A value is needed for #{name}."), null, cb
@@ -249,7 +250,7 @@ integerTypes =
 
 exports.integer =
   check: (name, value, options = {}, cb) ->
-    debug "Integer check '#{value}' for #{name}", options
+    debug "Integer check '#{value}' for #{name}", util.inspect(options).grey
     unless value?
       return done null, null, cb if options.optional
       return done new Error("A value is needed for #{name}."), null, cb
@@ -329,7 +330,7 @@ exports.integer =
 # - `max` - (numeric) the biggest allowed number
 exports.float =
   check: (name, value, options = {}, cb) ->
-    debug "Float check '#{value}' for #{name}", options
+    debug "Float check '#{value}' for #{name}", util.inspect(options).grey
     unless value?
       return done null, null, cb if options.optional
       return done new Error("A value is needed for #{name}."), null, cb
@@ -391,7 +392,7 @@ exports.float =
 # - `èntries` - specification for all entries or as array for each element
 exports.array =
   check: (name, value, options = {}, cb) ->
-    debug "Array check for #{name}", options
+    debug "Array check for #{name}", util.inspect(options).grey
     unless value?
       return done null, null, cb if options.optional
       return done new Error("A value is needed for #{name}."), null, cb
@@ -422,7 +423,7 @@ exports.array =
             options.entries
           return cb() unless suboptions?
           # run subcheck
-          validator.check "name[#{i}]", subvalue, suboptions, (err, result) ->
+          validator.check "#{name}[#{i}]", subvalue, suboptions, (err, result) ->
             # check response
             return cb err if err
             value[i] = result
@@ -436,7 +437,7 @@ exports.array =
           options.entries
         continue unless suboptions?
         # run subcheck
-        result = validator.check "name[#{i}]", subvalue, suboptions
+        result = validator.check "#{name}[#{i}]", subvalue, suboptions
         # check response
         return result if result instanceof Error
         value[i] = result
@@ -487,7 +488,7 @@ exports.array =
 # - `entries` - specification for entries
 exports.object =
   check: (name, value, options = {}, cb) ->
-    debug "Object check for #{name}", options
+    debug "Object check for #{name}", util.inspect(options).grey
     unless value?
       return done null, null, cb if options.optional
       return done new Error("A value is needed for #{name}."), null, cb
@@ -517,14 +518,14 @@ exports.object =
     if options.entries?
       if cb?
         # run async
-        return async.each Object.keys value, (key, cb) ->
+        return async.each Object.keys(value), (key, cb) ->
           suboptions = if options.entries.check?
             options.entries
           else
             options.entries[key]
           return cb() unless suboptions?
           # run subcheck
-          validator.check "name.#{key}", subvalue, suboptions, (err, result) ->
+          validator.check "#{name}.#{key}", value[key], suboptions, (err, result) ->
             # check response
             return cb err if err
             value[key] = result
@@ -538,7 +539,7 @@ exports.object =
           options.entries[key]
         continue unless suboptions?
         # run subcheck
-        result = validator.check "name.#{key}", subvalue, suboptions
+        result = validator.check "#{name}.#{key}", subvalue, suboptions
         # check response
         return result if result instanceof Error
         value[key] = result

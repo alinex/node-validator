@@ -1,6 +1,8 @@
 # Validator
 # =================================================
 
+debug = require('debug')('validator')
+
 # Get the type functions
 # -------------------------------------------------
 # This small helper will load the package and return the specific type hash.
@@ -23,6 +25,7 @@ exports.is = (name, value, options, cb) ->
 # This will check the given value, sanitize it and return the new value or an
 # Error to the callback.
 exports.check = (name, value, options, cb) ->
+  debug "Check for #{name}..."
   getType(options.check).check name, value, options, cb
 
 # Check if value is valid
