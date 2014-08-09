@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.1.1 (2014-08-09)
+-------------------------------------------------
+- Fixed bug in asynchronous call of type.any
+
 Version 0.1.0 (2014-08-08)
 -------------------------------------------------
 - Added short documentation of type.any check.
