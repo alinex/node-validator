@@ -482,6 +482,7 @@ exports.array =
 exports.object =
   check: (source, value, options = {}, cb) ->
     debug "Object check for #{source}", util.inspect(options).grey
+    console.log value
     unless value?
       return validator.result null, source, options, null, cb if options.optional
       return validator.result "A value is needed", source, options, null, cb
@@ -520,7 +521,6 @@ exports.object =
           # run subcheck
           validator.check "#{source}.#{key}", value[key], suboptions, (err, result) ->
             # check response
-            validator.error err, source, options
             return cb err if err
             value[key] = result
             cb()
@@ -565,20 +565,20 @@ exports.object =
 # -------------------------------------------------
 exports.any =
   check: (source, value, options = {}, cb) ->
-    debug "Check multiple alternatives for #{source}", util.inspect(options).grey
+    debug "Check multiple alternatives in #{source}", util.inspect(options).grey
     if cb?
       # run async
       return async.map options.list, (suboptions, cb) ->
         return cb new Error "Undefined" unless suboptions?
         # run subcheck
-        validator.check "#{source}.#{key}", value[key], suboptions, (err, result) ->
-          cb null, err if err
+        validator.check source, value, suboptions, (err, result) ->
+          return cb null, err if err
           cb null, result
       , (err, results) ->
         # check response
         for result in results
           unless result instanceof Error
-            validator.result null, source, options, result, cb
+            return validator.result null, source, options, result, cb
         validator.result "None of the alternatives are matched", source, options, null, cb
     #run sync
     for suboptions in options.list
