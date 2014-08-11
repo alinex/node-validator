@@ -507,15 +507,15 @@ exports.object =
       return helper.result null, source, options, value, cb
     if typeof value isnt 'object' or value instanceof Array
       return helper.result "The value has to be an object", source, options, null, cb
-    if options.allowedKeys?
+    unless allowedKeys.length is 0
       for key of value
         unless key in allowedKeys
-          return helper.result "The key #{key} is not allowed", source, options, null, cb
+          return helper.result "The key '#{key}' is not allowed", source, options, null, cb
     if options.mandatoryKeys?
       for key in options.mandatoryKeys
         keys = Object.keys value
         unless key in keys
-          return helper.result "The key #{key} is missing", source, options, null, cb
+          return helper.result "The key '#{key}' is missing", source, options, null, cb
     if options.entries?
       if cb?
         # run async
