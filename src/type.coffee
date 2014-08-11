@@ -424,7 +424,7 @@ exports.array =
             options.entries
           return cb() unless suboptions?
           # run subcheck
-          validator.check "#{source}[#{i}]", subvalue, suboptions, (err, result) ->
+          validator.check "#{source}[#{i}]", value[i], suboptions, (err, result) ->
             # check response
             return cb err if err
             value[i] = result

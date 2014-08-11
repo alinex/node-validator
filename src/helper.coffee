@@ -2,6 +2,7 @@
 # =================================================
 
 debug = require('debug')('validator')
+util = require 'util'
 
 # Get the type functions
 # -------------------------------------------------
@@ -49,7 +50,7 @@ exports.error = (err, source = "unknown", options, value) ->
       err = new Error text
     debug "Failed: #{err.message}"
   else
-    debug "Succeeded with '#{value}' in #{source}"
+    debug "Succeeded in #{source}", util.inspect(options).grey
   err
 
 # Send value or error
