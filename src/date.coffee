@@ -4,7 +4,9 @@
 debug = require('debug')('validator:date')
 util = require 'util'
 {number} = require 'alinex-util'
+
 validator = require './index'
+helper = require './helper'
 
 # Interval
 # -------------------------------------------------
@@ -23,14 +25,14 @@ validator = require './index'
 exports.interval =
   check: (source, value, options = {}, cb) ->
     debug "Interval check '#{value}' in #{source}", util.inspect(options).grey
-    unless value?
-      return validator.result null, source, options, null, cb if options.optional
-      return validator.result "A value is needed", source, options, null, cb
+    # check optional
+    result = helper.optional source, options, value, cb
+    return result unless result is false
     # sanitize
     if typeof value is 'string'
       parsed = number.parseMSeconds value
       if isNaN parsed
-        return validator.result "The given value '#{value}' is not parse able as
+        return helper.result "The given value '#{value}' is not parse able as
           interval", source, options, null, cb
       unit = options.unit ? 'ms'
       unless unit is 'ms'
@@ -50,7 +52,7 @@ exports.interval =
         when 'floor' then Math.floor value
         else Math.round value
     if typeof value isnt 'number'
-      return validator.result "A number should be given", source, options, null, cb
+      return helper.result "A number should be given", source, options, null, cb
     # validate
     suboptions =
       check: if options.round? then 'type.integer' else 'type.float'
@@ -60,7 +62,7 @@ exports.interval =
     suboptions.max = options.max if options.max?
     value = validator.check source, value, suboptions
     # done return resulting value
-    return validator.result null, source, options, value, cb
+    return helper.result null, source, options, value, cb
   describe: (options = {}) ->
     text = 'An time interval is needed, here. '
     text += "If defined as a text you may use a combination of values with the

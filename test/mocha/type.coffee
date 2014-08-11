@@ -100,12 +100,17 @@ describe "Type checks", ->
         optional: true
       testEqual null, options, null
       testEqual undefined, options, null
+    it "should support default option", ->
+      options =
+        check: 'type.string'
+        optional: true
+        default: ''
+      testEqual null, options, ''
+      testEqual undefined, options, ''
     it "should support tostring option", ->
       options =
         check: 'type.string'
         tostring: true
-      testEqual [], options, ''
-      testEqual {}, options, '[object Object]'
       testEqual (new Error 'test'), options, 'Error: test'
     it "should support trim option", ->
       options =

@@ -3,8 +3,11 @@
 
 debug = require('debug')('validator:type')
 async = require 'async'
-validator = require './index'
 util = require 'util'
+
+validator = require './index'
+helper = require './helper'
+
 
 # Boolean value
 # -------------------------------------------------
@@ -16,25 +19,25 @@ exports.boolean =
     else
       debug "Boolean check #{value} for #{source}"
     unless value?
-      return validator.result null, source, options, false, cb
+      return helper.result null, source, options, false, cb
     switch typeof value
       when 'boolean'
-        return validator.result null, source, options, value, cb
+        return helper.result null, source, options, value, cb
       when 'string'
         switch value.toLowerCase()
           when 'true', '1', 'on', 'yes'
-            return validator.result null, source, options, true, cb
+            return helper.result null, source, options, true, cb
           when 'false', '0', 'off', 'no'
-            return validator.result null, source, options, false, cb
+            return helper.result null, source, options, false, cb
       when 'number'
         switch value
           when 1
-            return validator.result null, source, options, true, cb
+            return helper.result null, source, options, true, cb
           when 0
-            return validator.result null, source, options, false, cb
+            return helper.result null, source, options, false, cb
       else
-        return validator.result "No boolean value given", source, options, null, cb
-    validator.result "The value '#{value}' is no boolean", source, options, null, cb
+        return helper.result "No boolean value given", source, options, null, cb
+    helper.result "The value '#{value}' is no boolean", source, options, null, cb
   describe: (options = {}) ->
     "The value has to be a boolean. The value will be true for 1, 'true', 'on',
     'yes' and it will be considered as false for 0, 'false', 'off', 'no', '.
@@ -70,14 +73,14 @@ exports.boolean =
 exports.string =
   check: (source, value, options = {}, cb) ->
     debug "String check '#{value}'", util.inspect(options).grey
-    unless value?
-      return validator.result null, source, options, null, cb if options.optional
-      return validator.result "A value is needed", source, options, null, cb
+    # check optional
+    result = helper.optional source, options, value, cb
+    return result unless result is false
     if options.tostring and typeof value is 'object'
       value = value.toString()
     # first check input type
     unless typeof value is 'string'
-      return validator.result "A string is needed but got #{typeof value}
+      return helper.result "A string is needed but got #{typeof value}
         instead", source, options, null, cb
     # sanitize
     unless options.allowControls
@@ -103,21 +106,24 @@ exports.string =
       value = value.trim()
     if options.crop?
       value = value.substring 0, options.crop
+    # check optional, again
+    result = helper.optional source, options, value, cb
+    return result unless result is false
     # validate
     if options.minLength? and value.length < options.minLength
-      return validator.result "The given string '#{value}' is too short at
+      return helper.result "The given string '#{value}' is too short at
         most #{options.minlength} characters are needed", source, options, null, cb
     if options.maxLength? and value.length > options.maxLength
-      return validator.result "The given string '#{value}' is too long for
+      return helper.result "The given string '#{value}' is too long for
         at least #{options.maxlength} characters are allowed", source, options, null, cb
     if options.values? and not (value in options.values)
-      return validator.result "The given string '#{value}' is not in the list of
+      return helper.result "The given string '#{value}' is not in the list of
         allowed phrases (#{options.values})", source, options, null, cb
     if options.startsWith? and value[..options.startsWith.length-1] isnt options.startsWith
-      return validator.result "The given string '#{value}' should start with
+      return helper.result "The given string '#{value}' should start with
         '#{options.startsWith}'", source, options, null, cb
     if options.endsWith? and value[value.length-options.endsWith.length..] isnt options.endsWith
-      return validator.result "The given string '#{value}' should end with
+      return helper.result "The given string '#{value}' should end with
         '#{options.endsWith}'", source, options, null, cb
     if options.match?
       if Array.isArray options.match
@@ -128,13 +134,13 @@ exports.string =
           else
             success = success and ~value.indexOf match
         unless success
-          return validator.result "The given string '#{value}' should match against
+          return helper.result "The given string '#{value}' should match against
             '#{options.match}'", source, options, null, cb
       else if options.match instanceof RegExp and not value.match options.match
-        return validator.result "The given string '#{value}' should match against
+        return helper.result "The given string '#{value}' should match against
           '#{options.match}'", source, options, null, cb
       else if not ~value.indexOf options.match
-        return validator.result "The given string '#{value}' should contain
+        return helper.result "The given string '#{value}' should contain
           '#{options.match}'", source, options, null, cb
     if options.matchNot?
       if Array.isArray options.matchNot
@@ -145,16 +151,16 @@ exports.string =
           else
             success = success and not ~value.indexOf match
         unless success
-          return validator.result "The given string '#{value}' shouldn't match against
+          return helper.result "The given string '#{value}' shouldn't match against
             '#{options.match}'", source, options, null, cb
       else if options.matchNot instanceof RegExp and value.matchNot options.match
-        return validator.result "The given string '#{value}' shouldn't match against
+        return helper.result "The given string '#{value}' shouldn't match against
           '#{options.matchNot}'", source, options, null, cb
       else if ~value.indexOf options.matchNot
-        return validator.result "The given string '#{value}' shouldn't contain
+        return helper.result "The given string '#{value}' shouldn't contain
           '#{options.matchNot}'", source, options, null, cb
     # done return resulting value
-    return validator.result null, source, options, value, cb
+    return helper.result null, source, options, value, cb
   describe: (options = {}) ->
     text = 'This should be text entry. '
     if options.tostring
@@ -244,9 +250,9 @@ integerTypes =
 exports.integer =
   check: (source, value, options = {}, cb) ->
     debug "Integer check '#{value}'", util.inspect(options).grey
-    unless value?
-      return validator.result null, source, options, null, cb if options.optional
-      return validator.result "A value is needed", source, options, null, cb
+    # check optional
+    result = helper.optional source, options, value, cb
+    return result unless result is false
     # sanitize
     if typeof value is 'string'
       if options.sanitize
@@ -261,15 +267,16 @@ exports.integer =
         when 'ceil' then Math.ceil value
         when 'floor' then Math.floor value
         else Math.round value
+    return result unless result is false
     # validate
     unless value is (value | 0)
-      return validator.result "The given value '#{value}' is no integer as needed
+      return helper.result "The given value '#{value}' is no integer as needed
        ", source, options, null, cb
     if options.min? and value < options.min
-      return validator.result "The value is to low, it has to be at least
+      return helper.result "The value is to low, it has to be at least
         #{options.min}", source, options, null, cb
     if options.max? and value > options.max
-      return validator.result "The value is to high, it has to be #{options.max}
+      return helper.result "The value is to high, it has to be #{options.max}
         or lower", source, options, null, cb
     if options.type
       type = integerTypes[options.type] ? options.type
@@ -278,10 +285,10 @@ exports.integer =
       max = (Math.pow 2, type-1+unsigned)-1
       min = (unsigned-1) * max - 1 + unsigned
       if value < min or value > max
-        return validator.result "The value is out of range for #{options.type}
+        return helper.result "The value is out of range for #{options.type}
           #{unit}-integer", source, options, null, cb
     # done return resulting value
-    return validator.result null, source, options, value, cb
+    return helper.result null, source, options, value, cb
   describe: (options = {}) ->
     text = 'An integer value is needed, here. '
     if options.sanitize
@@ -324,9 +331,9 @@ exports.integer =
 exports.float =
   check: (source, value, options = {}, cb) ->
     debug "Float check '#{value}'", util.inspect(options).grey
-    unless value?
-      return validator.result null, source, options, null, cb if options.optional
-      return validator.result "A value is needed", source, options, null, cb
+    # check optional
+    result = helper.optional source, options, value, cb
+    return result unless result is false
     # sanitize
     if typeof value is 'string'
       if options.sanitize
@@ -338,16 +345,16 @@ exports.float =
       value = Math.round(value * exp) / exp
     # validate
     unless not isNaN(parseFloat value) and isFinite value
-      return validator.result "The given value '#{value}' is no number as needed
+      return helper.result "The given value '#{value}' is no number as needed
        ", source, options, null, cb
     if options.min? and value < options.min
-      return validator.result "The value is to low, it has to be at least
+      return helper.result "The value is to low, it has to be at least
         '#{options.min}'", source, options, null, cb
     if options.max? and value > options.max
-      return validator.result "The value is to high, it has to be'#{options.max}'
+      return helper.result "The value is to high, it has to be'#{options.max}'
         or lower", source, options, null, cb
     # done return resulting value
-    return validator.result null, source, options, value, cb
+    return helper.result null, source, options, value, cb
   describe: (options = {}) ->
     text = 'A numeric value (float) is needed. '
     if options.sanitize
@@ -386,25 +393,26 @@ exports.float =
 exports.array =
   check: (source, value, options = {}, cb) ->
     debug "Array check in #{source}", util.inspect(options).grey
-    unless value?
-      return validator.result null, source, options, null, cb if options.optional
-      return validator.result "A value is needed", source, options, null, cb
+    # check optional
+    result = helper.optional source, options, value, cb
+    return result unless result is false
+    # sanitize
     if typeof value is 'string' and options.delimiter?
       value = value.split options.delimiter
     # validate
     unless Array.isArray value
-      return validator.result "The value has to be an array", source, options, null, cb
+      return helper.result "The value has to be an array", source, options, null, cb
     if options.notEmpty and value.length is 0
-      return validator.result "An empty array/list is not allowed", source, options, null, cb
+      return helper.result "An empty array/list is not allowed", source, options, null, cb
     if options.minLength? and options.minLength is options.maxLength and (
       value.length isnt options.minLength)
-      return validator.result "Exactly #{options.minLength} entries are required
+      return helper.result "Exactly #{options.minLength} entries are required
         ", source, options, null, cb
     else if options.minLength? and options.minLength > value.length
-      return validator.result "At least #{options.minLength} entries are required
+      return helper.result "At least #{options.minLength} entries are required
         in list ", source, options, null, cb
     else if options.maxLength? and options.maxLength < value.length
-      return validator.result "Not more than #{options.maxLength} entries are allowed in list
+      return helper.result "Not more than #{options.maxLength} entries are allowed in list
         ", source, options, null, cb
     if options.entries?
       if cb?
@@ -435,7 +443,7 @@ exports.array =
         return result if result instanceof Error
         value[i] = result
     # done return resulting value
-    return validator.result null, source, options, value, cb
+    return helper.result null, source, options, value, cb
 
   describe: (options = {}) ->
     text = 'Here a list have to be given. '
@@ -482,10 +490,9 @@ exports.array =
 exports.object =
   check: (source, value, options = {}, cb) ->
     debug "Object check for #{source}", util.inspect(options).grey
-    console.log value
-    unless value?
-      return validator.result null, source, options, null, cb if options.optional
-      return validator.result "A value is needed", source, options, null, cb
+    # check optional
+    result = helper.optional source, options, value, cb
+    return result unless result is false
     # add mandatory keys to allowed keys
     allowedKeys = []
     allowedKeys = allowedKeys.concat options.allowedKeys if options.allowedKeys?
@@ -495,20 +502,20 @@ exports.object =
     # validate
     if options.instanceOf?
       unless value instanceof options.instanceOf
-        return validator.result "An object of #{options.instanceOf.name} is needed
+        return helper.result "An object of #{options.instanceOf.name} is needed
           as value", source, options, null, cb
-      return validator.result null, source, options, value, cb
+      return helper.result null, source, options, value, cb
     if typeof value isnt 'object' or value instanceof Array
-      return validator.result "The value has to be an object", source, options, null, cb
+      return helper.result "The value has to be an object", source, options, null, cb
     if options.allowedKeys?
       for key of value
         unless key in allowedKeys
-          return validator.result "The key #{key} is not allowed", source, options, null, cb
+          return helper.result "The key #{key} is not allowed", source, options, null, cb
     if options.mandatoryKeys?
       for key in options.mandatoryKeys
         keys = Object.keys value
         unless key in keys
-          return validator.result "The key #{key} is missing", source, options, null, cb
+          return helper.result "The key #{key} is missing", source, options, null, cb
     if options.entries?
       if cb?
         # run async
@@ -524,7 +531,7 @@ exports.object =
             return cb err if err
             value[key] = result
             cb()
-        , (err) -> validator.result err, source, options, value, cb
+        , (err) -> helper.result err, source, options, value, cb
       #run sync
       for key, subvalue of value
         suboptions = if options.entries.check?
@@ -535,10 +542,10 @@ exports.object =
         # run subcheck
         result = validator.check "#{source}.#{key}", subvalue, suboptions
         # check response
-        return validator.result result, source, options, null if result instanceof Error
+        return helper.result result, source, options, null if result instanceof Error
         value[key] = result
     # done return resulting value
-    return validator.result null, source, options, value, cb
+    return helper.result null, source, options, value, cb
   describe: (options = {}) ->
     text = 'Here an object have to be given. '
     if options.mandatoryKeys?
@@ -578,8 +585,8 @@ exports.any =
         # check response
         for result in results
           unless result instanceof Error
-            return validator.result null, source, options, result, cb
-        validator.result "None of the alternatives are matched", source, options, null, cb
+            return helper.result null, source, options, result, cb
+        helper.result "None of the alternatives are matched", source, options, null, cb
     #run sync
     for suboptions in options.list
       continue unless suboptions?
@@ -587,9 +594,9 @@ exports.any =
       result = validator.check source, value, suboptions
       # check response
       unless result instanceof Error
-        return validator.result null, source, options, result, cb
+        return helper.result null, source, options, result, cb
     # done without success
-    validator.result "None of the alternatives are matched", source, options, null, cb
+    helper.result "None of the alternatives are matched", source, options, null, cb
   describe: (options = {}) ->
     text = "Here one of the following checks have to succeed:\n"
     for entry in options.list
