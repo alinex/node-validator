@@ -146,6 +146,8 @@ and also different check settings to use.
 
 __Sanitize options:__
 
+- `optional` - the value must not be present (will return null)
+- `default` - value used if optional and no value given
 - `tostring` - convert objects to string, first
 - `allowControls` - keep control characters in string instead of
   stripping them (but keep \\r\\n)
@@ -159,7 +161,6 @@ __Sanitize options:__
 
 __Validate options:__
 
-- `optional` - the value must not be present (will return null)
 - `minLength` - minimum text length in characters
 - `maxLength` - maximum text length in characters
 - `values` - array of possible values (complete text)
@@ -176,13 +177,14 @@ To test for integer values which may be sanitized.
 
 __Sanitize options:__
 
+- `optional` - the value must not be present (will return null)
+- `default` - value used if optional and no value given
 - `sanitize` - (bool) remove invalid characters
 - `round` - (bool) rounding of float can be set to true for arithmetic rounding
   or use `floor` or `ceil` for the corresponding methods
 
 __Validate options:__
 
-- `optional` - the value must not be present (will return null)
 - `min` - (integer) the smalles allowed number
 - `max` - (integer) the biggest allowed number
 - `type` - (integer|string) the integer is of given type
@@ -195,12 +197,13 @@ Nearly the same as for integer values but here are floats allowed, too.
 
 __Sanitize options:__
 
+- `optional` - the value must not be present (will return null)
+- `default` - value used if optional and no value given
 - `sanitize` - (bool) remove invalid characters
 - `round` - (int) number of decimal digits to round to
 
 __Check options:__
 
-- `optional` - the value must not be present (will return null)
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
@@ -208,6 +211,8 @@ __Check options:__
 
 __Sanitize options:__
 
+- `optional` - the value must not be present (will return null)
+- `default` - value used if optional and no value given
 - `delimiter` - allow value text with specified list separator
   (it can also be an regular expression)
 
@@ -216,7 +221,6 @@ __Check options:__
 - `notEmpty` - set to true if an empty array is not valid
 - `minLength` - minimum number of entries
 - `maxLength` - maximum number of entries
-- `optional` - the value must not be present (will return null)
 
 __Validating children:__
 
@@ -224,9 +228,13 @@ __Validating children:__
 
 ### type.object
 
-__Check options:__
+__Sanitize options:__
 
 - `optional` - the value must not be present (will return null)
+- `default` - value used if optional and no value given
+
+__Check options:__
+
 - `instanceOf` - only objects of given class type are allowed
 - `mandatoryKeys` - the list of elements which are mandatory
 - `allowedKeys` - gives a list of elements which are also allowed
@@ -252,15 +260,57 @@ Date checks
 
 __Sanitize options:__
 
+- `optional` - the value must not be present (will return null)
+- `default` - value used if optional and no value given
 - `unit` - (string) type of unit to convert if not integer given
 - `round` - (bool) rounding of float can be set to true for arithmetic rounding
   or use `floor` or `ceil` for the corresponding methods
 
 __Check options:__
 
-- `optional` - the value must not be present (will return null)
 - `min` - (integer) the smalles allowed number
 - `max` - (integer) the biggest allowed number
+
+
+Examples
+-------------------------------------------------
+
+The following check structure comes from an coffee script program which
+checks it's configuration file.
+
+    title: "Monitoring Configuration"
+    check: 'type.object'
+    allowedKeys: ['runat', 'contacts', 'email']
+    entries:
+      runat:
+        title: "Location"
+        description: "the location of this machine to run only tests which have
+          the same location or no location at all"
+        check: 'type.string'
+        optional: true
+      contacts:
+        title: "Contacts"
+        description: "the possible contacts to be referred from controller for
+          email alerts"
+        check: 'type.object'
+        entries:
+          check: 'type.any'
+          list: [
+            title: "Contact Group"
+            description: "the list of references in the group specifies the individual
+              contacts"
+            check: 'type.array'
+            entries:
+              check: 'type.string'
+          ,
+            title: "Contact Details"
+            description: "the name and email address for a specific contact"
+            check: 'type.object'
+            mandatoryKeys: ['email']
+            allowedKeys: ['name']
+            entries:
+              check: 'type.string'
+          ]
 
 
 License
