@@ -238,6 +238,7 @@ __Check options:__
 - `instanceOf` - only objects of given class type are allowed
 - `mandatoryKeys` - the list of elements which are mandatory
 - `allowedKeys` - gives a list of elements which are also allowed
+   or true to use the list from entries definition
 
 __Validating children:__
 

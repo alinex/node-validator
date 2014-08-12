@@ -637,6 +637,22 @@ describe "Type checks", ->
             check: 'type.integer'
       testFail { one:1.1, two:2, three:3 }, options
       testFail { two:2, three:3, one:'nnn' }, options
+    it.only "should support allowed subcheck values", ->
+      options =
+        check: 'type.object'
+        allowedKeys: true
+        entries:
+          one:
+            check: 'type.integer'
+      testDeep { one:1}, options, { one:1 }
+    it "should fail on not allowed subcheck values", ->
+      options =
+        check: 'type.object'
+        allowedKeys: true
+        entries:
+          one:
+            check: 'type.integer'
+      testFail { one:1, two:2, three:3 }, options
     it "should give description", ->
       testDesc options
 

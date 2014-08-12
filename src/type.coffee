@@ -483,6 +483,7 @@ exports.array =
 # - `instanceOf` - only objects of given class type are allowed
 # - `mandatoryKeys` - the list of elements which are mandatory
 # - `allowedKeys` - gives a list of elements which are also allowed
+#   or true to use the list from entries definition
 #
 # Validating children:
 #
@@ -496,6 +497,9 @@ exports.object =
     # add mandatory keys to allowed keys
     allowedKeys = []
     allowedKeys = allowedKeys.concat options.allowedKeys if options.allowedKeys?
+    if options.entries?
+      for key in Object.keys options.entries
+        allowedKeys.push key unless allowedKeys[key]
     if options.mandatoryKeys?
       for entry in options.mandatoryKeys
         allowedKeys.push entry unless allowedKeys[entry]
@@ -507,7 +511,7 @@ exports.object =
       return helper.result null, source, options, value, cb
     if typeof value isnt 'object' or value instanceof Array
       return helper.result "The value has to be an object", source, options, null, cb
-    unless allowedKeys.length is 0
+    if options.allowedKeys? and (options.allowedKeys.length or options.allowedKeys is true)
       for key of value
         unless key in allowedKeys
           return helper.result "The key '#{key}' is not allowed", source, options, null, cb
