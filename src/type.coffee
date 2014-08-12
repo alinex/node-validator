@@ -579,7 +579,7 @@ exports.any =
     debug "Check multiple alternatives in #{source}", util.inspect(options).grey
     if cb?
       # run async
-      return async.map options.list, (suboptions, cb) ->
+      return async.map options.entries, (suboptions, cb) ->
         return cb new Error "Undefined" unless suboptions?
         # run subcheck
         validator.check source, value, suboptions, (err, result) ->
@@ -592,7 +592,7 @@ exports.any =
             return helper.result null, source, options, result, cb
         helper.result "None of the alternatives are matched", source, options, null, cb
     #run sync
-    for suboptions in options.list
+    for suboptions in options.entries
       continue unless suboptions?
       # run subcheck
       result = validator.check source, value, suboptions
@@ -603,7 +603,7 @@ exports.any =
     helper.result "None of the alternatives are matched", source, options, null, cb
   describe: (options = {}) ->
     text = "Here one of the following checks have to succeed:\n"
-    for entry in options.list
+    for entry in options.entries
       text += "\n- #{validator.describe entry} "
     text.trim()
 

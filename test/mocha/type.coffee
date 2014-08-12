@@ -637,7 +637,7 @@ describe "Type checks", ->
             check: 'type.integer'
       testFail { one:1.1, two:2, three:3 }, options
       testFail { two:2, three:3, one:'nnn' }, options
-    it.only "should support allowed subcheck values", ->
+    it "should support allowed subcheck values", ->
       options =
         check: 'type.object'
         allowedKeys: true
@@ -656,11 +656,11 @@ describe "Type checks", ->
     it "should give description", ->
       testDesc options
 
-  describe "for array", ->
+  describe "for any", ->
 
     options =
       check: 'type.any'
-      list: [
+      entries: [
         check: 'type.integer'
       ,
         check: 'type.boolean'

@@ -251,7 +251,7 @@ succeed. The first one succeeding will work.
 
 __Option:__
 
-- `list` - (array) with different check alternatives
+- `entries` - (array) with different check alternatives
 
 
 Date checks
@@ -296,7 +296,7 @@ checks it's configuration file.
         check: 'type.object'
         entries:
           check: 'type.any'
-          list: [
+          entries: [
             title: "Contact Group"
             description: "the list of references in the group specifies the individual
               contacts"
