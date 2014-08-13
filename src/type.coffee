@@ -519,7 +519,8 @@ exports.object =
       for key in options.mandatoryKeys
         keys = Object.keys value
         unless key in keys
-          return helper.result "The key '#{key}' is missing", source, options, null, cb
+          opt = options.entries[key] ? options.entries
+          return helper.result "The key '#{key}' is missing", source, opt, null, cb
     if options.entries?
       if cb?
         # run async
