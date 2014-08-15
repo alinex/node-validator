@@ -36,9 +36,9 @@
     "debug": "1.x"
   },
   "devDependencies": {
-    "alinex-make": "0.2.x",
+    "alinex-make": "0.3.x",
     "chai": "1.x",
-    "alinex-error": "~0.2.2"
+    "alinex-error": "0.2.x"
   },
   "optionalDependencies": {},
   "engines": {
