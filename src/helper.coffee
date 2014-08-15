@@ -9,7 +9,7 @@ util = require 'util'
 # This small helper will load the package and return the specific type hash.
 exports.getType = (name) ->
   [group, type] = name.split /\./
-  mod = require "./#{group}"
+  mod = require "./#{group}Check"
   mod[type]
 
 # Check for empty value
