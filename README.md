@@ -314,6 +314,13 @@ checks it's configuration file.
           ]
 
 
+Package structure
+-------------------------------------------------
+The validator is implemented as `index` which has the public available methods,
+`helper` which is used for all data exchange and calls and the real check
+implementations.
+
+
 License
 -------------------------------------------------
 

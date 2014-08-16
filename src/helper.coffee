@@ -4,13 +4,27 @@
 debug = require('debug')('validator')
 util = require 'util'
 
-# Get the type functions
+# Check value and sanitize
 # -------------------------------------------------
-# This small helper will load the package and return the specific type hash.
-exports.getType = (name) ->
-  [group, type] = name.split /\./
-  mod = require "./#{group}Check"
-  mod[type]
+# this may also be used for subcalls.
+exports.check = (source, options = {}, value, work, cb) ->
+  lib = require "./type/#{options.type}"
+  work.refrun = true if options.reference?
+  lib.check source, options, value, work, cb
+
+# Check value and sanitize
+# -------------------------------------------------
+# this may also be used for subcalls.
+exports.reference = (source, options = {}, value, data, cb) ->
+  lib = require "./type/#{options.type}"
+  lib.reference source, options, value, work, cb
+
+# Check if value is valid
+# -------------------------------------------------
+# This will directly return the description of how the value has to be.
+exports.describe = (options = {}) ->
+  lib = require "./type/#{options.type}"
+  lib.describe options
 
 # Check for empty value
 # -------------------------------------------------
