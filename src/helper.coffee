@@ -1,8 +1,10 @@
 # Validator Helper methods
 # =================================================
 
-debug = require('debug')('validator')
+debug = require('debug')('validator:type')
 util = require 'util'
+# internal classes and helper
+reference = require './reference'
 
 # Check value and sanitize
 # -------------------------------------------------
@@ -10,6 +12,7 @@ util = require 'util'
 exports.check = (source, options = {}, value, work, cb) ->
   lib = require "./type/#{options.type}"
   work.refrun = true if options.reference?
+  debug "check #{options.type} '#{value}' in #{source}", util.inspect(options).grey
   lib.check source, options, value, work, cb
 
 # Check value and sanitize
@@ -17,7 +20,23 @@ exports.check = (source, options = {}, value, work, cb) ->
 # this may also be used for subcalls.
 exports.reference = (source, options = {}, value, data, cb) ->
   lib = require "./type/#{options.type}"
-  lib.reference source, options, value, work, cb
+  # run library check if defined else do the default check here
+  if lib.reference?
+    debug "#{options.type} reference in #{source}", util.inspect(options).grey
+    return lib.reference source, options, value, work, cb
+  # skip reference check if not defined
+  unless options.reference
+    return exports.result null, source, options, value, cb
+  # check references sync
+  unless cb?
+    value = reference.check source, options.reference, value, work
+    if value instanceof Error
+      return exports.result value, source, options, null
+    return exports.result null, source, options, value
+  # check references async
+  reference.check source, options.reference, value, work, (err, value) ->
+    exports.result err, source, options, value, cb
+
 
 # Check if value is valid
 # -------------------------------------------------

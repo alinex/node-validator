@@ -49,7 +49,7 @@ Only if an asynchronous check is called synchronously it will throw an Error.
 Synchronous call:
 
     var value = Validator.check('test', value, {
-      check: 'type.integer',
+      type: 'integer',
       min: 0,
       max: 100
     });
@@ -57,7 +57,7 @@ Synchronous call:
 Asynchronous call:
 
     Validator.check('test', value, {
-      check: 'type.integer',
+      type: 'integer',
       min: 0,
       max: 100
     }, function(err, value) {
@@ -75,7 +75,7 @@ The checks are split up into several packages to load on demand.
 If you won't change the value it is possible to call a simplified form:
 
     if (Validator.is('test', value, {
-      check: 'type.integer',
+      type: 'integer',
       min: 0,
       max: 100
     })) {
@@ -88,7 +88,7 @@ This method may be used to get a human readable description of how a value
 has to be to validate.
 
     console.log Validator.describe({
-      check: 'type.integer',
+      type: 'integer',
       min: 0,
       max: 100
     });
@@ -101,7 +101,7 @@ for the given field in the configuration. This will be used in error reporting
 and `describe()` calls.
 
     Validator.check('test', value, {
-      check: 'type.float',
+      type: 'float',
       title: 'Overall Timeout',
       description: 'time in milliseconds the whole test may take',
       min: 500
@@ -119,12 +119,10 @@ This may result in the following error:
 > It should contain the time in milliseconds the whole test may take.
 
 
-Type checks
+Possible Types
 -------------------------------------------------
-This package contains the basic checks which consists of some of the basic
-language types with different options.
 
-### type.boolean
+### boolean
 
 The value has to be a boolean. The value will be true for 1, 'true', 'on',
 'yes' and it will be considered as false for 0, 'false', 'off', 'no', null and
@@ -136,10 +134,10 @@ __Options:__ None
 __Example:__
 
     var value = Validator.check('verboseMode', value, {
-      check: 'type.boolean'
+      type: 'boolean'
     });
 
-### type.string
+### string
 
 This will test for strings and have lots of sanitize and optimization filters
 and also different check settings to use.
@@ -171,7 +169,7 @@ __Validate options:__
 - `matchNot` - string or regular expression which is not allowed to
   match (or list of expressions)
 
-### type.integer
+### integer
 
 To test for integer values which may be sanitized.
 
@@ -187,11 +185,11 @@ __Validate options:__
 
 - `min` - (integer) the smalles allowed number
 - `max` - (integer) the biggest allowed number
-- `type` - (integer|string) the integer is of given type
+- `inttype` - (integer|string) the integer is of given type
   (4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')
 - `unsigned` - (bool) the integer has to be positive
 
-### type.float
+### float
 
 Nearly the same as for integer values but here are floats allowed, too.
 
@@ -207,7 +205,7 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
-### type.array
+### array
 
 __Sanitize options:__
 
@@ -226,7 +224,7 @@ __Validating children:__
 
 - `èntries` - specification for all entries or as array for each element
 
-### type.object
+### object
 
 __Sanitize options:__
 
@@ -244,7 +242,7 @@ __Validating children:__
 
 - `entries` - specification for all entries or specific to the key name
 
-### type.any
+### any
 
 This is used to give some alternatives from which at least one check have to
 succeed. The first one succeeding will work.
@@ -253,11 +251,7 @@ __Option:__
 
 - `entries` - (array) with different check alternatives
 
-
-Date checks
--------------------------------------------------
-
-### date.interval
+### interval
 
 __Sanitize options:__
 
@@ -280,37 +274,37 @@ The following check structure comes from an coffee script program which
 checks it's configuration file.
 
     title: "Monitoring Configuration"
-    check: 'type.object'
+    type: 'object'
     allowedKeys: ['runat', 'contacts', 'email']
     entries:
       runat:
         title: "Location"
         description: "the location of this machine to run only tests which have
           the same location or no location at all"
-        check: 'type.string'
+        type: 'string'
         optional: true
       contacts:
         title: "Contacts"
         description: "the possible contacts to be referred from controller for
           email alerts"
-        check: 'type.object'
+        type: 'object'
         entries:
-          check: 'type.any'
+          type: 'any'
           entries: [
             title: "Contact Group"
             description: "the list of references in the group specifies the individual
               contacts"
-            check: 'type.array'
+            type: 'array'
             entries:
-              check: 'type.string'
+              type: 'string'
           ,
             title: "Contact Details"
             description: "the name and email address for a specific contact"
-            check: 'type.object'
+            type: 'object'
             mandatoryKeys: ['email']
             allowedKeys: ['name']
             entries:
-              check: 'type.string'
+              type: 'string'
           ]
 
 

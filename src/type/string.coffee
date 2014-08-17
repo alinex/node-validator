@@ -3,7 +3,6 @@
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:type')
 async = require 'async'
 util = require 'util'
 # include classes and helper
@@ -38,7 +37,6 @@ reference = require '../reference'
 # - `matchNot` - string or regular expression which is not allowed to
 #   match (or list of expressions)
 exports.check = (source, options, value, work, cb) ->
-  debug "Check '#{value}'", util.inspect(options).grey
   # check optional
   result = helper.optional source, options, value, cb
   return result unless result is false
@@ -128,22 +126,6 @@ exports.check = (source, options, value, work, cb) ->
   # done return resulting value
   return helper.result null, source, options, value, cb
 
-# Reference check
-# -------------------------------------------------
-exports.reference = (source, options, value, work, cb) ->
-  # call reference check
-  unless options.reference?
-    # no sub element possible, so returning
-    return helper.result null, source, options, value, cb
-  # check references
-  unless cb?
-    value = reference.check source, options.reference, value, work
-    if value instanceof Error
-      return helper.result value, source, options, null
-    return helper.result null, source, options, value
-  reference.check source, options.reference, value, work, (err, value) ->
-    return helper.result err, source, options, value, cb
-
 # Description
 # -------------------------------------------------
 exports.describe = (options) ->
@@ -205,5 +187,6 @@ exports.describe = (options) ->
       text += "'#{options.matchNot}'. "
   if options.optional
     text += "The setting is optional. "
+  text += "\n" + reference.describe options.reference if options.reference
   text.trim()
 

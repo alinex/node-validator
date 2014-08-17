@@ -5,8 +5,11 @@ test = require '../test'
 
 describe "Boolean", ->
 
-  options =
-    type: 'boolean'
+  options = null
+
+  beforeEach ->
+    options =
+      type: 'boolean'
 
   describe "sync check", ->
 
