@@ -4,6 +4,23 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.2.0 (2014-08-18)
+-------------------------------------------------
+- Added time format in interval type.
+- Added first reference check with name resolution.
+- Check optional and default parameter globally instead of in type.
+- Restructured all types and added async checks.
+- Restructured base system, boolean and string checks.
+- Updated to alinex-make 3.0 for development.
+- Renamed check libraries.
+- Report the key description for missing keys.
+- Rename list to entries in type.any setup.
+- Added support to only use allowedKeys = true instead of list.
+- Add documentation for default option and real world example.
+- Optimized error messages for object keys.
+- Optimized debug output and fixed async array check bug.
+- Added default option and made internal restructure.
+
 Version 0.1.1 (2014-08-09)
 -------------------------------------------------
 - Fixed bug in asynchronous call of type.any
