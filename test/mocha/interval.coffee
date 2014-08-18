@@ -22,6 +22,11 @@ describe "Interval", ->
       test.equal options, '1s', 1000
       test.equal options, '1m', 60000
       test.equal options, '+18.6s', 18600
+    it "should match time definition", ->
+      test.equal options, '1:02', 3720000
+      test.equal options, '01:02', 3720000
+      test.equal options, '1:2', 3720000
+      test.equal options, '01:02:30', 3750000
     it "should fail on other objects", ->
       test.fail options, 'hello'
       test.fail options, null

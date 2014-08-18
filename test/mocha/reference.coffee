@@ -6,7 +6,7 @@ expect = chai.expect
 test = require '../test'
 reference = require '../../lib/reference'
 
-describe.only "Reference", ->
+describe "Reference", ->
 
   describe "name resolution", ->
 

@@ -28,6 +28,12 @@ reference = require '../reference'
 exports.check = (source, options, value, work, cb) ->
   # sanitize
   if typeof value is 'string'
+    # support time format
+    if value.trim().match /^(\d\d?)(:\d\d?)(:\d\d?)?(\.\d+)?$/
+      parts = value.split ':'
+      value = "#{parts[0]}h #{parts[1]}m"
+      value += " #{parts[2]}s" if parts.length is 3
+    # support different time values with units
     parsed = number.parseMSeconds value
     if isNaN parsed
       return helper.result "The given value '#{value}' is not parse able as
