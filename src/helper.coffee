@@ -22,11 +22,11 @@ exports.check = (source, options = {}, value, work, cb) ->
 # Check value and sanitize
 # -------------------------------------------------
 # this may also be used for subcalls.
-exports.reference = (source, options = {}, value, data, cb) ->
+exports.reference = (source, options = {}, value, work, cb) ->
+  debug "#{options.type} reference in #{source}", util.inspect(options).grey
   lib = require "./type/#{options.type}"
   # run library check if defined else do the default check here
   if lib.reference?
-    debug "#{options.type} reference in #{source}", util.inspect(options).grey
     return lib.reference source, options, value, work, cb
   # skip reference check if not defined
   unless options.reference

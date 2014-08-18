@@ -51,6 +51,9 @@ exports.equal = (options, value, goal, cb) ->
     expect(result, value).to.equal goal
     cb()
 
+exports.same = (options, value, cb) ->
+  exports.deep options, value, value, cb
+
 exports.deep = (options, value, goal, cb) ->
   # sync version
   unless cb?

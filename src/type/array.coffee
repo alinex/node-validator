@@ -56,7 +56,7 @@ exports.check = (source, options, value, work, cb) ->
           options.entries
         return cb() unless suboptions?
         # run subcheck
-        helper.check "#{source}[#{i}]", suboptions, value[i], work, (err, result) ->
+        helper.check "#{source}.#{i}", suboptions, value[i], work, (err, result) ->
           # check response
           return cb err if err
           value[i] = result
@@ -71,7 +71,7 @@ exports.check = (source, options, value, work, cb) ->
         options.entries
       continue unless suboptions?
       # run subcheck
-      result = helper.check "#{source}[#{i}]", suboptions, subvalue, work
+      result = helper.check "#{source}.#{i}", suboptions, subvalue, work
       # check response
       return result if result instanceof Error
       value[i] = result

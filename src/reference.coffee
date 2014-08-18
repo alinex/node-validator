@@ -11,20 +11,35 @@ validator = require './index'
 helper = require './helper'
 
 
-# check this value against another one in this structure
-# check this value against another value in a specific configuration
 
-# check:
-# - equal: field
-# - greater: field
-# - lower: field
-# - in: field
-#
-# sanitize:
-# - copyFrom: field
+#    - validator - field ref: 'sensors.[*].sensor' # through any array/key element
+#- validator - field ref: '@sensor' # relative
+#- validator - field ref: '@<sensor' # relative back
+#- validator - field ref: '#config.monitor.contacts' # other data element
 
-valueByName = (name, work) ->
-  name
+exports.valueByName = (source, name, work) ->
+  # calculate the path
+  if name[0] is '#'
+    path = "data.#{name[1..]}"
+  else if name[0] is '@'
+    name = name[1..]
+    path = source.split '.'
+    path.shift()
+    while name[0] is '<'
+      path.shift()
+      name = name[1..]
+    path.push name
+    path = "self.#{path.join '.'}"
+  else
+    path = "self.#{name}"
+#  console.log path, work
+  obj = work
+  for part in path.split '.'
+    unless obj[part]?
+      debug "reference #{name} not found"
+      return null
+    obj = obj[part]
+  obj
 
 # Greater than
 # -------------------------------------------------
@@ -33,8 +48,8 @@ exports.check = (source, value, options, work, cb) ->
   # sanitize
   # validate
   if options.greater?
-    ref = valueByName options.greater, work
-    if value <= ref
+    ref = exports.valueByName source, options.greater, work
+    if ref? and value <= ref
       return helper.result "The value '#{value}' in #{source} has to be greater
       than '#{ref}' in #{options.greater}.", source, options, null, cb
   # done return resulting value

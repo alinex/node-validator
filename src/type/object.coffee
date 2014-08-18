@@ -66,7 +66,7 @@ exports.check = (source, options, value, work, cb) ->
           value[key] = result
           cb()
       , (err) -> helper.result err, source, options, value, cb
-    #run sync
+    # run sync
     for key, subvalue of value
       suboptions = if options.entries.check?
         options.entries
@@ -84,18 +84,36 @@ exports.check = (source, options, value, work, cb) ->
 # Reference check
 # -------------------------------------------------
 exports.reference = (source, options, value, work, cb) ->
-  # skip reference check if not defined
-  unless options.reference
-    return exports.result null, source, options, value, cb
-  # check references sync
-  unless cb?
-    value = reference.check source, options.reference, value, work
-    if value instanceof Error
-      return exports.result value, source, options, null
-    return exports.result null, source, options, value
-  # check references async
-  reference.check source, options.reference, value, work, (err, value) ->
-    exports.result err, source, options, value, cb
+  if options.entries?
+    if cb?
+      # run async
+      return async.each Object.keys(value), (key, cb) ->
+        suboptions = if options.entries.check?
+          options.entries
+        else
+          options.entries[key]
+        return cb() unless suboptions?
+        # run subcheck
+        helper.reference "#{source}.#{key}", suboptions, value[key], work, (err, result) ->
+          # check response
+          return cb err if err
+          value[key] = result
+          cb()
+      , (err) -> helper.result err, source, options, value, cb
+    # run sync
+    for key, subvalue of value
+      suboptions = if options.entries.check?
+        options.entries
+      else
+        options.entries[key]
+      continue unless suboptions?
+      # run subcheck
+      result = helper.reference "#{source}.#{key}", suboptions, subvalue, work
+      # check response
+      return helper.result result, source, options, null if result instanceof Error
+      value[key] = result
+  # done return resulting value
+  return helper.result null, source, options, value, cb
 
 # Description
 # -------------------------------------------------
