@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>string.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/stringcoffee", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+  <script src="../../fileSearch.js"></script>
+  <script src="../../goToLine.js"></script>
+  <link rel="stylesheet" href="../../fileSearch.css" />
+  <link rel="stylesheet" href="../../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#string%20value%20validation">String value validation</a>
+      </div>
+      <div class="heading h2">
+        <a href="#node%20modules">Node modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#sanitize%20and%20validate">Sanitize and validate</a>
+      </div>
+      <div class="heading h2">
+        <a href="#description">Description</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="string%20value%20validation">
+  <h1>
+    <a href="#string%20value%20validation" name="string%20value%20validation" class="pilcrow">&#182;</a>
+    String value validation
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;async&#39;</span>
+<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>include classes and helper</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">helper = </span><span class="nx">require</span> <span class="s">&#39;../helper&#39;</span>
+<span class="nv">reference = </span><span class="nx">require</span> <span class="s">&#39;../reference&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="sanitize%20and%20validate">
+  <h2>
+    <a href="#sanitize%20and%20validate" name="sanitize%20and%20validate" class="pilcrow">&#182;</a>
+    Sanitize and validate
+  </h2>
+</div>
+
+
+<p>Sanitize options allowed:</p>
+
+<ul>
+<li><code>tostring</code> - convert objects to string, first</li>
+<li><code>allowControls</code> - keep control characters in string instead of
+stripping them (but keep \r\n)</li>
+<li><code>stripTags</code> - remove all html tags</li>
+<li><code>lowerCase</code> - set to <code>true</code> or <code>first</code></li>
+<li><code>upperCase</code> - set to <code>true</code> or <code>first</code></li>
+<li><code>replace</code> - replacements (list): string (only single replacement) or
+regular expressions and replacements as inner array</li>
+<li><code>trim</code> - strip whitespace from the beginning and end</li>
+<li><code>crop</code> - crop text after number of characters</li>
+</ul>
+
+<p>Check options:</p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>minLength</code> - minimum text length in characters</li>
+<li><code>maxLength</code> - maximum text length in characters</li>
+<li><code>values</code> - array of possible values (complete text)</li>
+<li><code>startsWith</code> - start of text</li>
+<li><code>endsWith</code> - end of text</li>
+<li><code>match</code> - string or regular expression which have to be matched
+(or list of expressions)</li>
+<li><code>matchNot</code> - string or regular expression which is not allowed to
+match (or list of expressions)</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.check = </span><span class="nf">(source, options, value, work, cb) -&gt;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tostring</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>first check input type</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;A string is needed but got </span><span class="si">#{</span><span class="k">typeof</span> <span class="nx">value</span><span class="si">}</span><span class="s"></span>
+<span class="s">      instead&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowControls</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">stripTags</span><span class="o">?</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/&lt;\/?[^&gt;]+(&gt;|$)/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span> <span class="o">is</span> <span class="kc">true</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span> <span class="o">is</span> <span class="kc">true</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">()</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span> <span class="o">is</span> <span class="s">&#39;first&#39;</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">+</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span> <span class="o">is</span> <span class="s">&#39;first&#39;</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">+</span> <span class="nx">value</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span><span class="o">?</span>
+    <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="k">for</span> <span class="p">[</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">replace</span><span class="p">]</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span>
+        <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="nx">pattern</span><span class="p">,</span> <span class="nx">replace</span>
+    <span class="k">else</span>
+      <span class="p">[</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">replace</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span>
+      <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="nx">pattern</span><span class="p">,</span> <span class="nx">replace</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">trim</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">crop</span><span class="o">?</span>
+    <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">substring</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">crop</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>check optional, again</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">result = </span><span class="nx">helper</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">return</span> <span class="nx">result</span> <span class="k">unless</span> <span class="nx">result</span> <span class="o">is</span> <span class="kc">false</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span>
+    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is too short at</span>
+<span class="s">      most </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minlength</span><span class="si">}</span><span class="s"> characters are needed&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span>
+    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is too long for</span>
+<span class="s">      at least </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxlength</span><span class="si">}</span><span class="s"> characters are allowed&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">values</span><span class="o">?</span> <span class="o">and</span> <span class="o">not</span> <span class="p">(</span><span class="nx">value</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not in the list of</span>
+<span class="s">      allowed phrases (</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">values</span><span class="si">}</span><span class="s">)&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">[..</span><span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">isnt</span> <span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span>
+    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should start with</span>
+<span class="s">      &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">[</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="p">.</span><span class="nx">length</span><span class="p">..]</span> <span class="o">isnt</span> <span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span>
+    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should end with</span>
+<span class="s">      &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="o">?</span>
+    <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+      <span class="nv">success = </span><span class="kc">true</span>
+      <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+        <span class="k">if</span> <span class="nx">match</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+          <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="nx">match</span>
+        <span class="k">else</span>
+          <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">match</span>
+      <span class="k">unless</span> <span class="nx">success</span>
+        <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should match against</span>
+<span class="s">          &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+      <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should match against</span>
+<span class="s">        &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="o">not</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+      <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should contain</span>
+<span class="s">        &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="o">?</span>
+    <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+      <span class="nv">success = </span><span class="kc">true</span>
+      <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+        <span class="k">if</span> <span class="nx">match</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+          <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="nx">match</span>
+        <span class="k">else</span>
+          <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">not</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">match</span>
+      <span class="k">unless</span> <span class="nx">success</span>
+        <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; shouldn&#39;t match against</span>
+<span class="s">          &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">matchNot</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+      <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; shouldn&#39;t match against</span>
+<span class="s">        &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+      <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; shouldn&#39;t contain</span>
+<span class="s">        &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="description">
+  <h2>
+    <a href="#description" name="description" class="pilcrow">&#182;</a>
+    Description
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.describe = </span><span class="nf">(options) -&gt;</span>
+  <span class="nv">text = </span><span class="s">&#39;This should be text entry. &#39;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">tostring</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Objects will be converted to their string representation. &quot;</span>
+  <span class="nv">remove = </span><span class="p">[]</span>
+  <span class="nx">remove</span><span class="p">.</span><span class="nx">push</span> <span class="s">&quot;Control characters&quot;</span> <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowControls</span>
+  <span class="nx">remove</span><span class="p">.</span><span class="nx">push</span> <span class="s">&quot;HTML Tags&quot;</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">stripTags</span>
+  <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">remove</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span><span class="si">}</span><span class="s"> will be removed. &quot;</span> <span class="k">if</span> <span class="nx">remove</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The following replacements will take place: &quot;</span>
+    <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="k">for</span> <span class="p">[</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">replace</span><span class="p">]</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">pattern</span><span class="si">}</span><span class="s"> =&gt; </span><span class="si">#{</span><span class="nx">replace</span><span class="si">}</span><span class="s">, &quot;</span>
+      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/, $/</span><span class="p">,</span> <span class="s">&#39;. &#39;</span>
+    <span class="k">else</span>
+      <span class="p">[</span><span class="nx">pattern</span><span class="p">,</span> <span class="nx">replace</span><span class="p">]</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">replace</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">pattern</span><span class="si">}</span><span class="s"> =&gt; </span><span class="si">#{</span><span class="nx">replace</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">trim</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Whitespace will be removed at start and end of the text. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">crop</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text will be cropped after </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">crop</span><span class="si">}</span><span class="s"> characters. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span> <span class="o">is</span> <span class="kc">true</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text will get lower case. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span> <span class="o">is</span> <span class="kc">true</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text will get upper case. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span> <span class="o">is</span> <span class="s">&#39;first&#39;</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The first letter will get lower case. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span> <span class="o">is</span> <span class="s">&#39;first&#39;</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The first letter will get upper case. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be at least </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be not more than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">values</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only the values: </span><span class="si">#{</span><span class="nx">values</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span><span class="si">}</span><span class="s"> are allowed. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to start with </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="si">}</span><span class="s">... &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to end with ...</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text should match: &quot;</span>
+    <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">match</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&#39;, &quot;</span>
+      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/, $/</span><span class="p">,</span> <span class="s">&#39;. &#39;</span>
+    <span class="k">else</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">match</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The text shouldn&#39;t match: &quot;</span>
+    <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&#39;, &quot;</span>
+      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/, $/</span><span class="p">,</span> <span class="s">&#39;. &#39;</span>
+    <span class="k">else</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">matchNot</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+  <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

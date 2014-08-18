@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>integer.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/integercoffee", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+  <script src="../../fileSearch.js"></script>
+  <script src="../../goToLine.js"></script>
+  <link rel="stylesheet" href="../../fileSearch.css" />
+  <link rel="stylesheet" href="../../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#integer%20validator">Integer validator</a>
+      </div>
+      <div class="heading h2">
+        <a href="#node%20modules">Node modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#sanitize%20and%20validate">Sanitize and validate</a>
+      </div>
+      <div class="heading h2">
+        <a href="#description">Description</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="integer%20validator">
+  <h1>
+    <a href="#integer%20validator" name="integer%20validator" class="pilcrow">&#182;</a>
+    Integer validator
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;async&#39;</span>
+<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>include classes and helper</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">helper = </span><span class="nx">require</span> <span class="s">&#39;../helper&#39;</span>
+<span class="nv">reference = </span><span class="nx">require</span> <span class="s">&#39;../reference&#39;</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="sanitize%20and%20validate">
+  <h2>
+    <a href="#sanitize%20and%20validate" name="sanitize%20and%20validate" class="pilcrow">&#182;</a>
+    Sanitize and validate
+  </h2>
+</div>
+
+
+<p>Sanitize options allowed:</p>
+
+<ul>
+<li><code>sanitize</code> - (bool) remove invalid characters</li>
+<li><code>round</code> - (bool) rounding of float can be set to true for arithmetic rounding
+or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+</ul>
+
+<p>Check options:</p>
+
+<ul>
+<li><code>min</code> - (integer) the smalles allowed number</li>
+<li><code>max</code> - (integer) the biggest allowed number</li>
+<li><code>inttype</code> - (integer|string) the integer is of given type
+(4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')</li>
+<li><code>unsigned</code> - (bool) the integer has to be positive</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nv">integerTypes =</span>
+  <span class="nv">byte: </span><span class="mi">8</span>
+  <span class="nv">short: </span><span class="mi">16</span>
+  <span class="nv">long : </span><span class="mi">32</span>
+  <span class="nv">safe: </span><span class="mi">53</span>
+  <span class="nv">quad: </span><span class="mi">64</span>
+
+<span class="nv">exports.check = </span><span class="nf">(source, options, value, work, cb) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sanitize</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span><span class="o">?</span>
+        <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/^.*?(-?\d+\.?\d*).*?$/</span><span class="p">,</span> <span class="s">&#39;$1&#39;</span>
+      <span class="k">else</span>
+        <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/^.*?(-?\d+).*?$/</span><span class="p">,</span> <span class="s">&#39;$1&#39;</span>
+    <span class="k">if</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span>
+      <span class="nv">value = </span><span class="nb">Number</span> <span class="nx">value</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+    <span class="nv">value = </span><span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+      <span class="k">when</span> <span class="s">&#39;ceil&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">value</span>
+      <span class="k">when</span> <span class="s">&#39;floor&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="nx">value</span>
+      <span class="k">else</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">unless</span> <span class="nx">value</span> <span class="o">is</span> <span class="p">(</span><span class="nx">value</span> <span class="o">|</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no integer as needed</span>
+<span class="s">     &quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&lt;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span>
+    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The value is to low, it has to be at least</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>{options.min}", source, options, null, cb</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">  if options.max? and value &gt; options.max</span>
+<span class="s">    return helper.result &quot;</span><span class="nx">The</span> <span class="nx">value</span> <span class="o">is</span> <span class="nx">to</span> <span class="nx">high</span><span class="p">,</span> <span class="nx">it</span> <span class="nx">has</span> <span class="nx">to</span> <span class="nx">be</span> <span class="c1">#{options.max}</span>
+      <span class="o">or</span> <span class="nx">lower</span><span class="s">&quot;, source, options, null, cb</span>
+<span class="s">  if options.inttype</span>
+<span class="s">    type = integerTypes[options.inttype] ? options.inttype</span>
+<span class="s">    unit = integerTypes[options.inttype] ? &#39;byte&#39;</span>
+<span class="s">    unsigned = if options.unsigned then 1 else 0</span>
+<span class="s">    max = (Math.pow 2, type-1+unsigned)-1</span>
+<span class="s">    min = (unsigned-1) * max - 1 + unsigned</span>
+<span class="s">    if value &lt; min or value &gt; max</span>
+<span class="s">      return helper.result &quot;</span><span class="nx">The</span> <span class="nx">value</span> <span class="o">is</span> <span class="nx">out</span> <span class="k">of</span> <span class="nx">range</span> <span class="k">for</span> <span class="c1">#{options.inttype}</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>{unit}-integer", source, options, null, cb
+done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="description">
+  <h2>
+    <a href="#description" name="description" class="pilcrow">&#182;</a>
+    Description
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.describe = </span><span class="nf">(options) -&gt;</span>
+  <span class="nv">text = </span><span class="s">&#39;An integer value is needed, here. &#39;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">sanitize</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Invalid characters will be removed from text. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+    <span class="nv">type = </span><span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
+      <span class="k">when</span> <span class="s">&#39;to ceil&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">value</span>
+      <span class="k">when</span> <span class="s">&#39;to floor&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="nx">value</span>
+      <span class="k">else</span> <span class="s">&#39;arithḿetic&#39;</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Value will be rounded </span><span class="si">#{</span><span class="nx">type</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s"> and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be greater than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be lower than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">inttype</span><span class="o">?</span>
+    <span class="nv">type = </span><span class="nx">integerTypes</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">inttype</span><span class="p">]</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">inttype</span>
+    <span class="nv">unit = </span><span class="nx">integerTypes</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">inttype</span><span class="p">]</span> <span class="o">?</span> <span class="s">&#39;byte&#39;</span>
+    <span class="nv">unsigned = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">unsigned</span> <span class="k">then</span> <span class="s">&#39;unsigned&#39;</span> <span class="k">else</span> <span class="s">&#39;signed&#39;</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only values in the range of a </span><span class="si">#{</span><span class="nx">unsigned</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">type</span><span class="si">}#{</span><span class="nx">unit</span><span class="si">}</span><span class="s">-integer</span>
+<span class="s">      are allowed. &quot;</span>
+  <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

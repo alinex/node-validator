@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>reference.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/referencecoffee", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+  <script src="../fileSearch.js"></script>
+  <script src="../goToLine.js"></script>
+  <link rel="stylesheet" href="../fileSearch.css" />
+  <link rel="stylesheet" href="../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#validator%20for%20references">Validator for references</a>
+      </div>
+      <div class="heading h2">
+        <a href="#greater%20than">Greater than</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="validator%20for%20references">
+  <h1>
+    <a href="#validator%20for%20references" name="validator%20for%20references" class="pilcrow">&#182;</a>
+    Validator for references
+  </h1>
+</div>
+
+
+<p>This validator is special because it should only run after the normal sanitize
+checks are done in a second run. It will check the referencing between different
+values and maybe different configurations.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre><span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:reference&#39;</span><span class="p">)</span>
+<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>include classes and helper</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;./index&#39;</span>
+<span class="nv">helper = </span><span class="nx">require</span> <span class="s">&#39;./helper&#39;</span>
+
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<ul>
+<li>validator - field ref: 'sensors.[*].sensor' # through any array/key element
+<ul><li>validator - field ref: '@sensor' # relative</li>
+<li>validator - field ref: '@<sensor' # relative back</li>
+<li>validator - field ref: '#config.monitor.contacts' # other data element</li></ul></li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nv">exports.valueByName = </span><span class="nf">(source, name, work) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>calculate the path</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">if</span> <span class="nx">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;#&#39;</span>
+    <span class="nv">path = </span><span class="s">&quot;data.</span><span class="si">#{</span><span class="nx">name</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="nx">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;@&#39;</span>
+    <span class="nv">name = </span><span class="nx">name</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span>
+    <span class="nv">path = </span><span class="nx">source</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;.&#39;</span>
+    <span class="nx">path</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span>
+    <span class="k">while</span> <span class="nx">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;&lt;&#39;</span>
+      <span class="nx">path</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span>
+      <span class="nv">name = </span><span class="nx">name</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span>
+    <span class="nx">path</span><span class="p">.</span><span class="nx">push</span> <span class="nx">name</span>
+    <span class="nv">path = </span><span class="s">&quot;self.</span><span class="si">#{</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="k">else</span>
+    <span class="nv">path = </span><span class="s">&quot;self.</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>console.log path, work</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">obj = </span><span class="nx">work</span>
+  <span class="k">for</span> <span class="nx">part</span> <span class="k">in</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;.&#39;</span>
+    <span class="k">unless</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">part</span><span class="p">]</span><span class="o">?</span>
+      <span class="nx">debug</span> <span class="s">&quot;reference </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s"> not found&quot;</span>
+      <span class="k">return</span> <span class="kc">null</span>
+    <span class="nv">obj = </span><span class="nx">obj</span><span class="p">[</span><span class="nx">part</span><span class="p">]</span>
+  <span class="nx">obj</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="greater%20than">
+  <h2>
+    <a href="#greater%20than" name="greater%20than" class="pilcrow">&#182;</a>
+    Greater than
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.check = </span><span class="nf">(source, value, options, work, cb) -&gt;</span>
+  <span class="nx">debug</span> <span class="s">&quot;Check references for </span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">grey</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>sanitize
+validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">greater</span><span class="o">?</span>
+    <span class="nv">ref = </span><span class="nx">exports</span><span class="p">.</span><span class="nx">valueByName</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">greater</span><span class="p">,</span> <span class="nx">work</span>
+    <span class="k">if</span> <span class="nx">ref</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&lt;=</span> <span class="nx">ref</span>
+      <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; in </span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s"> has to be greater</span>
+<span class="s">      than &#39;</span><span class="si">#{</span><span class="nx">ref</span><span class="si">}</span><span class="s">&#39; in </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">greater</span><span class="si">}</span><span class="s">.&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+
+<span class="nv">exports.describe = </span><span class="nf">(options = {}) -&gt;</span>
+  <span class="nv">text = </span><span class="s">&#39;&#39;</span>
+  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">greater</span><span class="o">?</span>
+    <span class="nv">text = </span><span class="s">&quot;The value has to be greater than the value in </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">greater</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>

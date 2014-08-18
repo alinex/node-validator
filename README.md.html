@@ -38,37 +38,43 @@
         <a href="#get%20description">Get description</a>
       </div>
       <div class="heading h2">
+        <a href="#optional%20values">Optional values</a>
+      </div>
+      <div class="heading h2">
         <a href="#descriptive%20reporting">Descriptive reporting</a>
       </div>
       <div class="heading h2">
-        <a href="#type%20checks">Type checks</a>
+        <a href="#possible%20types">Possible Types</a>
       </div>
       <div class="heading h3">
-        <a href="#type.boolean">type.boolean</a>
+        <a href="#boolean">boolean</a>
       </div>
       <div class="heading h3">
-        <a href="#type.string">type.string</a>
+        <a href="#string">string</a>
       </div>
       <div class="heading h3">
-        <a href="#type.integer">type.integer</a>
+        <a href="#integer">integer</a>
       </div>
       <div class="heading h3">
-        <a href="#type.float">type.float</a>
+        <a href="#float">float</a>
       </div>
       <div class="heading h3">
-        <a href="#type.array">type.array</a>
+        <a href="#array">array</a>
       </div>
       <div class="heading h3">
-        <a href="#type.object">type.object</a>
+        <a href="#object">object</a>
       </div>
       <div class="heading h3">
-        <a href="#type.any">type.any</a>
+        <a href="#any">any</a>
+      </div>
+      <div class="heading h3">
+        <a href="#interval">interval</a>
       </div>
       <div class="heading h2">
-        <a href="#date%20checks">Date checks</a>
+        <a href="#examples">Examples</a>
       </div>
-      <div class="heading h3">
-        <a href="#date.interval">date.interval</a>
+      <div class="heading h2">
+        <a href="#package%20structure">Package structure</a>
       </div>
       <div class="heading h2">
         <a href="#license">License</a>
@@ -85,9 +91,9 @@
 </div>
 
 
-<p><a href="https://travis-ci.org/alinex/node-validator.html"><img src="https://travis-ci.org/alinex/node-validator.svg?branch=master" alt="Build Status" title="" /></a>
-<a href="https://coveralls.io/r/alinex/node-validator.html?branch=master"><img src="https://coveralls.io/repos/alinex/node-validator/badge.png?branch=master" alt="Coverage Status" title="" /></a>
-<a href="https://gemnasium.com/alinex/node-validator.html"><img src="https://gemnasium.com/alinex/node-validator.png" alt="Dependency Status" title="" /></a></p>
+<p><a href="https://travis-ci.org/alinex/node-validator"><img src="https://travis-ci.org/alinex/node-validator.svg?branch=master" alt="Build Status" title="" /></a>
+<a href="https://coveralls.io/r/alinex/node-validator?branch=master"><img src="https://coveralls.io/repos/alinex/node-validator/badge.png?branch=master" alt="Coverage Status" title="" /></a>
+<a href="https://gemnasium.com/alinex/node-validator"><img src="https://gemnasium.com/alinex/node-validator.png" alt="Dependency Status" title="" /></a></p>
 
 <p>This module will help validating complex structures. And may be used for all
 external information.</p>
@@ -100,7 +106,7 @@ external information.</p>
 <li>can give a human readable description</li>
 </ul>
 
-<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex.html">Alinex Universe</a>
+<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
 following the code standards defined there.</p>
 
 
@@ -120,7 +126,7 @@ following the code standards defined there.</p>
 
 
 
-<p><a href="https://nodei.co/npm/alinex-validator/.html"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
+<p><a href="https://nodei.co/npm/alinex-validator/"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
 
 
 <div class="pilwrap" id="usage">
@@ -155,8 +161,8 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 <p>Synchronous call:</p>
 
 
-<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span>
   <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
 <span class="p">});</span>
@@ -167,8 +173,8 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 <p>Asynchronous call:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span>
   <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
 <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
@@ -196,8 +202,8 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 <p>If you won't change the value it is possible to call a simplified form:</p>
 
 
-<div class="highlight"><pre><code><span class="k">if</span> <span class="p">(</span><span class="nx">Validator</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><code><span class="k">if</span> <span class="p">(</span><span class="nx">validator</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span>
   <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
 <span class="p">}))</span> <span class="p">{</span>
@@ -220,14 +226,34 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 has to be to validate.</p>
 
 
-<div class="highlight"><pre><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">describe</span><span class="p">({</span>
-  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.integer&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span><span class="p">({</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span>
   <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
   <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
 <span class="p">});</span>
 </code></pre></div>
 
 
+
+
+<div class="pilwrap" id="optional%20values">
+  <h2>
+    <a href="#optional%20values" name="optional%20values" class="pilcrow">&#182;</a>
+    Optional values
+  </h2>
+</div>
+
+
+<p>All types (excluding boolean) support the <code>optional</code> parameter, which makes an
+entry in the data structure optional.
+If not given it will be set to null or the value given with <code>default</code>.</p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+<li><code>default</code> - value used if optional and no value given</li>
+</ul>
+
+<p>The <code>default</code> option automatically includes the <code>optional</code> option.</p>
 
 
 <div class="pilwrap" id="descriptive%20reporting">
@@ -243,8 +269,8 @@ for the given field in the configuration. This will be used in error reporting
 and <code>describe()</code> calls.</p>
 
 
-<div class="highlight"><pre><code><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.float&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
   <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Overall Timeout&#39;</span><span class="p">,</span>
   <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;time in milliseconds the whole test may take&#39;</span><span class="p">,</span>
   <span class="nx">min</span><span class="o">:</span> <span class="mi">500</span>
@@ -267,22 +293,19 @@ and <code>describe()</code> calls.</p>
 </blockquote>
 
 
-<div class="pilwrap" id="type%20checks">
+<div class="pilwrap" id="possible%20types">
   <h2>
-    <a href="#type%20checks" name="type%20checks" class="pilcrow">&#182;</a>
-    Type checks
+    <a href="#possible%20types" name="possible%20types" class="pilcrow">&#182;</a>
+    Possible Types
   </h2>
 </div>
 
 
-<p>This package contains the basic checks which consists of some of the basic
-language types with different options.</p>
 
-
-<div class="pilwrap" id="type.boolean">
+<div class="pilwrap" id="boolean">
   <h3>
-    <a href="#type.boolean" name="type.boolean" class="pilcrow">&#182;</a>
-    type.boolean
+    <a href="#boolean" name="boolean" class="pilcrow">&#182;</a>
+    boolean
   </h3>
 </div>
 
@@ -298,17 +321,17 @@ Other values are not allowed.</p>
 
 
 <div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;verboseMode&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
-  <span class="nx">check</span><span class="o">:</span> <span class="s1">&#39;type.boolean&#39;</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;boolean&#39;</span>
 <span class="p">});</span>
 </code></pre></div>
 
 
 
 
-<div class="pilwrap" id="type.string">
+<div class="pilwrap" id="string">
   <h3>
-    <a href="#type.string" name="type.string" class="pilcrow">&#182;</a>
-    type.string
+    <a href="#string" name="string" class="pilcrow">&#182;</a>
+    string
   </h3>
 </div>
 
@@ -334,7 +357,6 @@ replacement text] while search may be a string or RegExp</li>
 <p><strong>Validate options:</strong></p>
 
 <ul>
-<li><code>optional</code> - the value must not be present (will return null)</li>
 <li><code>minLength</code> - minimum text length in characters</li>
 <li><code>maxLength</code> - maximum text length in characters</li>
 <li><code>values</code> - array of possible values (complete text)</li>
@@ -347,10 +369,10 @@ match (or list of expressions)</li>
 </ul>
 
 
-<div class="pilwrap" id="type.integer">
+<div class="pilwrap" id="integer">
   <h3>
-    <a href="#type.integer" name="type.integer" class="pilcrow">&#182;</a>
-    type.integer
+    <a href="#integer" name="integer" class="pilcrow">&#182;</a>
+    integer
   </h3>
 </div>
 
@@ -368,19 +390,18 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p><strong>Validate options:</strong></p>
 
 <ul>
-<li><code>optional</code> - the value must not be present (will return null)</li>
 <li><code>min</code> - (integer) the smalles allowed number</li>
 <li><code>max</code> - (integer) the biggest allowed number</li>
-<li><code>type</code> - (integer|string) the integer is of given type
+<li><code>inttype</code> - (integer|string) the integer is of given type
 (4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')</li>
 <li><code>unsigned</code> - (bool) the integer has to be positive</li>
 </ul>
 
 
-<div class="pilwrap" id="type.float">
+<div class="pilwrap" id="float">
   <h3>
-    <a href="#type.float" name="type.float" class="pilcrow">&#182;</a>
-    type.float
+    <a href="#float" name="float" class="pilcrow">&#182;</a>
+    float
   </h3>
 </div>
 
@@ -397,16 +418,15 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p><strong>Check options:</strong></p>
 
 <ul>
-<li><code>optional</code> - the value must not be present (will return null)</li>
 <li><code>min</code> - (numeric) the smalles allowed number</li>
 <li><code>max</code> - (numeric) the biggest allowed number</li>
 </ul>
 
 
-<div class="pilwrap" id="type.array">
+<div class="pilwrap" id="array">
   <h3>
-    <a href="#type.array" name="type.array" class="pilcrow">&#182;</a>
-    type.array
+    <a href="#array" name="array" class="pilcrow">&#182;</a>
+    array
   </h3>
 </div>
 
@@ -424,7 +444,6 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <li><code>notEmpty</code> - set to true if an empty array is not valid</li>
 <li><code>minLength</code> - minimum number of entries</li>
 <li><code>maxLength</code> - maximum number of entries</li>
-<li><code>optional</code> - the value must not be present (will return null)</li>
 </ul>
 
 <p><strong>Validating children:</strong></p>
@@ -434,10 +453,10 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 </ul>
 
 
-<div class="pilwrap" id="type.object">
+<div class="pilwrap" id="object">
   <h3>
-    <a href="#type.object" name="type.object" class="pilcrow">&#182;</a>
-    type.object
+    <a href="#object" name="object" class="pilcrow">&#182;</a>
+    object
   </h3>
 </div>
 
@@ -445,10 +464,10 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p><strong>Check options:</strong></p>
 
 <ul>
-<li><code>optional</code> - the value must not be present (will return null)</li>
 <li><code>instanceOf</code> - only objects of given class type are allowed</li>
 <li><code>mandatoryKeys</code> - the list of elements which are mandatory</li>
-<li><code>allowedKeys</code> - gives a list of elements which are also allowed</li>
+<li><code>allowedKeys</code> - gives a list of elements which are also allowed
+or true to use the list from entries definition</li>
 </ul>
 
 <p><strong>Validating children:</strong></p>
@@ -458,10 +477,10 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 </ul>
 
 
-<div class="pilwrap" id="type.any">
+<div class="pilwrap" id="any">
   <h3>
-    <a href="#type.any" name="type.any" class="pilcrow">&#182;</a>
-    type.any
+    <a href="#any" name="any" class="pilcrow">&#182;</a>
+    any
   </h3>
 </div>
 
@@ -472,26 +491,25 @@ succeed. The first one succeeding will work.</p>
 <p><strong>Option:</strong></p>
 
 <ul>
-<li><code>list</code> - (array) with different check alternatives</li>
+<li><code>entries</code> - (array) with different check alternatives</li>
 </ul>
 
 
-<div class="pilwrap" id="date%20checks">
-  <h2>
-    <a href="#date%20checks" name="date%20checks" class="pilcrow">&#182;</a>
-    Date checks
-  </h2>
-</div>
-
-
-
-<div class="pilwrap" id="date.interval">
+<div class="pilwrap" id="interval">
   <h3>
-    <a href="#date.interval" name="date.interval" class="pilcrow">&#182;</a>
-    date.interval
+    <a href="#interval" name="interval" class="pilcrow">&#182;</a>
+    interval
   </h3>
 </div>
 
+
+<p>A time interval may be given:</p>
+
+<ul>
+<li>directly as number</li>
+<li>in a string with days, minutes and seconds: <code>1d 3h 12m 10s 400ms</code></li>
+<li>in a time format: <code>03:20</code>, <code>02:18:10.5</code></li>
+</ul>
 
 <p><strong>Sanitize options:</strong></p>
 
@@ -504,10 +522,72 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p><strong>Check options:</strong></p>
 
 <ul>
-<li><code>optional</code> - the value must not be present (will return null)</li>
 <li><code>min</code> - (integer) the smalles allowed number</li>
 <li><code>max</code> - (integer) the biggest allowed number</li>
 </ul>
+
+
+<div class="pilwrap" id="examples">
+  <h2>
+    <a href="#examples" name="examples" class="pilcrow">&#182;</a>
+    Examples
+  </h2>
+</div>
+
+
+<p>The following check structure comes from an coffee script program which
+checks it's configuration file.</p>
+
+
+<div class="highlight"><pre><code><span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Monitoring Configuration&quot;</span>
+<span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
+<span class="nx">allowedKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;runat&#39;</span><span class="p">,</span> <span class="s1">&#39;contacts&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">]</span>
+<span class="nx">entries</span><span class="o">:</span>
+  <span class="nx">runat</span><span class="o">:</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Location&quot;</span>
+    <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;the location of this machine to run only tests which have</span>
+<span class="s2">      the same location or no location at all&quot;</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
+    <span class="nx">optional</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="nx">contacts</span><span class="o">:</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Contacts&quot;</span>
+    <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;the possible contacts to be referred from controller for</span>
+<span class="s2">      email alerts&quot;</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
+    <span class="nx">entries</span><span class="o">:</span>
+      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;any&#39;</span>
+      <span class="nx">entries</span><span class="o">:</span> <span class="p">[</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Contact Group&quot;</span>
+        <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;the list of references in the group specifies the individual</span>
+<span class="s2">          contacts&quot;</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;array&#39;</span>
+        <span class="nx">entries</span><span class="o">:</span>
+          <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
+      <span class="p">,</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Contact Details&quot;</span>
+        <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;the name and email address for a specific contact&quot;</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
+        <span class="nx">mandatoryKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span>
+        <span class="nx">allowedKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="nx">entries</span><span class="o">:</span>
+          <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
+      <span class="p">]</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="package%20structure">
+  <h2>
+    <a href="#package%20structure" name="package%20structure" class="pilcrow">&#182;</a>
+    Package structure
+  </h2>
+</div>
+
+
+<p>The validator is implemented as <code>index</code> which has the public available methods,
+<code>helper</code> which is used for all data exchange and calls and the real check
+implementations.</p>
 
 
 <div class="pilwrap" id="license">
@@ -525,7 +605,7 @@ you may not use this file except in compliance with the License.
 You may obtain a copy of the License at</p>
 
 <blockquote>
-  <p><a href="http://www.apache.org/licenses/LICENSE-2.0.html">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+  <p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
 </blockquote>
 
 <p>Unless required by applicable law or agreed to in writing, software
