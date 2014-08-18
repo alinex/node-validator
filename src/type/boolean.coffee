@@ -37,9 +37,7 @@ exports.check = (source, options, value, work, cb) ->
 # Description
 # -------------------------------------------------
 exports.describe = (options) ->
-  text = "The value has to be a boolean. The value will be true for 1, 'true', 'on',
+  "The value has to be a boolean. The value will be true for 1, 'true', 'on',
   'yes' and it will be considered as false for 0, 'false', 'off', 'no', '.
   Other values are not allowed."
-  text += "\n" + reference.describe options.reference if options.reference
-  text
 

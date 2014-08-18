@@ -13,6 +13,10 @@ exports.check = (source, options = {}, value, work, cb) ->
   lib = require "./type/#{options.type}"
   work.refrun = true if options.reference?
   debug "check #{options.type} '#{value}' in #{source}", util.inspect(options).grey
+  # check optional
+  result = exports.optional source, options, value, cb
+  return result unless result is false
+  # normal check through type library
   lib.check source, options, value, work, cb
 
 # Check value and sanitize
@@ -43,7 +47,26 @@ exports.reference = (source, options = {}, value, data, cb) ->
 # This will directly return the description of how the value has to be.
 exports.describe = (options = {}) ->
   lib = require "./type/#{options.type}"
-  lib.describe options
+  text = lib.describe options
+  if options.default
+    text += " The setting is optional and will be set to '#{options.default}'."
+  else if options.optional
+    text += " The setting is optional."
+  text += "\n" + reference.describe options.reference if options.reference
+  text
+
+# Check for optional value
+# -------------------------------------------------
+# If called you have to check the return value to not be `false` then processing
+# should be returned with the given value.
+exports.optional = (source, options, value, cb) ->
+  # check optional
+  if options.type isnt 'boolean' and exports.isEmpty value
+    unless options.optional or options.default
+      return exports.result "A value is needed", source, options, null, cb
+    value = options.default ? null
+    return exports.result null, source, options, value, cb if options.optional
+  return false
 
 # Check for empty value
 # -------------------------------------------------
@@ -57,17 +80,6 @@ exports.isEmpty = (value) ->
       if value.length is 0
         return true
   false
-
-# Check for optional value
-# -------------------------------------------------
-# If called you have to check the return value to not be `false` then processing
-# should be returned with the given value.
-exports.optional = (source, options, value, cb) ->
-  if exports.isEmpty value
-    value = options.default ? null
-    return exports.result null, source, options, value, cb if options.optional
-    return exports.result "A value is needed", source, options, null, cb
-  return false
 
 # Create a descriptive error message
 # -------------------------------------------------

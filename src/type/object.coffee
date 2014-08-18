@@ -14,7 +14,6 @@ reference = require '../reference'
 #
 # Check options:
 #
-# - `optional` - the value must not be present (will return null)
 # - `instanceOf` - only objects of given class type are allowed
 # - `mandatoryKeys` - the list of elements which are mandatory
 # - `allowedKeys` - gives a list of elements which are also allowed
@@ -24,9 +23,6 @@ reference = require '../reference'
 #
 # - `entries` - specification for entries
 exports.check = (source, options, value, work, cb) ->
-  # check optional
-  result = helper.optional source, options, value, cb
-  return result unless result is false
   # add mandatory keys to allowed keys
   allowedKeys = []
   allowedKeys = allowedKeys.concat options.allowedKeys if options.allowedKeys?
@@ -121,8 +117,5 @@ exports.describe = (options) ->
           text += "\n- #{key} - #{helper.describe options.entries[key]} "
         else
           text += "\n- #{key} - Free input without specification. "
-  if options.optional
-    text += "The setting is optional. "
-  text += "\n" + reference.describe options.reference if options.reference
   text.trim()
 

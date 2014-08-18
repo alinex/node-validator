@@ -21,7 +21,6 @@ reference = require '../reference'
 #
 # Check options:
 #
-# - `optional` - the value must not be present (will return null)
 # - `min` - (integer) the smalles allowed number
 # - `max` - (integer) the biggest allowed number
 # - `inttype` - (integer|string) the integer is of given type
@@ -36,9 +35,6 @@ integerTypes =
   quad: 64
 
 exports.check = (source, options, value, work, cb) ->
-  # check optional
-  result = helper.optional source, options, value, cb
-  return result unless result is false
   # sanitize
   if typeof value is 'string'
     if options.sanitize
@@ -53,7 +49,6 @@ exports.check = (source, options, value, work, cb) ->
       when 'ceil' then Math.ceil value
       when 'floor' then Math.floor value
       else Math.round value
-  return result unless result is false
   # validate
   unless value is (value | 0)
     return helper.result "The given value '#{value}' is no integer as needed
@@ -100,8 +95,5 @@ exports.describe = (options) ->
     unsigned = if options.unsigned then 'unsigned' else 'signed'
     text += "Only values in the range of a #{unsigned} #{type}#{unit}-integer
       are allowed. "
-  if options.optional
-    text += "The setting is optional. "
-  text += "\n" + reference.describe options.reference if options.reference
   text.trim()
 

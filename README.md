@@ -48,7 +48,7 @@ Only if an asynchronous check is called synchronously it will throw an Error.
 
 Synchronous call:
 
-    var value = Validator.check('test', value, {
+    var value = validator.check('test', value, {
       type: 'integer',
       min: 0,
       max: 100
@@ -56,7 +56,7 @@ Synchronous call:
 
 Asynchronous call:
 
-    Validator.check('test', value, {
+    validator.check('test', value, {
       type: 'integer',
       min: 0,
       max: 100
@@ -74,7 +74,7 @@ The checks are split up into several packages to load on demand.
 
 If you won't change the value it is possible to call a simplified form:
 
-    if (Validator.is('test', value, {
+    if (validator.is('test', value, {
       type: 'integer',
       min: 0,
       max: 100
@@ -87,11 +87,23 @@ If you won't change the value it is possible to call a simplified form:
 This method may be used to get a human readable description of how a value
 has to be to validate.
 
-    console.log Validator.describe({
+    console.log validator.describe({
       type: 'integer',
       min: 0,
       max: 100
     });
+
+
+Optional values
+-------------------------------------------------
+All types (excluding boolean) support the `optional` parameter, which makes an
+entry in the data structure optional.
+If not given it will be set to null or the value given with `default`.
+
+- `optional` - the value must not be present (will return null)
+- `default` - value used if optional and no value given
+
+The `default` option automatically includes the `optional` option.
 
 
 Descriptive reporting
@@ -100,7 +112,7 @@ To get even more descriptive reporting it is possible to set a title and abstrac
 for the given field in the configuration. This will be used in error reporting
 and `describe()` calls.
 
-    Validator.check('test', value, {
+    validator.check('test', value, {
       type: 'float',
       title: 'Overall Timeout',
       description: 'time in milliseconds the whole test may take',
@@ -144,8 +156,6 @@ and also different check settings to use.
 
 __Sanitize options:__
 
-- `optional` - the value must not be present (will return null)
-- `default` - value used if optional and no value given
 - `tostring` - convert objects to string, first
 - `allowControls` - keep control characters in string instead of
   stripping them (but keep \\r\\n)
@@ -175,8 +185,6 @@ To test for integer values which may be sanitized.
 
 __Sanitize options:__
 
-- `optional` - the value must not be present (will return null)
-- `default` - value used if optional and no value given
 - `sanitize` - (bool) remove invalid characters
 - `round` - (bool) rounding of float can be set to true for arithmetic rounding
   or use `floor` or `ceil` for the corresponding methods
@@ -195,8 +203,6 @@ Nearly the same as for integer values but here are floats allowed, too.
 
 __Sanitize options:__
 
-- `optional` - the value must not be present (will return null)
-- `default` - value used if optional and no value given
 - `sanitize` - (bool) remove invalid characters
 - `round` - (int) number of decimal digits to round to
 
@@ -209,8 +215,6 @@ __Check options:__
 
 __Sanitize options:__
 
-- `optional` - the value must not be present (will return null)
-- `default` - value used if optional and no value given
 - `delimiter` - allow value text with specified list separator
   (it can also be an regular expression)
 
@@ -225,11 +229,6 @@ __Validating children:__
 - `èntries` - specification for all entries or as array for each element
 
 ### object
-
-__Sanitize options:__
-
-- `optional` - the value must not be present (will return null)
-- `default` - value used if optional and no value given
 
 __Check options:__
 
@@ -255,8 +254,6 @@ __Option:__
 
 __Sanitize options:__
 
-- `optional` - the value must not be present (will return null)
-- `default` - value used if optional and no value given
 - `unit` - (string) type of unit to convert if not integer given
 - `round` - (bool) rounding of float can be set to true for arithmetic rounding
   or use `floor` or `ceil` for the corresponding methods

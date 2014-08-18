@@ -23,13 +23,9 @@ reference = require '../reference'
 #
 # Check options:
 #
-# - `optional` - the value must not be present (will return null)
 # - `min` - (integer) the smalles allowed number
 # - `max` - (integer) the biggest allowed number
 exports.check = (source, options, value, work, cb) ->
-  # check optional
-  result = helper.optional source, options, value, cb
-  return result unless result is false
   # sanitize
   if typeof value is 'string'
     parsed = number.parseMSeconds value
@@ -104,6 +100,4 @@ exports.describe = (options) ->
     text += "The value should be greater than #{options.min}. "
   else if options.max?
     text += "The value should be lower than #{options.max}. "
-  if options.optional
-    text += "The setting is optional. "
   text.trim()

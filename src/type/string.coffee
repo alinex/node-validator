@@ -37,9 +37,6 @@ reference = require '../reference'
 # - `matchNot` - string or regular expression which is not allowed to
 #   match (or list of expressions)
 exports.check = (source, options, value, work, cb) ->
-  # check optional
-  result = helper.optional source, options, value, cb
-  return result unless result is false
   if options.tostring and typeof value is 'object'
     value = value.toString()
   # first check input type
@@ -185,8 +182,5 @@ exports.describe = (options) ->
       text = text.replace /, $/, '. '
     else
       text += "'#{options.matchNot}'. "
-  if options.optional
-    text += "The setting is optional. "
-  text += "\n" + reference.describe options.reference if options.reference
   text.trim()
 

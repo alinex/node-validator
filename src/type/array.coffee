@@ -23,15 +23,11 @@ reference = require '../reference'
 # - `notEmpty` - set to true if an empty array is not valid
 # - `minLength` - minimum number of entries
 # - `maxLength` - maximum number of entries
-# - `optional` - the value must not be present (will return null)
 #
 # Validating children:
 #
 # - `èntries` - specification for all entries or as array for each element
 exports.check = (source, options, value, work, cb) ->
-  # check optional
-  result = helper.optional source, options, value, cb
-  return result unless result is false
   # sanitize
   if typeof value is 'string' and options.delimiter?
     value = value.split options.delimiter
@@ -125,8 +121,5 @@ exports.describe = (options) ->
           text += "\n#{num}. Free input without specification. "
     else
       text += "All entries should be:\n> #{helper.describe options.entries} "
-  if options.optional
-    text += "The setting is optional. "
-  text += "\n" + reference.describe options.reference if options.reference
   text.trim()
 

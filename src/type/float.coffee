@@ -20,13 +20,9 @@ reference = require '../reference'
 #
 # Check options:
 #
-# - `optional` - the value must not be present (will return null)
 # - `min` - (numeric) the smalles allowed number
 # - `max` - (numeric) the biggest allowed number
 exports.check = (source, options, value, work, cb) ->
-  # check optional
-  result = helper.optional source, options, value, cb
-  return result unless result is false
   # sanitize
   if typeof value is 'string'
     if options.sanitize
@@ -63,8 +59,5 @@ exports.describe = (options) ->
     text += "The value should be greater than #{options.min}. "
   else if options.max?
     text += "The value should be lower than #{options.max}. "
-  if options.optional
-    text += "The setting is optional. "
-  text += "\n" + reference.describe options.reference if options.reference
   text.trim()
 
