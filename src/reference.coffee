@@ -12,11 +12,6 @@ helper = require './helper'
 
 
 
-#    - validator - field ref: 'sensors.[*].sensor' # through any array/key element
-#- validator - field ref: '@sensor' # relative
-#- validator - field ref: '@<sensor' # relative back
-#- validator - field ref: '#config.monitor.contacts' # other data element
-
 exports.valueByName = (source, name, work) ->
   # calculate the path
   if name[0] is '#'
@@ -24,14 +19,17 @@ exports.valueByName = (source, name, work) ->
   else if name[0] is '@'
     name = name[1..]
     path = source.split '.'
-    path.shift()
+    first = path.shift()
     while name[0] is '<'
       path.shift()
       name = name[1..]
     path.push name
+    name = "#{first}.#{path.join '.'}"
     path = "self.#{path.join '.'}"
   else
     path = "self.#{name}"
+    first = source.split('.')[0]
+    name = "#{first}.#{name}"
 #  console.log path, work
   obj = work
   for part in path.split '.'
@@ -39,19 +37,19 @@ exports.valueByName = (source, name, work) ->
       debug "reference #{name} not found"
       return null
     obj = obj[part]
-  obj
+  [name, obj]
 
 # Greater than
 # -------------------------------------------------
-exports.check = (source, value, options, work, cb) ->
-  debug "Check references for #{source}", util.inspect(options).grey
+exports.check = (source, options, value, work, cb) ->
+  debug "Check references for #{source}", util.inspect(options.reference).grey
   # sanitize
   # validate
-  if options.greater?
-    ref = exports.valueByName source, options.greater, work
-    if ref? and value <= ref
+  if options.reference.greater?
+    [refname, refvalue] = exports.valueByName source, options.reference.greater, work
+    if refvalue? and value <= refvalue
       return helper.result "The value '#{value}' in #{source} has to be greater
-      than '#{ref}' in #{options.greater}.", source, options, null, cb
+      than '#{refvalue}'", refname, options, null, cb
   # done return resulting value
   return helper.result null, source, options, value, cb
 

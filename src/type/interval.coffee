@@ -70,26 +70,10 @@ exports.check = (source, options, value, work, cb) ->
   # done return resulting value
   return helper.result null, source, options, value, cb
 
-# Reference check
-# -------------------------------------------------
-exports.reference = (source, options, value, work, cb) ->
-  # call reference check
-  unless options.reference?
-    # no sub element possible, so returning
-    return helper.result null, source, options, value, cb
-  # check references
-  unless cb?
-    value = reference.check source, options.reference, value, work
-    if value instanceof Error
-      return helper.result value, source, options, null
-    return helper.result null, source, options, value
-  reference.check source, options.reference, value, work, (err, value) ->
-    return helper.result err, source, options, value, cb
-
 # Description
 # -------------------------------------------------
 exports.describe = (options) ->
-  text = 'An time interval is needed, here. '
+  text = 'A time interval is needed, here. '
   text += "If defined as a text you may use a combination of values with the
     units: ms, s, m, h, d. "
   if options.unit

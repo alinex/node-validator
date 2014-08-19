@@ -49,7 +49,7 @@ describe "Reference", ->
 #- validator - field ref: '@<sensor' # relative back
 #- validator - field ref: '#config.monitor.contacts' # other data element
 
-  describe "sync check", ->
+  describe.only "sync check", ->
 
     it "should support greater option", ->
       test.same
@@ -64,6 +64,45 @@ describe "Reference", ->
       ,
         one: 2
         two: 5
+    it "should fail for greater option", ->
+      test.fail
+        type: 'object'
+        entries:
+          one:
+            type: 'integer'
+          two:
+            type: 'integer'
+            reference:
+              greater: 'one'
+      ,
+        one: 2
+        two: 1
+    it "should support greater option with back reference", ->
+      test.same
+        type: 'object'
+        entries:
+          one:
+            type: 'integer'
+          two:
+            type: 'integer'
+            reference:
+              greater: '@<one'
+      ,
+        one: 2
+        two: 5
+    it "should fail for greater option with back reference", ->
+      test.fail
+        type: 'object'
+        entries:
+          one:
+            type: 'integer'
+          two:
+            type: 'integer'
+            reference:
+              greater: '@<one'
+      ,
+        one: 2
+        two: 1
 
   describe "description", ->
 

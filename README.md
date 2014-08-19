@@ -269,6 +269,20 @@ __Check options:__
 - `min` - (integer) the smalles allowed number
 - `max` - (integer) the biggest allowed number
 
+### percent
+
+Nearly the same as float but values which are given as string using the % sign
+like 50% are converted to floats like 0.5.
+
+__Sanitize options:__
+
+- `round` - (int) number of decimal digits to round to
+
+__Check options:__
+
+- `min` - (numeric) the smalles allowed number
+- `max` - (numeric) the biggest allowed number
+
 
 Examples
 -------------------------------------------------

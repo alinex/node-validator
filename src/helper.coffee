@@ -33,7 +33,7 @@ exports.reference = (source, options = {}, value, work, cb) ->
     return exports.result null, source, options, value, cb
   # check references sync
   unless cb?
-    value = reference.check source, options.reference, value, work
+    value = reference.check source, options, value, work
     if value instanceof Error
       return exports.result value, source, options, null
     return exports.result null, source, options, value
