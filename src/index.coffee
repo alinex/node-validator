@@ -1,18 +1,21 @@
 # Validator
 # =================================================
 
-debug = require('debug')('validator')
-
-helper = require './helper'
+ValidatorCheck = require './check'
 
 # Check if value is valid
 # -------------------------------------------------
 # This will check the given value against the checks defined in the options.
 # It will only give a value of true or false to the callback.
-exports.is = (source, options, value, cb) ->
-  not exports.check source, options, value, (err) ->
-    cb not err?
-    not err?
+exports.is = (source, options, value, data = {}, cb) ->
+  if not cb? and typeof data is 'function'
+    cb = data
+    data = {}
+  check = new ValidatorCheck source, options, value, data
+  unless cb?
+    return not check.run() typeof Error
+  check.run (err) ->
+    cb err?
 
 # Check value and sanitize
 # -------------------------------------------------
@@ -22,28 +25,14 @@ exports.check = (source, options, value, data = {}, cb) ->
   if not cb? and typeof data is 'function'
     cb = data
     data = {}
-  debug "Validating #{source}..."
-# data for first run
-  work =
-    refrun: false
+  check = new ValidatorCheck source, options, value, data
   unless cb?
-    # first run
-    value = helper.check source, options, value, work
-    return value if value instanceof Error or not work.refrun
-    # second run if needed
-    work.self = value
-    work.data = data
-    return helper.reference source, options, value, work
-  #firstrun
-  helper.check source, options, value, work, (err, value) ->
-    return cb err, value if err or not work.refrun
-    # secondrun if needed
-    work.self = value
-    work.data = data
-    helper.reference source, options, value, work, cb
+    return check.sync()
+  check.async cb
+
 
 # Check if value is valid
 # -------------------------------------------------
 # This will directly return the description of how the value has to be.
-exports.describe = (options = {}) ->
-  helper.describe options
+exports.describe = (options) ->
+  ValidatorCheck.describe options

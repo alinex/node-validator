@@ -4,40 +4,52 @@
 
 # Node modules
 # -------------------------------------------------
+debug = require('debug')('validator:boolean')
 async = require 'async'
 util = require 'util'
 # include classes and helper
-helper = require '../helper'
-reference = require '../reference'
+rules = require '../rules'
 
-# Sanitize and validate
-# -------------------------------------------------
-exports.check = (source, options, value, work, cb) ->
-  unless value?
-    return helper.result null, source, options, false, cb
-  switch typeof value
-    when 'boolean'
-      return helper.result null, source, options, value, cb
-    when 'string'
-      switch value.toLowerCase()
-        when 'true', '1', 'on', 'yes'
-          return helper.result null, source, options, true, cb
-        when 'false', '0', 'off', 'no'
-          return helper.result null, source, options, false, cb
-    when 'number'
-      switch value
-        when 1
-          return helper.result null, source, options, true, cb
-        when 0
-          return helper.result null, source, options, false, cb
-    else
-      return helper.result "No boolean value given", source, options, null, cb
-  helper.result "The value #{value} is no boolean", source, options, null, cb
+valuesTrue = ['true', '1', 'on', 'yes', 1, true]
+valuesFalse = ['false', '0', 'off', 'no', 0, false]
 
-# Description
-# -------------------------------------------------
-exports.describe = (options) ->
-  "The value has to be a boolean. The value will be true for 1, 'true', 'on',
-  'yes' and it will be considered as false for 0, 'false', 'off', 'no', '.
-  Other values are not allowed."
+module.exports =
 
+  # Description
+  # -------------------------------------------------
+  describe:
+
+    # ### Type Description
+    type: (options) ->
+      # optimize options
+      if options.optional and not options.default?
+        options.default = false
+      # get possible values
+      vTrue = valuesTrue.map(util.inspect).join ', '
+      vFalse = valuesFalse.map(util.inspect).join ', '
+      # combine into message
+      "The value has to be a boolean. The value will be true for #{vTrue} and it
+      will be considered as false for #{vFalse}. #{rules.describe.optional options}
+      Other values are not allowed."
+
+  # Synchronous check
+  # -------------------------------------------------
+  sync:
+
+    # ### Check Type
+    type: (check, path, options, value) ->
+      debug "check #{util.inspect value} in #{path}", util.inspect(options).grey
+      # optimize options
+      if options.optional and not options.default?
+        options.default = false
+      # optional check
+      value = rules.sync.optional check, path, options, value
+      # sanitize
+      if typeof value is 'string'
+        value = value.toLowerCase()
+      # boolean values check
+      return true if value in valuesTrue
+      return false if value in valuesFalse
+      # failed
+      throw check.error path, options, value,
+      new Error "No boolean value given"

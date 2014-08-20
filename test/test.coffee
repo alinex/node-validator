@@ -30,9 +30,9 @@ exports.false = (options, value, cb) ->
 exports.fail = (options, value, cb) ->
   # sync version
   unless cb?
-    return expect validator.check('test', options, value)
-    , value
-    .to.be.an.instanceof Error
+    return expect ->
+      validator.check('test', options, value)
+    .to.throw Error
   # async version
   validator.check 'test', options, value, (err, result) ->
     expect(err, value).to.exist

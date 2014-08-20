@@ -7,136 +7,75 @@ util = require 'util'
 reference = require './reference'
 
 
-# Check value and sanitize
+# Class for validation
 # -------------------------------------------------
 # ### Instance properties
-#
-# Overall information
 #
 # - source - original name of source
 # - options - check definition
 # - value - check value
 # - data - additional references for checks
+# - runAgain - true for another check round
 #
-# Working information per step
-#
-# - path - current work path
-# - pval - the current path value
-# - popt - the current path options
+class ValidatorCheck
 
-class Check
+  # ### Get description for check
+  @describe: (options) ->
+    getTypeLib(options).describe.type(options).trim()
 
+  # ### New run needed?
+  # If this is true a new sync or async run is needed. This may lead to multiple
+  # runs in case of references to references...
+  runAgain: true
+
+  # ### Initialize data for check
   constructor: (@source, @options, @value, @data) ->
 
-  sync: ->
-    return value
+  # ### Create error message
+  # This is called by the subclasses
+  error: (path, options, value, err) ->
+    source = [@source].concat(path).join '.'
+    message = "#{err.message} in #{@source}"
+    if options.title?
+      message += " '#{options.title}'"
+    message += '.'
+    if options.description?
+      message += "It should contain #{options.description}. "
+    new Error message
 
+  # ### Synchronous check
+  sync: ->
+    debug "start new check of #{@source}"
+    lib = getTypeLib(@options)
+    unless lib.sync?.type?
+      return new Error "Could not synchronously call #{@options.type} check in #{@source}."
+    try
+      result = @value
+      while @runAgain
+        @runAgain = false
+        result = lib.sync.type @, [], @options, result
+        debug "check succeeded for #{@source}"
+      result
+    catch err
+      debug "check failed with #{err}"
+      throw err
+
+  # Asynchronous check
   async: (cb) ->
     cb null, value
 
+# Export the class
+module.exports = ValidatorCheck
 
-exports = check
 
-
-
-# Check value and sanitize
+# Helper methods
 # -------------------------------------------------
-# this may also be used for subcalls.
-exports.check = (source, options = {}, value, work, cb) ->
-  lib = require "./type/#{options.type}"
-  work.refrun = true if options.reference?
-  debug "check #{options.type} '#{value}' in #{source}", util.inspect(options).grey
-  # check optional
-  result = exports.optional source, options, value, cb
-  return result unless result is false
-  # normal check through type library
-  lib.check source, options, value, work, cb
 
-# Check value and sanitize
-# -------------------------------------------------
-# this may also be used for subcalls.
-exports.reference = (source, options = {}, value, work, cb) ->
-  debug "#{options.type} reference in #{source}", util.inspect(options).grey
-  lib = require "./type/#{options.type}"
-  # run library check if defined else do the default check here
-  if lib.reference?
-    return lib.reference source, options, value, work, cb
-  # skip reference check if not defined
-  unless options.reference
-    return exports.result null, source, options, value, cb
-  # check references sync
-  unless cb?
-    value = reference.check source, options, value, work
-    if value instanceof Error
-      return exports.result value, source, options, null
-    return exports.result null, source, options, value
-  # check references async
-  reference.check source, options.reference, value, work, (err, value) ->
-    exports.result err, source, options, value, cb
+# ### Get type library
+getTypeLib = (name) ->
+  if typeof name is 'string'
+    return require "./type/#{name}"
+  if name.type?
+    return require "./type/#{name.type}"
+  throw Error "Undefined type #{name}"
 
-
-# Check if value is valid
-# -------------------------------------------------
-# This will directly return the description of how the value has to be.
-exports.describe = (options = {}) ->
-  lib = require "./type/#{options.type}"
-  text = lib.describe options
-  if options.default
-    text += " The setting is optional and will be set to '#{options.default}'."
-  else if options.optional
-    text += " The setting is optional."
-  text += "\n" + reference.describe options.reference if options.reference
-  text
-
-# Check for optional value
-# -------------------------------------------------
-# If called you have to check the return value to not be `false` then processing
-# should be returned with the given value.
-exports.optional = (source, options, value, cb) ->
-  # check optional
-  if options.type isnt 'boolean' and exports.isEmpty value
-    unless options.optional or options.default
-      return exports.result "A value is needed", source, options, null, cb
-    value = options.default ? null
-    return exports.result null, source, options, value, cb if options.optional
-  return false
-
-# Check for empty value
-# -------------------------------------------------
-exports.isEmpty = (value) ->
-  return true unless value?
-  switch typeof value
-    when 'object'
-      if value.constructor.name is 'Object' and Object.keys(value).length is 0
-        return true
-    when 'array'
-      if value.length is 0
-        return true
-  false
-
-# Create a descriptive error message
-# -------------------------------------------------
-# This is used internally only.
-# This will contain the title and description from the configuration if there.
-exports.error = (err, source = "unknown", options, value) ->
-  if err
-    unless err instanceof Error
-      text = "#{err} in #{source}"
-      text += " for \"#{options.title}\"" if options.title?
-      text += "."
-      text += "\nIt should contain #{options.description}." if options.description?
-      err = new Error text
-    debug "Failed: #{err.message}"
-  else
-    debug "Succeeded in #{source}", util.inspect(options).grey
-  err
-
-# Send value or error
-# -------------------------------------------------
-# This is used internally only.
-# This helps supporting both return values and callbacks at the same time.
-# This will contain the title and description from the configuration if there.
-exports.result = (err, source, options, value, cb = ->) ->
-  err = exports.error err, source, options, value
-  cb err, value
-  err ? value

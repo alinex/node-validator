@@ -49,7 +49,7 @@ describe "Reference", ->
 #- validator - field ref: '@<sensor' # relative back
 #- validator - field ref: '#config.monitor.contacts' # other data element
 
-  describe.only "sync check", ->
+  describe "sync check", ->
 
     it "should support greater option", ->
       test.same
