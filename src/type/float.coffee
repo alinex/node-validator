@@ -6,7 +6,7 @@
 # - `sanitize` - (bool) remove invalid characters
 # - `round` - (bool) rounding of float can be set to true for arithmetic rounding
 #   or use `floor` or `ceil` for the corresponding methods
-# - `digits` - (int) number of decimal digits to round to
+# - `decimals` - (int) number of decimal digits to round to
 #
 # Check options:
 #

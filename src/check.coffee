@@ -1,6 +1,8 @@
 # Check class
 # =================================================
 
+# Node modules
+# -------------------------------------------------
 debug = require('debug')('validator')
 util = require 'util'
 # internal classes and helper

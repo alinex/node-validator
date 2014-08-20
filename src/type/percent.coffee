@@ -15,11 +15,9 @@
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:integer')
+debug = require('debug')('validator:percent')
 async = require 'async'
 util = require 'util'
-# include alinex packages
-{number} = require 'alinex-util'
 # include classes and helper
 rules = require '../rules'
 float = require './float'
