@@ -73,11 +73,15 @@ module.exports = float =
           value = Number value
       value = float.sync.round check, path, options, value
       # validate
+      value = float.sync.number check, path, options, value
+      value = float.sync.minmax check, path, options, value
+      # done return resulting value
+      value
+
+    number: (check, path, options, value) ->
       unless not isNaN(parseFloat value) and isFinite value
         throw check.error path, options, value,
         new Error "The given value #{util.inspect value} is no number as needed"
-      value = float.sync.minmax check, path, options, value
-      # done return resulting value
       value
 
     round: (check, path, options, value) ->

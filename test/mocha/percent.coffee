@@ -39,9 +39,9 @@ describe "Percent", ->
     it "should support round option", ->
       options =
         type: 'percent'
-        round: 1
-      test.equal options, 13.44, 13.4
-      test.equal options, '+18.56', 18.6
+        round: true
+      test.equal options, 1.445, 1.45
+      test.equal options, '+18.56', 18.56
     it "should support min option", ->
       options =
         type: 'percent'
@@ -65,77 +65,6 @@ describe "Percent", ->
         max: 1
       test.fail options, 10
       test.fail options, '110%'
-
-  describe "async check", ->
-
-    it "should match number objects", (cb) ->
-      async.series [
-        (cb) -> test.equal options, 18, 18, cb
-        (cb) -> test.equal options, 0.4, 0.4, cb
-        (cb) -> test.equal options, -0.02, -0.02, cb
-      ], cb
-    it "should match string definition", (cb) ->
-      async.series [
-        (cb) -> test.equal options, '1800%', 18, cb
-        (cb) -> test.equal options, '40%', 0.4, cb
-        (cb) -> test.equal options, '-2%', -0.02, cb
-        (cb) -> test.equal options, '3.8%', 0.038, cb
-      ], cb
-    it "should fail on other objects", (cb) ->
-      async.series [
-        (cb) -> test.fail options, 'hello', cb
-        (cb) -> test.fail options, null, cb
-        (cb) -> test.fail options, [], cb
-        (cb) -> test.fail options, (new Error '????'), cb
-        (cb) -> test.fail options, {}, cb
-      ], cb
-    it "should support optional option", (cb) ->
-      options =
-        type: 'percent'
-        optional: true
-      async.series [
-        (cb) -> test.equal options, null, null, cb
-        (cb) -> test.equal options, undefined, null, cb
-      ], cb
-    it "should support round option", (cb) ->
-      options =
-        type: 'percent'
-        round: 1
-      async.series [
-        (cb) -> test.equal options, 13.44, 13.4, cb
-        (cb) -> test.equal options, '+18.56', 18.6, cb
-      ], cb
-    it "should support min option", (cb) ->
-      options =
-        type: 'percent'
-        min: 0
-      async.series [
-        (cb) -> test.equal options, 0.06, 0.06, cb
-        (cb) -> test.equal options, 0, 0, cb
-      ], cb
-    it "should fail for min option", (cb) ->
-      options =
-        type: 'percent'
-        min: 0
-      async.series [
-        (cb) -> test.fail options, -8, cb
-      ], cb
-    it "should support max option", (cb) ->
-      options =
-        type: 'percent'
-        max: 1
-      async.series [
-        (cb) -> test.equal options, 1, 1, cb
-        (cb) -> test.equal options, '100%', 1, cb
-      ], cb
-    it "should fail for max option", (cb) ->
-      options =
-        type: 'percent'
-        max: 1
-      async.series [
-        (cb) -> test.fail options, 10, cb
-        (cb) -> test.fail options, '110%', cb
-      ], cb
 
   describe "description", ->
 
