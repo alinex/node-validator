@@ -21,9 +21,7 @@ module.exports =
 
     # ### Type Description
     type: (options) ->
-      # optimize options
-      if options.optional and not options.default?
-        options.default = false
+      options = optimize options
       # get possible values
       vTrue = valuesTrue.map(util.inspect).join ', '
       vFalse = valuesFalse.map(util.inspect).join ', '
@@ -39,12 +37,9 @@ module.exports =
     # ### Check Type
     type: (check, path, options, value) ->
       debug "check #{util.inspect value} in #{path}", util.inspect(options).grey
-      # optimize options
-      if options.optional and not options.default?
-        options.default = false
-      # optional check
-      value = rules.sync.optional check, path, options, value
+      options = optimize options
       # sanitize
+      value = rules.sync.optional check, path, options, value
       if typeof value is 'string'
         value = value.toLowerCase()
       # boolean values check
@@ -53,3 +48,10 @@ module.exports =
       # failed
       throw check.error path, options, value,
       new Error "No boolean value given"
+
+# Optimize options setting
+# -------------------------------------------------
+optimize = (options) ->
+  if options.optional and not options.default?
+    options.default = false
+  options
