@@ -30,7 +30,7 @@ module.exports =
         return value
       # check for optional
       unless options.optional or options.default
-        return check.error path, options, value,
+        throw check.error path, options, value,
         new Error "A value is needed"
       # send default back
       options.default ? null

@@ -45,15 +45,16 @@ module.exports = float =
           when 'to ceil' then Math.ceil value
           when 'to floor' then Math.floor value
           else 'arithḿetic'
-        text += "Value will be rounded #{type} to #{options.decimals} decimals. "
+        return "Value will be rounded #{type} to #{options.decimals} decimals. "
+      ''
 
     minmax: (options) ->
       if options.min? and options.max?
-        text += "The value should be between #{options.min} and #{options.max}. "
+        return "The value should be between #{options.min} and #{options.max}. "
       else if options.min?
-        text += "The value should be greater than #{options.min}. "
+        return "The value should be greater than #{options.min}. "
       else if options.max?
-        text += "The value should be lower than #{options.max}. "
+        return "The value should be lower than #{options.max}. "
 
   # Synchronous check
   # -------------------------------------------------
@@ -61,7 +62,7 @@ module.exports = float =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
       options = optimize options
       # sanitize
       value = rules.sync.optional check, path, options, value

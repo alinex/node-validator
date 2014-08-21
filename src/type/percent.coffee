@@ -37,7 +37,6 @@ module.exports = percent =
       text += rules.describe.optional options
       text += float.describe.round options
       text += float.describe.minmax options
-      text
 
   # Synchronous check
   # -------------------------------------------------
@@ -45,7 +44,7 @@ module.exports = percent =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
       options = optimize options
       # sanitize
       value = rules.sync.optional check, path, options, value

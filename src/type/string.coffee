@@ -108,7 +108,7 @@ module.exports = float =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
       # first check input type
       value = rules.sync.optional check, path, options, value
       return value unless value?

@@ -53,7 +53,8 @@ module.exports = integer =
           when 'to ceil' then Math.ceil value
           when 'to floor' then Math.floor value
           else 'arithḿetic'
-        text += "Value will be rounded #{type} to an integer. "
+        return "Value will be rounded #{type} to an integer. "
+      ''
 
   # Synchronous check
   # -------------------------------------------------
@@ -61,7 +62,7 @@ module.exports = integer =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
       # sanitize
       value = rules.sync.optional check, path, options, value
       return value unless value?

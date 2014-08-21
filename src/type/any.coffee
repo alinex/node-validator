@@ -3,63 +3,61 @@
 
 # Node modules
 # -------------------------------------------------
+debug = require('debug')('validator:any')
 async = require 'async'
 util = require 'util'
 # include classes and helper
-helper = require '../helper'
-reference = require '../reference'
+rules = require '../rules'
+ValidatorCheck = require '../check'
 
+module.exports = any =
 
-# Sanitize and validate
-# -------------------------------------------------
-exports.check = (source, options, value, work, cb) ->
-  if cb?
-    # run async
-    return async.map options.entries, (suboptions, cb) ->
-      return cb new Error "Undefined" unless suboptions?
-      # run subcheck
-      helper.check source, suboptions, value, work, (err, result) ->
-        return cb null, err if err
-        cb null, result
-    , (err, results) ->
-      # check response
-      for result in results
-        unless result instanceof Error
-          return helper.result null, source, options, result, cb
-      helper.result "None of the alternatives are matched", source, options, null, cb
-  #run sync
-  for suboptions in options.entries
-    continue unless suboptions?
-    # run subcheck
-    result = helper.check source, suboptions, value, work
-    # check response
-    unless result instanceof Error
-      return helper.result null, source, options, result, cb
-  # done without success
-  helper.result "None of the alternatives are matched", source, options, null, cb
+  # Description
+  # -------------------------------------------------
+  describe:
 
-# Reference check
-# -------------------------------------------------
-exports.reference = (source, options, value, work, cb) ->
-  # skip reference check if not defined
-  unless options.reference
-    return exports.result null, source, options, value, cb
-  # check references sync
-  unless cb?
-    value = reference.check source, options.reference, value, work
-    if value instanceof Error
-      return exports.result value, source, options, null
-    return exports.result null, source, options, value
-  # check references async
-  reference.check source, options.reference, value, work, (err, value) ->
-    exports.result err, source, options, value, cb
+    # ### Type Description
+    type: (options) ->
+      text = "Here one of the following checks have to succeed:\n"
+      for entry in options.entries
+        text += "\n- #{ValidatorCheck.describe entry} "
+      text
 
-# Description
-# -------------------------------------------------
-exports.describe = (options) ->
-  text = "Here one of the following checks have to succeed:\n"
-  for entry in options.entries
-    text += "\n- #{helper.describe entry} "
-  text += "\n" + reference.describe options.reference if options.reference
-  text.trim()
+  # Synchronous check
+  # -------------------------------------------------
+  sync:
 
+    # ### Check Type
+    type: (check, path, options, value) ->
+      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      # validate
+      for suboptions in options.entries
+        continue unless suboptions?
+        # run subcheck
+        try
+          return check.subcall path, suboptions, value
+        catch err
+      # error, nothing matched
+      throw check.error path, options, value,
+      new Error "None of the alternatives are matched"
+
+  # Asynchronous check
+  # -------------------------------------------------
+  async:
+
+    # ### Check Type
+    type: (check, path, options, value, cb) ->
+      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      # run sync checks
+      async.map options.entries, (suboptions, cb) ->
+        # run subcheck
+        check.subcall path, suboptions, value, (err, result) ->
+          # check response
+          return cb() if err
+          cb null, result
+      , (err, results) ->
+        # check response
+        for result in results
+          return cb null, result if result?
+        cb check.error path, options, value,
+        new Error "None of the alternatives are matched"
