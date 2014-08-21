@@ -29,13 +29,22 @@
         <a href="#node%20modules">Node modules</a>
       </div>
       <div class="heading h2">
-        <a href="#sanitize%20and%20validate">Sanitize and validate</a>
-      </div>
-      <div class="heading h2">
-        <a href="#reference%20check">Reference check</a>
-      </div>
-      <div class="heading h2">
         <a href="#description">Description</a>
+      </div>
+      <div class="heading h3">
+        <a href="#type%20description">Type Description</a>
+      </div>
+      <div class="heading h2">
+        <a href="#synchronous%20check">Synchronous check</a>
+      </div>
+      <div class="heading h3">
+        <a href="#check%20type">Check Type</a>
+      </div>
+      <div class="heading h2">
+        <a href="#asynchronous%20check">Asynchronous check</a>
+      </div>
+      <div class="heading h3">
+        <a href="#check%20type">Check Type</a>
       </div>
     </div>
   </div>
@@ -58,46 +67,9 @@
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="node%20modules">
-  <h2>
-    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
-    Node modules
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;async&#39;</span>
-<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
 </div>
-<p>include classes and helper</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">helper = </span><span class="nx">require</span> <span class="s">&#39;../helper&#39;</span>
-<span class="nv">reference = </span><span class="nx">require</span> <span class="s">&#39;../reference&#39;</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="sanitize%20and%20validate">
-  <h2>
-    <a href="#sanitize%20and%20validate" name="sanitize%20and%20validate" class="pilcrow">&#182;</a>
-    Sanitize and validate
-  </h2>
-</div>
-
-
 <p>Check options:</p>
 
 <ul>
@@ -114,163 +86,6 @@ or true to use the list from entries definition</li>
 </ul>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.check = </span><span class="nf">(source, options, value, work, cb) -&gt;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
-</div>
-<p>add mandatory keys to allowed keys</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">allowedKeys = </span><span class="p">[]</span>
-  <span class="nv">allowedKeys = </span><span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="o">?</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
-    <span class="k">for</span> <span class="nx">key</span> <span class="k">in</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
-      <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">key</span> <span class="k">unless</span> <span class="nx">allowedKeys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
-    <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span>
-      <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">entry</span> <span class="k">unless</span> <span class="nx">allowedKeys</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
-</div>
-<p>validate</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="o">?</span>
-    <span class="k">unless</span> <span class="nx">value</span> <span class="k">instanceof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span>
-      <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;An object of </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> is needed</span>
-<span class="s">        as value&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
-    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
-  <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">isnt</span> <span class="s">&#39;object&#39;</span> <span class="o">or</span> <span class="nx">value</span> <span class="k">instanceof</span> <span class="nb">Array</span>
-    <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The value has to be an object&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="o">?</span> <span class="o">and</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">length</span> <span class="o">or</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span> <span class="o">is</span> <span class="kc">true</span><span class="p">)</span>
-    <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">value</span>
-      <span class="k">unless</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">allowedKeys</span>
-        <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The key &#39;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&#39; is not allowed&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
-    <span class="k">for</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span>
-      <span class="nv">keys = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span>
-      <span class="k">unless</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">keys</span>
-        <span class="nv">opt = </span><span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span> <span class="o">?</span> <span class="p">{}</span>
-        <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="s">&quot;The key &#39;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&#39; is missing&quot;</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">opt</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">cb</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
-    <span class="k">if</span> <span class="nx">cb</span><span class="o">?</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
-</div>
-<p>run async</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">return</span> <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">value</span><span class="p">),</span> <span class="nf">(key, cb) -&gt;</span>
-        <span class="nv">suboptions = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
-          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
-        <span class="k">else</span>
-          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
-        <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
-</div>
-<p>run subcheck</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">helper</span><span class="p">.</span><span class="nx">check</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="nx">work</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
-</div>
-<p>check response</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-          <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
-          <span class="nx">cb</span><span class="p">()</span>
-      <span class="p">,</span> <span class="nf">(err) -&gt;</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
-</div>
-<p>run sync</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">subvalue</span> <span class="k">of</span> <span class="nx">value</span>
-      <span class="nv">suboptions = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
-        <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
-      <span class="k">else</span>
-        <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
-      <span class="k">continue</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
-</div>
-<p>run subcheck</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">result = </span><span class="nx">helper</span><span class="p">.</span><span class="nx">check</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">subvalue</span><span class="p">,</span> <span class="nx">work</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
-</div>
-<p>check response</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span> <span class="k">if</span> <span class="nx">result</span> <span class="k">instanceof</span> <span class="nb">Error</span>
-      <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
-</div>
-<p>done return resulting value</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
 
 
 </pre></div>
@@ -278,18 +93,18 @@ or true to use the list from entries definition</li>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="reference%20check">
+<div class="pilwrap" id="node%20modules">
   <h2>
-    <a href="#reference%20check" name="reference%20check" class="pilcrow">&#182;</a>
-    Reference check
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node modules
   </h2>
 </div>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.reference = </span><span class="nf">(source, options, value, work, cb) -&gt;</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
-    <span class="k">if</span> <span class="nx">cb</span><span class="o">?</span>
+<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:object&#39;</span><span class="p">)</span>
+<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;async&#39;</span>
+<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
 
 </pre></div>
         </td>
@@ -297,104 +112,15 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
-<p>run async</p>
+<p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">return</span> <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">value</span><span class="p">),</span> <span class="nf">(key, cb) -&gt;</span>
-        <span class="nv">suboptions = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
-          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
-        <span class="k">else</span>
-          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
-        <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
+<span class="nv">rules = </span><span class="nx">require</span> <span class="s">&#39;../rules&#39;</span>
+<span class="nv">ValidatorCheck = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
 
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
-</div>
-<p>run subcheck</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">helper</span><span class="p">.</span><span class="nx">reference</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="nx">work</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
-</div>
-<p>check response</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-          <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
-          <span class="nx">cb</span><span class="p">()</span>
-      <span class="p">,</span> <span class="nf">(err) -&gt;</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
-</div>
-<p>run sync</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">subvalue</span> <span class="k">of</span> <span class="nx">value</span>
-      <span class="nv">suboptions = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
-        <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
-      <span class="k">else</span>
-        <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
-      <span class="k">continue</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
-</div>
-<p>run subcheck</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">result = </span><span class="nx">helper</span><span class="p">.</span><span class="nx">reference</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">subvalue</span><span class="p">,</span> <span class="nx">work</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
-</div>
-<p>check response</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="kc">null</span> <span class="k">if</span> <span class="nx">result</span> <span class="k">instanceof</span> <span class="nb">Error</span>
-      <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
-</div>
-<p>done return resulting value</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">return</span> <span class="nx">helper</span><span class="p">.</span><span class="nx">result</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">source</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+<span class="nv">module.exports = object =</span>
 
 
 </pre></div>
@@ -411,25 +137,397 @@ or true to use the list from entries definition</li>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(options) -&gt;</span>
-  <span class="nv">text = </span><span class="s">&#39;Here an object have to be given. &#39;</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The keys </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="si">}</span><span class="s"> have to be included. &quot;</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="o">?</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The keys </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="si">}</span><span class="s"> are optional. &quot;</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="o">?</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The object has to be an instance of </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="si">}</span><span class="s">. &quot;</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
-    <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;All entries should be:\n&gt; </span><span class="si">#{</span><span class="nx">helper</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="si">}</span><span class="s"> &quot;</span>
-    <span class="k">else</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Entries should contain:\n&quot;</span>
-      <span class="k">for</span> <span class="nx">entry</span><span class="p">,</span> <span class="nx">num</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
-        <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span><span class="o">?</span>
-          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> - </span><span class="si">#{</span><span class="nx">helper</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span><span class="si">}</span><span class="s"> &quot;</span>
+  <span class="nv">describe:</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="type%20description">
+  <h3>
+    <a href="#type%20description" name="type%20description" class="pilcrow">&#182;</a>
+    Type Description
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
+      <span class="nv">text = </span><span class="s">&#39;Here an object have to be given. &#39;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">object</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">instanceof</span> <span class="nx">options</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">object</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">options</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+        <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
+          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;All entries should be:\n&gt; </span><span class="si">#{</span><span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="si">}</span><span class="s"> &quot;</span>
         <span class="k">else</span>
-          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> - Free input without specification. &quot;</span>
-  <span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
+          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Entries should contain:\n&quot;</span>
+          <span class="k">for</span> <span class="nx">entry</span><span class="p">,</span> <span class="nx">num</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+            <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span><span class="o">?</span>
+              <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> - </span><span class="si">#{</span><span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span><span class="si">}</span><span class="s"> &quot;</span>
+            <span class="k">else</span>
+              <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s"> - Free input without specification. &quot;</span>
+      <span class="nx">text</span>
+
+    <span class="k">instanceof</span><span class="o">:</span> <span class="nf">(options) -&gt;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="o">?</span>
+        <span class="k">return</span> <span class="s">&quot;The object has to be an instance of </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="si">}</span><span class="s">. &quot;</span>
+      <span class="s">&#39;&#39;</span>
+
+    <span class="nv">keys: </span><span class="nf">(options) -&gt;</span>
+      <span class="nv">text = </span><span class="s">&#39;&#39;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The keys </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="si">}</span><span class="s"> have to be included. &quot;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="o">?</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The keys </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="si">}</span><span class="s"> are optional. &quot;</span>
+      <span class="nx">text</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="synchronous%20check">
+  <h2>
+    <a href="#synchronous%20check" name="synchronous%20check" class="pilcrow">&#182;</a>
+    Synchronous check
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">sync:</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="check%20type">
+  <h3>
+    <a href="#check%20type" name="check%20type" class="pilcrow">&#182;</a>
+    Check Type
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">type: </span><span class="nf">(check, path, options, value) -&gt;</span>
+      <span class="nx">debug</span> <span class="s">&quot;check </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">grey</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nv">value = </span><span class="nx">rules</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
+      <span class="k">return</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">for</span> <span class="nx">method</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;instanceof&#39;</span><span class="p">,</span> <span class="s">&#39;object&#39;</span><span class="p">,</span> <span class="s">&#39;keys&#39;</span><span class="p">]</span>
+        <span class="nv">value = </span><span class="nx">object</span><span class="p">.</span><span class="nx">sync</span><span class="p">[</span><span class="nx">method</span><span class="p">]</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p>end processing if no entries to check</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+        <span class="k">return</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>check entries</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">subvalue</span> <span class="k">of</span> <span class="nx">value</span>
+        <span class="nv">suboptions = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+        <span class="k">else</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+        <span class="k">continue</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p>run subcheck</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">),</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">subvalue</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+</div>
+<p>done return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">value</span>
+
+    <span class="k">instanceof</span><span class="o">:</span> <span class="nf">(check, path, options, value) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="o">?</span>
+        <span class="k">unless</span> <span class="nx">value</span> <span class="k">instanceof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span>
+          <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+          <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;An object of </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">instanceOf</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s"> is needed as value&quot;</span>
+      <span class="nx">value</span>
+
+    <span class="nv">object: </span><span class="nf">(check, path, options, value) -&gt;</span>
+      <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">isnt</span> <span class="s">&#39;object&#39;</span> <span class="o">or</span> <span class="nx">value</span> <span class="k">instanceof</span> <span class="nb">Array</span>
+        <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+          <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The value has to be an object&quot;</span>
+      <span class="nx">value</span>
+
+    <span class="nv">keys: </span><span class="nf">(check, path, options, value) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>add mandatory keys to allowed keys</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nv">allowedKeys = </span><span class="p">[]</span>
+      <span class="nv">allowedKeys = </span><span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="o">?</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+        <span class="k">for</span> <span class="nx">key</span> <span class="k">in</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+          <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">key</span> <span class="k">unless</span> <span class="nx">allowedKeys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
+        <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span>
+          <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">entry</span> <span class="k">unless</span> <span class="nx">allowedKeys</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>check</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="o">?</span> <span class="o">and</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">length</span> <span class="o">or</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowedKeys</span> <span class="o">is</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">value</span>
+          <span class="k">unless</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">allowedKeys</span>
+            <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+            <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The key &#39;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&#39; is not allowed&quot;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span><span class="o">?</span>
+        <span class="k">for</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">mandatoryKeys</span>
+          <span class="nv">keys = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span>
+          <span class="k">unless</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">keys</span>
+            <span class="nv">opt = </span><span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span> <span class="o">?</span> <span class="p">{}</span>
+            <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+            <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The key &#39;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&#39; is missing&quot;</span>
+      <span class="nx">value</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="asynchronous%20check">
+  <h2>
+    <a href="#asynchronous%20check" name="asynchronous%20check" class="pilcrow">&#182;</a>
+    Asynchronous check
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">async:</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="check%20type">
+  <h3>
+    <a href="#check%20type" name="check%20type" class="pilcrow">&#182;</a>
+    Check Type
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">type: </span><span class="nf">(check, path, options, value, cb) -&gt;</span>
+      <span class="nx">debug</span> <span class="s">&quot;check </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">grey</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>run sync checks</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">try</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nv">value = </span><span class="nx">rules</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
+<p>validate</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="k">for</span> <span class="nx">method</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;instanceof&#39;</span><span class="p">,</span> <span class="s">&#39;object&#39;</span><span class="p">,</span> <span class="s">&#39;keys&#39;</span><span class="p">]</span>
+          <span class="nv">value = </span><span class="nx">object</span><span class="p">.</span><span class="nx">sync</span><span class="p">[</span><span class="nx">method</span><span class="p">]</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
+      <span class="k">catch</span> <span class="nx">err</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+</div>
+<p>end processing if no entries to check</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+</div>
+<p>check entries</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">return</span> <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">value</span><span class="p">),</span> <span class="nf">(key, cb) -&gt;</span>
+        <span class="nv">suboptions = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">check</span><span class="o">?</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+        <span class="k">else</span>
+          <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+</div>
+<p>run subcheck</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">),</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="nf">(err, result) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>check response</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+          <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+          <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
+          <span class="nx">cb</span><span class="p">()</span>
+      <span class="p">,</span> <span class="nf">(err) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>done return results</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nx">cb</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">value</span>
 </pre></div>
         </td>
       </tr>

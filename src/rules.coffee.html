@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>rules.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../doc-style.css" />
+  <script src="../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/rulescoffee", defaultSidebar = true;
+  </script>
+  <script src="../doc-script.js"></script>
+  <script src="../fileSearch.js"></script>
+  <script src="../goToLine.js"></script>
+  <link rel="stylesheet" href="../fileSearch.css" />
+  <link rel="stylesheet" href="../goToLine.css" />
+</head>
+<body>
+  <div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#base%20validation%20rules">Base validation rules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#node%20modules">Node modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#description">Description</a>
+      </div>
+      <div class="heading h2">
+        <a href="#synchronous%20checks">Synchronous checks</a>
+      </div>
+      <div class="heading h3">
+        <a href="#optional%2C%20default">optional, default</a>
+      </div>
+      <div class="heading h2">
+        <a href="#helper%20methods">helper methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#is%20value%20empty%3F">Is value empty?</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="base%20validation%20rules">
+  <h1>
+    <a href="#base%20validation%20rules" name="base%20validation%20rules" class="pilcrow">&#182;</a>
+    Base validation rules
+  </h1>
+</div>
+
+
+<p>This is a collection of general check rules which are not specific to any type.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;async&#39;</span>
+<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>include classes and helper</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+<span class="nv">module.exports =</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="description">
+  <h2>
+    <a href="#description" name="description" class="pilcrow">&#182;</a>
+    Description
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">describe:</span>
+
+    <span class="nv">optional: </span><span class="nf">(options) -&gt;</span>
+      <span class="nv">value = </span><span class="nx">options</span><span class="p">.</span><span class="nx">default</span> <span class="o">?</span> <span class="kc">null</span>
+      <span class="s">&quot;This is optional and may not be set. If let blank it will be set to</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>{value}. "</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="synchronous%20checks">
+  <h2>
+    <a href="#synchronous%20checks" name="synchronous%20checks" class="pilcrow">&#182;</a>
+    Synchronous checks
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">  sync:</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="optional%2C%20default">
+  <h3>
+    <a href="#optional%2C%20default" name="optional%2C%20default" class="pilcrow">&#182;</a>
+    optional, default
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">    optional: (check, path, options, value) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>check for value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">      unless isEmpty value</span>
+<span class="s">        return value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>check for optional</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">      unless options.optional or options.default</span>
+<span class="s">        throw check.error path, options, value,</span>
+<span class="s">        new Error &quot;</span><span class="nx">A</span> <span class="nx">value</span> <span class="o">is</span> <span class="nx">needed</span><span class="s">&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>send default back</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">      options.default ? null</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="helper%20methods">
+  <h2>
+    <a href="#helper%20methods" name="helper%20methods" class="pilcrow">&#182;</a>
+    helper methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="is%20value%20empty%3F">
+  <h3>
+    <a href="#is%20value%20empty%3F" name="is%20value%20empty%3F" class="pilcrow">&#182;</a>
+    Is value empty?
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">isEmpty = (value) -&gt;</span>
+<span class="s">  return true unless value?</span>
+<span class="s">  switch typeof value</span>
+<span class="s">    when &#39;object&#39;</span>
+<span class="s">      if value.constructor.name is &#39;Object&#39; and Object.keys(value).length is 0</span>
+<span class="s">        return true</span>
+<span class="s">    when &#39;array&#39;</span>
+<span class="s">      if value.length is 0</span>
+<span class="s">        return true</span>
+<span class="s">  false</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
