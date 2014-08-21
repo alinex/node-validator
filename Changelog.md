@@ -4,6 +4,18 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.2.1 (2014-08-21)
+-------------------------------------------------
+- Finished internal rewrite but removed reference implementation.
+- Updated string type to new structure.
+- Updated interval type to new structure.
+- Updated percent type to new structure.
+- Update integer and float types to new validator structure.
+- Internal restructure of module working only for boolean type, yet.
+- Start to restructure into classes.
+- Fixed reference bug and optimized debug messages.
+- Added percent validator.
+
 Version 0.2.0 (2014-08-18)
 -------------------------------------------------
 - Added time format in interval type.
