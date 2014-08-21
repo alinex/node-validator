@@ -22,7 +22,7 @@ util = require 'util'
 rules = require '../rules'
 float = require './float'
 
-module.exports = integer =
+module.exports = percent =
 
   # Description
   # -------------------------------------------------
@@ -49,6 +49,7 @@ module.exports = integer =
       options = optimize options
       # sanitize
       value = rules.sync.optional check, path, options, value
+      return value unless value?
       if typeof value is 'string' and value.trim().slice(-1) is '%'
         value = value[0..-2]
         unless not isNaN(parseFloat value) and isFinite value
