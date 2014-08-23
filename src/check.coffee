@@ -121,6 +121,7 @@ class ValidatorCheck
         obj = @value
         unless pathname in @checked
           throw new Error 'EAGAIN'
+        debug "use absolute reference to '#{source.join '.'}'"
       when 'relative'
         obj = @value
         newpath = path.slice()
@@ -130,8 +131,10 @@ class ValidatorCheck
         source = newpath.concat source
         unless pathname in @checked
           throw new Error 'EAGAIN'
+        debug "use relative reference to '#{source.join '.'}'"
       when 'external'
         obj = @data
+        debug "use external reference to '#{source.join '.'}'"
     # read value
     for part in source
       unless obj[part]?
@@ -143,7 +146,8 @@ class ValidatorCheck
   subcall: (path, options, value, cb) ->
     # check for references
     try
-      value = @ref2value path, value
+      for key in Object.keys options
+        options[key] = @ref2value path, options[key]
     catch err
       if err.message is 'EAGAIN'
         @runAgain = true
@@ -151,23 +155,24 @@ class ValidatorCheck
         return cb null, value
       throw err unless cb?
       return cb err
-    debug "subcall for #{options.type} in #{@pathname path}"
-    lib = getTypeLib(options)
-    unless cb?
-      # sync call sync
-      unless lib.sync?.type?
-        return new Error "Could not synchronously call #{options.type} check in #{@pathname path}."
-      return lib.sync.type @, path, options, value
-    else
-      # async call async
-      if lib.async?.type?
-        return lib.async.type @, path, options, value, cb
-      # async call sync
-      try
-        result = lib.sync.type @, path, options, value
-        cb null, result
-      catch err
-        cb err
+    finally
+      debug "subcall for #{options.type} in #{@pathname path}"
+      lib = getTypeLib(options)
+      unless cb?
+        # sync call sync
+        unless lib.sync?.type?
+          return new Error "Could not synchronously call #{options.type} check in #{@pathname path}."
+        return lib.sync.type @, path, options, value
+      else
+        # async call async
+        if lib.async?.type?
+          return lib.async.type @, path, options, value, cb
+        # async call sync
+        try
+          result = lib.sync.type @, path, options, value
+          cb null, result
+        catch err
+          cb err
 
 # Export the class
 module.exports = ValidatorCheck

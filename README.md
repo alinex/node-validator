@@ -106,6 +106,17 @@ If not given it will be set to null or the value given with `default`.
 The `default` option automatically includes the `optional` option.
 
 
+References
+-------------------------------------------------
+It is also possible to use references instead of values in the validation rules.
+They are written as object with:
+
+- `reference` - the type of reference: absolute, relative, external
+- `source` - the path to get the value
+
+External references will be checked against the data element given to the validator.
+
+
 Descriptive reporting
 -------------------------------------------------
 To get even more descriptive reporting it is possible to set a title and abstract
