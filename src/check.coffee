@@ -19,6 +19,7 @@ reference = require './reference'
 # - value - check value
 # - data - additional references for checks
 # - runAgain - true for another check round
+# - checked - list of paths which are checked
 #
 class ValidatorCheck
 
@@ -33,6 +34,7 @@ class ValidatorCheck
 
   # ### Initialize data for check
   constructor: (@source, @options, @value, @data) ->
+    @checked = []
 
   # ### Create error message
   # This is called by the subclasses
@@ -95,12 +97,60 @@ class ValidatorCheck
       debug "check failed with #{err}"
       cb err
 
+
+  # ### Pathname to be printed
   pathname: (path) ->
     if path? and path.length
       return "#{@source}.#{path.join '.'}"
     @source
 
+  # ### Get value with reference support
+  # will set the runAgain flag if necessary
+  #
+  ref2value: (path, value) ->
+    pathname = path.join '.'
+    unless typeof value is 'object' and
+    Object.keys(value).sort().join(',') is 'reference,source'
+      @checked.push pathname
+      return value
+    # it's a reference, find path
+    source = value.source.split '.'
+    obj = null
+    switch value.reference
+      when 'absolute'
+        obj = @value
+        unless pathname in @checked
+          throw new Error 'EAGAIN'
+      when 'relative'
+        obj = @value
+        newpath = path.slice()
+        while source[0][0] is '<'
+          newpath.shift()
+          source[0] = source[0][1..]
+        source = newpath.concat source
+        unless pathname in @checked
+          throw new Error 'EAGAIN'
+      when 'external'
+        obj = @data
+    # read value
+    for part in source
+      unless obj[part]?
+        debug "reference '#{source.join '.'}' not found"
+        return null
+      obj = obj[part]
+    obj
+
   subcall: (path, options, value, cb) ->
+    # check for references
+    try
+      value = @ref2value path, value
+    catch err
+      if err.message is 'EAGAIN'
+        @runAgain = true
+        return value unless cb?
+        return cb null, value
+      throw err unless cb?
+      return cb err
     debug "subcall for #{options.type} in #{@pathname path}"
     lib = getTypeLib(options)
     unless cb?
