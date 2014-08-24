@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.2.2 (2014-08-24)
+-------------------------------------------------
+- Fixed references with mocha tests.
+- Added support for references.
+
 Version 0.2.1 (2014-08-21)
 -------------------------------------------------
 - Finished internal rewrite but removed reference implementation.
