@@ -1,7 +1,13 @@
 # Validator
 # =================================================
 
+# Node modules
+# -------------------------------------------------
+fs = require 'fs'
+path = require 'path'
+# internal classes and helper
 ValidatorCheck = require './check'
+
 
 # Check if value is valid
 # -------------------------------------------------
@@ -17,6 +23,7 @@ exports.is = (source, options, value, data = {}, cb) ->
   check.run (err) ->
     cb err?
 
+
 # Check value and sanitize
 # -------------------------------------------------
 # This will check the given value, sanitize it and return the new value or an
@@ -31,8 +38,29 @@ exports.check = (source, options, value, data = {}, cb) ->
   check.async cb
 
 
-# Check if value is valid
+# Create human readable description
 # -------------------------------------------------
 # This will directly return the description of how the value has to be.
 exports.describe = (options) ->
   ValidatorCheck.describe options
+
+
+# Check validation rules
+# -------------------------------------------------
+# This may be used in tests to check the validator check options if they are valid.
+exports.selfcheck = (name, rules) ->
+  types = []
+  for file in fs.readdirSync path.join __dirname, 'type'
+    if path.extname(file) is '.js'
+      types.push path.basename file, path.extname file
+  exports.check name,
+    type: 'object'
+    mandatoryKeys: ['type']
+    entries:
+      type:
+        type: 'string'
+        values: types
+  , rules
+  # Check type specific
+  lib = require "./type/#{rules.type}"
+  lib.selfcheck name, rules

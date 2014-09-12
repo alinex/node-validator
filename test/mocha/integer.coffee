@@ -125,3 +125,8 @@ describe "Integer", ->
 
     it "should give simple description", ->
       test.desc options
+
+  describe.only "selfcheck", ->
+
+    it "should validate", ->
+      test.selfcheck options

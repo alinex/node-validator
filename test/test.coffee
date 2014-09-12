@@ -92,3 +92,5 @@ exports.desc = (options) ->
   expect(desc).to.be.a 'string'
   expect(desc).to.have.length.of.at.least 10
 
+exports.selfcheck = (options) ->
+  validator.selfcheck 'test', options

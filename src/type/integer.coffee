@@ -56,6 +56,7 @@ module.exports = integer =
         return "Value will be rounded #{type} to an integer. "
       ''
 
+
   # Synchronous check
   # -------------------------------------------------
   sync:
@@ -99,6 +100,44 @@ module.exports = integer =
           when 'floor' then Math.floor value
           else Math.round value
       value
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        optional:
+          type: 'boolean'
+        default:
+          type: 'integer'
+        sanitize:
+          type: 'boolean'
+        round:
+          type: 'any'
+          entries: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['floor', 'ceil']
+          ]
+        min: rules.selfcheck.integerOrReference
+        max: rules.selfcheck.integerOrReference
+        inttype:
+          type: 'any'
+          entries: [
+            type: 'integer'
+          ,
+            type: 'string'
+            values: ['byte', 'short','long','quad', 'safe']
+          ]
+        unsigned:
+          type: 'boolean'
+    , options
+
 
 # integer type names
 # -------------------------------------------------

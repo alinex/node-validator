@@ -8,7 +8,7 @@ async = require 'async'
 util = require 'util'
 # include classes and helper
 
-module.exports =
+module.exports = rules =
 
   # Description
   # -------------------------------------------------
@@ -35,6 +35,26 @@ module.exports =
       # send default back
       options.default ? null
 
+  # Selfcheck definition
+  # -------------------------------------------------
+  selfcheck:
+
+    # ### detect references
+    reference:
+      type: 'object'
+      entries:
+        reference:
+          type: 'string'
+        source:
+          type: 'string'
+
+rules.selfcheck.integerOrReference =
+  type: 'any'
+  entries: [
+    type: 'integer'
+  ,
+    rules.selfcheck.reference
+  ]
 
 # helper methods
 # -------------------------------------------------
