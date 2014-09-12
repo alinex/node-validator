@@ -125,8 +125,30 @@ describe "Integer", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give complete description", ->
+      test.desc
+        type: 'integer'
+        optional: true
+        default: 5
+        sanitize: true
+        round: 'floor'
+        inttype: 'byte'
+        unsigned: true
+        min: 2
+        max: 20
 
-  describe.only "selfcheck", ->
+  describe "selfcheck", ->
 
-    it "should validate", ->
+    it "should validate simple options", ->
       test.selfcheck options
+    it "should validate complete options", ->
+      test.selfcheck
+        type: 'integer'
+        optional: true
+        default: 5
+        sanitize: true
+        round: 'floor'
+        inttype: 'byte'
+        unsigned: true
+        min: 2
+        max: 20

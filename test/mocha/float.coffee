@@ -106,4 +106,26 @@ describe "Float", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give complete description", ->
+      test.desc
+        type: 'float'
+        optional: true
+        default: 5.4
+        sanitize: true
+        round: 2
+        min: 2
+        max: 20
 
+  describe "selfcheck", ->
+
+    it "should validate simple options", ->
+      test.selfcheck options
+    it "should validate complete options", ->
+      test.selfcheck
+        type: 'float'
+        optional: true
+        default: 5.4
+        sanitize: true
+        round: 2
+        min: 2
+        max: 20

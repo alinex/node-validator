@@ -105,6 +105,29 @@ module.exports = float =
         new Error "The value is to high, it has to be'#{options.max}' or lower"
       value
 
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        optional:
+          type: 'boolean'
+        default:
+          type: 'float'
+        sanitize:
+          type: 'boolean'
+        round:
+          type: 'integer'
+          min: 0
+        min: rules.selfcheck.integerOrReference
+        max: rules.selfcheck.integerOrReference
+    , options
+
+
 # Optimize options setting
 # -------------------------------------------------
 optimize = (options) ->

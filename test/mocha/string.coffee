@@ -200,4 +200,48 @@ describe "String", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give complete description", ->
+      test.desc
+        type: 'string'
+        optional: true
+        default: 'nix'
+        tostring: true
+        allowControls: true
+        stripTags: true
+        lowerCase: true
+        upperCase: 'first'
+        replace: ['test', 'done']
+        trim: true
+        crop: 50
+        minLength: 5
+        maxLength: 50
+        values: ['Kopenhagen', 'Amsterdam', 'Hannover']
+        startsWith: 'H'
+        endsWith: 'r'
+        match: /\w+/
+        matchNot: /\d/
 
+  describe "selfcheck", ->
+
+    it "should validate simple options", ->
+      test.selfcheck options
+    it "should validate complete options", ->
+      test.selfcheck
+        type: 'string'
+        optional: true
+        default: 'nix'
+        tostring: true
+        allowControls: true
+        stripTags: true
+        lowerCase: true
+        upperCase: 'first'
+        replace: ['test', 'done']
+        trim: true
+        crop: 50
+        minLength: 5
+        maxLength: 50
+        values: ['Kopenhagen', 'Amsterdam', 'Hannover']
+        startsWith: 'H'
+        endsWith: 'r'
+        match: /\w+/
+        matchNot: /\d/

@@ -7,7 +7,6 @@ debug = require('debug')('validator')
 util = require 'util'
 async = require 'async'
 # internal classes and helper
-reference = require './reference'
 
 
 # Class for validation

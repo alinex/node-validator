@@ -79,7 +79,7 @@ module.exports = float =
       else if options.maxLength?
         text += "It has to be not more than #{options.maxLength} characters long. "
       if options.values?
-        text += "Only the values: #{values.join ', '} are allowed. "
+        text += "Only the values: #{options.values.join ', '} are allowed. "
       if options.startsWith?
         text += "It has to start with #{options.startsWith}... "
       if options.endsWith?
@@ -197,4 +197,106 @@ module.exports = float =
           new Error "The given string '#{value}' shouldn't contain '#{options.matchNot}'"
       # done return resulting value
       value
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        optional:
+          type: 'boolean'
+        default:
+          type: 'string'
+        tostring:
+          type: 'boolean'
+        allowControls:
+          type: 'boolean'
+        stripTags:
+          type: 'boolean'
+        lowerCase:
+          type: 'any'
+          entries: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['first']
+          ]
+        upperCase:
+          type: 'any'
+          entries: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['first']
+          ]
+        replace:
+          type: 'array'
+          entries: [
+            type: 'any'
+            entries: [
+              type: 'string'
+            ,
+              type: 'object'
+              instanceOf: RegExp
+            ,
+              type: 'array'
+              entries: [
+                type: 'string'
+              ,
+                type: 'object'
+                instanceOf: RegExp
+              ]
+            ]
+          ,
+            type: 'any'
+            entries: [
+              type: 'string'
+            ,
+              type: 'array'
+              entries:
+                type: 'string'
+            ]
+          ]
+        trim:
+          type: 'boolean'
+        crop:
+          type: 'integer'
+          min: 1
+        minLength:
+          type: 'integer'
+          min: 0
+        maxLength:
+          type: 'integer'
+          min:
+            reference: 'relative'
+            source: '<minLength'
+        values:
+          type: 'array'
+          entries:
+            type: 'string'
+        startsWith:
+          type: 'string'
+        endsWith:
+          type: 'string'
+        match:
+          type: 'any'
+          entries: [
+            type: 'string'
+          ,
+            type: 'object'
+            instanceOf: RegExp
+          ]
+        matchNot:
+          type: 'any'
+          entries: [
+            type: 'string'
+          ,
+            type: 'object'
+            instanceOf: RegExp
+          ]
+    , options
 
