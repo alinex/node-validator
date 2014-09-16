@@ -49,6 +49,23 @@ module.exports =
       throw check.error path, options, value,
       new Error "No boolean value given"
 
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        optional:
+          type: 'boolean'
+        default:
+          type: 'boolean'
+    , options
+
+
 # Optimize options setting
 # -------------------------------------------------
 optimize = (options) ->

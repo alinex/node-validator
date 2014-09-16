@@ -123,8 +123,23 @@ module.exports = float =
         round:
           type: 'integer'
           min: 0
-        min: rules.selfcheck.integerOrReference
-        max: rules.selfcheck.integerOrReference
+        min:
+          type: 'any'
+          entries: [
+            type: 'float'
+          ,
+            rules.selfcheck.reference
+          ]
+        max:
+          type: 'any'
+          min:
+            reference: 'relative'
+            source: '<min'
+          entries: [
+            type: 'float'
+          ,
+            rules.selfcheck.reference
+          ]
     , options
 
 

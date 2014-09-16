@@ -162,3 +162,36 @@ module.exports = object =
         # done return results
         cb err, value
 
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        instanceOf:
+          type: 'function'
+        mandatoryKeys:
+          type: 'array'
+          entries:
+            type: 'string'
+        allowedKeys:
+          type: 'any'
+          entries: [
+            type: 'boolean'
+          ,
+            type: 'array'
+            entries:
+              type: 'string'
+          ]
+        entries:
+          type: 'object'
+    , options
+    # Check type specific
+    return unless options.entries
+    for key, entry of options.entries
+      validator.selfcheck "#{name}.entries[#{key}]", entry
+

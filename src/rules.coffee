@@ -48,13 +48,6 @@ module.exports = rules =
         source:
           type: 'string'
 
-rules.selfcheck.integerOrReference =
-  type: 'any'
-  entries: [
-    type: 'integer'
-  ,
-    rules.selfcheck.reference
-  ]
 
 # helper methods
 # -------------------------------------------------

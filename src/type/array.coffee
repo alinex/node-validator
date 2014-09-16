@@ -170,3 +170,50 @@ module.exports = array =
         # done return results
         cb err, value
 
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        delimiter:
+          type: 'any'
+          entries: [
+            type: 'string'
+          ,
+            type: 'object'
+            instanceOf: RegExp
+          ]
+        notEmpty:
+          type: 'boolean'
+        minLength:
+          type: 'integer'
+          min: 0
+        maxLength:
+          type: 'integer'
+          min:
+            reference: 'relative'
+            source: '<minLength'
+        entries:
+          type: 'any'
+          entries: [
+            type: 'object'
+          ,
+            type: 'array'
+            entries:
+              type: 'object'
+          ]
+    , options
+    # Check type specific
+    return unless options.entries
+    if Array.isArray options.entries
+      num = 0
+      for entry in options.entries
+        validator.selfcheck "#{name}.entries[#{num++}]", entry
+    else
+      validator.selfcheck "#{name}.entries", options.entries
+

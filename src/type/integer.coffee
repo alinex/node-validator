@@ -124,8 +124,23 @@ module.exports = integer =
             type: 'string'
             values: ['floor', 'ceil']
           ]
-        min: rules.selfcheck.integerOrReference
-        max: rules.selfcheck.integerOrReference
+        min:
+          type: 'any'
+          entries: [
+            type: 'integer'
+          ,
+            rules.selfcheck.reference
+          ]
+        max:
+          type: 'any'
+          min:
+            reference: 'relative'
+            source: '<min'
+          entries: [
+            type: 'integer'
+          ,
+            rules.selfcheck.reference
+          ]
         inttype:
           type: 'any'
           entries: [

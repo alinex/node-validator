@@ -67,4 +67,18 @@ describe "Boolean", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give complete description", ->
+      test.desc
+        type: 'boolean'
+        optional: true
+        default: true
 
+  describe "selfcheck", ->
+
+    it "should validate simple options", ->
+      test.selfcheck options
+    it "should validate complete options", ->
+      test.selfcheck
+        type: 'boolean'
+        optional: true
+        default: true

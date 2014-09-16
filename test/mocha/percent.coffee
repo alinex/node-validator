@@ -70,3 +70,24 @@ describe "Percent", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give complete description", ->
+      test.desc
+        type: 'percent'
+        optional: true
+        default: 5
+        round: 2
+        min: 2
+        max: 200
+
+  describe "selfcheck", ->
+
+    it "should validate simple options", ->
+      test.selfcheck options
+    it "should validate complete options", ->
+      test.selfcheck
+        type: 'percent'
+        optional: true
+        default: 5
+        round: 2
+        min: 2
+        max: 200

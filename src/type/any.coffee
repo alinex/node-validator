@@ -61,3 +61,24 @@ module.exports = any =
           return cb null, result if result?
         cb check.error path, options, value,
         new Error "None of the alternatives are matched"
+
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        entries:
+          type: 'array'
+          entries:
+            type: 'object'
+    , options
+    # Check type specific
+    num = 0
+    for entry in options.entries
+      validator.selfcheck "#{name}.any[#{num++}]", entry
+

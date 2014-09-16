@@ -245,4 +245,34 @@ describe "Array", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give simple list description", ->
+      test.desc
+        type: 'array'
+        entries:
+          type: 'integer'
+    it "should give complex list description", ->
+      test.desc
+        type: 'array'
+        entries: [
+          type: 'integer'
+        ,
+          type: 'string'
+        ]
 
+  describe "selfcheck", ->
+
+    it "should validate simple options", ->
+      test.selfcheck options
+    it "should validate simple list", ->
+      test.selfcheck
+        type: 'array'
+        entries:
+          type: 'integer'
+    it "should validate complex list", ->
+      test.selfcheck
+        type: 'array'
+        entries: [
+          type: 'integer'
+        ,
+          type: 'string'
+        ]

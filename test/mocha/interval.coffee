@@ -97,3 +97,26 @@ describe "Interval", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give complete description", ->
+      test.desc
+        type: 'interval'
+        optional: true
+        default: 5
+        unit: 's'
+        round: 'floor'
+        min: 2
+        max: 20
+
+  describe "selfcheck", ->
+
+    it "should validate simple options", ->
+      test.selfcheck options
+    it "should validate complete options", ->
+      test.selfcheck
+        type: 'interval'
+        optional: true
+        default: 5
+        unit: 's'
+        round: 'floor'
+        min: 2
+        max: 20

@@ -54,4 +54,25 @@ describe "Any", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give complete description", ->
+      test.desc
+        type: 'any'
+        entries: [
+          type: 'integer'
+        ,
+          type: 'string'
+        ]
+
+  describe "selfcheck", ->
+
+    it "should validate simple options", ->
+      test.selfcheck options
+    it "should validate complete options", ->
+      test.selfcheck
+        type: 'any'
+        entries: [
+          type: 'integer'
+        ,
+          type: 'string'
+        ]
 

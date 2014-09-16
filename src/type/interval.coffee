@@ -87,6 +87,51 @@ module.exports = interval =
       # done return resulting value
       value
 
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        optional:
+          type: 'boolean'
+        default:
+          type: 'float'
+        unit:
+          type: 'string'
+          values: ['d', 'h', 'm', 's', 'ms']
+        round:
+          type: 'any'
+          entries: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['floor', 'ceil']
+          ]
+        min:
+          type: 'any'
+          entries: [
+            type: 'float'
+          ,
+            rules.selfcheck.reference
+          ]
+        max:
+          type: 'any'
+          min:
+            reference: 'relative'
+            source: '<min'
+          entries: [
+            type: 'float'
+          ,
+            rules.selfcheck.reference
+          ]
+    , options
+
+
 # Optimize options setting
 # -------------------------------------------------
 optimize = (options) ->

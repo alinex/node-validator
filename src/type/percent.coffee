@@ -63,6 +63,43 @@ module.exports = percent =
       # done return resulting value
       value
 
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        optional:
+          type: 'boolean'
+        default:
+          type: 'float'
+        round:
+          type: 'integer'
+          min: 0
+        min:
+          type: 'any'
+          entries: [
+            type: 'float'
+          ,
+            rules.selfcheck.reference
+          ]
+        max:
+          type: 'any'
+          min:
+            reference: 'relative'
+            source: '<min'
+          entries: [
+            type: 'float'
+          ,
+            rules.selfcheck.reference
+          ]
+    , options
+
+
 # Optimize options setting
 # -------------------------------------------------
 optimize = (options) ->

@@ -209,4 +209,36 @@ describe "Object", ->
 
     it "should give simple description", ->
       test.desc options
+    it "should give instance description", ->
+      test.desc
+        type: 'object'
+        instanceOf: RegExp
+    it "should give complex object description", ->
+      test.desc
+        type: 'object'
+        mandatoryKeys: 'one'
+        allowedKeys: 'two'
+        entries:
+          one:
+            type: 'integer'
+          two:
+            type: 'string'
 
+  describe "selfcheck", ->
+
+    it "should validate simple options", ->
+      test.selfcheck options
+    it "should give instance description", ->
+      test.selfcheck
+        type: 'object'
+        instanceOf: RegExp
+    it "should give complex object description", ->
+      test.selfcheck
+        type: 'object'
+        mandatoryKeys: 'one'
+        allowedKeys: 'two'
+        entries:
+          one:
+            type: 'integer'
+          two:
+            type: 'string'
