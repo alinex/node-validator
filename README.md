@@ -293,6 +293,15 @@ __Option:__
 
 - `entries` - (array) with different check alternatives
 
+### and
+
+This is used to give multiple rules which will be executed in a series and
+all have to succeed.
+
+__Option:__
+
+- `entries` - (array) with multiple check rules
+
 ### interval
 
 A time interval may be given:

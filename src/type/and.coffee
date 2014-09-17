@@ -1,9 +1,9 @@
-# Validator to match any of the possibilities
+# Validator to match multiple definitions
 # =================================================
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:any')
+debug = require('debug')('validator:and')
 async = require 'async'
 util = require 'util'
 # include classes and helper
@@ -18,7 +18,7 @@ module.exports = any =
 
     # ### Type Description
     type: (options) ->
-      text = "Here one of the following checks have to succeed:\n"
+      text = "Here all of the following checks have to succeed:\n"
       for entry in options.entries
         text += "\n- #{ValidatorCheck.describe entry} "
       text
@@ -32,15 +32,17 @@ module.exports = any =
       debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
       # validate
       num = 0
-      for suboptions in options.entries
-        continue unless suboptions?
-        # run subcheck
-        try
-          return check.subcall path.concat(num++), suboptions, value
-        catch err
-      # error, nothing matched
-      throw check.error path, options, value,
-      new Error "None of the alternatives are matched"
+      try
+        for suboptions in options.entries
+          continue unless suboptions?
+          # run subcheck
+          value = check.subcall path.concat(num++), suboptions, value
+      catch err
+        # error, not all matched
+        throw check.error path, options, value,
+        new Error "Not all of the rules matched"
+      value
+
 
   # Asynchronous check
   # -------------------------------------------------
@@ -51,18 +53,19 @@ module.exports = any =
       debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
       # run sync checks
       num = 0
-      async.map options.entries, (suboptions, cb) ->
+      async.eachSeries options.entries, (suboptions, cb) ->
         # run subcheck
         check.subcall path, suboptions, value, (err, result) ->
           # check response
-          return cb() if err
-          cb null, result
-      , (err, results) ->
+          return cb err if err
+          value = result
+          cb()
+      , (err) ->
         # check response
-        for result in results
-          return cb null, result if result?
-        cb check.error path.concat(num++), options, value,
-        new Error "None of the alternatives are matched"
+        if err
+          return cb check.error path.concat(num++), options, value,
+          new Error "Not all of the rules matched"
+        cb null, value
 
 
   # Selfcheck
@@ -86,5 +89,5 @@ module.exports = any =
     # Check type specific
     num = 0
     for entry in options.entries
-      validator.selfcheck "#{name}.any[#{num++}]", entry
+      validator.selfcheck "#{name}.all[#{num++}]", entry
 
