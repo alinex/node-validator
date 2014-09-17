@@ -14,6 +14,9 @@ external information.
 - may check complex structures
 - can give a human readable description
 
+The validation rules are really simple, but they will get more complex as your
+data structure gains complexity.
+
 It is one of the modules of the [Alinex Universe](http://alinex.github.io/node-alinex)
 following the code standards defined there.
 
@@ -140,6 +143,20 @@ This may result in the following error:
 
 > Failed: The value is to low, it has to be at least 500 in test.timeout for "Overall Timeout".
 > It should contain the time in milliseconds the whole test may take.
+
+
+Selfchecking Options
+-------------------------------------------------
+It is also possible to let your complex options be validated against the
+different types. This will help you to find problems in your development.
+To do this you have to add it in your tests:
+
+__Mocha coffee example:__
+
+    ...
+    it "should has correct validator rules", ->
+      validator.selfcheck 'config', MyObject.config
+    ...
 
 
 Possible Types
@@ -310,7 +327,7 @@ __Check options:__
 - `max` - (numeric) the biggest allowed number
 
 
-Examples
+Complete Example
 -------------------------------------------------
 
 The following check structure comes from an coffee script program which
