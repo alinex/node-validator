@@ -174,6 +174,7 @@ module.exports = object =
       entries:
         instanceOf:
           type: 'function'
+          class: true
         mandatoryKeys:
           type: 'array'
           entries:

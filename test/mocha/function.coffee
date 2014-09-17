@@ -42,6 +42,7 @@ describe "Function", ->
         type: 'function'
         optional: true
         default: RegExp
+        class: true
 
   describe "selfcheck", ->
 
@@ -52,3 +53,4 @@ describe "Function", ->
         type: 'function'
         optional: true
         default: RegExp
+        class: true

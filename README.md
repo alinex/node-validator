@@ -152,7 +152,9 @@ The value has to be a boolean. The value will be true for 1, 'true', 'on',
 undefined.
 Other values are not allowed.
 
-__Options:__ None
+__Validate options:__
+
+- `class` - (boolean) only a class or only a normal function is valid
 
 __Example:__
 
