@@ -22,7 +22,7 @@ describe "Function", ->
       test.fail options, null
       test.fail options, undefined
 
-  describe.only "base check", ->
+  describe "base check", ->
 
     it "should support optional option", ->
       options.optional = true

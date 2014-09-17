@@ -40,6 +40,7 @@ class ValidatorCheck
   error: (path, options, value, err) ->
     source = [@source].concat(path).join '.'
     message = "#{err.message} in #{@source}"
+    message += '.' + path.join '.' if path
     if options.title?
       message += " '#{options.title}'"
     message += '.'

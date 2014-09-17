@@ -235,8 +235,8 @@ describe "Object", ->
     it "should give complex object description", ->
       test.selfcheck
         type: 'object'
-        mandatoryKeys: 'one'
-        allowedKeys: 'two'
+        mandatoryKeys: ['one']
+        allowedKeys: ['two']
         entries:
           one:
             type: 'integer'
