@@ -44,6 +44,9 @@
         <a href="#check%20type">Check Type</a>
       </div>
       <div class="heading h2">
+        <a href="#selfcheck">Selfcheck</a>
+      </div>
+      <div class="heading h2">
         <a href="#optimize%20options%20setting">Optimize options setting</a>
       </div>
     </div>
@@ -318,6 +321,64 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nx">value</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="selfcheck">
+  <h2>
+    <a href="#selfcheck" name="selfcheck" class="pilcrow">&#182;</a>
+    Selfcheck
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">selfcheck: </span><span class="nf">(name, options) -&gt;</span>
+    <span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;../index&#39;</span>
+    <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">entries:</span>
+        <span class="nv">optional:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+        <span class="nv">default:</span>
+          <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+        <span class="nv">unit:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;ms&#39;</span><span class="p">]</span>
+        <span class="nv">round:</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;floor&#39;</span><span class="p">,</span> <span class="s">&#39;ceil&#39;</span><span class="p">]</span>
+          <span class="p">]</span>
+        <span class="nv">min:</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+          <span class="p">,</span>
+            <span class="nx">rules</span><span class="p">.</span><span class="nx">selfcheck</span><span class="p">.</span><span class="nx">reference</span>
+          <span class="p">]</span>
+        <span class="nv">max:</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">min:</span>
+            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
+            <span class="nv">source: </span><span class="s">&#39;&lt;min&#39;</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+          <span class="p">,</span>
+            <span class="nx">rules</span><span class="p">.</span><span class="nx">selfcheck</span><span class="p">.</span><span class="nx">reference</span>
+          <span class="p">]</span>
+    <span class="p">,</span> <span class="nx">options</span>
+
 
 
 </pre></div>

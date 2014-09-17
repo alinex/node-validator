@@ -106,7 +106,6 @@
 <p>internal classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">reference = </span><span class="nx">require</span> <span class="s">&#39;./reference&#39;</span>
 
 
 
@@ -220,6 +219,7 @@ runs in case of references to references...</p>
   <span class="nv">error: </span><span class="nf">(path, options, value, err) -&gt;</span>
     <span class="nv">source = </span><span class="p">[</span><span class="nx">@source</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">path</span><span class="p">).</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span>
     <span class="nv">message = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">@source</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nx">message</span> <span class="o">+=</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span> <span class="k">if</span> <span class="nx">path</span>
     <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="o">?</span>
       <span class="nx">message</span> <span class="o">+=</span> <span class="s">&quot; &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="si">}</span><span class="s">&#39;&quot;</span>
     <span class="nx">message</span> <span class="o">+=</span> <span class="s">&#39;.&#39;</span>
@@ -459,9 +459,7 @@ runs in case of references to references...</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">unless</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">sync</span><span class="o">?</span><span class="p">.</span><span class="nx">type</span><span class="o">?</span>
-          <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Could not synchronously call </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s"> check in </span><span class="si">#{</span><span class="nx">@pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s">.&quot;</span>
-        <span class="k">return</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">type</span> <span class="nx">@</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-      <span class="k">else</span>
+          <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Could not synchronously call </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s"> check in</span>
 
 </pre></div>
         </td>
@@ -471,11 +469,11 @@ runs in case of references to references...</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
-<p>async call async</p>
+<p>{@pathname path}."</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">if</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">async</span><span class="o">?</span><span class="p">.</span><span class="nx">type</span><span class="o">?</span>
-          <span class="k">return</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">async</span><span class="p">.</span><span class="nx">type</span> <span class="nx">@</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">cb</span>
+<span class="s">        return lib.sync.type @, path, options, value</span>
+<span class="s">      else</span>
 
 </pre></div>
         </td>
@@ -485,15 +483,11 @@ runs in case of references to references...</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
-<p>async call sync</p>
+<p>async call async</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">try</span>
-          <span class="nv">result = </span><span class="nx">lib</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">type</span> <span class="nx">@</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-          <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
-        <span class="k">catch</span> <span class="nx">err</span>
-          <span class="nx">cb</span> <span class="nx">err</span>
-
+<span class="s">        if lib.async?.type?</span>
+<span class="s">          return lib.async.type @, path, options, value, cb</span>
 
 </pre></div>
         </td>
@@ -503,10 +497,28 @@ runs in case of references to references...</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
+<p>async call sync</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">        try</span>
+<span class="s">          result = lib.sync.type @, path, options, value</span>
+<span class="s">          cb null, result</span>
+<span class="s">        catch err</span>
+<span class="s">          cb err</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+</div>
 <p>Export the class</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">module.exports = </span><span class="nx">ValidatorCheck</span>
+<span class="s">module.exports = ValidatorCheck</span>
 
 
 
@@ -540,9 +552,9 @@ runs in case of references to references...</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">getTypeLib = </span><span class="nf">(name) -&gt;</span>
-  <span class="k">if</span> <span class="k">typeof</span> <span class="nx">name</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
-    <span class="k">return</span> <span class="nx">require</span> <span class="s">&quot;./type/</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span>
+<span class="s">getTypeLib = (name) -&gt;</span>
+<span class="s">  if typeof name is &#39;string&#39;</span>
+<span class="s">    return require &quot;</span><span class="p">.</span><span class="o">/</span><span class="nx">type</span><span class="o">/</span><span class="c1">#{name}&quot;</span>
   <span class="k">if</span> <span class="nx">name</span><span class="p">.</span><span class="nx">type</span><span class="o">?</span>
     <span class="k">return</span> <span class="nx">require</span> <span class="s">&quot;./type/</span><span class="si">#{</span><span class="nx">name</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
   <span class="k">throw</span> <span class="nb">Error</span> <span class="s">&quot;Undefined type </span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span>

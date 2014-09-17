@@ -38,6 +38,12 @@
         <a href="#optional%2C%20default">optional, default</a>
       </div>
       <div class="heading h2">
+        <a href="#selfcheck%20definition">Selfcheck definition</a>
+      </div>
+      <div class="heading h3">
+        <a href="#detect%20references">detect references</a>
+      </div>
+      <div class="heading h2">
         <a href="#helper%20methods">helper methods</a>
       </div>
       <div class="heading h3">
@@ -90,7 +96,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 
-<span class="nv">module.exports =</span>
+<span class="nv">module.exports = rules =</span>
 
 
 </pre></div>
@@ -200,6 +206,46 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="s">      options.default ? null</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="selfcheck%20definition">
+  <h2>
+    <a href="#selfcheck%20definition" name="selfcheck%20definition" class="pilcrow">&#182;</a>
+    Selfcheck definition
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">  selfcheck:</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="detect%20references">
+  <h3>
+    <a href="#detect%20references" name="detect%20references" class="pilcrow">&#182;</a>
+    detect references
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">    reference:</span>
+<span class="s">      type: &#39;object&#39;</span>
+<span class="s">      entries:</span>
+<span class="s">        reference:</span>
+<span class="s">          type: &#39;string&#39;</span>
+<span class="s">        source:</span>
+<span class="s">          type: &#39;string&#39;</span>
 
 
 

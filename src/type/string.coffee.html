@@ -40,6 +40,9 @@
       <div class="heading h3">
         <a href="#check%20type">Check Type</a>
       </div>
+      <div class="heading h2">
+        <a href="#selfcheck">Selfcheck</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -193,13 +196,14 @@ match (or list of expressions)</li>
       <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">upperCase</span> <span class="o">is</span> <span class="s">&#39;first&#39;</span>
         <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The first letter will get upper case. &quot;</span>
       <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be between </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> and </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"></span>
+<span class="s">        characters long. &quot;</span>
       <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="o">?</span>
         <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be at least </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">minLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
       <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="o">?</span>
         <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to be not more than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">maxLength</span><span class="si">}</span><span class="s"> characters long. &quot;</span>
       <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">values</span><span class="o">?</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only the values: </span><span class="si">#{</span><span class="nx">values</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span><span class="si">}</span><span class="s"> are allowed. &quot;</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only the values: </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">values</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span><span class="si">}</span><span class="s"> are allowed. &quot;</span>
       <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="o">?</span>
         <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It has to start with </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">startsWith</span><span class="si">}</span><span class="s">... &quot;</span>
       <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">endsWith</span><span class="o">?</span>
@@ -399,6 +403,121 @@ match (or list of expressions)</li>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nx">value</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="selfcheck">
+  <h2>
+    <a href="#selfcheck" name="selfcheck" class="pilcrow">&#182;</a>
+    Selfcheck
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">selfcheck: </span><span class="nf">(name, options) -&gt;</span>
+    <span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;../index&#39;</span>
+    <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">entries:</span>
+        <span class="nv">optional:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+        <span class="nv">default:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">tostring:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+        <span class="nv">allowControls:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+        <span class="nv">stripTags:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+        <span class="nv">lowerCase:</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;first&#39;</span><span class="p">]</span>
+          <span class="p">]</span>
+        <span class="nv">upperCase:</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;first&#39;</span><span class="p">]</span>
+          <span class="p">]</span>
+        <span class="nv">replace:</span>
+          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+            <span class="nv">entries: </span><span class="p">[</span>
+              <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="p">,</span>
+              <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+              <span class="nv">instanceOf: </span><span class="nb">RegExp</span>
+            <span class="p">,</span>
+              <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+              <span class="nv">entries: </span><span class="p">[</span>
+                <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+              <span class="p">,</span>
+                <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+                <span class="nv">instanceOf: </span><span class="nb">RegExp</span>
+              <span class="p">]</span>
+            <span class="p">]</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+            <span class="nv">entries: </span><span class="p">[</span>
+              <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="p">,</span>
+              <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+              <span class="nv">entries:</span>
+                <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="p">]</span>
+          <span class="p">]</span>
+        <span class="nv">trim:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+        <span class="nv">crop:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">min: </span><span class="mi">1</span>
+        <span class="nv">minLength:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+        <span class="nv">maxLength:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">min:</span>
+            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
+            <span class="nv">source: </span><span class="s">&#39;&lt;minLength&#39;</span>
+        <span class="nv">values:</span>
+          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+          <span class="nv">entries:</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">startsWith:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">endsWith:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">match:</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+            <span class="nv">instanceOf: </span><span class="nb">RegExp</span>
+          <span class="p">]</span>
+        <span class="nv">matchNot:</span>
+          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+          <span class="nv">entries: </span><span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+            <span class="nv">instanceOf: </span><span class="nb">RegExp</span>
+          <span class="p">]</span>
+    <span class="p">,</span> <span class="nx">options</span>
 </pre></div>
         </td>
       </tr>

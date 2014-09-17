@@ -46,6 +46,9 @@
       <div class="heading h3">
         <a href="#check%20type">Check Type</a>
       </div>
+      <div class="heading h2">
+        <a href="#selfcheck">Selfcheck</a>
+      </div>
     </div>
   </div>
   <div id="sidebar-toggle"></div>
@@ -303,6 +306,50 @@
           <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
         <span class="nx">cb</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
         <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;None of the alternatives are matched&quot;</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="selfcheck">
+  <h2>
+    <a href="#selfcheck" name="selfcheck" class="pilcrow">&#182;</a>
+    Selfcheck
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">selfcheck: </span><span class="nf">(name, options) -&gt;</span>
+    <span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;../index&#39;</span>
+    <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">entries:</span>
+        <span class="nv">entries:</span>
+          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+          <span class="nv">entries:</span>
+            <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+    <span class="p">,</span> <span class="nx">options</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>Check type specific</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">num = </span><span class="mi">0</span>
+    <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
+      <span class="nx">validator</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">.any[</span><span class="si">#{</span><span class="nx">num</span><span class="o">++</span><span class="si">}</span><span class="s">]&quot;</span><span class="p">,</span> <span class="nx">entry</span>
 </pre></div>
         </td>
       </tr>

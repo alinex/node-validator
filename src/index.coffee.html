@@ -26,13 +26,19 @@
         <a href="#validator">Validator</a>
       </div>
       <div class="heading h2">
+        <a href="#node%20modules">Node modules</a>
+      </div>
+      <div class="heading h2">
         <a href="#check%20if%20value%20is%20valid">Check if value is valid</a>
       </div>
       <div class="heading h2">
         <a href="#check%20value%20and%20sanitize">Check value and sanitize</a>
       </div>
       <div class="heading h2">
-        <a href="#check%20if%20value%20is%20valid">Check if value is valid</a>
+        <a href="#create%20human%20readable%20description">Create human readable description</a>
+      </div>
+      <div class="heading h2">
+        <a href="#check%20validation%20rules">Check validation rules</a>
       </div>
     </div>
   </div>
@@ -50,7 +56,36 @@
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre><span class="nv">ValidatorCheck = </span><span class="nx">require</span> <span class="s">&#39;./check&#39;</span>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">fs = </span><span class="nx">require</span> <span class="s">&#39;fs&#39;</span>
+<span class="nv">path = </span><span class="nx">require</span> <span class="s">&#39;path&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+</div>
+<p>internal classes and helper</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">ValidatorCheck = </span><span class="nx">require</span> <span class="s">&#39;./check&#39;</span>
+
 
 
 </pre></div>
@@ -79,6 +114,7 @@ It will only give a value of true or false to the callback.</p>
     <span class="k">return</span> <span class="o">not</span> <span class="nx">check</span><span class="p">.</span><span class="nx">run</span><span class="p">()</span> <span class="k">typeof</span> <span class="nb">Error</span>
   <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nf">(err) -&gt;</span>
     <span class="nx">cb</span> <span class="nx">err</span><span class="o">?</span>
+
 
 
 </pre></div>
@@ -114,10 +150,10 @@ Error to the callback.</p>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="check%20if%20value%20is%20valid">
+<div class="pilwrap" id="create%20human%20readable%20description">
   <h2>
-    <a href="#check%20if%20value%20is%20valid" name="check%20if%20value%20is%20valid" class="pilcrow">&#182;</a>
-    Check if value is valid
+    <a href="#create%20human%20readable%20description" name="create%20human%20readable%20description" class="pilcrow">&#182;</a>
+    Create human readable description
   </h2>
 </div>
 
@@ -127,6 +163,52 @@ Error to the callback.</p>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">exports.describe = </span><span class="nf">(options) -&gt;</span>
   <span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="check%20validation%20rules">
+  <h2>
+    <a href="#check%20validation%20rules" name="check%20validation%20rules" class="pilcrow">&#182;</a>
+    Check validation rules
+  </h2>
+</div>
+
+
+<p>This may be used in tests to check the validator check options if they are valid.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.selfcheck = </span><span class="nf">(name, rules) -&gt;</span>
+  <span class="nv">types = </span><span class="p">[]</span>
+  <span class="k">for</span> <span class="nx">file</span> <span class="k">in</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="nx">__dirname</span><span class="p">,</span> <span class="s">&#39;type&#39;</span>
+    <span class="k">if</span> <span class="nx">path</span><span class="p">.</span><span class="nx">extname</span><span class="p">(</span><span class="nx">file</span><span class="p">)</span> <span class="o">is</span> <span class="s">&#39;.js&#39;</span>
+      <span class="nx">types</span><span class="p">.</span><span class="nx">push</span> <span class="nx">path</span><span class="p">.</span><span class="nx">basename</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">extname</span> <span class="nx">file</span>
+  <span class="nx">exports</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span>
+    <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+    <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
+    <span class="nv">entries:</span>
+      <span class="nv">type:</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">values: </span><span class="nx">types</span>
+  <span class="p">,</span> <span class="nx">rules</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>Check type specific</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">lib = </span><span class="nx">require</span> <span class="s">&quot;./type/</span><span class="si">#{</span><span class="nx">rules</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">lib</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">rules</span>
 </pre></div>
         </td>
       </tr>
