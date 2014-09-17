@@ -4,6 +4,17 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.2.3 (2014-09-17)
+-------------------------------------------------
+- Differentiate between normale function and class in check.
+- Optimized source in error message and fixed bug in object test.
+- Fixed 'function' check.
+- Initial version of function check.
+- Added selfcheck for other types.
+- Added selfcheck for float and string and removed old reference implementation.
+- Added selfcheck method for integers.
+- Updated to debug 2.0.0
+
 Version 0.2.2 (2014-08-24)
 -------------------------------------------------
 - Fixed references with mocha tests.

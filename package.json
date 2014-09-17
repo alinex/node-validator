@@ -1,6 +1,6 @@
 {
   "name": "alinex-validator",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Validator with additional sanitize of simple and complex values.",
   "copyright": "Alexander Schilling 2014",
   "private": false,
@@ -34,7 +34,7 @@
     "alinex-util": "0.1.x",
     "async": "0.9.x",
     "debug": "0.8.0 - 2.x"
- },
+  },
   "devDependencies": {
     "alinex-make": "0.3.x",
     "chai": "1.x",
