@@ -160,7 +160,8 @@ class ValidatorCheck
       unless cb?
         # sync call sync
         unless lib.sync?.type?
-          return new Error "Could not synchronously call #{options.type} check in #{@pathname path}."
+          return new Error "Could not synchronously call #{options.type} check in
+          #{@pathname path}."
         return lib.sync.type @, path, options, value
       else
         # async call async

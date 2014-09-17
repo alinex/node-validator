@@ -22,12 +22,12 @@ describe "Function", ->
       test.fail options, null
       test.fail options, undefined
 
-  describe "base check", ->
+  describe.only "base check", ->
 
     it "should support optional option", ->
       options.optional = true
-      test.equal options, null, undefined
-      test.equal options, undefined, undefined
+      test.equal options, null, null
+      test.equal options, undefined, null
     it "should support default option", ->
       options.optional = true
       options.default = RegExp

@@ -160,6 +160,19 @@ __Example:__
       type: 'boolean'
     });
 
+### function
+
+The value has to be a function.
+Other values are not allowed.
+
+__Options:__ None
+
+__Example:__
+
+    var value = Validator.check('callback', value, {
+      type: 'function'
+    });
+
 ### string
 
 This will test for strings and have lots of sanitize and optimization filters

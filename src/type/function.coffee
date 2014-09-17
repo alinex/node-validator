@@ -30,8 +30,9 @@ module.exports =
       debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
       # sanitize
       value = rules.sync.optional check, path, options, value
-      # boolean values check
-      return true if typeof value is 'function'
+      return value unless value?
+      # value check
+      return value if typeof value is 'function'
       # failed
       throw check.error path, options, value,
       new Error "No function given as value"

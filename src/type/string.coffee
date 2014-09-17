@@ -73,7 +73,8 @@ module.exports = float =
       if options.upperCase? and options.upperCase is 'first'
         text += "The first letter will get upper case. "
       if options.minLength? and options.maxLength?
-        text += "It has to be between #{options.minLength} and #{options.maxLength} characters long. "
+        text += "It has to be between #{options.minLength} and #{options.maxLength}
+        characters long. "
       else if options.minLength?
         text += "It has to be at least #{options.minLength} characters long. "
       else if options.maxLength?
