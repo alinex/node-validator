@@ -114,6 +114,10 @@ module.exports = float =
       mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        title:
+          type: 'string'
+        description:
+          type: 'string'
         optional:
           type: 'boolean'
         default:

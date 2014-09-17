@@ -72,6 +72,10 @@ module.exports = any =
       mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        title:
+          type: 'string'
+        description:
+          type: 'string'
         entries:
           type: 'array'
           entries:

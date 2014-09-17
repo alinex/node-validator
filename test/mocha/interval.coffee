@@ -99,6 +99,8 @@ describe "Interval", ->
       test.desc options
     it "should give complete description", ->
       test.desc
+        title: 'test'
+        description: 'Some test rules'
         type: 'interval'
         optional: true
         default: 5
@@ -113,6 +115,8 @@ describe "Interval", ->
       test.selfcheck options
     it "should validate complete options", ->
       test.selfcheck
+        title: 'test'
+        description: 'Some test rules'
         type: 'interval'
         optional: true
         default: 5

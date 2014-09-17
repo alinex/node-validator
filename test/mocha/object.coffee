@@ -215,6 +215,8 @@ describe "Object", ->
         instanceOf: RegExp
     it "should give complex object description", ->
       test.desc
+        title: 'test'
+        description: 'Some test rules'
         type: 'object'
         mandatoryKeys: 'one'
         allowedKeys: 'two'
@@ -234,6 +236,8 @@ describe "Object", ->
         instanceOf: RegExp
     it "should give complex object description", ->
       test.selfcheck
+        title: 'test'
+        description: 'Some test rules'
         type: 'object'
         mandatoryKeys: ['one']
         allowedKeys: ['two']

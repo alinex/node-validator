@@ -56,6 +56,8 @@ describe "Any", ->
       test.desc options
     it "should give complete description", ->
       test.desc
+        title: 'test'
+        description: 'Some test rules'
         type: 'any'
         entries: [
           type: 'integer'
@@ -69,6 +71,8 @@ describe "Any", ->
       test.selfcheck options
     it "should validate complete options", ->
       test.selfcheck
+        title: 'test'
+        description: 'Some test rules'
         type: 'any'
         entries: [
           type: 'integer'

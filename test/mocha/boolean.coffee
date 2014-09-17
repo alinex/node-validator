@@ -69,6 +69,8 @@ describe "Boolean", ->
       test.desc options
     it "should give complete description", ->
       test.desc
+        title: 'test'
+        description: 'Some test rules'
         type: 'boolean'
         optional: true
         default: true
@@ -79,6 +81,8 @@ describe "Boolean", ->
       test.selfcheck options
     it "should validate complete options", ->
       test.selfcheck
+        title: 'test'
+        description: 'Some test rules'
         type: 'boolean'
         optional: true
         default: true

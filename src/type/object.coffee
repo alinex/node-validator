@@ -172,6 +172,10 @@ module.exports = object =
       mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        title:
+          type: 'string'
+        description:
+          type: 'string'
         instanceOf:
           type: 'function'
           class: true

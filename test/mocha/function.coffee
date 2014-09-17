@@ -39,6 +39,8 @@ describe "Function", ->
       test.desc options
     it "should give complete description", ->
       test.desc
+        title: 'test'
+        description: 'Some test rules'
         type: 'function'
         optional: true
         default: RegExp
@@ -50,6 +52,8 @@ describe "Function", ->
       test.selfcheck options
     it "should validate complete options", ->
       test.selfcheck
+        title: 'test'
+        description: 'Some test rules'
         type: 'function'
         optional: true
         default: RegExp

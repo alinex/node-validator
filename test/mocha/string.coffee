@@ -202,6 +202,8 @@ describe "String", ->
       test.desc options
     it "should give complete description", ->
       test.desc
+        title: 'test'
+        description: 'Some test rules'
         type: 'string'
         optional: true
         default: 'nix'
@@ -227,6 +229,8 @@ describe "String", ->
       test.selfcheck options
     it "should validate complete options", ->
       test.selfcheck
+        title: 'test'
+        description: 'Some test rules'
         type: 'string'
         optional: true
         default: 'nix'

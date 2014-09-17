@@ -252,6 +252,8 @@ describe "Array", ->
           type: 'integer'
     it "should give complex list description", ->
       test.desc
+        title: 'test'
+        description: 'Some test rules'
         type: 'array'
         entries: [
           type: 'integer'
@@ -270,6 +272,8 @@ describe "Array", ->
           type: 'integer'
     it "should validate complex list", ->
       test.selfcheck
+        title: 'test'
+        description: 'Some test rules'
         type: 'array'
         entries: [
           type: 'integer'

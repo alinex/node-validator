@@ -127,6 +127,8 @@ describe "Integer", ->
       test.desc options
     it "should give complete description", ->
       test.desc
+        title: 'test'
+        description: 'Some test rules'
         type: 'integer'
         optional: true
         default: 5
@@ -143,6 +145,8 @@ describe "Integer", ->
       test.selfcheck options
     it "should validate complete options", ->
       test.selfcheck
+        title: 'test'
+        description: 'Some test rules'
         type: 'integer'
         optional: true
         default: 5

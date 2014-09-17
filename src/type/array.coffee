@@ -180,6 +180,10 @@ module.exports = array =
       mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        title:
+          type: 'string'
+        description:
+          type: 'string'
         delimiter:
           type: 'any'
           entries: [
