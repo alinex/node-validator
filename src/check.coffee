@@ -34,6 +34,8 @@ class ValidatorCheck
   # ### Initialize data for check
   constructor: (@source, @options, @value, @data) ->
     @checked = []
+    for key in Object.keys @options
+      @options[key] = @ref2value [''], @options[key], key
 
   # ### Create error message
   # This is called by the subclasses
@@ -109,10 +111,9 @@ class ValidatorCheck
   # ### Get value with reference support
   # will set the runAgain flag if necessary
   #
-  ref2value: (path, value) ->
+  ref2value: (path, value, key) ->
     pathname = path.join '.'
-    unless typeof value is 'object' and
-    Object.keys(value).sort().join(',') is 'reference,source'
+    unless typeof value is 'object' and value.reference? and value.source?
       @checked.push pathname
       return value
     # it's a reference, find path
@@ -123,7 +124,7 @@ class ValidatorCheck
         obj = @value
         unless pathname in @checked
           throw new Error 'EAGAIN'
-        debug "use absolute reference to '#{source.join '.'}'"
+        debug "use absolute reference to '#{source.join '.'}' for #{path.join '.'}.#{key}"
       when 'relative'
         obj = @value
         newpath = path.slice()
@@ -133,23 +134,28 @@ class ValidatorCheck
         source = newpath.concat source
         unless pathname in @checked
           throw new Error 'EAGAIN'
-        debug "use relative reference to '#{source.join '.'}'"
+        debug "use relative reference to '#{source.join '.'}' for #{path.join '.'}.#{key}"
       when 'external'
         obj = @data
-        debug "use external reference to '#{source.join '.'}'"
+        debug "use external reference to '#{source.join '.'}' for #{path.join '.'}.#{key}"
     # read value
     for part in source
       unless obj[part]?
         debug "reference '#{source.join '.'}' not found"
         return null
       obj = obj[part]
+    # call operations
+    if value.operation
+      debug "run operation on referenced value"
+      obj = value.operation obj
+    # return resulting value
     obj
 
   subcall: (path, options, value, cb) ->
     # check for references
     try
       for key in Object.keys options
-        options[key] = @ref2value path, options[key]
+        options[key] = @ref2value path, options[key], key
     catch err
       if err.message is 'EAGAIN'
         @runAgain = true

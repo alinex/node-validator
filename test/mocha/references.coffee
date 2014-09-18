@@ -27,11 +27,6 @@ describe "reference values", ->
       test.same options, { one:1, two:2, three:3 }
       test.same options, { one:6, two:5, three:4 }
 
-    it "should support absolute reference", ->
-      options.entries.two.min =
-        reference: 'absolute'
-        source: 'one'
-      test.same options, { one:1, two:2, three:3 }
     it "should fail on absolute reference", ->
       options.entries.two.min =
         reference: 'absolute'
@@ -59,6 +54,20 @@ describe "reference values", ->
         reference: 'external'
         source: 'test.min'
       test.fail options, { one:6, two:5, three:4 }, { test: {min:6} }
+
+    it "should support operation in reference", ->
+      options.entries.two.min =
+        reference: 'absolute'
+        source: 'one'
+        operation: (val) -> val + 1
+      test.same options, { one:1, two:2, three:3 }
+
+    it "should fail after operation in reference", ->
+      options.entries.two.min =
+        reference: 'absolute'
+        source: 'one'
+        operation: (val) -> val + 4
+      test.fail options, { one:1, two:2, three:3 }
 
   describe "async check", ->
 

@@ -47,6 +47,8 @@ module.exports = rules =
           type: 'string'
         source:
           type: 'string'
+        operation:
+          type: 'function'
 
 
 # helper methods

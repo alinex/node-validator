@@ -116,6 +116,7 @@ They are written as object with:
 
 - `reference` - the type of reference: absolute, relative, external
 - `source` - the path to get the value
+- `operation` - function which will be used on retrieved value
 
 External references will be checked against the data element given to the validator.
 
