@@ -45,6 +45,7 @@ module.exports = rules =
       entries:
         reference:
           type: 'string'
+          values: ['absolute', 'relative', 'external']
         source:
           type: 'string'
         operation:
