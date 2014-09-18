@@ -76,7 +76,7 @@ module.exports = object =
         return value
       # check entries
       for key, subvalue of value
-        suboptions = if options.entries.check?
+        suboptions = if typeof options.entries.type is 'string'
           options.entries
         else
           options.entries[key]
@@ -147,7 +147,7 @@ module.exports = object =
         return cb null, value
       # check entries
       return async.each Object.keys(value), (key, cb) ->
-        suboptions = if options.entries.check?
+        suboptions = if typeof options.entries.type is 'string'
           options.entries
         else
           options.entries[key]
@@ -197,6 +197,8 @@ module.exports = object =
     , options
     # Check type specific
     return unless options.entries
+    if typeof options.entries.type is 'string'
+      return validator.selfcheck "#{name}.entries", options.entries
     for key, entry of options.entries
       validator.selfcheck "#{name}.entries[#{key}]", entry
 

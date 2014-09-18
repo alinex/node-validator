@@ -269,7 +269,7 @@ __Check options:__
 
 __Validating children:__
 
-- `èntries` - specification for all entries or as array for each element
+- `entries` - specification for all entries or as array for each element
 
 ### object
 

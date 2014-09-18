@@ -57,8 +57,8 @@ module.exports = array =
 
     string: (options) ->
       if options.delimiter?
-        return "You may also give a single text using '#{options.delimiter}' as
-          for the individual entries. "
+        return "You may also give a text or RegExp using '#{options.delimiter}'
+          as separator for the individual entries. "
       ''
 
     minmax: (options) ->
@@ -184,6 +184,10 @@ module.exports = array =
           type: 'string'
         description:
           type: 'string'
+        optional:
+          type: 'boolean'
+        default:
+          type: 'array'
         delimiter:
           type: 'any'
           entries: [
