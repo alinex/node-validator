@@ -168,6 +168,7 @@ class ValidatorCheck
         # async call async
         if lib.async?.type?
           return lib.async.type @, path, options, value, cb
+
         # async call sync
         try
           result = lib.sync.type @, path, options, value

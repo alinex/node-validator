@@ -18,7 +18,6 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:integer')
-async = require 'async'
 util = require 'util'
 # include classes and helper
 rules = require '../rules'

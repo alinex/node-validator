@@ -5,7 +5,6 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:boolean')
-async = require 'async'
 util = require 'util'
 # include classes and helper
 rules = require '../rules'

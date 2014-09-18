@@ -1,12 +1,10 @@
-# Percent check
+# Byte check
 # =================================================
 
 # Sanitize options allowed:
 #
-# - `unit` - (string) type of unit to convert if not integer given
 # - `round` - (bool) rounding can be set to true for arithmetic rounding
 #   or use `floor` or `ceil` for the corresponding methods
-# - `decimals` - (int) number of decimal digits to round to (defaults to 2)
 #
 # Check options:
 #
@@ -15,13 +13,49 @@
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:percent')
+debug = require('debug')('validator:metric')
 util = require 'util'
+# include alinex packages
+{number} = require 'alinex-util'
 # include classes and helper
 rules = require '../rules'
 float = require './float'
 
-module.exports = percent =
+# 10^x
+prefix =
+  Y: 24
+  Z: 21
+  E: 18
+  P: 15
+  T: 12
+  G: 9
+  M: 6
+  k: 3
+  h: 2
+  da: 1
+  d: -1
+  c: -2
+  m: -3
+  µ: -6
+  n: -9
+  p: -12
+  f: -15
+  a: -18
+  z: -21
+  y: -24
+
+# (2^10)^x
+prefixSI:
+  Yi: 8
+  Zi: 7
+  Ei: 6
+  Pi: 5
+  Ti: 4
+  Gi: 3
+  Mi: 2
+  Ki: 1
+
+module.exports = metric =
 
   # Description
   # -------------------------------------------------
@@ -31,9 +65,12 @@ module.exports = percent =
     type: (options) ->
       options = optimize options
       # combine into message
-      text = 'This should be a percentage value which may be given as decimal 0..1
-      or as percent value like 30%. '
+      text = 'A byte size is needed, here. '
+      text += "If defined as a text you may use a prefix of:
+        units: ms, s, m, h, d. "
       text += rules.describe.optional options
+      if options.unit
+        text += "The result will be given as the number of #{options.unit}. "
       text += float.describe.round options
       text += float.describe.minmax options
 
@@ -48,13 +85,28 @@ module.exports = percent =
       # sanitize
       value = rules.sync.optional check, path, options, value
       return value unless value?
-      if typeof value is 'string' and value.trim().slice(-1) is '%'
-        value = value[0..-2]
-        unless not isNaN(parseFloat value) and isFinite value
+      # support time format
+      if typeof value is 'string'
+        if value.trim().match /^(\d\d?)(:\d\d?)(:\d\d?)?(\.\d+)?$/
+          parts = value.split ':'
+          value = "#{parts[0]}h #{parts[1]}m"
+          value += " #{parts[2]}s" if parts.length is 3
+        parsed = number.parseMSeconds value
+        if isNaN parsed
           throw check.error path, options, value,
-          new Error "The given value '#{value}' is no number as needed"
-        value = value / 100
-      return value unless value?
+          new Error "The given value '#{value}' is not parse able as interval"
+        unit = options.unit ? 'ms'
+        unless unit is 'ms'
+          parsed /= switch unit
+            when 's'
+              1000
+            when 'm'
+              1000 * 60
+            when 'h'
+              1000 * 60 * 60
+            when 'd'
+              1000 * 60 * 60 * 24
+        value = parsed
       value = float.sync.round check, path, options, value
       # validate
       value = float.sync.number check, path, options, value
@@ -80,9 +132,17 @@ module.exports = percent =
           type: 'boolean'
         default:
           type: 'float'
+        unit:
+          type: 'string'
+          values: ['d', 'h', 'm', 's', 'ms']
         round:
-          type: 'integer'
-          min: 0
+          type: 'any'
+          entries: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['floor', 'ceil']
+          ]
         min:
           type: 'any'
           entries: [
@@ -109,5 +169,5 @@ optimize = (options) ->
   if options.decimals and not options.round?
     options.round = true
   if options.round and not options.decimals?
-    options.decimals = 2
+    options.decimals = 0
   options

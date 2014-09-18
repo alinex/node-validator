@@ -1,16 +1,11 @@
 # Date interval check
 # =================================================
 
-# Percent check
-# =================================================
-
 # Sanitize options allowed:
 #
 # - `unit` - (string) type of unit to convert if not integer given
 # - `round` - (bool) rounding can be set to true for arithmetic rounding
 #   or use `floor` or `ceil` for the corresponding methods
-# - `decimals` - (int) number of decimal digits to round to (defaults to 2)
-# - `unit` - (string) type of unit to convert if not integer given
 #
 # Check options:
 #
@@ -20,7 +15,6 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:interval')
-async = require 'async'
 util = require 'util'
 # include alinex packages
 {number} = require 'alinex-util'
