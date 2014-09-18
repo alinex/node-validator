@@ -38,6 +38,8 @@ class ValidatorCheck
   # ### Create error message
   # This is called by the subclasses
   error: (path, options, value, err) ->
+    unless options
+      throw new Error "Validator called without options."
     source = [@source].concat(path).join '.'
     message = "#{err.message} in #{@source}"
     message += '.' + path.join '.' if path and path.length

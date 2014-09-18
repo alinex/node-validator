@@ -171,9 +171,10 @@ module.exports = float =
           unless success
             throw check.error path, options, value,
             new Error "The given string '#{value}' should match against '#{options.match}'"
-        else if options.match instanceof RegExp and not value.match options.match
-          throw check.error path, options, value,
-          new Error "The given string '#{value}' should match against '#{options.match}'"
+        else if options.match instanceof RegExp
+          unless value.match options.match
+            throw check.error path, options, value,
+            new Error "The given string '#{value}' should match against '#{options.match}'"
         else if not ~value.indexOf options.match
           throw check.error path, options, value,
           new Error "The given string '#{value}' should contain '#{options.match}'"
