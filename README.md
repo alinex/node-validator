@@ -255,6 +255,15 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
+### byte
+
+To test for byte values which may contain prefixes like `18M` or `6.2 GB`.
+
+__Validate options:__
+
+- `min` - (integer) the smalles allowed number
+- `max` - (integer) the biggest allowed number
+
 ### array
 
 __Sanitize options:__

@@ -1,0 +1,122 @@
+# Date interval check
+# =================================================
+
+# Sanitize options allowed:
+#
+# - `unit` - (string) type of unit to convert if not integer given
+# - `round` - (bool) rounding can be set to true for arithmetic rounding
+#   or use `floor` or `ceil` for the corresponding methods
+#
+# Check options:
+#
+# - `min` - (integer) the smalles allowed number
+# - `max` - (integer) the biggest allowed number
+
+# Node modules
+# -------------------------------------------------
+debug = require('debug')('validator:byte')
+util = require 'util'
+math = require 'mathjs'
+# include alinex packages
+{number} = require 'alinex-util'
+# include classes and helper
+rules = require '../rules'
+float = require './float'
+
+pattern = /^[0-9]+(\.?[0-9]*) *(k|Ki|[MGTPEZY]i?)?B?$/
+
+module.exports = byte =
+
+  # Description
+  # -------------------------------------------------
+  describe:
+
+    # ### Type Description
+    type: (options) ->
+      options = optimize options
+      # combine into message
+      text = 'A byte value. '
+      text += rules.describe.optional options
+      text += "If defined as a text you may use a prefixes like: k, M, G, P, T, E, Z, Y
+      also with the unit B like '12MB' or '3.7 GiB'. "
+      text += float.describe.minmax options
+
+  # Synchronous check
+  # -------------------------------------------------
+  sync:
+
+    # ### Check Type
+    type: (check, path, options, value) ->
+      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      options = optimize options
+      # sanitize
+      value = rules.sync.optional check, path, options, value
+      return value unless value?
+      # support byte format
+      if typeof value is 'number'
+        unless value is (value | 0)
+          throw check.error path, options, value,
+          new Error "The given value '#{value}' is no byte or integer number as needed"
+        return float.sync.minmax check, path, options, value
+      unless typeof value is 'string' and value.trim().match pattern
+        throw check.error path, options, value,
+        new Error "A byte value with optional prefixes is needed"
+      # sanitize string
+      value = value.trim()
+      value += 'B' unless value.match /B$/
+      value = math.unit value
+      value = value.toNumber 'B'
+      # validate
+      value = float.sync.minmax check, path, options, value
+      # done return resulting value
+      value
+
+
+  # Selfcheck
+  # -------------------------------------------------
+  selfcheck: (name, options) ->
+    validator = require '../index'
+    validator.check name,
+      type: 'object'
+      mandatoryKeys: ['type']
+      allowedKeys: true
+      entries:
+        title:
+          type: 'string'
+        description:
+          type: 'string'
+        optional:
+          type: 'boolean'
+        default:
+          type: 'integer'
+        min:
+          type: 'any'
+          entries: [
+            type: 'integer'
+            min: 0
+          ,
+            rules.selfcheck.reference
+          ]
+        max:
+          type: 'any'
+          min:
+            reference: 'relative'
+            source: '<min'
+          entries: [
+            type: 'integer'
+          ,
+            rules.selfcheck.reference
+          ]
+    , options
+
+
+# Optimize options setting
+# -------------------------------------------------
+optimize = (options) ->
+  if options.decimals and not options.round?
+    options.round = true
+  if options.round and not options.decimals?
+    options.decimals = 0
+  unless options.min
+    options.min = 0
+  options

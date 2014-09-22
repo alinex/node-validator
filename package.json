@@ -33,7 +33,8 @@
   "dependencies": {
     "alinex-util": "0.1.x",
     "async": "0.9.x",
-    "debug": "0.8.0 - 2.x"
+    "debug": "0.8.0 - 2.x",
+    "mathjs": "^1.x"
   },
   "devDependencies": {
     "alinex-make": "0.3.x",
