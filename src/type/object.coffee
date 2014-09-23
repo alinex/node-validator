@@ -69,20 +69,24 @@ module.exports = object =
       value = rules.sync.optional check, path, options, value
       return value unless value?
       # validate
-      for method in ['instanceof', 'object', 'keys']
+      for method in ['instanceof', 'object']
         value = object.sync[method] check, path, options, value
       # end processing if no entries to check
-      unless options.entries?
+      if options.instanceOf?
         return value
       # check entries
-      for key, subvalue of value
-        suboptions = if typeof options.entries.type is 'string'
-          options.entries
-        else
-          options.entries[key]
-        continue unless suboptions?
-        # run subcheck
-        value[key] = check.subcall path.concat(key), suboptions, subvalue
+      if options.entries?
+        keys = Object.keys(options.entries).concat Object.keys value
+        keys = keys.filter (item, pos, self) -> return self.indexOf(item) == pos
+        for key in keys
+          suboptions = if typeof options.entries.type is 'string'
+            options.entries
+          else
+            options.entries[key]
+          continue unless suboptions?
+          # run subcheck
+          value[key] = check.subcall path.concat(key), suboptions, value[key]
+      value = object.sync.keys check, path, options, value
       # done return resulting value
       value
 
@@ -169,22 +173,28 @@ module.exports = object =
     validator = require '../index'
     validator.check name,
       type: 'object'
-      mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        type:
+          type: 'string'
         title:
           type: 'string'
+          optional: true
         description:
           type: 'string'
+          optional: true
         instanceOf:
           type: 'function'
           class: true
+          optional: true
         mandatoryKeys:
           type: 'array'
+          optional: true
           entries:
             type: 'string'
         allowedKeys:
           type: 'any'
+          optional: true
           entries: [
             type: 'boolean'
           ,
@@ -194,6 +204,7 @@ module.exports = object =
           ]
         entries:
           type: 'object'
+          optional: true
     , options
     # Check type specific
     return unless options.entries

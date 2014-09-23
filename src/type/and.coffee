@@ -21,6 +21,7 @@ module.exports = any =
       text = "Here all of the following checks have to succeed:\n"
       for entry in options.entries
         text += "\n- #{ValidatorCheck.describe entry} "
+      text += rules.describe.optional options
       text
 
   # Synchronous check
@@ -30,6 +31,9 @@ module.exports = any =
     # ### Check Type
     type: (check, path, options, value) ->
       debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      # sanitize
+      value = rules.sync.optional check, path, options, value
+      return value unless value?
       # validate
       num = 0
       try
@@ -52,6 +56,13 @@ module.exports = any =
     type: (check, path, options, value, cb) ->
       debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
       # run sync checks
+      try
+        # sanitize
+        value = rules.sync.optional check, path, options, value
+        return cb null, value unless value?
+      catch err
+        return cb err
+      # run async checks
       num = 0
       async.eachSeries options.entries, (suboptions, cb) ->
         # run subcheck

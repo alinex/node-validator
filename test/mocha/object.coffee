@@ -69,7 +69,7 @@ describe "Object", ->
           one:
             type: 'integer'
       test.deep options, { one:1, two:2, three:3 }, { one:1, two:2, three:3 }
-      test.deep options, { three:3 }, { three:3 }
+      test.deep options, { one:100, three:3 }, { one:100, three:3 }
     it "should fail on subchecks", ->
       options =
         type: 'object'
@@ -226,7 +226,7 @@ describe "Object", ->
           two:
             type: 'string'
 
-  describe "selfcheck", ->
+  describe.only "selfcheck", ->
 
     it "should validate simple options", ->
       test.selfcheck options
