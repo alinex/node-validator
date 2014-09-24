@@ -34,9 +34,9 @@ module.exports = object =
       text += object.describe.instanceof options
       text += object.describe.keys options
       if options.entries?
-        if options.entries.check?
+        if options.entries.type? and typeof options.entries.type is 'string'
           text += "All entries should be:\n> #{ValidatorCheck.describe options.entries} "
-        else
+        else if options.entries.length
           text += "Entries should contain:\n"
           for entry, num in options.entries
             if options.entries[key]?
@@ -54,8 +54,11 @@ module.exports = object =
       text = ''
       if options.mandatoryKeys?
         text += "The keys #{options.mandatoryKeys} have to be included. "
-      if options.allowedKeys?
-        text += "The keys #{options.allowedKeys} are optional. "
+      if options.allowedKeys
+        if typeof options.allowedKeys is 'boolean'
+          text += "Only specified keys are allowed. "
+        else
+          text += "The keys #{options.allowedKeys} are optional. "
       text
 
   # Synchronous check
