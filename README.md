@@ -283,16 +283,52 @@ __Validating children:__
 
 ### object
 
-__Check options:__
+For all complex data structures you use the object type which checks for named
+arrays.
 
-- `instanceOf` - only objects of given class type are allowed
-- `mandatoryKeys` - the list of elements which are mandatory
-- `allowedKeys` - gives a list of elements which are also allowed
+__Options:__
+
+- `instanceOf` - (class) only objects of given class type are allowed
+- `mandatoryKeys` - (list) the list of elements which are mandatory
+- `allowedKeys` - (list) gives a list of elements which are also allowed
    or true to use the list from entries definition
-
-__Validating children:__
-
 - `entries` - specification for all entries or specific to the key name
+
+So you have three different ways to specify objects. First you may have class
+instances as the object. Then you only can use the `instanceOf` check.
+
+    var value = Validator.check('callback', value, {
+      type: 'object',
+      instanceOf: RegExp
+    });
+
+Next you may have an object in which you only want to specify what attributes
+it should have but not checking the attribute values:
+
+    var value = Validator.check('callback', value, {
+      type: 'object',
+      mandatoryKeys: ['name'],
+      allowedKeys: ['mail', 'phone']
+    });
+
+If you don't specify `allowedKeys` more attributes with other names are possible.
+
+And the last and most complex situation is a deep checking structure:
+
+    var value = Validator.check('callback', value, {
+      type: 'object',
+      allowedKeys: true,
+      entries: {
+        name: { type: 'string' },
+        mail: { type: 'string', optional: true },
+        phone: { type: 'string', optional: true }
+      }
+    });
+
+Here `allowedKeys` will check that no attributes are used which are not specified
+in the entries. Which attribute is optional may be specified within the attributes
+specification. That means this check is the same as above but also checks that the
+three attributes are strings.
 
 ### any
 
