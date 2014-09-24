@@ -4,6 +4,23 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.0 (2014-09-24)
+-------------------------------------------------
+- Updated description for objects.
+- Added describe text to error messages.
+- Finished rewriting of object checks.
+- Extended object documentation.
+- Started rework for optional use in objects.
+- Added new validation type 'byte'.
+- Make reference selfcheck more specific.
+- Add possibility to use operations on references.
+- Added 'hostname' type as example for string extension.
+- Removed async there not needed.
+- Bug fixes in selfcheck and object validation.
+- Added new check type 'and'.
+- Adding description for selfcheck.
+- Allow the general keys 'title' and 'description' in all selftests.
+
 Version 0.2.3 (2014-09-17)
 -------------------------------------------------
 - Differentiate between normale function and class in check.
