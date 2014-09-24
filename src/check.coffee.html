@@ -198,6 +198,8 @@ runs in case of references to references...</p>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">constructor: </span><span class="nf">(@source, @options, @value, @data) -&gt;</span>
     <span class="vi">@checked = </span><span class="p">[]</span>
+    <span class="k">for</span> <span class="nx">key</span> <span class="k">in</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">@options</span>
+      <span class="nx">@options</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">@ref2value</span> <span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">],</span> <span class="nx">@options</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="nx">key</span>
 
 
 </pre></div>
@@ -217,14 +219,17 @@ runs in case of references to references...</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">error: </span><span class="nf">(path, options, value, err) -&gt;</span>
+    <span class="k">unless</span> <span class="nx">options</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Validator called without options.&quot;</span>
     <span class="nv">source = </span><span class="p">[</span><span class="nx">@source</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">path</span><span class="p">).</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span>
     <span class="nv">message = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">@source</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="nx">message</span> <span class="o">+=</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span> <span class="k">if</span> <span class="nx">path</span>
+    <span class="nx">message</span> <span class="o">+=</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span> <span class="k">if</span> <span class="nx">path</span> <span class="o">and</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
     <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="o">?</span>
       <span class="nx">message</span> <span class="o">+=</span> <span class="s">&quot; &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">title</span><span class="si">}</span><span class="s">&#39;&quot;</span>
-    <span class="nx">message</span> <span class="o">+=</span> <span class="s">&#39;.&#39;</span>
+    <span class="nx">message</span> <span class="o">+=</span> <span class="s">&#39;. &#39;</span>
     <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">description</span><span class="o">?</span>
       <span class="nx">message</span> <span class="o">+=</span> <span class="s">&quot;It should contain </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">description</span><span class="si">}</span><span class="s">. &quot;</span>
+    <span class="nx">message</span> <span class="o">+=</span> <span class="s">&#39;\n&#39;</span> <span class="o">+</span> <span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span>
     <span class="k">new</span> <span class="nb">Error</span> <span class="nx">message</span>
 
 
@@ -361,10 +366,9 @@ runs in case of references to references...</p>
 <p>will set the runAgain flag if necessary</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">ref2value: </span><span class="nf">(path, value) -&gt;</span>
+  <span class="nv">ref2value: </span><span class="nf">(path, value, key) -&gt;</span>
     <span class="nv">pathname = </span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span>
-    <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span> <span class="o">and</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">sort</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">is</span> <span class="s">&#39;reference,source&#39;</span>
+    <span class="k">unless</span> <span class="nx">value</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">reference</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">source</span><span class="o">?</span>
       <span class="nx">@checked</span><span class="p">.</span><span class="nx">push</span> <span class="nx">pathname</span>
       <span class="k">return</span> <span class="nx">value</span>
 
@@ -386,7 +390,7 @@ runs in case of references to references...</p>
         <span class="nv">obj = </span><span class="nx">@value</span>
         <span class="k">unless</span> <span class="nx">pathname</span> <span class="k">in</span> <span class="nx">@checked</span>
           <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&#39;EAGAIN&#39;</span>
-        <span class="nx">debug</span> <span class="s">&quot;use absolute reference to &#39;</span><span class="si">#{</span><span class="nx">source</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">&#39;&quot;</span>
+        <span class="nx">debug</span> <span class="s">&quot;use absolute reference to &#39;</span><span class="si">#{</span><span class="nx">source</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span>
       <span class="k">when</span> <span class="s">&#39;relative&#39;</span>
         <span class="nv">obj = </span><span class="nx">@value</span>
         <span class="nv">newpath = </span><span class="nx">path</span><span class="p">.</span><span class="nx">slice</span><span class="p">()</span>
@@ -396,10 +400,10 @@ runs in case of references to references...</p>
         <span class="nv">source = </span><span class="nx">newpath</span><span class="p">.</span><span class="nx">concat</span> <span class="nx">source</span>
         <span class="k">unless</span> <span class="nx">pathname</span> <span class="k">in</span> <span class="nx">@checked</span>
           <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&#39;EAGAIN&#39;</span>
-        <span class="nx">debug</span> <span class="s">&quot;use relative reference to &#39;</span><span class="si">#{</span><span class="nx">source</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">&#39;&quot;</span>
+        <span class="nx">debug</span> <span class="s">&quot;use relative reference to &#39;</span><span class="si">#{</span><span class="nx">source</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span>
       <span class="k">when</span> <span class="s">&#39;external&#39;</span>
         <span class="nv">obj = </span><span class="nx">@data</span>
-        <span class="nx">debug</span> <span class="s">&quot;use external reference to &#39;</span><span class="si">#{</span><span class="nx">source</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">&#39;&quot;</span>
+        <span class="nx">debug</span> <span class="s">&quot;use external reference to &#39;</span><span class="si">#{</span><span class="nx">source</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">&#39; for </span><span class="si">#{</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">.</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&quot;</span>
 
 </pre></div>
         </td>
@@ -417,6 +421,33 @@ runs in case of references to references...</p>
         <span class="nx">debug</span> <span class="s">&quot;reference &#39;</span><span class="si">#{</span><span class="nx">source</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span><span class="si">}</span><span class="s">&#39; not found&quot;</span>
         <span class="k">return</span> <span class="kc">null</span>
       <span class="nv">obj = </span><span class="nx">obj</span><span class="p">[</span><span class="nx">part</span><span class="p">]</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+</div>
+<p>call operations</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="nx">value</span><span class="p">.</span><span class="nx">operation</span>
+      <span class="nx">debug</span> <span class="s">&quot;run operation on referenced value&quot;</span>
+      <span class="nv">obj = </span><span class="nx">value</span><span class="p">.</span><span class="nx">operation</span> <span class="nx">obj</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>return resulting value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">obj</span>
 
   <span class="nv">subcall: </span><span class="nf">(path, options, value, cb) -&gt;</span>
@@ -427,14 +458,14 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>check for references</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="k">try</span>
       <span class="k">for</span> <span class="nx">key</span> <span class="k">in</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">options</span>
-        <span class="nx">options</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">@ref2value</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+        <span class="nx">options</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">@ref2value</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="nx">key</span>
     <span class="k">catch</span> <span class="nx">err</span>
       <span class="k">if</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span> <span class="o">is</span> <span class="s">&#39;EAGAIN&#39;</span>
         <span class="vi">@runAgain = </span><span class="kc">true</span>
@@ -453,7 +484,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>sync call sync</p>
         </td>
@@ -467,7 +498,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>{@pathname path}."</p>
         </td>
@@ -481,7 +512,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>async call async</p>
         </td>
@@ -489,13 +520,14 @@ runs in case of references to references...</p>
 <span class="s">        if lib.async?.type?</span>
 <span class="s">          return lib.async.type @, path, options, value, cb</span>
 
+
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>async call sync</p>
         </td>
@@ -513,7 +545,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>Export the class</p>
         </td>

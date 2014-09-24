@@ -47,6 +47,9 @@
         <a href="#descriptive%20reporting">Descriptive reporting</a>
       </div>
       <div class="heading h2">
+        <a href="#selfchecking%20options">Selfchecking Options</a>
+      </div>
+      <div class="heading h2">
         <a href="#possible%20types">Possible Types</a>
       </div>
       <div class="heading h3">
@@ -65,6 +68,9 @@
         <a href="#float">float</a>
       </div>
       <div class="heading h3">
+        <a href="#byte">byte</a>
+      </div>
+      <div class="heading h3">
         <a href="#array">array</a>
       </div>
       <div class="heading h3">
@@ -74,13 +80,16 @@
         <a href="#any">any</a>
       </div>
       <div class="heading h3">
+        <a href="#and">and</a>
+      </div>
+      <div class="heading h3">
         <a href="#interval">interval</a>
       </div>
       <div class="heading h3">
         <a href="#percent">percent</a>
       </div>
       <div class="heading h2">
-        <a href="#examples">Examples</a>
+        <a href="#complete%20example">Complete Example</a>
       </div>
       <div class="heading h2">
         <a href="#package%20structure">Package structure</a>
@@ -115,7 +124,10 @@ external information.</p>
 <li>can give a human readable description</li>
 </ul>
 
-<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex.html">Alinex Universe</a>
+<p>The validation rules are really simple, but they will get more complex as your
+data structure gains complexity.</p>
+
+<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
 following the code standards defined there.</p>
 
 
@@ -279,6 +291,7 @@ They are written as object with:</p>
 <ul>
 <li><code>reference</code> - the type of reference: absolute, relative, external</li>
 <li><code>source</code> - the path to get the value</li>
+<li><code>operation</code> - function which will be used on retrieved value</li>
 </ul>
 
 <p>External references will be checked against the data element given to the validator.</p>
@@ -319,6 +332,30 @@ and <code>describe()</code> calls.</p>
   <p>Failed: The value is to low, it has to be at least 500 in test.timeout for "Overall Timeout".
   It should contain the time in milliseconds the whole test may take.</p>
 </blockquote>
+
+
+<div class="pilwrap" id="selfchecking%20options">
+  <h2>
+    <a href="#selfchecking%20options" name="selfchecking%20options" class="pilcrow">&#182;</a>
+    Selfchecking Options
+  </h2>
+</div>
+
+
+<p>It is also possible to let your complex options be validated against the
+different types. This will help you to find problems in your development.
+To do this you have to add it in your tests:</p>
+
+<p><strong>Mocha coffee example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="p">...</span>
+<span class="nx">it</span> <span class="s2">&quot;should has correct validator rules&quot;</span><span class="p">,</span> <span class="o">-&gt;</span>
+  <span class="nx">validator</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="nx">MyObject</span><span class="p">.</span><span class="nx">config</span>
+<span class="p">...</span>
+</code></pre></div>
+
+
 
 
 <div class="pilwrap" id="possible%20types">
@@ -479,6 +516,24 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 </ul>
 
 
+<div class="pilwrap" id="byte">
+  <h3>
+    <a href="#byte" name="byte" class="pilcrow">&#182;</a>
+    byte
+  </h3>
+</div>
+
+
+<p>To test for byte values which may contain prefixes like <code>18M</code> or <code>6.2 GB</code>.</p>
+
+<p><strong>Validate options:</strong></p>
+
+<ul>
+<li><code>min</code> - (integer) the smalles allowed number</li>
+<li><code>max</code> - (integer) the biggest allowed number</li>
+</ul>
+
+
 <div class="pilwrap" id="array">
   <h3>
     <a href="#array" name="array" class="pilcrow">&#182;</a>
@@ -505,7 +560,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p><strong>Validating children:</strong></p>
 
 <ul>
-<li><code>èntries</code> - specification for all entries or as array for each element</li>
+<li><code>entries</code> - specification for all entries or as array for each element</li>
 </ul>
 
 
@@ -517,20 +572,66 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 </div>
 
 
-<p><strong>Check options:</strong></p>
+<p>For all complex data structures you use the object type which checks for named
+arrays.</p>
+
+<p><strong>Options:</strong></p>
 
 <ul>
-<li><code>instanceOf</code> - only objects of given class type are allowed</li>
-<li><code>mandatoryKeys</code> - the list of elements which are mandatory</li>
-<li><code>allowedKeys</code> - gives a list of elements which are also allowed
+<li><code>instanceOf</code> - (class) only objects of given class type are allowed</li>
+<li><code>mandatoryKeys</code> - (list) the list of elements which are mandatory</li>
+<li><code>allowedKeys</code> - (list) gives a list of elements which are also allowed
 or true to use the list from entries definition</li>
-</ul>
-
-<p><strong>Validating children:</strong></p>
-
-<ul>
 <li><code>entries</code> - specification for all entries or specific to the key name</li>
 </ul>
+
+<p>So you have three different ways to specify objects. First you may have class
+instances as the object. Then you only can use the <code>instanceOf</code> check.</p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span>
+  <span class="nx">instanceOf</span><span class="o">:</span> <span class="nb">RegExp</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>Next you may have an object in which you only want to specify what attributes
+it should have but not checking the attribute values:</p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span>
+  <span class="nx">mandatoryKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+  <span class="nx">allowedKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;mail&#39;</span><span class="p">,</span> <span class="s1">&#39;phone&#39;</span><span class="p">]</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>If you don't specify <code>allowedKeys</code> more attributes with other names are possible.</p>
+
+<p>And the last and most complex situation is a deep checking structure:</p>
+
+
+<div class="highlight"><pre><code><span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span><span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span><span class="p">,</span>
+  <span class="nx">allowedKeys</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="nx">entries</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="p">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span> <span class="p">},</span>
+    <span class="nx">mail</span><span class="o">:</span> <span class="p">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">optional</span><span class="o">:</span> <span class="kc">true</span> <span class="p">},</span>
+    <span class="nx">phone</span><span class="o">:</span> <span class="p">{</span> <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="nx">optional</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
+
+
+<p>Here <code>allowedKeys</code> will check that no attributes are used which are not specified
+in the entries. Which attribute is optional may be specified within the attributes
+specification. That means this check is the same as above but also checks that the
+three attributes are strings.</p>
 
 
 <div class="pilwrap" id="any">
@@ -548,6 +649,24 @@ succeed. The first one succeeding will work.</p>
 
 <ul>
 <li><code>entries</code> - (array) with different check alternatives</li>
+</ul>
+
+
+<div class="pilwrap" id="and">
+  <h3>
+    <a href="#and" name="and" class="pilcrow">&#182;</a>
+    and
+  </h3>
+</div>
+
+
+<p>This is used to give multiple rules which will be executed in a series and
+all have to succeed.</p>
+
+<p><strong>Option:</strong></p>
+
+<ul>
+<li><code>entries</code> - (array) with multiple check rules</li>
 </ul>
 
 
@@ -608,10 +727,10 @@ like 50% are converted to floats like 0.5.</p>
 </ul>
 
 
-<div class="pilwrap" id="examples">
+<div class="pilwrap" id="complete%20example">
   <h2>
-    <a href="#examples" name="examples" class="pilcrow">&#182;</a>
-    Examples
+    <a href="#complete%20example" name="complete%20example" class="pilcrow">&#182;</a>
+    Complete Example
   </h2>
 </div>
 

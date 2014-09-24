@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>function.coffee</title>
+  <title>hostname.coffee</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/functioncoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/hostnamecoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -23,7 +23,7 @@
     <div id="tree"></div>
     <div id="headings">
       <div class="heading h1">
-        <a href="#function%20validation">Function validation</a>
+        <a href="#domain%20name%20validation">Domain name validation</a>
       </div>
       <div class="heading h2">
         <a href="#node%20modules">Node modules</a>
@@ -51,17 +51,33 @@
   <tbody>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="function%20validation">
+<div class="pilwrap" id="domain%20name%20validation">
   <h1>
-    <a href="#function%20validation" name="function%20validation" class="pilcrow">&#182;</a>
-    Function validation
+    <a href="#domain%20name%20validation" name="domain%20name%20validation" class="pilcrow">&#182;</a>
+    Domain name validation
   </h1>
 </div>
 
-
-<p>No options allowed.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Check options:</p>
+
+<ul>
+<li><code>optional</code> - the value must not be present (will return null)</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+
+</pre></div>
         </td>
       </tr>
       <tr>
@@ -75,7 +91,7 @@
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:function&#39;</span><span class="p">)</span>
+<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:hostname&#39;</span><span class="p">)</span>
 <span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
 
 </pre></div>
@@ -84,15 +100,24 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
 <p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">ValidatorCheck = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
 <span class="nv">rules = </span><span class="nx">require</span> <span class="s">&#39;../rules&#39;</span>
 
+<span class="nv">suboptions =</span>
+  <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+  <span class="nv">match: </span><span class="sr">///</span>
+<span class="sr">    ^</span>
+<span class="sr">    [a-zA-Z0-9]</span>
+<span class="sr">    |[a-zA-Z0-9][a-zA-Z0-9\-_]{0,61}[a-zA-Z0-9]</span>
+<span class="sr">    $</span>
+<span class="sr">    ///</span>
 
-<span class="nv">module.exports =</span>
+<span class="nv">module.exports = hostname =</span>
 
 
 </pre></div>
@@ -127,24 +152,10 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
-</div>
-<p>combine into message</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">class</span><span class="o">?</span>
-        <span class="nv">type = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">class</span> <span class="k">then</span> <span class="s">&#39;class&#39;</span> <span class="k">else</span> <span class="s">&#39;function&#39;</span>
-        <span class="nv">text = </span><span class="s">&quot;The value has to be a </span><span class="si">#{</span><span class="nx">type</span><span class="si">}</span><span class="s">. &quot;</span>
-      <span class="k">else</span>
-        <span class="s">&quot;The value has to be a function/class. &quot;</span>
+      <span class="nv">text = </span><span class="s">&#39;This should be a valid hostname. &#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">suboptions</span>
+      <span class="nx">text</span>
 
 
 </pre></div>
@@ -189,7 +200,7 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
-<p>sanitize</p>
+<p>first check input type</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nv">value = </span><span class="nx">rules</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
@@ -203,21 +214,10 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
-<p>value check</p>
+<p>validate</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span>
-        <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-        <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No function given as value&quot;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">class</span><span class="o">?</span>
-        <span class="nv">isClass = </span><span class="nx">value</span><span class="p">.</span><span class="nx">constructor</span><span class="o">?</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span>
-        <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">class</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">isClass</span>
-          <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-          <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No class given as value&quot;</span>
-        <span class="k">if</span> <span class="o">not</span> <span class="nx">options</span><span class="p">.</span><span class="nx">class</span> <span class="o">and</span> <span class="nx">isClass</span>
-          <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-          <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No function given as value&quot;</span>
-      <span class="nx">value</span>
+      <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">value</span>
 
 
 
@@ -253,10 +253,7 @@
           <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
         <span class="nv">default:</span>
-          <span class="nv">type: </span><span class="s">&#39;function&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="k">class</span><span class="o">:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
     <span class="p">,</span> <span class="nx">options</span>
 </pre></div>
