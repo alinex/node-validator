@@ -172,7 +172,7 @@ describe "Object", ->
             type: 'integer'
       async.series [
         (cb) -> test.deep options, { one:1, two:2, three:3 }, { one:1, two:2, three:3 }, cb
-        (cb) -> test.deep options, { three:3 }, { three:3 }, cb
+        (cb) -> test.deep options, { one:100, three:3 }, { one:100, three:3 }, cb
       ], cb
     it "should fail on subchecks", (cb) ->
       options =
@@ -226,15 +226,15 @@ describe "Object", ->
           two:
             type: 'string'
 
-  describe.only "selfcheck", ->
+  describe "selfcheck", ->
 
     it "should validate simple options", ->
       test.selfcheck options
-    it "should give instance description", ->
+    it "should validate instance options", ->
       test.selfcheck
         type: 'object'
         instanceOf: RegExp
-    it "should give complex object description", ->
+    it "should validate complex object", ->
       test.selfcheck
         title: 'test'
         description: 'Some test rules'

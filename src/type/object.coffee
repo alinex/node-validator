@@ -142,15 +142,24 @@ module.exports = object =
         value = rules.sync.optional check, path, options, value
         return cb null, value unless value?
         # validate
-        for method in ['instanceof', 'object', 'keys']
+        for method in ['instanceof', 'object']
           value = object.sync[method] check, path, options, value
       catch err
         return cb err
       # end processing if no entries to check
-      unless options.entries?
+      if options.instanceOf?
         return cb null, value
       # check entries
-      return async.each Object.keys(value), (key, cb) ->
+      unless options.entries?
+        try
+          value = object.sync.keys check, path, options, value
+        catch err
+          return cb err
+        # done return results
+        return cb null, value
+      keys = Object.keys(options.entries).concat Object.keys value
+      keys = keys.filter (item, pos, self) -> return self.indexOf(item) == pos
+      return async.each keys, (key, cb) ->
         suboptions = if typeof options.entries.type is 'string'
           options.entries
         else
@@ -163,6 +172,10 @@ module.exports = object =
           value[key] = result
           cb()
       , (err) ->
+        try
+          value = object.sync.keys check, path, options, value
+        catch err
+          return cb err
         # done return results
         cb err, value
 

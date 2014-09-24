@@ -110,24 +110,32 @@ module.exports = float =
     validator = require '../index'
     validator.check name,
       type: 'object'
-      mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        type:
+          type: 'string'
         title:
           type: 'string'
+          optional: true
         description:
           type: 'string'
+          optional: true
         optional:
           type: 'boolean'
+          optional: true
         default:
           type: 'float'
+          optional: true
         sanitize:
           type: 'boolean'
+          optional: true
         round:
           type: 'integer'
+          optional: true
           min: 0
         min:
           type: 'any'
+          optional: true
           entries: [
             type: 'float'
           ,
@@ -135,6 +143,7 @@ module.exports = float =
           ]
         max:
           type: 'any'
+          optional: true
           min:
             reference: 'relative'
             source: '<min'

@@ -78,19 +78,25 @@ module.exports = byte =
     validator = require '../index'
     validator.check name,
       type: 'object'
-      mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        type:
+          type: 'string'
         title:
           type: 'string'
+          optional: true
         description:
           type: 'string'
+          optional: true
         optional:
           type: 'boolean'
+          optional: true
         default:
           type: 'integer'
+          optional: true
         min:
           type: 'any'
+          optional: true
           entries: [
             type: 'integer'
             min: 0
@@ -99,6 +105,7 @@ module.exports = byte =
           ]
         max:
           type: 'any'
+          optional: true
           min:
             reference: 'relative'
             source: '<min'

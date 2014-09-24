@@ -88,22 +88,29 @@ module.exports = interval =
     validator = require '../index'
     validator.check name,
       type: 'object'
-      mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        type:
+          type: 'string'
         title:
           type: 'string'
+          optional: true
         description:
           type: 'string'
+          optional: true
         optional:
           type: 'boolean'
+          optional: true
         default:
           type: 'float'
+          optional: true
         unit:
           type: 'string'
+          optional: true
           values: ['d', 'h', 'm', 's', 'ms']
         round:
           type: 'any'
+          optional: true
           entries: [
             type: 'boolean'
           ,
@@ -112,6 +119,7 @@ module.exports = interval =
           ]
         min:
           type: 'any'
+          optional: true
           entries: [
             type: 'float'
           ,
@@ -119,6 +127,7 @@ module.exports = interval =
           ]
         max:
           type: 'any'
+          optional: true
           min:
             reference: 'relative'
             source: '<min'

@@ -205,25 +205,34 @@ module.exports = float =
     validator = require '../index'
     validator.check name,
       type: 'object'
-      mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        type:
+          type: 'string'
         title:
           type: 'string'
+          optional: true
         description:
           type: 'string'
+          optional: true
         optional:
           type: 'boolean'
+          optional: true
         default:
           type: 'string'
+          optional: true
         tostring:
           type: 'boolean'
+          optional: true
         allowControls:
           type: 'boolean'
+          optional: true
         stripTags:
           type: 'boolean'
+          optional: true
         lowerCase:
           type: 'any'
+          optional: true
           entries: [
             type: 'boolean'
           ,
@@ -232,6 +241,7 @@ module.exports = float =
           ]
         upperCase:
           type: 'any'
+          optional: true
           entries: [
             type: 'boolean'
           ,
@@ -240,6 +250,7 @@ module.exports = float =
           ]
         replace:
           type: 'array'
+          optional: true
           entries: [
             type: 'any'
             entries: [
@@ -268,27 +279,35 @@ module.exports = float =
           ]
         trim:
           type: 'boolean'
+          optional: true
         crop:
           type: 'integer'
+          optional: true
           min: 1
         minLength:
           type: 'integer'
+          optional: true
           min: 0
         maxLength:
           type: 'integer'
+          optional: true
           min:
             reference: 'relative'
             source: '<minLength'
         values:
           type: 'array'
+          optional: true
           entries:
             type: 'string'
         startsWith:
           type: 'string'
+          optional: true
         endsWith:
           type: 'string'
+          optional: true
         match:
           type: 'any'
+          optional: true
           entries: [
             type: 'string'
           ,
@@ -297,6 +316,7 @@ module.exports = float =
           ]
         matchNot:
           type: 'any'
+          optional: true
           entries: [
             type: 'string'
           ,

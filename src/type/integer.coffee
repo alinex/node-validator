@@ -106,21 +106,28 @@ module.exports = integer =
     validator = require '../index'
     validator.check name,
       type: 'object'
-      mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        type:
+          type: 'string'
         title:
           type: 'string'
+          optional: true
         description:
           type: 'string'
+          optional: true
         optional:
           type: 'boolean'
+          optional: true
         default:
           type: 'integer'
+          optional: true
         sanitize:
           type: 'boolean'
+          optional: true
         round:
           type: 'any'
+          optional: true
           entries: [
             type: 'boolean'
           ,
@@ -129,6 +136,7 @@ module.exports = integer =
           ]
         min:
           type: 'any'
+          optional: true
           entries: [
             type: 'integer'
           ,
@@ -136,6 +144,7 @@ module.exports = integer =
           ]
         max:
           type: 'any'
+          optional: true
           min:
             reference: 'relative'
             source: '<min'
@@ -146,6 +155,7 @@ module.exports = integer =
           ]
         inttype:
           type: 'any'
+          optional: true
           entries: [
             type: 'integer'
           ,
@@ -154,6 +164,7 @@ module.exports = integer =
           ]
         unsigned:
           type: 'boolean'
+          optional: true
     , options
 
 

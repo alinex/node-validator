@@ -177,19 +177,25 @@ module.exports = array =
     validator = require '../index'
     validator.check name,
       type: 'object'
-      mandatoryKeys: ['type']
       allowedKeys: true
       entries:
+        type:
+          type: 'string'
         title:
           type: 'string'
+          optional: true
         description:
           type: 'string'
+          optional: true
         optional:
           type: 'boolean'
+          optional: true
         default:
           type: 'array'
+          optional: true
         delimiter:
           type: 'any'
+          optional: true
           entries: [
             type: 'string'
           ,
@@ -198,16 +204,20 @@ module.exports = array =
           ]
         notEmpty:
           type: 'boolean'
+          optional: true
         minLength:
           type: 'integer'
+          optional: true
           min: 0
         maxLength:
           type: 'integer'
+          optional: true
           min:
             reference: 'relative'
             source: '<minLength'
         entries:
           type: 'any'
+          optional: true
           entries: [
             type: 'object'
           ,
