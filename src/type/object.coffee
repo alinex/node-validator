@@ -107,7 +107,8 @@ module.exports = object =
     keys: (check, path, options, value) ->
       # add mandatory keys to allowed keys
       allowedKeys = []
-      allowedKeys = allowedKeys.concat options.allowedKeys if options.allowedKeys?
+      if options.allowedKeys? and typeof options.allowedKeys isnt 'boolean'
+        allowedKeys = allowedKeys.concat options.allowedKeys
       if options.entries?
         for key in Object.keys options.entries
           allowedKeys.push key unless allowedKeys[key]

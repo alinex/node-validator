@@ -42,7 +42,7 @@ module.exports = float =
 
     # ### Type Description
     type: (options) ->
-      text = 'This should be text entry. '
+      text = 'This should be a text entry. '
       text += rules.describe.optional options
       if options.tostring
         text += "Objects will be converted to their string representation. "

@@ -15,8 +15,8 @@ module.exports = rules =
   describe:
 
     optional: (options) ->
-      value = options.default ? null
-      "This is optional and may not be set. If let blank it will be set to
+      value = if options.default? then util.inspect options.default else null
+      "It's optional and may not be set. If let blank it will be set to
       #{value}. "
 
   # Synchronous checks
@@ -50,6 +50,7 @@ module.exports = rules =
           type: 'string'
         operation:
           type: 'function'
+          optional: true
 
 
 # helper methods

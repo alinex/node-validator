@@ -82,7 +82,7 @@ module.exports = any =
     validator = require '../index'
     validator.check name,
       type: 'object'
-      allowedKeys: true
+      allowedKeys: ['default']
       entries:
         type:
           type: 'string'
@@ -91,6 +91,9 @@ module.exports = any =
           optional: true
         description:
           type: 'string'
+          optional: true
+        optional:
+          type: 'boolean'
           optional: true
         entries:
           type: 'array'

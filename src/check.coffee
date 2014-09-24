@@ -47,9 +47,10 @@ class ValidatorCheck
     message += '.' + path.join '.' if path and path.length
     if options.title?
       message += " '#{options.title}'"
-    message += '.'
+    message += '. '
     if options.description?
       message += "It should contain #{options.description}. "
+    message += '\n' + ValidatorCheck.describe options
     new Error message
 
   # ### Synchronous check
@@ -113,7 +114,7 @@ class ValidatorCheck
   #
   ref2value: (path, value, key) ->
     pathname = path.join '.'
-    unless typeof value is 'object' and value.reference? and value.source?
+    unless value and typeof value is 'object' and value.reference? and value.source?
       @checked.push pathname
       return value
     # it's a reference, find path
