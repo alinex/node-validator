@@ -205,6 +205,12 @@ module.exports = object =
         description:
           type: 'string'
           optional: true
+        optional:
+          type: 'boolean'
+          optional: true
+        default:
+          type: 'object'
+          optional: true
         instanceOf:
           type: 'function'
           class: true

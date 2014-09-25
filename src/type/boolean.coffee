@@ -26,8 +26,7 @@ module.exports =
       vFalse = valuesFalse.map(util.inspect).join ', '
       # combine into message
       "A boolean value, which will be true for #{vTrue} and
-      will be considered as false for #{vFalse}. #{rules.describe.optional options}
-      Other values are not allowed."
+      will be considered as false for #{vFalse}. #{rules.describe.optional options}"
 
   # Synchronous check
   # -------------------------------------------------

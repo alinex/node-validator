@@ -28,7 +28,7 @@ module.exports = rules =
       unless isEmpty value
         return value
       # check for optional
-      unless options.optional or options.default
+      unless options.optional or options.default?
         throw check.error path, options, value,
         new Error "A value is needed"
       # send default back
