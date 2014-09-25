@@ -18,9 +18,10 @@ module.exports = any =
 
     # ### Type Description
     type: (options) ->
-      text = "Here all of the following checks have to succeed:\n"
+      text = "All of the following checks have to succeed:\n"
       for entry in options.entries
-        text += "\n- #{ValidatorCheck.describe entry} "
+        text += "- #{ValidatorCheck.describe entry} ".replace '\n', '\n  '
+        text += '\n'
       text += rules.describe.optional options
       text
 

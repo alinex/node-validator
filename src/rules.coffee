@@ -16,8 +16,7 @@ module.exports = rules =
 
     optional: (options) ->
       value = if options.default? then util.inspect options.default else null
-      "It's optional and may not be set. If let blank it will be set to
-      #{value}. "
+      "It's optional and will be set to #{value} if not specified. "
 
   # Synchronous checks
   # -------------------------------------------------

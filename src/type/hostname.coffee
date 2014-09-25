@@ -31,7 +31,7 @@ module.exports = hostname =
 
     # ### Type Description
     type: (options) ->
-      text = 'This should be a valid hostname. '
+      text = 'A valid hostname. '
       text += rules.describe.optional options
       text += ValidatorCheck.describe suboptions
       text

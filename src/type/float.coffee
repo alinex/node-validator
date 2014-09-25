@@ -31,7 +31,7 @@ module.exports = float =
     type: (options) ->
       options = optimize options
       # combine into message
-      text = "A numeric floating point number is needed. "
+      text = "A numeric floating point number. "
       text += rules.describe.optional options
       if options.sanitize
         text += "Invalid characters will be removed from text. "

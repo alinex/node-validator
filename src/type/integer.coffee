@@ -32,7 +32,7 @@ module.exports = integer =
     # ### Type Description
     type: (options) ->
       # combine into message
-      text = "An integer is needed. "
+      text = "An integer value. "
       text += rules.describe.optional options
       if options.sanitize
         text += "Invalid characters will be removed from text. "

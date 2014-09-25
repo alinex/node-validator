@@ -25,7 +25,7 @@ module.exports =
       vTrue = valuesTrue.map(util.inspect).join ', '
       vFalse = valuesFalse.map(util.inspect).join ', '
       # combine into message
-      "The value has to be a boolean. The value will be true for #{vTrue} and it
+      "A boolean value, which will be true for #{vTrue} and
       will be considered as false for #{vFalse}. #{rules.describe.optional options}
       Other values are not allowed."
 

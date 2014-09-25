@@ -29,20 +29,22 @@ module.exports = object =
 
     # ### Type Description
     type: (options) ->
-      text = 'Here an object have to be given. '
+      text = 'An object. '
       text += rules.describe.optional options
       text += object.describe.instanceof options
       text += object.describe.keys options
       if options.entries?
         if options.entries.type? and typeof options.entries.type is 'string'
-          text += "All entries should be:\n> #{ValidatorCheck.describe options.entries} "
+          text += "All entries should be:\n"
+          text += "#{ValidatorCheck.describe options.entries} ".replace '\n', '\n  '
         else if options.entries.length
           text += "Entries should contain:\n"
           for entry, num in options.entries
             if options.entries[key]?
-              text += "\n- #{key} - #{ValidatorCheck.describe options.entries[key]} "
+              text += "\n- #{key} - #{ValidatorCheck.describe options.entries[key]} "\
+              .replace '\n', '\n  '
             else
-              text += "\n- #{key} - Free input without specification. "
+              text += "\n- #{key} - Free input without specification. ".replace '\n', '\n  '
       text
 
     instanceof: (options) ->
@@ -53,12 +55,12 @@ module.exports = object =
     keys: (options) ->
       text = ''
       if options.mandatoryKeys?
-        text += "The keys #{options.mandatoryKeys} have to be included. "
+        text += "The keys '#{options.mandatoryKeys.join "', '"}' have to be included. "
       if options.allowedKeys
         if typeof options.allowedKeys is 'boolean'
           text += "Only specified keys are allowed. "
         else
-          text += "The keys #{options.allowedKeys} are optional. "
+          text += "The keys '#{options.allowedKeys.join "', '"}' are also allowed. "
       text
 
   # Synchronous check
@@ -79,7 +81,9 @@ module.exports = object =
         return value
       # check entries
       if options.entries?
-        keys = Object.keys(options.entries).concat Object.keys value
+        keys = Object.keys value
+        unless typeof options.entries.type is 'string'
+          keys = keys.concat Object.keys options.entries
         keys = keys.filter (item, pos, self) -> return self.indexOf(item) == pos
         for key in keys
           suboptions = if typeof options.entries.type is 'string'
@@ -161,8 +165,9 @@ module.exports = object =
           return cb err
         # done return results
         return cb null, value
-      keys = Object.keys(options.entries).concat Object.keys value
-      keys = keys.filter (item, pos, self) -> return self.indexOf(item) == pos
+      keys = Object.keys value
+      unless typeof options.entries.type is 'string'
+        keys = keys.concat Object.keys options.entries
       return async.each keys, (key, cb) ->
         suboptions = if typeof options.entries.type is 'string'
           options.entries

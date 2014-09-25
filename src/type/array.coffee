@@ -33,7 +33,7 @@ module.exports = array =
 
     # ### Type Description
     type: (options) ->
-      text = 'Here a list have to be given. '
+      text = 'A list. '
       text += rules.describe.optional options
       text += array.describe.notempty options
       text += array.describe.string options
@@ -47,7 +47,8 @@ module.exports = array =
             else
               text += "\n#{num}. Free input without specification. "
         else
-          text += "All entries should be:\n> #{ValidatorCheck.describe options.entries} "
+          text += "All entries should be:\n"
+          text += "#{ValidatorCheck.describe options.entries} ".replace '\n', '\n  '
       text
 
     notempty: (options) ->

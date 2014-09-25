@@ -94,6 +94,12 @@ describe "Object", ->
           one:
             type: 'integer'
       test.fail options, { one:1, two:2, three:3 }
+    it "should support same check for all keys", ->
+      options =
+        type: 'object'
+        entries:
+          type: 'integer'
+      test.deep options, { one:1}, { one:1 }
 
   describe "async check", ->
 
@@ -204,6 +210,14 @@ describe "Object", ->
       async.series [
         (cb) -> test.fail options, { one:1, two:2, three:3 }, cb
       ], cb
+    it "should support same check for all keys", (cb) ->
+      options =
+        type: 'object'
+        entries:
+          type: 'integer'
+      async.series [
+        (cb) -> test.deep options, { one:1}, { one:1 }, cb
+      ], cb
 
   describe "description", ->
 
@@ -218,8 +232,8 @@ describe "Object", ->
         title: 'test'
         description: 'Some test rules'
         type: 'object'
-        mandatoryKeys: 'one'
-        allowedKeys: 'two'
+        mandatoryKeys: ['one']
+        allowedKeys: ['two']
         entries:
           one:
             type: 'integer'

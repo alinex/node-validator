@@ -32,7 +32,7 @@ module.exports = interval =
     type: (options) ->
       options = optimize options
       # combine into message
-      text = 'A time interval is needed, here. '
+      text = 'A time interval. '
       text += "If defined as a text you may use a combination of values with the
         units: ms, s, m, h, d. "
       text += rules.describe.optional options
