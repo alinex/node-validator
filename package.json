@@ -37,7 +37,7 @@
     "mathjs": "^1.x"
   },
   "devDependencies": {
-    "alinex-make": "0.3.x",
+    "alinex-make": "0.4.x",
     "chai": "1.x",
     "alinex-error": "0.2.x"
   },
