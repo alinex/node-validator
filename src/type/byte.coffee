@@ -94,6 +94,10 @@ module.exports = byte =
         default:
           type: 'integer'
           optional: true
+        unit:
+          type: 'string'
+          optional: true
+          values: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
         min:
           type: 'any'
           optional: true
