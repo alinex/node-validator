@@ -62,10 +62,10 @@ module.exports = any =
       catch err
         return cb err
       # run async checks
-      num = 0
-      async.map options.entries, (suboptions, cb) ->
+      async.map [0..(options.entries.length-1)], (num, cb) ->
+        suboptions = options.entries[num]
         # run subcheck
-        check.subcall path, suboptions, value, (err, result) ->
+        check.subcall path.concat(num), suboptions, value, (err, result) ->
           # check response
           return cb() if err
           cb null, result
@@ -73,7 +73,7 @@ module.exports = any =
         # check response
         for result in results
           return cb null, result if result?
-        cb check.error path.concat(num++), options, value,
+        cb check.error path, options, value,
         new Error "None of the alternatives are matched"
 
 

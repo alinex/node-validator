@@ -64,10 +64,10 @@ module.exports = any =
       catch err
         return cb err
       # run async checks
-      num = 0
-      async.eachSeries options.entries, (suboptions, cb) ->
+      async.map [0..(options.entries.length-1)], (num, cb) ->
+        suboptions = options.entries[num]
         # run subcheck
-        check.subcall path, suboptions, value, (err, result) ->
+        check.subcall path.concat(num), suboptions, value, (err, result) ->
           # check response
           return cb err if err
           value = result
@@ -75,7 +75,7 @@ module.exports = any =
       , (err) ->
         # check response
         if err
-          return cb check.error path.concat(num++), options, value,
+          return cb check.error path, options, value,
           new Error "Not all of the rules matched"
         cb null, value
 

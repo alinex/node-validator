@@ -168,6 +168,7 @@ module.exports = object =
       keys = Object.keys value
       unless typeof options.entries.type is 'string'
         keys = keys.concat Object.keys options.entries
+      keys = keys.filter (item, pos, self) -> return self.indexOf(item) == pos
       return async.each keys, (key, cb) ->
         suboptions = if typeof options.entries.type is 'string'
           options.entries

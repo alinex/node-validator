@@ -115,7 +115,7 @@ class ValidatorCheck
   ref2value: (path, value, key) ->
     pathname = path.join '.'
     unless value and typeof value is 'object' and value.reference? and value.source?
-      @checked.push pathname
+      @checked.push pathname unless pathname in @checked
       return value
     # it's a reference, find path
     source = value.source.split '.'
@@ -181,9 +181,9 @@ class ValidatorCheck
         # async call sync
         try
           result = lib.sync.type @, path, options, value
-          cb null, result
         catch err
-          cb err
+          return cb err
+        cb null, result
 
 # Export the class
 module.exports = ValidatorCheck
