@@ -132,9 +132,10 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
-      <span class="nv">text = </span><span class="s">&quot;Here all of the following checks have to succeed:\n&quot;</span>
+      <span class="nv">text = </span><span class="s">&quot;All of the following checks have to succeed:\n&quot;</span>
       <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">entry</span><span class="si">}</span><span class="s"> &quot;</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;- </span><span class="si">#{</span><span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">entry</span><span class="si">}</span><span class="s"> &quot;</span><span class="p">.</span><span class="nx">replace</span> <span class="s">&#39;\n&#39;</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&#39;\n&#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
       <span class="nx">text</span>
 
@@ -308,8 +309,8 @@
 <p>run async checks</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">num = </span><span class="mi">0</span>
-      <span class="nx">async</span><span class="p">.</span><span class="nx">eachSeries</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">,</span> <span class="nf">(suboptions, cb) -&gt;</span>
+      <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..(</span><span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)],</span> <span class="nf">(num, cb) -&gt;</span>
+        <span class="nv">suboptions = </span><span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span>
 
 </pre></div>
         </td>
@@ -322,7 +323,7 @@
 <p>run subcheck</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+        <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">num</span><span class="p">),</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
 
 </pre></div>
         </td>
@@ -352,7 +353,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
         <span class="k">if</span> <span class="nx">err</span>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">num</span><span class="o">++</span><span class="p">),</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+          <span class="k">return</span> <span class="nx">cb</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
           <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Not all of the rules matched&quot;</span>
         <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 

@@ -167,7 +167,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
-      <span class="nv">text = </span><span class="s">&#39;Here a list have to be given. &#39;</span>
+      <span class="nv">text = </span><span class="s">&#39;A list. &#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">array</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">notempty</span> <span class="nx">options</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">array</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">string</span> <span class="nx">options</span>
@@ -181,7 +181,8 @@
             <span class="k">else</span>
               <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n</span><span class="si">#{</span><span class="nx">num</span><span class="si">}</span><span class="s">. Free input without specification. &quot;</span>
         <span class="k">else</span>
-          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;All entries should be:\n&gt; </span><span class="si">#{</span><span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="si">}</span><span class="s"> &quot;</span>
+          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;All entries should be:\n&quot;</span>
+          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="si">}</span><span class="s"> &quot;</span><span class="p">.</span><span class="nx">replace</span> <span class="s">&#39;\n&#39;</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span>
       <span class="nx">text</span>
 
     <span class="nv">notempty: </span><span class="nf">(options) -&gt;</span>
