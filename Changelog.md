@@ -4,6 +4,15 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.1 (2014-10-08)
+-------------------------------------------------
+- Fixed npmignore file.
+- Fixed bug with path and duplicate callback in async call.
+- Add informal unit setting for byte type.
+- Updated alinex-make.
+- Allow 'default: false' in boolen type.
+- Fixed bug in objects with one rule for all keys and optimized description text.
+
 Version 0.3.0 (2014-09-24)
 -------------------------------------------------
 - Updated description for objects.
