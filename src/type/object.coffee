@@ -61,6 +61,19 @@ module.exports = object =
           text += "Only specified keys are allowed. "
         else
           text += "The keys '#{options.allowedKeys.join "', '"}' are also allowed. "
+      if options.entries?.type is 'string'
+        text += "\n" + ValidatorCheck.describe options.entries
+      else if options.entries?
+        for key in Object.keys options.entries
+          suboptions = if typeof options.entries.type is 'string'
+            options.entries
+          else
+            options.entries[key]
+          continue unless suboptions?
+          # run subcheck
+          text += "\n- #{key}"
+# removed to not be to verbose
+#          text += "\n  " + ValidatorCheck.describe(suboptions).replace /\n/g, '\n  '
       text
 
   # Synchronous check
