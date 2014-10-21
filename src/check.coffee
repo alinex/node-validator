@@ -48,10 +48,13 @@ class ValidatorCheck
     if options.title?
       message += " '#{options.title}'"
     message += '. '
+    detail = []
     if options.description?
-      message += "It should contain #{options.description}. "
-    message += '\n' + ValidatorCheck.describe options
-    new Error message
+      detail = "It should contain #{options.description}. \n"
+    detail += ValidatorCheck.describe options
+    err = new Error message
+    err.description = detail if detail
+    err
 
   # ### Synchronous check
   sync: ->
