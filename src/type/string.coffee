@@ -119,7 +119,7 @@ module.exports = float =
       # sanitize
       unless options.allowControls
         value = value.replace /[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, ''
-      if options.stripTags?
+      if options.stripTags
         value = value.replace /<\/?[^>]+(>|$)/g, ''
       if options.lowerCase? and options.lowerCase is true
         value = value.toLowerCase()
