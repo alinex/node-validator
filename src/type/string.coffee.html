@@ -258,7 +258,6 @@ match (or list of expressions)</li>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">type: </span><span class="nf">(check, path, options, value) -&gt;</span>
-      <span class="nx">debug</span> <span class="s">&quot;check </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">grey</span>
 
 </pre></div>
         </td>
@@ -292,7 +291,7 @@ match (or list of expressions)</li>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allowControls</span>
         <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">stripTags</span><span class="o">?</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">stripTags</span>
         <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/&lt;\/?[^&gt;]+(&gt;|$)/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span>
       <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span><span class="o">?</span> <span class="o">and</span> <span class="nx">options</span><span class="p">.</span><span class="nx">lowerCase</span> <span class="o">is</span> <span class="kc">true</span>
         <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
