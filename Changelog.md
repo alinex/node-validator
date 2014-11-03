@@ -4,6 +4,15 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.2 (2014-11-03)
+-------------------------------------------------
+- Updated package description.
+- Fixed small bug in which stripTags is done on string without specifications.
+- Moved error description into error properties for better display.
+- Added list of keys to error description in object.
+- Fixed package.json version notation.
+- Fixed bug with not using new chalk module.
+
 Version 0.3.1 (2014-10-08)
 -------------------------------------------------
 - Fixed npmignore file.
