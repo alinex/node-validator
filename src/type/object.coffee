@@ -36,7 +36,7 @@ module.exports = object =
       if options.entries?
         if options.entries.type? and typeof options.entries.type is 'string'
           text += "All entries should be:\n"
-          text += "#{ValidatorCheck.describe options.entries} ".replace '\n', '\n  '
+          text += "#{ValidatorCheck.describe options.entries} ".replace /\n/g, '\n  '
         else if options.entries.length
           text += "Entries should contain:\n"
           for entry, num in options.entries
@@ -44,7 +44,7 @@ module.exports = object =
               text += "\n- #{key} - #{ValidatorCheck.describe options.entries[key]} "\
               .replace '\n', '\n  '
             else
-              text += "\n- #{key} - Free input without specification. ".replace '\n', '\n  '
+              text += "\n- #{key} - Free input without specification. ".replace /\n/g, '\n  '
       text
 
     instanceof: (options) ->

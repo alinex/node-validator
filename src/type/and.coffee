@@ -20,7 +20,7 @@ module.exports = any =
     type: (options) ->
       text = "All of the following checks have to succeed:\n"
       for entry in options.entries
-        text += "- #{ValidatorCheck.describe entry} ".replace '\n', '\n  '
+        text += "- #{ValidatorCheck.describe entry} ".replace /\n/g, '\n  '
         text += '\n'
       text += rules.describe.optional options
       text

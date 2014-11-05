@@ -48,7 +48,7 @@ module.exports = array =
               text += "\n#{num}. Free input without specification. "
         else
           text += "All entries should be:\n"
-          text += "#{ValidatorCheck.describe options.entries} ".replace '\n', '\n  '
+          text += "#{ValidatorCheck.describe options.entries} ".replace /\n/g, '\n  '
       text
 
     notempty: (options) ->
