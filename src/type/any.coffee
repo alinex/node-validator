@@ -46,7 +46,6 @@ module.exports = any =
         catch err
           error[num] = err
       # error, nothing matched
-      console.log error
       throw check.error path, options, value,
       new Error "None of the alternatives are matched (#{error.map((e) -> e.message).join ''})"
 
