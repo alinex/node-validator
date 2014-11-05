@@ -37,15 +37,18 @@ module.exports = any =
       return value unless value?
       # validate
       num = 0
+      error = []
       for suboptions in options.entries
         continue unless suboptions?
         # run subcheck
         try
           return check.subcall path.concat(num++), suboptions, value
         catch err
+          error[num] = err
       # error, nothing matched
+      console.log error
       throw check.error path, options, value,
-      new Error "None of the alternatives are matched"
+      new Error "None of the alternatives are matched (#{error.map((e) -> e.message).join ''})"
 
   # Asynchronous check
   # -------------------------------------------------
@@ -62,11 +65,13 @@ module.exports = any =
       catch err
         return cb err
       # run async checks
+      error = []
       async.map [0..(options.entries.length-1)], (num, cb) ->
         suboptions = options.entries[num]
         # run subcheck
         check.subcall path.concat(num), suboptions, value, (err, result) ->
           # check response
+          error[num] = err if err
           return cb() if err
           cb null, result
       , (err, results) ->
@@ -74,7 +79,7 @@ module.exports = any =
         for result in results
           return cb null, result if result?
         cb check.error path, options, value,
-        new Error "None of the alternatives are matched"
+        new Error "None of the alternatives are matched (#{error.map((e) -> e.message).join ''})"
 
 
   # Selfcheck
