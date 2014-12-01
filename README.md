@@ -387,6 +387,25 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
+### hostname
+
+The value has to be a valid hostname definition.
+
+### file
+
+Check the value as valid file or directory entry.
+
+__Sanitize options:__
+
+- `basedir` - (string) relative paths are calculated from this directory
+- `resolve` - (bool) should the given value be resolved to a full path
+
+__Check options:__
+
+- `exists` - (bool) true to check for already existing entry
+- `find` - (bool) find the given file anywhere in the base directory
+- `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
+
 
 Complete Example
 -------------------------------------------------
