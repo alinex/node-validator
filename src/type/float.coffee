@@ -4,6 +4,7 @@
 # Sanitize options allowed:
 #
 # - `sanitize` - (bool) remove invalid characters
+# - `unit` - (string) unit to convert to if no number is given
 # - `round` - (bool) rounding of float can be set to true for arithmetic rounding
 #   or use `floor` or `ceil` for the corresponding methods
 # - `decimals` - (int) number of decimal digits to round to
@@ -18,8 +19,21 @@
 # -------------------------------------------------
 debug = require('debug')('validator:float')
 util = require 'util'
+math = require 'mathjs'
 # include classes and helper
 rules = require '../rules'
+
+# Extend Math.js
+# -------------------------------------------------
+# Additional derived units are added:
+
+math.type.Unit.BASE_UNITS.FREQUENCY = {}
+math.type.Unit.UNITS.hz =
+  name: 'Hz',
+  base: math.type.Unit.BASE_UNITS.FREQUENCY,
+  prefixes: math.type.Unit.PREFIXES.SHORT
+  value: 1, offset: 0
+
 
 module.exports = float =
 
@@ -66,6 +80,13 @@ module.exports = float =
       # sanitize
       value = rules.sync.optional check, path, options, value
       return value unless value?
+      # convert units
+      if options.unit?
+        if typeof value is 'number' or (typeof value is 'string' and value.match /\d$/)
+          value = "" + value + options.unit
+        value = math.unit value
+        value = value.toNumber options.unit
+      # sanitize string
       if typeof value is 'string'
         if options.sanitize
           value = value.replace /^.*?([-+]?\d+\.?\d*).*?$/, '$1'
@@ -129,6 +150,10 @@ module.exports = float =
         sanitize:
           type: 'boolean'
           optional: true
+        unit:
+          type: 'string'
+          optional: true
+          minLength: 1
         round:
           type: 'integer'
           optional: true

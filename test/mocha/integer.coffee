@@ -3,7 +3,7 @@ async = require 'async'
 
 test = require '../test'
 
-describe "Integer", ->
+describe.only "Integer", ->
 
   options = null
 
@@ -120,6 +120,17 @@ describe "Integer", ->
         unsigned: true
       test.fail options, 256
       test.fail options, -1
+
+  describe "unit checks", ->
+
+    it "should parse meters", ->
+      options.unit = 'm'
+      test.equal options, 100, 100
+      test.equal options, '100m', 100
+      test.equal options, '100 m', 100
+      test.equal options, '1km', 1000
+      test.equal options, '100cm', 1
+      test.equal options, '10000mm', 10
 
   describe "description", ->
 

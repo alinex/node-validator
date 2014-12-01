@@ -3,7 +3,7 @@ async = require 'async'
 
 test = require '../test'
 
-describe.only "Byte", ->
+describe "Byte", ->
 
   options = null
 

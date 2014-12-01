@@ -230,6 +230,7 @@ To test for integer values which may be sanitized.
 __Sanitize options:__
 
 - `sanitize` - (bool) remove invalid characters
+- `unit` - (string) unit to convert to if no number is given
 - `round` - (bool) rounding of float can be set to true for arithmetic rounding
   or use `floor` or `ceil` for the corresponding methods
 
@@ -248,6 +249,7 @@ Nearly the same as for integer values but here are floats allowed, too.
 __Sanitize options:__
 
 - `sanitize` - (bool) remove invalid characters
+- `unit` - (string) unit to convert to if no number is given
 - `round` - (int) number of decimal digits to round to
 
 __Check options:__
@@ -258,6 +260,10 @@ __Check options:__
 ### byte
 
 To test for byte values which may contain prefixes like `18M` or `6.2 GB`.
+
+__Sanitize options:__
+
+- `unit` - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...
 
 __Validate options:__
 

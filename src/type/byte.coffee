@@ -3,7 +3,7 @@
 
 # Sanitize options allowed:
 #
-# - `unit` - (string) type of unit to convert if not integer given
+# - `unit` - (string) unit to convert to if no number is given
 # - `round` - (bool) rounding can be set to true for arithmetic rounding
 #   or use `floor` or `ceil` for the corresponding methods
 #
@@ -11,6 +11,8 @@
 #
 # - `min` - (integer) the smalles allowed number
 # - `max` - (integer) the biggest allowed number
+#
+# This supports the units: B, Bytes, b, bps, bits
 
 # Node modules
 # -------------------------------------------------
@@ -27,13 +29,12 @@ pattern = /^[0-9]+(\.?[0-9]*) *(k|Ki|[MGTPEZY]i?)?([Bb]|bps)?$/
 
 # Extend Math.js
 # -------------------------------------------------
-# Additional derrived binary units are added:
+# Additional derived binary units are added:
 math.type.Unit.UNITS.bps =
   name: 'bps'
   base: math.type.Unit.BASE_UNITS.BIT
   prefixes: math.type.Unit.PREFIXES.BINARY_SHORT
-  value: 1
-  offset: 0
+  value: 1, offset: 0
 
 module.exports = byte =
 

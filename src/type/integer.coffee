@@ -4,6 +4,7 @@
 # Sanitize options allowed:
 #
 # - `sanitize` - (bool) remove invalid characters
+# - `unit` - (string) unit to convert to if no number is given
 # - `round` - (bool) rounding of float can be set to true for arithmetic rounding
 #   or use `floor` or `ceil` for the corresponding methods
 #
@@ -19,6 +20,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator:integer')
 util = require 'util'
+math = require 'mathjs'
 # include classes and helper
 rules = require '../rules'
 float = require './float'
@@ -66,6 +68,13 @@ module.exports = integer =
       # sanitize
       value = rules.sync.optional check, path, options, value
       return value unless value?
+      # convert units
+      if options.unit?
+        if typeof value is 'number' or (typeof value is 'string' and value.match /\d$/)
+          value = "" + value + options.unit
+        value = math.unit value
+        value = value.toNumber options.unit
+      # sanitize string
       if typeof value is 'string'
         if options.sanitize
           if options.round?
@@ -125,6 +134,10 @@ module.exports = integer =
         sanitize:
           type: 'boolean'
           optional: true
+        unit:
+          type: 'string'
+          optional: true
+          minLength: 1
         round:
           type: 'any'
           optional: true
