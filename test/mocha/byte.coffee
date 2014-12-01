@@ -3,7 +3,7 @@ async = require 'async'
 
 test = require '../test'
 
-describe "Byte", ->
+describe.only "Byte", ->
 
   options = null
 
@@ -64,6 +64,15 @@ describe "Byte", ->
         max: 100
       test.fail options, 1000
       test.fail options, -1
+
+  describe "derived bps", ->
+
+    it "should match string definition", ->
+      test.equal options, '100bps', 100
+    it "should match prefix definition", ->
+      test.equal options, '1kbps', 1024
+      test.equal options, '1Mbps', 1024*1024
+      test.equal options, '1Gbps', 1024*1024*1024
 
   describe "description", ->
 

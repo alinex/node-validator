@@ -23,7 +23,17 @@ math = require 'mathjs'
 rules = require '../rules'
 float = require './float'
 
-pattern = /^[0-9]+(\.?[0-9]*) *(k|Ki|[MGTPEZY]i?)?B?$/
+pattern = /^[0-9]+(\.?[0-9]*) *(k|Ki|[MGTPEZY]i?)?([Bb]|bps)?$/
+
+# Extend Math.js
+# -------------------------------------------------
+# Additional derrived binary units are added:
+math.type.Unit.UNITS.bps =
+  name: 'bps'
+  base: math.type.Unit.BASE_UNITS.BIT
+  prefixes: math.type.Unit.PREFIXES.BINARY_SHORT
+  value: 1
+  offset: 0
 
 module.exports = byte =
 
@@ -63,9 +73,11 @@ module.exports = byte =
         new Error "A byte value with optional prefixes is needed"
       # sanitize string
       value = value.trim()
-      value += 'B' unless value.match /B$/
+      options.unit ?= if value.match /(b|bits|bps)$/ then 'b' else 'B'
+      unless value.match /([bB]|bps)$/
+        value += options.unit
       value = math.unit value
-      value = value.toNumber 'B'
+      value = value.toNumber options.unit
       # validate
       value = float.sync.minmax check, path, options, value
       # done return resulting value
@@ -96,8 +108,8 @@ module.exports = byte =
           optional: true
         unit:
           type: 'string'
-          optional: true
-          values: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+          default: 'B'
+          matches: /^[kMGTPEZY]?([bB]|bps)$/
         min:
           type: 'any'
           optional: true
