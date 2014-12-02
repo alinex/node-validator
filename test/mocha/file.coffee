@@ -2,6 +2,7 @@ require('alinex-error').install()
 async = require 'async'
 
 test = require '../test'
+path = require 'path'
 
 describe "File", ->
 
@@ -19,6 +20,8 @@ describe "File", ->
       test.same options, '/anywhere/myfile.txt'
       test.same options, '/anywhere'
       test.equal options, '/anywhere/', '/anywhere'
+      test.equal options, '//anywhere', '/anywhere'
+      test.equal options, '/anywhere/../anywhere', '/anywhere'
     it "should fail on other objects", ->
       test.fail options, 1
       test.fail options, null
@@ -38,6 +41,31 @@ describe "File", ->
         default: 'myfile.txt'
       test.equal options, null, 'myfile.txt'
       test.equal options, undefined, 'myfile.txt'
+    it "should support resolve option", ->
+      options =
+        type: 'file'
+        resolve: true
+      test.equal options, 'myfile.txt', path.resolve '.', 'myfile.txt'
+    it "should support resolve and basedir option", ->
+      options =
+        type: 'file'
+        basedir: '/home/mydir/test'
+        resolve: true
+      test.equal options, 'myfile.txt', '/home/mydir/test/myfile.txt'
+      test.equal options, './myfile.txt', '/home/mydir/test/myfile.txt'
+      test.equal options, '../myfile.txt', '/home/mydir/myfile.txt'
+      test.equal options, '/myfile.txt', '/myfile.txt'
+    it "should support find option", ->
+      options =
+        type: 'file'
+        find: true
+      test.equal options, 'file.js', 'lib/type/file.js'
+    it "should support find  and resolve option", ->
+      options =
+        type: 'file'
+        find: true
+        resolve: true
+      test.equal options, 'file.js', path.resolve '.', 'lib/type/file.js'
 
   describe "description", ->
 
