@@ -1,7 +1,7 @@
 {
   "name": "alinex-validator",
   "version": "0.3.2",
-  "description": "Validator with additional sanitize of simple and complex values used as schema validation for any imported data structure.",
+  "description": "Data validator with additional sanitize of simple and complex values used as schema validation for any imported data structure.",
   "copyright": "Alexander Schilling 2014",
   "private": false,
   "keywords": [
@@ -32,7 +32,7 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "alinex-fs": "^0.1.8",
+    "alinex-fs": "0.1.x",
     "alinex-util": "0.1.x",
     "async": "0.9.x",
     "debug": ">=0.8.0 <3.0.0",
