@@ -134,7 +134,7 @@
     <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
       <span class="nv">text = </span><span class="s">&quot;At least one of the following checks have to succeed:\n&quot;</span>
       <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;- </span><span class="si">#{</span><span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">entry</span><span class="si">}</span><span class="s"> &quot;</span><span class="p">.</span><span class="nx">replace</span> <span class="s">&#39;\n&#39;</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;- </span><span class="si">#{</span><span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">entry</span><span class="si">}</span><span class="s"> &quot;</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span>
         <span class="nx">text</span> <span class="o">+=</span> <span class="s">&#39;\n&#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
       <span class="nx">text</span>
@@ -200,6 +200,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nv">num = </span><span class="mi">0</span>
+      <span class="nv">error = </span><span class="p">[]</span>
       <span class="k">for</span> <span class="nx">suboptions</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">entries</span>
         <span class="k">continue</span> <span class="k">unless</span> <span class="nx">suboptions</span><span class="o">?</span>
 
@@ -217,6 +218,7 @@
         <span class="k">try</span>
           <span class="k">return</span> <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">num</span><span class="o">++</span><span class="p">),</span> <span class="nx">suboptions</span><span class="p">,</span> <span class="nx">value</span>
         <span class="k">catch</span> <span class="nx">err</span>
+          <span class="nx">error</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span> <span class="o">=</span> <span class="nx">err</span>
 
 </pre></div>
         </td>
@@ -230,7 +232,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-      <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;None of the alternatives are matched&quot;</span>
+      <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;None of the alternatives are matched (</span><span class="si">#{</span><span class="nx">error</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nf">(e) -&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">).</span><span class="nx">join</span> <span class="s">&#39;&#39;</span><span class="si">}</span><span class="s">)&quot;</span>
 
 
 </pre></div>
@@ -307,6 +309,7 @@
 <p>run async checks</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+      <span class="nv">error = </span><span class="p">[]</span>
       <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..(</span><span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)],</span> <span class="nf">(num, cb) -&gt;</span>
         <span class="nv">suboptions = </span><span class="nx">options</span><span class="p">.</span><span class="nx">entries</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span>
 
@@ -334,6 +337,7 @@
 <p>check response</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+          <span class="nx">error</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span> <span class="o">=</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
           <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">err</span>
           <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
       <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
@@ -352,7 +356,7 @@
         <span class="k">for</span> <span class="nx">result</span> <span class="k">in</span> <span class="nx">results</span>
           <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
         <span class="nx">cb</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-        <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;None of the alternatives are matched&quot;</span>
+        <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;None of the alternatives are matched (</span><span class="si">#{</span><span class="nx">error</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nf">(e) -&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">).</span><span class="nx">join</span> <span class="s">&#39;&#39;</span><span class="si">}</span><span class="s">)&quot;</span>
 
 
 

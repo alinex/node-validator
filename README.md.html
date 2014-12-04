@@ -88,6 +88,12 @@
       <div class="heading h3">
         <a href="#percent">percent</a>
       </div>
+      <div class="heading h3">
+        <a href="#hostname">hostname</a>
+      </div>
+      <div class="heading h3">
+        <a href="#file">file</a>
+      </div>
       <div class="heading h2">
         <a href="#complete%20example">Complete Example</a>
       </div>
@@ -476,6 +482,7 @@ match (or list of expressions)</li>
 
 <ul>
 <li><code>sanitize</code> - (bool) remove invalid characters</li>
+<li><code>unit</code> - (string) unit to convert to if no number is given</li>
 <li><code>round</code> - (bool) rounding of float can be set to true for arithmetic rounding
 or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
 </ul>
@@ -505,6 +512,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 
 <ul>
 <li><code>sanitize</code> - (bool) remove invalid characters</li>
+<li><code>unit</code> - (string) unit to convert to if no number is given</li>
 <li><code>round</code> - (int) number of decimal digits to round to</li>
 </ul>
 
@@ -525,6 +533,12 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 
 
 <p>To test for byte values which may contain prefixes like <code>18M</code> or <code>6.2 GB</code>.</p>
+
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>unit</code> - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...</li>
+</ul>
 
 <p><strong>Validate options:</strong></p>
 
@@ -724,6 +738,43 @@ like 50% are converted to floats like 0.5.</p>
 <ul>
 <li><code>min</code> - (numeric) the smalles allowed number</li>
 <li><code>max</code> - (numeric) the biggest allowed number</li>
+</ul>
+
+
+<div class="pilwrap" id="hostname">
+  <h3>
+    <a href="#hostname" name="hostname" class="pilcrow">&#182;</a>
+    hostname
+  </h3>
+</div>
+
+
+<p>The value has to be a valid hostname definition.</p>
+
+
+<div class="pilwrap" id="file">
+  <h3>
+    <a href="#file" name="file" class="pilcrow">&#182;</a>
+    file
+  </h3>
+</div>
+
+
+<p>Check the value as valid file or directory entry.</p>
+
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>basedir</code> - (string) relative paths are calculated from this directory</li>
+<li><code>resolve</code> - (bool) should the given value be resolved to a full path</li>
+</ul>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>exists</code> - (bool) true to check for already existing entry</li>
+<li><code>find</code> - (bool) find the given file anywhere in the base directory</li>
+<li><code>filetype</code> - (string) check against inode type: f, file, d, dir, directory, l, link</li>
 </ul>
 
 
