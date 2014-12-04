@@ -4,6 +4,18 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.3 (2014-12-04)
+-------------------------------------------------
+- Updates allowed versions for alinex-fs module.
+- Use absolute path on basedir in file validator.
+- Finished basic version of file validator.
+- Adding file validator stubs.
+- Added unit support for integer and float.
+- Add support for derived unit 'bps' in byte type.
+- Removed test output.
+- Added subelement errors in error message of 'any'-type.
+- Fixed indentation in format description.
+
 Version 0.3.2 (2014-11-03)
 -------------------------------------------------
 - Updated package description.
