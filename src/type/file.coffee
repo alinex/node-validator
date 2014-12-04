@@ -51,13 +51,13 @@ module.exports = file =
       value = fspath.normalize value
       value = value[..-2] if value[-1..] is '/'
       # get basedir
-      basedir = options.basedir ? '.'
+      basedir = fspath.resolve options.basedir ? '.'
       # find
       if options.find
         list = fs.findSync basedir,
           include: value
         return null unless list
-        value = list[0]
+        value = list[0][basedir.length+1..]
       # resolve
       if options.resolve
         value = fspath.resolve basedir, value
@@ -102,7 +102,7 @@ module.exports = file =
       value = fspath.normalize value
       value = value[..-2] if value[-1..] is '/'
       # get basedir
-      basedir = options.basedir ? '.'
+      basedir = fspath.resolve options.basedir ? '.'
       # validate
       file.async.find check, path, options, value, (err, value) ->
         return cb err if err
@@ -123,7 +123,7 @@ module.exports = file =
       , (err, list) ->
         return cb err if err
         return cb null, null unless list
-        cb null, value = list[0]
+        cb null, value = list[0][basedir.length+1..]
 
     exists: (check, path, options, value, cb) ->
       return cb null, value unless options.exists
