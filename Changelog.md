@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.4 (2014-12-10)
+-------------------------------------------------
+- Fixed mathjs package specification.
+
 Version 0.3.3 (2014-12-04)
 -------------------------------------------------
 - Updates allowed versions for alinex-fs module.
