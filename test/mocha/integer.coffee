@@ -24,6 +24,8 @@ describe "Integer", ->
       test.fail options, []
       test.fail options, (new Error '????')
       test.fail options, {}
+    it "should fail on not pure integer strings", ->
+      test.fail options, '1g'
     it "should support optional option", ->
       options =
         type: 'integer'
