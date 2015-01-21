@@ -65,7 +65,7 @@ module.exports = file =
         value = fspath.resolve basedir, value
       filepath = fspath.resolve basedir, value
       # exists
-      if options.exists
+      if options.exists or options.filetype
         unless fs.existsSync filepath
           throw check.error path, options, value,
           new Error "The given file '#{value}' has to exist."
@@ -129,8 +129,8 @@ module.exports = file =
         cb null, value = list[0][basedir.length+1..]
 
     exists: (check, path, options, value, cb) ->
-      return cb null, value unless options.exists
-      fs.exists file, (exists) ->
+      return cb null, value unless options.exists or options.filetype
+      fs.exists value, (exists) ->
         unless exists
           return cb check.error path, options, value,
           new Error "The given file '#{value}' has to exist."
