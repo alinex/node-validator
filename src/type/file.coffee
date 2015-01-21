@@ -138,7 +138,7 @@ module.exports = file =
 
     filetype: (check, path, options, value, cb) ->
       return cb null, value unless options.filetype
-      fs.stat file, (err, stats) ->
+      fs.stat value, (err, stats) ->
         return cb err if err
         switch options.filetype
           when 'file', 'f'
