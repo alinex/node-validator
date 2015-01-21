@@ -31,6 +31,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator:string')
 util = require 'util'
+chalk = require 'chalk'
 # include classes and helper
 rules = require '../rules'
 

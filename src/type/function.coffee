@@ -6,6 +6,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator:function')
 util = require 'util'
+chalk = require 'chalk'
 # include classes and helper
 rules = require '../rules'
 
@@ -32,7 +33,8 @@ module.exports =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}"
+      , chalk.grey util.inspect options
       # sanitize
       value = rules.sync.optional check, path, options, value
       return value unless value?

@@ -18,6 +18,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator:byte')
 util = require 'util'
+chalk = require 'chalk'
 math = require 'mathjs'
 # include alinex packages
 {number} = require 'alinex-util'
@@ -58,7 +59,8 @@ module.exports = byte =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}"
+      , chalk.grey util.inspect options
       options = optimize options
       # sanitize
       value = rules.sync.optional check, path, options, value

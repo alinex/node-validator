@@ -6,6 +6,7 @@
 debug = require('debug')('validator:any')
 async = require 'async'
 util = require 'util'
+chalk = require 'chalk'
 # include classes and helper
 rules = require '../rules'
 ValidatorCheck = require '../check'
@@ -31,7 +32,9 @@ module.exports = any =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}"
+      , chalk.grey util.inspect options
+
       # sanitize
       value = rules.sync.optional check, path, options, value
       return value unless value?
@@ -55,7 +58,8 @@ module.exports = any =
 
     # ### Check Type
     type: (check, path, options, value, cb) ->
-      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}"
+      , chalk.grey util.inspect options
       # run sync checks
       try
         # sanitize

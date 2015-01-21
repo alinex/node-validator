@@ -35,6 +35,7 @@
     "alinex-fs": "0.1.x",
     "alinex-util": "0.1.x",
     "async": "0.9.x",
+    "chalk": "0.5.x",
     "debug": ">=0.8.0 <3.0.0",
     "mathjs": "1.x"
   },

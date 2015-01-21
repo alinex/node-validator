@@ -3,6 +3,7 @@
 
 debug = require('debug')('validator:type')
 util = require 'util'
+chalk = require 'chalk'
 # internal classes and helper
 reference = require './reference'
 
@@ -12,7 +13,8 @@ reference = require './reference'
 exports.check = (source, options = {}, value, work, cb) ->
   lib = require "./type/#{options.type}"
   work.refrun = true if options.reference?
-  debug "check #{options.type} '#{value}' in #{source}", util.inspect(options).grey
+  debug "check #{options.type} '#{value}' in #{source}"
+  , chalk.grey util.inspect options
   # check optional
   result = exports.optional source, options, value, cb
   return result unless result is false
@@ -23,7 +25,8 @@ exports.check = (source, options = {}, value, work, cb) ->
 # -------------------------------------------------
 # this may also be used for subcalls.
 exports.reference = (source, options = {}, value, work, cb) ->
-  debug "#{options.type} reference in #{source}", util.inspect(options).grey
+  debug "#{options.type} reference in #{source}"
+  , chalk.grey util.inspect options
   lib = require "./type/#{options.type}"
   # run library check if defined else do the default check here
   if lib.reference?
@@ -95,7 +98,7 @@ exports.error = (err, source = "unknown", options, value) ->
       err = new Error text
     debug "Failed: #{err.message}"
   else
-    debug "Succeeded in #{source}", util.inspect(options).grey
+    debug "Succeeded in #{source}", chalk.grey util.inspect options
   err
 
 # Send value or error

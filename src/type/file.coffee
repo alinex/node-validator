@@ -19,6 +19,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator:file')
 util = require 'util'
+chalk = require 'chalk'
 fs = require 'alinex-fs'
 fspath = require 'path'
 # include classes and helper
@@ -43,7 +44,8 @@ module.exports = file =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}"
+      , chalk.grey util.inspect options
       # first check input type
       value = rules.sync.optional check, path, options, value
       return value unless value?
@@ -94,7 +96,8 @@ module.exports = file =
   async:
     # ### Check Type
     type: (check, path, options, value, cb) ->
-      debug "check #{util.inspect value} in #{check.pathname path}", util.inspect(options).grey
+      debug "check #{util.inspect value} in #{check.pathname path}"
+      , chalk.grey util.inspect options
       # first check input type
       value = rules.sync.optional check, path, options, value
       return value unless value?
