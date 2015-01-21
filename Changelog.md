@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.6 (2015-01-21)
+-------------------------------------------------
+- Fixed bug in async checks for files.
+- Fixed bug with check for existing path.
+
 Version 0.3.5 (2015-01-21)
 -------------------------------------------------
 - Fixed bug in debug output caused missing option display.
