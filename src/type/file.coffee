@@ -99,8 +99,11 @@ module.exports = file =
       debug "check #{util.inspect value} in #{check.pathname path}"
       , chalk.grey util.inspect options
       # first check input type
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
+      try
+        value = rules.sync.optional check, path, options, value
+      catch err
+        return cb err
+      return cb null, value unless value?
       # sanitize
       value = fspath.normalize value
       value = value[..-2] if value[-1..] is '/'
