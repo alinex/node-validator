@@ -61,9 +61,8 @@ module.exports = file =
         return null unless list
         value = list[0][basedir.length+1..]
       # resolve
-      if options.resolve
-        value = fspath.resolve basedir, value
       filepath = fspath.resolve basedir, value
+      value = filepath if options.resolve
       # exists
       if options.exists or options.filetype
         unless fs.existsSync filepath
@@ -113,9 +112,8 @@ module.exports = file =
       file.async.find check, path, options, value, (err, value) ->
         return cb err if err
         # resolve
-        if options.resolve
-          value = fspath.resolve basedir, value
         filepath = fspath.resolve basedir, value
+        value = filepath if options.resolve
         file.async.exists check, path, options, value, (err, value) ->
           return cb err if err
           file.async.filetype check, path, options, value, (err, value) ->
