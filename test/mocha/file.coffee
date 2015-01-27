@@ -58,12 +58,12 @@ describe "File", ->
     it "should support find option", ->
       options =
         type: 'file'
-        find: true
+        find: ['.']
       test.equal options, 'file.js', 'lib/type/file.js'
     it "should support find  and resolve option", ->
       options =
         type: 'file'
-        find: true
+        find: ['.']
         resolve: true
       test.equal options, 'file.js', path.resolve '.', 'lib/type/file.js'
 
@@ -89,7 +89,7 @@ describe "File", ->
         optional: true
         default: 'myfile.txt'
         basedir: '/anywhere'
-        find: true
+        find: ['.']
         filetype: 'file'
 
   describe "selfcheck", ->
@@ -104,6 +104,6 @@ describe "File", ->
         optional: true
         default: 'myfile.txt'
         basedir: '/anywhere'
-        find: true
+        find: ['.']
         exists: true
         filetype: 'file'

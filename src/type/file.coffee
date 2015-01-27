@@ -11,7 +11,7 @@
 # __Check options:__
 #
 # - `exists` - (bool) true to check for already existing entry
-# - `find` - (bool) find the given file anywhere in the base directory
+# - `find` - (array) list of directories in which to search for the file
 # - `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
 
 
@@ -22,6 +22,7 @@ util = require 'util'
 chalk = require 'chalk'
 fs = require 'alinex-fs'
 fspath = require 'path'
+async = require 'async'
 # include classes and helper
 ValidatorCheck = require '../check'
 rules = require '../rules'
@@ -122,12 +123,18 @@ module.exports = file =
 
     find: (check, path, options, value, cb) ->
       return cb null, value unless options.find
-      fs.find basedir,
-        include: value
-      , (err, list) ->
-        return cb err if err
-        return cb null, null unless list
-        cb null, value = list[0][basedir.length+1..]
+      # search in list
+      async.map options.find, (dir, cb) ->
+        fs.find dir,
+          include: value
+        , (err, list) ->
+          cb err, list
+      , (err, lists) ->
+        for list in lists
+          # retrieve first found
+          return cb null, list[0] if list?.length
+        # return null if nothing found
+        cb()
 
     exists: (check, path, options, value, cb) ->
       return cb null, value unless options.exists or options.filetype
@@ -193,8 +200,10 @@ module.exports = file =
           type: 'boolean'
           default: false
         find:
-          type: 'boolean'
-          default: false
+          type: 'array'
+          optional: true
+          entries:
+            type: 'string'
         filetype:
           type: 'string'
           lowerCase: true

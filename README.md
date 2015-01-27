@@ -403,7 +403,7 @@ __Sanitize options:__
 __Check options:__
 
 - `exists` - (bool) true to check for already existing entry
-- `find` - (bool) find the given file anywhere in the base directory
+- `find` - (array) list of directories in which to search for the file
 - `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
 
 
