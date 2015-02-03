@@ -64,6 +64,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre><span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:type&#39;</span><span class="p">)</span>
 <span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
+<span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
 
 </pre></div>
         </td>
@@ -98,7 +99,8 @@
 <span class="nv">exports.check = </span><span class="nf">(source, options = {}, value, work, cb) -&gt;</span>
   <span class="nv">lib = </span><span class="nx">require</span> <span class="s">&quot;./type/</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
   <span class="nv">work.refrun = </span><span class="kc">true</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">reference</span><span class="o">?</span>
-  <span class="nx">debug</span> <span class="s">&quot;check </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s"> &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; in </span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">grey</span>
+  <span class="nx">debug</span> <span class="s">&quot;check </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s"> &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; in </span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="p">,</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">options</span>
 
 </pre></div>
         </td>
@@ -145,7 +147,8 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">exports.reference = </span><span class="nf">(source, options = {}, value, work, cb) -&gt;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s"> reference in </span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">grey</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s"> reference in </span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="p">,</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">options</span>
   <span class="nv">lib = </span><span class="nx">require</span> <span class="s">&quot;./type/</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
 
 </pre></div>
@@ -327,7 +330,7 @@ This will contain the title and description from the configuration if there.</p>
       <span class="nv">err = </span><span class="k">new</span> <span class="nb">Error</span> <span class="nx">text</span>
     <span class="nx">debug</span> <span class="s">&quot;Failed: </span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span>
   <span class="k">else</span>
-    <span class="nx">debug</span> <span class="s">&quot;Succeeded in </span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">options</span><span class="p">).</span><span class="nx">grey</span>
+    <span class="nx">debug</span> <span class="s">&quot;Succeeded in </span><span class="si">#{</span><span class="nx">source</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">options</span>
   <span class="nx">err</span>
 
 

@@ -133,7 +133,7 @@ external information.</p>
 <p>The validation rules are really simple, but they will get more complex as your
 data structure gains complexity.</p>
 
-<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex.html">Alinex Universe</a>
+<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
 following the code standards defined there.</p>
 
 
@@ -773,7 +773,7 @@ like 50% are converted to floats like 0.5.</p>
 
 <ul>
 <li><code>exists</code> - (bool) true to check for already existing entry</li>
-<li><code>find</code> - (bool) find the given file anywhere in the base directory</li>
+<li><code>find</code> - (array) list of directories in which to search for the file</li>
 <li><code>filetype</code> - (string) check against inode type: f, file, d, dir, directory, l, link</li>
 </ul>
 
@@ -837,7 +837,7 @@ checks it's configuration file.</p>
 
 
 <p>The validator is implemented as <code>index</code> which has the public available methods,
-<code>helper</code> which is used for all data exchange and calls and the real check
+<code>helper</code> which is used for all data exchange and calls the real check
 implementations.</p>
 
 
