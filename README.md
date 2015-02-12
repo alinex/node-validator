@@ -406,6 +406,10 @@ __Check options:__
 - `find` - (array) list of directories in which to search for the file
 - `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
 
+### RegExp
+
+Check that the given text is a regular expression.
+
 
 Complete Example
 -------------------------------------------------
