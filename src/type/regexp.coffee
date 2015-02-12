@@ -47,7 +47,7 @@ module.exports = hostname =
       value = check.subcall path, suboptions, value
       # transform into regexp
       parts = value.match /^\/(.*?)\/([gim]*)$/
-      new RegExp match[1], match[2]
+      new RegExp parts[1], parts[2]
 
 
   # Selfcheck
