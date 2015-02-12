@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.8 (2015-02-12)
+-------------------------------------------------
+- Added regexp validation.
+
 Version 0.3.7 (2015-02-03)
 -------------------------------------------------
 - Extended file find check to use multiple search paths.
