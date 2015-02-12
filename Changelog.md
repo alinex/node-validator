@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.9 (2015-02-12)
+-------------------------------------------------
+- Fixed type error in regexp check.
+
 Version 0.3.8 (2015-02-12)
 -------------------------------------------------
 - Added regexp validation.
