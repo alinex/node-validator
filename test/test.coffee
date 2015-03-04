@@ -40,7 +40,6 @@ exports.fail = (options, value, data, cb) ->
   validator.check 'test', options, value, data, (err, result) ->
     expect(err, value).to.exist
     expect(err, value).to.be.an.instanceof Error
-    console.log err.message
     cb()
 
 exports.equal = (options, value, goal, cb) ->
@@ -92,6 +91,7 @@ exports.desc = (options) ->
   desc = validator.describe options
   expect(desc).to.be.a 'string'
   expect(desc).to.have.length.of.at.least 10
+  #console.log desc
 
 exports.selfcheck = (options) ->
   validator.selfcheck 'test', options

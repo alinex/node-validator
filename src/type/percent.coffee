@@ -32,8 +32,8 @@ module.exports = percent =
     type: (options) ->
       options = optimize options
       # combine into message
-      text = 'A percentage value which may be given as decimal 0..1
-      or as percent value like 30%. '
+      text = 'A percentage value as decimal like 0.3 but it may be given
+      as percent value like 30%, too. '
       text += rules.describe.optional options
       text += float.describe.round options
       text += float.describe.minmax options

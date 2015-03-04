@@ -30,7 +30,6 @@ module.exports = hostname =
       text = 'A valid hostname. '
       text += rules.describe.optional options
       text += ValidatorCheck.describe suboptions
-      text
 
   # Synchronous check
   # -------------------------------------------------

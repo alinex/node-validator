@@ -58,8 +58,8 @@ module.exports = float =
         type = switch options.round
           when 'to ceil' then Math.ceil value
           when 'to floor' then Math.floor value
-          else 'arithḿetic'
-        return "Value will be rounded #{type} to #{options.decimals} decimals. "
+          else 'arithḿeticaly'
+        return "The value will be rounded #{type} to #{options.decimals} decimals. "
       ''
 
     minmax: (options) ->
@@ -69,6 +69,7 @@ module.exports = float =
         return "The value should be greater than #{options.min}. "
       else if options.max?
         return "The value should be lower than #{options.max}. "
+      ''
 
   # Synchronous check
   # -------------------------------------------------

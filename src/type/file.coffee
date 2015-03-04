@@ -37,7 +37,6 @@ module.exports = file =
     type: (options) ->
       text = 'A valid filesystem entry. '
       text += rules.describe.optional options
-      text
 
   # Synchronous check
   # -------------------------------------------------

@@ -20,9 +20,8 @@ module.exports =
     # ### Type Description
     type: (options) ->
       # combine into message
-      if options.class?
-        type = if options.class then 'class' else 'function'
-        text = "A #{type} reference. "
+      text = if options.class?
+        "A #{if options.class then 'class' else 'function'} reference. "
       else
         "The value has to be a function/class. "
       text += rules.describe.optional options

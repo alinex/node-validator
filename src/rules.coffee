@@ -15,7 +15,13 @@ module.exports = rules =
   describe:
 
     optional: (options) ->
-      value = if options.default? then util.inspect options.default else null
+      value = switch
+        when typeof options.default is 'function' and options.default.name
+          options.default.name
+        when options.default?
+          util.inspect options.default
+        else
+          null
       "It's optional and will be set to #{value} if not specified. "
 
   # Synchronous checks

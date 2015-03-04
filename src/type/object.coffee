@@ -34,37 +34,29 @@ module.exports = object =
       text += rules.describe.optional options
       text += object.describe.instanceof options
       text += object.describe.keys options
-      if options.entries?
-        if options.entries.type? and typeof options.entries.type is 'string'
-          text += "All entries should be:\n"
-          text += "#{ValidatorCheck.describe options.entries} ".replace /\n/g, '\n  '
-        else if options.entries.length
-          text += "Entries should contain:\n"
-          for entry, num in options.entries
-            if options.entries[key]?
-              text += "\n- #{key} - #{ValidatorCheck.describe options.entries[key]} "\
-              .replace '\n', '\n  '
-            else
-              text += "\n- #{key} - Free input without specification. ".replace /\n/g, '\n  '
-      text
 
     instanceof: (options) ->
       if options.instanceOf?
-        return "The object has to be an instance of #{options.instanceOf}. "
+        return "The object has to be an instance of #{options.instanceOf.name}. "
       ''
 
     keys: (options) ->
       text = ''
       if options.mandatoryKeys?
-        text += "The keys '#{options.mandatoryKeys.join "', '"}' have to be included. "
+        text += "The #{if options.mandatoryKeys.length>1 then 'keys' else 'key'}
+        '#{options.mandatoryKeys.join "', '"}' have to be included. "
       if options.allowedKeys
         if typeof options.allowedKeys is 'boolean'
           text += "Only specified keys are allowed. "
         else
-          text += "The keys '#{options.allowedKeys.join "', '"}' are also allowed. "
-      if options.entries?.type is 'string'
-        text += "\n" + ValidatorCheck.describe options.entries
+          text += "The #{if options.allowedKeys.length>1 then 'keys' else 'key'}
+          '#{options.allowedKeys.join "', '"}'
+          #{if options.allowedKeys.length>1 then 'are' else 'is'} also allowed. "
+      if typeof options.entries?.type is 'string'
+        text += "The entries should be:\n"
+        text += ValidatorCheck.describe options.entries.type
       else if options.entries?
+        text += "The following entries have a specific format:"
         for key in Object.keys options.entries
           suboptions = if typeof options.entries.type is 'string'
             options.entries
@@ -72,9 +64,8 @@ module.exports = object =
             options.entries[key]
           continue unless suboptions?
           # run subcheck
-          text += "\n- #{key}"
-# removed to not be to verbose
-#          text += "\n  " + ValidatorCheck.describe(suboptions).replace /\n/g, '\n  '
+          text += "\n- #{key}:"
+          text += "\n  " + ValidatorCheck.describe(suboptions).replace /\n/g, '\n  '
       text
 
   # Synchronous check

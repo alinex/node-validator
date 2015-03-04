@@ -49,7 +49,7 @@ module.exports = byte =
       # combine into message
       text = 'A byte value. '
       text += rules.describe.optional options
-      text += "If defined as a text you may use a prefixes like: k, M, G, P, T, E, Z, Y
+      text += "If defined as a text you may use a prefix like: k, M, G, P, T, E, Z, Y
       also with the unit B like '12MB' or '3.7 GiB'. "
       text += float.describe.minmax options
 

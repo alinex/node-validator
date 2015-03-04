@@ -76,10 +76,10 @@ describe "Percent", ->
         description: 'Some test rules'
         type: 'percent'
         optional: true
-        default: 5
+        default: 0.5
         round: 2
-        min: 2
-        max: 200
+        min: 0.2
+        max: 2
 
   describe "selfcheck", ->
 
@@ -91,7 +91,7 @@ describe "Percent", ->
         description: 'Some test rules'
         type: 'percent'
         optional: true
-        default: 5
+        default: 0.5
         round: 2
-        min: 2
-        max: 200
+        min: 0.2
+        max: 2

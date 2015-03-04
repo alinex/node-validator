@@ -41,12 +41,13 @@ module.exports = array =
       text += array.describe.minmax options
       if options.entries?
         if Array.isArray options.entries
-          text += "Entries should contain:\n"
+          text += "Entries should contain:"
           for entry, num in options.entries
             if options.entries[num]
-              text += "\n#{num}. #{ValidatorCheck.describe options.entries[num]} "
+              text += "\n- #{num}:"
+              text += "\n  " + ValidatorCheck.describe(options.entries[num]).replace /\n/g, '\n  '
             else
-              text += "\n#{num}. Free input without specification. "
+              text += "\n- #{num}: Free input without specification. "
         else
           text += "All entries should be:\n"
           text += "#{ValidatorCheck.describe options.entries} ".replace /\n/g, '\n  '

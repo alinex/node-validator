@@ -89,18 +89,18 @@ module.exports = float =
         text += "The text should match: "
         if Array.isArray options.match
           for entry in options.match
-            text += "'#{entry}', "
+            text += "#{entry}, "
           text = text.replace /, $/, '. '
         else
-          text += "'#{options.match}'. "
+          text += "#{options.match}. "
       if options.matchNot?
         text += "The text shouldn't match: "
         if Array.isArray options.matchNot
           for entry in options.matchNot
-            text += "'#{entry}', "
+            text += "#{entry}, "
           text = text.replace /, $/, '. '
         else
-          text += "'#{options.matchNot}'. "
+          text += "#{options.matchNot}. "
       text
 
   # Synchronous check
