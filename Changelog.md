@@ -4,6 +4,13 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.10 (2015-03-04)
+-------------------------------------------------
+- Optimized description text display.
+- Optimized wording in error messages.
+- Rewrite examples in coffeescript.
+- Updated dependent modules.
+
 Version 0.3.9 (2015-02-12)
 -------------------------------------------------
 - Fixed type error in regexp check.
