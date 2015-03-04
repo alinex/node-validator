@@ -50,7 +50,8 @@ module.exports = any =
           error[num] = err
       # error, nothing matched
       throw check.error path, options, value,
-      new Error "None of the alternatives are matched (#{error.map((e) -> e.message).join ''})"
+      new Error "None of the alternatives are matched
+      (#{error.map((e) -> e.message).join('/ ').trim()})"
 
   # Asynchronous check
   # -------------------------------------------------
@@ -82,7 +83,8 @@ module.exports = any =
         for result in results
           return cb null, result if result?
         cb check.error path, options, value,
-        new Error "None of the alternatives are matched (#{error.map((e) -> e.message).join ''})"
+        new Error "None of the alternatives are matched
+        (#{error.map((e) -> e.message).join('/ ').trim()})"
 
 
   # Selfcheck

@@ -47,7 +47,7 @@ module.exports = any =
       catch err
         # error, not all matched
         throw check.error path, options, value,
-        new Error "Not all of the rules matched"
+        new Error "Not all of the rules matched in #{check.pathname path}"
       value
 
 

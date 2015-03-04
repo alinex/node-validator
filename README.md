@@ -151,7 +151,7 @@ __Mocha coffee example:__
     ...
 
 
-Possible Types
+Possible Check Types
 -------------------------------------------------
 
 ### boolean

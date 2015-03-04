@@ -129,10 +129,10 @@ module.exports = array =
         new Error "Exactly #{options.minLength} entries are required"
       else if options.minLength? and options.minLength > value.length
         throw check.error path, options, value,
-        new Error "At least #{options.minLength} entries are required in list "
+        new Error "At least #{options.minLength} entries are required as list"
       else if options.maxLength? and options.maxLength < value.length
         throw check.error path, options, value,
-        new Error "Not more than #{options.maxLength} entries are allowed in list"
+        new Error "Not more than #{options.maxLength} entries are allowed as list"
       value
 
   # Asynchronous check

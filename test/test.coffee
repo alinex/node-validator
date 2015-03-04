@@ -40,6 +40,7 @@ exports.fail = (options, value, data, cb) ->
   validator.check 'test', options, value, data, (err, result) ->
     expect(err, value).to.exist
     expect(err, value).to.be.an.instanceof Error
+    console.log err.message
     cb()
 
 exports.equal = (options, value, goal, cb) ->
