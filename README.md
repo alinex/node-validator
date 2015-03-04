@@ -2,7 +2,6 @@ Package: alinex-validator
 =================================================
 
 [![Build Status] (https://travis-ci.org/alinex/node-validator.svg?branch=master)](https://travis-ci.org/alinex/node-validator)
-[![Coverage Status] (https://coveralls.io/repos/alinex/node-validator/badge.png?branch=master)](https://coveralls.io/r/alinex/node-validator?branch=master)
 [![Dependency Status] (https://gemnasium.com/alinex/node-validator.png)](https://gemnasium.com/alinex/node-validator)
 
 This module will help validating complex structures. And may be used for all
@@ -36,7 +35,7 @@ Usage
 
 To use the validator you have to first include it:
 
-    var validator = require('alinex-validator');
+    validator = require 'alinex-validator'
 
 All checks are called with:
 
@@ -51,25 +50,22 @@ Only if an asynchronous check is called synchronously it will throw an Error.
 
 Synchronous call:
 
-    var value = validator.check('test', value, {
-      type: 'integer',
-      min: 0,
+    value = validator.check 'test', value,
+      type: 'integer'
+      min: 0
       max: 100
-    });
 
 Asynchronous call:
 
-    validator.check('test', value, {
-      type: 'integer',
-      min: 0,
+    validator.check 'test', value,
+      type: 'integer'
+      min: 0
       max: 100
-    }, function(err, value) {
-      if (err) {
-        // error handling
-      } else  {
-        // do something with value
-      }
-    });
+    , (err, value) ->
+      if err
+        # error handling
+      else
+        # do something with value
 
 The checks are split up into several packages to load on demand.
 
@@ -77,24 +73,21 @@ The checks are split up into several packages to load on demand.
 
 If you won't change the value it is possible to call a simplified form:
 
-    if (validator.is('test', value, {
-      type: 'integer',
-      min: 0,
-      max: 100
-    })) {
-      // do something
-    };
+    if validator.is('test', value,
+        type: 'integer',
+        min: 0,
+        max: 100
+      # do something
 
 ### Get description
 
 This method may be used to get a human readable description of how a value
 has to be to validate.
 
-    console.log validator.describe({
+    console.log validator.describe
       type: 'integer',
       min: 0,
       max: 100
-    });
 
 
 Optional values
@@ -127,18 +120,16 @@ To get even more descriptive reporting it is possible to set a title and abstrac
 for the given field in the configuration. This will be used in error reporting
 and `describe()` calls.
 
-    validator.check('test', value, {
+    validator.check 'test', value,
       type: 'float',
       title: 'Overall Timeout',
       description: 'time in milliseconds the whole test may take',
       min: 500
-    }, function(err, value) {
-      if (err) {
-        // there will be the error
-      } else  {
-        // do something with value
-      }
-    });
+    , (err, value) ->
+      if err
+        # there will be the error
+      else
+        # do something with value
 
 This may result in the following error:
 
@@ -176,9 +167,8 @@ __Validate options:__
 
 __Example:__
 
-    var value = Validator.check('verboseMode', value, {
+    value = Validator.check 'verboseMode', value,
       type: 'boolean'
-    });
 
 ### function
 
@@ -189,9 +179,8 @@ __Options:__ None
 
 __Example:__
 
-    var value = Validator.check('callback', value, {
+    value = Validator.check 'callback', value,
       type: 'function'
-    });
 
 ### string
 
@@ -303,33 +292,34 @@ __Options:__
 So you have three different ways to specify objects. First you may have class
 instances as the object. Then you only can use the `instanceOf` check.
 
-    var value = Validator.check('callback', value, {
-      type: 'object',
+    value = Validator.check 'callback', value,
+      type: 'object'
       instanceOf: RegExp
-    });
 
 Next you may have an object in which you only want to specify what attributes
 it should have but not checking the attribute values:
 
-    var value = Validator.check('callback', value, {
-      type: 'object',
-      mandatoryKeys: ['name'],
+    value = Validator.check 'callback', value,
+      type: 'object'
+      mandatoryKeys: ['name']
       allowedKeys: ['mail', 'phone']
-    });
 
 If you don't specify `allowedKeys` more attributes with other names are possible.
 
 And the last and most complex situation is a deep checking structure:
 
-    var value = Validator.check('callback', value, {
-      type: 'object',
-      allowedKeys: true,
-      entries: {
-        name: { type: 'string' },
-        mail: { type: 'string', optional: true },
-        phone: { type: 'string', optional: true }
-      }
-    });
+    value = Validator.check 'callback', value,
+      type: 'object'
+      allowedKeys: true
+      entries:
+        name:
+          type: 'string'
+        mail:
+          type: 'string'
+          optional: true
+        phone:
+          type: 'string'
+          optional: true
 
 Here `allowedKeys` will check that no attributes are used which are not specified
 in the entries. Which attribute is optional may be specified within the attributes
