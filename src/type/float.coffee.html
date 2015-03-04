@@ -212,8 +212,8 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
         <span class="nv">type = </span><span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span>
           <span class="k">when</span> <span class="s">&#39;to ceil&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span> <span class="nx">value</span>
           <span class="k">when</span> <span class="s">&#39;to floor&#39;</span> <span class="k">then</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span> <span class="nx">value</span>
-          <span class="k">else</span> <span class="s">&#39;arithḿetic&#39;</span>
-        <span class="k">return</span> <span class="s">&quot;Value will be rounded </span><span class="si">#{</span><span class="nx">type</span><span class="si">}</span><span class="s"> to </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">decimals</span><span class="si">}</span><span class="s"> decimals. &quot;</span>
+          <span class="k">else</span> <span class="s">&#39;arithḿeticaly&#39;</span>
+        <span class="k">return</span> <span class="s">&quot;The value will be rounded </span><span class="si">#{</span><span class="nx">type</span><span class="si">}</span><span class="s"> to </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">decimals</span><span class="si">}</span><span class="s"> decimals. &quot;</span>
       <span class="s">&#39;&#39;</span>
 
     <span class="nv">minmax: </span><span class="nf">(options) -&gt;</span>
@@ -223,6 +223,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
         <span class="k">return</span> <span class="s">&quot;The value should be greater than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">min</span><span class="si">}</span><span class="s">. &quot;</span>
       <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span>
         <span class="k">return</span> <span class="s">&quot;The value should be lower than </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
+      <span class="s">&#39;&#39;</span>
 
 
 </pre></div>
