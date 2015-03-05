@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.11 (2015-03-05)
+-------------------------------------------------
+- Added correct error message if referenced file could not be found.
+
 Version 0.3.10 (2015-03-04)
 -------------------------------------------------
 - Optimized description text display.
