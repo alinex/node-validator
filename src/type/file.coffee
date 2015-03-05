@@ -109,16 +109,18 @@ module.exports = file =
       # get basedir
       basedir = fspath.resolve options.basedir ? '.'
       # validate
-      file.async.find check, path, options, value, (err, value) ->
+      file.async.find check, path, options, value, (err, found) ->
         return cb err if err
+        unless found
+          return cb new Error "Could not find the file #{value} in #{check.pathname path}"
         # resolve
-        filepath = fspath.resolve basedir, value
-        value = filepath if options.resolve
-        file.async.exists check, path, options, value, (err, value) ->
+        filepath = fspath.resolve basedir, found
+        found = filepath if options.resolve
+        file.async.exists check, path, options, found, (err, found) ->
           return cb err if err
-          file.async.filetype check, path, options, value, (err, value) ->
+          file.async.filetype check, path, options, found, (err, found) ->
             return cb err if err
-            cb null, value
+            cb null, found
 
     find: (check, path, options, value, cb) ->
       return cb null, value unless options.find
@@ -140,7 +142,7 @@ module.exports = file =
       fs.exists value, (exists) ->
         unless exists
           return cb check.error path, options, value,
-          new Error "The given file '#{value}' has to exist."
+          cb new Error "The given file '#{value}' has to exist."
         cb null, value
 
     filetype: (check, path, options, value, cb) ->
@@ -164,7 +166,7 @@ module.exports = file =
             return cb null, value if stats.isSocket()
             debug "skip #{file} because not a socket entry"
         return cb check.error path, options, value,
-        new Error "The given file '#{value}' is not a #{filetype} entry."
+        cb new Error "The given file '#{value}' is not a #{filetype} entry."
 
 
   # Selfcheck
