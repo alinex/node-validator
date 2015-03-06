@@ -35,7 +35,9 @@ Usage
 
 To use the validator you have to first include it:
 
-    validator = require 'alinex-validator'
+``` coffee
+validator = require 'alinex-validator'
+```
 
 All checks are called with:
 
@@ -50,22 +52,26 @@ Only if an asynchronous check is called synchronously it will throw an Error.
 
 Synchronous call:
 
-    value = validator.check 'test', value,
-      type: 'integer'
-      min: 0
-      max: 100
+``` coffee
+value = validator.check 'test', value,
+  type: 'integer'
+  min: 0
+  max: 100
+```
 
 Asynchronous call:
 
-    validator.check 'test', value,
-      type: 'integer'
-      min: 0
-      max: 100
-    , (err, value) ->
-      if err
-        # error handling
-      else
-        # do something with value
+``` coffee
+validator.check 'test', value,
+  type: 'integer'
+  min: 0
+  max: 100
+, (err, value) ->
+  if err
+    # error handling
+  else
+    # do something with value
+```
 
 The checks are split up into several packages to load on demand.
 
@@ -73,21 +79,25 @@ The checks are split up into several packages to load on demand.
 
 If you won't change the value it is possible to call a simplified form:
 
-    if validator.is('test', value,
-        type: 'integer',
-        min: 0,
-        max: 100
-      # do something
+``` coffee
+if validator.is('test', value,
+    type: 'integer',
+    min: 0,
+    max: 100
+  # do something
+```
 
 ### Get description
 
 This method may be used to get a human readable description of how a value
 has to be to validate.
 
-    console.log validator.describe
-      type: 'integer',
-      min: 0,
-      max: 100
+``` coffee
+console.log validator.describe
+  type: 'integer',
+  min: 0,
+  max: 100
+```
 
 
 Optional values
@@ -120,16 +130,18 @@ To get even more descriptive reporting it is possible to set a title and abstrac
 for the given field in the configuration. This will be used in error reporting
 and `describe()` calls.
 
-    validator.check 'test', value,
-      type: 'float',
-      title: 'Overall Timeout',
-      description: 'time in milliseconds the whole test may take',
-      min: 500
-    , (err, value) ->
-      if err
-        # there will be the error
-      else
-        # do something with value
+``` coffee
+validator.check 'test', value,
+  type: 'float',
+  title: 'Overall Timeout',
+  description: 'time in milliseconds the whole test may take',
+  min: 500
+, (err, value) ->
+  if err
+    # there will be the error
+  else
+    # do something with value
+```
 
 This may result in the following error:
 
@@ -145,10 +157,12 @@ To do this you have to add it in your tests:
 
 __Mocha coffee example:__
 
-    ...
-    it "should has correct validator rules", ->
-      validator.selfcheck 'config', MyObject.config
-    ...
+``` coffee
+# ...
+it "should has correct validator rules", ->
+  validator.selfcheck 'config', MyObject.config
+# ...
+```
 
 
 Possible Check Types
@@ -167,8 +181,10 @@ __Validate options:__
 
 __Example:__
 
-    value = Validator.check 'verboseMode', value,
-      type: 'boolean'
+``` coffee
+value = Validator.check 'verboseMode', value,
+  type: 'boolean'
+```
 
 ### function
 
@@ -179,8 +195,10 @@ __Options:__ None
 
 __Example:__
 
-    value = Validator.check 'callback', value,
-      type: 'function'
+``` coffee
+value = Validator.check 'callback', value,
+  type: 'function'
+```
 
 ### string
 
@@ -292,34 +310,40 @@ __Options:__
 So you have three different ways to specify objects. First you may have class
 instances as the object. Then you only can use the `instanceOf` check.
 
-    value = Validator.check 'callback', value,
-      type: 'object'
-      instanceOf: RegExp
+``` coffee
+value = Validator.check 'callback', value,
+  type: 'object'
+  instanceOf: RegExp
+```
 
 Next you may have an object in which you only want to specify what attributes
 it should have but not checking the attribute values:
 
-    value = Validator.check 'callback', value,
-      type: 'object'
-      mandatoryKeys: ['name']
-      allowedKeys: ['mail', 'phone']
+``` coffee
+value = Validator.check 'callback', value,
+  type: 'object'
+  mandatoryKeys: ['name']
+  allowedKeys: ['mail', 'phone']
+```
 
 If you don't specify `allowedKeys` more attributes with other names are possible.
 
 And the last and most complex situation is a deep checking structure:
 
-    value = Validator.check 'callback', value,
-      type: 'object'
-      allowedKeys: true
-      entries:
-        name:
-          type: 'string'
-        mail:
-          type: 'string'
-          optional: true
-        phone:
-          type: 'string'
-          optional: true
+``` coffee
+value = Validator.check 'callback', value,
+  type: 'object'
+  allowedKeys: true
+  entries:
+    name:
+      type: 'string'
+    mail:
+      type: 'string'
+      optional: true
+    phone:
+      type: 'string'
+      optional: true
+```
 
 Here `allowedKeys` will check that no attributes are used which are not specified
 in the entries. Which attribute is optional may be specified within the attributes
@@ -407,39 +431,41 @@ Complete Example
 The following check structure comes from an coffee script program which
 checks it's configuration file.
 
-    title: "Monitoring Configuration"
+``` coffee
+title: "Monitoring Configuration"
+type: 'object'
+allowedKeys: ['runat', 'contacts', 'email']
+entries:
+  runat:
+    title: "Location"
+    description: "the location of this machine to run only tests which have
+      the same location or no location at all"
+    type: 'string'
+    optional: true
+  contacts:
+    title: "Contacts"
+    description: "the possible contacts to be referred from controller for
+      email alerts"
     type: 'object'
-    allowedKeys: ['runat', 'contacts', 'email']
     entries:
-      runat:
-        title: "Location"
-        description: "the location of this machine to run only tests which have
-          the same location or no location at all"
-        type: 'string'
-        optional: true
-      contacts:
-        title: "Contacts"
-        description: "the possible contacts to be referred from controller for
-          email alerts"
-        type: 'object'
+      type: 'any'
+      entries: [
+        title: "Contact Group"
+        description: "the list of references in the group specifies the individual
+          contacts"
+        type: 'array'
         entries:
-          type: 'any'
-          entries: [
-            title: "Contact Group"
-            description: "the list of references in the group specifies the individual
-              contacts"
-            type: 'array'
-            entries:
-              type: 'string'
-          ,
-            title: "Contact Details"
-            description: "the name and email address for a specific contact"
-            type: 'object'
-            mandatoryKeys: ['email']
-            allowedKeys: ['name']
-            entries:
-              type: 'string'
-          ]
+          type: 'string'
+      ,
+        title: "Contact Details"
+        description: "the name and email address for a specific contact"
+        type: 'object'
+        mandatoryKeys: ['email']
+        allowedKeys: ['name']
+        entries:
+          type: 'string'
+      ]
+```
 
 
 Package structure
