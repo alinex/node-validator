@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "home/alex/a3/node-validator/READMEmd", defaultSidebar = true;
+    var relativeDir = "", thisFile = "home/alex/a3//README.md", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
   <script src="fileSearch.js"></script>
@@ -169,7 +169,7 @@ following the code standards defined there.</p>
 <p>To use the validator you have to first include it:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">validator</span> <span class="o">=</span> <span class="nx">require</span> <span class="s1">&#39;alinex-validator&#39;</span>
+<div class="highlight"><pre><code><span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;alinex-validator&#39;</span>
 </code></pre></div>
 
 
@@ -190,10 +190,10 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 <p>Synchronous call:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">value</span> <span class="o">=</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;integer&#39;</span>
-  <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span>
-  <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
+<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+  <span class="nv">min: </span><span class="mi">0</span>
+  <span class="nv">max: </span><span class="mi">100</span>
 </code></pre></div>
 
 
@@ -201,15 +201,15 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 <p>Asynchronous call:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;integer&#39;</span>
-  <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span>
-  <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
-<span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="o">-&gt;</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+  <span class="nv">min: </span><span class="mi">0</span>
+  <span class="nv">max: </span><span class="mi">100</span>
+<span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
   <span class="k">if</span> <span class="nx">err</span>
-    <span class="err">#</span> <span class="nx">error</span> <span class="nx">handling</span>
+    <span class="c1"># error handling</span>
   <span class="k">else</span>
-    <span class="err">#</span> <span class="k">do</span> <span class="nx">something</span> <span class="kd">with</span> <span class="nx">value</span>
+    <span class="c1"># do something with value</span>
 </code></pre></div>
 
 
@@ -228,11 +228,11 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 <p>If you won't change the value it is possible to call a simplified form:</p>
 
 
-<div class="highlight"><pre><code><span class="k">if</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">is</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span>
-    <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
-  <span class="err">#</span> <span class="k">do</span> <span class="nx">something</span>
+<div class="highlight"><pre><code><span class="k">if</span> <span class="nx">validator</span><span class="p">.</span><span class="o">is</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+    <span class="nv">type: </span><span class="s">&#39;integer&#39;</span><span class="p">,</span>
+    <span class="nv">min: </span><span class="mi">0</span><span class="p">,</span>
+    <span class="nv">max: </span><span class="mi">100</span>
+  <span class="c1"># do something</span>
 </code></pre></div>
 
 
@@ -251,9 +251,9 @@ has to be to validate.</p>
 
 
 <div class="highlight"><pre><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;integer&#39;</span><span class="p">,</span>
-  <span class="nx">min</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
-  <span class="nx">max</span><span class="o">:</span> <span class="mi">100</span>
+  <span class="nv">type: </span><span class="s">&#39;integer&#39;</span><span class="p">,</span>
+  <span class="nv">min: </span><span class="mi">0</span><span class="p">,</span>
+  <span class="nv">max: </span><span class="mi">100</span>
 </code></pre></div>
 
 
@@ -312,16 +312,16 @@ for the given field in the configuration. This will be used in error reporting
 and <code>describe()</code> calls.</p>
 
 
-<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span>
-  <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Overall Timeout&#39;</span><span class="p">,</span>
-  <span class="nx">description</span><span class="o">:</span> <span class="s1">&#39;time in milliseconds the whole test may take&#39;</span><span class="p">,</span>
-  <span class="nx">min</span><span class="o">:</span> <span class="mi">500</span>
-<span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="o">-&gt;</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;float&#39;</span><span class="p">,</span>
+  <span class="nv">title: </span><span class="s">&#39;Overall Timeout&#39;</span><span class="p">,</span>
+  <span class="nv">description: </span><span class="s">&#39;time in milliseconds the whole test may take&#39;</span><span class="p">,</span>
+  <span class="nv">min: </span><span class="mi">500</span>
+<span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
   <span class="k">if</span> <span class="nx">err</span>
-    <span class="err">#</span> <span class="nx">there</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">the</span> <span class="nx">error</span>
+    <span class="c1"># there will be the error</span>
   <span class="k">else</span>
-    <span class="err">#</span> <span class="k">do</span> <span class="nx">something</span> <span class="kd">with</span> <span class="nx">value</span>
+    <span class="c1"># do something with value</span>
 </code></pre></div>
 
 
@@ -349,10 +349,10 @@ To do this you have to add it in your tests:</p>
 <p><strong>Mocha coffee example:</strong></p>
 
 
-<div class="highlight"><pre><code><span class="p">...</span>
-<span class="nx">it</span> <span class="s2">&quot;should has correct validator rules&quot;</span><span class="p">,</span> <span class="o">-&gt;</span>
-  <span class="nx">validator</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="nx">MyObject</span><span class="p">.</span><span class="nx">config</span>
-<span class="p">...</span>
+<div class="highlight"><pre><code><span class="c1"># ...</span>
+<span class="nx">it</span> <span class="s">&quot;should has correct validator rules&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span>
+  <span class="nx">validator</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="s">&#39;config&#39;</span><span class="p">,</span> <span class="nx">MyObject</span><span class="p">.</span><span class="nx">config</span>
+<span class="c1"># ...</span>
 </code></pre></div>
 
 
@@ -389,8 +389,8 @@ Other values are not allowed.</p>
 <p><strong>Example:</strong></p>
 
 
-<div class="highlight"><pre><code><span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s1">&#39;verboseMode&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;boolean&#39;</span>
+<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;verboseMode&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
 </code></pre></div>
 
 
@@ -412,8 +412,8 @@ Other values are not allowed.</p>
 <p><strong>Example:</strong></p>
 
 
-<div class="highlight"><pre><code><span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;function&#39;</span>
+<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;function&#39;</span>
 </code></pre></div>
 
 
@@ -595,9 +595,9 @@ or true to use the list from entries definition</li>
 instances as the object. Then you only can use the <code>instanceOf</code> check.</p>
 
 
-<div class="highlight"><pre><code><span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
-  <span class="nx">instanceOf</span><span class="o">:</span> <span class="nb">RegExp</span>
+<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+  <span class="nv">instanceOf: </span><span class="nb">RegExp</span>
 </code></pre></div>
 
 
@@ -606,10 +606,10 @@ instances as the object. Then you only can use the <code>instanceOf</code> check
 it should have but not checking the attribute values:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
-  <span class="nx">mandatoryKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-  <span class="nx">allowedKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;mail&#39;</span><span class="p">,</span> <span class="s1">&#39;phone&#39;</span><span class="p">]</span>
+<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+  <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+  <span class="nv">allowedKeys: </span><span class="p">[</span><span class="s">&#39;mail&#39;</span><span class="p">,</span> <span class="s">&#39;phone&#39;</span><span class="p">]</span>
 </code></pre></div>
 
 
@@ -619,18 +619,18 @@ it should have but not checking the attribute values:</p>
 <p>And the last and most complex situation is a deep checking structure:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">value</span> <span class="o">=</span> <span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s1">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
-  <span class="nx">allowedKeys</span><span class="o">:</span> <span class="kc">true</span>
-  <span class="nx">entries</span><span class="o">:</span>
-    <span class="nx">name</span><span class="o">:</span>
-      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
-    <span class="nx">mail</span><span class="o">:</span>
-      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
-      <span class="nx">optional</span><span class="o">:</span> <span class="kc">true</span>
-    <span class="nx">phone</span><span class="o">:</span>
-      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
-      <span class="nx">optional</span><span class="o">:</span> <span class="kc">true</span>
+<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+  <span class="nv">allowedKeys: </span><span class="kc">true</span>
+  <span class="nv">entries:</span>
+    <span class="nv">name:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">mail:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">optional: </span><span class="kc">true</span>
+    <span class="nv">phone:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">optional: </span><span class="kc">true</span>
 </code></pre></div>
 
 
@@ -794,38 +794,38 @@ like 50% are converted to floats like 0.5.</p>
 checks it's configuration file.</p>
 
 
-<div class="highlight"><pre><code><span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Monitoring Configuration&quot;</span>
-<span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
-<span class="nx">allowedKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;runat&#39;</span><span class="p">,</span> <span class="s1">&#39;contacts&#39;</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">]</span>
-<span class="nx">entries</span><span class="o">:</span>
-  <span class="nx">runat</span><span class="o">:</span>
-    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Location&quot;</span>
-    <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;the location of this machine to run only tests which have</span>
-<span class="s2">      the same location or no location at all&quot;</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
-    <span class="nx">optional</span><span class="o">:</span> <span class="kc">true</span>
-  <span class="nx">contacts</span><span class="o">:</span>
-    <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Contacts&quot;</span>
-    <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;the possible contacts to be referred from controller for</span>
-<span class="s2">      email alerts&quot;</span>
-    <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
-    <span class="nx">entries</span><span class="o">:</span>
-      <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;any&#39;</span>
-      <span class="nx">entries</span><span class="o">:</span> <span class="p">[</span>
-        <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Contact Group&quot;</span>
-        <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;the list of references in the group specifies the individual</span>
-<span class="s2">          contacts&quot;</span>
-        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;array&#39;</span>
-        <span class="nx">entries</span><span class="o">:</span>
-          <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
+<div class="highlight"><pre><code><span class="nv">title: </span><span class="s">&quot;Monitoring Configuration&quot;</span>
+<span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+<span class="nv">allowedKeys: </span><span class="p">[</span><span class="s">&#39;runat&#39;</span><span class="p">,</span> <span class="s">&#39;contacts&#39;</span><span class="p">,</span> <span class="s">&#39;email&#39;</span><span class="p">]</span>
+<span class="nv">entries:</span>
+  <span class="nv">runat:</span>
+    <span class="nv">title: </span><span class="s">&quot;Location&quot;</span>
+    <span class="nv">description: </span><span class="s">&quot;the location of this machine to run only tests which have</span>
+<span class="s">      the same location or no location at all&quot;</span>
+    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">optional: </span><span class="kc">true</span>
+  <span class="nv">contacts:</span>
+    <span class="nv">title: </span><span class="s">&quot;Contacts&quot;</span>
+    <span class="nv">description: </span><span class="s">&quot;the possible contacts to be referred from controller for</span>
+<span class="s">      email alerts&quot;</span>
+    <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+    <span class="nv">entries:</span>
+      <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
+      <span class="nv">entries: </span><span class="p">[</span>
+        <span class="nv">title: </span><span class="s">&quot;Contact Group&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the list of references in the group specifies the individual</span>
+<span class="s">          contacts&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+        <span class="nv">entries:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
       <span class="p">,</span>
-        <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Contact Details&quot;</span>
-        <span class="nx">description</span><span class="o">:</span> <span class="s2">&quot;the name and email address for a specific contact&quot;</span>
-        <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;object&#39;</span>
-        <span class="nx">mandatoryKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span>
-        <span class="nx">allowedKeys</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-        <span class="nx">entries</span><span class="o">:</span>
-          <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;string&#39;</span>
+        <span class="nv">title: </span><span class="s">&quot;Contact Details&quot;</span>
+        <span class="nv">description: </span><span class="s">&quot;the name and email address for a specific contact&quot;</span>
+        <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+        <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span>
+        <span class="nv">allowedKeys: </span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+        <span class="nv">entries:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
       <span class="p">]</span>
 </code></pre></div>
 
