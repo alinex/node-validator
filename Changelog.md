@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.12 (2015-03-10)
+-------------------------------------------------
+- Fix file.find to work with multiple folders.
+- Update documentation structure.
+
 Version 0.3.11 (2015-03-05)
 -------------------------------------------------
 - Added correct error message if referenced file could not be found.
