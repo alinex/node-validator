@@ -5,7 +5,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator')
 util = require 'util'
-async = require 'async'
+async = require 'alinex-async'
 # internal classes and helper
 
 

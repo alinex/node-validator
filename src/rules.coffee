@@ -4,7 +4,7 @@
 
 # Node modules
 # -------------------------------------------------
-async = require 'async'
+async = require 'alinex-async'
 util = require 'util'
 # include classes and helper
 
