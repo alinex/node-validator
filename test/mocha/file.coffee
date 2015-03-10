@@ -1,5 +1,5 @@
 require('alinex-error').install()
-async = require 'async'
+async = require 'alinex-async'
 
 test = require '../test'
 path = require 'path'
