@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.13 (2015-03-10)
+-------------------------------------------------
+- Replace async with alinex-async.
+
 Version 0.3.12 (2015-03-10)
 -------------------------------------------------
 - Fix file.find to work with multiple folders.
