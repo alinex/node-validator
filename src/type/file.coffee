@@ -129,7 +129,7 @@ module.exports = file =
         fs.find dir,
           include: value
         , (err, list) ->
-          cb err, list
+          cb null, list
       , (err, lists) ->
         for list in lists
           # retrieve first found
