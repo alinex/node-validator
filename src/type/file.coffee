@@ -22,7 +22,7 @@ util = require 'util'
 chalk = require 'chalk'
 fs = require 'alinex-fs'
 fspath = require 'path'
-async = require 'async'
+async = require 'alinex-async'
 # include classes and helper
 ValidatorCheck = require '../check'
 rules = require '../rules'

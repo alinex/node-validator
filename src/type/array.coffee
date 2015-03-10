@@ -19,7 +19,7 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:array')
-async = require 'async'
+async = require 'alinex-async'
 util = require 'util'
 chalk = require 'chalk'
 # include classes and helper
