@@ -163,6 +163,17 @@
     <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
       <span class="nv">text = </span><span class="s">&#39;A valid filesystem entry. &#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">exists</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The file has to exist. &quot;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">basedir</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Relative paths are calculated from </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">basedir</span><span class="si">}</span><span class="s">. &quot;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">resolve</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The path will be resolved to it&#39;s absolute path. &quot;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;A search for the file will be done. &quot;</span>
+      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The file have to be of type &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+      <span class="nx">text</span>
 
 
 </pre></div>
@@ -253,10 +264,15 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
-        <span class="nv">list = </span><span class="nx">fs</span><span class="p">.</span><span class="nx">findSync</span> <span class="nx">basedir</span><span class="p">,</span>
-          <span class="nv">include: </span><span class="nx">value</span>
+        <span class="nv">search = </span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span> <span class="k">then</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span> <span class="k">else</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
+        <span class="k">unless</span> <span class="nx">search</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
+          <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Wrong find option, array is needed for file validation.&quot;</span>
+        <span class="k">for</span> <span class="nx">dir</span> <span class="k">in</span> <span class="nx">search</span>
+          <span class="nv">list = </span><span class="nx">fs</span><span class="p">.</span><span class="nx">findSync</span> <span class="nx">dir</span><span class="p">,</span>
+            <span class="nv">include: </span><span class="nx">value</span>
+          <span class="k">break</span> <span class="k">if</span> <span class="nx">list</span>
         <span class="k">return</span> <span class="kc">null</span> <span class="k">unless</span> <span class="nx">list</span>
-        <span class="nv">value = </span><span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="nx">basedir</span><span class="p">.</span><span class="nx">length</span><span class="o">+</span><span class="mi">1</span><span class="p">..]</span>
+        <span class="nv">value = </span><span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 </pre></div>
         </td>
@@ -434,6 +450,9 @@
 
     <span class="nv">find: </span><span class="nf">(check, path, options, value, cb) -&gt;</span>
       <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
+      <span class="nv">search = </span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span> <span class="k">then</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span> <span class="k">else</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
+      <span class="k">unless</span> <span class="nx">search</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Wrong find option, array is needed for file validation.&quot;</span>
 
 </pre></div>
         </td>
@@ -446,7 +465,7 @@
 <p>search in list</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span><span class="p">,</span> <span class="nf">(dir, cb) -&gt;</span>
+      <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">search</span><span class="p">,</span> <span class="nf">(dir, cb) -&gt;</span>
         <span class="nx">fs</span><span class="p">.</span><span class="nx">find</span> <span class="nx">dir</span><span class="p">,</span>
           <span class="nv">include: </span><span class="nx">value</span>
         <span class="p">,</span> <span class="nf">(err, list) -&gt;</span>
