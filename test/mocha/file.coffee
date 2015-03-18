@@ -60,12 +60,36 @@ describe "File", ->
         type: 'file'
         find: ['.']
       test.equal options, 'file.js', 'lib/type/file.js'
-    it "should support find  and resolve option", ->
+    it "should support find and resolve option", ->
       options =
         type: 'file'
         find: ['.']
         resolve: true
       test.equal options, 'file.js', path.resolve '.', 'lib/type/file.js'
+    it "should support find option with dynamic values", ->
+      options =
+        type: 'file'
+        find: -> ['.']
+      test.equal options, 'file.js', 'lib/type/file.js'
+
+  describe "async check", ->
+
+    it "should support find option", (done) ->
+      options =
+        type: 'file'
+        find: ['.']
+      test.equal options, 'file.js', 'lib/type/file.js', done
+    it "should support find and resolve option", (done) ->
+      options =
+        type: 'file'
+        find: ['.']
+        resolve: true
+      test.equal options, 'file.js', path.resolve('.', 'lib/type/file.js'), done
+    it "should support find option with dynamic values", (done) ->
+      options =
+        type: 'file'
+        find: -> ['.']
+      test.equal options, 'file.js', 'lib/type/file.js', done
 
   describe "description", ->
 

@@ -37,6 +37,17 @@ module.exports = file =
     type: (options) ->
       text = 'A valid filesystem entry. '
       text += rules.describe.optional options
+      if options.exists
+        text += "The file has to exist. "
+      if options.basedir
+        text += "Relative paths are calculated from #{options.basedir}. "
+      if options.resolve
+        text += "The path will be resolved to it's absolute path. "
+      if options.find
+        text += "A search for the file will be done. "
+      if options.filetype
+        text += "The file have to be of type '#{options.filetype}'. "
+      text
 
   # Synchronous check
   # -------------------------------------------------
@@ -56,10 +67,15 @@ module.exports = file =
       basedir = fspath.resolve options.basedir ? '.'
       # find
       if options.find
-        list = fs.findSync basedir,
-          include: value
+        search =  if typeof options.find is 'function' then options.find() else options.find
+        unless search?.length
+          throw new Error "Wrong find option, array is needed for file validation."
+        for dir in search
+          list = fs.findSync dir,
+            include: value
+          break if list
         return null unless list
-        value = list[0][basedir.length+1..]
+        value = list[0]
       # resolve
       filepath = fspath.resolve basedir, value
       value = filepath if options.resolve
@@ -124,8 +140,11 @@ module.exports = file =
 
     find: (check, path, options, value, cb) ->
       return cb null, value unless options.find
+      search =  if typeof options.find is 'function' then options.find() else options.find
+      unless search?.length
+        return cb new Error "Wrong find option, array is needed for file validation."
       # search in list
-      async.map options.find, (dir, cb) ->
+      async.map search, (dir, cb) ->
         fs.find dir,
           include: value
         , (err, list) ->
