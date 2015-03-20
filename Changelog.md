@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 0.3.15 (2015-03-20)
+-------------------------------------------------
+- Added debug message for directory search paths.
+
 Version 0.3.14 (2015-03-18)
 -------------------------------------------------
 - Added possibility to use dynamic find values for file search.
