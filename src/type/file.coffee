@@ -71,6 +71,7 @@ module.exports = file =
         unless search?.length
           throw new Error "Wrong find option, array is needed for file validation."
         for dir in search
+          debug "search in #{dir}..."
           list = fs.findSync dir,
             include: value
           break if list
@@ -145,6 +146,7 @@ module.exports = file =
         return cb new Error "Wrong find option, array is needed for file validation."
       # search in list
       async.map search, (dir, cb) ->
+        debug "search in #{dir}..."
         fs.find dir,
           include: value
         , (err, list) ->
