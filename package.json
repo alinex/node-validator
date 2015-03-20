@@ -37,6 +37,7 @@
     "alinex-util": "0.2.x",
     "chalk": "1.x",
     "debug": ">=0.8.0 <3.0.0",
+    "handlebars": "3.x",
     "mathjs": "1.x"
   },
   "devDependencies": {
