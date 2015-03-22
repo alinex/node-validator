@@ -44,8 +44,8 @@ module.exports =
       # compile if handlebars syntax found
       if value.match /\{\{.*?\}\}/
         debug "compile handlebars"
-        value = handlebars.compile value
-      value
+        return handlebars.compile value
+      -> value
 
 
   # Selfcheck

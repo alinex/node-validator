@@ -17,8 +17,9 @@ describe "Handlebars", ->
   describe "sync check", ->
 
     it "should match normal string", ->
-      test.equal options, 'localhost', 'localhost'
-      test.equal options, 'hello anybody', 'hello anybody'
+      value = validator.check('test', options, 'hello')
+      expect(value).to.be.a 'function'
+      expect(value {name: 'alex'}).to.equal 'hello'
 
     it "should compile handlebars", ->
       value = validator.check('test', options, 'hello {{name}}')

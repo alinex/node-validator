@@ -151,9 +151,9 @@ and `describe()` calls.
 
 ``` coffee
 validator.check 'test', value,
-  type: 'float',
-  title: 'Overall Timeout',
-  description: 'time in milliseconds the whole test may take',
+  type: 'float'
+  title: 'Overall Timeout'
+  description: 'time in milliseconds the whole test may take'
   min: 500
 , (err, value) ->
   if err
@@ -440,10 +440,27 @@ __Check options:__
   The function should return an array if called without parameters.
 - `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
 
-### RegExp
+### regexp
 
 Check that the given value is a regular expression. If a text is given it will be
 compiled into an regular expression.
+
+### handlebars
+
+You may also add a text which may contain [handlebars](http://handlebarsjs.com/)
+syntax. This will be compiled into a function which if called with the context
+object will return the resulting text.
+
+``` coffee
+  # first do the validation
+  value = validator.check 'test',
+    type: 'handlebars'
+  , 'hello {{name}}'
+  # then use it
+  console.log value
+    name: 'alex'
+  # this will output 'hello alex'
+```
 
 
 Complete Example
