@@ -80,9 +80,9 @@ The checks are split up into several packages to load on demand.
 If you won't change the value it is possible to call a simplified form:
 
 ``` coffee
-if validator.is('test', value,
-    type: 'integer',
-    min: 0,
+if validator.is 'test', value,
+    type: 'integer'
+    min: 0
     max: 100
   # do something
 ```
@@ -94,8 +94,8 @@ has to be to validate.
 
 ``` coffee
 console.log validator.describe
-  type: 'integer',
-  min: 0,
+  type: 'integer'
+  min: 0
   max: 100
 ```
 
@@ -117,11 +117,30 @@ References
 It is also possible to use references instead of values in the validation rules.
 They are written as object with:
 
-- `reference` - the type of reference: absolute, relative, external
+- `reference` - the type of reference: `absolute`, `relative`, `external`
 - `source` - the path to get the value
 - `operation` - function which will be used on retrieved value
 
 External references will be checked against the data element given to the validator.
+
+``` coffee
+validator.check 'test', value,
+  type: 'object'
+  title: 'Range'
+  description: 'the range to use'
+  entries:
+    min:
+      type: 'integer'
+    max:
+      type: 'integer'
+      min:
+        reference: 'absolute'
+        source: 'min'
+        operation: (val) -> val + 1
+```
+
+The above check condition will check that the given `max` value is above the
+`min` value.
 
 
 Descriptive reporting

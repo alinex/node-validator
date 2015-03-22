@@ -99,7 +99,7 @@ module.exports = integer =
         min = (unsigned-1) * max - 1 + unsigned
         if value < min or value > max
           throw check.error path, options, value,
-        new Error "The value is out of range for #{options.inttype} #{unit}-integer"
+          new Error "The value is out of range for #{options.inttype} #{unit}-integer"
       # done return resulting value
       value
 
