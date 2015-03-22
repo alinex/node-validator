@@ -56,17 +56,20 @@ describe "File", ->
       test.equal options, '../myfile.txt', '/home/mydir/myfile.txt'
       test.equal options, '/myfile.txt', '/myfile.txt'
     it "should support find option", ->
+      @timeout 5000
       options =
         type: 'file'
         find: ['.']
       test.equal options, 'file.js', 'lib/type/file.js'
     it "should support find and resolve option", ->
+      @timeout 5000
       options =
         type: 'file'
         find: ['.']
         resolve: true
       test.equal options, 'file.js', path.resolve '.', 'lib/type/file.js'
     it "should support find option with dynamic values", ->
+      @timeout 5000
       options =
         type: 'file'
         find: -> ['.']
@@ -75,17 +78,20 @@ describe "File", ->
   describe "async check", ->
 
     it "should support find option", (done) ->
+      @timeout 5000
       options =
         type: 'file'
         find: ['.']
       test.equal options, 'file.js', 'lib/type/file.js', done
     it "should support find and resolve option", (done) ->
+      @timeout 5000
       options =
         type: 'file'
         find: ['.']
         resolve: true
       test.equal options, 'file.js', path.resolve('.', 'lib/type/file.js'), done
     it "should support find option with dynamic values", (done) ->
+      @timeout 5000
       options =
         type: 'file'
         find: -> ['.']
