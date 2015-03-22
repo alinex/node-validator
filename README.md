@@ -423,7 +423,8 @@ __Check options:__
 
 ### RegExp
 
-Check that the given text is a regular expression.
+Check that the given value is a regular expression. If a text is given it will be
+compiled into an regular expression.
 
 
 Complete Example

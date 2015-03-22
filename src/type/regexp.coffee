@@ -27,7 +27,7 @@ module.exports = hostname =
 
     # ### Type Description
     type: (options) ->
-      text = 'A valid hostname. '
+      text = 'A valid regular expression. '
       text += rules.describe.optional options
       text += ValidatorCheck.describe suboptions
 
@@ -42,6 +42,8 @@ module.exports = hostname =
       # first check input type
       value = rules.sync.optional check, path, options, value
       return value unless value?
+      # if it already is an regexp return it
+      return value if value instanceof RegExp
       # validate
       value = check.subcall path, suboptions, value
       # transform into regexp
