@@ -114,14 +114,37 @@ The `default` option automatically includes the `optional` option.
 
 References
 -------------------------------------------------
-It is also possible to use references instead of values in the validation rules.
-They are written as object with:
+It is also possible to use references instead of values in the validation rules
+or values.
 
-- `reference` - the type of reference: `absolute`, `relative`, `external`
-- `source` - the path to get the value
+References are written as object with:
+
+- `reference` - the type of reference where the value comes from
+  - STRUCT: read from the validating structure
+  - DATA: read from the given data structure
+  - ENV: read from environment variable
+  - FILE: read from file
+- `path` - the path to get the value
 - `operation` - function which will be used on retrieved value
 
-External references will be checked against the data element given to the validator.
+If using the `STRUCT` reference the `path` will be relative from the containing
+object. But it may use:
+
+- `^ xxx`- to make it absolute
+- `< xxx` - to use the parent structure element
+- `<< xxx` - to use the grandparent element
+
+If using the `DATA` reference the `path` have to reference the element absolutely.
+
+If using the `ENV` reference the `path` will be the environment name: `MYSQL_HOST`
+
+If using the `FILE` reference the `path` will be the file path and should be
+absolute.
+
+### Use references in structure definition
+
+If used in structure checks it may need a second validation round but this is done
+automatically in the background.
 
 ``` coffee
 validator.check 'test', value,
@@ -134,13 +157,17 @@ validator.check 'test', value,
     max:
       type: 'integer'
       min:
-        reference: 'absolute'
-        source: 'min'
+        reference: 'STRUCT'
+        path: 'min'
         operation: (val) -> val + 1
 ```
 
 The above check condition will check that the given `max` value is above the
 `min` value.
+
+### Use references in values
+
+Within the values the use is the same.
 
 
 Descriptive reporting
