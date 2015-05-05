@@ -4,11 +4,14 @@
 # Check options:
 #
 # - `optional` - the value must not be present (will return null)
-
+# - `default` - the value to use if none given
+# - `format` - compression method to use: 'short', 'long'
+# - `allow` - the allowed ip ranges
+# - `deny` - the denied ip ranges
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:hostname')
+debug = require('debug')('validator:ipv4')
 util = require 'util'
 chalk = require 'chalk'
 rangeCheck = require 'range_check'
@@ -36,9 +39,18 @@ suboptions = (options) ->
       ){3}                  # number 2..4
       $
       ///
-    lowerCase: options.lowerCase
-    upperCase: options.upperCase
-  settings.replace = [ /0+(\d)/g, '$1' ] if options.compress
+  switch options.format
+    when 'short'
+      settings.replace = [ /0+(\d)/g, '$1' ]
+    when 'long'
+      settings.replace = [
+        [ /^(\d{1})(?=\.)/g, '00$1' ]
+        [ /^(\d{2})(?=\.)/g, '0$1' ]
+        [ /\.(\d{1})(?=\.)/g, '.00$1' ]
+        [ /\.(\d{2})(?=\.)/g, '.0$1' ]
+        [ /\.(\d{1})$/g, '.00$1' ]
+        [ /\.(\d{2})$/g, '.0$1' ]
+      ]
   settings
 
 optionCheck = (options) ->
@@ -48,7 +60,7 @@ optionCheck = (options) ->
     list = []
     for value in options.deny
       if value is 'private'
-        list.push '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'
+        list.push '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', '127.0.0.0/8'
       else list.push value
     options.deny = list
   if options.allow
@@ -57,66 +69,10 @@ optionCheck = (options) ->
     list = []
     for value in options.allow
       if value is 'private'
-        list.push '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16'
+        list.push '10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', '127.0.0.0/8'
       else list.push value
     options.allow = list
   options
-
-###
-  v6:
-    type: 'string'
-    match: ///
-      ^
-      (                               # ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff
-        ([0-9a-fA-F]{1,4}:){7,7}
-        [0-9a-fA-F]{1,4}
-      |                               # ffff:: - ffff:ffff:ffff:ffff:ffff:ffff:ffff::
-        ([0-9a-fA-F]{1,4}:){1,7}:
-      |                               # ffff::ffff - ffff:ffff:ffff:ffff:ffff:ffff::ffff
-        ([0-9a-fA-F]{1,4}:){1,6}:
-        [0-9a-fA-F]{1,4}
-      |                               # ffff::ffff - ffff:ffff:ffff:ffff:ffff::ffff:ffff
-        ([0-9a-fA-F]{1,4}:){1,5}
-        (:[0-9a-fA-F]{1,4}){1,2}
-      |                               # ffff::ffff - ffff:ffff:ffff:ffff::ffff:ffff:ffff
-        ([0-9a-fA-F]{1,4}:){1,4}
-        (:[0-9a-fA-F]{1,4}){1,3}
-      |                               # ffff::ffff - ffff:ffff:ffff::ffff:ffff:Ffff:ffff
-        ([0-9a-fA-F]{1,4}:){1,3}
-        (:[0-9a-fA-F]{1,4}){1,4}
-      |                               # ffff::ffff - ffff:ffff::ffff:ffff:ffff:ffff:ffff
-        ([0-9a-fA-F]{1,4}:){1,2}
-        (:[0-9a-fA-F]{1,4}){1,5}
-      |                               # ffff::ffff - ffff::ffff:ffff:ffff:ffff:ffff:ffff
-        [0-9a-fA-F]{1,4}:
-        ((:[0-9a-fA-F]{1,4}){1,6})
-      |                               # :: -  ::ffff:ffff:ffff:ffff:ffff:ffff:ffff
-        :((:[0-9a-fA-F]{1,4}){1,7}|:)
-      |                               #  fe80:%zzzz - fe80::ffff:ffff:ffff:ffff%zzzzz
-        fe80:
-        (:[0-9a-fA-F]{0,4}){0,4}
-        %[0-9a-zA-Z]{1,}
-      |                               #  :::i<pv4> -  ::ffff:0000:<ipv4>
-        ::(
-          ffff(:0{1,4}){0,1}:
-        ){0,1}
-        (                     # first number
-          25[0-5]             # 250-255
-          |2[0-4][0-9]        # or 200-249
-          |[01]?[0-9][0-9]?   # or 000-199 also without leading 0
-        )
-        (                     # second to third number
-          \.                  # using dot as separator
-          (                   # number as before
-            25[0-5]           # 250-255
-            |2[0-4][0-9]      # or 200-249
-            |[01]?[0-9][0-9]? # or 000-199 also without leading 0
-          )
-        ){3}                  # number 2..4
-      )
-      $
-      ///
-###
 
 module.exports =
 
@@ -130,6 +86,13 @@ module.exports =
       text = 'A valid ip version 4 address. '
       text += rules.describe.optional options
       text += ValidatorCheck.describe suboptions options
+      switch options.format
+        when 'short'
+          text += 'The address will be shortened as possible. '
+        when 'long'
+          text += 'The address will be left padded with 0. '
+      text
+
 
   # Synchronous check
   # -------------------------------------------------
@@ -144,11 +107,12 @@ module.exports =
       value = rules.sync.optional check, path, options, value
       return value unless value?
       # validate
-      check.subcall path, suboptions(options), value
+      value = check.subcall path, suboptions(options), value
       if options.deny
         return value unless rangeCheck.inRange value, options.deny
         if options.allow
           return value if rangeCheck.inRange value, options.allow
+          console.log value, options.allow
           throw check.error path, options, value,
           new Error "The given ip address '#{value}' is not in the valid range.
           Denied is #{options.deny.join ', '} but allowed is #{options.allow.join ', '}."
@@ -184,14 +148,9 @@ module.exports =
         default:
           type: 'string'
           optional: true
-        lowerCase:
-          type: 'boolean'
-          optional: true
-        upperCase:
-          type: 'boolean'
-          optional: true
-        compress:
-          type: 'boolean'
+        format:
+          type: 'string'
+          values: ['short', 'long']
           optional: true
         deny:
           type: 'any'

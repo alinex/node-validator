@@ -3,7 +3,7 @@ async = require 'alinex-async'
 
 test = require '../test'
 
-describe.only "IP version 4", ->
+describe "IP version 4", ->
 
   options = null
 
@@ -40,14 +40,49 @@ describe.only "IP version 4", ->
         default: '127.0.0.1'
       test.equal options, null, '127.0.0.1'
       test.equal options, undefined, '127.0.0.1'
+    it "should support short format", ->
+      options =
+        type: 'ipv4'
+        format: 'short'
+      test.equal options, '127.0.0.1', '127.0.0.1'
+      test.equal options, '127.000.000.001', '127.0.0.1'
+    it "should support long format", ->
+      options =
+        type: 'ipv4'
+        format: 'long'
+      test.equal options, '127.0.0.1', '127.000.000.001'
+      test.equal options, '127.000.000.001', '127.000.000.001'
 
-# lowerCase
-# upperCase
-# compress true
-# deny
-# allow
+    it.only "should support deny range", ->
+      options =
+        type: 'ipv4'
+        deny: 'private'
+      test.fail options, '127.0.0.1'
+      test.fail options, '172.16.0.1'
+      test.fail options, '192.168.15.1'
+      test.fail options, '10.8.0.1'
+      test.equal options, '217.122.0.1', '217.122.0.1'
 
+    it.only "should support allow range", ->
+      options =
+        type: 'ipv4'
+        allow: 'private'
+      test.fail options, '217.122.0.1'
+      test.equal options, '127.0.0.1', '127.0.0.1'
+      test.equal options, '172.16.0.1', '172.16.0.1'
+      test.equal options, '192.168.15.1', '192.168.15.1'
+      test.equal options, '10.8.0.1', '10.8.0.1'
 
+    it.only "should support deny with allow range", ->
+      options =
+        type: 'ipv4'
+        deny: 'private'
+        allow: '127.0.0.1/8'
+      test.fail options, '172.16.0.1'
+      test.fail options, '192.168.15.1'
+      test.fail options, '10.8.0.1'
+      test.equal options, '127.0.0.1', '127.0.0.1'
+      test.equal options, '217.122.0.1', '217.122.0.1'
 
   describe "description", ->
 
@@ -60,8 +95,7 @@ describe.only "IP version 4", ->
         type: 'ipv4'
         optional: true
         default: '127.0.0.1'
-        lowerCase: true
-        compress: true
+        format: 'short'
         deny: 'private'
         allow: '192.168.1.0/24'
 
@@ -76,7 +110,6 @@ describe.only "IP version 4", ->
         type: 'ipv4'
         optional: true
         default: '127.0.0.1'
-        lowerCase: true
-        compress: true
+        format: 'short'
         deny: 'private'
         allow: '192.168.1.0/24'
