@@ -5,6 +5,7 @@
 #
 # - `optional` - the value must not be present (will return null)
 # - `default` - the value to use if none given
+# - `version` - one of 'ipv4' or 'ipv6' and the value will be converted, if possible
 # - `format` - compression method to use: 'short', 'long'
 # - `allow` - the allowed ip ranges
 # - `deny` - the denied ip ranges
@@ -65,6 +66,9 @@ specialRanges.special = all
 suboptions = (options) ->
   settings =
     type: 'string'
+    # replace needed because ipaddr has bug with leading 0
+    # https://github.com/whitequark/ipaddr.js/issues/16
+    replace: [ /(^|[.:])0+(?=\d)/g, '$1' ]
   settings
 
 module.exports =
@@ -88,8 +92,6 @@ module.exports =
           text += 'The IPv6 address will be compressed as possible. '
         when 'long'
           text += 'The IPv6 address will be normalized with all octets visible. '
-        when 'ipv4mapped'
-          text += 'IPv4 addresses will be displayed as their mapped address. '
       text
 
 
@@ -104,17 +106,32 @@ module.exports =
       # first check input type
       value = rules.sync.optional check, path, options, value
       return value unless value?
-      check.subcall path, suboptions(options), value
+      value = check.subcall path, suboptions(options), value
       # validate
       unless ipaddr.isValid value
         throw check.error path, options, value,
         new Error "The given value '#{value}' is no valid IPv6 or IPv4 address"
       ip = ipaddr.parse value
-      debug 'analyzed ip', ip
+      debug "analyzed #{ip.kind()}", ip
+      # format value
       if options.version
-        unless ip.kind() is "ipv#{options.version}"
-          throw check.error path, options, value,
-          new Error "The given value '#{value}' is no valid IPv#{options.version} address"
+        if options.version is 'ipv4'
+          if ip.kind() is 'ipv6'
+            if ip.isIPv4MappedAddress()
+              debug 'convert to ipv4'
+              ip = ip.toIPv4Address()
+            else
+              throw check.error path, options, value,
+              new Error "The given value '#{value}' is no valid IPv#{options.version} address"
+        else
+          if ip.kind() is 'ipv4'
+            debug 'convert to ipv4mapped'
+            ip = ip.toIPv4MappedAddress()
+      if ip.kind() is 'ipv6'
+        value = if options.format is 'long' then ip.toNormalizedString() else ip.toString()
+      else
+        value = ip.toString()
+      # check ranges
       if options.allow
         for entry in options.allow
           if specialRanges[entry]?
@@ -168,7 +185,7 @@ module.exports =
           optional: true
         version:
           type: 'string'
-          values: ['4', '6']
+          values: ['ipv4', 'ipv6']
           optional: true
         deny:
           type: 'array'
@@ -182,7 +199,7 @@ module.exports =
             type: 'string'
         format:
           type: 'string'
-          values: ['short', 'long', 'ipv4mapped']
           default: 'short'
+          values: ['short', 'long']
     , options
 

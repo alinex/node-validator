@@ -211,7 +211,7 @@ it "should has correct validator rules", ->
 ```
 
 
-Possible Check Types
+Basic Check Types
 -------------------------------------------------
 
 ### boolean
@@ -310,19 +310,6 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
-### byte
-
-To test for byte values which may contain prefixes like `18M` or `6.2 GB`.
-
-__Sanitize options:__
-
-- `unit` - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...
-
-__Validate options:__
-
-- `min` - (integer) the smalles allowed number
-- `max` - (integer) the biggest allowed number
-
 ### array
 
 __Sanitize options:__
@@ -414,6 +401,60 @@ __Option:__
 
 - `entries` - (array) with multiple check rules
 
+
+Additional Check Types
+-------------------------------------------------
+
+### byte
+
+To test for byte values which may contain prefixes like `18M` or `6.2 GB`.
+
+__Sanitize options:__
+
+- `unit` - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...
+
+__Validate options:__
+
+- `min` - (integer) the smalles allowed number
+- `max` - (integer) the biggest allowed number
+
+### file
+
+Check the value as valid file or directory entry.
+
+__Sanitize options:__
+
+- `basedir` - (string) relative paths are calculated from this directory
+- `resolve` - (bool) should the given value be resolved to a full path
+
+__Check options:__
+
+- `exists` - (bool) true to check for already existing entry
+- `find` - (array or function) list of directories in which to search for the file
+  The function should return an array if called without parameters.
+- `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
+
+### handlebars
+
+You may also add a text which may contain [handlebars](http://handlebarsjs.com/)
+syntax. This will be compiled into a function which if called with the context
+object will return the resulting text.
+
+``` coffee
+  # first do the validation
+  value = validator.check 'test',
+    type: 'handlebars'
+  , 'hello {{name}}'
+  # then use it
+  console.log value
+    name: 'alex'
+  # this will output 'hello alex'
+```
+
+### hostname
+
+The value has to be a valid hostname definition.
+
 ### interval
 
 A time interval may be given:
@@ -433,6 +474,39 @@ __Check options:__
 - `min` - (integer) the smalles allowed number
 - `max` - (integer) the biggest allowed number
 
+### ipaddr
+
+The value has to be a IP address.
+
+__Check options:__
+
+- `version` - one of 'ipv4' or 'ipv6' and the value will be converted, if possible
+- `allow` - the allowed ip ranges
+- `deny` - the denied ip ranges
+
+__Sanitize options:__
+
+- `format` - compression method to use: 'short', 'long'
+
+The addresses may be converted from IPv6 to IPv4 and from IPv4 to IPv6 if possible.
+
+Ranges for `deny` and `allow` may contain a list of multiple IP ranges which are
+given in with the IP address and the significant bits behind: '127.0.0.1/8' or as
+a range name.
+Range names are: unspecified, broadcast, multicast, linklocal, loopback, private,
+reserved, uniquelocal, ipv4mapped, rfc6145, rfc6052, 6to4, teredo.
+Or use the range 'special' to specify all of the named ranges.
+
+|  has allow  |  has deny | in allow | in deny | in both | in other |
+|-------------|-----------|----------|---------|---------|----------|
+|   no        |   no      |    -     |    -    |    -    |   ok     |
+|   yes       |   no      |    ok    |    -    |    -    |   fail   |
+|   no        |   yes     |    -     |   fail  |    -    |   ok     |
+|   yes       |   yes     |    ok    |   fail  |    ok   |   ok     |
+
+The output will always be without leading '0' and by default compressed to the short
+form for IPv6 addresses. To get the long form use the 'format' option.
+
 ### percent
 
 Nearly the same as float but values which are given as string using the % sign
@@ -447,47 +521,10 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
-### hostname
-
-The value has to be a valid hostname definition.
-
-### file
-
-Check the value as valid file or directory entry.
-
-__Sanitize options:__
-
-- `basedir` - (string) relative paths are calculated from this directory
-- `resolve` - (bool) should the given value be resolved to a full path
-
-__Check options:__
-
-- `exists` - (bool) true to check for already existing entry
-- `find` - (array or function) list of directories in which to search for the file
-  The function should return an array if called without parameters.
-- `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
-
 ### regexp
 
 Check that the given value is a regular expression. If a text is given it will be
 compiled into an regular expression.
-
-### handlebars
-
-You may also add a text which may contain [handlebars](http://handlebarsjs.com/)
-syntax. This will be compiled into a function which if called with the context
-object will return the resulting text.
-
-``` coffee
-  # first do the validation
-  value = validator.check 'test',
-    type: 'handlebars'
-  , 'hello {{name}}'
-  # then use it
-  console.log value
-    name: 'alex'
-  # this will output 'hello alex'
-```
 
 
 Complete Example

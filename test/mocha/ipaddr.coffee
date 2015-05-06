@@ -3,7 +3,7 @@ async = require 'alinex-async'
 
 test = require '../test'
 
-describe.only "IP Address", ->
+describe "IP Address", ->
 
   options = null
 
@@ -15,7 +15,7 @@ describe.only "IP Address", ->
 
     it "should match normal adresses", ->
       test.equal options, '127.0.0.1', '127.0.0.1'
-      test.equal options, '192.012.001.001', '192.012.001.001'
+      test.equal options, '192.012.001.001', '192.12.1.1'
       test.equal options, 'ffff::', 'ffff::'
     it "should fail on other objects", ->
       test.fail options, 1
@@ -44,15 +44,15 @@ describe.only "IP Address", ->
     it "should limit to ipv4 addresses", ->
       options =
         type: 'ipaddr'
-        version: 4
+        version: 'ipv4'
       test.equal options, '127.0.0.1', '127.0.0.1'
       test.fail options, 'ffff::'
     it "should limit to ipv6 addresses", ->
       options =
         type: 'ipaddr'
-        version: 6
+        version: 'ipv6'
       test.equal options, 'ffff::', 'ffff::'
-      test.fail options, '127.0.0.1'
+      test.equal options, '127.0.0.1', '::ffff:7f00:1'
 
     it "should support deny range", ->
       options =
@@ -100,12 +100,15 @@ describe.only "IP Address", ->
         format: 'short'
       test.equal options, '127.0.0.1', '127.0.0.1'
       test.equal options, '127.000.000.001', '127.0.0.1'
+      test.equal options, 'ffff:0:0:0:0:0:0:1', 'ffff::1'
     it "should support long format", ->
       options =
         type: 'ipaddr'
         format: 'long'
-      test.equal options, '127.0.0.1', '127.000.000.001'
-      test.equal options, '127.000.000.001', '127.000.000.001'
+      test.equal options, '127.0.0.1', '127.0.0.1'
+      test.equal options, '127.000.000.001', '127.0.0.1'
+      test.equal options, 'ffff:0:0:0:0:0:0:1', 'ffff:0:0:0:0:0:0:1'
+      test.equal options, 'ffff::1', 'ffff:0:0:0:0:0:0:1'
 
 
   describe "description", ->
@@ -119,6 +122,7 @@ describe.only "IP Address", ->
         type: 'ipaddr'
         optional: true
         default: '127.0.0.1'
+        version: 'ipv4'
         format: 'short'
         deny: ['private']
         allow: ['192.168.1.0/24']
@@ -134,6 +138,7 @@ describe.only "IP Address", ->
         type: 'ipaddr'
         optional: true
         default: '127.0.0.1'
+        version: 'ipv4'
         format: 'short'
         deny: ['private']
         allow: ['192.168.1.0/24']
