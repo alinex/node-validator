@@ -15,7 +15,7 @@ describe "IP Address", ->
 
     it "should match normal adresses", ->
       test.equal options, '127.0.0.1', '127.0.0.1'
-      test.equal options, '192.012.001.001', '192.12.1.1'
+      test.equal options, '192.12.1.1', '192.12.1.1'
       test.equal options, 'ffff::', 'ffff::'
     it "should fail on other objects", ->
       test.fail options, 1

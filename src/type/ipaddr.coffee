@@ -66,9 +66,6 @@ specialRanges.special = all
 suboptions = (options) ->
   settings =
     type: 'string'
-    # replace needed because ipaddr has bug with leading 0
-    # https://github.com/whitequark/ipaddr.js/issues/16
-    replace: [ /(^|[.:])0+(?=\d)/g, '$1' ]
   settings
 
 module.exports =
