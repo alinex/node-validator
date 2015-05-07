@@ -22,11 +22,11 @@ describe "Byte", ->
       test.equal options, '100B', 100
       test.equal options, '100 B', 100
     it "should match prefix definition", ->
-      test.equal options, '1kB', 1024
+      test.equal options, '1kB', 1000
       test.equal options, '1KiB', 1024
-      test.equal options, '1MB', 1024*1024
+      test.equal options, '1MB', 1000000
       test.equal options, '1MiB', 1024*1024
-      test.equal options, '1GB', 1024*1024*1024
+      test.equal options, '1GB', 1000000000
       test.equal options, '1GiB', 1024*1024*1024
     it "should fail on other objects", ->
       test.fail options, 'hello'
@@ -70,9 +70,9 @@ describe "Byte", ->
     it "should match string definition", ->
       test.equal options, '100bps', 100
     it "should match prefix definition", ->
-      test.equal options, '1kbps', 1024
-      test.equal options, '1Mbps', 1024*1024
-      test.equal options, '1Gbps', 1024*1024*1024
+      test.equal options, '1kbps', 1000
+      test.equal options, '1Mbps', 1000000
+      test.equal options, '1Gbps', 1000000000
 
   describe "description", ->
 
