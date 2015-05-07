@@ -46,7 +46,7 @@
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me XXXXXXXXXXXXXXXXXXXX on GitHub"></a><div class="background highlight"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
       <tr>
@@ -148,7 +148,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
-      <span class="nv">text = </span><span class="s">&#39;A valid hostname. &#39;</span>
+      <span class="nv">text = </span><span class="s">&#39;A valid regular expression. &#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">suboptions</span>
 
@@ -210,6 +210,19 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
+<p>if it already is an regexp return it</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="k">return</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">value</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
 <p>validate</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -221,7 +234,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>transform into regexp</p>
         </td>

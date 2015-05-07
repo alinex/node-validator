@@ -64,7 +64,7 @@
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me XXXXXXXXXXXXXXXXXXXX on GitHub"></a><div class="background highlight"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
       <tr>
@@ -370,10 +370,6 @@ runs in case of references to references...</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">ref2value: </span><span class="nf">(path, value, key) -&gt;</span>
-    <span class="nv">pathname = </span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span>
-    <span class="k">unless</span> <span class="nx">value</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">reference</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">source</span><span class="o">?</span>
-      <span class="nx">@checked</span><span class="p">.</span><span class="nx">push</span> <span class="nx">pathname</span> <span class="k">unless</span> <span class="nx">pathname</span> <span class="k">in</span> <span class="nx">@checked</span>
-      <span class="k">return</span> <span class="nx">value</span>
 
 </pre></div>
         </td>
@@ -383,9 +379,29 @@ runs in case of references to references...</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
+<p>check for reference entry</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">pathname = </span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;.&#39;</span>
+    <span class="k">unless</span> <span class="nx">value</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">reference</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">.</span><span class="nx">path</span><span class="o">?</span>
+      <span class="nx">@checked</span><span class="p">.</span><span class="nx">push</span> <span class="nx">pathname</span> <span class="k">unless</span> <span class="nx">pathname</span> <span class="k">in</span> <span class="nx">@checked</span>
+      <span class="k">return</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
 <p>it's a reference, find path</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+
+
+
+
     <span class="nv">source = </span><span class="nx">value</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;.&#39;</span>
     <span class="nv">obj = </span><span class="kc">null</span>
     <span class="k">switch</span> <span class="nx">value</span><span class="p">.</span><span class="nx">reference</span>
@@ -414,7 +430,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>read value</p>
         </td>
@@ -431,7 +447,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>call operations</p>
         </td>
@@ -446,7 +462,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>return resulting value</p>
         </td>
@@ -461,7 +477,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>check for references</p>
         </td>
@@ -487,7 +503,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>sync call sync</p>
         </td>
@@ -501,7 +517,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>{@pathname path}."</p>
         </td>
@@ -515,7 +531,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>async call async</p>
         </td>
@@ -530,7 +546,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>async call sync</p>
         </td>
@@ -548,7 +564,7 @@ runs in case of references to references...</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>Export the class</p>
         </td>

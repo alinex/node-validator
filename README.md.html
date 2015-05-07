@@ -43,6 +43,12 @@
       <div class="heading h2">
         <a href="#references">References</a>
       </div>
+      <div class="heading h3">
+        <a href="#use%20references%20in%20structure%20definition">Use references in structure definition</a>
+      </div>
+      <div class="heading h3">
+        <a href="#use%20references%20in%20values">Use references in values</a>
+      </div>
       <div class="heading h2">
         <a href="#descriptive%20reporting">Descriptive reporting</a>
       </div>
@@ -50,7 +56,7 @@
         <a href="#selfchecking%20options">Selfchecking Options</a>
       </div>
       <div class="heading h2">
-        <a href="#possible%20check%20types">Possible Check Types</a>
+        <a href="#basic%20check%20types">Basic Check Types</a>
       </div>
       <div class="heading h3">
         <a href="#boolean">boolean</a>
@@ -68,9 +74,6 @@
         <a href="#float">float</a>
       </div>
       <div class="heading h3">
-        <a href="#byte">byte</a>
-      </div>
-      <div class="heading h3">
         <a href="#array">array</a>
       </div>
       <div class="heading h3">
@@ -82,20 +85,32 @@
       <div class="heading h3">
         <a href="#and">and</a>
       </div>
-      <div class="heading h3">
-        <a href="#interval">interval</a>
+      <div class="heading h2">
+        <a href="#additional%20check%20types">Additional Check Types</a>
       </div>
       <div class="heading h3">
-        <a href="#percent">percent</a>
-      </div>
-      <div class="heading h3">
-        <a href="#hostname">hostname</a>
+        <a href="#byte">byte</a>
       </div>
       <div class="heading h3">
         <a href="#file">file</a>
       </div>
       <div class="heading h3">
-        <a href="#regexp">RegExp</a>
+        <a href="#handlebars">handlebars</a>
+      </div>
+      <div class="heading h3">
+        <a href="#hostname">hostname</a>
+      </div>
+      <div class="heading h3">
+        <a href="#interval">interval</a>
+      </div>
+      <div class="heading h3">
+        <a href="#ipaddr">ipaddr</a>
+      </div>
+      <div class="heading h3">
+        <a href="#percent">percent</a>
+      </div>
+      <div class="heading h3">
+        <a href="#regexp">regexp</a>
       </div>
       <div class="heading h2">
         <a href="#complete%20example">Complete Example</a>
@@ -109,7 +124,7 @@
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me XXXXXXXXXXXXXXXXXXXX on GitHub"></a><div class="docs markdown">
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="docs markdown">
 <div class="pilwrap" id="package%3A%20alinex-validator">
   <h1>
     <a href="#package%3A%20alinex-validator" name="package%3A%20alinex-validator" class="pilcrow">&#182;</a>
@@ -125,15 +140,16 @@
 external information.</p>
 
 <ul>
-<li>check value against options configuration</li>
-<li>understandable errors</li>
+<li>check value against configuration</li>
 <li>easy checking of values</li>
 <li>may check complex structures</li>
+<li>understandable errors</li>
 <li>can give a human readable description</li>
 </ul>
 
 <p>The validation rules are really simple, but they will get more complex as your
-data structure gains complexity.</p>
+data structure gains complexity. But if you know the basic rules it's all
+a composition of some simple structures.</p>
 
 <p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
 following the code standards defined there.</p>
@@ -228,9 +244,9 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 <p>If you won't change the value it is possible to call a simplified form:</p>
 
 
-<div class="highlight"><pre><code><span class="k">if</span> <span class="nx">validator</span><span class="p">.</span><span class="o">is</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-    <span class="nv">type: </span><span class="s">&#39;integer&#39;</span><span class="p">,</span>
-    <span class="nv">min: </span><span class="mi">0</span><span class="p">,</span>
+<div class="highlight"><pre><code><span class="k">if</span> <span class="nx">validator</span><span class="p">.</span><span class="o">is</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+    <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+    <span class="nv">min: </span><span class="mi">0</span>
     <span class="nv">max: </span><span class="mi">100</span>
   <span class="c1"># do something</span>
 </code></pre></div>
@@ -251,8 +267,8 @@ has to be to validate.</p>
 
 
 <div class="highlight"><pre><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span>
-  <span class="nv">type: </span><span class="s">&#39;integer&#39;</span><span class="p">,</span>
-  <span class="nv">min: </span><span class="mi">0</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+  <span class="nv">min: </span><span class="mi">0</span>
   <span class="nv">max: </span><span class="mi">100</span>
 </code></pre></div>
 
@@ -276,7 +292,7 @@ If not given it will be set to null or the value given with <code>default</code>
 <li><code>default</code> - value used if optional and no value given</li>
 </ul>
 
-<p>The <code>default</code> option automatically includes the <code>optional</code> option.</p>
+<p>The <code>default</code> option automatically makes the setting optional.</p>
 
 
 <div class="pilwrap" id="references">
@@ -287,16 +303,98 @@ If not given it will be set to null or the value given with <code>default</code>
 </div>
 
 
-<p>It is also possible to use references instead of values in the validation rules.
-They are written as object with:</p>
+<p>It is also possible to use references instead of values in the validation rules
+or values.</p>
+
+<p>References are written as object with:</p>
 
 <ul>
-<li><code>reference</code> - the type of reference: absolute, relative, external</li>
-<li><code>source</code> - the path to get the value</li>
-<li><code>operation</code> - function which will be used on retrieved value</li>
+<li><code>REF</code> as the only needed key which may contain a single string path or a
+list of paths in which case the first found element will be used</li>
+<li><code>VAL</code> - specifies a default value if no reference found</li>
+<li><code>FUNC</code> - can additionally be used with a function optimizing the value
+it will be called with the value and the path it comes from</li>
 </ul>
 
-<p>External references will be checked against the data element given to the validator.</p>
+<p>Possible <code>REF</code> URIs are:</p>
+
+<ul>
+<li><code>struct:xxx</code> - to specify the value sibling value from the given one</li>
+<li><code>struct:/xxx.yyy</code> - to specify a value from the structure by absolute path</li>
+<li><code>struct:&lt;xxx.yyy</code> - to specify the value based from the parent of the operating object</li>
+<li><code>struct:&lt;&lt;xxx.yyy</code> - to specify the value based from the grandparent of the operating object</li>
+<li><code>data:/xxx</code> - to specify an element from the additional given data structure</li>
+<li><code>env:ENV_NAME</code> - to specify an environment variable</li>
+<li><code>file:/xxx.txt</code> - to specify a file content</li>
+</ul>
+
+<p>A value will be searched in each given reference till one is found. If nothing
+found the <code>VAL</code> setting is used or nothing.</p>
+
+
+<div class="pilwrap" id="use%20references%20in%20structure%20definition">
+  <h3>
+    <a href="#use%20references%20in%20structure%20definition" name="use%20references%20in%20structure%20definition" class="pilcrow">&#182;</a>
+    Use references in structure definition
+  </h3>
+</div>
+
+
+<p>If used in structure checks it may need a second validation round but this is done
+automatically in the background.</p>
+
+
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+  <span class="nv">title: </span><span class="s">&#39;Range&#39;</span>
+  <span class="nv">description: </span><span class="s">&#39;the range to use&#39;</span>
+  <span class="nv">entries:</span>
+    <span class="nv">min:</span>
+      <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+    <span class="nv">max:</span>
+      <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+      <span class="nv">min:</span>
+        <span class="nv">REF: </span><span class="s">&#39;struct:min&#39;</span>
+        <span class="nv">FUNC: </span><span class="nf">(val) -&gt;</span> <span class="nx">val</span> <span class="o">+</span> <span class="mi">1</span>
+</code></pre></div>
+
+
+
+<p>The above check condition will check that the given <code>max</code> value is at least one
+above the <code>min</code> value.</p>
+
+
+<div class="pilwrap" id="use%20references%20in%20values">
+  <h3>
+    <a href="#use%20references%20in%20values" name="use%20references%20in%20values" class="pilcrow">&#182;</a>
+    Use references in values
+  </h3>
+</div>
+
+
+<p>Within the values the use is the same.</p>
+
+
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span>
+  <span class="nv">database: </span><span class="s">&#39;test&#39;</span>
+  <span class="nv">host:</span>
+    <span class="nv">REF: </span><span class="s">&#39;env:MYSQL_HOST&#39;</span>
+    <span class="nv">VAL: </span><span class="s">&#39;localhost&#39;</span>
+  <span class="nv">user:</span>
+    <span class="nv">REF: </span><span class="s">&#39;env:MYSQL_USER&#39;</span>
+    <span class="nv">VAL: </span><span class="s">&#39;localhost&#39;</span>
+  <span class="nv">password:</span>
+    <span class="nv">REF: </span><span class="p">[</span>
+      <span class="s">&#39;env:MYSQL_PASS&#39;</span>
+      <span class="s">&#39;env:MYSQL_PAsSWORD&#39;</span>
+      <span class="s">&#39;file:/etc/mysql/access.password&#39;</span>
+    <span class="p">]</span>
+</code></pre></div>
+
+
+
+<p>This also shows that one or more references can be added and also with different
+reference types.</p>
 
 
 <div class="pilwrap" id="descriptive%20reporting">
@@ -313,9 +411,9 @@ and <code>describe()</code> calls.</p>
 
 
 <div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;float&#39;</span><span class="p">,</span>
-  <span class="nv">title: </span><span class="s">&#39;Overall Timeout&#39;</span><span class="p">,</span>
-  <span class="nv">description: </span><span class="s">&#39;time in milliseconds the whole test may take&#39;</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+  <span class="nv">title: </span><span class="s">&#39;Overall Timeout&#39;</span>
+  <span class="nv">description: </span><span class="s">&#39;time in milliseconds the whole test may take&#39;</span>
   <span class="nv">min: </span><span class="mi">500</span>
 <span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
   <span class="k">if</span> <span class="nx">err</span>
@@ -358,10 +456,10 @@ To do this you have to add it in your tests:</p>
 
 
 
-<div class="pilwrap" id="possible%20check%20types">
+<div class="pilwrap" id="basic%20check%20types">
   <h2>
-    <a href="#possible%20check%20types" name="possible%20check%20types" class="pilcrow">&#182;</a>
-    Possible Check Types
+    <a href="#basic%20check%20types" name="basic%20check%20types" class="pilcrow">&#182;</a>
+    Basic Check Types
   </h2>
 </div>
 
@@ -516,30 +614,6 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 </ul>
 
 
-<div class="pilwrap" id="byte">
-  <h3>
-    <a href="#byte" name="byte" class="pilcrow">&#182;</a>
-    byte
-  </h3>
-</div>
-
-
-<p>To test for byte values which may contain prefixes like <code>18M</code> or <code>6.2 GB</code>.</p>
-
-<p><strong>Sanitize options:</strong></p>
-
-<ul>
-<li><code>unit</code> - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...</li>
-</ul>
-
-<p><strong>Validate options:</strong></p>
-
-<ul>
-<li><code>min</code> - (integer) the smalles allowed number</li>
-<li><code>max</code> - (integer) the biggest allowed number</li>
-</ul>
-
-
 <div class="pilwrap" id="array">
   <h3>
     <a href="#array" name="array" class="pilcrow">&#182;</a>
@@ -677,6 +751,103 @@ all have to succeed.</p>
 </ul>
 
 
+<div class="pilwrap" id="additional%20check%20types">
+  <h2>
+    <a href="#additional%20check%20types" name="additional%20check%20types" class="pilcrow">&#182;</a>
+    Additional Check Types
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id="byte">
+  <h3>
+    <a href="#byte" name="byte" class="pilcrow">&#182;</a>
+    byte
+  </h3>
+</div>
+
+
+<p>To test for byte values which may contain prefixes like <code>18M</code> or <code>6.2 GB</code>.</p>
+
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>unit</code> - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...</li>
+</ul>
+
+<p><strong>Validate options:</strong></p>
+
+<ul>
+<li><code>min</code> - (integer) the smalles allowed number</li>
+<li><code>max</code> - (integer) the biggest allowed number</li>
+</ul>
+
+
+<div class="pilwrap" id="file">
+  <h3>
+    <a href="#file" name="file" class="pilcrow">&#182;</a>
+    file
+  </h3>
+</div>
+
+
+<p>Check the value as valid file or directory entry.</p>
+
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>basedir</code> - (string) relative paths are calculated from this directory</li>
+<li><code>resolve</code> - (bool) should the given value be resolved to a full path</li>
+</ul>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>exists</code> - (bool) true to check for already existing entry</li>
+<li><code>find</code> - (array or function) list of directories in which to search for the file
+The function should return an array if called without parameters.</li>
+<li><code>filetype</code> - (string) check against inode type: f, file, d, dir, directory, l, link</li>
+</ul>
+
+
+<div class="pilwrap" id="handlebars">
+  <h3>
+    <a href="#handlebars" name="handlebars" class="pilcrow">&#182;</a>
+    handlebars
+  </h3>
+</div>
+
+
+<p>You may also add a text which may contain <a href="http://handlebarsjs.com/">handlebars</a>
+syntax. This will be compiled into a function which if called with the context
+object will return the resulting text.</p>
+
+
+<div class="highlight"><pre><code>  <span class="c1"># first do the validation</span>
+  <span class="nv">value = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span>
+    <span class="nv">type: </span><span class="s">&#39;handlebars&#39;</span>
+  <span class="p">,</span> <span class="s">&#39;hello {{name}}&#39;</span>
+  <span class="c1"># then use it</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">value</span>
+    <span class="nv">name: </span><span class="s">&#39;alex&#39;</span>
+  <span class="c1"># this will output &#39;hello alex&#39;</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="hostname">
+  <h3>
+    <a href="#hostname" name="hostname" class="pilcrow">&#182;</a>
+    hostname
+  </h3>
+</div>
+
+
+<p>The value has to be a valid hostname definition.</p>
+
+
 <div class="pilwrap" id="interval">
   <h3>
     <a href="#interval" name="interval" class="pilcrow">&#182;</a>
@@ -709,6 +880,50 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 </ul>
 
 
+<div class="pilwrap" id="ipaddr">
+  <h3>
+    <a href="#ipaddr" name="ipaddr" class="pilcrow">&#182;</a>
+    ipaddr
+  </h3>
+</div>
+
+
+<p>The value has to be a IP address.</p>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>version</code> - one of 'ipv4' or 'ipv6' and the value will be converted, if possible</li>
+<li><code>allow</code> - the allowed ip ranges</li>
+<li><code>deny</code> - the denied ip ranges</li>
+</ul>
+
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>format</code> - compression method to use: 'short', 'long'</li>
+</ul>
+
+<p>The addresses may be converted from IPv6 to IPv4 and from IPv4 to IPv6 if possible.</p>
+
+<p>Ranges for <code>deny</code> and <code>allow</code> may contain a list of multiple IP ranges which are
+given in with the IP address and the significant bits behind: '127.0.0.1/8' or as
+a range name.
+Range names are: unspecified, broadcast, multicast, linklocal, loopback, private,
+reserved, uniquelocal, ipv4mapped, rfc6145, rfc6052, 6to4, teredo.
+Or use the range 'special' to specify all of the named ranges.</p>
+
+<p style="font-family:monospace;white-space:pre">|  has allow  |  has deny | in allow | in deny | in both | in other |
+|-------------|-----------|----------|---------|---------|----------|
+|   no        |   no      |    -     |    -    |    -    |   ok     |
+|   yes       |   no      |    ok    |    -    |    -    |   fail   |
+|   no        |   yes     |    -     |   fail  |    -    |   ok     |
+|   yes       |   yes     |    ok    |   fail  |    ok   |   ok     |</p>
+
+<p>The output will always be without leading '0' and by default compressed to the short
+form for IPv6 addresses. To get the long form use the 'format' option.</p>
+
+
 <div class="pilwrap" id="percent">
   <h3>
     <a href="#percent" name="percent" class="pilcrow">&#182;</a>
@@ -734,53 +949,16 @@ like 50% are converted to floats like 0.5.</p>
 </ul>
 
 
-<div class="pilwrap" id="hostname">
-  <h3>
-    <a href="#hostname" name="hostname" class="pilcrow">&#182;</a>
-    hostname
-  </h3>
-</div>
-
-
-<p>The value has to be a valid hostname definition.</p>
-
-
-<div class="pilwrap" id="file">
-  <h3>
-    <a href="#file" name="file" class="pilcrow">&#182;</a>
-    file
-  </h3>
-</div>
-
-
-<p>Check the value as valid file or directory entry.</p>
-
-<p><strong>Sanitize options:</strong></p>
-
-<ul>
-<li><code>basedir</code> - (string) relative paths are calculated from this directory</li>
-<li><code>resolve</code> - (bool) should the given value be resolved to a full path</li>
-</ul>
-
-<p><strong>Check options:</strong></p>
-
-<ul>
-<li><code>exists</code> - (bool) true to check for already existing entry</li>
-<li><code>find</code> - (array or function) list of directories in which to search for the file
-The function should return an array if called without parameters.</li>
-<li><code>filetype</code> - (string) check against inode type: f, file, d, dir, directory, l, link</li>
-</ul>
-
-
 <div class="pilwrap" id="regexp">
   <h3>
     <a href="#regexp" name="regexp" class="pilcrow">&#182;</a>
-    RegExp
+    regexp
   </h3>
 </div>
 
 
-<p>Check that the given text is a regular expression.</p>
+<p>Check that the given value is a regular expression. If a text is given it will be
+compiled into an regular expression.</p>
 
 
 <div class="pilwrap" id="complete%20example">

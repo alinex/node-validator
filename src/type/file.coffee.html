@@ -49,7 +49,7 @@
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me XXXXXXXXXXXXXXXXXXXX on GitHub"></a><div class="background highlight"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
       <tr>
@@ -268,6 +268,7 @@
         <span class="k">unless</span> <span class="nx">search</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
           <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Wrong find option, array is needed for file validation.&quot;</span>
         <span class="k">for</span> <span class="nx">dir</span> <span class="k">in</span> <span class="nx">search</span>
+          <span class="nx">debug</span> <span class="s">&quot;search in </span><span class="si">#{</span><span class="nx">dir</span><span class="si">}</span><span class="s">...&quot;</span>
           <span class="nv">list = </span><span class="nx">fs</span><span class="p">.</span><span class="nx">findSync</span> <span class="nx">dir</span><span class="p">,</span>
             <span class="nv">include: </span><span class="nx">value</span>
           <span class="k">break</span> <span class="k">if</span> <span class="nx">list</span>
@@ -466,6 +467,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">search</span><span class="p">,</span> <span class="nf">(dir, cb) -&gt;</span>
+        <span class="nx">debug</span> <span class="s">&quot;search in </span><span class="si">#{</span><span class="nx">dir</span><span class="si">}</span><span class="s">...&quot;</span>
         <span class="nx">fs</span><span class="p">.</span><span class="nx">find</span> <span class="nx">dir</span><span class="p">,</span>
           <span class="nv">include: </span><span class="nx">value</span>
         <span class="p">,</span> <span class="nf">(err, list) -&gt;</span>
