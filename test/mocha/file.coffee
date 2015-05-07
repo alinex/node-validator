@@ -15,6 +15,7 @@ describe "File", ->
   describe "sync check", ->
 
     it "should match normal filename", ->
+      @timeout 5000
       test.same options, 'myfile.txt'
       test.same options, 'anywhere/myfile.txt'
       test.same options, '/anywhere/myfile.txt'
@@ -56,20 +57,20 @@ describe "File", ->
       test.equal options, '../myfile.txt', '/home/mydir/myfile.txt'
       test.equal options, '/myfile.txt', '/myfile.txt'
     it "should support find option", ->
-      @timeout 5000
+      @timeout 10000
       options =
         type: 'file'
         find: ['.']
       test.equal options, 'file.js', 'lib/type/file.js'
     it "should support find and resolve option", ->
-      @timeout 5000
+      @timeout 10000
       options =
         type: 'file'
         find: ['.']
         resolve: true
       test.equal options, 'file.js', path.resolve '.', 'lib/type/file.js'
     it "should support find option with dynamic values", ->
-      @timeout 5000
+      @timeout 10000
       options =
         type: 'file'
         find: -> ['.']
