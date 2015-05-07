@@ -119,27 +119,22 @@ or values.
 
 References are written as object with:
 
-- `reference` - the type of reference where the value comes from
-  - STRUCT: read from the validating structure
-  - DATA: read from the given data structure
-  - ENV: read from environment variable
-  - FILE: read from file
-- `path` - the path to get the value
-- `operation` - function which will be used on retrieved value
+- `REF` as the only needed key which may contain a single string path or a
+  list of paths in which case the first found element will be used
+- `operation` - can additionally be used with a function optimizing the value
+  it will be called with the value and the path it comes from
 
-If using the `STRUCT` reference the `path` will be relative from the containing
-object. But it may use:
+Possible `REF` URIs are:
 
-- `^ xxx`- to make it absolute
-- `< xxx` - to use the parent structure element
-- `<< xxx` - to use the grandparent element
+- `struct:xxx` - to specify the value sibling value from the given one
+- `struct:/xxx.yyy` - to specify a value from the structure by absolute path
+- `struct:<xxx.yyy` - to specify the value based from the parent of the operating object
+- `struct:<<xxx.yyy` - to specify the value based from the grandparent of the operating object
+- `data:/xxx` - to specify an element from the additional given data structure
+- `env:ENV_NAME` - to specify an environment variable
+- `file:/xxx.txt` - to specify a file content
 
-If using the `DATA` reference the `path` have to reference the element absolutely.
 
-If using the `ENV` reference the `path` will be the environment name: `MYSQL_HOST`
-
-If using the `FILE` reference the `path` will be the file path and should be
-absolute.
 
 ### Use references in structure definition
 

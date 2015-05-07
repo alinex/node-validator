@@ -114,13 +114,17 @@ class ValidatorCheck
 
   # ### Get value with reference support
   # will set the runAgain flag if necessary
-  #
   ref2value: (path, value, key) ->
+    # check for reference entry
     pathname = path.join '.'
-    unless value and typeof value is 'object' and value.reference? and value.source?
+    unless value and typeof value is 'object' and value.reference? and value.path?
       @checked.push pathname unless pathname in @checked
       return value
     # it's a reference, find path
+
+
+
+
     source = value.source.split '.'
     obj = null
     switch value.reference

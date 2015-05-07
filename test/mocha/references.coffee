@@ -27,7 +27,7 @@ describe "reference values", ->
       test.same options, { one:1, two:2, three:3 }
       test.same options, { one:6, two:5, three:4 }
 
-    it "should fail on absolute reference", ->
+    it.only "should fail on absolute reference", ->
       options.entries.two.min =
         reference: 'absolute'
         source: 'one'
