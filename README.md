@@ -7,14 +7,15 @@ Package: alinex-validator
 This module will help validating complex structures. And may be used for all
 external information.
 
-- check value against options configuration
-- understandable errors
+- check value against configuration
 - easy checking of values
 - may check complex structures
+- understandable errors
 - can give a human readable description
 
 The validation rules are really simple, but they will get more complex as your
-data structure gains complexity.
+data structure gains complexity. But if you know the basic rules it's all
+a composition of some simple structures.
 
 It is one of the modules of the [Alinex Universe](http://alinex.github.io/node-alinex)
 following the code standards defined there.
@@ -109,7 +110,7 @@ If not given it will be set to null or the value given with `default`.
 - `optional` - the value must not be present (will return null)
 - `default` - value used if optional and no value given
 
-The `default` option automatically includes the `optional` option.
+The `default` option automatically makes the setting optional.
 
 
 References
@@ -121,7 +122,8 @@ References are written as object with:
 
 - `REF` as the only needed key which may contain a single string path or a
   list of paths in which case the first found element will be used
-- `operation` - can additionally be used with a function optimizing the value
+- `VAL` - specifies a default value if no reference found
+- `FUNC` - can additionally be used with a function optimizing the value
   it will be called with the value and the path it comes from
 
 Possible `REF` URIs are:
@@ -134,7 +136,8 @@ Possible `REF` URIs are:
 - `env:ENV_NAME` - to specify an environment variable
 - `file:/xxx.txt` - to specify a file content
 
-
+A value will be searched in each given reference till one is found. If nothing
+found the `VAL` setting is used or nothing.
 
 ### Use references in structure definition
 
@@ -152,18 +155,36 @@ validator.check 'test', value,
     max:
       type: 'integer'
       min:
-        reference: 'STRUCT'
-        path: 'min'
-        operation: (val) -> val + 1
+        REF: 'struct:min'
+        FUNC: (val) -> val + 1
 ```
 
-The above check condition will check that the given `max` value is above the
-`min` value.
+The above check condition will check that the given `max` value is at least one
+above the `min` value.
 
 ### Use references in values
 
 Within the values the use is the same.
 
+``` coffee
+validator.check 'test',
+  database: 'test'
+  host:
+    REF: 'env:MYSQL_HOST'
+    VAL: 'localhost'
+  user:
+    REF: 'env:MYSQL_USER'
+    VAL: 'localhost'
+  password:
+    REF: [
+      'env:MYSQL_PASS'
+      'env:MYSQL_PAsSWORD'
+      'file:/etc/mysql/access.password'
+    ]
+```
+
+This also shows that one or more references can be added and also with different
+reference types.
 
 Descriptive reporting
 -------------------------------------------------
