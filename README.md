@@ -139,7 +139,7 @@ Possible `REF` URIs are:
 A value will be searched in each given reference till one is found. If nothing
 found the `VAL` setting is used or nothing.
 
-### Use references in structure definition
+### Example in definition
 
 If used in structure checks it may need a second validation round but this is done
 automatically in the background.
@@ -162,7 +162,7 @@ validator.check 'test', value,
 The above check condition will check that the given `max` value is at least one
 above the `min` value.
 
-### Use references in values
+### Example in check values
 
 Within the values the use is the same.
 
@@ -211,7 +211,7 @@ This may result in the following error:
 > It should contain the time in milliseconds the whole test may take.
 
 
-Selfchecking Options
+Selfchecking
 -------------------------------------------------
 It is also possible to let your complex options be validated against the
 different types. This will help you to find problems in your development.
