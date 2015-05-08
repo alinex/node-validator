@@ -37,6 +37,7 @@ module.exports = file =
     type: (options) ->
       text = 'A valid filesystem entry. '
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       if options.exists
         text += "The file has to exist. "
       if options.basedir

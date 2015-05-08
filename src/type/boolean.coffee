@@ -38,6 +38,7 @@ module.exports =
       debug "check #{util.inspect value} in #{check.pathname path}"
       , chalk.grey util.inspect options
       options = optimize options
+      text = text.replace /\. It's/, ' which is'
       # sanitize
       value = rules.sync.optional check, path, options, value
       if typeof value is 'string'

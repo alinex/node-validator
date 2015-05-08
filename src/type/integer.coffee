@@ -37,6 +37,7 @@ module.exports = integer =
       # combine into message
       text = "An integer value. "
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       if options.sanitize
         text += "Invalid characters will be removed from text. "
       text += integer.describe.round options

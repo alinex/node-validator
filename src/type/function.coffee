@@ -25,6 +25,8 @@ module.exports =
       else
         "The value has to be a function/class. "
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
+
 
   # Synchronous check
   # -------------------------------------------------

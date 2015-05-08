@@ -29,6 +29,7 @@ module.exports = hostname =
     type: (options) ->
       text = 'A valid regular expression. '
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       text += ValidatorCheck.describe suboptions
 
   # Synchronous check

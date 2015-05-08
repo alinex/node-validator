@@ -91,7 +91,7 @@ exports.desc = (options) ->
   desc = validator.describe options
   expect(desc).to.be.a 'string'
   expect(desc).to.have.length.of.at.least 10
-  #console.log desc
+  console.log desc
 
 exports.selfcheck = (options) ->
   validator.selfcheck 'test', options

@@ -34,8 +34,9 @@ module.exports = interval =
       options = optimize options
       # combine into message
       text = 'A time interval. '
-      text += "If defined as a text you may use a combination of values with the
+      text += "If defined as a text it may use a combination of values with the
         units: ms, s, m, h, d. "
+      text = text.replace /\. If/, ' which if'
       text += rules.describe.optional options
       if options.unit
         text += "The result will be given as the number of #{options.unit}. "

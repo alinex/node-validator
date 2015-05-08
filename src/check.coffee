@@ -121,10 +121,6 @@ class ValidatorCheck
       @checked.push pathname unless pathname in @checked
       return value
     # it's a reference, find path
-
-
-
-
     source = value.source.split '.'
     obj = null
     switch value.reference

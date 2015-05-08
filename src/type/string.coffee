@@ -45,6 +45,7 @@ module.exports = float =
     type: (options) ->
       text = 'A simple text entry. '
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       if options.tostring
         text += "Objects will be converted to their string representation. "
       remove = []

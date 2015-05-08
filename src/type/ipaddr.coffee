@@ -78,17 +78,18 @@ module.exports =
     type: (options) ->
       text = 'A valid IP address. '
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       if options.deny
-        text += "The IP address should not be in the ranges #{options.deny.join ', '}. "
+        text += "The IP address should not be in the ranges: '#{options.deny.join '\', \''}'. "
         if options.allow
-          text += "But IP address in the ranges #{options.allow.join ', '} are allowed. "
+          text += "But IP address in the ranges: '#{options.allow.join '\', \''}' are allowed. "
       else if options.allow
-        text += "The IP address have to be in the ranges #{options.allow.join ', '}. "
+        text += "The IP address have to be in the ranges: '#{options.allow.join '\', \''}'. "
       switch options.format
         when 'short'
-          text += 'The IPv6 address will be compressed as possible. '
+          text += 'An IPv6 address will be compressed as possible. '
         when 'long'
-          text += 'The IPv6 address will be normalized with all octets visible. '
+          text += 'An IPv6 address will be normalized with all octets visible. '
       text
 
 

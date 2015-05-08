@@ -48,6 +48,7 @@ module.exports = float =
       # combine into message
       text = "A numeric floating point number. "
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       if options.sanitize
         text += "Invalid characters will be removed from text. "
       text += float.describe.round options

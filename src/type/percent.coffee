@@ -35,6 +35,7 @@ module.exports = percent =
       text = 'A percentage value as decimal like 0.3 but it may be given
       as percent value like 30%, too. '
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       text += float.describe.round options
       text += float.describe.minmax options
 

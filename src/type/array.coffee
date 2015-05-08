@@ -36,6 +36,7 @@ module.exports = array =
     type: (options) ->
       text = 'A list. '
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       text += array.describe.notempty options
       text += array.describe.string options
       text += array.describe.minmax options

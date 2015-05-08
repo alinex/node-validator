@@ -89,11 +89,6 @@ describe "IP Address", ->
       test.equal options, '192.168.12.20', '192.168.12.20'
       test.equal options, '217.122.0.1', '217.122.0.1'
 
-
-
-
-
-
     it "should support short format", ->
       options =
         type: 'ipaddr'

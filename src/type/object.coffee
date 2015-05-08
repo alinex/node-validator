@@ -32,6 +32,7 @@ module.exports = object =
     type: (options) ->
       text = 'An object. '
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
       text += object.describe.instanceof options
       text += object.describe.keys options
 

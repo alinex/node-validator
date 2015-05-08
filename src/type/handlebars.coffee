@@ -26,6 +26,7 @@ module.exports =
     type: (options) ->
       text = 'A valid text which may contain handlebar syntax and variables. '
       text += rules.describe.optional options
+      text = text.replace /\. It's/, ' which is'
 
   # Asynchronous check
   # -------------------------------------------------
