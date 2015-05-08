@@ -172,6 +172,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <span class="nv">text = </span><span class="s">&#39;A percentage value as decimal like 0.3 but it may be given</span>
 <span class="s">      as percent value like 30%, too. &#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
+      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">float</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">round</span> <span class="nx">options</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">float</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">minmax</span> <span class="nx">options</span>
 

@@ -150,6 +150,7 @@
     <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
       <span class="nv">text = </span><span class="s">&#39;A valid regular expression. &#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
+      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="nx">ValidatorCheck</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">suboptions</span>
 
 

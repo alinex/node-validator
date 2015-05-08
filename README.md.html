@@ -37,6 +37,9 @@
       <div class="heading h3">
         <a href="#get%20description">Get description</a>
       </div>
+      <div class="heading h3">
+        <a href="#compositing">Compositing</a>
+      </div>
       <div class="heading h2">
         <a href="#optional%20values">Optional values</a>
       </div>
@@ -44,16 +47,19 @@
         <a href="#references">References</a>
       </div>
       <div class="heading h3">
-        <a href="#use%20references%20in%20structure%20definition">Use references in structure definition</a>
+        <a href="#how%20it%20works">How it works</a>
       </div>
       <div class="heading h3">
-        <a href="#use%20references%20in%20values">Use references in values</a>
+        <a href="#example%20in%20definition">Example in definition</a>
+      </div>
+      <div class="heading h3">
+        <a href="#example%20in%20check%20values">Example in check values</a>
       </div>
       <div class="heading h2">
         <a href="#descriptive%20reporting">Descriptive reporting</a>
       </div>
       <div class="heading h2">
-        <a href="#selfchecking%20options">Selfchecking Options</a>
+        <a href="#selfchecking">Selfchecking</a>
       </div>
       <div class="heading h2">
         <a href="#basic%20check%20types">Basic Check Types</a>
@@ -151,6 +157,11 @@ external information.</p>
 data structure gains complexity. But if you know the basic rules it's all
 a composition of some simple structures.</p>
 
+<p>This library can help you make your life secure and easy but you have to run
+every external data through it using a detailed data description. If you do so
+you can trust and use the values and get also the benefit that they are optimized
+as with the <code>handlebars</code> type you get a ready to use handlebar function back.</p>
+
 <p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
 following the code standards defined there.</p>
 
@@ -203,7 +214,7 @@ reporting.</li>
 <p>Most checks are synchronous and may be called synchronously or asynchronously.
 Only if an asynchronous check is called synchronously it will throw an Error.</p>
 
-<p>Synchronous call:</p>
+<p><strong>Synchronous call:</strong></p>
 
 
 <div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
@@ -214,7 +225,7 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 
 
 
-<p>Asynchronous call:</p>
+<p><strong>Asynchronous call:</strong></p>
 
 
 <div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
@@ -275,6 +286,54 @@ has to be to validate.</p>
 
 
 
+<div class="pilwrap" id="compositing">
+  <h3>
+    <a href="#compositing" name="compositing" class="pilcrow">&#182;</a>
+    Compositing
+  </h3>
+</div>
+
+
+<p>As your structure gets more and more complex it may help you keep the overview
+if you divide by setting some parts to variables first before compositing all
+together:</p>
+
+
+<div class="highlight"><pre><code><span class="nv">address =</span>
+  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+  <span class="nv">allowedKeys: </span><span class="kc">true</span>
+  <span class="nv">entries:</span>
+    <span class="nv">name:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">street:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">city:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">country:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">email:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">validator</span><span class="p">.</span><span class="o">is</span> <span class="s">&#39;audiocd&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
+  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+  <span class="nv">allowedKeys: </span><span class="kc">true</span>
+  <span class="nv">entries:</span>
+    <span class="nv">title:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">publisher: </span><span class="nx">address</span>
+    <span class="nv">artists:</span>
+      <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+      <span class="nv">notEmpty: </span><span class="kc">true</span>
+      <span class="nv">entries: </span><span class="nx">address</span>
+    <span class="nv">composer: </span><span class="nx">address</span>
+</code></pre></div>
+
+
+
+<p>The above example shows how to composite a complex structure out of parts and
+how to reuse the same elements.</p>
+
+
 <div class="pilwrap" id="optional%20values">
   <h2>
     <a href="#optional%20values" name="optional%20values" class="pilcrow">&#182;</a>
@@ -309,39 +368,119 @@ or values.</p>
 <p>References are written as object with:</p>
 
 <ul>
-<li><code>REF</code> as the only needed key which may contain a single string path or a
-list of paths in which case the first found element will be used</li>
+<li><code>REF</code> - the only needed key which contain a list of reference locations</li>
 <li><code>VAL</code> - specifies a default value if no reference found</li>
 <li><code>FUNC</code> - can additionally be used with a function optimizing the value
 it will be called with the value and the path it comes from</li>
 </ul>
 
-<p>Possible <code>REF</code> URIs are:</p>
+<p>Reference locations are objects with:</p>
 
 <ul>
-<li><code>struct:xxx</code> - to specify the value sibling value from the given one</li>
-<li><code>struct:/xxx.yyy</code> - to specify a value from the structure by absolute path</li>
-<li><code>struct:&lt;xxx.yyy</code> - to specify the value based from the parent of the operating object</li>
-<li><code>struct:&lt;&lt;xxx.yyy</code> - to specify the value based from the grandparent of the operating object</li>
-<li><code>data:/xxx</code> - to specify an element from the additional given data structure</li>
-<li><code>env:ENV_NAME</code> - to specify an environment variable</li>
-<li><code>file:/xxx.txt</code> - to specify a file content</li>
+<li><code>source</code> - the type of references (struct, data, env, file)</li>
+<li><code>path</code> - the path to the reference (source specific)</li>
+<li><code>type</code> - if a check should be done give the type...</li>
 </ul>
+
+<p>Other keys may follow specific to the type checks.</p>
+
+<p><strong>STRUCT references</strong></p>
+
+<p>They are used to specify another element in the value structure. The path specifies
+where to find it. If you use this source type you won't need the checks within the
+reference because the values will already get checked. The validator will guaranty
+that values are used as reference after they are checked.</p>
+
+<p>The path is calculated from the viewpoint of the current parent element. That means
+giving a name it will look at the sibling node but you may go up/down the tree:</p>
+
+<ul>
+<li><code>xxx</code> - to specify the value sibling value from the given one</li>
+<li><code>/xxx.yyy</code> - to specify a value from the structure by absolute path</li>
+<li><code>/xxx.*.yyy</code> - specify a value in any of the subelements of xxx</li>
+<li><code>/xxx.**.yyy</code> - specify a value in any of the subelements also multiple levels deep</li>
+<li><code>&lt;xxx.yyy</code> - to specify the value based from the parent of the operating object</li>
+<li><code>&lt;&lt;xxx.yyy</code> - to specify the value based from the grandparent of the operating object</li>
+</ul>
+
+<p><strong>DATA references</strong></p>
+
+<p>The DATA values may be given as additional data to the validator. If so you may
+access it but paths are always absolute.</p>
+
+<p><strong>ENV references</strong></p>
+
+<p>You can also use some environment settings as reference. For this source type only
+give the name of the environment variable as path. But keep in mind to better check
+the type of it's content, too.</p>
+
+<p><strong>FILE references</strong></p>
+
+<p>And at last you can read the content of a simple text file as value. The path points
+to the file and have to be an absolute path.
+Maybe you have to do some type checks here, too.</p>
+
+<p>In this type of references the system will cache the file contents for a short time
+to prevent multiple read and gain better performance.</p>
+
+
+<div class="pilwrap" id="how%20it%20works">
+  <h3>
+    <a href="#how%20it%20works" name="how%20it%20works" class="pilcrow">&#182;</a>
+    How it works
+  </h3>
+</div>
+
+
+<p>Use it everywhere you may need it but prevent round referencing in which it reference
+itself through other references.</p>
+
+<p><strong>In check definitions</strong></p>
+
+<p>Before doing a check or a subcheck it's options are checked for references if there
+is one:</p>
+
+<ul>
+<li>go through the reference list</li>
+<li>get the reference and do the accompanying check (if there is one)</li>
+<li>use this as an value if it is found and succeeded in check</li>
+<li>if not go on to the next reference from the list</li>
+<li>if no value found use the default value</li>
+<li>if an operation is given run it with the value</li>
+<li>give back the resulting reference check</li>
+</ul>
+
+<p><strong>In value structures</strong></p>
+
+<p>Every value will be checked if it is a reference. If so it will:</p>
+
+<ul>
+<li>go through the reference list</li>
+<li>get the reference and do the accompanying check (if there is one)</li>
+<li>use this as an value if it is found and succeeded in check</li>
+<li>if not go on to the next reference from the list</li>
+<li>if no value found use the default value</li>
+<li>if an operation is given run it with the value</li>
+<li>go on to the validation check with the resulting value</li>
+</ul>
+
+<p><em>_ Default value_</em></p>
 
 <p>A value will be searched in each given reference till one is found. If nothing
 found the <code>VAL</code> setting is used or nothing.</p>
 
 
-<div class="pilwrap" id="use%20references%20in%20structure%20definition">
+<div class="pilwrap" id="example%20in%20definition">
   <h3>
-    <a href="#use%20references%20in%20structure%20definition" name="use%20references%20in%20structure%20definition" class="pilcrow">&#182;</a>
-    Use references in structure definition
+    <a href="#example%20in%20definition" name="example%20in%20definition" class="pilcrow">&#182;</a>
+    Example in definition
   </h3>
 </div>
 
 
-<p>If used in structure checks it may need a second validation round but this is done
-automatically in the background.</p>
+<p>If used in check definitions it may need a second validation round but this is done
+automatically in the background. Mostly you may need the references as comparing
+value for some checks or as an default value.</p>
 
 
 <div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
@@ -354,7 +493,15 @@ automatically in the background.</p>
     <span class="nv">max:</span>
       <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
       <span class="nv">min:</span>
-        <span class="nv">REF: </span><span class="s">&#39;struct:min&#39;</span>
+        <span class="nv">REF: </span><span class="p">[</span>
+          <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
+          <span class="nv">path: </span><span class="s">&#39;MINVAL&#39;</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+        <span class="p">,</span>
+          <span class="nv">source: </span><span class="s">&#39;struct&#39;</span>
+          <span class="nv">path: </span><span class="s">&#39;min&#39;</span>
+        <span class="p">]</span>
         <span class="nv">FUNC: </span><span class="nf">(val) -&gt;</span> <span class="nx">val</span> <span class="o">+</span> <span class="mi">1</span>
 </code></pre></div>
 
@@ -364,10 +511,10 @@ automatically in the background.</p>
 above the <code>min</code> value.</p>
 
 
-<div class="pilwrap" id="use%20references%20in%20values">
+<div class="pilwrap" id="example%20in%20check%20values">
   <h3>
-    <a href="#use%20references%20in%20values" name="use%20references%20in%20values" class="pilcrow">&#182;</a>
-    Use references in values
+    <a href="#example%20in%20check%20values" name="example%20in%20check%20values" class="pilcrow">&#182;</a>
+    Example in check values
   </h3>
 </div>
 
@@ -378,16 +525,27 @@ above the <code>min</code> value.</p>
 <div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span>
   <span class="nv">database: </span><span class="s">&#39;test&#39;</span>
   <span class="nv">host:</span>
-    <span class="nv">REF: </span><span class="s">&#39;env:MYSQL_HOST&#39;</span>
+    <span class="nv">REF: </span><span class="p">[</span>
+      <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
+      <span class="nv">path: </span><span class="s">&#39;MYSQL_HOST&#39;</span>
+    <span class="p">]</span>
     <span class="nv">VAL: </span><span class="s">&#39;localhost&#39;</span>
   <span class="nv">user:</span>
-    <span class="nv">REF: </span><span class="s">&#39;env:MYSQL_USER&#39;</span>
+    <span class="nv">REF: </span><span class="p">[</span>
+      <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
+      <span class="nv">path: </span><span class="s">&#39;MYSQL_USER&#39;</span>
+    <span class="p">]</span>
     <span class="nv">VAL: </span><span class="s">&#39;localhost&#39;</span>
   <span class="nv">password:</span>
     <span class="nv">REF: </span><span class="p">[</span>
-      <span class="s">&#39;env:MYSQL_PASS&#39;</span>
-      <span class="s">&#39;env:MYSQL_PAsSWORD&#39;</span>
-      <span class="s">&#39;file:/etc/mysql/access.password&#39;</span>
+      <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
+      <span class="nv">path: </span><span class="s">&#39;MYSQL_PASS&#39;</span>
+    <span class="p">,</span>
+      <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
+      <span class="nv">path: </span><span class="s">&#39;MYSQL_PAsSWORD&#39;</span>
+    <span class="p">,</span>
+      <span class="nv">source: </span><span class="s">&#39;file&#39;</span>
+      <span class="nv">path: </span><span class="s">&#39;/etc/mysql/access.password&#39;</span>
     <span class="p">]</span>
 </code></pre></div>
 
@@ -432,10 +590,10 @@ and <code>describe()</code> calls.</p>
 </blockquote>
 
 
-<div class="pilwrap" id="selfchecking%20options">
+<div class="pilwrap" id="selfchecking">
   <h2>
-    <a href="#selfchecking%20options" name="selfchecking%20options" class="pilcrow">&#182;</a>
-    Selfchecking Options
+    <a href="#selfchecking" name="selfchecking" class="pilcrow">&#182;</a>
+    Selfchecking
   </h2>
 </div>
 
