@@ -214,6 +214,8 @@ reporting.</li>
 <p>Most checks are synchronous and may be called synchronously or asynchronously.
 Only if an asynchronous check is called synchronously it will throw an Error.</p>
 
+<p>The checks are split up into several packages to load on demand.</p>
+
 <p><strong>Synchronous call:</strong></p>
 
 
@@ -224,6 +226,9 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 </code></pre></div>
 
 
+
+<p>You get the value directly back but if something goes wrong or the check fails
+it will throw an error which you could catch.</p>
 
 <p><strong>Asynchronous call:</strong></p>
 
@@ -241,7 +246,8 @@ Only if an asynchronous check is called synchronously it will throw an Error.</p
 
 
 
-<p>The checks are split up into several packages to load on demand.</p>
+<p>Here you will get the error directly in the callback in the default manner
+of asynchronous calls.</p>
 
 
 <div class="pilwrap" id="only%20test">
