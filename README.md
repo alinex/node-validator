@@ -17,6 +17,11 @@ The validation rules are really simple, but they will get more complex as your
 data structure gains complexity. But if you know the basic rules it's all
 a composition of some simple structures.
 
+This library can help you make your life secure and easy but you have to run
+every external data through it using a detailed data description. If you do so
+you can trust and use the values and get also the benefit that they are optimized
+as with the `handlebars` type you get a ready to use handlebar function back.
+
 It is one of the modules of the [Alinex Universe](http://alinex.github.io/node-alinex)
 following the code standards defined there.
 
@@ -120,29 +125,96 @@ or values.
 
 References are written as object with:
 
-- `REF` as the only needed key which may contain a single string path or a
-  list of paths in which case the first found element will be used
+- `REF` - the only needed key which contain a list of reference locations
 - `VAL` - specifies a default value if no reference found
 - `FUNC` - can additionally be used with a function optimizing the value
   it will be called with the value and the path it comes from
 
-Possible `REF` URIs are:
+Reference locations are objects with:
 
-- `struct:xxx` - to specify the value sibling value from the given one
-- `struct:/xxx.yyy` - to specify a value from the structure by absolute path
-- `struct:<xxx.yyy` - to specify the value based from the parent of the operating object
-- `struct:<<xxx.yyy` - to specify the value based from the grandparent of the operating object
-- `data:/xxx` - to specify an element from the additional given data structure
-- `env:ENV_NAME` - to specify an environment variable
-- `file:/xxx.txt` - to specify a file content
+- `source` - the type of references (struct, data, env, file)
+- `path` - the path to the reference (source specific)
+- `type` - if a check should be done give the type...
+
+Other keys may follow specific to the type checks.
+
+__STRUCT references__
+
+They are used to specify another element in the value structure. The path specifies
+where to find it. If you use this source type you won't need the checks within the
+reference because the values will already get checked. The validator will guaranty
+that values are used as reference after they are checked.
+
+The path is calculated from the viewpoint of the current parent element. That means
+giving a name it will look at the sibling node but you may go up/down the tree:
+
+- `xxx` - to specify the value sibling value from the given one
+- `/xxx.yyy` - to specify a value from the structure by absolute path
+- `/xxx.*.yyy` - specify a value in any of the subelements of xxx
+- `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
+- `<xxx.yyy` - to specify the value based from the parent of the operating object
+- `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
+
+__DATA references__
+
+The DATA values may be given as additional data to the validator. If so you may
+access it but paths are always absolute.
+
+__ENV references__
+
+You can also use some environment settings as reference. For this source type only
+give the name of the environment variable as path. But keep in mind to better check
+the type of it's content, too.
+
+__FILE references__
+
+And at last you can read the content of a simple text file as value. The path points
+to the file and have to be an absolute path.
+Maybe you have to do some type checks here, too.
+
+In this type of references the system will cache the file contents for a short time
+to prevent multiple read and gain better performance.
+
+### How it works
+
+Use it everywhere you may need it but prevent round referencing in which it reference
+itself through other references.
+
+__In check definitions__
+
+Before doing a check or a subcheck it's options are checked for references if there
+is one:
+
+- go through the reference list
+- get the reference and do the accompanying check (if there is one)
+- use this as an value if it is found and succeeded in check
+- if not go on to the next reference from the list
+- if no value found use the default value
+- if an operation is given run it with the value
+- give back the resulting reference check
+
+__In value structures__
+
+Every value will be checked if it is a reference. If so it will:
+
+- go through the reference list
+- get the reference and do the accompanying check (if there is one)
+- use this as an value if it is found and succeeded in check
+- if not go on to the next reference from the list
+- if no value found use the default value
+- if an operation is given run it with the value
+- go on to the validation check with the resulting value
+
+__ Default value__
 
 A value will be searched in each given reference till one is found. If nothing
 found the `VAL` setting is used or nothing.
 
 ### Example in definition
 
-If used in structure checks it may need a second validation round but this is done
-automatically in the background.
+If used in check definitions it may need a second validation round but this is done
+automatically in the background. Mostly you may need the references as comparing
+value for some checks or as an default value.
 
 ``` coffee
 validator.check 'test', value,
@@ -155,7 +227,15 @@ validator.check 'test', value,
     max:
       type: 'integer'
       min:
-        REF: 'struct:min'
+        REF: [
+          source: 'env'
+          path: 'MINVAL'
+          type: 'integer'
+          min: 0
+        ,
+          source: 'struct'
+          path: 'min'
+        ]
         FUNC: (val) -> val + 1
 ```
 
@@ -170,16 +250,27 @@ Within the values the use is the same.
 validator.check 'test',
   database: 'test'
   host:
-    REF: 'env:MYSQL_HOST'
+    REF: [
+      source: 'env'
+      path: 'MYSQL_HOST'
+    ]
     VAL: 'localhost'
   user:
-    REF: 'env:MYSQL_USER'
+    REF: [
+      source: 'env'
+      path: 'MYSQL_USER'
+    ]
     VAL: 'localhost'
   password:
     REF: [
-      'env:MYSQL_PASS'
-      'env:MYSQL_PAsSWORD'
-      'file:/etc/mysql/access.password'
+      source: 'env'
+      path: 'MYSQL_PASS'
+    ,
+      source: 'env'
+      path: 'MYSQL_PAsSWORD'
+    ,
+      source: 'file'
+      path: '/etc/mysql/access.password'
     ]
 ```
 
