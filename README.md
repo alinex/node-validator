@@ -56,7 +56,7 @@ All checks are called with:
 Most checks are synchronous and may be called synchronously or asynchronously.
 Only if an asynchronous check is called synchronously it will throw an Error.
 
-Synchronous call:
+__Synchronous call:__
 
 ``` coffee
 value = validator.check 'test', value,
@@ -65,7 +65,7 @@ value = validator.check 'test', value,
   max: 100
 ```
 
-Asynchronous call:
+__Asynchronous call:__
 
 ``` coffee
 validator.check 'test', value,
@@ -105,6 +105,44 @@ console.log validator.describe
   max: 100
 ```
 
+### Compositing
+
+As your structure gets more and more complex it may help you keep the overview
+if you divide by setting some parts to variables first before compositing all
+together:
+
+``` coffee
+address =
+  type: 'object'
+  allowedKeys: true
+  entries:
+    name:
+      type: 'string'
+    street:
+      type: 'string'
+    city:
+      type: 'string'
+    country:
+      type: 'string'
+    email:
+      type: 'string'
+
+console.log validator.is 'audiocd', value,
+  type: 'object'
+  allowedKeys: true
+  entries:
+    title:
+      type: 'string'
+    publisher: address
+    artists:
+      type: 'array'
+      notEmpty: true
+      entries: address
+    composer: address
+```
+
+The above example shows how to composite a complex structure out of parts and
+how to reuse the same elements.
 
 Optional values
 -------------------------------------------------
