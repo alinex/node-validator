@@ -3,20 +3,33 @@ async = require 'alinex-async'
 
 test = require '../test'
 
-describe "IP Address", ->
+describe "References", ->
 
   options = null
 
   beforeEach ->
     options =
-      type: 'ipaddr'
+      type: 'reference'
 
   describe "sync check", ->
 
-    it "should match normal adresses", ->
-      test.equal options, '127.0.0.1', '127.0.0.1'
-      test.equal options, '192.12.1.1', '192.12.1.1'
-      test.equal options, 'ffff::', 'ffff::'
+    it.only "should keep normal values", ->
+      test.same options, 'one'
+      test.same options, 1
+      test.same options, [1,2,3]
+      test.same options, { one: 1 }
+      test.same options, (new Error '????')
+
+# get struct value
+# get data value
+# get env value
+# get file value
+# get second ref
+# get undefined if no ref
+# get VAL
+# use operation
+
+
     it "should fail on other objects", ->
       test.fail options, 1
       test.fail options, null

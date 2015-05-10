@@ -15,31 +15,67 @@
 debug = require('debug')('validator:reference')
 util = require 'util'
 chalk = require 'chalk'
+process = require 'process'
+# alinex modules
+fs = require 'alinex-fs'
 # include classes and helper
 ValidatorCheck = require '../check'
 rules = require '../rules'
 
-suboptions = (options) ->
-  settings =
-    type: 'object'
-    mandatoryKeys: ['REF']
-    allowedKeys: ['VAL','FUNC']
-    entries:
-      REF:
-        type: 'array'
-        notEmpty: true
+checkref =
+  type: 'object'
+  mandatoryKeys: ['REF']
+  allowedKeys: ['VAL','FUNC']
+  entries:
+    REF:
+      type: 'array'
+      notEmpty: true
+      entries:
+        type: 'object'
         entries:
-          type: 'object'
-          entries:
-            source:
-              type: 'string'
-              lowerCase: true
-              values: ['struct', 'data', 'env', 'file']
-            path:
-              type: 'string'
-      FUNC:
-        type: 'function'
-  settings
+          source:
+            type: 'string'
+            lowerCase: true
+            values: ['struct', 'data', 'env', 'file']
+          path:
+            type: 'string'
+    FUNC:
+      type: 'function'
+
+
+            # `/xxx.*.yyy` - specify a value in any of the subelements of xxx
+            # `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
+            # `/xxx.test*.yyy` - specify to search in some subelements
+valueAtPath = (data, path) ->
+  return null unless data[path[0]]?
+  switch
+    when path[0] is '*'
+      list = if data.isArray() then [0..data.length] else Object.keys data
+      for sub in list
+        result = valueAtPath data[sub], path[1..]
+        return result if result
+      return null
+    when path[0] is '**'
+      list = if data.isArray() then [0..data.length] else Object.keys data
+      for sub in list
+        result = valueAtPath data[sub], path[1..]
+        return result if result
+      for sub in list
+        result = valueAtPath data[sub], path
+        return result if result
+      return null
+    when ~path[0].indexOf '*'
+      re = new RegExp "^#{path[0].replace '*', '.*'}$"
+      list = if data.isArray() then [0..data.length] else Object.keys data
+      for sub in list
+        continue unless sub.match re
+        result = valueAtPath data[sub], path[1..]
+        return result if result
+      return null
+    else
+      return data[path[0]] if path.length is 1
+      return valueAtPath data[path[0]], path[1..]
+
 
 module.exports =
 
@@ -59,6 +95,7 @@ module.exports =
 
   # Synchronous check
   # -------------------------------------------------
+  # Only a synchronous check is supported here, also if it comes to file reads.
   sync:
 
     # ### Check Type
@@ -66,70 +103,65 @@ module.exports =
       debug "check #{util.inspect value} in #{check.pathname path}"
       , chalk.grey util.inspect options
       # make basic check for reference or not
+      return value unless typeof value is 'object' and value.REF?
       # validate reference
+      value = ValidatorCheck.check 'name', value, checkref
       # find reference
-      # do the reference checks
-      # run the operation
-      # return resulting value
-
-
-      # first check input type
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      value = check.subcall path, suboptions(options), value
-      # validate
-      unless ipaddr.isValid value
-        throw check.error path, options, value,
-        new Error "The given value '#{value}' is no valid IPv6 or IPv4 address"
-      ip = ipaddr.parse value
-      debug "analyzed #{ip.kind()}", ip
-      # format value
-      if options.version
-        if options.version is 'ipv4'
-          if ip.kind() is 'ipv6'
-            if ip.isIPv4MappedAddress()
-              debug 'convert to ipv4'
-              ip = ip.toIPv4Address()
+      result = null
+      refname = null
+      for ref in value.REF
+        # try to get the value
+        refname = "#{ref.source}:#{ref.path}"
+        debug "check for reference '#{refname}'"
+        switch ref.source
+          when 'struct'
+            absolute = ref.path[0] is '/'
+            source = ref.path.split '.'
+            if absolute
+              source[0] = source[0].replace /^[\/<]*/, ''
             else
-              throw check.error path, options, value,
-              new Error "The given value '#{value}' is no valid IPv#{options.version} address"
-        else
-          if ip.kind() is 'ipv4'
-            debug 'convert to ipv4mapped'
-            ip = ip.toIPv4MappedAddress()
-      if ip.kind() is 'ipv6'
-        value = if options.format is 'long' then ip.toNormalizedString() else ip.toString()
-      else
-        value = ip.toString()
-      # check ranges
-      if options.allow
-        for entry in options.allow
-          if specialRanges[entry]?
-            for subentry in specialRanges[entry]
-              [addr, bits] = subentry.split /\//
-              return value if ip.match ipaddr.parse(addr), bits
-          else
-            [addr, bits] = entry.split /\//
-            return value if ip.match ipaddr.parse(addr), bits
-        # ip not in the allowed range
-        unless options.deny
-          throw check.error path, options, value,
-          new Error "The given ip address '#{value}' is not in the allowed ranges"
-      if options.deny
-        for entry in options.deny
-          if specialRanges[entry]?
-            for subentry in specialRanges[entry]
-              [addr, bits] = subentry.split /\//
-              if ip.match ipaddr.parse(addr), bits
-                throw check.error path, options, value,
-                new Error "The given ip address '#{value}' is denied because in range #{entry}"
-          else
-            [addr, bits] = entry.split /\//
-            if ip.match ipaddr.parse(addr), bits
-              throw check.error path, options, value,
-              new Error "The given ip address '#{value}' is denied because in range #{entry}"
-      # ip also not in the denied range so allowed again
-      value
+              newpath = source.slice()
+              while source[0][0] is '<'
+                newpath.shift() if newpath.length
+                source[0] = source[0][1..]
+              source = newpath.concat source
+              refname = "#{ref.source}:/#{source.join '.'}"
+              debug "check for absolute reference '#{refname}'"
+            # read value from absolute value
+            result = valueAtPath check.value, source
+            debug "reference '#{refname}' not found" unless result?
+            # `/xxx.yyy` - to specify a value from the structure by absolute path
+            # `xxx` - to specify the value sibling value from the given one
+            # `<xxx.yyy` - to specify the value based from the parent of the operating object
+            # `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
+
+# check for already checked value?????
+
+          when 'data'
+            source = ref.path.replace(/^[\/<]*/, '').split '.'
+            refname = "#{ref.source}:/#{source.join '.'}"
+            # read value from absolute value
+            result = valueAtPath check.data, source
+            debug "reference '#{refname}' not found" unless result?
+          when 'env'
+            result = process.env[ref.path]
+          when 'file'
+            result = fs.readFileSync ref.path, 'utf8'
+        break if result? # stop search if value is found
+      # use VAL if no ref found
+      unless result
+        debug "use default value"
+        result = value.VAL
+        refname = 'default reference value'
+      unless result
+        debug "failed to find reference"
+      # run the operation
+      if value.FUNC?
+        debug "run optimize function"
+        result = value.FUNC result, refname
+      # return resulting value
+      result
+
 
   # Selfcheck
   # -------------------------------------------------
@@ -141,91 +173,5 @@ module.exports =
       entries:
         type:
           type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
-        default:
-          type: 'string'
-          optional: true
-        version:
-          type: 'string'
-          values: ['ipv4', 'ipv6']
-          optional: true
-        deny:
-          type: 'array'
-          optional: true
-          entries:
-            type: 'string'
-            match: ///
-              ^
-              unspecified|broadcast|multicast|linklocal|loopback|private
-              |reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special
-              |( # ipv6 mask
-                |([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}          # 1:2:3:4:5:6:7:8
-                |([0-9a-fA-F]{1,4}:){1,7}:                         # 1::                              1:2:3:4:5:6:7::
-                |([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}         # 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
-                |([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}  # 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
-                |([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}  # 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
-                |([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}  # 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
-                |([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}  # 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
-                |[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})       # 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
-                |:((:[0-9a-fA-F]{1,4}){1,7}|:)                     # ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::
-                |fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}     # fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)
-                |::(ffff(:0{1,4}){0,1}:){0,1}
-                  ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                  (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])          # ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255  (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-                |([0-9a-fA-F]{1,4}:){1,4}:
-                  ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                  (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])          # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
-              )\/(12[0-8]|(1[01][0-9]){0,1}[0-9])                   # /128
-              |( # ipv4 mask
-                ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])            # 255.255.255.255
-              )\/(3[0-2]|[12]{0,1}[0-9])                            # /32
-              $
-            ///
-        allow:
-          type: 'array'
-          optional: true
-          entries:
-            type: 'string'
-            match: ///
-              ^
-              unspecified|broadcast|multicast|linklocal|loopback|private
-              |reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special
-              |( # ipv6 mask
-                |([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}          # 1:2:3:4:5:6:7:8
-                |([0-9a-fA-F]{1,4}:){1,7}:                         # 1::                              1:2:3:4:5:6:7::
-                |([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}         # 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
-                |([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}  # 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
-                |([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}  # 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
-                |([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}  # 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
-                |([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}  # 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
-                |[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})       # 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
-                |:((:[0-9a-fA-F]{1,4}){1,7}|:)                     # ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::
-                |fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}     # fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)
-                |::(ffff(:0{1,4}){0,1}:){0,1}
-                  ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                  (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])          # ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255  (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-                |([0-9a-fA-F]{1,4}:){1,4}:
-                  ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                  (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])          # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
-              )\/(12[0-8]|(1[01][0-9]){0,1}[0-9])                   # /128
-              |( # ipv4 mask
-                ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])            # 255.255.255.255
-              )\/(3[0-2]|[12]{0,1}[0-9])                            # /32
-              $
-            ///
-        format:
-          type: 'string'
-          default: 'short'
-          values: ['short', 'long']
     , options
 

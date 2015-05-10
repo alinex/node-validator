@@ -56,6 +56,8 @@ All checks are called with:
 Most checks are synchronous and may be called synchronously or asynchronously.
 Only if an asynchronous check is called synchronously it will throw an Error.
 
+The checks are split up into several packages to load on demand.
+
 __Synchronous call:__
 
 ``` coffee
@@ -64,6 +66,9 @@ value = validator.check 'test', value,
   min: 0
   max: 100
 ```
+
+You get the value directly back but if something goes wrong or the check fails
+it will throw an error which you could catch.
 
 __Asynchronous call:__
 
@@ -79,7 +84,8 @@ validator.check 'test', value,
     # do something with value
 ```
 
-The checks are split up into several packages to load on demand.
+Here you will get the error directly in the callback in the default manner
+of asynchronous calls.
 
 ### Only test
 
@@ -243,7 +249,7 @@ Every value will be checked if it is a reference. If so it will:
 - if an operation is given run it with the value
 - go on to the validation check with the resulting value
 
-__ Default value__
+__Default value__
 
 A value will be searched in each given reference till one is found. If nothing
 found the `VAL` setting is used or nothing.
