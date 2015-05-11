@@ -6,6 +6,7 @@
 debug = require('debug')('validator')
 util = require 'util'
 async = require 'alinex-async'
+chalk = require 'chalk'
 # internal classes and helper
 
 
@@ -67,7 +68,7 @@ class ValidatorCheck
       while @runAgain
         @runAgain = false
         result = lib.sync.type @, [], @options, result
-      debug "check succeeded for #{@source}"
+      debug "check succeeded for #{@source}", chalk.grey util.inspect result
       result
     catch err
       debug "check failed with #{err}"
@@ -91,7 +92,7 @@ class ValidatorCheck
         if err
           debug "check failed with #{err}"
           return cb err
-        debug "check succeeded for #{@source}"
+        debug "check succeeded for #{@source}", chalk.grey util.inspect result
         cb null, result
     # alternatively run sync code
     try
@@ -175,12 +176,16 @@ class ValidatorCheck
         unless lib.sync?.type?
           return new Error "Could not synchronously call #{options.type} check in
           #{@pathname path}."
-        return lib.sync.type @, path, options, value
+        result = lib.sync.type @, path, options, value
+        debug "subcall finished for #{@pathname path}", chalk.grey util.inspect result
+        return result
       else
         # async call async
         if lib.async?.type?
-          return lib.async.type @, path, options, value, cb
-
+          return lib.async.type @, path, options, value, (err, result) ->
+            unless err
+              debug "subcall finished for #{@pathname path}", chalk.grey util.inspect result
+            cb err, result
         # async call sync
         try
           result = lib.sync.type @, path, options, value
