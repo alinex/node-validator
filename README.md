@@ -196,13 +196,15 @@ giving a name it will look at the sibling node but you may go up/down the tree:
 - `/xxx.yyy` - to specify a value from the structure by absolute path
 - `/xxx.*.yyy` - specify a value in any of the subelements of xxx
 - `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
+- `/xxx.zz*.yyy` - specify a value in any of the subelements which start with zz
 - `<xxx.yyy` - to specify the value based from the parent of the operating object
 - `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
 
 __DATA references__
 
 The DATA values may be given as additional data to the validator. If so you may
-access it but paths are always absolute.
+access it with the same path specifier as for `struct` but paths are always absolute
+here.
 
 __ENV references__
 

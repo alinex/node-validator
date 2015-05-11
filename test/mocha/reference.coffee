@@ -5,129 +5,106 @@ test = require '../test'
 
 describe "References", ->
 
-  options = null
+  describe "simple ENV checks", ->
 
-  beforeEach ->
-    options =
-      type: 'reference'
+    simple = null
+    beforeEach ->
+      simple =
+        type: 'reference'
 
-  describe "sync check", ->
+    it "should keep normal values", ->
+      test.same simple, 'one'
+      test.same simple, 1
+      test.same simple, [1,2,3]
+      test.same simple, { one: 1 }
+      test.same simple, (new Error '????')
+      test.same simple, undefined
+      test.same simple, null
 
-    it.only "should keep normal values", ->
-      test.same options, 'one'
-      test.same options, 1
-      test.same options, [1,2,3]
-      test.same options, { one: 1 }
-      test.same options, (new Error '????')
+    it "should get ENV reference", ->
+      process.env.TESTVALIDATOR = 123
+      test.equal simple,
+        REF: [
+          source: 'env'
+          path: 'TESTVALIDATOR'
+        ]
+      , '123'
 
-# get struct value
+    it "should get STRUCT reference", ->
+      test.equal simple,
+        REF: [
+          source: 'env'
+          path: 'TESTVALIDATOR'
+        ]
+      , '123'
+
+    it "should run checks", ->
+      process.env.TESTVALIDATOR = 123
+      test.equal simple,
+        REF: [
+          source: 'env'
+          path: 'TESTVALIDATOR'
+          type: 'integer'
+        ]
+      , 123
+    it "should work on missing reference", ->
+      test.equal simple,
+        REF: [
+          source: 'env'
+          path: 'TESTVALIDATOR2'
+        ]
+      , undefined
+    it "should return default value", ->
+      test.equal simple,
+        REF: [
+          source: 'env'
+          path: 'TESTVALIDATOR2'
+        ]
+        VAL: 0
+      , 0
+    it "should run operations", ->
+      process.env.TESTVALIDATOR = 123
+      test.equal simple,
+        REF: [
+          source: 'env'
+          path: 'TESTVALIDATOR'
+          type: 'integer'
+        ]
+        FUNC: (v) -> ++v
+      , 124
+
+  describe.only "STRUCT checks", ->
+
+    struct = null
+    beforeEach ->
+      struct =
+        type: 'object'
+        entries:
+          ref:
+            type: 'reference'
+
+    it "should get absolute path", ->
+      test.equal struct,
+        data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+      , 1
+
 # get data value
-# get env value
 # get file value
+
+
 # get second ref
-# get undefined if no ref
-# get VAL
-# use operation
-
-
-    it "should fail on other objects", ->
-      test.fail options, 1
-      test.fail options, null
-      test.fail options, []
-      test.fail options, (new Error '????')
-      test.fail options, {}
-    it "should fail on wrong addresses", ->
-      test.fail options, '300.92.16.2'
-      test.fail options, '192.168.5'
-      test.fail options, '12.0.0.0.1'
-    it "should support optional option", ->
-      options =
-        type: 'ipaddr'
-        optional: true
-      test.equal options, null, null
-      test.equal options, undefined, null
-    it "should support default option", ->
-      options =
-        type: 'ipaddr'
-        optional: true
-        default: '127.0.0.1'
-      test.equal options, null, '127.0.0.1'
-      test.equal options, undefined, '127.0.0.1'
-
-    it "should limit to ipv4 addresses", ->
-      options =
-        type: 'ipaddr'
-        version: 'ipv4'
-      test.equal options, '127.0.0.1', '127.0.0.1'
-      test.fail options, 'ffff::'
-    it "should limit to ipv6 addresses", ->
-      options =
-        type: 'ipaddr'
-        version: 'ipv6'
-      test.equal options, 'ffff::', 'ffff::'
-      test.equal options, '127.0.0.1', '::ffff:7f00:1'
-
-    it "should support deny range", ->
-      options =
-        type: 'ipaddr'
-        deny: [
-          '216.0.0.1/8'
-          'private'
-        ]
-      test.fail options, '172.16.0.1'
-      test.fail options, '192.168.15.1'
-      test.fail options, '10.8.0.1'
-      test.fail options, '216.122.0.1'
-      test.equal options, '217.122.0.1', '217.122.0.1'
-    it "should support allow range", ->
-      options =
-        type: 'ipaddr'
-        allow: [
-          '216.0.0.1/8'
-          'private'
-        ]
-      test.fail options, '217.122.0.1'
-      test.equal options, '172.16.0.1', '172.16.0.1'
-      test.equal options, '192.168.15.1', '192.168.15.1'
-      test.equal options, '10.8.0.1', '10.8.0.1'
-      test.equal options, '216.122.0.1', '216.122.0.1'
-    it "should support deny with allow range", ->
-      options =
-        type: 'ipaddr'
-        deny: ['private']
-        allow: ['192.168.12.1/24']
-      test.fail options, '172.16.0.1'
-      test.fail options, '192.168.15.1'
-      test.fail options, '10.8.0.1'
-      test.equal options, '192.168.12.20', '192.168.12.20'
-      test.equal options, '217.122.0.1', '217.122.0.1'
-
-
-
-
-
-
-    it "should support short format", ->
-      options =
-        type: 'ipaddr'
-        format: 'short'
-      test.equal options, '127.0.0.1', '127.0.0.1'
-      test.equal options, '127.000.000.001', '127.0.0.1'
-      test.equal options, 'ffff:0:0:0:0:0:0:1', 'ffff::1'
-    it "should support long format", ->
-      options =
-        type: 'ipaddr'
-        format: 'long'
-      test.equal options, '127.0.0.1', '127.0.0.1'
-      test.equal options, '127.000.000.001', '127.0.0.1'
-      test.equal options, 'ffff:0:0:0:0:0:0:1', 'ffff:0:0:0:0:0:0:1'
-      test.equal options, 'ffff::1', 'ffff:0:0:0:0:0:0:1'
+# use second ref if first fails on check
 
 
   describe "description", ->
 
     it "should give simple description", ->
-      test.desc options
+      test.desc simple
     it "should give complete description", ->
       test.desc
         title: 'test'

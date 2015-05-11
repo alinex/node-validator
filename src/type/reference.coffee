@@ -15,7 +15,6 @@
 debug = require('debug')('validator:reference')
 util = require 'util'
 chalk = require 'chalk'
-process = require 'process'
 # alinex modules
 fs = require 'alinex-fs'
 # include classes and helper
@@ -41,6 +40,7 @@ checkref =
             type: 'string'
     FUNC:
       type: 'function'
+      optional: true
 
 
             # `/xxx.*.yyy` - specify a value in any of the subelements of xxx
@@ -103,9 +103,9 @@ module.exports =
       debug "check #{util.inspect value} in #{check.pathname path}"
       , chalk.grey util.inspect options
       # make basic check for reference or not
-      return value unless typeof value is 'object' and value.REF?
+      return value unless typeof value is 'object' and value?.REF?
       # validate reference
-      value = ValidatorCheck.check 'name', value, checkref
+      value = (new ValidatorCheck 'name', checkref, value).sync()
       # find reference
       result = null
       refname = null
@@ -147,9 +147,17 @@ module.exports =
             result = process.env[ref.path]
           when 'file'
             result = fs.readFileSync ref.path, 'utf8'
-        break if result? # stop search if value is found
+        # run check on retrieved values
+        if result? and ref.type?
+          result = (new ValidatorCheck refname, ref, result).sync()
+        # stop search if value is found
+        break if result?
+
+
+
+
       # use VAL if no ref found
-      unless result
+      unless result or !value.VAL?
         debug "use default value"
         result = value.VAL
         refname = 'default reference value'
