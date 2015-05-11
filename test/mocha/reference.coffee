@@ -11,7 +11,6 @@ describe "References", ->
     beforeEach ->
       simple =
         type: 'reference'
-
     it "should keep normal values", ->
       test.same simple, 'one'
       test.same simple, 1
@@ -20,7 +19,6 @@ describe "References", ->
       test.same simple, (new Error '????')
       test.same simple, undefined
       test.same simple, null
-
     it "should get ENV reference", ->
       process.env.TESTVALIDATOR = 123
       test.equal simple,
@@ -29,7 +27,6 @@ describe "References", ->
           path: 'TESTVALIDATOR'
         ]
       , '123'
-
     it "should get STRUCT reference", ->
       test.equal simple,
         REF: [
@@ -37,7 +34,6 @@ describe "References", ->
           path: 'TESTVALIDATOR'
         ]
       , '123'
-
     it "should run checks", ->
       process.env.TESTVALIDATOR = 123
       test.equal simple,
@@ -75,23 +71,189 @@ describe "References", ->
 
   describe.only "STRUCT checks", ->
 
-    struct = null
-    beforeEach ->
-      struct =
+    it "should get absolute path", ->
+      test.deep
         type: 'object'
         entries:
           ref:
             type: 'reference'
-
-    it "should get absolute path", ->
-      test.equal struct,
+      ,
         data: 1
         ref:
           REF: [
             source: 'struct'
             path: '/data'
           ]
-      , 1
+      ,
+        data: 1
+        ref: 1
+    it "should get absolute path from deep", ->
+      test.deep
+        type: 'object'
+        entries:
+          sub:
+            type: 'object'
+            entries:
+              ref:
+                type: 'reference'
+      ,
+        data: 1
+        sub:
+          ref:
+            REF: [
+              source: 'struct'
+              path: '/data'
+            ]
+      ,
+        data: 1
+        sub:
+          ref: 1
+    it "should get relative path", ->
+      test.deep
+        type: 'object'
+        entries:
+          ref:
+            type: 'reference'
+      ,
+        data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'data'
+          ]
+      ,
+        data: 1
+        ref: 1
+    it "should get relative path with parent", ->
+      test.deep
+        type: 'object'
+        entries:
+          sub:
+            type: 'object'
+            entries:
+              ref:
+                type: 'reference'
+      ,
+        data: 1
+        sub:
+          ref:
+            REF: [
+              source: 'struct'
+              path: '<data'
+            ]
+      ,
+        data: 1
+        sub:
+          ref: 1
+    it "should get relative path with grandparent", ->
+      test.deep
+        type: 'object'
+        entries:
+          group:
+            type: 'object'
+            entries:
+              sub:
+                type: 'object'
+                entries:
+                  ref:
+                    type: 'reference'
+      ,
+        data: 1
+        group:
+          sub:
+            ref:
+              REF: [
+                source: 'struct'
+                path: '<<data'
+              ]
+      ,
+        data: 1
+        group:
+          sub:
+            ref: 1
+    it "should get sub element", ->
+      test.deep
+        type: 'object'
+        entries:
+          ref:
+            type: 'reference'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.sub.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+    it "should get sub element using asterisk", ->
+      test.deep
+        type: 'object'
+        entries:
+          ref:
+            type: 'reference'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.*.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+    it "should get sub element using double asterisk", ->
+      test.deep
+        type: 'object'
+        entries:
+          ref:
+            type: 'reference'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: '**.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+    it "should get sub element using like syntax", ->
+      test.deep
+        type: 'object'
+        entries:
+          ref:
+            type: 'reference'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.s*.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+
+
+
 
 # get data value
 # get file value

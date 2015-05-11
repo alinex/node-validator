@@ -47,16 +47,16 @@ checkref =
             # `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
             # `/xxx.test*.yyy` - specify to search in some subelements
 valueAtPath = (data, path) ->
-  return null unless data[path[0]]?
+  debug "valueAtPath #{path}", data
   switch
     when path[0] is '*'
-      list = if data.isArray() then [0..data.length] else Object.keys data
+      list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
         result = valueAtPath data[sub], path[1..]
         return result if result
       return null
     when path[0] is '**'
-      list = if data.isArray() then [0..data.length] else Object.keys data
+      list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
         result = valueAtPath data[sub], path[1..]
         return result if result
@@ -66,13 +66,14 @@ valueAtPath = (data, path) ->
       return null
     when ~path[0].indexOf '*'
       re = new RegExp "^#{path[0].replace '*', '.*'}$"
-      list = if data.isArray() then [0..data.length] else Object.keys data
+      list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
         continue unless sub.match re
         result = valueAtPath data[sub], path[1..]
         return result if result
       return null
     else
+      return null unless data[path[0]]?
       return data[path[0]] if path.length is 1
       return valueAtPath data[path[0]], path[1..]
 
@@ -120,7 +121,7 @@ module.exports =
             if absolute
               source[0] = source[0].replace /^[\/<]*/, ''
             else
-              newpath = source.slice()
+              newpath = path[1..] # go one step back to be in parent of reference
               while source[0][0] is '<'
                 newpath.shift() if newpath.length
                 source[0] = source[0][1..]
@@ -134,7 +135,6 @@ module.exports =
             # `xxx` - to specify the value sibling value from the given one
             # `<xxx.yyy` - to specify the value based from the parent of the operating object
             # `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
-
 # check for already checked value?????
 
           when 'data'
@@ -152,10 +152,6 @@ module.exports =
           result = (new ValidatorCheck refname, ref, result).sync()
         # stop search if value is found
         break if result?
-
-
-
-
       # use VAL if no ref found
       unless result or !value.VAL?
         debug "use default value"
