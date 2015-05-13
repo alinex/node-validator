@@ -262,7 +262,6 @@ describe "References", ->
 # get second ref
 # use second ref if first fails on check
 
-
   describe "description", ->
 
     it "should give simple description", ->
@@ -278,6 +277,7 @@ describe "References", ->
         format: 'short'
         deny: ['private']
         allow: ['192.168.1.0/24']
+
 
   describe "selfcheck", ->
 
