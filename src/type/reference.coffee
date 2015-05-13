@@ -42,26 +42,25 @@ checkref =
       type: 'function'
       optional: true
 
-
-            # `/xxx.*.yyy` - specify a value in any of the subelements of xxx
-            # `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
-            # `/xxx.test*.yyy` - specify to search in some subelements
-valueAtPath = (data, path) ->
-  debug "valueAtPath #{path}", data
+# ### get value from path
+# - `/xxx.*.yyy` - specify a value in any of the subelements of xxx
+# - `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
+# - `/xxx.test*.yyy` - specify to search in some subelements
+valueAtPath = (data, path, source) ->
   switch
     when path[0] is '*'
       list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
-        result = valueAtPath data[sub], path[1..]
+        result = valueAtPath data[sub], path[1..], "#{path[0]}.#{sub}"
         return result if result
       return null
     when path[0] is '**'
       list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
-        result = valueAtPath data[sub], path[1..]
+        result = valueAtPath data[sub], path[1..], "#{path[0]}.#{sub}"
         return result if result
       for sub in list
-        result = valueAtPath data[sub], path
+        result = valueAtPath data[sub], path, "#{path[0]}.#{sub}"
         return result if result
       return null
     when ~path[0].indexOf '*'
@@ -69,13 +68,13 @@ valueAtPath = (data, path) ->
       list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
         continue unless sub.match re
-        result = valueAtPath data[sub], path[1..]
+        result = valueAtPath data[sub], path[1..], "#{path[0]}.#{sub}"
         return result if result
       return null
     else
       return null unless data[path[0]]?
-      return data[path[0]] if path.length is 1
-      return valueAtPath data[path[0]], path[1..]
+      return [data[path[0]], path[0]] if path.length is 1
+      return valueAtPath data[path[0]], path[1..], path[0]
 
 
 module.exports =
@@ -103,10 +102,11 @@ module.exports =
     type: (check, path, options, value) ->
       debug "check #{util.inspect value} in #{check.pathname path}"
       , chalk.grey util.inspect options
+      console.log '----', check.checked
       # make basic check for reference or not
       return value unless typeof value is 'object' and value?.REF?
       # validate reference
-      value = (new ValidatorCheck 'name', checkref, value).sync()
+      value = (new ValidatorCheck check.pathname(path), checkref, value).sync()
       # find reference
       result = null
       refname = null
@@ -130,19 +130,32 @@ module.exports =
               debug "check for absolute reference '#{refname}'"
             # read value from absolute value
             result = valueAtPath check.value, source
-            debug "reference '#{refname}' not found" unless result?
+            if result?
+              # check for already checked value?????
+
+              unless result[1] in check.checked
+                console.log '----FAIL', refname, result[1], check.checked
+#                throw new Error 'EAGAIN'
+              # use value
+              debug "found '#{result[0]}' at '#{result[1]}' for '#{refname}'"
+              result = result[0]
+            else
+              debug "reference '#{refname}' not found"
             # `/xxx.yyy` - to specify a value from the structure by absolute path
             # `xxx` - to specify the value sibling value from the given one
             # `<xxx.yyy` - to specify the value based from the parent of the operating object
             # `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
-# check for already checked value?????
 
           when 'data'
             source = ref.path.replace(/^[\/<]*/, '').split '.'
             refname = "#{ref.source}:/#{source.join '.'}"
             # read value from absolute value
             result = valueAtPath check.data, source
-            debug "reference '#{refname}' not found" unless result?
+            if result?
+              debug "found '#{result[0]}' at '#{result[1]}' for '#{refname}'"
+              result = result[0]
+            else
+              debug "reference '#{refname}' not found"
           when 'env'
             result = process.env[ref.path]
           when 'file'

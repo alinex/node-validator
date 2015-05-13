@@ -62,11 +62,13 @@ class ValidatorCheck
     debug "check sync #{@options.type} in #{@source}"
     lib = getTypeLib(@options)
     unless lib.sync?.type?
-      return new Error "Could not synchronously call #{@options.type} check in #{@source}."
+      return new Error "Could not synchronously call #{@options.type} check in #{@source}"
     try
       result = @value
+      num = 0
       while @runAgain
         @runAgain = false
+        debug "check sync round ##{++num}"
         result = lib.sync.type @, [], @options, result
       debug "check succeeded for #{@source}", chalk.grey util.inspect result
       result
@@ -74,17 +76,19 @@ class ValidatorCheck
       debug "check failed with #{err}"
       throw err
 
-  # Asynchronous check
+  # ### Asynchronous check
   async: (cb) ->
     debug "check async #{@options.type} in #{@source}"
     lib = getTypeLib(@options)
     # call async lib
     if lib.async?.type?
       result = @value
+      num = 0
       return async.whilst =>
         @runAgain is true
       , (cb) =>
         @runAgain = false
+        debug "check async round ##{++num}"
         lib.async.type @, [], @options, result, (err, res) ->
           result = res
           cb err, res
@@ -158,18 +162,28 @@ class ValidatorCheck
 
   subcall: (path, options, value, cb) ->
     # check for references
+    debug "subcall for #{options.type} in #{@pathname path}"
     try
+      # check for references in value and options
+      value = subcall path, {type: 'reference'}, value
       for key in Object.keys options
-        options[key] = @ref2value path, options[key], key
+        options[key] = subcall path, {type: 'reference'}, options[key]
+      # set field as checked
+      pathname = path.join '.'
+      @checked.push pathname unless pathname in @checked
     catch err
       if err.message is 'EAGAIN'
+        debug "run again because reference not ready in #{@pathname path}"
         @runAgain = true
         return value unless cb?
         return cb null, value
       throw err unless cb?
       return cb err
     finally
-      debug "subcall for #{options.type} in #{@pathname path}"
+      unless options
+        debug "finished subcall for #{options.type} in #{@pathname path}"
+        return value unless cb?
+        return cb null, value
       lib = getTypeLib(options)
       unless cb?
         # sync call sync
@@ -177,14 +191,14 @@ class ValidatorCheck
           return new Error "Could not synchronously call #{options.type} check in
           #{@pathname path}."
         result = lib.sync.type @, path, options, value
-        debug "subcall finished for #{@pathname path}", chalk.grey util.inspect result
+        debug "finished subcall for #{@pathname path}", chalk.grey util.inspect result
         return result
       else
         # async call async
         if lib.async?.type?
           return lib.async.type @, path, options, value, (err, result) ->
             unless err
-              debug "subcall finished for #{@pathname path}", chalk.grey util.inspect result
+              debug "finished subcall for #{@pathname path}", chalk.grey util.inspect result
             cb err, result
         # async call sync
         try

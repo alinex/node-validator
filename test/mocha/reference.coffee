@@ -69,7 +69,7 @@ describe "References", ->
         FUNC: (v) -> ++v
       , 124
 
-  describe.only "STRUCT checks", ->
+  describe "STRUCT checks", ->
 
     it "should get absolute path", ->
       test.deep
@@ -252,7 +252,49 @@ describe "References", ->
             data: 1
         ref: 1
 
-
+    it "should get ref->ref->value", ->
+      test.deep
+        type: 'object'
+        entries:
+          ref1:
+            type: 'reference'
+          ref2:
+            type: 'reference'
+      ,
+        data: 1
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/ref1'
+          ]
+      ,
+        data: 1
+        ref1: 1
+        ref2: 1
+    it.only "should get ref->ref->value (need for second loop)", ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/ref2'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+      ,
+        data: 1
+        ref1: 1
+        ref2: 1
 
 
 # get data value
