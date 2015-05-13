@@ -103,13 +103,21 @@ module.exports = object =
       # check the used keys
       value = object.sync.keys check, path, options, value
       # check also for references in unspecified keys
+      hasErr = false
       for key of value
-        value[key] = check.subcall path.concat(key), null, value[key]
-        # traverse down
-        if Array.isArray value[key]
-          value[key] = check.subcall path.concat(key), { type: 'array' }, value[key]
-        else if typeof value[key] is 'object'
-          value[key] = check.subcall path.concat(key), { type: 'object' }, value[key]
+        try
+          if Array.isArray value[key]
+            value[key] = check.subcall path.concat(key), null, value[key]
+          else if typeof value[key] is 'object'
+            value[key] = check.subcall path.concat(key), null, value[key]
+          else
+            value[key] = check.subcall path.concat(key), null, value[key]
+        catch err
+          if err.message is 'EAGAIN'
+            hasErr = err
+          else
+            throw err
+      throw hasErr if hasErr
       # done return resulting value
       value
 

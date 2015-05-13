@@ -9,6 +9,10 @@ async = require 'alinex-async'
 chalk = require 'chalk'
 # internal classes and helper
 
+# Configuration
+# -------------------------------------------------
+# the maximum number of runs to try to solve references
+MAXRUNS = 10
 
 # Class for validation
 # -------------------------------------------------
@@ -35,21 +39,28 @@ class ValidatorCheck
   # ### Initialize data for check
   constructor: (@source, @options, @value, @data) ->
     @checked = []
+
+###################### TODO ###############################
+# resolve references in direct option settings
 #    for key in Object.keys @options
 #      @options[key] = @ref2value [''], @options[key], key
+###################### TODO ###############################
 
   # ### Pathname to be printed
-  pathname: (path) ->
+  # give color = false as parameter for error messages
+  pathname: (path, color = true) ->
+    msg = @source
     if path? and path.length
-      return chalk.grey "#{@source}.#{path.join '.'}"
-    chalk.grey @source
+      msg = "#{@source}.#{path.join '.'}"
+    return msg unless color
+    chalk.grey msg
 
   # ### Create error message
   # This is called by the subclasses
   error: (path, options, value, err) ->
     unless options
       throw new Error "Validator called without options."
-    message = "#{err.message} in #{@pathname path}"
+    message = "#{err.message} in #{@pathname path, false}"
     if options.title?
       message += " '#{options.title}'"
     message += '. '
@@ -74,6 +85,8 @@ class ValidatorCheck
         @runAgain = false
         debug "#{@pathname()} round ##{++num}"
         result = lib.sync.type @, [], @options, result
+        if @runAgain and num >= MAXRUNS
+          throw new Error 'Stopped validation because of endless loop in references'
       debug "#{@pathname()} success: #{util.inspect(result).replace /\n/g, ''}"
       result
     catch err
@@ -94,7 +107,8 @@ class ValidatorCheck
         @runAgain = false
         debug "#{@pathname()} round ##{++num}"
         lib.async.type @, [], @options, result, (err, res) ->
-          result = res
+          if @runAgain and num >= MAXRUNS
+            return cb new Error 'Stopped validation because of endless loop in references'
           cb err, res
       , (err) =>
         if err
@@ -104,44 +118,61 @@ class ValidatorCheck
         cb null, result
     # alternatively run sync code
     try
+      num = 0
       result = @value
       while @runAgain
         @runAgain = false
+        debug "#{@pathname()} round ##{++num}"
         result = lib.sync.type @, [], @options, result
+        if @runAgain and num >= MAXRUNS
+          return cb new Error 'Stopped validation because of endless loop in references'
       debug "#{@pathname()} success: #{util.inspect(result).replace /\n/g, ''}"
       cb null, result
     catch err
       debug "#{@pathname()} failed with #{err}"
       cb err
 
-  # ### optional, default
+  # ### check reference
+  # This short helper will load the reference check and execute it.
   reference: (path, options = { type: 'reference' }, value) ->
     return value if 'REF' in path # no checking within the reference declaration itself
     debug "#{@pathname path} check as #{options.type}"
     lib = getTypeLib options
     lib.sync.type @, path, options, value
 
+  # ### Subcheck
   subcall: (path, options, value, cb) ->
+    pathname = path.join '.'
+    if pathname in @checked
+      return value unless cb?
+      return cb null, value
     # check for references
+    failed = false
     try
       # check for references in value and options
       value = @reference path, null, value
+
+############# TODO ####################################
 #      for key in Object.keys options
 #        options[key] = @reference path, null, options[key]
-      # set field as checked
-      pathname = path.join '.'
-      @checked.push pathname unless pathname in @checked
+############# TODO ####################################
+
     catch err
       if err.message is 'EAGAIN'
         debug "#{@pathname path} run again because reference not ready"
         @runAgain = true
+        failed = true
         return value unless cb?
         return cb null, value
       throw err unless cb?
       return cb err
     finally
+      options ?= { type: 'array' } if Array.isArray value
+      if typeof value is 'object'
+        options ?= { type: 'object' } unless value.REF?
       unless options
         debug "#{@pathname path} finished", chalk.grey util.inspect value
+        @checked.push pathname unless pathname in @checked or failed
         return value unless cb?
         return cb null, value
       debug "#{@pathname path} check as #{options.type}"
@@ -151,20 +182,28 @@ class ValidatorCheck
         unless lib.sync?.type?
           return new Error "Could not synchronously call #{options.type} check in
           #{@pathname path}."
-        result = lib.sync.type @, path, options, value
-        debug "#{@pathname path} finished", chalk.grey util.inspect result
-        return result
+        try
+          result = lib.sync.type @, path, options, value
+          debug "#{@pathname path} finished", chalk.grey util.inspect result
+          @checked.push pathname unless pathname in @checked or failed
+          return result
+        catch err
+          return value if err.message is 'EAGAIN'
+          throw err
       else
         # async call async
         if lib.async?.type?
           return lib.async.type @, path, options, value, (err, result) ->
             unless err
               debug "#{@pathname path} finished", chalk.grey util.inspect result
+              @checked.push pathname unless pathname in @checked or failed
+            return cb null, value if err.message is 'EAGAIN'
             cb err, result
         # async call sync
         try
           result = lib.sync.type @, path, options, value
         catch err
+          return cb null, value if err.message is 'EAGAIN'
           return cb err
         cb null, result
 

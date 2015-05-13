@@ -46,21 +46,21 @@ checkref =
 # - `/xxx.*.yyy` - specify a value in any of the subelements of xxx
 # - `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
 # - `/xxx.test*.yyy` - specify to search in some subelements
-valueAtPath = (data, path, source) ->
+valueAtPath = (data, path, source = []) ->
   switch
     when path[0] is '*'
       list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
-        result = valueAtPath data[sub], path[1..], "#{path[0]}.#{sub}"
+        result = valueAtPath data[sub], path[1..], source.concat sub
         return result if result
       return null
     when path[0] is '**'
       list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
-        result = valueAtPath data[sub], path[1..], "#{path[0]}.#{sub}"
+        result = valueAtPath data[sub], path[1..], source.concat sub
         return result if result
       for sub in list
-        result = valueAtPath data[sub], path, "#{path[0]}.#{sub}"
+        result = valueAtPath data[sub], path, source.concat sub
         return result if result
       return null
     when ~path[0].indexOf '*'
@@ -68,13 +68,14 @@ valueAtPath = (data, path, source) ->
       list = if Array.isArray data then [0..data.length] else Object.keys data
       for sub in list
         continue unless sub.match re
-        result = valueAtPath data[sub], path[1..], "#{path[0]}.#{sub}"
+        result = valueAtPath data[sub], path[1..], source.concat sub
         return result if result
       return null
     else
       return null unless data[path[0]]?
-      return [data[path[0]], path[0]] if path.length is 1
-      return valueAtPath data[path[0]], path[1..], path[0]
+      work = source.concat path[0]
+      return [data[path[0]], work.join '.'] if path.length is 1
+      return valueAtPath data[path[0]], path[1..], work
 
 
 module.exports =
@@ -131,8 +132,8 @@ module.exports =
             result = valueAtPath check.value, source
             if result?
               # check for already checked value?????
-
               unless result[1] in check.checked
+                debug "#{check.pathname path} referenced '#{result[1]}' is not checked"
                 throw new Error 'EAGAIN'
               # use value
               debug "#{check.pathname path} found '#{util.inspect result[0]}'

@@ -69,14 +69,11 @@ describe "References", ->
         FUNC: (v) -> ++v
       , 124
 
-  describe "STRUCT checks", ->
+  describe.only "STRUCT checks", ->
 
     it "should get absolute path", ->
       test.deep
         type: 'object'
-        entries:
-          ref:
-            type: 'reference'
       ,
         data: 1
         ref:
@@ -90,12 +87,6 @@ describe "References", ->
     it "should get absolute path from deep", ->
       test.deep
         type: 'object'
-        entries:
-          sub:
-            type: 'object'
-            entries:
-              ref:
-                type: 'reference'
       ,
         data: 1
         sub:
@@ -111,9 +102,6 @@ describe "References", ->
     it "should get relative path", ->
       test.deep
         type: 'object'
-        entries:
-          ref:
-            type: 'reference'
       ,
         data: 1
         ref:
@@ -127,12 +115,6 @@ describe "References", ->
     it "should get relative path with parent", ->
       test.deep
         type: 'object'
-        entries:
-          sub:
-            type: 'object'
-            entries:
-              ref:
-                type: 'reference'
       ,
         data: 1
         sub:
@@ -148,15 +130,6 @@ describe "References", ->
     it "should get relative path with grandparent", ->
       test.deep
         type: 'object'
-        entries:
-          group:
-            type: 'object'
-            entries:
-              sub:
-                type: 'object'
-                entries:
-                  ref:
-                    type: 'reference'
       ,
         data: 1
         group:
@@ -174,9 +147,6 @@ describe "References", ->
     it "should get sub element", ->
       test.deep
         type: 'object'
-        entries:
-          ref:
-            type: 'reference'
       ,
         group:
           sub:
@@ -194,9 +164,6 @@ describe "References", ->
     it "should get sub element using asterisk", ->
       test.deep
         type: 'object'
-        entries:
-          ref:
-            type: 'reference'
       ,
         group:
           sub:
@@ -214,9 +181,6 @@ describe "References", ->
     it "should get sub element using double asterisk", ->
       test.deep
         type: 'object'
-        entries:
-          ref:
-            type: 'reference'
       ,
         group:
           sub:
@@ -234,9 +198,6 @@ describe "References", ->
     it "should get sub element using like syntax", ->
       test.deep
         type: 'object'
-        entries:
-          ref:
-            type: 'reference'
       ,
         group:
           sub:
@@ -255,11 +216,6 @@ describe "References", ->
     it "should get ref->ref->value", ->
       test.deep
         type: 'object'
-        entries:
-          ref1:
-            type: 'reference'
-          ref2:
-            type: 'reference'
       ,
         data: 1
         ref1:
@@ -276,7 +232,7 @@ describe "References", ->
         data: 1
         ref1: 1
         ref2: 1
-    it.only "should get ref->ref->value (need for second loop)", ->
+    it "should get ref->ref->value (need for second loop)", ->
       test.deep
         type: 'object'
       ,
