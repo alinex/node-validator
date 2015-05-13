@@ -100,20 +100,19 @@ module.exports =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{check.pathname path}"
+      debug "#{check.pathname path} check #{util.inspect value}"
       , chalk.grey util.inspect options
-      console.log '----', check.checked
       # make basic check for reference or not
       return value unless typeof value is 'object' and value?.REF?
       # validate reference
-      value = (new ValidatorCheck check.pathname(path), checkref, value).sync()
+      #value = check.subcall path, checkref, value
       # find reference
       result = null
       refname = null
       for ref in value.REF
         # try to get the value
         refname = "#{ref.source}:#{ref.path}"
-        debug "check for reference '#{refname}'"
+        debug "#{check.pathname path} find '#{refname}'"
         switch ref.source
           when 'struct'
             absolute = ref.path[0] is '/'
@@ -127,20 +126,20 @@ module.exports =
                 source[0] = source[0][1..]
               source = newpath.concat source
               refname = "#{ref.source}:/#{source.join '.'}"
-              debug "check for absolute reference '#{refname}'"
+              debug "#{check.pathname path} absolute reference '#{refname}'"
             # read value from absolute value
             result = valueAtPath check.value, source
             if result?
               # check for already checked value?????
 
               unless result[1] in check.checked
-                console.log '----FAIL', refname, result[1], check.checked
-#                throw new Error 'EAGAIN'
+                throw new Error 'EAGAIN'
               # use value
-              debug "found '#{result[0]}' at '#{result[1]}' for '#{refname}'"
+              debug "#{check.pathname path} found '#{util.inspect result[0]}'
+              at '#{result[1]}' for '#{refname}'"
               result = result[0]
             else
-              debug "reference '#{refname}' not found"
+              debug "#{check.pathname path} reference '#{refname}' not found"
             # `/xxx.yyy` - to specify a value from the structure by absolute path
             # `xxx` - to specify the value sibling value from the given one
             # `<xxx.yyy` - to specify the value based from the parent of the operating object
@@ -152,7 +151,7 @@ module.exports =
             # read value from absolute value
             result = valueAtPath check.data, source
             if result?
-              debug "found '#{result[0]}' at '#{result[1]}' for '#{refname}'"
+              debug "found '#{util.inspect result[0]}' at '#{result[1]}' for '#{refname}'"
               result = result[0]
             else
               debug "reference '#{refname}' not found"
@@ -167,14 +166,14 @@ module.exports =
         break if result?
       # use VAL if no ref found
       unless result or !value.VAL?
-        debug "use default value"
+        debug "#{check.pathname path} use default value"
         result = value.VAL
         refname = 'default reference value'
       unless result
-        debug "failed to find reference"
+        debug "#{check.pathname path} failed to find reference"
       # run the operation
       if value.FUNC?
-        debug "run optimize function"
+        debug "#{check.pathname path} run optimize function"
         result = value.FUNC result, refname
       # return resulting value
       result

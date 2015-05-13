@@ -35,8 +35,8 @@ class ValidatorCheck
   # ### Initialize data for check
   constructor: (@source, @options, @value, @data) ->
     @checked = []
-    for key in Object.keys @options
-      @options[key] = @ref2value [''], @options[key], key
+#    for key in Object.keys @options
+#      @options[key] = @ref2value [''], @options[key], key
 
   # ### Pathname to be printed
   pathname: (path) ->
@@ -114,64 +114,26 @@ class ValidatorCheck
       debug "#{@pathname()} failed with #{err}"
       cb err
 
-
-  # ### Get value with reference support
-  # will set the runAgain flag if necessary
-  ref2value: (path, value, key) ->
-    # check for reference entry
-    pathname = path.join '.'
-    unless value and typeof value is 'object' and value.reference? and value.path?
-      @checked.push pathname unless pathname in @checked
-      return value
-    # it's a reference, find path
-    source = value.source.split '.'
-    obj = null
-    switch value.reference
-      when 'absolute'
-        obj = @value
-        unless pathname in @checked
-          throw new Error 'EAGAIN'
-        debug "use absolute reference to '#{source.join '.'}' for #{path.join '.'}.#{key}"
-      when 'relative'
-        obj = @value
-        newpath = path.slice()
-        while source[0][0] is '<'
-          newpath.shift()
-          source[0] = source[0][1..]
-        source = newpath.concat source
-        unless pathname in @checked
-          throw new Error 'EAGAIN'
-        debug "use relative reference to '#{source.join '.'}' for #{path.join '.'}.#{key}"
-      when 'external'
-        obj = @data
-        debug "use external reference to '#{source.join '.'}' for #{path.join '.'}.#{key}"
-    # read value
-    for part in source
-      unless obj[part]?
-        debug "reference '#{source.join '.'}' not found"
-        return null
-      obj = obj[part]
-    # call operations
-    if value.operation
-      debug "run operation on referenced value"
-      obj = value.operation obj
-    # return resulting value
-    obj
+  # ### optional, default
+  reference: (path, options = { type: 'reference' }, value) ->
+    return value if 'REF' in path # no checking within the reference declaration itself
+    debug "#{@pathname path} check as #{options.type}"
+    lib = getTypeLib options
+    lib.sync.type @, path, options, value
 
   subcall: (path, options, value, cb) ->
     # check for references
-    debug "subcall for #{options.type} in #{@pathname path}"
     try
       # check for references in value and options
-      value = subcall path, {type: 'reference'}, value
-      for key in Object.keys options
-        options[key] = subcall path, {type: 'reference'}, options[key]
+      value = @reference path, null, value
+#      for key in Object.keys options
+#        options[key] = @reference path, null, options[key]
       # set field as checked
       pathname = path.join '.'
       @checked.push pathname unless pathname in @checked
     catch err
       if err.message is 'EAGAIN'
-        debug "run again because reference not ready in #{@pathname path}"
+        debug "#{@pathname path} run again because reference not ready"
         @runAgain = true
         return value unless cb?
         return cb null, value
@@ -179,9 +141,10 @@ class ValidatorCheck
       return cb err
     finally
       unless options
-        debug "finished subcall for #{options.type} in #{@pathname path}"
+        debug "#{@pathname path} finished", chalk.grey util.inspect value
         return value unless cb?
         return cb null, value
+      debug "#{@pathname path} check as #{options.type}"
       lib = getTypeLib options
       unless cb?
         # sync call sync
@@ -189,14 +152,14 @@ class ValidatorCheck
           return new Error "Could not synchronously call #{options.type} check in
           #{@pathname path}."
         result = lib.sync.type @, path, options, value
-        debug "finished subcall for #{@pathname path}", chalk.grey util.inspect result
+        debug "#{@pathname path} finished", chalk.grey util.inspect result
         return result
       else
         # async call async
         if lib.async?.type?
           return lib.async.type @, path, options, value, (err, result) ->
             unless err
-              debug "finished subcall for #{@pathname path}", chalk.grey util.inspect result
+              debug "#{@pathname path} finished", chalk.grey util.inspect result
             cb err, result
         # async call sync
         try
