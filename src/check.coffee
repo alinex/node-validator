@@ -38,14 +38,18 @@ class ValidatorCheck
     for key in Object.keys @options
       @options[key] = @ref2value [''], @options[key], key
 
+  # ### Pathname to be printed
+  pathname: (path) ->
+    if path? and path.length
+      return chalk.grey "#{@source}.#{path.join '.'}"
+    chalk.grey @source
+
   # ### Create error message
   # This is called by the subclasses
   error: (path, options, value, err) ->
     unless options
       throw new Error "Validator called without options."
-    source = [@source].concat(path).join '.'
-    message = "#{err.message} in #{@source}"
-    message += '.' + path.join '.' if path and path.length
+    message = "#{err.message} in #{@pathname path}"
     if options.title?
       message += " '#{options.title}'"
     message += '. '
@@ -59,27 +63,27 @@ class ValidatorCheck
 
   # ### Synchronous check
   sync: ->
-    debug "check sync #{@options.type} in #{@source}"
-    lib = getTypeLib(@options)
+    debug "#{@pathname()} start sync check as #{@options.type}"
+    lib = getTypeLib @options
     unless lib.sync?.type?
-      return new Error "Could not synchronously call #{@options.type} check in #{@source}"
+      return new Error "Could not synchronously call #{@options.type} check in '#{@pathname()}'"
     try
       result = @value
       num = 0
       while @runAgain
         @runAgain = false
-        debug "check sync round ##{++num}"
+        debug "#{@pathname()} round ##{++num}"
         result = lib.sync.type @, [], @options, result
-      debug "check succeeded for #{@source}", chalk.grey util.inspect result
+      debug "#{@pathname()} success: #{util.inspect(result).replace /\n/g, ''}"
       result
     catch err
-      debug "check failed with #{err}"
+      debug "#{@pathname()} failed with #{err}"
       throw err
 
   # ### Asynchronous check
   async: (cb) ->
-    debug "check async #{@options.type} in #{@source}"
-    lib = getTypeLib(@options)
+    debug "#{@pathname()} start async check as #{@options.type}"
+    lib = getTypeLib @options
     # call async lib
     if lib.async?.type?
       result = @value
@@ -88,15 +92,15 @@ class ValidatorCheck
         @runAgain is true
       , (cb) =>
         @runAgain = false
-        debug "check async round ##{++num}"
+        debug "#{@pathname()} round ##{++num}"
         lib.async.type @, [], @options, result, (err, res) ->
           result = res
           cb err, res
       , (err) =>
         if err
-          debug "check failed with #{err}"
+          debug "#{@pathname()} failed with #{err}"
           return cb err
-        debug "check succeeded for #{@source}", chalk.grey util.inspect result
+        debug "#{@pathname()} success: #{util.inspect(result).replace /\n/g, ''}"
         cb null, result
     # alternatively run sync code
     try
@@ -104,18 +108,12 @@ class ValidatorCheck
       while @runAgain
         @runAgain = false
         result = lib.sync.type @, [], @options, result
-      debug "check succeeded for #{@source}"
+      debug "#{@pathname()} success: #{util.inspect(result).replace /\n/g, ''}"
       cb null, result
     catch err
-      debug "check failed with #{err}"
+      debug "#{@pathname()} failed with #{err}"
       cb err
 
-
-  # ### Pathname to be printed
-  pathname: (path) ->
-    if path? and path.length
-      return "#{@source}.#{path.join '.'}"
-    @source
 
   # ### Get value with reference support
   # will set the runAgain flag if necessary
@@ -184,7 +182,7 @@ class ValidatorCheck
         debug "finished subcall for #{options.type} in #{@pathname path}"
         return value unless cb?
         return cb null, value
-      lib = getTypeLib(options)
+      lib = getTypeLib options
       unless cb?
         # sync call sync
         unless lib.sync?.type?
@@ -220,5 +218,4 @@ getTypeLib = (name) ->
     return require "./type/#{name}"
   if name.type?
     return require "./type/#{name.type}"
-  throw Error "Undefined type #{name}"
-
+  throw Error "Undefined validator type #{name}"
