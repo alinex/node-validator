@@ -110,6 +110,8 @@ module.exports = float =
 
     # ### Check Type
     type: (check, path, options, value) ->
+      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
+      , chalk.grey util.inspect options
       # first check input type
       value = rules.sync.optional check, path, options, value
       return value unless value?

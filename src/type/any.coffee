@@ -32,7 +32,7 @@ module.exports = any =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{check.pathname path}"
+      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
       , chalk.grey util.inspect options
 
       # sanitize
@@ -59,7 +59,7 @@ module.exports = any =
 
     # ### Check Type
     type: (check, path, options, value, cb) ->
-      debug "check #{util.inspect value} in #{check.pathname path}"
+      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
       , chalk.grey util.inspect options
       # run sync checks
       try

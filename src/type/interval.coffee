@@ -49,7 +49,7 @@ module.exports = interval =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{check.pathname path}"
+      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
       , chalk.grey util.inspect options
       options = optimize options
       # sanitize

@@ -147,6 +147,9 @@ module.exports =
             # `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
 
           when 'data'
+
+############################## TODO ##########################
+
             source = ref.path.replace(/^[\/<]*/, '').split '.'
             refname = "#{ref.source}:/#{source.join '.'}"
             # read value from absolute value

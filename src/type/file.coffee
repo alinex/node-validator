@@ -56,7 +56,7 @@ module.exports = file =
 
     # ### Check Type
     type: (check, path, options, value) ->
-      debug "check #{util.inspect value} in #{check.pathname path}"
+      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
       , chalk.grey util.inspect options
       # first check input type
       value = rules.sync.optional check, path, options, value
@@ -113,7 +113,7 @@ module.exports = file =
   async:
     # ### Check Type
     type: (check, path, options, value, cb) ->
-      debug "check #{util.inspect value} in #{check.pathname path}"
+      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
       , chalk.grey util.inspect options
       # first check input type
       try
