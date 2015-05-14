@@ -142,6 +142,7 @@ class ValidatorCheck
 
   # ### Subcheck
   subcall: (path, options, value, cb) ->
+    # return if already checked value
     pathname = path.join '.'
     if pathname in @checked
       return value unless cb?
@@ -159,14 +160,19 @@ class ValidatorCheck
 
     catch err
       if err.message is 'EAGAIN'
+        # if the references could not be checked keep reference an use another round
         debug "#{@pathname path} run again because reference not ready"
         @runAgain = true
         failed = true
         return value unless cb?
         return cb null, value
+      # throw other errors back
       throw err unless cb?
       return cb err
     finally
+      # do the real subcheck
+      # if no check defined use array/object because of checking subvalues
+      # against references
       options ?= { type: 'array' } if Array.isArray value
       if typeof value is 'object'
         options ?= { type: 'object' } unless value.REF?
