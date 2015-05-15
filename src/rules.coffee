@@ -40,6 +40,24 @@ module.exports = rules =
       # send default back
       options.default ? null
 
+    reference: (check, path, options, value) ->
+      hasErr = false
+      for key of value
+        try
+          if Array.isArray value[key]
+            value[key] = check.subcall path.concat(key), null, value[key]
+          else if typeof value[key] is 'object'
+            value[key] = check.subcall path.concat(key), null, value[key]
+          else
+            value[key] = check.subcall path.concat(key), null, value[key]
+        catch err
+          if err.message is 'EAGAIN'
+            hasErr = err
+          else
+            throw err
+      throw hasErr if hasErr
+      value
+
   # Selfcheck definition
   # -------------------------------------------------
   selfcheck:

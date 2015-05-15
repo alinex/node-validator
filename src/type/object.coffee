@@ -103,7 +103,7 @@ module.exports = object =
       # check the used keys
       value = object.sync.keys check, path, options, value
       # check also for references in unspecified keys
-      value = object.sync.reference check, path, options, value
+      value = rules.sync.reference check, path, options, value
       # done return resulting value
       value
 
@@ -147,24 +147,6 @@ module.exports = object =
             new Error "The key '#{key}' is missing"
       value
 
-    reference: (check, path, options, value) ->
-      hasErr = false
-      for key of value
-        try
-          if Array.isArray value[key]
-            value[key] = check.subcall path.concat(key), null, value[key]
-          else if typeof value[key] is 'object'
-            value[key] = check.subcall path.concat(key), null, value[key]
-          else
-            value[key] = check.subcall path.concat(key), null, value[key]
-        catch err
-          if err.message is 'EAGAIN'
-            hasErr = err
-          else
-            throw err
-      throw hasErr if hasErr
-      value
-
 
   # Asynchronous check
   # -------------------------------------------------
@@ -193,7 +175,7 @@ module.exports = object =
           # check the used keys
           value = object.sync.keys check, path, options, value
           # check also for references in unspecified keys
-          value = object.sync.reference check, path, options, value
+          value = rules.sync.reference check, path, options, value
         catch err
           return cb err
         # done return results
@@ -219,7 +201,7 @@ module.exports = object =
           # check the used keys
           value = object.sync.keys check, path, options, value
           # check also for references in unspecified keys
-          value = object.sync.reference check, path, options, value
+          value = rules.sync.reference check, path, options, value
         catch err
           return cb err
         # done return results
