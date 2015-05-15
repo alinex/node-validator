@@ -49,6 +49,8 @@ module.exports = object =
       if options.allowedKeys
         if typeof options.allowedKeys is 'boolean'
           text += "Only specified keys are allowed. "
+        if options.allowedKeys instanceof RegExp
+          text += "The keys have to match #{options.allowedKeys}. "
         else
           text += "The #{if options.allowedKeys.length>1 then 'keys' else 'key'}
           '#{options.allowedKeys.join "', '"}'
@@ -124,7 +126,9 @@ module.exports = object =
     keys: (check, path, options, value) ->
       # add mandatory keys to allowed keys
       allowedKeys = []
-      if options.allowedKeys? and typeof options.allowedKeys isnt 'boolean'
+      if options.allowedKeys instanceof RegExp
+        re = options.allowedKeys
+      else if options.allowedKeys? and typeof options.allowedKeys isnt 'boolean'
         allowedKeys = allowedKeys.concat options.allowedKeys
       if options.entries?
         for key in Object.keys options.entries
@@ -132,12 +136,19 @@ module.exports = object =
       if options.mandatoryKeys?
         for entry in options.mandatoryKeys
           allowedKeys.push entry unless allowedKeys[entry]
-      # check
+      # check for allowed keys
       if options.allowedKeys? and (options.allowedKeys.length or options.allowedKeys is true)
         for key of value
           unless key in allowedKeys
+            unless re? and key.match re
+              throw check.error path, options, value,
+              new Error "The key '#{key}' is not allowed"
+      else if re?
+        for key of value
+          unless key.match re
             throw check.error path, options, value,
-            new Error "The key '#{key}' is not allowed"
+            new Error "The key '#{key}' is not matched by #{re}"
+      # check for mandatory keys
       if options.mandatoryKeys?
         for key in options.mandatoryKeys
           keys = Object.keys value
@@ -248,6 +259,8 @@ module.exports = object =
             type: 'array'
             entries:
               type: 'string'
+          ,
+            type: 'regexp'
           ]
         entries:
           type: 'object'

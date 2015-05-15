@@ -490,7 +490,7 @@ __Options:__
 - `instanceOf` - (class) only objects of given class type are allowed
 - `mandatoryKeys` - (list) the list of elements which are mandatory
 - `allowedKeys` - (list) gives a list of elements which are also allowed
-   or true to use the list from entries definition
+   or true to use the list from entries definition or an regular expression
 - `entries` - specification for all entries or specific to the key name
 
 So you have three different ways to specify objects. First you may have class

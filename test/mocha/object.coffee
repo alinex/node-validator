@@ -41,12 +41,42 @@ describe "Object", ->
     it "should support allowedKeys option", ->
       options =
         type: 'object'
-        allowedKeys: ['one','two']
+        allowedKeys: true
+        entries:
+          one:
+            type: 'integer'
+          two:
+            type: 'integer'
       test.deep options, { one:1, two:2 }, { one:1, two:2 }
     it "should fail for allowedKeys option", ->
       options =
         type: 'object'
+        allowedKeys: true
+        entries:
+          one:
+            type: 'integer'
+          two:
+            type: 'integer'
+      test.fail options, { one:1, two:2, three:3 }
+    it "should support allowedKeys list option", ->
+      options =
+        type: 'object'
         allowedKeys: ['one','two']
+      test.deep options, { one:1, two:2 }, { one:1, two:2 }
+    it "should fail for allowedKeys list option", ->
+      options =
+        type: 'object'
+        allowedKeys: ['one','two']
+      test.fail options, { one:1, two:2, three:3 }
+    it "should support allowedKeys regexp option", ->
+      options =
+        type: 'object'
+        allowedKeys: /o/
+      test.deep options, { one:1, two:2 }, { one:1, two:2 }
+    it "should fail for allowedKeys list option", ->
+      options =
+        type: 'object'
+        allowedKeys: /o/
       test.fail options, { one:1, two:2, three:3 }
     it "should support mandatoryKeys option", ->
       options =
@@ -120,8 +150,8 @@ describe "Object", ->
         type: 'object'
         optional: true
       async.series [
-        (cb) -> test.equal options, null, null, cb
-        (cb) -> test.equal options, undefined, null, cb
+        (cb) -> test.same options, null, cb
+        (cb) -> test.same options, undefined, cb
       ], cb
     it "should support instanceOf option", (cb) ->
       options =
