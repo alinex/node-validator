@@ -3,7 +3,7 @@ async = require 'alinex-async'
 
 test = require '../test'
 
-describe "References", ->
+describe.only "References", ->
 
   describe "simple ENV checks", ->
 
@@ -69,7 +69,7 @@ describe "References", ->
         FUNC: (v) -> ++v
       , 124
 
-  describe.only "STRUCT checks", ->
+  describe "STRUCT checks", ->
 
     it "should get absolute path", ->
       test.deep
@@ -263,32 +263,21 @@ describe "References", ->
   describe "description", ->
 
     it "should give simple description", ->
-      test.desc simple
+      test.desc
+        type: 'reference'
     it "should give complete description", ->
       test.desc
         title: 'test'
         description: 'Some test rules'
-        type: 'ipaddr'
-        optional: true
-        default: '127.0.0.1'
-        version: 'ipv4'
-        format: 'short'
-        deny: ['private']
-        allow: ['192.168.1.0/24']
-
+        type: 'reference'
 
   describe "selfcheck", ->
 
     it "should validate simple options", ->
-      test.selfcheck options
+      test.selfcheck
+        type: 'reference'
     it "should validate complete options", ->
       test.selfcheck
         title: 'test'
         description: 'Some test rules'
-        type: 'ipaddr'
-        optional: true
-        default: '127.0.0.1'
-        version: 'ipv4'
-        format: 'short'
-        deny: ['private']
-        allow: ['192.168.1.0/24']
+        type: 'reference'

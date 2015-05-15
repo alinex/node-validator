@@ -193,5 +193,11 @@ module.exports =
       entries:
         type:
           type: 'string'
+        title:
+          type: 'string'
+          optional: true
+        description:
+          type: 'string'
+          optional: true
     , options
 
