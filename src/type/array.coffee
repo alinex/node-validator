@@ -92,7 +92,8 @@ module.exports = array =
         value = array.sync[method] check, path, options, value
       # end processing if no entries to check
       unless options.entries? and value.length
-        return value
+        # check also for references in unspecified keys
+        return rules.sync.reference check, path, options, value
       # check entries
       for subvalue, i in value
         suboptions = if Array.isArray options.entries
@@ -102,8 +103,8 @@ module.exports = array =
         continue unless suboptions?
         # run subcheck
         value[i] = check.subcall path.concat(i), suboptions, subvalue
-      # done return resulting value
-      value
+      # check also for references in unspecified keys
+      rules.sync.reference check, path, options, value
 
     # ### Convert string
     string: (check, path, options, value) ->
@@ -158,7 +159,8 @@ module.exports = array =
         return cb err
       # end processing if no entries to check
       unless options.entries? and value.length
-        return cb null, value
+        # check also for references in unspecified keys
+        return cb null, rules.sync.reference check, path, options, value
       # check entries
       return async.each [0..value.length-1], (i, cb) ->
         suboptions = if Array.isArray options.entries
@@ -173,9 +175,8 @@ module.exports = array =
           value[i] = result
           cb()
       , (err) ->
-        # done return results
-        cb err, value
-
+        # check also for references in unspecified keys
+        cb err, rules.sync.reference check, path, options, value
 
   # Selfcheck
   # -------------------------------------------------

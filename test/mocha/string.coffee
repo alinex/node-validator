@@ -3,7 +3,7 @@ async = require 'alinex-async'
 
 test = require '../test'
 
-describe "String", ->
+describe.only "String", ->
 
   options = null
 
