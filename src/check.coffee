@@ -106,7 +106,7 @@ class ValidatorCheck
       , (cb) =>
         @runAgain = false
         debug "#{@pathname()} round ##{++num}"
-        lib.async.type @, [], @options, result, (err, res) ->
+        lib.async.type @, [], @options, result, (err, res) =>
           if @runAgain and num >= MAXRUNS
             return cb new Error 'Stopped validation because of endless loop in references'
           cb err, res

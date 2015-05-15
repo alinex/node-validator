@@ -3,7 +3,9 @@ async = require 'alinex-async'
 
 test = require '../test'
 
-describe.only "References", ->
+describe "References", ->
+
+  ###########################################################################################
 
   describe "simple ENV checks", ->
 
@@ -69,7 +71,9 @@ describe.only "References", ->
         FUNC: (v) -> ++v
       , 124
 
-  describe "STRUCT checks", ->
+  ###########################################################################################
+
+  describe "sync STRUCT checks", ->
 
     it "should get absolute path", ->
       test.deep
@@ -251,14 +255,232 @@ describe.only "References", ->
         data: 1
         ref1: 1
         ref2: 1
+    it "should fail on circular reference", ->
+      test.fail
+        type: 'object'
+      ,
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/ref2'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/ref1'
+          ]
+
+  ###########################################################################################
+
+  describe "async STRUCT checks", ->
+    it "should get absolute path", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+      ,
+        data: 1
+        ref: 1
+      , done
+    it "should get absolute path from deep", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        sub:
+          ref:
+            REF: [
+              source: 'struct'
+              path: '/data'
+            ]
+      ,
+        data: 1
+        sub:
+          ref: 1
+      , done
+    it "should get relative path", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'data'
+          ]
+      ,
+        data: 1
+        ref: 1
+      , done
+    it "should get relative path with parent", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        sub:
+          ref:
+            REF: [
+              source: 'struct'
+              path: '<data'
+            ]
+      ,
+        data: 1
+        sub:
+          ref: 1
+      , done
+    it "should get relative path with grandparent", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        group:
+          sub:
+            ref:
+              REF: [
+                source: 'struct'
+                path: '<<data'
+              ]
+      ,
+        data: 1
+        group:
+          sub:
+            ref: 1
+      , done
+    it "should get sub element", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.sub.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+      , done
+    it "should get sub element using asterisk", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.*.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+      , done
+    it "should get sub element using double asterisk", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: '**.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+      , done
+    it "should get sub element using like syntax", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.s*.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+      , done
+    it "should get ref->ref->value", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/ref1'
+          ]
+      ,
+        data: 1
+        ref1: 1
+        ref2: 1
+      , done
+    it "should get ref->ref->value (need for second loop)", (done) ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/ref2'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+      ,
+        data: 1
+        ref1: 1
+        ref2: 1
+      , done
+    it "should fail on circular reference", (done) ->
+      test.fail
+        type: 'object'
+      ,
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/ref2'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/ref1'
+          ]
+      , done
 
 
-# get data value
-# get file value
 
-
-# get second ref
-# use second ref if first fails on check
 
   describe "description", ->
 
