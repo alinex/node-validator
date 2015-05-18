@@ -21,6 +21,12 @@ fs = require 'alinex-fs'
 ValidatorCheck = require '../check'
 rules = require '../rules'
 
+# Helper methods
+# -------------------------------------------------
+
+# ### check for reference
+#
+# This validator rule will check if a value is a reference or not.
 checkref =
   type: 'object'
   mandatoryKeys: ['REF']
@@ -43,6 +49,9 @@ checkref =
       optional: true
 
 # ### get value from path
+#
+# The following patterns are also possible:
+#
 # - `/xxx.*.yyy` - specify a value in any of the subelements of xxx
 # - `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
 # - `/xxx.test*.yyy` - specify to search in some subelements
@@ -87,10 +96,6 @@ module.exports =
     # ### Type Description
     type: (options) ->
       text = 'A reference to a value. '
-
-
-
-
       text
 
 
@@ -116,6 +121,12 @@ module.exports =
         debug "#{check.pathname path} find '#{refname}'"
         switch ref.source
           when 'struct'
+            # Extract the reference target:
+            #
+            # `/xxx.yyy` - to specify a value from the structure by absolute path
+            # `xxx` - to specify the value sibling value from the given one
+            # `<xxx.yyy` - to specify the value based from the parent of the operating object
+            # `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
             absolute = ref.path[0] is '/'
             source = ref.path.split '.'
             if absolute
@@ -128,10 +139,10 @@ module.exports =
               source = newpath.concat source
               refname = "#{ref.source}:/#{source.join '.'}"
               debug "#{check.pathname path} absolute reference '#{refname}'"
-            # read value from absolute value
+            # read value from referenced path's value
             result = valueAtPath check.value, source
             if result?
-              # check for already checked value?????
+              # check for already checked value
               unless result[1] in check.checked
                 debug "#{check.pathname path} referenced '#{result[1]}' is not checked"
                 throw new Error 'EAGAIN'
@@ -141,24 +152,23 @@ module.exports =
               result = result[0]
             else
               debug "#{check.pathname path} reference '#{refname}' not found"
-            # `/xxx.yyy` - to specify a value from the structure by absolute path
-            # `xxx` - to specify the value sibling value from the given one
-            # `<xxx.yyy` - to specify the value based from the parent of the operating object
-            # `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
-
           when 'data'
-
-############################## TODO ##########################
-
+            # remove relative path signs because not possible here
             source = ref.path.replace(/^[\/<]*/, '').split '.'
             refname = "#{ref.source}:/#{source.join '.'}"
             # read value from absolute value
             result = valueAtPath check.data, source
             if result?
-              debug "found '#{util.inspect result[0]}' at '#{result[1]}' for '#{refname}'"
+              # check for already checked value
+              unless result[1] in check.checked
+                debug "#{check.pathname path} referenced '#{result[1]}' is not checked"
+                throw new Error 'EAGAIN'
+              # use value
+              debug "#{check.pathname path} found '#{util.inspect result[0]}'
+              at '#{result[1]}' for '#{refname}'"
               result = result[0]
             else
-              debug "reference '#{refname}' not found"
+              debug "#{check.pathname path} reference '#{refname}' not found"
           when 'env'
             result = process.env[ref.path]
           when 'file'

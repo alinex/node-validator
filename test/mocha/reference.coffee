@@ -480,6 +480,206 @@ describe "References", ->
       , done
 
 
+  ###########################################################################################
+
+  describe.only "DATA checks", ->
+
+    it "should get absolute path", ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+      ,
+        data: 1
+        ref: 1
+    it "should get absolute path from deep", ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        sub:
+          ref:
+            REF: [
+              source: 'struct'
+              path: '/data'
+            ]
+      ,
+        data: 1
+        sub:
+          ref: 1
+    it "should get relative path", ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'data'
+          ]
+      ,
+        data: 1
+        ref: 1
+    it "should get relative path with parent", ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        sub:
+          ref:
+            REF: [
+              source: 'struct'
+              path: '<data'
+            ]
+      ,
+        data: 1
+        sub:
+          ref: 1
+    it "should get relative path with grandparent", ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        group:
+          sub:
+            ref:
+              REF: [
+                source: 'struct'
+                path: '<<data'
+              ]
+      ,
+        data: 1
+        group:
+          sub:
+            ref: 1
+    it "should get sub element", ->
+      test.deep
+        type: 'object'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.sub.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+    it "should get sub element using asterisk", ->
+      test.deep
+        type: 'object'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.*.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+    it "should get sub element using double asterisk", ->
+      test.deep
+        type: 'object'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: '**.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+    it "should get sub element using like syntax", ->
+      test.deep
+        type: 'object'
+      ,
+        group:
+          sub:
+            data: 1
+        ref:
+          REF: [
+            source: 'struct'
+            path: 'group.s*.data'
+          ]
+      ,
+        group:
+          sub:
+            data: 1
+        ref: 1
+
+    it "should get ref->ref->value", ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/ref1'
+          ]
+      ,
+        data: 1
+        ref1: 1
+        ref2: 1
+    it "should get ref->ref->value (need for second loop)", ->
+      test.deep
+        type: 'object'
+      ,
+        data: 1
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/ref2'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/data'
+          ]
+      ,
+        data: 1
+        ref1: 1
+        ref2: 1
+    it "should fail on circular reference", ->
+      test.fail
+        type: 'object'
+      ,
+        ref1:
+          REF: [
+            source: 'struct'
+            path: '/ref2'
+          ]
+        ref2:
+          REF: [
+            source: 'struct'
+            path: '/ref1'
+          ]
+
+    #######################################################################################
 
 
   describe "description", ->
