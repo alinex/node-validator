@@ -164,6 +164,135 @@ The `default` option automatically makes the setting optional.
 
 References
 -------------------------------------------------
+References point to values which are used on their place. You can use references
+within the structure data which is checked and also within the check conditions.
+
+### Syntax
+
+The syntax looks easy but has a lot of variations and possibilities.
+
+``` text
+${source://path}
+${source://path source://path default}
+${source://path <<type:"integer">> source://path default}
+```
+
+Within the curly braces the source from which to retrieve the value is given.
+The source is given in form of an URI.
+Like you see in line two you may use multiple fallback URIs and also a default
+value at last.
+And at last in the third line you see how to add a special check condition
+after an URI. If this fails the next URI is checked.
+
+The path may also have different possibilities based on the `source` protocol
+type.
+
+### Combine
+
+You may also combine the resulting value(s) of the reference(s) into one
+string:
+
+``` text
+${host}:${port}
+```
+
+This will result in `localhost:8080` as example.
+
+### Value Structure
+
+The `struct` protocol is used to search for the value in the current data structure.
+
+__Absolute path__
+
+``` text
+${struct:///absolute.field}
+${struct:///absolute.field.0}
+```
+
+Like in the first line you give the path to the value which will be used. In the
+second line `field` is an array and the first value of it will be used.
+
+__Relative path__
+
+``` text
+${struct://relative.field}
+```
+
+This will search for the `relative` node in the current path backwards and
+then for the `field` subentry  which value is used .
+
+__Matching__
+
+With this you can also search for the position of the field.
+
+``` text
+${struct://relative.*.min}
+${struct://relative.**.min}
+${struct://relative.test?.min}
+${struct://relative.test*.min}
+```
+
+The easiest way is to search in all subentries (line 1) then to also go down
+recursively (line 2) and at last use matches in line 3 and 4.
+
+### Context
+
+``` text
+${context:///absolute.*.min}
+```
+
+### Environment
+
+``` text
+${env://MY_HOME}
+```
+
+### File
+
+``` text
+${file:///etc/my.value}
+${file:///etc/my.value#14}
+```
+
+This will load the content of a textfile (line 1) or use only line number 14
+of the file.
+
+### Web Ressources
+
+Only use a valid URL therefore:
+
+``` text
+${http://any.server.com/service}
+${ftp://user:pass@any.server.com/file.txt}
+```
+
+
+
+
+
+
+
+References Old
+-------------------------------------------------
+References point to values which are used. You can use two types of references:
+
+- structured - for values and check definitions
+- inline - within a string value and return a string
+
+To know then to use what see the following decision list:
+
+#1. use it in check definition => structured (because you need the checks)
+#2. you may get not only scalar values => structured
+3. you combine multiple reference together into a string => inline
+#4. you want to run specific checks per reference => structured
+5. else use the simpler notation => inline
+
+
+
+
+
+### Structured
+
 It is also possible to use references instead of values in the validation rules
 or values.
 
@@ -176,7 +305,7 @@ References are written as object with:
 
 Reference locations are objects with:
 
-- `source` - the type of references (struct, data, env, file)
+- `source` - the type of references (struct, data, env, file, web)
 - `path` - the path to the reference (source specific)
 - `type` - if a check should be done give the type...
 
