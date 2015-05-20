@@ -263,6 +263,8 @@ Here you may also go into a file which is referenced:
 Searches for a field, reads the file path there, loads the file and gets the first
 line.
 
+### Source Types (protocol)
+
 #### Context
 
 ``` text
@@ -275,7 +277,7 @@ line.
 <<<env://MY_HOME>>>
 ```
 
-#### Locale File
+#### File
 
 ``` text
 <<<file:///etc/myvalue>>>
@@ -299,7 +301,9 @@ Only use a valid URL therefore:
 <<<ftp://user:pass@any.server.com/file.txt>>>
 ```
 
-Also you may use the `#` anchor to access a specific line or structured element.
+It is not allowed to use a # anchor in the URL.
+
+But you may use the `#` anchor to access a specific line or structured element.
 
 #### Command
 
@@ -318,9 +322,11 @@ Also you may use the `#` anchor to access a specific line or structured element.
 ### Path Locator
 
 They may be used directly as the path in `struc` references or as anchor to
-get a subvalue (region). Multiple anchors are possible to specify a next
-subsearch which makes only sense if you switch from structured to a text
-element like:
+get a subvalue (region).
+
+__Subsearch__
+
+Multiple anchors are possible to specify a next subsearch like:
 
 ``` text
 <<<struct:///absolute.field>>>
@@ -329,8 +335,24 @@ element like:
 <<<struct://file#address.info#1>>>
 ```
 
+
 That means then either a # character comes up the search will use this value
 and uses the rest of the path on this.
+
+But to keep the system secure not any context can be used in another one. The
+Following list shows the precedence and can only be used top to bottom.
+
+1. environment
+2. struct
+3. context
+4. file, command
+5. web
+6. value structure or range in value are always possible
+
+Within the same level references between both are possible.
+
+This keeps the security, so that a user can not compromise the system by injecting
+references to extract internal data.
 
 __Text Range__
 
@@ -357,13 +379,26 @@ name/test?/min - pattern match with one missing character
 name/test*/min - pattern match with multiple missing characters
 ```
 
+You may also use regexp notation to find the correct element:
 
-__Ideas__
+``` text
+name/test[AB]/min - pattern match with one missing character
+name/test\d+/min - pattern match with multiple missing characters
+```
 
-- pattern matches (regex) re:...
+See the [Mozilla Developer Network](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+for the possible syntax but without modifier.
+
+
+__More Ideas__
+
+This are only ideas and will not be implemented, yet. Some of them make it too
+complex.
+
+- multiple elements as array or first element
+- specific match match#3
 - element which has specific value in it's subelement    $(num<4)
 - element which has specific number of subelements     $(name:count>5)
-- <<<xxxx ? yyyy : zzzz>>>
 - <<<xxxx ? yyyy : zzzz>>>
 
 
