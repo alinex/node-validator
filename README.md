@@ -176,15 +176,16 @@ References (new in version 0.4.0)
 -------------------------------------------------
 References point to values which are used on their place. You can use references
 within the structure data which is checked and also within the check conditions.
+Not everything is possible, but a lot - see below.
 
 ### Syntax
 
 The syntax looks easy but has a lot of variations and possibilities.
 
 ``` text
-${source://path}
-${source://path source://path default}
-${source://path <<type:"integer">> source://path default}
+<<<source://path>>>
+<<<source://path | source://path | default>>>
+<<<source://path#{type:"integer"} | source://path | default>>>
 ```
 
 Within the curly braces the source from which to retrieve the value is given.
@@ -203,20 +204,24 @@ You may also combine the resulting value(s) of the reference(s) into one
 string:
 
 ``` text
-${host}:${port}
+<<<host>>>:<<<port>>>
 ```
 
 This will result in `localhost:8080` as example.
 
-### Value Structure
+### Data Sources
+
+The following are the diffferent data sources to use.
+
+#### Value Structure
 
 The `struct` protocol is used to search for the value in the current data structure.
 
 __Absolute path__
 
 ``` text
-${struct:///absolute.field}
-${struct:///absolute.field.0}
+<<<struct:///absolute/field>>>
+<<<struct:///absolute/field.0>>>
 ```
 
 Like in the first line you give the path to the value which will be used. In the
@@ -225,45 +230,58 @@ second line `field` is an array and the first value of it will be used.
 __Relative path__
 
 ``` text
-${struct://relative.field}
+<<<struct://relative/field>>>
+<<<struct://./relative/field>>>
+<<<struct://../relative/field>>>
 ```
 
 This will search for the `relative` node in the current path backwards and
-then for the `field` subentry  which value is used .
+then for the `field` subentry  which value is used.
+In relative paths you can also make backreferences like in the filesystem. So
+line 2 makes no difference but line 3 of the examples goes one level up.
 
 __Matching__
 
 With this you can also search for the position of the field.
 
 ``` text
-${struct://relative.*.min}
-${struct://relative.**.min}
-${struct://relative.test?.min}
-${struct://relative.test*.min}
+<<<struct://relative/*/min>>>
+<<<struct://relative/**/min>>>
+<<<struct://relative/test?/min>>>
+<<<struct://relative/test*/min>>>
 ```
 
 The easiest way is to search in all subentries (line 1) then to also go down
 recursively (line 2) and at last use matches in line 3 and 4.
 
-### Context
+__Subchecks__
+
+Here you may also go into a file which is referenced:
+
+<<<struct://file#address.info#1>>>
+
+Searches for a field, reads the file path there, loads the file and gets the first
+line.
+
+#### Context
 
 ``` text
-${context:///absolute.*.min}
+<<<context:///absolute/*/min>>>
 ```
 
-### Environment
+#### Environment
 
 ``` text
-${env://MY_HOME}
+<<<env://MY_HOME>>>
 ```
 
-### File
+#### Locale File
 
 ``` text
-${file:///etc/my.value}
-${file:///etc/my.value#14}
-${file:///etc/my.value#14,5-8}
-${file:///etc/my.value#name.min}
+<<<file:///etc/myvalue>>>
+<<<file:///etc/myvalue#14>>>
+<<<file:///etc/myvalue#14/5-8>>>
+<<<file:///etc/myvalue#name/min>>>
 ```
 
 This will load the content of a textfile (line 1) or use only line number 14
@@ -272,16 +290,81 @@ range to use.
 And in the last example line the file has to contain some type of
 structured information from which the given element path will be used.
 
-### Web Ressources
+#### Web Ressources
 
 Only use a valid URL therefore:
 
 ``` text
-${http://any.server.com/service}
-${ftp://user:pass@any.server.com/file.txt}
+<<<http://any.server.com/service>>>
+<<<ftp://user:pass@any.server.com/file.txt>>>
 ```
 
 Also you may use the `#` anchor to access a specific line or structured element.
+
+#### Command
+
+``` text
+<<<cmd://date>>>
+<<<cmd:///user/local/bin/date>>>
+<<<cmd://df%20-h>>>
+```
+
+#### Database
+
+``` text
+<<<mysql://xpath>>>
+```
+
+### Path Locator
+
+They may be used directly as the path in `struc` references or as anchor to
+get a subvalue (region). Multiple anchors are possible to specify a next
+subsearch which makes only sense if you switch from structured to a text
+element like:
+
+``` text
+<<<struct:///absolute.field>>>
+<<<struct:///absolute.field#1>>>
+<<<file:///data/book.yml#publishing.notice#2-4>>>
+<<<struct://file#address.info#1>>>
+```
+
+That means then either a # character comes up the search will use this value
+and uses the rest of the path on this.
+
+__Text Range__
+
+Within a text element you may use the following ranges:
+
+``` text
+3 - specific row
+3-5 - specific row range
+3,5 - specific row and column
+3,5-8 - specific column range in row
+3-5,5-8 - specific row and column range
+```
+
+__Structure__
+
+If it is a structured information you may specify the path by name:
+
+``` text
+name - get first element with this name
+name/*/min - within any subelement
+name/*/*/min - within any subelement (two level depth)
+name/**/min - within any subelement in any depth
+name/test?/min - pattern match with one missing character
+name/test*/min - pattern match with multiple missing characters
+```
+
+
+__Ideas__
+
+- pattern matches (regex) re:...
+- element which has specific value in it's subelement    $(num<4)
+- element which has specific number of subelements     $(name:count>5)
+- <<<xxxx ? yyyy : zzzz>>>
+- <<<xxxx ? yyyy : zzzz>>>
 
 
 Descriptive reporting
