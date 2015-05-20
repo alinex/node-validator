@@ -31,10 +31,20 @@ Install
 
 The easiest way is to let npm add the module directly:
 
-    > npm install alinex-validator --save
+``` bash
+npm install alinex-validator --save
+```
 
 [![NPM](https://nodei.co/npm/alinex-validator.png?downloads=true&stars=true)](https://nodei.co/npm/alinex-validator/)
 
+But you can also get the sources from github and install the subpackages using
+npm:
+
+``` bash
+git clone git://github.com/alinex/node-validator alinex-validator
+cd alinex-validator
+npm install
+```
 
 Usage
 -------------------------------------------------
@@ -162,7 +172,7 @@ If not given it will be set to null or the value given with `default`.
 The `default` option automatically makes the setting optional.
 
 
-References
+References (new in version 0.4.0)
 -------------------------------------------------
 References point to values which are used on their place. You can use references
 within the structure data which is checked and also within the check conditions.
@@ -252,10 +262,15 @@ ${env://MY_HOME}
 ``` text
 ${file:///etc/my.value}
 ${file:///etc/my.value#14}
+${file:///etc/my.value#14,5-8}
+${file:///etc/my.value#name.min}
 ```
 
 This will load the content of a textfile (line 1) or use only line number 14
-of the file.
+of the file. seperated by a colon you can also specify which colum (character)
+range to use.
+And in the last example line the file has to contain some type of
+structured information from which the given element path will be used.
 
 ### Web Ressources
 
@@ -266,191 +281,8 @@ ${http://any.server.com/service}
 ${ftp://user:pass@any.server.com/file.txt}
 ```
 
+Also you may use the `#` anchor to access a specific line or structured element.
 
-
-
-
-
-
-References Old
--------------------------------------------------
-References point to values which are used. You can use two types of references:
-
-- structured - for values and check definitions
-- inline - within a string value and return a string
-
-To know then to use what see the following decision list:
-
-#1. use it in check definition => structured (because you need the checks)
-#2. you may get not only scalar values => structured
-3. you combine multiple reference together into a string => inline
-#4. you want to run specific checks per reference => structured
-5. else use the simpler notation => inline
-
-
-
-
-
-### Structured
-
-It is also possible to use references instead of values in the validation rules
-or values.
-
-References are written as object with:
-
-- `REF` - the only needed key which contain a list of reference locations
-- `VAL` - specifies a default value if no reference found
-- `FUNC` - can additionally be used with a function optimizing the value
-  it will be called with the value and the path it comes from
-
-Reference locations are objects with:
-
-- `source` - the type of references (struct, data, env, file, web)
-- `path` - the path to the reference (source specific)
-- `type` - if a check should be done give the type...
-
-Other keys may follow specific to the type checks.
-
-__STRUCT references__
-
-They are used to specify another element in the value structure. The path specifies
-where to find it. If you use this source type you won't need the checks within the
-reference because the values will already get checked. The validator will guaranty
-that values are used as reference after they are checked.
-
-The path is calculated from the viewpoint of the current parent element. That means
-giving a name it will look at the sibling node but you may go up/down the tree:
-
-- `xxx` - to specify the value sibling value from the given one
-- `/xxx.yyy` - to specify a value from the structure by absolute path
-- `/xxx.*.yyy` - specify a value in any of the subelements of xxx
-- `/xxx.**.yyy` - specify a value in any of the subelements also multiple levels deep
-- `/xxx.zz*.yyy` - specify a value in any of the subelements which start with zz
-- `<xxx.yyy` - to specify the value based from the parent of the operating object
-- `<<xxx.yyy` - to specify the value based from the grandparent of the operating object
-
-__DATA references__
-
-The DATA values may be given as additional data to the validator. If so you may
-access it with the same path specifier as for `struct` but paths are always absolute
-here.
-
-__ENV references__
-
-You can also use some environment settings as reference. For this source type only
-give the name of the environment variable as path. But keep in mind to better check
-the type of it's content, too.
-
-__FILE references__
-
-And at last you can read the content of a simple text file as value. The path points
-to the file and have to be an absolute path.
-Maybe you have to do some type checks here, too.
-
-In this type of references the system will cache the file contents for a short time
-to prevent multiple read and gain better performance.
-
-### How it works
-
-Use it everywhere you may need it but prevent round referencing in which it reference
-itself through other references.
-
-__In check definitions__
-
-Before doing a check or a subcheck it's options are checked for references if there
-is one:
-
-- go through the reference list
-- get the reference and do the accompanying check (if there is one)
-- use this as an value if it is found and succeeded in check
-- if not go on to the next reference from the list
-- if no value found use the default value
-- if an operation is given run it with the value
-- give back the resulting reference check
-
-__In value structures__
-
-Every value will be checked if it is a reference. If so it will:
-
-- go through the reference list
-- get the reference and do the accompanying check (if there is one)
-- use this as an value if it is found and succeeded in check
-- if not go on to the next reference from the list
-- if no value found use the default value
-- if an operation is given run it with the value
-- go on to the validation check with the resulting value
-
-__Default value__
-
-A value will be searched in each given reference till one is found. If nothing
-found the `VAL` setting is used or nothing.
-
-### Example in definition
-
-If used in check definitions it may need a second validation round but this is done
-automatically in the background. Mostly you may need the references as comparing
-value for some checks or as an default value.
-
-``` coffee
-validator.check 'test', value,
-  type: 'object'
-  title: 'Range'
-  description: 'the range to use'
-  entries:
-    min:
-      type: 'integer'
-    max:
-      type: 'integer'
-      min:
-        REF: [
-          source: 'env'
-          path: 'MINVAL'
-          type: 'integer'
-          min: 0
-        ,
-          source: 'struct'
-          path: 'min'
-        ]
-        FUNC: (val) -> val + 1
-```
-
-The above check condition will check that the given `max` value is at least one
-above the `min` value.
-
-### Example in check values
-
-Within the values the use is the same.
-
-``` coffee
-validator.check 'test',
-  database: 'test'
-  host:
-    REF: [
-      source: 'env'
-      path: 'MYSQL_HOST'
-    ]
-    VAL: 'localhost'
-  user:
-    REF: [
-      source: 'env'
-      path: 'MYSQL_USER'
-    ]
-    VAL: 'localhost'
-  password:
-    REF: [
-      source: 'env'
-      path: 'MYSQL_PASS'
-    ,
-      source: 'env'
-      path: 'MYSQL_PAsSWORD'
-    ,
-      source: 'file'
-      path: '/etc/mysql/access.password'
-    ]
-```
-
-This also shows that one or more references can be added and also with different
-reference types.
 
 Descriptive reporting
 -------------------------------------------------
