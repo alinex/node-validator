@@ -1,705 +1,104 @@
 require('alinex-error').install()
+chai = require 'chai'
+expect = chai.expect
+
 async = require 'alinex-async'
 
 test = require '../test'
+reference = require '../../lib/reference'
 
-describe "References", ->
+describe.only "References", ->
 
-  ###########################################################################################
+  describe "detect", ->
 
-  describe "simple ENV checks", ->
+    it "should know that there are no references", ->
+      values = [
+        'one'
+        1
+        [1,2,3]
+        { one: 1 }
+        new Error '????'
+        undefined
+        null
+      ]
+      for value in values
+        result = reference.exists value
+        expect(result, value).to.be.false
 
-    simple = null
-    beforeEach ->
-      simple =
-        type: 'reference'
-    it "should keep normal values", ->
-      test.same simple, 'one'
-      test.same simple, 1
-      test.same simple, [1,2,3]
-      test.same simple, { one: 1 }
-      test.same simple, (new Error '????')
-      test.same simple, undefined
-      test.same simple, null
-    it "should get ENV reference", ->
+    it "should find references", ->
+      values = [
+        '<<<name>>>'
+        'My name is <<<name>>>'
+        '<<<firstname>>> <<<lastname>>>'
+      ]
+      for value in values
+        result = reference.exists value
+        expect(result, value).to.be.true
+
+  describe "simple", ->
+
+    it "should keep values without references", ->
+      values = [
+        'one'
+        1
+        [1,2,3]
+        { one: 1 }
+        new Error '????'
+        undefined
+        null
+      ]
+      for value in values
+        result = reference.replace value
+        expect(result, value).to.equal value
+
+    it "should replace references with default value", ->
+      values =
+        '<<<>>>': '' # empty default value
+        '<<<name>>>': 'name' # whole reference
+        'My name is <<<alex>>>': 'My name is alex' # reference in string
+        '<<<firstname>>> <<<lastname>>>': 'firstname lastname' #concatenate
+      for value, check of values
+        result = reference.replace value
+        expect(result, value).to.equal check
+
+  describe "data sources", ->
+
+    it "should find environment value", ->
       process.env.TESTVALIDATOR = 123
-      test.equal simple,
-        REF: [
-          source: 'env'
-          path: 'TESTVALIDATOR'
-        ]
-      , '123'
-    it "should get STRUCT reference", ->
-      test.equal simple,
-        REF: [
-          source: 'env'
-          path: 'TESTVALIDATOR'
-        ]
-      , '123'
-    it "should run checks", ->
-      process.env.TESTVALIDATOR = 123
-      test.equal simple,
-        REF: [
-          source: 'env'
-          path: 'TESTVALIDATOR'
-          type: 'integer'
-        ]
-      , 123
-    it "should work on missing reference", ->
-      test.equal simple,
-        REF: [
-          source: 'env'
-          path: 'TESTVALIDATOR2'
-        ]
-      , undefined
-    it "should return default value", ->
-      test.equal simple,
-        REF: [
-          source: 'env'
-          path: 'TESTVALIDATOR2'
-        ]
-        VAL: 0
-      , 0
-    it "should run operations", ->
-      process.env.TESTVALIDATOR = 123
-      test.equal simple,
-        REF: [
-          source: 'env'
-          path: 'TESTVALIDATOR'
-          type: 'integer'
-        ]
-        FUNC: (v) -> ++v
-      , 124
+      value = '<<<env://TESTVALIDATOR>>>'
+      result = reference.replace value
+      expect(result, value).to.equal process.env.TESTVALIDATOR
+    it "should fail for environment", ->
+      value = '<<<env://TESTNOTEXISTING>>>'
+      result = reference.replace value
+      expect(result, value).to.not.exist
 
-  ###########################################################################################
+    it.skip "should find file value", ->
 
-  describe "sync STRUCT checks", ->
+    it.skip "should find command value", ->
 
-    it "should get absolute path", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-      ,
-        data: 1
-        ref: 1
-    it "should get absolute path from deep", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        sub:
-          ref:
-            REF: [
-              source: 'struct'
-              path: '/data'
-            ]
-      ,
-        data: 1
-        sub:
-          ref: 1
-    it "should get relative path", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'data'
-          ]
-      ,
-        data: 1
-        ref: 1
-    it "should get relative path with parent", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        sub:
-          ref:
-            REF: [
-              source: 'struct'
-              path: '<data'
-            ]
-      ,
-        data: 1
-        sub:
-          ref: 1
-    it "should get relative path with grandparent", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        group:
-          sub:
-            ref:
-              REF: [
-                source: 'struct'
-                path: '<<data'
-              ]
-      ,
-        data: 1
-        group:
-          sub:
-            ref: 1
-    it "should get sub element", ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.sub.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-    it "should get sub element using asterisk", ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.*.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-    it "should get sub element using double asterisk", ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: '**.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-    it "should get sub element using like syntax", ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.s*.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
+    it.skip "should find web resource value", ->
 
-    it "should get ref->ref->value", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/ref1'
-          ]
-      ,
-        data: 1
-        ref1: 1
-        ref2: 1
-    it "should get ref->ref->value (need for second loop)", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/ref2'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-      ,
-        data: 1
-        ref1: 1
-        ref2: 1
-    it "should fail on circular reference", ->
-      test.fail
-        type: 'object'
-      ,
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/ref2'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/ref1'
-          ]
+  describe "structure", ->
 
-  ###########################################################################################
+    it "should find absolute path", ->
+      struct =
+        absolute: 123
+      value = '<<<struct:///absolute>>>'
+      result = reference.replace value,
+        data: struct
+      expect(result, value).to.equal struct.absolute
 
-  describe "async STRUCT checks", ->
-    it "should get absolute path", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-      ,
-        data: 1
-        ref: 1
-      , done
-    it "should get absolute path from deep", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        sub:
-          ref:
-            REF: [
-              source: 'struct'
-              path: '/data'
-            ]
-      ,
-        data: 1
-        sub:
-          ref: 1
-      , done
-    it "should get relative path", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'data'
-          ]
-      ,
-        data: 1
-        ref: 1
-      , done
-    it "should get relative path with parent", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        sub:
-          ref:
-            REF: [
-              source: 'struct'
-              path: '<data'
-            ]
-      ,
-        data: 1
-        sub:
-          ref: 1
-      , done
-    it "should get relative path with grandparent", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        group:
-          sub:
-            ref:
-              REF: [
-                source: 'struct'
-                path: '<<data'
-              ]
-      ,
-        data: 1
-        group:
-          sub:
-            ref: 1
-      , done
-    it "should get sub element", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.sub.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-      , done
-    it "should get sub element using asterisk", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.*.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-      , done
-    it "should get sub element using double asterisk", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: '**.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-      , done
-    it "should get sub element using like syntax", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.s*.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-      , done
-    it "should get ref->ref->value", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/ref1'
-          ]
-      ,
-        data: 1
-        ref1: 1
-        ref2: 1
-      , done
-    it "should get ref->ref->value (need for second loop)", (done) ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/ref2'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-      ,
-        data: 1
-        ref1: 1
-        ref2: 1
-      , done
-    it "should fail on circular reference", (done) ->
-      test.fail
-        type: 'object'
-      ,
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/ref2'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/ref1'
-          ]
-      , done
+  describe "context", ->
 
+  describe "alternatives", ->
 
-  ###########################################################################################
+  describe "value search", ->
 
-  describe.only "DATA checks", ->
+    it.skip "should find line", ->
 
-    it "should get absolute path", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-      ,
-        data: 1
-        ref: 1
-    it "should get absolute path from deep", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        sub:
-          ref:
-            REF: [
-              source: 'struct'
-              path: '/data'
-            ]
-      ,
-        data: 1
-        sub:
-          ref: 1
-    it "should get relative path", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'data'
-          ]
-      ,
-        data: 1
-        ref: 1
-    it "should get relative path with parent", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        sub:
-          ref:
-            REF: [
-              source: 'struct'
-              path: '<data'
-            ]
-      ,
-        data: 1
-        sub:
-          ref: 1
-    it "should get relative path with grandparent", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        group:
-          sub:
-            ref:
-              REF: [
-                source: 'struct'
-                path: '<<data'
-              ]
-      ,
-        data: 1
-        group:
-          sub:
-            ref: 1
-    it "should get sub element", ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.sub.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-    it "should get sub element using asterisk", ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.*.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-    it "should get sub element using double asterisk", ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: '**.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
-    it "should get sub element using like syntax", ->
-      test.deep
-        type: 'object'
-      ,
-        group:
-          sub:
-            data: 1
-        ref:
-          REF: [
-            source: 'struct'
-            path: 'group.s*.data'
-          ]
-      ,
-        group:
-          sub:
-            data: 1
-        ref: 1
+  describe "checks", ->
 
-    it "should get ref->ref->value", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/ref1'
-          ]
-      ,
-        data: 1
-        ref1: 1
-        ref2: 1
-    it "should get ref->ref->value (need for second loop)", ->
-      test.deep
-        type: 'object'
-      ,
-        data: 1
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/ref2'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/data'
-          ]
-      ,
-        data: 1
-        ref1: 1
-        ref2: 1
-    it "should fail on circular reference", ->
-      test.fail
-        type: 'object'
-      ,
-        ref1:
-          REF: [
-            source: 'struct'
-            path: '/ref2'
-          ]
-        ref2:
-          REF: [
-            source: 'struct'
-            path: '/ref1'
-          ]
+  describe "multipath", ->
 
-    #######################################################################################
-
-
-  describe "description", ->
-
-    it "should give simple description", ->
-      test.desc
-        type: 'reference'
-    it "should give complete description", ->
-      test.desc
-        title: 'test'
-        description: 'Some test rules'
-        type: 'reference'
-
-  describe "selfcheck", ->
-
-    it "should validate simple options", ->
-      test.selfcheck
-        type: 'reference'
-    it "should validate complete options", ->
-      test.selfcheck
-        title: 'test'
-        description: 'Some test rules'
-        type: 'reference'
+  describe "multiref", ->

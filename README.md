@@ -242,17 +242,7 @@ line 2 makes no difference but line 3 of the examples goes one level up.
 
 __Matching__
 
-With this you can also search for the position of the field.
-
-``` text
-<<<struct://relative/*/min>>>
-<<<struct://relative/**/min>>>
-<<<struct://relative/test?/min>>>
-<<<struct://relative/test*/min>>>
-```
-
-The easiest way is to search in all subentries (line 1) then to also go down
-recursively (line 2) and at last use matches in line 3 and 4.
+See below in the path locator description for the more complex search pattern.
 
 __Subchecks__
 
@@ -262,8 +252,6 @@ Here you may also go into a file which is referenced:
 
 Searches for a field, reads the file path there, loads the file and gets the first
 line.
-
-### Source Types (protocol)
 
 #### Context
 
@@ -310,7 +298,7 @@ But you may use the `#` anchor to access a specific line or structured element.
 ``` text
 <<<cmd://date>>>
 <<<cmd:///user/local/bin/date>>>
-<<<cmd://df%20-h>>>
+<<<cmd://df -h>>>
 ```
 
 #### Database
@@ -329,15 +317,24 @@ __Subsearch__
 Multiple anchors are possible to specify a next subsearch like:
 
 ``` text
-<<<struct:///absolute.field>>>
 <<<struct:///absolute.field#1>>>
 <<<file:///data/book.yml#publishing.notice#2-4>>>
-<<<struct://file#address.info#1>>>
 ```
-
 
 That means then either a # character comes up the search will use this value
 and uses the rest of the path on this.
+
+It is also possible to inject references through the referenced field like:
+
+``` text
+<<<struct://file#address.info#1>>>
+file = <<<file:///myconfig.yml>>>
+```
+
+This means that the `file` element of the structure will be used and as this
+is also a reference the value of this will first be retrieved by the reference to
+the `myconfig.yml` file. Then the result comes back the main path will be followed
+and the specific element is used.
 
 But to keep the system secure not any context can be used in another one. The
 Following list shows the precedence and can only be used top to bottom.
@@ -396,7 +393,7 @@ This are only ideas and will not be implemented, yet. Some of them make it too
 complex.
 
 - multiple elements as array or first element
-- specific match match#3
+- specific match    match#3
 - element which has specific value in it's subelement    $(num<4)
 - element which has specific number of subelements     $(name:count>5)
 - <<<xxxx ? yyyy : zzzz>>>
