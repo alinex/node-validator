@@ -236,7 +236,9 @@ __Relative path__
 ```
 
 This will search for the `relative` node in the current path backwards and
-then for the `field` subentry  which value is used.
+then for the `field` subentry  which value is used. It will look for the
+neighbor elements, the parent and it'S neighborts and so on back to root.
+
 In relative paths you can also make backreferences like in the filesystem. So
 line 2 makes no difference but line 3 of the examples goes one level up.
 

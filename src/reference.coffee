@@ -6,6 +6,7 @@
 # - lastType - the type of the last checked reference to ensure security
 # - data - structure to work on
 # - pos - array defining the current position in data
+# - structSearch - set if first element is done (within findData())
 # - context - alternative data object
 
 
@@ -27,7 +28,7 @@ protocolMap =
   https: 'web'
 
 # to ensure security a reference can only call references with lower precedence
-[typePrecedence] =
+typePrecedence =
   env: 5
   struct: 4
   context : 3
@@ -122,26 +123,50 @@ findType =
   struct: (proto, path, work) ->
     findData path, work
   context: (proto, path, work) ->
-    findData path, object.expand {}, work,
+    findData path, object.extend {}, work,
       data: work.context
 
 findData = (path, work) ->
+  unless work.structSearch?
+    work = object.clone work
   # split path
   path = path.replace('/\/+$/','').split /\/+/ if typeof path is 'string'
+  work.pos ?= []
   # process first level
   cur = path.shift()
   if cur is ''
     work.pos = []
   else
-    work.pos.push cur
+    if getData(work.data, work.pos)[cur]?
+      work.pos.push cur
+    else
+      return undefined if work.structSearch
+      # search backwards neighbors and parent
+      done = false
+      if work.pos.length > 1
+        for i in [work.pos.length-2..0]
+          if getData(work.data, work.pos[0..i])[cur]?
+            work.pos = work.pos[0..i]
+            work.pos.push cur
+            done = true
+            break
+      unless done
+        if work.data[cur]?
+          work.pos = [cur]
+          done = true
+      return undefined unless done
+  work.structSearch = true
   # go on for more level if existing
   return findData path, work if path.length
   # if not use the current path and return this value
   getData work.data, work.pos
 
 getData = (data, pos) ->
+  return data unless pos.length
   result = data
   for i in [0..pos.length-1]
+    #console.log '-->', result, pos[i]
     result = result[pos[i]]
+    #console.log '--=', result
   return result
 

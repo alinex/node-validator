@@ -61,23 +61,29 @@ describe.only "References", ->
         result = reference.replace value
         expect(result, value).to.equal check
 
-  describe "data sources", ->
+    it "should use alternatives value", ->
+      process.env.TESTVALIDATOR = 123
+      values =
+        '<<<env://TESTVALIDATOR | 456>>>': process.env.TESTVALIDATOR
+        '<<<env://NOTEXISTING | 456>>>': '456'
+        '<<<env://NOTEXISTING | env://TESTVALIDATOR | 456>>>': process.env.TESTVALIDATOR
+        '<<<env://TESTVALIDATOR | env://NOTEXISTING | 456>>>': process.env.TESTVALIDATOR
+      for value, check of values
+        result = reference.replace value
+        expect(result, value).to.equal check
+
+  describe "environment", ->
 
     it "should find environment value", ->
       process.env.TESTVALIDATOR = 123
       value = '<<<env://TESTVALIDATOR>>>'
       result = reference.replace value
       expect(result, value).to.equal process.env.TESTVALIDATOR
+
     it "should fail for environment", ->
       value = '<<<env://TESTNOTEXISTING>>>'
       result = reference.replace value
       expect(result, value).to.not.exist
-
-    it.skip "should find file value", ->
-
-    it.skip "should find command value", ->
-
-    it.skip "should find web resource value", ->
 
   describe "structure", ->
 
@@ -89,9 +95,87 @@ describe.only "References", ->
         data: struct
       expect(result, value).to.equal struct.absolute
 
-  describe "context", ->
+    it "should fail with absolute path", ->
+      struct =
+        absolute: 123
+      values = [
+        '<<<struct:///notfound>>>'
+        '<<<struct:///notfound/value>>>'
+      ]
+      for value in values
+        result = reference.replace value,
+          data: struct
+        expect(result, value).to.not.exist
 
-  describe "alternatives", ->
+    it "should find relative path", ->
+      struct =
+        europe:
+          germany:
+            stuttgart: 'VFB Stuttgart'
+            munich: 'FC Bayern'
+          spain:
+            madrid: 'Real Madrid'
+        southamerica:
+          brazil:
+            saopaulo: 'FC Sao Paulo'
+      values =
+        '<<<struct://stuttgart>>>': struct.europe.germany.stuttgart
+        '<<<struct://munich>>>': struct.europe.germany.munich
+        '<<<struct://spain>>>': struct.europe.spain
+        '<<<struct://spain/madrid>>>': struct.europe.spain.madrid
+        '<<<struct://southamerica/brazil/saopaulo>>>': struct.southamerica.brazil.saopaulo
+      for value, check of values
+        result = reference.replace value,
+          data: struct
+          pos: ['europe','germany']
+        expect(result, value).to.deep.equal check
+
+    it "should fail with relative path", ->
+      struct =
+        europe:
+          germany:
+            stuttgart: 'VFB Stuttgart'
+            munich: 'FC Bayern'
+          spain:
+            madrid: 'Real Madrid'
+        southamerica:
+          brazil:
+            saopaulo: 'FC Sao Paulo'
+      values = [
+        '<<<struct:///berlin>>>'
+        '<<<struct:///america/newyork>>>'
+        '<<<struct:///southamerica/chile>>>'
+      ]
+      for value in values
+        result = reference.replace value,
+          data: struct
+          pos: ['europe','germany']
+        expect(result, value).to.not.exist
+
+    it "should find context path", ->
+      struct =
+        absolute: 123
+      values = [
+        '<<<context:///absolute>>>'
+        '<<<context://absolute>>>'
+      ]
+      for value in values
+        result = reference.replace value,
+          context: struct
+        expect(result, value).to.equal struct.absolute
+
+  describe.skip "file", ->
+
+    it "should find file value", ->
+      value = "<<<file://#{path.dirname __dirname}/textfile>>>"
+      result = reference.replace value
+      expect(result, value).to.equal '123'
+
+  describe "web", ->
+
+  describe "command", ->
+
+  describe "database", ->
 
   describe "value search", ->
 
