@@ -94,7 +94,7 @@ find = (list, work={}) ->
   proto = proto.toLowerCase()
   type = protocolMap[proto] ? proto
   # check for correct handler
-  unless findType[proto]?
+  unless findType[type]?
     throw new Error "No handler for protocol #{proto} for references defined"
   # check precedence for next uri
   if work.lastType? and typePrecedence[type] > typePrecedence[work.lastType?]
@@ -102,7 +102,7 @@ find = (list, work={}) ->
     for security reasons"
   # run type handler and return if nothing found
   work.lastType = type
-  result = findType[proto] proto, path, work
+  result = findType[type] proto, path, work
   if result?
     debug "found #{util.inspect result}"
     # check for another reference
@@ -125,6 +125,29 @@ findType =
   context: (proto, path, work) ->
     findData path, object.extend {}, work,
       data: work.context
+  file: (proto, path, work) ->
+    fs = require 'alinex-fs'
+    console.log proto, path
+    try
+      result = fs.readFileSync fs.realpathSync(path), 'utf-8'
+    catch err
+      debug err.message
+      return undefined
+  web: (proto, path, work) ->
+    request = require 'request'
+    sync = require 'sync'
+    wget = (url, cb) ->
+      request "#{proto}://#{path}", (err, response, body) ->
+        debug err, body
+        return cb null, undefined if err
+        return cb null, undefined if response.statusCode isnt 200 or not body?
+        cb null, body
+    sync ->
+      try
+        return wget "#{proto}://#{path}"
+      catch err
+        debug err.message
+        return undefined
 
 findData = (path, work) ->
   unless work.structSearch?

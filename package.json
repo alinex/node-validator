@@ -39,7 +39,8 @@
     "debug": ">=0.8.0 <3.0.0",
     "handlebars": "3.x",
     "ipaddr.js": "1.x",
-    "mathjs": "1.x"
+    "mathjs": "1.x",
+    "sync": "^0.2.5"
   },
   "devDependencies": {
     "alinex-builder": "1.x",

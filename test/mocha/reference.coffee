@@ -3,6 +3,7 @@ chai = require 'chai'
 expect = chai.expect
 
 async = require 'alinex-async'
+path = require 'path'
 
 test = require '../test'
 reference = require '../../lib/reference'
@@ -164,14 +165,45 @@ describe.only "References", ->
           context: struct
         expect(result, value).to.equal struct.absolute
 
-  describe.skip "file", ->
+  describe "file", ->
 
     it "should find file value", ->
-      value = "<<<file://#{path.dirname __dirname}/textfile>>>"
-      result = reference.replace value
-      expect(result, value).to.equal '123'
+      values = [
+        "<<<file://#{path.dirname __dirname}/data/textfile>>>"
+        "<<<file://test/data/textfile>>>"
+      ]
+      for value in values
+        result = reference.replace value
+        expect(result, value).to.equal '123'
+
+    it "should fail on file", ->
+      values = [
+        "<<<file://#{path.dirname __dirname}/data/notfound>>>"
+        "<<<file://textfile>>>"
+      ]
+      for value in values
+        result = reference.replace value
+        expect(result, value).to.not.exist
 
   describe "web", ->
+
+    it "should find web value", ->
+      values = [
+        "<<<http://www.thomas-bayer.com/sqlrest/CUSTOMER/18/>>>"
+        "<<<file://test/data/textfile>>>"
+      ]
+      for value in values
+        result = reference.replace value
+        expect(result, value).to.equal '123'
+
+    it "should fail on web", ->
+      values = [
+        "<<<file://#{path.dirname __dirname}/data/notfound>>>"
+        "<<<file://textfile>>>"
+      ]
+      for value in values
+        result = reference.replace value
+        expect(result, value).to.not.exist
 
   describe "command", ->
 

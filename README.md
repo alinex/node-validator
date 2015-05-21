@@ -269,6 +269,9 @@ line.
 
 #### File
 
+File paths should be given absolute because relative paths are calculated from
+the current working directory.
+
 ``` text
 <<<file:///etc/myvalue>>>
 <<<file:///etc/myvalue#14>>>
@@ -276,8 +279,8 @@ line.
 <<<file:///etc/myvalue#name/min>>>
 ```
 
-This will load the content of a textfile (line 1) or use only line number 14
-of the file. seperated by a colon you can also specify which colum (character)
+This will load the content of a text file (line 1) or use only line number 14
+of the file. separated by a colon you can also specify which column (character)
 range to use.
 And in the last example line the file has to contain some type of
 structured information from which the given element path will be used.
@@ -306,8 +309,11 @@ But you may use the `#` anchor to access a specific line or structured element.
 #### Database
 
 ``` text
-<<<mysql://xpath>>>
+<<<mysql://user:password@host:port/database/table/field?id=15>>>
+<<<mysql:///dataname/table/id=15/field>>>
+<<<mysql:///dataname/select name from xxx where id=15>>>
 ```
+
 
 ### Path Locator
 
