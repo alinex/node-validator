@@ -6,6 +6,7 @@
 # - lastType - the type of the last checked reference to ensure security
 # - data - structure to work on
 # - pos - array defining the current position in data
+# - dir - set to base directory for file relative file paths
 # - structSearch - set if first element is done (within findData())
 # - context - alternative data object
 
@@ -16,6 +17,7 @@ debug = require('debug')('validator:reference')
 util = require 'util'
 chalk = require 'chalk'
 # alinex modules
+async = require 'alinex-async'
 {object,array} = require 'alinex-util'
 # include classes and helper
 ValidatorCheck = require './check'
@@ -44,109 +46,118 @@ exists = module.exports.exists = (value) ->
   return false unless typeof value is 'string'
   Boolean value.match /<<<.*>>>/
 
-replace = module.exports.replace = (value, work={}) ->
-  return value unless  exists value
+replace = module.exports.replace = (value, work={}, cb) ->
+  if typeof work is 'function'
+    cb = work
+    work = {}
+  return cb null, value unless exists value
   debug "replace #{util.inspect value}..."
-  # step other parts
+  # step over parts
   refs = value.split /(<<<.*?>>>)/
-  combined = ''
-  single = refs.length is 3 and refs[0] is '' and refs[2] is ''
-  for v in refs
-    result = findAlternative v, work
-    unless result?
-      debug "no value found for #{util.inspect value}"
-      return undefined
-    if single
-      combined = result if result
-    else
-      combined += result
-  debug "#{util.inspect value} is replaced by #{util.inspect combined}"
-  combined
+  refs = [refs[1]] if refs.length is 3 and refs[0] is '' and refs[2] is ''
+  # check alternatives
+  async.map refs, (v, cb) ->
+    findAlternative v, work, cb
+  , (err, results) ->
+    return cb() if err
+    if results.length is 1
+      debug "#{util.inspect value} is replaced by #{util.inspect results[0]}"
+      return cb null, results[0]
+    # combine together
+    result = results.join ''
+    debug "#{util.inspect value} is replaced by #{util.inspect result}"
+    cb null, result
 
-findAlternative = (value, work={}) ->
-  return value unless ~value.indexOf '<<<'
-  debug "alternative #{util.inspect value}"
+
+findAlternative = (value, work={}, cb) ->
+  return cb null, value unless ~value.indexOf '<<<'
+  debug chalk.grey "check part #{util.inspect value}"
   # replace <<< and >>> and split into alternatives
-  for alt in value[3..-4].split /\s+\|\s+/
+  async.map value[3..-4].split(/\s+\|\s+/), (alt, cb) ->
     # split into paths and call
     uris = alt.split(/#/)
     # return default value
     if uris.length is 1 and not ~alt.indexOf '://'
-      debug "use default value"
-      return alt
+      debug chalk.grey "#{util.inspect alt} -> default value: #{util.inspect alt}"
+      return cb null, alt
     # search the uris
-    result = find uris, work
-    return result if result?
-  undefined
+    find uris, work, (err, result) ->
+      if err
+        debug chalk.grey "#{util.inspect alt} -> failed: #{err.message}"
+        return cb err
+      debug chalk.grey "#{util.inspect alt} -> result: #{util.inspect result}"
+      cb null, result
+  , (err, results) ->
+    # find first alternative
+    for result in results
+      return cb null, result if result?
+    cb()
 
-find = (list, work={}) ->
+find = (list, work={}, cb) ->
   # get first element of path
   [proto,path] = list.shift().split /:\/\//
   unless path
     # return if no data to work on
-    return undefined unless work.data?
+    return cb() unless work.data?
     # set protocol missing uris
     path = proto
     proto if typeof work.data is 'string' then 'range' else 'match'
     proto = 'check' if proto = 'range' and path[0] = '{'
   # find type handler
-  debug "find #{proto}://#{path}"
   proto = proto.toLowerCase()
   type = protocolMap[proto] ? proto
   # check for correct handler
   unless findType[type]?
-    throw new Error "No handler for protocol #{proto} for references defined"
+    return cb new Error "No handler for protocol #{proto} for references defined"
   # check precedence for next uri
   if work.lastType? and typePrecedence[type] > typePrecedence[work.lastType?]
-    throw new Error "#{next}-reference can not be called from #{proto}-reference
+    return cb new Error "#{next}-reference can not be called from #{proto}-reference
     for security reasons"
   # run type handler and return if nothing found
   work.lastType = type
-  result = findType[type] proto, path, work
-  if result?
-    debug "found #{util.inspect result}"
-    # check for another reference
-    result = replace data, object.clone work if exists result
-  result
+  findType[type] proto, path, work, (err, result) ->
+    return cb err, result unless exists result
+    debug chalk.grey 'rerun replace on subdata'
+    replace data, object.clone(work), cb
 
 findType =
-  check:  (proto, path, work) ->
+  check:  (proto, path, work, cb) ->
     value
-  range:  (proto, path, work) ->
+  range:  (proto, path, work, cb) ->
     value
-  match:  (proto, path, work) ->
+  match:  (proto, path, work, cb) ->
     value
-  env: (proto, path, work) ->
-    result = process.env[path]
-    return result if result?
-    null
-  struct: (proto, path, work) ->
-    findData path, work
-  context: (proto, path, work) ->
-    findData path, object.extend {}, work,
+  env: (proto, path, work, cb) ->
+    cb null, process.env[path]
+  struct: (proto, path, work, cb) ->
+    cb null, findData path, work
+  context: (proto, path, work, cb) ->
+    cb null, findData path, object.extend {}, work,
       data: work.context
-  file: (proto, path, work) ->
+  file: (proto, path, work, cb) ->
     fs = require 'alinex-fs'
-    console.log proto, path
-    try
-      result = fs.readFileSync fs.realpathSync(path), 'utf-8'
-    catch err
-      debug err.message
-      return undefined
-  web: (proto, path, work) ->
+    fspath = require 'path'
+    path = fspath.resolve work.dir, path if work.dir?
+    fs.realpath path, (err, path) ->
+      return cb err if err
+      fs.readFile path, 'utf-8', cb
+  web: (proto, path, work, cb) ->
     request = require 'request'
     sync = require 'sync'
     wget = (url, cb) ->
-      request "#{proto}://#{path}", (err, response, body) ->
-        debug err, body
+      debug "call #{url}"
+      request url, (err, response, body) ->
         return cb null, undefined if err
         return cb null, undefined if response.statusCode isnt 200 or not body?
         cb null, body
     sync ->
       try
-        return wget "#{proto}://#{path}"
+#        result = wget.sync null, "#{proto}://#{path}"
+        result = request.sync null,
+          uri: "#{proto}://#{path}"
+        return result
       catch err
-        debug err.message
+        debug "Error: #{err.message}"
         return undefined
 
 findData = (path, work) ->
