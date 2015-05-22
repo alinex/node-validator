@@ -153,6 +153,12 @@ findType =
         return cb new Error "Server send wrong return code: #{response.statusCode}"
       return cb() unless body?
       cb null, body
+  cmd: (proto, path, work, cb) ->
+    exec = require('child_process').exec
+    opt = {}
+    opt.cwd = work.dir if work.dir?
+    exec path, opt, cb
+
 
 findData = (path, work) ->
   unless work.structSearch?

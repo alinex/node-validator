@@ -250,7 +250,19 @@ describe.only "References", ->
           cb()
       , cb
 
-  describe.skip "command", ->
+  describe "command", ->
+
+    it "should execute commands", (cb) ->
+      values =
+        '<<<cmd://uname>>>': 'Linux\n'
+        '<<<cmd://cat test/data/textfile>>>': '123'
+        '<<<cmd://cat test/data/poem| head -1>>>': 'William B Yeats (1865-1939)\n'
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value, (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.equal check
+          cb()
+      , cb
 
   describe "database", ->
 

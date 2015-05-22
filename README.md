@@ -307,13 +307,25 @@ but the paths have to be absoulte.
 
 #### Command
 
+The complete path will be execute as if it is typed into the command line on
+the current directory or the one given in `work.dir`.
+
 ``` text
 <<<cmd://date>>>
 <<<cmd:///user/local/bin/date>>>
 <<<cmd://df -h>>>
 ```
 
-#### Database
+It will use the value returned on STDOUT.
+
+Note: If you use pipes remove the space before or behind, because if you have
+both it is recognized as alternative reference.
+
+``` text
+<<<cmd://cat test/data/poem| head -1>>>
+```
+
+#### Database (to be implemented later)
 
 ``` text
 <<<mysql://user:password@host:port/database/table/field?id=15>>>
