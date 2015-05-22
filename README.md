@@ -291,12 +291,19 @@ Only use a valid URL therefore:
 
 ``` text
 <<<http://any.server.com/service>>>
-<<<ftp://user:pass@any.server.com/file.txt>>>
 ```
 
 It is not allowed to use a # anchor in the URL.
-
 But you may use the `#` anchor to access a specific line or structured element.
+
+Possible protocols are:
+
+- http://domain:port/...
+- https://domain:port/...
+
+And you may connect to UNIX Sockets like `http://unix:/absolute/unix.socket:/request/path`
+but the paths have to be absoulte.
+
 
 #### Command
 
@@ -393,18 +400,6 @@ name/test\d+/min - pattern match with multiple missing characters
 
 See the [Mozilla Developer Network](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
 for the possible syntax but without modifier.
-
-
-__More Ideas__
-
-This are only ideas and will not be implemented, yet. Some of them make it too
-complex.
-
-- multiple elements as array or first element
-- specific match    match#3
-- element which has specific value in it's subelement    $(num<4)
-- element which has specific number of subelements     $(name:count>5)
-- <<<xxxx ? yyyy : zzzz>>>
 
 
 Descriptive reporting

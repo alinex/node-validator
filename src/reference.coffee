@@ -143,22 +143,16 @@ findType =
       fs.readFile path, 'utf-8', cb
   web: (proto, path, work, cb) ->
     request = require 'request'
-    sync = require 'sync'
-    wget = (url, cb) ->
-      debug "call #{url}"
-      request url, (err, response, body) ->
-        return cb null, undefined if err
-        return cb null, undefined if response.statusCode isnt 200 or not body?
-        cb null, body
-    sync ->
-      try
-#        result = wget.sync null, "#{proto}://#{path}"
-        result = request.sync null,
-          uri: "#{proto}://#{path}"
-        return result
-      catch err
-        debug "Error: #{err.message}"
-        return undefined
+    request
+      uri: "#{proto}://#{path}"
+      followAllRedirects: true
+    , (err, response, body) ->
+      # error checking
+      return cb err if err
+      if response.statusCode isnt 200
+        return cb new Error "Server send wrong return code: #{response.statusCode}"
+      return cb() unless body?
+      cb null, body
 
 findData = (path, work) ->
   unless work.structSearch?

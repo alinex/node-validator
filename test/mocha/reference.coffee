@@ -223,25 +223,32 @@ describe.only "References", ->
           cb()
       , cb
 
-  describe.skip "web", ->
+  describe "web", ->
 
-    it "should find web value", (cb) ->
-      values = [
-        "<<<http://www.thomas-bayer.com/sqlrest/CUSTOMER/18/>>>"
-        "<<<file://test/data/textfile>>>"
-      ]
-      for value in values
-        result = reference.replace value
-        expect(result, value).to.equal '123'
+    it "should find http/https value", (cb) ->
+      values =
+        "<<<http://www.thomas-bayer.com/sqlrest/CUSTOMER/18/>>>": '<?xml version="1.0"?><CUSTOMER xmlns:xlink="http://www.w3.org/1999/xlink">\
+        \n    <ID>18</ID>\n    <FIRSTNAME>Sylvia</FIRSTNAME>\n    <LASTNAME>Fuller</LASTNAME>\n    <STREET>158 - 20th Ave.</STREET>\
+        \n    <CITY>Paris</CITY>\n</CUSTOMER>'
+        '<<<https://raw.githubusercontent.com/alinex/node-validator/master/test/data/textfile>>>': '123'
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value, (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.equal check
+          cb()
+      , cb
 
-    it "should fail on web", (cb) ->
+    it "should fail on web resource", (cb) ->
       values = [
-        "<<<file://#{path.dirname __dirname}/data/notfound>>>"
-        "<<<file://textfile>>>"
+        "<<<http://www.this-server-did-not-exist-here.org>>>"
+        "<<<http://www.heise.de/page-did-not-exist-here>>>"
       ]
-      for value in values
-        result = reference.replace value
-        expect(result, value).to.not.exist
+      async.each values, (value, cb) ->
+        reference.replace value, (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.not.exist
+          cb()
+      , cb
 
   describe.skip "command", ->
 
