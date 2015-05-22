@@ -264,13 +264,25 @@ describe.only "References", ->
           cb()
       , cb
 
-  describe "database", ->
-
   describe "value search", ->
 
-    it.skip "should find line", ->
+  describe.skip "checks", ->
 
-  describe "checks", ->
+    it "should check against integer", (cb) ->
+      struct =
+        number: 123
+        string: '123'
+      values =
+        '<<<struct:///number#{type:"integer"}>>>': 123
+        '<<<struct:///number#{type:"integer"}>>>': 123
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value,
+          data: struct
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.equal check
+          cb()
+      , cb
 
   describe "multipath", ->
 

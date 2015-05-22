@@ -71,7 +71,6 @@ replace = module.exports.replace = (value, work={}, cb) ->
 
 findAlternative = (value, work={}, cb) ->
   return cb null, value unless ~value.indexOf '<<<'
-  debug chalk.grey "check part #{util.inspect value}"
   # replace <<< and >>> and split into alternatives
   async.map value[3..-4].split(/\s+\|\s+/), (alt, cb) ->
     # split into paths and call
@@ -101,8 +100,14 @@ find = (list, work={}, cb) ->
     return cb() unless work.data?
     # set protocol missing uris
     path = proto
-    proto if typeof work.data is 'string' then 'range' else 'match'
-    proto = 'check' if proto = 'range' and path[0] = '{'
+    proto = switch
+      when path.trim()[0] is '{'
+        'check'
+      when work.data is 'string'
+        'range'
+      else
+        'match'
+  debug chalk.grey "check part #{proto}://#{path}"
   # find type handler
   proto = proto.toLowerCase()
   type = protocolMap[proto] ? proto
@@ -116,13 +121,29 @@ find = (list, work={}, cb) ->
   # run type handler and return if nothing found
   work.lastType = type
   findType[type] proto, path, work, (err, result) ->
-    return cb err, result unless exists result
+    return cb err if err
+    unless exists result
+      return cb null, result unless list.length
+      debug chalk.grey "'#{proto}://#{path}' -> result: #{util.inspect result}"
+      work = object.extend {}, work,
+        data: result
+        pos: undefined
+      find list, work, cb
     debug chalk.grey 'rerun replace on subdata'
-    replace data, object.clone(work), cb
+    replace data, object.clone(work), (err, result) ->
+      return cb err if err
+      return cb null, result unless list.length
+      debug chalk.grey "'#{proto}://#{path}' -> result: #{util.inspect result}"
+      work = object.extend {}, work,
+        data: result
+        pos: undefined
+      find list, work, cb
 
 findType =
   check:  (proto, path, work, cb) ->
-    value
+    vm = require 'vm'
+    check = util.inspect vm.runInNewContext "x=#{path}"
+    (new ValidatorCheck 'work.refname', check, work.data).async cb
   range:  (proto, path, work, cb) ->
     value
   match:  (proto, path, work, cb) ->
@@ -171,7 +192,7 @@ findData = (path, work) ->
   if cur is ''
     work.pos = []
   else
-    if getData(work.data, work.pos)[cur]?
+    if getData(work.data, work.pos)?[cur]?
       work.pos.push cur
     else
       return undefined if work.structSearch
