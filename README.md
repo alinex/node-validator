@@ -55,7 +55,65 @@ To use the validator you have to first include it:
 validator = require 'alinex-validator'
 ```
 
-All checks are called with:
+The main method will validate and sanitize the value or value structure:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema: schema      # definition of checks
+  context: null       # additional data (optional)
+, (err, result) ->
+  # do something
+```
+
+To get a human readable description:
+
+``` coffee
+message = validator.describe
+  name: 'test'        # name to be displayed in errors (optional)
+  schema: schema      # definition of checks
+  pos: ''             # position which to describe (optional)
+  depth: 2            # level of depth to describe (optional)
+```
+
+Within your tests you may check your schema configurations:
+
+``` coffee
+validator.selfcheck
+  name: 'test'        # name to be displayed in errors
+  schema: schema      # definition of checks
+, (err) ->
+  # do something
+```
+
+And to be portable you can also export the schema in other formats but you may
+loose some information:
+
+``` coffee
+jsonSchema = validator.toJson schema
+```
+
+Schema Definition
+-------------------------------------------------
+
+The Schema definition is defined as object with the concrete specification as
+attributes. The common attributes are:
+
+- title - gives a short title for the element
+- description - has a more descriptive information
+- type - check type
+
+Further each type has it's own additional attributes which may be set to further
+specify how it works.
+
+
+
+
+
+
+
+All checks are asynchronous and called with:
 
 - a `source` which should specify where the value comes from and is used in error
   reporting.
@@ -68,21 +126,29 @@ Only if an asynchronous check is called synchronously it will throw an Error.
 
 The checks are split up into several packages to load on demand.
 
-__Synchronous call:__
 
 ``` coffee
-value = validator.check 'test', value,
+validator.check
+  name: 'test'
+  value: input
+  schema: schema
+  context: null
+, (result) ->
+  # do something
+```
+
+
+_``` coffee
+validator.check 'test', value,
   type: 'integer'
   min: 0
   max: 100
-```
+, (err, value) ->
+  if err
+    # error handling
+  else
+    # do something with value
 
-You get the value directly back but if something goes wrong or the check fails
-it will throw an error which you could catch.
-
-__Asynchronous call:__
-
-``` coffee
 validator.check 'test', value,
   type: 'integer'
   min: 0

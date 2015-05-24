@@ -3,227 +3,133 @@
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator')
+debug = require('debug')('validator:check')
 util = require 'util'
 async = require 'alinex-async'
 chalk = require 'chalk'
 # internal classes and helper
 
-# Configuration
+# Work management
 # -------------------------------------------------
-# the maximum number of runs to try to solve references
-MAXRUNS = 10
-
-# Class for validation
-# -------------------------------------------------
-# ### Instance properties
+# The work class contains all relevant informations for an work step within the
+# complete check run.
 #
-# - source - original name of source
-# - options - check definition
-# - value - check value
-# - data - additional references for checks
-# - runAgain - true for another check round
-# - checked - list of paths which are checked
+# The following properties are used:
 #
-class ValidatorCheck
+# - spec - reference to the original validation call
+# - path - array containing the current path
+# - pos - reference to schema position at this path
+# - value - value at this path
+# - debug - output of current path for debugging
+class Work
 
-  # ### Get description for check
-  @describe: (options) ->
-    getTypeLib(options).describe.type(options).trim()
+  constructor: (@spec) ->
+    @init()
 
-  # ### New run needed?
-  # If this is true a new sync or async run is needed. This may lead to multiple
-  # runs in case of references to references...
-  runAgain: true
+  init: ->
+    # optimize work
+    @path ?= []
+    @pos ?= @spec.schema
+    @value = @spec.value
+    @debug = chalk.grey "#{@spec.name ? 'value'}/#{@path.join '/'}"
 
-  # ### Initialize data for check
-  constructor: (@source, @options, @value, @data) ->
-    @checked = []
-
-###################### TODO ###############################
-# resolve references in direct option settings
-#    for key in Object.keys @options
-#      @options[key] = @ref2value [''], @options[key], key
-###################### TODO ###############################
-
-  # ### Pathname to be printed
-  # give color = false as parameter for error messages
-  pathname: (path, color = true) ->
-    msg = @source
-    if path? and path.length
-      msg = "#{@source}.#{path.join '.'}"
-    return msg unless color
-    chalk.grey msg
-
-  # ### Create error message
-  # This is called by the subclasses
-  error: (path, options, value, err) ->
-    unless options
-      throw new Error "Validator called without options."
-    message = "#{err.message} in #{@pathname path, false}"
-    if options.title?
-      message += " '#{options.title}'"
+  report: (err) ->
+    message = "#{err.message} in #{@spec.name ? 'value'}/#{@path.join '/'}"
+    message += " '#{@pos.title}'" if @pos.title?
     message += '. '
     detail = []
-    if options.description?
-      detail = "It should contain #{options.description}. \n"
-    detail += ValidatorCheck.describe options
+    if @pos.description?
+      detail = "It should contain #{@pos.description}. \n"
+    detail += exports.describe @
     err = new Error message
     err.description = detail if detail
     err
-
-  # ### Synchronous check
-  sync: ->
-    debug "#{@pathname()} start sync check as #{@options.type}"
-    lib = getTypeLib @options
-    unless lib.sync?.type?
-      return new Error "Could not synchronously call #{@options.type} check in '#{@pathname()}'"
-    try
-      result = @value
-      num = 0
-      while @runAgain
-        @runAgain = false
-        debug "#{@pathname()} round ##{++num}"
-        result = lib.sync.type @, [], @options, result
-        if @runAgain and num >= MAXRUNS
-          throw new Error 'Stopped validation because of endless loop in references'
-      debug "#{@pathname()} success: #{util.inspect(result).replace /\n/g, ''}"
-      result
-    catch err
-      debug "#{@pathname()} failed with #{err}"
-      throw err
-
-  # ### Asynchronous check
-  async: (cb) ->
-    debug "#{@pathname()} start async check as #{@options.type}"
-    lib = getTypeLib @options
-    # call async lib
-    if lib.async?.type?
-      result = @value
-      num = 0
-      return async.whilst =>
-        @runAgain is true
-      , (cb) =>
-        @runAgain = false
-        debug "#{@pathname()} round ##{++num}"
-        lib.async.type @, [], @options, result, (err, res) =>
-          if @runAgain and num >= MAXRUNS
-            return cb new Error 'Stopped validation because of endless loop in references'
-          cb err, res
-      , (err) =>
-        if err
-          debug "#{@pathname()} failed with #{err}"
-          return cb err
-        debug "#{@pathname()} success: #{util.inspect(result).replace /\n/g, ''}"
-        cb null, result
-    # alternatively run sync code
-    try
-      num = 0
-      result = @value
-      while @runAgain
-        @runAgain = false
-        debug "#{@pathname()} round ##{++num}"
-        result = lib.sync.type @, [], @options, result
-        if @runAgain and num >= MAXRUNS
-          return cb new Error 'Stopped validation because of endless loop in references'
-      debug "#{@pathname()} success: #{util.inspect(result).replace /\n/g, ''}"
-      cb null, result
-    catch err
-      debug "#{@pathname()} failed with #{err}"
-      cb err
-
-  # ### check reference
-  # This short helper will load the reference check and execute it.
-  reference: (path, options = { type: 'reference' }, value) ->
-    return value if 'REF' in path # no checking within the reference declaration itself
-    debug "#{@pathname path} check as #{options.type}"
-    lib = getTypeLib options
-    lib.sync.type @, path, options, value
-
-  # ### Subcheck
-  subcall: (path, options, value, cb) ->
-    # return if already checked value
-    pathname = path.join '.'
-    if pathname in @checked
-      return value unless cb?
-      return cb null, value
-    # check for references
-    failed = false
-    try
-      # check for references in value and options
-      value = @reference path, null, value
-
-############# TODO ####################################
-#      for key in Object.keys options
-#        options[key] = @reference path, null, options[key]
-############# TODO ####################################
-
-    catch err
-      if err.message is 'EAGAIN'
-        # if the references could not be checked keep reference an use another round
-        debug "#{@pathname path} run again because reference not ready"
-        @runAgain = true
-        failed = true
-        return value unless cb?
-        return cb null, value
-      # throw other errors back
-      throw err unless cb?
-      return cb err
-    finally
-      # do the real subcheck
-      # if no check defined use array/object because of checking subvalues
-      # against references
-      options ?= { type: 'array' } if Array.isArray value
-      if typeof value is 'object'
-        options ?= { type: 'object' } unless value.REF?
-      unless options
-        debug "#{@pathname path} finished", chalk.grey util.inspect value
-        @checked.push pathname unless pathname in @checked or failed
-        return value unless cb?
-        return cb null, value
-      debug "#{@pathname path} check as #{options.type}"
-      lib = getTypeLib options
-      unless cb?
-        # sync call sync
-        unless lib.sync?.type?
-          return new Error "Could not synchronously call #{options.type} check in
-          #{@pathname path}."
-        try
-          result = lib.sync.type @, path, options, value
-          debug "#{@pathname path} finished", chalk.grey util.inspect result
-          @checked.push pathname unless pathname in @checked or failed
-          return result
-        catch err
-          return value if err.message is 'EAGAIN'
-          throw err
-      else
-        # async call async
-        if lib.async?.type?
-          return lib.async.type @, path, options, value, (err, result) ->
-            unless err
-              debug "#{@pathname path} finished", chalk.grey util.inspect result
-              @checked.push pathname unless pathname in @checked or failed
-            return cb null, value if err.message is 'EAGAIN'
-            cb err, result
-        # async call sync
-        try
-          result = lib.sync.type @, path, options, value
-        catch err
-          return cb null, value if err.message is 'EAGAIN'
-          return cb err
-        cb null, result
-
-# Export the class
-module.exports = ValidatorCheck
-
 
 # Helper methods
 # -------------------------------------------------
 
 # ### Get type library
-getTypeLib = (name) ->
-  if typeof name is 'string'
-    return require "./type/#{name}"
-  if name.type?
-    return require "./type/#{name.type}"
-  throw Error "Undefined validator type #{name}"
+# Dynamically loading of type check.
+getTypeLib = (type) ->
+  # check type
+  unless typeof type?.type  is 'string'
+    return cb new Error "No type given to load"
+  type = type.type unless typeof type is 'string'
+  # try to load
+  require "./type/#{type}"
+
+# ### Is value empty?
+isEmpty = (value) ->
+  return true unless value?
+  switch typeof value
+    when 'object'
+      if value.constructor.name is 'Object' and Object.keys(value).length is 0
+        return true
+    when 'array'
+      if value.length is 0
+        return true
+  false
+
+# Main routines
+# -------------------------------------------------
+# ### Get description of schema
+# This may be called using the spec or an already created work instance.
+exports.describe = (work) ->
+  work = new Work work unless work instanceof Work
+  # load library and call check
+  lib = getTypeLib work.pos, (err, lib) ->
+  unless lib.describe?
+    throw new Error "Type '#{work.pos.type}' has no describe() method"
+  lib.describe work
+
+# ### Run check
+# This may be called using the spec or an already created work instance.
+exports.run = (work, cb) ->
+  work = new Work work unless work instanceof Work
+  # load library and call check
+  try
+    lib = getTypeLib work.pos, (err, lib) ->
+    unless lib.run?
+      return cb new Error "Type '#{work.pos.type}' has no run() method"
+  catch err
+    debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
+    return cb new Error "Type '#{work.pos.type}' not supported"
+  lib.run work, cb
+
+
+# ### Selfcheck of schema
+# This may be called using the spec or an already created work instance.
+exports.selfcheck = (work, cb) ->
+  work = new Work work unless work instanceof Work
+  # load library and call check
+  try
+    lib = getTypeLib work.pos, (err, lib) ->
+    unless lib.selfcheck?
+      return cb new Error "Type '#{work.pos.type}' has no selfcheck() method"
+  catch err
+    return cb new Error "Type '#{work.pos.type}' not supported"
+  lib.run
+    name: 'selfcheck'
+    schema: lib.selfcheck work
+  , cb
+
+# General checks
+# -------------------------------------------------
+# ### Optional and default checks
+exports.optional =
+  describe: (work) ->
+    unless work.pos.optional or work.pos.default?
+      return ''
+    if work.pos.default
+      return "It's optional and will be set to #{util.inspect work.pos.default}
+      if not specified. "
+    else
+      return "It's optional."
+  run: (work) ->
+    # check for value
+    return false unless isEmpty work.value # go on if value given
+    if work.pos.default? # use default and go on
+      work.value = work.pos.default
+      return false
+    return true if work.pos.optional # end this test without value
+    throw new Error "A value is needed"

@@ -1,97 +1,71 @@
 chai = require 'chai'
 expect = chai.expect
+async = require 'alinex-async'
+chalk = require 'chalk'
 
 validator = require '../lib/index'
 
-exports.true = (options, value, cb) ->
-  # sync version
-  unless cb?
-    return expect validator.check('test', options, value)
-    , value
-    .to.be.true
-  # async version
-  validator.check 'test', options, value, (err, result) ->
-    expect(err, value).to.not.exist
-    expect(result, value).to.be.true
-    cb()
-
-exports.false = (options, value, cb) ->
-  # sync version
-  unless cb?
-    return expect validator.check('test', options, value)
-    , value
-    .to.be.false
-  # async version
-  validator.check 'test', options, value, (err, result) ->
-    expect(err, value).to.not.exist
-    expect(result, value).to.be.false
-    cb()
-
-exports.fail = (options, value, data, cb) ->
-  if not cb? and typeof data is 'function'
-    cb = data
-    data = {}
-  # sync version
-  unless cb?
-    return expect ->
-      validator.check('test', options, value, data)
-    .to.throw Error
-  # async version
-  validator.check 'test', options, value, data, (err, result) ->
-    expect(err, value).to.exist
-    expect(err, value).to.be.an.instanceof Error
-    cb()
-
-exports.equal = (options, value, goal, cb) ->
-  # sync version
-  unless cb?
-    return expect validator.check('test', options, value)
-    , value
-    .to.equal goal
-  # async version
-  validator.check 'test', options, value, (err, result) ->
-    expect(err, value).to.not.exist
-    expect(result, value).to.equal goal
-    cb()
-
-exports.same = (options, value, data, cb) ->
-  if not cb? and typeof data is 'function'
-    cb = data
-    data = {}
-  exports.deep options, value, value, data, cb
-
-exports.deep = (options, value, goal, data, cb) ->
-  if not cb? and typeof data is 'function'
-    cb = data
-    data = {}
-  # sync version
-  unless cb?
-    return expect validator.check('test', options, value, data)
-    , value
-    .to.deep.equal goal
-  # async version
-  validator.check 'test', options, value, data, (err, result) ->
-    expect(err, value).to.not.exist
-    expect(result, value).to.deep.equal goal
-    cb()
-
-exports.instance = (options, value, goal, cb) ->
-  # sync version
-  unless cb?
-    return expect validator.check('test', options, value)
-    , value
-    .to.be.an.instanceof goal
-  # async version
-  validator.check 'test', options, value, (err, result) ->
-    expect(err, value).to.not.exist
-    expect(result, value).to.be.an.instanceof goal
-    cb()
-
-exports.desc = (options) ->
-  desc = validator.describe options
+exports.describe = (schema) ->
+  desc = validator.describe
+    schema: schema
   expect(desc).to.be.a 'string'
   expect(desc).to.have.length.of.at.least 10
-  console.log desc
+  console.log chalk.yellow desc
 
-exports.selfcheck = (options) ->
-  validator.selfcheck 'test', options
+exports.true = (schema, values, cb) ->
+  num = 0
+  async.each values, (value, cb) ->
+    validator.check
+      name: "test-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.not.exist
+      expect(result, 'result').to.be.true
+      cb()
+  , cb
+
+exports.false = (schema, values, cb) ->
+  num = 0
+  async.each values, (value, cb) ->
+    validator.check
+      name: "test-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.not.exist
+      expect(result, 'result').to.be.false
+      cb()
+  , cb
+
+exports.fail = (schema, values, cb) ->
+  num = 0
+  async.each values, (value, cb) ->
+    validator.check
+      name: "test-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.exist
+      expect(result, 'result').to.not.exist
+      cb()
+  , cb
+
+exports.undefined = (schema, values, cb) ->
+  num = 0
+  async.each values, (value, cb) ->
+    validator.check
+      name: "test-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.not.exist
+      expect(result, 'result').to.be.undefined
+      cb()
+  , cb
+
+exports.selfcheck = (schema, cb) ->
+  validator.selfcheck 'test', schema, (err, result) ->
+    expect(err, 'error').to.not.exist
+    expect(result, 'result').to.exist
+    cb()
