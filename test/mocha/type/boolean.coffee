@@ -69,6 +69,7 @@ describe "Boolean", ->
 
     it "should validate simple options", ->
       test.selfcheck schema
+
     it "should validate complete options", ->
       test.selfcheck
         title: 'test'
