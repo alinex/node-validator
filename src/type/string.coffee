@@ -33,298 +33,294 @@ debug = require('debug')('validator:string')
 util = require 'util'
 chalk = require 'chalk'
 # include classes and helper
-rules = require '../rules'
+check = require '../check'
 
-module.exports = float =
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work) ->
+  text = 'A simple text entry. '
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  if typeof work.pos.toString is 'boolean' and work.pos.toString
+    text += "Objects will be converted to their string representation. "
+  # remove characters
+  remove = []
+  remove.push "Control characters" unless work.pos.allowControls
+  remove.push "HTML Tags" if work.pos.stripTags
+  text += "#{remove.join ', '} will be removed. " if remove.length
+  # upper/lowercase
+  if work.pos.lowerCase? and work.pos.lowerCase is true
+    text += "The text will get lower case. "
+  if work.pos.upperCase? and work.pos.upperCase is true
+    text += "The text will get upper case. "
+  if work.pos.lowerCase? and work.pos.lowerCase is 'first'
+    text += "The first letter will get lower case. "
+  if work.pos.upperCase? and work.pos.upperCase is 'first'
+    text += "The first letter will get upper case. "
+  # replacements
+  if work.pos.replace?
+    text += "The following replacements will take place: "
+    if Array.isArray work.pos.replace[0]
+      for [pattern, replace] in work.pos.replace
+        text += "#{pattern} => #{replace}, "
+      text = text.replace /, $/, '. '
+    else
+      [pattern, replace] = work.pos.replace
+      text += "#{pattern} => #{replace}. "
+  # trim and crop
+  if work.pos.trim
+    text += "Whitespace will be removed at start and end of the text. "
+  if work.pos.crop?
+    text += "The text will be cropped after #{work.pos.crop} characters. "
+  # string length
+  if work.pos.minLength? and work.pos.maxLength?
+    text += "It has to be between #{work.pos.minLength} and #{work.pos.maxLength}
+    characters long. "
+  else if work.pos.minLength?
+    text += "It has to be at least #{work.pos.minLength} characters long. "
+  else if work.pos.maxLength?
+    text += "It has to be not more than #{work.pos.maxLength} characters long. "
+  # specific values
+  if work.pos.values?
+    text += "Only the values: #{work.pos.values.join ', '} are allowed. "
+  # matching
+  if work.pos.startsWith?
+    text += "It has to start with #{work.pos.startsWith}... "
+  if work.pos.endsWith?
+    text += "It has to end with ...#{work.pos.endsWith}. "
+  if work.pos.match?
+    text += "The text should match: "
+    if Array.isArray work.pos.match
+      for entry in work.pos.match
+        text += "#{entry}, "
+      text = text.replace /, $/, '. '
+    else
+      text += "#{work.pos.match}. "
+  if work.pos.matchNot?
+    text += "The text shouldn't match: "
+    if Array.isArray work.pos.matchNot
+      for entry in work.pos.matchNot
+        text += "#{entry}, "
+      text = text.replace /, $/, '. '
+    else
+      text += "#{work.pos.matchNot}. "
+  text
 
-  # Description
-  # -------------------------------------------------
-  describe:
-
-    # ### Type Description
-    type: (options) ->
-      text = 'A simple text entry. '
-      text += rules.describe.optional options
-      text = text.replace /\. It's/, ' which is'
-      if options.tostring
-        text += "Objects will be converted to their string representation. "
-      remove = []
-      remove.push "Control characters" unless options.allowControls
-      remove.push "HTML Tags" if options.stripTags
-      text += "#{remove.join ', '} will be removed. " if remove
-      if options.replace?
-        text += "The following replacements will take place: "
-        if Array.isArray options.replace[0]
-          for [pattern, replace] in options.replace
-            text += "#{pattern} => #{replace}, "
-          text = text.replace /, $/, '. '
+exports.run = (work, cb) ->
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    return cb() if check.optional.run work
+  catch err
+    return cb work.report err
+  value = work.value
+  # first check input type
+  if work.pos.toString and typeof work.pos.toString isnt 'function'
+    value = value.toString()
+  unless typeof value is 'string'
+    return cb work.report new Error "A string is needed but got #{typeof value} instead"
+  # sanitize
+  unless work.pos.allowControls
+    value = value.replace /[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, ''
+  if work.pos.stripTags
+    value = value.replace /<\/?[^>]+(>|$)/g, ''
+  # upper/lowercase
+  if work.pos.lowerCase? and work.pos.lowerCase is true
+    value = value.toLowerCase()
+  if work.pos.upperCase? and work.pos.upperCase is true
+    value = value.toUpperCase()
+  if work.pos.lowerCase? and work.pos.lowerCase is 'first'
+    value = value.charAt(0).toLowerCase() + value[1..]
+  if work.pos.upperCase? and work.pos.upperCase is 'first'
+    value = value.charAt(0).toUpperCase() + value[1..]
+  # replacements
+  if work.pos.replace?
+    if Array.isArray work.pos.replace[0]
+      for [pattern, replace] in work.pos.replace
+        value = value.replace pattern, replace
+    else
+      [pattern, replace] = work.pos.replace
+      value = value.replace pattern, replace
+  # trim and crop
+  if work.pos.trim
+    value = value.trim()
+  if work.pos.crop?
+    value = value.substring 0, work.pos.crop
+  # string length
+  if work.pos.minLength? and value.length < work.pos.minLength
+    return cb work.report new Error "The given string '#{value}' is too short at most
+    #{work.pos.minlength} characters are needed"
+  if work.pos.maxLength? and value.length > work.pos.maxLength
+    return cb work.report new Error "The given string '#{value}' is too long for
+      at least #{work.pos.maxlength} characters are allowed"
+  # specific values
+  if work.pos.values? and not (value in work.pos.values)
+    return cb work.report new Error "The given string '#{value}' is not in the list of
+      allowed phrases (#{work.pos.values})"
+  if work.pos.startsWith? and value[..work.pos.startsWith.length-1] isnt work.pos.startsWith
+    return cb work.report new Error "The given string '#{value}' should start with
+    '#{work.pos.startsWith}'"
+  if work.pos.endsWith? and value[value.length-work.pos.endsWith.length..] isnt work.pos.endsWith
+    return cb work.report new Error "The given string '#{value}' should end with
+    '#{work.pos.endsWith}'"
+  # matching
+  if work.pos.match?
+    if Array.isArray work.pos.match
+      success = true
+      for match in work.pos.match
+        if match instanceof RegExp
+          success = success and value.match match
         else
-          [pattern, replace] = options.replace
-          text += "#{pattern} => #{replace}. "
-      if options.trim
-        text += "Whitespace will be removed at start and end of the text. "
-      if options.crop?
-        text += "The text will be cropped after #{options.crop} characters. "
-      if options.lowerCase? and options.lowerCase is true
-        text += "The text will get lower case. "
-      if options.upperCase? and options.upperCase is true
-        text += "The text will get upper case. "
-      if options.lowerCase? and options.lowerCase is 'first'
-        text += "The first letter will get lower case. "
-      if options.upperCase? and options.upperCase is 'first'
-        text += "The first letter will get upper case. "
-      if options.minLength? and options.maxLength?
-        text += "It has to be between #{options.minLength} and #{options.maxLength}
-        characters long. "
-      else if options.minLength?
-        text += "It has to be at least #{options.minLength} characters long. "
-      else if options.maxLength?
-        text += "It has to be not more than #{options.maxLength} characters long. "
-      if options.values?
-        text += "Only the values: #{options.values.join ', '} are allowed. "
-      if options.startsWith?
-        text += "It has to start with #{options.startsWith}... "
-      if options.endsWith?
-        text += "It has to end with ...#{options.endsWith}. "
-      if options.match?
-        text += "The text should match: "
-        if Array.isArray options.match
-          for entry in options.match
-            text += "#{entry}, "
-          text = text.replace /, $/, '. '
+          success = success and ~value.indexOf match
+      unless success
+        return cb work.report new Error "The given string '#{value}' should match
+        against '#{work.pos.match}'"
+    else if work.pos.match instanceof RegExp
+      unless value.match work.pos.match
+        return cb work.report new Error "The given string '#{value}' should match
+        against '#{work.pos.match}'"
+    else if not ~value.indexOf work.pos.match
+      return cb work.report new Error "The given string '#{value}' should contain
+      '#{work.pos.match}'"
+  if work.pos.matchNot?
+    if Array.isArray work.pos.matchNot
+      success = true
+      for match in work.pos.matchNot
+        if match instanceof RegExp
+          success = success and not value.match match
         else
-          text += "#{options.match}. "
-      if options.matchNot?
-        text += "The text shouldn't match: "
-        if Array.isArray options.matchNot
-          for entry in options.matchNot
-            text += "#{entry}, "
-          text = text.replace /, $/, '. '
-        else
-          text += "#{options.matchNot}. "
-      text
+          success = success and not ~value.indexOf match
+      unless success
+        return cb work.report new Error "The given string '#{value}' shouldn't match
+        against '#{work.pos.match}'"
+    else if work.pos.matchNot instanceof RegExp and value.matchNot work.pos.match
+      return cb work.report new Error "The given string '#{value}' shouldn't match
+      against '#{work.pos.matchNot}'"
+    else if ~value.indexOf work.pos.matchNot
+      return cb work.report new Error "The given string '#{value}' shouldn't contain
+      '#{work.pos.matchNot}'"
+  # done return resulting value
+  cb null, value
 
-  # Synchronous check
-  # -------------------------------------------------
-  sync:
-
-    # ### Check Type
-    type: (check, path, options, value) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      # first check input type
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      if options.tostring and typeof value is 'object'
-        value = value.toString()
-      unless typeof value is 'string'
-        throw check.error path, options, value,
-        new Error "A string is needed but got #{typeof value} instead"
-      # sanitize
-      unless options.allowControls
-        value = value.replace /[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, ''
-      if options.stripTags
-        value = value.replace /<\/?[^>]+(>|$)/g, ''
-      if options.lowerCase? and options.lowerCase is true
-        value = value.toLowerCase()
-      if options.upperCase? and options.upperCase is true
-        value = value.toUpperCase()
-      if options.lowerCase? and options.lowerCase is 'first'
-        value = value.charAt(0).toLowerCase() + value[1..]
-      if options.upperCase? and options.upperCase is 'first'
-        value = value.charAt(0).toUpperCase() + value[1..]
-      if options.replace?
-        if Array.isArray options.replace[0]
-          for [pattern, replace] in options.replace
-            value = value.replace pattern, replace
-        else
-          [pattern, replace] = options.replace
-          value = value.replace pattern, replace
-      if options.trim
-        value = value.trim()
-      if options.crop?
-        value = value.substring 0, options.crop
-      # validate
-      if options.minLength? and value.length < options.minLength
-        throw check.error path, options, value,
-        new Error "The given string '#{value}' is too short at most
-        #{options.minlength} characters are needed"
-      if options.maxLength? and value.length > options.maxLength
-        throw check.error path, options, value,
-        new Error "The given string '#{value}' is too long for
-          at least #{options.maxlength} characters are allowed"
-      if options.values? and not (value in options.values)
-        throw check.error path, options, value,
-        new Error "The given string '#{value}' is not in the list of
-          allowed phrases (#{options.values})"
-      if options.startsWith? and value[..options.startsWith.length-1] isnt options.startsWith
-        throw check.error path, options, value,
-        new Error "The given string '#{value}' should start with '#{options.startsWith}'"
-      if options.endsWith? and value[value.length-options.endsWith.length..] isnt options.endsWith
-        throw check.error path, options, value,
-        new Error "The given string '#{value}' should end with '#{options.endsWith}'"
-      if options.match?
-        if Array.isArray options.match
-          success = true
-          for match in options.match
-            if match instanceof RegExp
-              success = success and value.match match
-            else
-              success = success and ~value.indexOf match
-          unless success
-            throw check.error path, options, value,
-            new Error "The given string '#{value}' should match against '#{options.match}'"
-        else if options.match instanceof RegExp
-          unless value.match options.match
-            throw check.error path, options, value,
-            new Error "The given string '#{value}' should match against '#{options.match}'"
-        else if not ~value.indexOf options.match
-          throw check.error path, options, value,
-          new Error "The given string '#{value}' should contain '#{options.match}'"
-      if options.matchNot?
-        if Array.isArray options.matchNot
-          success = true
-          for match in options.matchNot
-            if match instanceof RegExp
-              success = success and not value.match match
-            else
-              success = success and not ~value.indexOf match
-          unless success
-            throw check.error path, options, value,
-            new Error "The given string '#{value}' shouldn't match against '#{options.match}'"
-        else if options.matchNot instanceof RegExp and value.matchNot options.match
-          throw check.error path, options, value,
-          new Error "The given string '#{value}' shouldn't match
-          against '#{options.matchNot}'"
-        else if ~value.indexOf options.matchNot
-          throw check.error path, options, value,
-          new Error "The given string '#{value}' shouldn't contain '#{options.matchNot}'"
-      # done return resulting value
-      value
-
-  # Selfcheck
-  # -------------------------------------------------
-  selfcheck: (name, options) ->
-    validator = require '../index'
-    validator.check name,
-      type: 'object'
-      allowedKeys: true
-      entries:
-        type:
+exports.selfcheck =
+  type: 'object'
+  allowedKeys: true
+  entries:
+    type:
+      type: 'string'
+    title:
+      type: 'string'
+      optional: true
+    description:
+      type: 'string'
+      optional: true
+    optional:
+      type: 'boolean'
+      optional: true
+    default:
+      type: 'string'
+      optional: true
+    tostring:
+      type: 'boolean'
+      optional: true
+    allowControls:
+      type: 'boolean'
+      optional: true
+    stripTags:
+      type: 'boolean'
+      optional: true
+    lowerCase:
+      type: 'any'
+      optional: true
+      entries: [
+        type: 'boolean'
+      ,
+        type: 'string'
+        values: ['first']
+      ]
+    upperCase:
+      type: 'any'
+      optional: true
+      entries: [
+        type: 'boolean'
+      ,
+        type: 'string'
+        values: ['first']
+      ]
+    replace:
+      type: 'array'
+      optional: true
+      entries: [
+        type: 'any'
+        entries: [
           type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
-        default:
-          type: 'string'
-          optional: true
-        tostring:
-          type: 'boolean'
-          optional: true
-        allowControls:
-          type: 'boolean'
-          optional: true
-        stripTags:
-          type: 'boolean'
-          optional: true
-        lowerCase:
-          type: 'any'
-          optional: true
-          entries: [
-            type: 'boolean'
-          ,
-            type: 'string'
-            values: ['first']
-          ]
-        upperCase:
-          type: 'any'
-          optional: true
-          entries: [
-            type: 'boolean'
-          ,
-            type: 'string'
-            values: ['first']
-          ]
-        replace:
+        ,
+          type: 'object'
+          instanceOf: RegExp
+        ,
           type: 'array'
-          optional: true
           entries: [
-            type: 'any'
-            entries: [
-              type: 'string'
-            ,
-              type: 'object'
-              instanceOf: RegExp
-            ,
-              type: 'array'
-              entries: [
-                type: 'string'
-              ,
-                type: 'object'
-                instanceOf: RegExp
-              ]
-            ]
+            type: 'string'
           ,
-            type: 'any'
-            entries: [
-              type: 'string'
-            ,
-              type: 'array'
-              entries:
-                type: 'string'
-            ]
+            type: 'object'
+            instanceOf: RegExp
           ]
-        trim:
-          type: 'boolean'
-          optional: true
-        crop:
-          type: 'integer'
-          optional: true
-          min: 1
-        minLength:
-          type: 'integer'
-          optional: true
-          min: 0
-        maxLength:
-          type: 'integer'
-          optional: true
-          min:
-            reference: 'relative'
-            source: '<minLength'
-        values:
+        ]
+      ,
+        type: 'any'
+        entries: [
+          type: 'string'
+        ,
           type: 'array'
-          optional: true
           entries:
             type: 'string'
-        startsWith:
-          type: 'string'
-          optional: true
-        endsWith:
-          type: 'string'
-          optional: true
-        match:
-          type: 'any'
-          optional: true
-          entries: [
-            type: 'string'
-          ,
-            type: 'object'
-            instanceOf: RegExp
-          ]
-        matchNot:
-          type: 'any'
-          optional: true
-          entries: [
-            type: 'string'
-          ,
-            type: 'object'
-            instanceOf: RegExp
-          ]
-    , options
+        ]
+      ]
+    trim:
+      type: 'boolean'
+      optional: true
+    crop:
+      type: 'integer'
+      optional: true
+      min: 1
+    minLength:
+      type: 'integer'
+      optional: true
+      min: 0
+    maxLength:
+      type: 'integer'
+      optional: true
+      min:
+        reference: 'relative'
+        source: '<minLength'
+    values:
+      type: 'array'
+      optional: true
+      entries:
+        type: 'string'
+    startsWith:
+      type: 'string'
+      optional: true
+    endsWith:
+      type: 'string'
+      optional: true
+    match:
+      type: 'any'
+      optional: true
+      entries: [
+        type: 'string'
+      ,
+        type: 'object'
+        instanceOf: RegExp
+      ]
+    matchNot:
+      type: 'any'
+      optional: true
+      entries: [
+        type: 'string'
+      ,
+        type: 'object'
+        instanceOf: RegExp
+      ]
 

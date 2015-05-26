@@ -25,6 +25,8 @@ as with the `handlebars` type you get a ready to use handlebar function back.
 It is one of the modules of the [Alinex Universe](http://alinex.github.io/node-alinex)
 following the code standards defined there.
 
+Also see the last [changes](Changelog.md).
+
 
 Install
 -------------------------------------------------
@@ -67,6 +69,8 @@ validator.check
   # do something
 ```
 
+The checks are completely asynchronous because they may contain some IO checks.
+
 To get a human readable description:
 
 ``` coffee
@@ -104,87 +108,40 @@ attributes. The common attributes are:
 - description - has a more descriptive information
 - type - check type
 
-Further each type has it's own additional attributes which may be set to further
+In it's easiest way the schema definition includes only a type:
+
+``` coffee
+schema =
+  type: 'integer'
+```
+
+Or with the above descriptive fields:
+
+``` coffee
+schema =
+  title: "Max runs"
+  description: 'The number of runs which may occur.'
+  type: 'integer'
+```
+
+Further each type has it's own additional attributes which may be set to
 specify how it works.
 
-
-
-
-
-
-
-All checks are asynchronous and called with:
-
-- a `source` which should specify where the value comes from and is used in error
-  reporting.
-- the `value` to check
-- an `options` array which specifies what to check
-- and optionally a `callback` function
-
-Most checks are synchronous and may be called synchronously or asynchronously.
-Only if an asynchronous check is called synchronously it will throw an Error.
-
-The checks are split up into several packages to load on demand.
-
-
 ``` coffee
-validator.check
-  name: 'test'
-  value: input
-  schema: schema
-  context: null
-, (result) ->
-  # do something
-```
-
-
-_``` coffee
-validator.check 'test', value,
-  type: 'integer'
-  min: 0
-  max: 100
-, (err, value) ->
-  if err
-    # error handling
-  else
-    # do something with value
-
-validator.check 'test', value,
-  type: 'integer'
-  min: 0
-  max: 100
-, (err, value) ->
-  if err
-    # error handling
-  else
-    # do something with value
-```
-
-Here you will get the error directly in the callback in the default manner
-of asynchronous calls.
-
-### Only test
-
-If you won't change the value it is possible to call a simplified form:
-
-``` coffee
-if validator.is 'test', value,
-    type: 'integer'
-    min: 0
-    max: 100
-  # do something
-```
-
-### Get description
-
-This method may be used to get a human readable description of how a value
-has to be to validate.
-
-``` coffee
-console.log validator.describe
-  type: 'integer'
-  min: 0
-  max: 100
+address =
+  type: 'object'
+  allowedKeys: true
+  entries:
+    name:
+      type: 'string'
+    street:
+      type: 'string'
+    city:
+      type: 'string'
+    country:
+      type: 'string'
+    email:
+      type: 'string'
 ```
 
 ### Compositing
@@ -226,8 +183,8 @@ console.log validator.is 'audiocd', value,
 The above example shows how to composite a complex structure out of parts and
 how to reuse the same elements.
 
-Optional values
--------------------------------------------------
+### Optional values
+
 All types (excluding boolean) support the `optional` parameter, which makes an
 entry in the data structure optional.
 If not given it will be set to null or the value given with `default`.
@@ -238,7 +195,7 @@ If not given it will be set to null or the value given with `default`.
 The `default` option automatically makes the setting optional.
 
 
-References (new in version 0.4.0)
+References
 -------------------------------------------------
 References point to values which are used on their place. You can use references
 within the structure data which is checked and also within the check conditions.
@@ -488,9 +445,9 @@ and `describe()` calls.
 
 ``` coffee
 validator.check 'test', value,
-  type: 'float'
   title: 'Overall Timeout'
-  description: 'time in milliseconds the whole test may take'
+  description: 'Time in milliseconds the whole test may take.'
+  type: 'float'
   min: 500
 , (err, value) ->
   if err
@@ -527,8 +484,8 @@ Basic Check Types
 ### boolean
 
 The value has to be a boolean. The value will be true for 1, 'true', 'on',
-'yes' and it will be considered as false for 0, 'false', 'off', 'no', null and
-undefined.
+'yes', '+' and it will be considered as false for 0, 'false', 'off', 'no',
+'-', null and undefined.
 Other values are not allowed.
 
 __Validate options:__
@@ -563,7 +520,7 @@ and also different check settings to use.
 
 __Sanitize options:__
 
-- `tostring` - convert objects to string, first
+- `toString` - convert objects to string, first
 - `allowControls` - keep control characters in string instead of
   stripping them (but keep \\r\\n)
 - `stripTags` - remove all html tags

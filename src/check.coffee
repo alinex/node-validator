@@ -39,7 +39,9 @@ class Work
     message += '. '
     detail = []
     if @pos.description?
-      detail = "It should contain #{@pos.description}. \n"
+      desc = @pos.description[0].toLowerCase() + @pos.description[1..]
+      desc = desc.replace /\.\s*$/, ''
+      detail = "It should contain #{desc}. \n"
     detail += exports.describe @
     err = new Error message
     err.description = detail if detail
