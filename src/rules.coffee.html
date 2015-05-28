@@ -201,6 +201,24 @@
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nx">options</span><span class="p">.</span><span class="nx">default</span> <span class="o">?</span> <span class="kc">null</span>
 
+    <span class="nv">reference: </span><span class="nf">(check, path, options, value) -&gt;</span>
+      <span class="nv">hasErr = </span><span class="kc">false</span>
+      <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">value</span>
+        <span class="k">try</span>
+          <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+            <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+          <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span>
+            <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+          <span class="k">else</span>
+            <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">),</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+        <span class="k">catch</span> <span class="nx">err</span>
+          <span class="k">if</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span> <span class="o">is</span> <span class="s">&#39;EAGAIN&#39;</span>
+            <span class="nv">hasErr = </span><span class="nx">err</span>
+          <span class="k">else</span>
+            <span class="k">throw</span> <span class="nx">err</span>
+      <span class="k">throw</span> <span class="nx">hasErr</span> <span class="k">if</span> <span class="nx">hasErr</span>
+      <span class="nx">value</span>
+
 
 </pre></div>
         </td>

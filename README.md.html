@@ -31,29 +31,50 @@
       <div class="heading h2">
         <a href="#usage">Usage</a>
       </div>
-      <div class="heading h3">
-        <a href="#only%20test">Only test</a>
-      </div>
-      <div class="heading h3">
-        <a href="#get%20description">Get description</a>
+      <div class="heading h2">
+        <a href="#schema%20definition">Schema Definition</a>
       </div>
       <div class="heading h3">
         <a href="#compositing">Compositing</a>
       </div>
-      <div class="heading h2">
+      <div class="heading h3">
         <a href="#optional%20values">Optional values</a>
       </div>
       <div class="heading h2">
         <a href="#references">References</a>
       </div>
       <div class="heading h3">
-        <a href="#how%20it%20works">How it works</a>
+        <a href="#syntax">Syntax</a>
       </div>
       <div class="heading h3">
-        <a href="#example%20in%20definition">Example in definition</a>
+        <a href="#combine">Combine</a>
       </div>
       <div class="heading h3">
-        <a href="#example%20in%20check%20values">Example in check values</a>
+        <a href="#data%20sources">Data Sources</a>
+      </div>
+      <div class="heading h4">
+        <a href="#value%20structure">Value Structure</a>
+      </div>
+      <div class="heading h4">
+        <a href="#context">Context</a>
+      </div>
+      <div class="heading h4">
+        <a href="#environment">Environment</a>
+      </div>
+      <div class="heading h4">
+        <a href="#file">File</a>
+      </div>
+      <div class="heading h4">
+        <a href="#web%20ressources">Web Ressources</a>
+      </div>
+      <div class="heading h4">
+        <a href="#command">Command</a>
+      </div>
+      <div class="heading h4">
+        <a href="#database%20(to%20be%20implemented%20later)">Database (to be implemented later)</a>
+      </div>
+      <div class="heading h3">
+        <a href="#path%20locator">Path Locator</a>
       </div>
       <div class="heading h2">
         <a href="#descriptive%20reporting">Descriptive reporting</a>
@@ -165,6 +186,8 @@ as with the <code>handlebars</code> type you get a ready to use handlebar functi
 <p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
 following the code standards defined there.</p>
 
+<p>Also see the last <a href="Changelog.md.html">changes</a>.</p>
+
 
 <div class="pilwrap" id="install">
   <h2>
@@ -177,12 +200,23 @@ following the code standards defined there.</p>
 <p>The easiest way is to let npm add the module directly:</p>
 
 
-<div class="highlight"><pre><code><span class="o">&gt;</span> <span class="nx">npm</span> <span class="nx">install</span> <span class="nx">alinex</span><span class="o">-</span><span class="nx">validator</span> <span class="o">--</span><span class="nx">save</span>
+<div class="highlight"><pre><code>npm install alinex-validator --save
 </code></pre></div>
 
 
 
 <p><a href="https://nodei.co/npm/alinex-validator/"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
+
+<p>But you can also get the sources from github and install the subpackages using
+npm:</p>
+
+
+<div class="highlight"><pre><code>git clone git://github.com/alinex/node-validator alinex-validator
+<span class="nb">cd </span>alinex-validator
+npm install
+</code></pre></div>
+
+
 
 
 <div class="pilwrap" id="usage">
@@ -201,92 +235,111 @@ following the code standards defined there.</p>
 
 
 
-<p>All checks are called with:</p>
-
-<ul>
-<li>a <code>source</code> which should specify where the value comes from and is used in error
-reporting.</li>
-<li>the <code>value</code> to check</li>
-<li>an <code>options</code> array which specifies what to check</li>
-<li>and optionally a <code>callback</code> function</li>
-</ul>
-
-<p>Most checks are synchronous and may be called synchronously or asynchronously.
-Only if an asynchronous check is called synchronously it will throw an Error.</p>
-
-<p>The checks are split up into several packages to load on demand.</p>
-
-<p><strong>Synchronous call:</strong></p>
+<p>The main method will validate and sanitize the value or value structure:</p>
 
 
-<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-  <span class="nv">min: </span><span class="mi">0</span>
-  <span class="nv">max: </span><span class="mi">100</span>
-</code></pre></div>
-
-
-
-<p>You get the value directly back but if something goes wrong or the check fails
-it will throw an error which you could catch.</p>
-
-<p><strong>Asynchronous call:</strong></p>
-
-
-<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-  <span class="nv">min: </span><span class="mi">0</span>
-  <span class="nv">max: </span><span class="mi">100</span>
-<span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
-  <span class="k">if</span> <span class="nx">err</span>
-    <span class="c1"># error handling</span>
-  <span class="k">else</span>
-    <span class="c1"># do something with value</span>
-</code></pre></div>
-
-
-
-<p>Here you will get the error directly in the callback in the default manner
-of asynchronous calls.</p>
-
-
-<div class="pilwrap" id="only%20test">
-  <h3>
-    <a href="#only%20test" name="only%20test" class="pilcrow">&#182;</a>
-    Only test
-  </h3>
-</div>
-
-
-<p>If you won't change the value it is possible to call a simplified form:</p>
-
-
-<div class="highlight"><pre><code><span class="k">if</span> <span class="nx">validator</span><span class="p">.</span><span class="o">is</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-    <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-    <span class="nv">min: </span><span class="mi">0</span>
-    <span class="nv">max: </span><span class="mi">100</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span><span class="nx">schema</span>      <span class="c1"># definition of checks</span>
+  <span class="nv">context: </span><span class="kc">null</span>       <span class="c1"># additional data (optional)</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
   <span class="c1"># do something</span>
 </code></pre></div>
 
 
 
+<p>The checks are completely asynchronous because they may contain some IO checks.</p>
 
-<div class="pilwrap" id="get%20description">
-  <h3>
-    <a href="#get%20description" name="get%20description" class="pilcrow">&#182;</a>
-    Get description
-  </h3>
+<p>To get a human readable description:</p>
+
+
+<div class="highlight"><pre><code><span class="nv">message = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">schema: </span><span class="nx">schema</span>      <span class="c1"># definition of checks</span>
+  <span class="nv">pos: </span><span class="s">&#39;&#39;</span>             <span class="c1"># position which to describe (optional)</span>
+  <span class="nv">depth: </span><span class="mi">2</span>            <span class="c1"># level of depth to describe (optional)</span>
+</code></pre></div>
+
+
+
+<p>Within your tests you may check your schema configurations:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">selfcheck</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors</span>
+  <span class="nv">schema: </span><span class="nx">schema</span>      <span class="c1"># definition of checks</span>
+<span class="p">,</span> <span class="nf">(err) -&gt;</span>
+  <span class="c1"># do something</span>
+</code></pre></div>
+
+
+
+<p>And to be portable you can also export the schema in other formats but you may
+loose some information:</p>
+
+
+<div class="highlight"><pre><code><span class="nv">jsonSchema = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">toJson</span> <span class="nx">schema</span>
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="schema%20definition">
+  <h2>
+    <a href="#schema%20definition" name="schema%20definition" class="pilcrow">&#182;</a>
+    Schema Definition
+  </h2>
 </div>
 
 
-<p>This method may be used to get a human readable description of how a value
-has to be to validate.</p>
+<p>The Schema definition is defined as object with the concrete specification as
+attributes. The common attributes are:</p>
+
+<ul>
+<li>title - gives a short title for the element</li>
+<li>description - has a more descriptive information</li>
+<li>type - check type</li>
+</ul>
+
+<p>In it's easiest way the schema definition includes only a type:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span>
+<div class="highlight"><pre><code><span class="nv">schema =</span>
   <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-  <span class="nv">min: </span><span class="mi">0</span>
-  <span class="nv">max: </span><span class="mi">100</span>
+</code></pre></div>
+
+
+
+<p>Or with the above descriptive fields:</p>
+
+
+<div class="highlight"><pre><code><span class="nv">schema =</span>
+  <span class="nv">title: </span><span class="s">&quot;Max runs&quot;</span>
+  <span class="nv">description: </span><span class="s">&#39;The number of runs which may occur.&#39;</span>
+  <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+</code></pre></div>
+
+
+
+<p>Further each type has it's own additional attributes which may be set to
+specify how it works.</p>
+
+
+<div class="highlight"><pre><code><span class="nv">address =</span>
+  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+  <span class="nv">allowedKeys: </span><span class="kc">true</span>
+  <span class="nv">entries:</span>
+    <span class="nv">name:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">street:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">city:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">country:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">email:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
 </code></pre></div>
 
 
@@ -341,10 +394,10 @@ how to reuse the same elements.</p>
 
 
 <div class="pilwrap" id="optional%20values">
-  <h2>
+  <h3>
     <a href="#optional%20values" name="optional%20values" class="pilcrow">&#182;</a>
     Optional values
-  </h2>
+  </h3>
 </div>
 
 
@@ -368,197 +421,355 @@ If not given it will be set to null or the value given with <code>default</code>
 </div>
 
 
-<p>It is also possible to use references instead of values in the validation rules
-or values.</p>
-
-<p>References are written as object with:</p>
-
-<ul>
-<li><code>REF</code> - the only needed key which contain a list of reference locations</li>
-<li><code>VAL</code> - specifies a default value if no reference found</li>
-<li><code>FUNC</code> - can additionally be used with a function optimizing the value
-it will be called with the value and the path it comes from</li>
-</ul>
-
-<p>Reference locations are objects with:</p>
-
-<ul>
-<li><code>source</code> - the type of references (struct, data, env, file)</li>
-<li><code>path</code> - the path to the reference (source specific)</li>
-<li><code>type</code> - if a check should be done give the type...</li>
-</ul>
-
-<p>Other keys may follow specific to the type checks.</p>
-
-<p><strong>STRUCT references</strong></p>
-
-<p>They are used to specify another element in the value structure. The path specifies
-where to find it. If you use this source type you won't need the checks within the
-reference because the values will already get checked. The validator will guaranty
-that values are used as reference after they are checked.</p>
-
-<p>The path is calculated from the viewpoint of the current parent element. That means
-giving a name it will look at the sibling node but you may go up/down the tree:</p>
-
-<ul>
-<li><code>xxx</code> - to specify the value sibling value from the given one</li>
-<li><code>/xxx.yyy</code> - to specify a value from the structure by absolute path</li>
-<li><code>/xxx.*.yyy</code> - specify a value in any of the subelements of xxx</li>
-<li><code>/xxx.**.yyy</code> - specify a value in any of the subelements also multiple levels deep</li>
-<li><code>&lt;xxx.yyy</code> - to specify the value based from the parent of the operating object</li>
-<li><code>&lt;&lt;xxx.yyy</code> - to specify the value based from the grandparent of the operating object</li>
-</ul>
-
-<p><strong>DATA references</strong></p>
-
-<p>The DATA values may be given as additional data to the validator. If so you may
-access it but paths are always absolute.</p>
-
-<p><strong>ENV references</strong></p>
-
-<p>You can also use some environment settings as reference. For this source type only
-give the name of the environment variable as path. But keep in mind to better check
-the type of it's content, too.</p>
-
-<p><strong>FILE references</strong></p>
-
-<p>And at last you can read the content of a simple text file as value. The path points
-to the file and have to be an absolute path.
-Maybe you have to do some type checks here, too.</p>
-
-<p>In this type of references the system will cache the file contents for a short time
-to prevent multiple read and gain better performance.</p>
+<p>References point to values which are used on their place. You can use references
+within the structure data which is checked and also within the check conditions.
+Not everything is possible, but a lot - see below.</p>
 
 
-<div class="pilwrap" id="how%20it%20works">
+<div class="pilwrap" id="syntax">
   <h3>
-    <a href="#how%20it%20works" name="how%20it%20works" class="pilcrow">&#182;</a>
-    How it works
+    <a href="#syntax" name="syntax" class="pilcrow">&#182;</a>
+    Syntax
   </h3>
 </div>
 
 
-<p>Use it everywhere you may need it but prevent round referencing in which it reference
-itself through other references.</p>
-
-<p><strong>In check definitions</strong></p>
-
-<p>Before doing a check or a subcheck it's options are checked for references if there
-is one:</p>
-
-<ul>
-<li>go through the reference list</li>
-<li>get the reference and do the accompanying check (if there is one)</li>
-<li>use this as an value if it is found and succeeded in check</li>
-<li>if not go on to the next reference from the list</li>
-<li>if no value found use the default value</li>
-<li>if an operation is given run it with the value</li>
-<li>give back the resulting reference check</li>
-</ul>
-
-<p><strong>In value structures</strong></p>
-
-<p>Every value will be checked if it is a reference. If so it will:</p>
-
-<ul>
-<li>go through the reference list</li>
-<li>get the reference and do the accompanying check (if there is one)</li>
-<li>use this as an value if it is found and succeeded in check</li>
-<li>if not go on to the next reference from the list</li>
-<li>if no value found use the default value</li>
-<li>if an operation is given run it with the value</li>
-<li>go on to the validation check with the resulting value</li>
-</ul>
-
-<p><em>_ Default value_</em></p>
-
-<p>A value will be searched in each given reference till one is found. If nothing
-found the <code>VAL</code> setting is used or nothing.</p>
+<p>The syntax looks easy but has a lot of variations and possibilities.</p>
 
 
-<div class="pilwrap" id="example%20in%20definition">
-  <h3>
-    <a href="#example%20in%20definition" name="example%20in%20definition" class="pilcrow">&#182;</a>
-    Example in definition
-  </h3>
-</div>
-
-
-<p>If used in check definitions it may need a second validation round but this is done
-automatically in the background. Mostly you may need the references as comparing
-value for some checks or as an default value.</p>
-
-
-<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-  <span class="nv">title: </span><span class="s">&#39;Range&#39;</span>
-  <span class="nv">description: </span><span class="s">&#39;the range to use&#39;</span>
-  <span class="nv">entries:</span>
-    <span class="nv">min:</span>
-      <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-    <span class="nv">max:</span>
-      <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-      <span class="nv">min:</span>
-        <span class="nv">REF: </span><span class="p">[</span>
-          <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
-          <span class="nv">path: </span><span class="s">&#39;MINVAL&#39;</span>
-          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-          <span class="nv">min: </span><span class="mi">0</span>
-        <span class="p">,</span>
-          <span class="nv">source: </span><span class="s">&#39;struct&#39;</span>
-          <span class="nv">path: </span><span class="s">&#39;min&#39;</span>
-        <span class="p">]</span>
-        <span class="nv">FUNC: </span><span class="nf">(val) -&gt;</span> <span class="nx">val</span> <span class="o">+</span> <span class="mi">1</span>
+<div class="highlight"><pre><code>&lt;&lt;&lt;source://path&gt;&gt;&gt;
+&lt;&lt;&lt;source://path | source://path | default&gt;&gt;&gt;
+&lt;&lt;&lt;source://path#{type:&quot;integer&quot;} | source://path | default&gt;&gt;&gt;
 </code></pre></div>
 
 
 
-<p>The above check condition will check that the given <code>max</code> value is at least one
-above the <code>min</code> value.</p>
+<p>Within the curly braces the source from which to retrieve the value is given.
+The source is given in form of an URI.
+Like you see in line two you may use multiple fallback URIs and also a default
+value at last.
+And at last in the third line you see how to add a special check condition
+after an URI. If this fails the next URI is checked.</p>
+
+<p>The path may also have different possibilities based on the <code>source</code> protocol
+type.</p>
 
 
-<div class="pilwrap" id="example%20in%20check%20values">
+<div class="pilwrap" id="combine">
   <h3>
-    <a href="#example%20in%20check%20values" name="example%20in%20check%20values" class="pilcrow">&#182;</a>
-    Example in check values
+    <a href="#combine" name="combine" class="pilcrow">&#182;</a>
+    Combine
   </h3>
 </div>
 
 
-<p>Within the values the use is the same.</p>
+<p>You may also combine the resulting value(s) of the reference(s) into one
+string:</p>
 
 
-<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span>
-  <span class="nv">database: </span><span class="s">&#39;test&#39;</span>
-  <span class="nv">host:</span>
-    <span class="nv">REF: </span><span class="p">[</span>
-      <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
-      <span class="nv">path: </span><span class="s">&#39;MYSQL_HOST&#39;</span>
-    <span class="p">]</span>
-    <span class="nv">VAL: </span><span class="s">&#39;localhost&#39;</span>
-  <span class="nv">user:</span>
-    <span class="nv">REF: </span><span class="p">[</span>
-      <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
-      <span class="nv">path: </span><span class="s">&#39;MYSQL_USER&#39;</span>
-    <span class="p">]</span>
-    <span class="nv">VAL: </span><span class="s">&#39;localhost&#39;</span>
-  <span class="nv">password:</span>
-    <span class="nv">REF: </span><span class="p">[</span>
-      <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
-      <span class="nv">path: </span><span class="s">&#39;MYSQL_PASS&#39;</span>
-    <span class="p">,</span>
-      <span class="nv">source: </span><span class="s">&#39;env&#39;</span>
-      <span class="nv">path: </span><span class="s">&#39;MYSQL_PAsSWORD&#39;</span>
-    <span class="p">,</span>
-      <span class="nv">source: </span><span class="s">&#39;file&#39;</span>
-      <span class="nv">path: </span><span class="s">&#39;/etc/mysql/access.password&#39;</span>
-    <span class="p">]</span>
+<div class="highlight"><pre><code>&lt;&lt;&lt;host&gt;&gt;&gt;:&lt;&lt;&lt;port&gt;&gt;&gt;
 </code></pre></div>
 
 
 
-<p>This also shows that one or more references can be added and also with different
-reference types.</p>
+<p>This will result in <code>localhost:8080</code> as example.</p>
+
+
+<div class="pilwrap" id="data%20sources">
+  <h3>
+    <a href="#data%20sources" name="data%20sources" class="pilcrow">&#182;</a>
+    Data Sources
+  </h3>
+</div>
+
+
+<p>The following are the diffferent data sources to use.</p>
+
+
+<div class="pilwrap" id="value%20structure">
+  <h4>
+    <a href="#value%20structure" name="value%20structure" class="pilcrow">&#182;</a>
+    Value Structure
+  </h4>
+</div>
+
+
+<p>The <code>struct</code> protocol is used to search for the value in the current data structure.</p>
+
+<p><strong>Absolute path</strong></p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;struct:///absolute/field&gt;&gt;&gt;
+&lt;&lt;&lt;struct:///absolute/field.0&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+<p>Like in the first line you give the path to the value which will be used. In the
+second line <code>field</code> is an array and the first value of it will be used.</p>
+
+<p><strong>Relative path</strong></p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;struct://relative/field&gt;&gt;&gt;
+&lt;&lt;&lt;struct://./relative/field&gt;&gt;&gt;
+&lt;&lt;&lt;struct://../relative/field&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+<p>This will search for the <code>relative</code> node in the current path backwards and
+then for the <code>field</code> subentry  which value is used. It will look for the
+neighbor elements, the parent and it'S neighborts and so on back to root.</p>
+
+<p>In relative paths you can also make backreferences like in the filesystem. So
+line 2 makes no difference but line 3 of the examples goes one level up.</p>
+
+<p><strong>Matching</strong></p>
+
+<p>See below in the path locator description for the more complex search pattern.</p>
+
+<p><strong>Subchecks</strong></p>
+
+<p>Here you may also go into a file which is referenced:</p>
+
+<p>&lt;&lt;<struct://file#address.info#1>>></p>
+
+<p>Searches for a field, reads the file path there, loads the file and gets the first
+line.</p>
+
+
+<div class="pilwrap" id="context">
+  <h4>
+    <a href="#context" name="context" class="pilcrow">&#182;</a>
+    Context
+  </h4>
+</div>
+
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;context:///absolute/*/min&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="environment">
+  <h4>
+    <a href="#environment" name="environment" class="pilcrow">&#182;</a>
+    Environment
+  </h4>
+</div>
+
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;env://MY_HOME&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="file">
+  <h4>
+    <a href="#file" name="file" class="pilcrow">&#182;</a>
+    File
+  </h4>
+</div>
+
+
+<p>File paths should be given absolute because relative paths are calculated from
+the current working directory.</p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;file:///etc/myvalue&gt;&gt;&gt;
+&lt;&lt;&lt;file:///etc/myvalue#14&gt;&gt;&gt;
+&lt;&lt;&lt;file:///etc/myvalue#14/5-8&gt;&gt;&gt;
+&lt;&lt;&lt;file:///etc/myvalue#name/min&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+<p>This will load the content of a text file (line 1) or use only line number 14
+of the file. separated by a colon you can also specify which column (character)
+range to use.
+And in the last example line the file has to contain some type of
+structured information from which the given element path will be used.</p>
+
+
+<div class="pilwrap" id="web%20ressources">
+  <h4>
+    <a href="#web%20ressources" name="web%20ressources" class="pilcrow">&#182;</a>
+    Web Ressources
+  </h4>
+</div>
+
+
+<p>Only use a valid URL therefore:</p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;http://any.server.com/service&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+<p>It is not allowed to use a # anchor in the URL.
+But you may use the <code>#</code> anchor to access a specific line or structured element.</p>
+
+<p>Possible protocols are:</p>
+
+<ul>
+<li><a href='http://domain:port/'>http://domain:port/</a>...</li>
+<li><a href='https://domain:port/'>https://domain:port/</a>...</li>
+</ul>
+
+<p>And you may connect to UNIX Sockets like <code>http://unix:/absolute/unix.socket:/request/path</code>
+but the paths have to be absoulte.</p>
+
+
+<div class="pilwrap" id="command">
+  <h4>
+    <a href="#command" name="command" class="pilcrow">&#182;</a>
+    Command
+  </h4>
+</div>
+
+
+<p>The complete path will be execute as if it is typed into the command line on
+the current directory or the one given in <code>work.dir</code>.</p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;cmd://date&gt;&gt;&gt;
+&lt;&lt;&lt;cmd:///user/local/bin/date&gt;&gt;&gt;
+&lt;&lt;&lt;cmd://df -h&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+<p>It will use the value returned on STDOUT.</p>
+
+<p>Note: If you use pipes remove the space before or behind, because if you have
+both it is recognized as alternative reference.</p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;cmd://cat test/data/poem| head -1&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="database%20(to%20be%20implemented%20later)">
+  <h4>
+    <a href="#database%20(to%20be%20implemented%20later)" name="database%20(to%20be%20implemented%20later)" class="pilcrow">&#182;</a>
+    Database (to be implemented later)
+  </h4>
+</div>
+
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;mysql://user:password@host:port/database/table/field?id=15&gt;&gt;&gt;
+&lt;&lt;&lt;mysql:///dataname/table/id=15/field&gt;&gt;&gt;
+&lt;&lt;&lt;mysql:///dataname/select name from xxx where id=15&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+
+<div class="pilwrap" id="path%20locator">
+  <h3>
+    <a href="#path%20locator" name="path%20locator" class="pilcrow">&#182;</a>
+    Path Locator
+  </h3>
+</div>
+
+
+<p>They may be used directly as the path in <code>struc</code> references or as anchor to
+get a subvalue (region).</p>
+
+<p><strong>Subsearch</strong></p>
+
+<p>Multiple anchors are possible to specify a next subsearch like:</p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;struct:///absolute.field#1&gt;&gt;&gt;
+&lt;&lt;&lt;file:///data/book.yml#publishing.notice#2-4&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+<p>That means then either a # character comes up the search will use this value
+and uses the rest of the path on this.</p>
+
+<p>It is also possible to inject references through the referenced field like:</p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;struct://file#address.info#1&gt;&gt;&gt;
+file = &lt;&lt;&lt;file:///myconfig.yml&gt;&gt;&gt;
+</code></pre></div>
+
+
+
+<p>This means that the <code>file</code> element of the structure will be used and as this
+is also a reference the value of this will first be retrieved by the reference to
+the <code>myconfig.yml</code> file. Then the result comes back the main path will be followed
+and the specific element is used.</p>
+
+<p>But to keep the system secure not any context can be used in another one. The
+Following list shows the precedence and can only be used top to bottom.</p>
+
+<ol>
+<li>environment</li>
+<li>struct</li>
+<li>context</li>
+<li>file, command</li>
+<li>web</li>
+<li>value structure or range in value are always possible</li>
+</ol>
+
+<p>Within the same level references between both are possible.</p>
+
+<p>This keeps the security, so that a user can not compromise the system by injecting
+references to extract internal data.</p>
+
+<p><strong>Text Range</strong></p>
+
+<p>Within a text element you may use the following ranges:</p>
+
+
+<div class="highlight"><pre><code>3 - specific row
+3-5 - specific row range
+3,5 - specific row and column
+3,5-8 - specific column range in row
+3-5,5-8 - specific row and column range
+</code></pre></div>
+
+
+
+<p><strong>Structure</strong></p>
+
+<p>If it is a structured information you may specify the path by name:</p>
+
+
+<div class="highlight"><pre><code>name - get first element with this name
+name/*/min - within any subelement
+name/*/*/min - within any subelement (two level depth)
+name/**/min - within any subelement in any depth
+name/test?/min - pattern match with one missing character
+name/test*/min - pattern match with multiple missing characters
+</code></pre></div>
+
+
+
+<p>You may also use regexp notation to find the correct element:</p>
+
+
+<div class="highlight"><pre><code>name/test[AB]/min - pattern match with one missing character
+name/test\d+/min - pattern match with multiple missing characters
+</code></pre></div>
+
+
+
+<p>See the <a href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp">Mozilla Developer Network</a>
+for the possible syntax but without modifier.</p>
 
 
 <div class="pilwrap" id="descriptive%20reporting">
@@ -575,9 +786,9 @@ and <code>describe()</code> calls.</p>
 
 
 <div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
   <span class="nv">title: </span><span class="s">&#39;Overall Timeout&#39;</span>
-  <span class="nv">description: </span><span class="s">&#39;time in milliseconds the whole test may take&#39;</span>
+  <span class="nv">description: </span><span class="s">&#39;Time in milliseconds the whole test may take.&#39;</span>
+  <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
   <span class="nv">min: </span><span class="mi">500</span>
 <span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
   <span class="k">if</span> <span class="nx">err</span>
@@ -605,15 +816,19 @@ and <code>describe()</code> calls.</p>
 
 
 <p>It is also possible to let your complex options be validated against the
-different types. This will help you to find problems in your development.
+different types. This will help you to find problems in development state.
 To do this you have to add it in your tests:</p>
 
 <p><strong>Mocha coffee example:</strong></p>
 
 
 <div class="highlight"><pre><code><span class="c1"># ...</span>
-<span class="nx">it</span> <span class="s">&quot;should has correct validator rules&quot;</span><span class="p">,</span> <span class="nf">-&gt;</span>
-  <span class="nx">validator</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="s">&#39;config&#39;</span><span class="p">,</span> <span class="nx">MyObject</span><span class="p">.</span><span class="nx">config</span>
+<span class="nx">it</span> <span class="s">&quot;should has correct validator rules&quot;</span><span class="p">,</span> <span class="nf">(cb) -&gt;</span>
+  <span class="nx">validator</span><span class="p">.</span><span class="nx">selfcheck</span>
+    <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors</span>
+    <span class="nv">schema: </span><span class="nx">schema</span>      <span class="c1"># definition of checks</span>
+  <span class="p">,</span> <span class="nf">(err) -&gt;</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">err</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="o">not</span><span class="p">.</span><span class="nx">exist</span>
 <span class="c1"># ...</span>
 </code></pre></div>
 
@@ -638,8 +853,8 @@ To do this you have to add it in your tests:</p>
 
 
 <p>The value has to be a boolean. The value will be true for 1, 'true', 'on',
-'yes' and it will be considered as false for 0, 'false', 'off', 'no', null and
-undefined.
+'yes', '+' and it will be considered as false for 0, 'false', 'off', 'no',
+'-', null and undefined.
 Other values are not allowed.</p>
 
 <p><strong>Validate options:</strong></p>
@@ -651,8 +866,13 @@ Other values are not allowed.</p>
 <p><strong>Example:</strong></p>
 
 
-<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;verboseMode&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
 </code></pre></div>
 
 
@@ -674,8 +894,13 @@ Other values are not allowed.</p>
 <p><strong>Example:</strong></p>
 
 
-<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;function&#39;</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;function&#39;</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
 </code></pre></div>
 
 
@@ -695,7 +920,7 @@ and also different check settings to use.</p>
 <p><strong>Sanitize options:</strong></p>
 
 <ul>
-<li><code>tostring</code> - convert objects to string, first</li>
+<li><code>toString</code> - convert objects to string, first</li>
 <li><code>allowControls</code> - keep control characters in string instead of
 stripping them (but keep \r\n)</li>
 <li><code>stripTags</code> - remove all html tags</li>
@@ -720,6 +945,23 @@ replacement text] while search may be a string or RegExp</li>
 <li><code>matchNot</code> - string or regular expression which is not allowed to
 match (or list of expressions)</li>
 </ul>
+
+<p><strong>Example:</strong></p>
+
+
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">lowerCase: </span><span class="kc">true</span>
+    <span class="nv">upperCase: </span><span class="s">&#39;first&#39;</span>
+    <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;One&#39;</span><span class="p">,</span> <span class="s">&#39;Two&#39;</span><span class="p">,</span> <span class="s">&#39;Three&#39;</span><span class="p">]</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
+</code></pre></div>
+
+
 
 
 <div class="pilwrap" id="integer">
@@ -824,51 +1066,98 @@ arrays.</p>
 <ul>
 <li><code>instanceOf</code> - (class) only objects of given class type are allowed</li>
 <li><code>mandatoryKeys</code> - (list) the list of elements which are mandatory</li>
-<li><code>allowedKeys</code> - (list) gives a list of elements which are also allowed
-or true to use the list from entries definition</li>
+<li><code>allowedKeys</code> - (list, regexp or boolean) gives a list of elements which are
+also allowed or true to use the list from entries definition or an regular
+expression</li>
 <li><code>entries</code> - specification for all entries or specific to the key name</li>
 </ul>
 
-<p>So you have three different ways to specify objects. First you may have class
-instances as the object. Then you only can use the <code>instanceOf</code> check.</p>
+<p>So you have two different ways to specify objects. First you can use the <code>instanceOf</code>
+check. Or specify a data object.</p>
+
+<p><strong>Examples:</strong></p>
+
+<p>The follwoing will check for an instance:</p>
 
 
-<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-  <span class="nv">instanceOf: </span><span class="nb">RegExp</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+    <span class="nv">instanceOf: </span><span class="nx">RegeExp</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
 </code></pre></div>
 
 
 
-<p>Next you may have an object in which you only want to specify what attributes
-it should have but not checking the attribute values:</p>
+<p>Or you may specify the data object structure:</p>
 
 
-<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-  <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
-  <span class="nv">allowedKeys: </span><span class="p">[</span><span class="s">&#39;mail&#39;</span><span class="p">,</span> <span class="s">&#39;phone&#39;</span><span class="p">]</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+    <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+    <span class="nv">allowedKeys: </span><span class="p">[</span><span class="s">&#39;mail&#39;</span><span class="p">,</span> <span class="s">&#39;phone&#39;</span><span class="p">]</span>
+    <span class="nv">entries: </span><span class="p">[</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="p">]</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
 </code></pre></div>
 
 
+
+<p>Here all object values have to be strings.</p>
+
+
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+    <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+    <span class="nv">entries: </span><span class="p">[</span>
+      <span class="nv">key: </span><span class="sr">/^num-\d+/</span>
+      <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+    <span class="p">,</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="p">]</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
+</code></pre></div>
+
+
+
+<p>And here the keys matching the key-check (starting with 'num-...') have to be
+integers and all other strings.</p>
 
 <p>If you don't specify <code>allowedKeys</code> more attributes with other names are possible.</p>
 
-<p>And the last and most complex situation is a deep checking structure:</p>
+<p>And the most complex situation is a deep checking structure with checking each
+key for its specifics:</p>
 
 
-<div class="highlight"><pre><code><span class="nv">value = </span><span class="nx">Validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;callback&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-  <span class="nv">allowedKeys: </span><span class="kc">true</span>
-  <span class="nv">entries:</span>
-    <span class="nv">name:</span>
-      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-    <span class="nv">mail:</span>
-      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-      <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">phone:</span>
-      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-      <span class="nv">optional: </span><span class="kc">true</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+    <span class="nv">allowedKeys: </span><span class="kc">true</span>
+    <span class="nv">keys:</span>
+      <span class="nv">name:</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">mail:</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">optional: </span><span class="kc">true</span>
+      <span class="nv">phone:</span>
+        <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+        <span class="nv">optional: </span><span class="kc">true</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
 </code></pre></div>
 
 
@@ -877,6 +1166,9 @@ it should have but not checking the attribute values:</p>
 in the entries. Which attribute is optional may be specified within the attributes
 specification. That means this check is the same as above but also checks that the
 three attributes are strings.</p>
+
+<p>If you specify <code>entries</code> and <code>keys</code>, the entries check will only be used as default
+for all keys which has no own specification.</p>
 
 
 <div class="pilwrap" id="any">
@@ -948,9 +1240,9 @@ all have to succeed.</p>
 </ul>
 
 
-<div class="pilwrap" id="file">
+<div class="pilwrap" id="file_1">
   <h3>
-    <a href="#file" name="file" class="pilcrow">&#182;</a>
+    <a href="#file_1" name="file_1" class="pilcrow">&#182;</a>
     file
   </h3>
 </div>

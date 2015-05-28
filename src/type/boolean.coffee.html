@@ -29,22 +29,10 @@
         <a href="#node%20modules">Node modules</a>
       </div>
       <div class="heading h2">
-        <a href="#description">Description</a>
-      </div>
-      <div class="heading h3">
-        <a href="#type%20description">Type Description</a>
+        <a href="#configuration">Configuration</a>
       </div>
       <div class="heading h2">
-        <a href="#synchronous%20check">Synchronous check</a>
-      </div>
-      <div class="heading h3">
-        <a href="#check%20type">Check Type</a>
-      </div>
-      <div class="heading h2">
-        <a href="#selfcheck">Selfcheck</a>
-      </div>
-      <div class="heading h2">
-        <a href="#optimize%20options%20setting">Optimize options setting</a>
+        <a href="#type%20implementation">Type implementation</a>
       </div>
     </div>
   </div>
@@ -93,12 +81,7 @@
 <p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">rules = </span><span class="nx">require</span> <span class="s">&#39;../rules&#39;</span>
-
-<span class="nv">valuesTrue = </span><span class="p">[</span><span class="s">&#39;true&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="s">&#39;on&#39;</span><span class="p">,</span> <span class="s">&#39;yes&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">]</span>
-<span class="nv">valuesFalse = </span><span class="p">[</span><span class="s">&#39;false&#39;</span><span class="p">,</span> <span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span><span class="p">,</span> <span class="s">&#39;no&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">false</span><span class="p">]</span>
-
-<span class="nv">module.exports =</span>
+<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
 
 
 </pre></div>
@@ -106,16 +89,17 @@
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="description">
+<div class="pilwrap" id="configuration">
   <h2>
-    <a href="#description" name="description" class="pilcrow">&#182;</a>
-    Description
+    <a href="#configuration" name="configuration" class="pilcrow">&#182;</a>
+    Configuration
   </h2>
 </div>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">describe:</span>
+<span class="nv">valuesTrue = </span><span class="p">[</span><span class="s">&#39;true&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="s">&#39;on&#39;</span><span class="p">,</span> <span class="s">&#39;yes&#39;</span><span class="p">,</span> <span class="s">&#39;+&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">true</span><span class="p">]</span>
+<span class="nv">valuesFalse = </span><span class="p">[</span><span class="s">&#39;false&#39;</span><span class="p">,</span> <span class="s">&#39;0&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span><span class="p">,</span> <span class="s">&#39;no&#39;</span><span class="p">,</span> <span class="s">&#39;-&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">false</span><span class="p">]</span>
 
 
 </pre></div>
@@ -123,17 +107,16 @@
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="type%20description">
-  <h3>
-    <a href="#type%20description" name="type%20description" class="pilcrow">&#182;</a>
-    Type Description
-  </h3>
+<div class="pilwrap" id="type%20implementation">
+  <h2>
+    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
+    Type implementation
+  </h2>
 </div>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
-      <span class="nv">options = </span><span class="nx">optimize</span> <span class="nx">options</span>
+<span class="nv">exports.describe = </span><span class="nf">(work) -&gt;</span>
 
 </pre></div>
         </td>
@@ -146,8 +129,8 @@
 <p>get possible values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">vTrue = </span><span class="nx">valuesTrue</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">).</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span>
-      <span class="nv">vFalse = </span><span class="nx">valuesFalse</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">).</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span>
+  <span class="nv">vTrue = </span><span class="nx">valuesTrue</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">).</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span>
+  <span class="nv">vFalse = </span><span class="nx">valuesFalse</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">).</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span>
 
 </pre></div>
         </td>
@@ -160,46 +143,43 @@
 <p>combine into message</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="s">&quot;A boolean value, which will be true for </span><span class="si">#{</span><span class="nx">vTrue</span><span class="si">}</span><span class="s"> and</span>
-<span class="s">      will be considered as false for </span><span class="si">#{</span><span class="nx">vFalse</span><span class="si">}</span><span class="s">. </span><span class="si">#{</span><span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nv">text = </span><span class="s">&quot;A boolean value, which will be true for </span><span class="si">#{</span><span class="nx">vTrue</span><span class="si">}</span><span class="s"> and</span>
+<span class="s">  will be considered as false for </span><span class="si">#{</span><span class="nx">vFalse</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="synchronous%20check">
-  <h2>
-    <a href="#synchronous%20check" name="synchronous%20check" class="pilcrow">&#182;</a>
-    Synchronous check
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">sync:</span>
-
+<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="check%20type">
-  <h3>
-    <a href="#check%20type" name="check%20type" class="pilcrow">&#182;</a>
-    Check Type
-  </h3>
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
-
+<p>base checks</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(check, path, options, value) -&gt;</span>
-      <span class="nx">debug</span> <span class="s">&quot;check </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="p">,</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">options</span>
-      <span class="nv">options = </span><span class="nx">optimize</span> <span class="nx">options</span>
-      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
+  <span class="k">try</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+  <span class="k">catch</span> <span class="nx">err</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span>
+  <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>sanitize</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
 
 </pre></div>
         </td>
@@ -209,12 +189,11 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
-<p>sanitize</p>
+<p>boolean values check</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">value = </span><span class="nx">rules</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-      <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
-        <span class="nv">value = </span><span class="nx">value</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span> <span class="k">if</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">valuesTrue</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">false</span> <span class="k">if</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">valuesFalse</span>
 
 </pre></div>
         </td>
@@ -224,84 +203,29 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
-<p>boolean values check</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">return</span> <span class="kc">true</span> <span class="k">if</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">valuesTrue</span>
-      <span class="k">return</span> <span class="kc">false</span> <span class="k">if</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">valuesFalse</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
-</div>
 <p>failed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-      <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No boolean value given&quot;</span>
+  <span class="nx">cb</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No boolean value given&quot;</span>
 
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="selfcheck">
-  <h2>
-    <a href="#selfcheck" name="selfcheck" class="pilcrow">&#182;</a>
-    Selfcheck
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">selfcheck: </span><span class="nf">(name, options) -&gt;</span>
-    <span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;../index&#39;</span>
-    <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span>
-      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-      <span class="nv">allowedKeys: </span><span class="kc">true</span>
-      <span class="nv">entries:</span>
-        <span class="nv">type:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-        <span class="nv">title:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">description:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">optional:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">default:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="p">,</span> <span class="nx">options</span>
-
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="optimize%20options%20setting">
-  <h2>
-    <a href="#optimize%20options%20setting" name="optimize%20options%20setting" class="pilcrow">&#182;</a>
-    Optimize options setting
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">optimize = </span><span class="nf">(options) -&gt;</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">optional</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">options</span><span class="p">.</span><span class="nx">default</span><span class="o">?</span>
-    <span class="nv">options.default = </span><span class="kc">false</span>
-  <span class="nx">options</span>
+<span class="nv">exports.selfcheck =</span>
+  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+  <span class="nv">allowedKeys: </span><span class="kc">true</span>
+  <span class="nv">entries:</span>
+    <span class="nv">type:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">title:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">optional: </span><span class="kc">true</span>
+    <span class="nv">description:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">optional: </span><span class="kc">true</span>
+    <span class="nv">optional:</span>
+      <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+      <span class="nv">optional: </span><span class="kc">true</span>
+    <span class="nv">default:</span>
+      <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+      <span class="nv">optional: </span><span class="kc">true</span>
 </pre></div>
         </td>
       </tr>
