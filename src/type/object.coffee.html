@@ -302,7 +302,7 @@ or true to use the list from entries definition</li>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
-<p>object</p>
+<p>is object</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">isnt</span> <span class="s">&#39;object&#39;</span> <span class="o">or</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">value</span>
@@ -316,10 +316,11 @@ or true to use the list from entries definition</li>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
-<p>check entries</p>
+<p>check object keys</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">keys = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span>
+
 
 </pre></div>
         </td>
@@ -328,6 +329,66 @@ or true to use the list from entries definition</li>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>check allowedKeys</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">allowedKeys = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowedKeys</span> <span class="o">?</span> <span class="p">[]</span>
+  <span class="k">if</span> <span class="nx">allowedKeys</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">allowedKeys</span> <span class="o">isnt</span> <span class="s">&#39;boolean&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+</div>
+<p>use from entries and keys</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">allowedKeys = </span><span class="p">[]</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span><span class="o">?</span>
+      <span class="nv">allowedKeys = </span><span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span>
+        <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span> <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>check mandatoryKeys</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">mandatoryKeys = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">mandatoryKeys</span> <span class="o">?</span> <span class="p">[]</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>check entries
+check keys</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>check entries</p>
         </td>
@@ -350,7 +411,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>run subcheck</p>
         </td>
@@ -363,7 +424,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>check the used keys</p>
         </td>
@@ -386,7 +447,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>check for allowed keys</p>
         </td>
@@ -407,7 +468,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>check also for references in unspecified keys
  value = rules.sync.reference check, path, options, value

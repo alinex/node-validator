@@ -1059,21 +1059,39 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 
 
 <p>For all complex data structures you use the object type which checks for named
-arrays.</p>
+arrays or instance objects.</p>
+
+<p>This is the most complex validation form because it has different checks and
+uses subchecks on each entry.</p>
 
 <p><strong>Options:</strong></p>
 
 <ul>
 <li><code>instanceOf</code> - (class) only objects of given class type are allowed</li>
-<li><code>mandatoryKeys</code> - (list) the list of elements which are mandatory</li>
-<li><code>allowedKeys</code> - (list, regexp or boolean) gives a list of elements which are
+<li><code>mandatoryKeys</code> - (list or boolean) the list of elements which are mandatory</li>
+<li><code>allowedKeys</code> - (list or boolean) gives a list of elements which are
 also allowed or true to use the list from entries definition or an regular
 expression</li>
-<li><code>entries</code> - specification for all entries or specific to the key name</li>
+<li><code>entries</code> - specification for multiple entries based on match and default</li>
+<li><code>keys</code> - specification for all entries per each key name</li>
 </ul>
 
 <p>So you have two different ways to specify objects. First you can use the <code>instanceOf</code>
 check. Or specify a data object.</p>
+
+<p>The <code>mandatoryKeys</code> and <code>allowedKeys</code> may both contain normal strings for complete
+key names and also regular expressions to match multiple. In case of using it
+in the mandatoryKeys field at least one matching key have to be present.
+And as you may suspect the <code>mandatoryKeys</code> are automatically also <code>allowedKeys</code>.
+If <code>mandatoryKeys</code> or <code>allowedKeys</code> are set to true instead of a list all of the
+specified keys in entries or keys are meant.</p>
+
+<p>The <code>keys</code> specify the subcheck for each containing object attribute. If they are
+not optional or contain a default entry they will be seen also as mandatory field.</p>
+
+<p>The <code>entries</code> list do the same as the <code>keys</code> section but works using key matching
+on multiple entires. If an object attribute matches multiple entries-rules the
+first will be used.</p>
 
 <p><strong>Examples:</strong></p>
 
