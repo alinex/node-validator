@@ -465,15 +465,19 @@ This may result in the following error:
 Selfchecking
 -------------------------------------------------
 It is also possible to let your complex options be validated against the
-different types. This will help you to find problems in your development.
+different types. This will help you to find problems in development state.
 To do this you have to add it in your tests:
 
 __Mocha coffee example:__
 
 ``` coffee
 # ...
-it "should has correct validator rules", ->
-  validator.selfcheck 'config', MyObject.config
+it "should has correct validator rules", (cb) ->
+  validator.selfcheck
+    name: 'test'        # name to be displayed in errors
+    schema: schema      # definition of checks
+  , (err) ->
+    expect(err).to.not.exist
 # ...
 ```
 
@@ -495,8 +499,13 @@ __Validate options:__
 __Example:__
 
 ``` coffee
-value = Validator.check 'verboseMode', value,
-  type: 'boolean'
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'boolean'
+, (err, result) ->
+  # do something
 ```
 
 ### function
@@ -509,8 +518,13 @@ __Options:__ None
 __Example:__
 
 ``` coffee
-value = Validator.check 'callback', value,
-  type: 'function'
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'function'
+, (err, result) ->
+  # do something
 ```
 
 ### string
@@ -542,6 +556,21 @@ __Validate options:__
   (or list of expressions)
 - `matchNot` - string or regular expression which is not allowed to
   match (or list of expressions)
+
+__Example:__
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'string'
+    lowerCase: true
+    upperCase: 'first'
+    values: ['One', 'Two', 'Three']
+, (err, result) ->
+  # do something
+```
 
 ### integer
 
@@ -597,58 +626,131 @@ __Validating children:__
 ### object
 
 For all complex data structures you use the object type which checks for named
-arrays.
+arrays or instance objects.
+
+This is the most complex validation form because it has different checks and
+uses subchecks on each entry.
 
 __Options:__
 
 - `instanceOf` - (class) only objects of given class type are allowed
-- `mandatoryKeys` - (list) the list of elements which are mandatory
-- `allowedKeys` - (list) gives a list of elements which are also allowed
-   or true to use the list from entries definition or an regular expression
-- `entries` - specification for all entries or specific to the key name
+- `mandatoryKeys` - (list or boolean) the list of elements which are mandatory
+- `allowedKeys` - (list or boolean) gives a list of elements which are
+   also allowed or true to use the list from entries definition or an regular
+   expression
+- `entries` - specification for multiple entries based on match and default
+- `keys` - specification for all entries per each key name
 
-So you have three different ways to specify objects. First you may have class
-instances as the object. Then you only can use the `instanceOf` check.
+So you have two different ways to specify objects. First you can use the `instanceOf`
+check. Or specify a data object.
+
+The `mandatoryKeys` and `allowedKeys` may both contain normal strings for complete
+key names and also regular expressions to match multiple. In case of using it
+in the mandatoryKeys field at least one matching key have to be present.
+And as you may suspect the `mandatoryKeys` are automatically also `allowedKeys`.
+If `mandatoryKeys` or `allowedKeys` are set to true instead of a list all of the
+specified keys in entries or keys are meant.
+
+The `keys` specify the subcheck for each containing object attribute. If they are
+not optional or contain a default entry they will be seen also as mandatory field.
+
+The `entries` list do the same as the `keys` section but works using key matching
+on multiple entires. If an object attribute matches multiple entries-rules the
+first will be used.
+
+__Examples:__
+
+The follwoing will check for an instance:
 
 ``` coffee
-value = Validator.check 'callback', value,
-  type: 'object'
-  instanceOf: RegExp
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    instanceOf: RegeExp
+, (err, result) ->
+  # do something
 ```
 
-Next you may have an object in which you only want to specify what attributes
-it should have but not checking the attribute values:
+Or you may specify the data object structure:
 
 ``` coffee
-value = Validator.check 'callback', value,
-  type: 'object'
-  mandatoryKeys: ['name']
-  allowedKeys: ['mail', 'phone']
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    mandatoryKeys: ['name']
+    allowedKeys: ['mail', 'phone']
+    entries: [
+      type: 'string'
+    ]
+, (err, result) ->
+  # do something
 ```
+
+Here all object values have to be strings.
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    mandatoryKeys: ['name']
+    entries: [
+      key: /^num-\d+/
+      type: 'integer'
+    ,
+      type: 'string'
+    ]
+, (err, result) ->
+  # do something
+```
+
+And here the keys matching the key-check (starting with 'num-...') have to be
+integers and all other strings.
 
 If you don't specify `allowedKeys` more attributes with other names are possible.
 
-And the last and most complex situation is a deep checking structure:
+And the most complex situation is a deep checking structure with checking each
+key for its specifics:
 
 ``` coffee
-value = Validator.check 'callback', value,
-  type: 'object'
-  allowedKeys: true
-  entries:
-    name:
-      type: 'string'
-    mail:
-      type: 'string'
-      optional: true
-    phone:
-      type: 'string'
-      optional: true
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    allowedKeys: true
+    keys:
+      name:
+        type: 'string'
+      mail:
+        type: 'string'
+        optional: true
+      phone:
+        type: 'string'
+        optional: true
+, (err, result) ->
+  # do something
 ```
 
 Here `allowedKeys` will check that no attributes are used which are not specified
 in the entries. Which attribute is optional may be specified within the attributes
 specification. That means this check is the same as above but also checks that the
 three attributes are strings.
+
+If you specify `entries` and `keys`, the entries check will only be used as default
+for all keys which has no own specification.
+
+
+
+
+
+
+
 
 ### any
 

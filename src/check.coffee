@@ -47,6 +47,18 @@ class Work
     err.description = detail if detail
     err
 
+  goInto: (names...) ->
+    #console.log names, @
+    name = names.shift()
+    sub = new Work @spec
+    sub.path = @path.concat name
+    sub.pos = @pos[name]
+    sub.value = @value
+    sub.debug = chalk.grey "#{sub.spec.name ? 'value'}/#{sub.path.join '/'}"
+    #console.log name, sub
+    return sub unless names.length
+    sub.goInto names...
+
 # Helper methods
 # -------------------------------------------------
 
@@ -55,7 +67,7 @@ class Work
 getTypeLib = (type) ->
   # check type
   unless typeof type?.type  is 'string'
-    return cb new Error "No type given to load"
+    throw new Error "No type given to load"
   type = type.type unless typeof type is 'string'
   # try to load
   require "./type/#{type}"

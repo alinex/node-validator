@@ -1,44 +1,57 @@
 require('alinex-error').install()
 async = require 'alinex-async'
 
-test = require '../test'
+test = require '../../test'
 
 describe "Object", ->
 
-  options = null
-
+  schema = null
   beforeEach ->
-    options =
+    schema =
       type: 'object'
 
-  describe "sync check", ->
+  describe "check", ->
 
-    it "should match an object", ->
-      test.deep options, {one:1,two:2,three:3}, {one:1,two:2,three:3}
-    it "should fail on other elements", ->
-      test.fail options, ''
-      test.fail options, null
-      test.fail options, 16
-      test.fail options, []
-      test.fail options, new Array()
-    it "should support optional option", ->
+    it "should support optional option", (cb) ->
+      schema.optional = true
+      test.undefined schema, [null, undefined], cb
+
+    it "should support default option", (cb) ->
+      schema.optional = true
+      schema.default = {one:1}
+      test.equal schema, [
+        [null, schema.default]
+        [undefined, schema.default]
+      ], cb
+
+  describe "simple check", ->
+
+    it "should match an object", (cb) ->
+      test.same schema, [{one:1,two:2,three:3}], cb
+
+    it.only "should fail on other elements", (cb) ->
+      test.fail schema, [null, 16, [], new Error 'xxx'], cb
+
+
+
+    it "should support optional option", (cb) ->
       options =
         type: 'object'
         optional: true
       test.equal options, null, null
       test.equal options, undefined, null
-    it "should support instanceOf option", ->
+    it "should support instanceOf option", (cb) ->
       options =
         type: 'object'
         instanceOf: Date
       test.instance options, new Date(), Date
-    it "should fail for instanceOf option", ->
+    it "should fail for instanceOf option", (cb) ->
       options =
         type: 'object'
         instanceOf: Date
       test.fail options, new Object()
       test.fail options, []
-    it "should support allowedKeys option", ->
+    it "should support allowedKeys option", (cb) ->
       options =
         type: 'object'
         allowedKeys: true
@@ -48,7 +61,7 @@ describe "Object", ->
           two:
             type: 'integer'
       test.deep options, { one:1, two:2 }, { one:1, two:2 }
-    it "should fail for allowedKeys option", ->
+    it "should fail for allowedKeys option", (cb) ->
       options =
         type: 'object'
         allowedKeys: true
@@ -58,41 +71,41 @@ describe "Object", ->
           two:
             type: 'integer'
       test.fail options, { one:1, two:2, three:3 }
-    it "should support allowedKeys list option", ->
+    it "should support allowedKeys list option", (cb) ->
       options =
         type: 'object'
         allowedKeys: ['one','two']
       test.deep options, { one:1, two:2 }, { one:1, two:2 }
-    it "should fail for allowedKeys list option", ->
+    it "should fail for allowedKeys list option", (cb) ->
       options =
         type: 'object'
         allowedKeys: ['one','two']
       test.fail options, { one:1, two:2, three:3 }
-    it "should support allowedKeys regexp option", ->
+    it "should support allowedKeys regexp option", (cb) ->
       options =
         type: 'object'
         allowedKeys: /o/
       test.deep options, { one:1, two:2 }, { one:1, two:2 }
-    it "should fail for allowedKeys list option", ->
+    it "should fail for allowedKeys list option", (cb) ->
       options =
         type: 'object'
         allowedKeys: /o/
       test.fail options, { one:1, two:2, three:3 }
-    it "should support mandatoryKeys option", ->
+    it "should support mandatoryKeys option", (cb) ->
       options =
         type: 'object'
         allowedKeys: ['one','two']
         mandatoryKeys: ['three']
       test.deep options, { one:1, two:2, three:3 }, { one:1, two:2, three:3 }
       test.deep options, { three:3 }, { three:3 }
-    it "should fail for mandatoryKeys option", ->
+    it "should fail for mandatoryKeys option", (cb) ->
       options =
         type: 'object'
         allowedKeys: ['one','two']
         mandatoryKeys: ['three']
       test.fail options, { one:1, two:2, four:3 }
       test.fail options, { one:1, two:2 }
-    it "should support subchecks", ->
+    it "should support subchecks", (cb) ->
       options =
         type: 'object'
         entries:
@@ -100,7 +113,7 @@ describe "Object", ->
             type: 'integer'
       test.deep options, { one:1, two:2, three:3 }, { one:1, two:2, three:3 }
       test.deep options, { one:100, three:3 }, { one:100, three:3 }
-    it "should fail on subchecks", ->
+    it "should fail on subchecks", (cb) ->
       options =
         type: 'object'
         entries:
@@ -108,7 +121,7 @@ describe "Object", ->
             type: 'integer'
       test.fail options, { one:1.1, two:2, three:3 }
       test.fail options, { two:2, three:3, one:'nnn' }
-    it "should support allowed subcheck values", ->
+    it "should support allowed subcheck values", (cb) ->
       options =
         type: 'object'
         allowedKeys: true
@@ -116,7 +129,7 @@ describe "Object", ->
           one:
             type: 'integer'
       test.deep options, { one:1}, { one:1 }
-    it "should fail on not allowed subcheck values", ->
+    it "should fail on not allowed subcheck values", (cb) ->
       options =
         type: 'object'
         allowedKeys: true
@@ -124,14 +137,14 @@ describe "Object", ->
           one:
             type: 'integer'
       test.fail options, { one:1, two:2, three:3 }
-    it "should support same check for all keys", ->
+    it "should support same check for all keys", (cb) ->
       options =
         type: 'object'
         entries:
           type: 'integer'
       test.deep options, { one:1}, { one:1 }
 
-  describe "async check", ->
+  describe "async check", (cb) ->
 
     it "should match an object", (cb) ->
       async.series [

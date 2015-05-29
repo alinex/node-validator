@@ -106,6 +106,7 @@ exports.run = (work, cb) ->
   if work.pos.max? and value > work.pos.max
     return cb work.report new Error "The value is to high, it has to be'#{work.pos.max}' or lower"
   # done return resulting value
+  debug "#{work.debug} result #{util.inspect value}"
   cb null, value
 
 exports.selfcheck =

@@ -38,8 +38,12 @@ exports.run = (work, cb) ->
   # sanitize
   value = value.trim().toLowerCase() if typeof value is 'string'
   # boolean values check
-  return cb null, true if value in valuesTrue
-  return cb null, false if value in valuesFalse
+  if value in valuesTrue
+    debug "#{work.debug} result #{util.inspect true}"
+    return cb null, true
+  if value in valuesFalse
+    debug "#{work.debug} result #{util.inspect false}"
+    return cb null, false
   # failed
   cb work.report new Error "No boolean value given"
 

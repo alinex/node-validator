@@ -16,7 +16,7 @@ exports.true = (schema, values, cb) ->
   num = 0
   async.each values, (value, cb) ->
     validator.check
-      name: "test-#{++num}"
+      name: "true-#{++num}"
       schema: schema
       value: value
     , (err, result) ->
@@ -29,7 +29,7 @@ exports.false = (schema, values, cb) ->
   num = 0
   async.each values, (value, cb) ->
     validator.check
-      name: "test-#{++num}"
+      name: "false-#{++num}"
       schema: schema
       value: value
     , (err, result) ->
@@ -42,7 +42,7 @@ exports.fail = (schema, values, cb) ->
   num = 0
   async.each values, (value, cb) ->
     validator.check
-      name: "test-#{++num}"
+      name: "fail-#{++num}"
       schema: schema
       value: value
     , (err, result) ->
@@ -55,7 +55,7 @@ exports.undefined = (schema, values, cb) ->
   num = 0
   async.each values, (value, cb) ->
     validator.check
-      name: "test-#{++num}"
+      name: "undefined-#{++num}"
       schema: schema
       value: value
     , (err, result) ->
@@ -68,7 +68,7 @@ exports.same = (schema, values, cb) ->
   num = 0
   async.each values, (value, cb) ->
     validator.check
-      name: "test-#{++num}"
+      name: "same-#{++num}"
       schema: schema
       value: value
     , (err, result) ->
@@ -81,7 +81,7 @@ exports.equal = (schema, values, cb) ->
   num = 0
   async.each values, ([value, goal], cb) ->
     validator.check
-      name: "test-#{++num}"
+      name: "equal-#{++num}"
       schema: schema
       value: value
     , (err, result) ->

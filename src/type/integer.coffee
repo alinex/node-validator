@@ -105,7 +105,7 @@ exports.run = (work, cb) ->
       else Math.round value
   # check integer
   unless value is (value | 0)
-    return cb work.report new Error "The given value '#{value}' is no integer as needed"
+    return cb work.report new Error "The given value '#{work.value}' is no integer as needed"
   # integer type
   if work.pos.inttype
     type = integerTypes[work.pos.inttype] ? work.pos.inttype
@@ -122,6 +122,7 @@ exports.run = (work, cb) ->
   if work.pos.max? and value > work.pos.max
     return cb work.report new Error "The value is to high, it has to be'#{work.pos.max}' or lower"
   # done return resulting value
+  debug "#{work.debug} result #{util.inspect value}"
   cb null, value
 
 exports.selfcheck =

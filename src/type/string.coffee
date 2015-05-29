@@ -201,6 +201,7 @@ exports.run = (work, cb) ->
       return cb work.report new Error "The given string '#{value}' shouldn't contain
       '#{work.pos.matchNot}'"
   # done return resulting value
+  debug "#{work.debug} result #{util.inspect value}"
   cb null, value
 
 exports.selfcheck =
