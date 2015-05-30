@@ -135,7 +135,11 @@ exports.optional =
     unless work.pos.optional or work.pos.default?
       return ''
     if work.pos.default
-      return "It's optional and will be set to #{util.inspect work.pos.default}
+      value = if work.pos.default instanceof Function
+        '[function]'
+      else
+        util.inspect work.pos.default
+      return "It's optional and will be set to #{value}
       if not specified. "
     else
       return "It's optional."

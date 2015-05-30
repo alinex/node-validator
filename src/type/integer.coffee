@@ -24,7 +24,6 @@ chalk = require 'chalk'
 math = require 'mathjs'
 # include classes and helper
 check = require '../check'
-float = require './float'
 
 # integer type names
 # -------------------------------------------------

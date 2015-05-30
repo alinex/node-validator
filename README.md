@@ -513,7 +513,7 @@ validator.check
 The value has to be a function.
 Other values are not allowed.
 
-__Options:__ None
+__Options:__ none
 
 __Example:__
 
