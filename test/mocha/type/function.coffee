@@ -3,7 +3,7 @@ async = require 'alinex-async'
 
 test = require '../../test'
 
-describe.only "Function", ->
+describe "Function", ->
 
   schema = null
   beforeEach ->

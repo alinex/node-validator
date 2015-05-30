@@ -153,6 +153,10 @@ exports.run = (work, cb) ->
       unless isAllowed
         return cb work.report new Error "The key '#{key}' is not allowed"
   # values
+  unless Object.keys(value).length
+    # done return resulting value
+    debug "#{work.debug} result #{util.inspect value}"
+    return cb null, value
   async.each Object.keys(value), (key, cb) ->
     # find sub-check
     if work.pos.keys?[key]?
@@ -168,7 +172,6 @@ exports.run = (work, cb) ->
           sub = work.goInto 'entries', i
           sub.value = sub.value[key]
     return cb() unless sub?
-    #cb()
     check.run sub, cb
   , (err) ->
     return cb err if err

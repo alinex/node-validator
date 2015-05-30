@@ -9,7 +9,7 @@ exports.describe = (schema) ->
   desc = validator.describe
     schema: schema
   expect(desc).to.be.a 'string'
-  expect(desc).to.have.length.of.at.least 10
+  expect(desc).to.have.length.of.at.least 8
   console.log chalk.yellow desc
 
 exports.true = (schema, values, cb) ->
@@ -86,7 +86,7 @@ exports.equal = (schema, values, cb) ->
       value: value
     , (err, result) ->
       expect(err, 'error').to.not.exist
-      expect(result, 'result').to.equal goal
+      expect(result, 'result').to.deep.equal goal
       cb()
   , cb
 

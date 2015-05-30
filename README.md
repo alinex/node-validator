@@ -612,6 +612,7 @@ __Sanitize options:__
 
 - `delimiter` - allow value text with specified list separator
   (it can also be an regular expression)
+- `toArray` - will convert single values into array with one element
 
 __Check options:__
 
@@ -621,7 +622,8 @@ __Check options:__
 
 __Validating children:__
 
-- `entries` - specification for all entries or as array for each element
+- `entries` - default specification for all entries
+- `list` - specification for entries per each key number
 
 ### object
 
