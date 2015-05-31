@@ -62,11 +62,11 @@ exports.describe = (work, cb) ->
     text += "The following replacements will take place: "
     if Array.isArray work.pos.replace[0]
       for [pattern, replace] in work.pos.replace
-        text += "#{pattern} => #{replace}, "
+        text += "#{pattern} => '#{replace}', "
       text = text.replace /, $/, '. '
     else
       [pattern, replace] = work.pos.replace
-      text += "#{pattern} => #{replace}. "
+      text += "#{pattern} => '#{replace}'. "
   # trim and crop
   if work.pos.trim
     text += "Whitespace will be removed at start and end of the text. "

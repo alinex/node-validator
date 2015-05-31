@@ -33,7 +33,6 @@ exports.run = (work, cb) ->
     return cb() if check.optional.run work
   catch err
     return work.report err, cb
-  value = work.value
   # run async checks
   error = []
   async.map [0..(work.pos.entries.length-1)], (num, cb) ->

@@ -754,14 +754,10 @@ three attributes are strings.
 If you specify `entries` and `keys`, the entries check will only be used as default
 for all keys which has no own specification.
 
+Alternative-/Multiple Checks
+-------------------------------------------------
 
-
-
-
-
-
-
-### any
+### or
 
 This is used to give some alternatives from which at least one check have to
 succeed. The first one succeeding will work.
@@ -779,6 +775,27 @@ __Option:__
 
 - `entries` - (array) with multiple check rules
 
+With this it is possible to use a string-check to sanitize and then use an
+other test to finalize the value like:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'and'
+    entries: [
+      type: 'string'
+      toString: true
+      replace: [/,/g, '.']
+    ,
+      type: 'float'
+    ]
+, (err, result) ->
+  # do something
+```
+
+This allows to give float numbers in the european format: xx,x
 
 Additional Check Types
 -------------------------------------------------
