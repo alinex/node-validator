@@ -80,15 +80,16 @@ describe "Object", ->
 
   describe "description", ->
 
-    it "should give simple description", ->
-      test.describe schema
+    it "should give simple description", (cb) ->
+      test.describe schema, cb
 
-    it "should give instance description", ->
+    it "should give instance description", (cb) ->
       test.describe
         type: 'object'
         instanceOf: RegExp
+      , cb
 
-    it "should give complex object description", ->
+    it "should give complex object description", (cb) ->
       test.describe
         title: 'test'
         description: 'Some test rules'
@@ -100,16 +101,20 @@ describe "Object", ->
             type: 'integer'
           two:
             type: 'string'
+      , cb
 
   describe.skip "selfcheck", ->
 
-    it "should validate simple options", ->
-      test.selfcheck options
-    it "should validate instance options", ->
+    it "should validate simple options", (cb) ->
+      test.selfcheck options, cb
+
+    it "should validate instance options", (cb) ->
       test.selfcheck
         type: 'object'
         instanceOf: RegExp
-    it "should validate complex object", ->
+      , cb
+
+    it "should validate complex object", (cb) ->
       test.selfcheck
         title: 'test'
         description: 'Some test rules'
@@ -121,3 +126,4 @@ describe "Object", ->
             type: 'integer'
           two:
             type: 'string'
+      , cb

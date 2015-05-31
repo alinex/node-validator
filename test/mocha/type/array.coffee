@@ -93,18 +93,19 @@ describe "Array", ->
 
   describe "description", ->
 
-    it "should give simple description", ->
-      test.describe schema
+    it "should give simple description", (cb) ->
+      test.describe schema, cb
 
-    it "should give simple list description", ->
+    it "should give simple list description", (cb) ->
       test.describe
         type: 'array'
         delimiter: ','
         toArray: true
         entries:
           type: 'integer'
+      , cb
 
-    it "should give complex list description", ->
+    it "should give complex list description", (cb) ->
       test.describe
         title: 'test'
         description: 'Some test rules'
@@ -114,21 +115,23 @@ describe "Array", ->
         ,
           type: 'string'
         ]
+      , cb
 
   describe.skip "selfcheck", ->
 
-    it "should validate simple options", ->
-      test.selfcheck schema
+    it "should validate simple options", (cb) ->
+      test.selfcheck schema, cb
 
-    it "should validate simple list", ->
+    it "should validate simple list", (cb) ->
       test.selfcheck
         type: 'array'
         delimiter: ','
         toArray: true
         entries:
           type: 'integer'
+      , cb
 
-    it "should validate complex list", ->
+    it "should validate complex list", (cb) ->
       test.selfcheck
         title: 'test'
         description: 'Some test rules'
@@ -138,3 +141,4 @@ describe "Array", ->
         ,
           type: 'string'
         ]
+      , cb

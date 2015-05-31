@@ -5,12 +5,14 @@ chalk = require 'chalk'
 
 validator = require '../lib/index'
 
-exports.describe = (schema) ->
-  desc = validator.describe
+exports.describe = (schema, cb) ->
+  validator.describe
     schema: schema
-  expect(desc).to.be.a 'string'
-  expect(desc).to.have.length.of.at.least 8
-  console.log chalk.yellow desc
+  , (err, text) ->
+    expect(text).to.be.a 'string'
+    expect(text).to.have.length.of.at.least 8
+    console.log chalk.yellow text
+    cb()
 
 exports.true = (schema, values, cb) ->
   num = 0

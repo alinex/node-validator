@@ -37,7 +37,7 @@ check = require '../check'
 
 # Type implementation
 # -------------------------------------------------
-exports.describe = (work) ->
+exports.describe = (work, cb) ->
   text = 'A simple text entry. '
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
@@ -104,7 +104,7 @@ exports.describe = (work) ->
       text = text.replace /, $/, '. '
     else
       text += "#{work.pos.matchNot}. "
-  text
+  cb null, text
 
 exports.run = (work, cb) ->
   debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
@@ -113,13 +113,13 @@ exports.run = (work, cb) ->
   try
     return cb() if check.optional.run work
   catch err
-    return cb work.report err
+    return work.report err, cb
   value = work.value
   # first check input type
   if work.pos.toString and typeof work.pos.toString isnt 'function'
     value = value.toString()
   unless typeof value is 'string'
-    return cb work.report new Error "A string is needed but got #{typeof value} instead"
+    return work.report (new Error "A string is needed but got #{typeof value} instead"), cb
   # sanitize
   unless work.pos.allowControls
     value = value.replace /[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, ''
@@ -149,21 +149,21 @@ exports.run = (work, cb) ->
     value = value.substring 0, work.pos.crop
   # string length
   if work.pos.minLength? and value.length < work.pos.minLength
-    return cb work.report new Error "The given string '#{value}' is too short at most
-    #{work.pos.minlength} characters are needed"
+    return work.report (new Error "The given string '#{value}' is too short at most
+    #{work.pos.minlength} characters are needed"), cb
   if work.pos.maxLength? and value.length > work.pos.maxLength
-    return cb work.report new Error "The given string '#{value}' is too long for
-      at least #{work.pos.maxlength} characters are allowed"
+    return work.report (new Error "The given string '#{value}' is too long for
+      at least #{work.pos.maxlength} characters are allowed"), cb
   # specific values
   if work.pos.values? and not (value in work.pos.values)
-    return cb work.report new Error "The given string '#{value}' is not in the list of
-      allowed phrases (#{work.pos.values})"
+    return work.report (new Error "The given string '#{value}' is not in the list of
+      allowed phrases (#{work.pos.values})"), cb
   if work.pos.startsWith? and value[..work.pos.startsWith.length-1] isnt work.pos.startsWith
-    return cb work.report new Error "The given string '#{value}' should start with
-    '#{work.pos.startsWith}'"
+    return work.report (new Error "The given string '#{value}' should start with
+    '#{work.pos.startsWith}'"), cb
   if work.pos.endsWith? and value[value.length-work.pos.endsWith.length..] isnt work.pos.endsWith
-    return cb work.report new Error "The given string '#{value}' should end with
-    '#{work.pos.endsWith}'"
+    return work.report (new Error "The given string '#{value}' should end with
+    '#{work.pos.endsWith}'"), cb
   # matching
   if work.pos.match?
     if Array.isArray work.pos.match
@@ -174,15 +174,15 @@ exports.run = (work, cb) ->
         else
           success = success and ~value.indexOf match
       unless success
-        return cb work.report new Error "The given string '#{value}' should match
-        against '#{work.pos.match}'"
+        return work.report (new Error "The given string '#{value}' should match
+        against '#{work.pos.match}'"), cb
     else if work.pos.match instanceof RegExp
       unless value.match work.pos.match
-        return cb work.report new Error "The given string '#{value}' should match
-        against '#{work.pos.match}'"
+        return work.report (new Error "The given string '#{value}' should match
+        against '#{work.pos.match}'"), cb
     else if not ~value.indexOf work.pos.match
-      return cb work.report new Error "The given string '#{value}' should contain
-      '#{work.pos.match}'"
+      return work.report (new Error "The given string '#{value}' should contain
+      '#{work.pos.match}'"), cb
   if work.pos.matchNot?
     if Array.isArray work.pos.matchNot
       success = true
@@ -192,14 +192,14 @@ exports.run = (work, cb) ->
         else
           success = success and not ~value.indexOf match
       unless success
-        return cb work.report new Error "The given string '#{value}' shouldn't match
-        against '#{work.pos.match}'"
+        return work.report (new Error "The given string '#{value}' shouldn't match
+        against '#{work.pos.match}'"), cb
     else if work.pos.matchNot instanceof RegExp and value.matchNot work.pos.match
-      return cb work.report new Error "The given string '#{value}' shouldn't match
-      against '#{work.pos.matchNot}'"
+      return work.report (new Error "The given string '#{value}' shouldn't match
+      against '#{work.pos.matchNot}'"), cb
     else if ~value.indexOf work.pos.matchNot
-      return cb work.report new Error "The given string '#{value}' shouldn't contain
-      '#{work.pos.matchNot}'"
+      return work.report (new Error "The given string '#{value}' shouldn't contain
+      '#{work.pos.matchNot}'"), cb
   # done return resulting value
   debug "#{work.debug} result #{util.inspect value}"
   cb null, value

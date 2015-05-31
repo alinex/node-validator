@@ -13,8 +13,8 @@ check = require './check'
 # Create human readable description
 # -------------------------------------------------
 # This will directly return the description of how the value has to be.
-exports.describe = (spec) ->
-  check.describe spec
+exports.describe = (spec, cb) ->
+  check.describe spec, cb
 
 # Check value and sanitize
 # -------------------------------------------------

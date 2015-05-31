@@ -33,19 +33,21 @@ class Work
     @value = @spec.value
     @debug = chalk.grey "#{@spec.name ? 'value'}/#{@path.join '/'}"
 
-  report: (err) ->
+  report: (err, cb) ->
     message = "#{err.message} in #{@spec.name ? 'value'}/#{@path.join '/'}"
     message += " '#{@pos.title}'" if @pos.title?
     message += '. '
-    detail = []
+    detail = ''
     if @pos.description?
       desc = @pos.description[0].toLowerCase() + @pos.description[1..]
       desc = desc.replace /\.\s*$/, ''
       detail = "It should contain #{desc}. \n"
-    detail += exports.describe @
-    err = new Error message
-    err.description = detail if detail
-    err
+    detail +=
+    exports.describe @, (err, text) ->
+      detail += text
+      err = new Error message
+      err.description = detail if detail
+      cb err
 
   goInto: (names...) ->
     #console.log names, @
@@ -88,13 +90,13 @@ isEmpty = (value) ->
 # -------------------------------------------------
 # ### Get description of schema
 # This may be called using the spec or an already created work instance.
-exports.describe = (work) ->
+exports.describe = (work, cb) ->
   work = new Work work unless work instanceof Work
   # load library and call check
   lib = getTypeLib work.pos, (err, lib) ->
   unless lib.describe?
     throw new Error "Type '#{work.pos.type}' has no describe() method"
-  lib.describe work
+  lib.describe work, cb
 
 # ### Run check
 # This may be called using the spec or an already created work instance.

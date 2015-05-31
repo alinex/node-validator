@@ -12,7 +12,7 @@ check = require '../check'
 
 # Type implementation
 # -------------------------------------------------
-exports.describe = (work) ->
+exports.describe = (work, cb) ->
   # combine into message
   text = if work.pos.class?
     "A #{if work.pos.class then 'class' else 'function'} reference. "
@@ -20,6 +20,7 @@ exports.describe = (work) ->
     "The value has to be a function/class. "
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
+  cb null, text
 
 exports.run = (work, cb) ->
   debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
@@ -28,11 +29,11 @@ exports.run = (work, cb) ->
   try
     return cb() if check.optional.run work
   catch err
-    return cb work.report err
+    return work.report err, cb
   value = work.value
   # value check
   unless value instanceof Function
-    return cb work.report new Error "No function given as value"
+    return work.report (new Error "No function given as value"), cb
   # done return resulting value
   debug "#{work.debug} result #{util.inspect value}"
   cb null, value

@@ -51,6 +51,9 @@ npm install
 Usage
 -------------------------------------------------
 
+This library is implemented completely asynchronous, to allow io-operations
+and others within the validation.
+
 To use the validator you have to first include it:
 
 ``` coffee
@@ -79,7 +82,11 @@ message = validator.describe
   schema: schema      # definition of checks
   pos: ''             # position which to describe (optional)
   depth: 2            # level of depth to describe (optional)
+, (err, text) ->
+  # do something
 ```
+
+This will get the description un markdown format.
 
 Within your tests you may check your schema configurations:
 

@@ -42,7 +42,7 @@ optimize = (work) ->
 
 # Type implementation
 # -------------------------------------------------
-exports.describe = (work) ->
+exports.describe = (work, cb) ->
   optimize work
   # combine into message
   text = "A numeric floating point number. "
@@ -64,7 +64,7 @@ exports.describe = (work) ->
     text += "The value should be greater than #{work.pos.min}. "
   else if work.pos.max?
     text += "The value should be lower than #{work.pos.max}. "
-  text
+  cb null, text
 
 exports.run = (work, cb) ->
   optimize work
@@ -74,7 +74,7 @@ exports.run = (work, cb) ->
   try
     return cb() if check.optional.run work
   catch err
-    return cb work.report err
+    return work.report err, cb
   value = work.value
   # convert units
   if work.pos.unit?
@@ -99,12 +99,15 @@ exports.run = (work, cb) ->
     value = value / exp
   # is number
   unless not isNaN(parseFloat value) and isFinite value
-    return cb work.report new Error "The given value #{util.inspect value} is no number as needed"
+    return work.report (new Error "The given value #{util.inspect value} is no
+      number as needed"), cb
   # minmax
   if work.pos.min? and value < work.pos.min
-    return cb work.report new Error "The value is to low, it has to be at least #{work.pos.min}"
+    return work.report (new Error "The value is to low, it has to be at least
+      #{work.pos.min}"), cb
   if work.pos.max? and value > work.pos.max
-    return cb work.report new Error "The value is to high, it has to be'#{work.pos.max}' or lower"
+    return work.report (new Error "The value is to high, it has to be'#{work.pos.max}'
+      or lower"), cb
   # done return resulting value
   debug "#{work.debug} result #{util.inspect value}"
   cb null, value

@@ -25,7 +25,7 @@ check = require '../check'
 
 # Type implementation
 # -------------------------------------------------
-exports.describe = (work) ->
+exports.describe = (work, cb) ->
   text = 'An object. '
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
@@ -71,22 +71,37 @@ exports.describe = (work) ->
     list = allowedKeys.filter (e) -> not e in mandatoryKeys
     text += "The following keys are also allowed: #{list.join ','}"
   # subchecks
-  if work.pos.keys?
-    text += "The following entries have a specific format: "
-    for key of work.pos.keys
-      text += "\n- #{key}: "
-      # run subcheck
-      text += check.describe(work.goInto 'keys', key).replace /\n/g, '\n  '
-  if work.pos.entries?
-    text += "And all keys which are:"
-    for rule, i in work.pos.entries
-      if rule.key?
-        text += "\n- matching #{rule.key}: "
-      else
-        text += "\n- other keys: "
-      # run subcheck
-      text += check.describe(work.goInto 'entries', i).replace /\n/g, '\n  '
-  text
+  async.parallel [
+    (cb) ->
+      return cb() unless work.pos.keys?
+      subtext = "The following entries have a specific format: "
+      async.map Object.keys(work.pos.keys), (key, cb) ->
+        # run subcheck
+        check.describe work.goInto('keys', key), (err, text) ->
+          return cb err if err
+          cb null, "\n- #{key}: #{text.replace /\n/g, '\n  '}"
+      , (err, results) ->
+        return cb err if err
+        cb null, subtext + results.join('') + '\n'
+    (cb) ->
+      return cb() unless work.pos.entries?
+      subtext = "And all keys which are: "
+      async.map [0..work.pos.entries.length-1], (num, cb) ->
+        rule = work.pos.entries[num]
+        if rule.key?
+          ruletext = "\n- matching #{rule.key}: "
+        else
+          ruletext = "\n- other keys: "
+        # run subcheck
+        check.describe work.goInto('entries', num), (err, text) ->
+          return cb err if err
+          cb null, ruletext + text.replace /\n/g, '\n  '
+      , (err, results) ->
+        return cb err if err
+        cb null, subtext + results.join('') + '\n'
+  ], (err, results) ->
+    return cb err if err
+    cb null, (text + results.join '').trim() + ' '
 
 exports.run = (work, cb) ->
   debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
@@ -95,15 +110,16 @@ exports.run = (work, cb) ->
   try
     return cb() if check.optional.run work
   catch err
-    return cb work.report err
+    return work.report err, cb
   value = work.value
   # instanceof
   if work.pos.instanceOf?
     unless value instanceof work.pos.instanceOf
-      return cb work.report new Error "An object of #{work.pos.instanceOf.name} is needed as value"
+      return work.report (new Error "An object of #{work.pos.instanceOf.name} is
+        needed as value"), cb
   # is object
   if typeof value isnt 'object' or Array.isArray value
-    return cb work.report new Error "The value has to be an object"
+    return work.report (new Error "The value has to be an object"), cb
   # check object keys
   keys = Object.keys value
   # check mandatoryKeys
@@ -124,10 +140,10 @@ exports.run = (work, cb) ->
           fail = false
           break
       if fail
-        return cb work.report new Error "The mandatory key '#{key}' is missing"
+        return work.report (new Error "The mandatory key '#{key}' is missing"), cb
     else
       unless value[mandatory]?
-        return cb work.report new Error "The mandatory key '#{mandatory}' is missing"
+        return work.report (new Error "The mandatory key '#{mandatory}' is missing"), cb
   # check allowedKeys
   allowedKeys = work.pos.allowedKeys ? []
   if allowedKeys and typeof allowedKeys is 'boolean'
@@ -151,7 +167,7 @@ exports.run = (work, cb) ->
             isAllowed = true
             break
       unless isAllowed
-        return cb work.report new Error "The key '#{key}' is not allowed"
+        return work.report (new Error "The key '#{key}' is not allowed"), cb
   # values
   unless Object.keys(value).length
     # done return resulting value

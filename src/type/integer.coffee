@@ -36,7 +36,7 @@ integerTypes =
 
 # Type implementation
 # -------------------------------------------------
-exports.describe = (work) ->
+exports.describe = (work, cb) ->
   # combine into message
   text = "An integer value. "
   text += check.optional.describe work
@@ -70,7 +70,7 @@ exports.describe = (work) ->
     text += "The value should be greater than #{min}. "
   else if max?
     text += "The value should be lower than #{max}. "
-  text
+  cb null, text
 
 exports.run = (work, cb) ->
   debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
@@ -79,7 +79,7 @@ exports.run = (work, cb) ->
   try
     return cb() if check.optional.run work
   catch err
-    return cb work.report err
+    return work.report err, cb
   value = work.value
   # convert units
   if work.pos.unit?
@@ -104,7 +104,8 @@ exports.run = (work, cb) ->
       else Math.round value
   # check integer
   unless value is (value | 0)
-    return cb work.report new Error "The given value '#{work.value}' is no integer as needed"
+    return work.report (new Error "The given value '#{work.value}' is no integer
+      as needed"), cb
   # integer type
   if work.pos.inttype
     type = integerTypes[work.pos.inttype] ? work.pos.inttype
@@ -113,79 +114,81 @@ exports.run = (work, cb) ->
     max = (Math.pow 2, type-1+unsigned)-1
     min = (unsigned-1) * max - 1 + unsigned
     if value < min or value > max
-      return cb work.report new Error "The value is out of range for
-      #{work.pos.inttype}#{unit}-integer"
-  # minmax
+      return work.report (new Error "The value is out of range for
+      #{work.pos.inttype}#{unit}-integer"), cb
+  # min/max
   if work.pos.min? and value < work.pos.min
-    return cb work.report new Error "The value is to low, it has to be at least #{work.pos.min}"
+    return work.report (new Error "The value is to low, it has to be at least
+      #{work.pos.min}"), cb
   if work.pos.max? and value > work.pos.max
-    return cb work.report new Error "The value is to high, it has to be'#{work.pos.max}' or lower"
+    return work.report (new Error "The value is to high, it has to be'#{work.pos.max}'
+      or lower"), cb
   # done return resulting value
   debug "#{work.debug} result #{util.inspect value}"
   cb null, value
 
 exports.selfcheck =
-type: 'object'
-allowedKeys: true
-entries:
-  type:
-    type: 'string'
-  title:
-    type: 'string'
-    optional: true
-  description:
-    type: 'string'
-    optional: true
-  optional:
-    type: 'boolean'
-    optional: true
-  default:
-    type: 'integer'
-    optional: true
-  sanitize:
-    type: 'boolean'
-    optional: true
-  unit:
-    type: 'string'
-    optional: true
-    minLength: 1
-  round:
-    type: 'any'
-    optional: true
-    entries: [
+  type: 'object'
+  allowedKeys: true
+  entries:
+    type:
+      type: 'string'
+    title:
+      type: 'string'
+      optional: true
+    description:
+      type: 'string'
+      optional: true
+    optional:
       type: 'boolean'
-    ,
-      type: 'string'
-      values: ['floor', 'ceil']
-    ]
-  min:
-    type: 'any'
-    optional: true
-    entries: [
+      optional: true
+    default:
       type: 'integer'
-    ,
-#      rules.selfcheck.reference
-    ]
-  max:
-    type: 'any'
-    optional: true
+      optional: true
+    sanitize:
+      type: 'boolean'
+      optional: true
+    unit:
+      type: 'string'
+      optional: true
+      minLength: 1
+    round:
+      type: 'any'
+      optional: true
+      entries: [
+        type: 'boolean'
+      ,
+        type: 'string'
+        values: ['floor', 'ceil']
+      ]
     min:
-      reference: 'relative'
-      source: '<min'
-    entries: [
-      type: 'integer'
-    ,
-#      rules.selfcheck.reference
-    ]
-  inttype:
-    type: 'any'
-    optional: true
-    entries: [
-      type: 'integer'
-    ,
-      type: 'string'
-      values: ['byte', 'short','long','quad', 'safe']
-    ]
-  unsigned:
-    type: 'boolean'
-    optional: true
+      type: 'any'
+      optional: true
+      entries: [
+        type: 'integer'
+      ,
+  #      rules.selfcheck.reference
+      ]
+    max:
+      type: 'any'
+      optional: true
+      min:
+        reference: 'relative'
+        source: '<min'
+      entries: [
+        type: 'integer'
+      ,
+  #      rules.selfcheck.reference
+      ]
+    inttype:
+      type: 'any'
+      optional: true
+      entries: [
+        type: 'integer'
+      ,
+        type: 'string'
+        values: ['byte', 'short','long','quad', 'safe']
+      ]
+    unsigned:
+      type: 'boolean'
+      optional: true

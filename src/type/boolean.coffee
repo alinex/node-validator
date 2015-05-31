@@ -17,7 +17,7 @@ valuesFalse = ['false', '0', 'off', 'no', '-', 0, false]
 
 # Type implementation
 # -------------------------------------------------
-exports.describe = (work) ->
+exports.describe = (work, cb) ->
   # get possible values
   vTrue = valuesTrue.map(util.inspect).join ', '
   vFalse = valuesFalse.map(util.inspect).join ', '
@@ -25,6 +25,7 @@ exports.describe = (work) ->
   text = "A boolean value, which will be true for #{vTrue} and
   will be considered as false for #{vFalse}. "
   text += check.optional.describe work
+  cb null, text
 
 exports.run = (work, cb) ->
   debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
@@ -33,7 +34,7 @@ exports.run = (work, cb) ->
   try
     return cb() if check.optional.run work
   catch err
-    return cb work.report err
+    return work.report err, cb
   value = work.value
   # sanitize
   value = value.trim().toLowerCase() if typeof value is 'string'
@@ -45,7 +46,7 @@ exports.run = (work, cb) ->
     debug "#{work.debug} result #{util.inspect false}"
     return cb null, false
   # failed
-  cb work.report new Error "No boolean value given"
+  work.report (new Error "No boolean value given"), cb
 
 exports.selfcheck =
   type: 'object'

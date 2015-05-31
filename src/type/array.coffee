@@ -27,7 +27,7 @@ check = require '../check'
 
 # Type implementation
 # -------------------------------------------------
-exports.describe = (work) ->
+exports.describe = (work, cb) ->
   text = 'A list. '
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
@@ -43,18 +43,28 @@ exports.describe = (work) ->
     text += "At least #{work.pos.minLength} elements should be given. "
   else if work.pos.maxLength?
     text += "Not more than #{work.pos.maxLength} elements are allowed. "
-
-  if work.pos.list?
-    text += "The following entries have a specific format: "
-    for entry, num in work.pos.list
-      text += "\n- #{num}: "
+  async.parallel [
+    (cb) ->
+      return cb() unless work.pos.list?
+      subtext = "The following entries have a specific format:"
+      async.map [0..work.pos.list.length-1], (num, cb) ->
+        # run subcheck
+        check.describe work.goInto('list', num), (err, text) ->
+          return cb err if err
+          cb null, "\n- #{num}: #{text.replace /\n/g, '\n  '}"
+      , (err, results) ->
+        return cb err if err
+        cb null, subtext + results.join('') + '\n'
+    (cb) ->
+      return cb() unless work.pos.entries?
+      subtext = "And all other entries have to be:\n- "
       # run subcheck
-      text += check.describe(work.goInto 'list', num).replace /\n/g, '\n  '
-  if work.pos.entries?
-    text += "And all other entries have to be:"
-    # run subcheck
-    text += check.describe(work.goInto 'entries').replace /\n/g, '\n  '
-  text
+      check.describe work.goInto('entries'), (err, text) ->
+        return cb err if err
+        cb null, subtext + (text.replace /\n/g, '\n  ') + '\n'
+  ], (err, results) ->
+    return cb err if err
+    cb null, (text + results.join '').trim() + ' '
 
 exports.run = (work, cb) ->
   debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
@@ -63,7 +73,7 @@ exports.run = (work, cb) ->
   try
     return cb() if check.optional.run work
   catch err
-    return cb work.report err
+    return work.report err, cb
   value = work.value
   # string to array
   if typeof value is 'string' and work.pos.delimiter?
@@ -72,19 +82,19 @@ exports.run = (work, cb) ->
     value = [value]
   # is array
   unless Array.isArray value
-    return cb work.report new Error "The value has to be an array"
+    return work.report (new Error "The value has to be an array"), cb
   # not empty
   if work.pos.notEmpty and value.length is 0
-    return cb work.report new Error "An empty array/list is not allowed"
+    return work.report (new Error "An empty array/list is not allowed"), cb
   # min/macLength
   if work.pos.minLength? and work.pos.minLength is work.pos.maxLength and (
     value.length isnt work.pos.minLength)
-    return cb work.report new Error "Exactly #{work.pos.minLength} entries are required"
+    return work.report (new Error "Exactly #{work.pos.minLength} entries are required"), cb
   else if work.pos.minLength? and work.pos.minLength > value.length
-    return cb work.report new Error "At least #{work.pos.minLength} entries are required as list"
+    return work.report (new Error "At least #{work.pos.minLength} entries are required as list"), cb
   else if work.pos.maxLength? and work.pos.maxLength < value.length
-    return cb work.report new Error "Not more than #{work.pos.maxLength} entries
-    are allowed as list"
+    return work.report (new Error "Not more than #{work.pos.maxLength} entries
+    are allowed as list"), cb
   # values
   unless value.length
     # done return resulting value

@@ -54,26 +54,28 @@ describe "Boolean", ->
 
   describe "description", ->
 
-    it "should give simple description", ->
-      test.describe schema
+    it "should give simple description", (cb) ->
+      test.describe schema, cb
 
-    it "should give complete description", ->
+    it "should give complete description", (cb) ->
       test.describe
         title: 'test'
         description: 'Some test rules'
         type: 'boolean'
         optional: true
         default: true
+      , cb
 
   describe.skip "selfcheck", ->
 
-    it "should validate simple options", ->
-      test.selfcheck schema
+    it "should validate simple options", (cb) ->
+      test.selfcheck schema, cb
 
-    it "should validate complete options", ->
+    it "should validate complete options", (cb) ->
       test.selfcheck
         title: 'test'
         description: 'Some test rules'
         type: 'boolean'
         optional: true
         default: true
+      , cb
