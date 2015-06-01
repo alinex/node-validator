@@ -93,7 +93,7 @@ Within your tests you may check your schema configurations:
 ``` coffee
 validator.selfcheck
   name: 'test'        # name to be displayed in errors
-  schema: schema      # definition of checks
+  schema: schema      # definition to check
 , (err) ->
   # do something
 ```
@@ -764,7 +764,7 @@ succeed. The first one succeeding will work.
 
 __Option:__
 
-- `entries` - (array) with different check alternatives
+- `or` - (array) with different check alternatives
 
 ### and
 
@@ -773,7 +773,7 @@ all have to succeed.
 
 __Option:__
 
-- `entries` - (array) with multiple check rules
+- `and` - (array) with multiple check rules
 
 With this it is possible to use a string-check to sanitize and then use an
 other test to finalize the value like:
@@ -784,7 +784,7 @@ validator.check
   value: input        # value to check
   schema:             # definition of checks
     type: 'and'
-    entries: [
+    and: [
       type: 'string'
       toString: true
       replace: [/,/g, '.']
