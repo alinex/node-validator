@@ -3,13 +3,13 @@ async = require 'alinex-async'
 
 test = require '../../test'
 
-describe.only "And", ->
+describe "And", ->
 
   schema = null
   beforeEach ->
     schema =
       type: 'and'
-      entries: [
+      and: [
         type: 'string'
         toString: true
         replace: [/,/g, '.']
@@ -59,14 +59,14 @@ describe.only "And", ->
         title: 'test'
         description: 'Some test rules'
         type: 'and'
-        entries: [
+        and: [
           type: 'string'
         ,
           type: 'integer'
         ]
       , cb
 
-  describe.skip "selfcheck", ->
+  describe "selfcheck", ->
 
     it "should validate simple options", (cb) ->
       test.selfcheck schema, cb
@@ -75,8 +75,8 @@ describe.only "And", ->
       test.selfcheck
         title: 'test'
         description: 'Some test rules'
-        type: 'any'
-        entries: [
+        type: 'and'
+        and: [
           type: 'integer'
         ,
           type: 'string'

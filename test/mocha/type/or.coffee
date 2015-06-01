@@ -9,7 +9,7 @@ describe "Or", ->
   beforeEach ->
     schema =
       type: 'or'
-      entries: [
+      or: [
         type: 'integer'
       ,
         type: 'boolean'
@@ -50,14 +50,14 @@ describe "Or", ->
         title: 'test'
         description: 'Some test rules'
         type: 'or'
-        entries: [
+        or: [
           type: 'integer'
         ,
           type: 'string'
         ]
       , cb
 
-  describe.skip "selfcheck", ->
+  describe "selfcheck", ->
 
     it "should validate simple options", (cb) ->
       test.selfcheck schema, cb
@@ -66,8 +66,8 @@ describe "Or", ->
       test.selfcheck
         title: 'test'
         description: 'Some test rules'
-        type: 'any'
-        entries: [
+        type: 'or'
+        or: [
           type: 'integer'
         ,
           type: 'string'

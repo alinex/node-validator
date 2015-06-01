@@ -11,6 +11,7 @@
 # - `notEmpty` - set to true if an empty array is not valid
 # - `minLength` - minimum number of entries
 # - `maxLength` - maximum number of entries
+# - `toArray` - convert scalar values into array
 #
 # Validating children:
 #
@@ -19,9 +20,11 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:array')
-async = require 'alinex-async'
 util = require 'util'
 chalk = require 'chalk'
+# alinex modules
+object = require('alinex-util').object
+async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
 
@@ -116,53 +119,55 @@ exports.run = (work, cb) ->
     debug "#{work.debug} result #{util.inspect value}"
     cb null, value
 
-exports.selfcheck = ->
-  type: 'object'
-  allowedKeys: true
-  entries:
-    type:
-      type: 'string'
-    title:
-      type: 'string'
-      optional: true
-    description:
-      type: 'string'
-      optional: true
-    optional:
-      type: 'boolean'
-      optional: true
-    default:
-      type: 'array'
-      optional: true
-    delimiter:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'string'
-      ,
-        type: 'object'
-        instanceOf: RegExp
-      ]
-    notEmpty:
-      type: 'boolean'
-      optional: true
-    minLength:
-      type: 'integer'
-      optional: true
-      min: 0
-    maxLength:
-      type: 'integer'
-      optional: true
-      min:
-        reference: 'relative'
-        source: '<minLength'
-    entries:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'object'
-      ,
-        type: 'array'
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: object.extend {}, check.base,
+        default:
+          type: 'array'
+          optional: true
+        delimiter:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'string'
+          ,
+            type: 'object'
+            instanceOf: RegExp
+          ]
+        toArray:
+          type: 'boolean'
+          optional: true
+        notEmpty:
+          type: 'boolean'
+          optional: true
+        minLength:
+          type: 'integer'
+          optional: true
+          min: 0
+        maxLength:
+          type: 'integer'
+          optional: true
+#          min: '<<<minLength>>>'
+        list:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'object'
+          ,
+            type: 'array'
+          ]
         entries:
-          type: 'object'
-      ]
+          type: 'or'
+          or: [
+            type: 'object'
+          ,
+            type: 'array'
+          ,
+            type: 'string'
+          ]
+
+    value: schema
+  , cb

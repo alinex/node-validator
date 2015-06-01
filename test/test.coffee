@@ -93,7 +93,4 @@ exports.equal = (schema, values, cb) ->
   , cb
 
 exports.selfcheck = (schema, cb) ->
-  validator.selfcheck 'test', schema, (err, result) ->
-    expect(err, 'error').to.not.exist
-    expect(result, 'result').to.exist
-    cb()
+  validator.selfcheck schema, cb

@@ -7,6 +7,8 @@
 debug = require('debug')('validator:boolean')
 util = require 'util'
 chalk = require 'chalk'
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
 
@@ -48,23 +50,14 @@ exports.run = (work, cb) ->
   # failed
   work.report (new Error "No boolean value given"), cb
 
-exports.selfcheck =
-  type: 'object'
-  allowedKeys: true
-  entries:
-    type:
-      type: 'string'
-    title:
-      type: 'string'
-      optional: true
-    description:
-      type: 'string'
-      optional: true
-    optional:
-      type: 'boolean'
-      optional: true
-    default:
-      type: 'boolean'
-      optional: true
-
-
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: object.extend {}, check.base,
+        default:
+          type: 'boolean'
+          optional: true
+    value: schema
+  , cb

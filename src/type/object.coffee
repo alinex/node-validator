@@ -15,11 +15,11 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:object')
-async = require 'alinex-async'
 util = require 'util'
 chalk = require 'chalk'
 # alinex modules
-array = require('alinex-util').array
+object = require('alinex-util').object
+async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
 
@@ -195,45 +195,54 @@ exports.run = (work, cb) ->
     debug "#{work.debug} result #{util.inspect value}"
     cb null, value
 
-exports.selfcheck = ->
-  type: 'object'
-  allowedKeys: true
-  entries:
-    type:
-      type: 'string'
-    title:
-      type: 'string'
-      optional: true
-    description:
-      type: 'string'
-      optional: true
-    optional:
-      type: 'boolean'
-      optional: true
-    default:
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
       type: 'object'
-      optional: true
-    instanceOf:
-      type: 'function'
-      class: true
-      optional: true
-    mandatoryKeys:
-      type: 'array'
-      optional: true
-      entries:
-        type: 'string'
-    allowedKeys:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'boolean'
-      ,
-        type: 'array'
+      allowedKeys: true
+      keys: object.extend {}, check.base,
+        default:
+          type: 'object'
+          optional: true
+        instanceOf:
+          type: 'function'
+          optional: true
+        mandatoryKeys:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'array'
+            entries:
+              type: 'or'
+              or: [
+                type: 'string'
+              ,
+                type: 'regexp'
+              ]
+          ]
+        allowedKeys:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'array'
+            entries:
+              type: 'or'
+              or: [
+                type: 'string'
+              ,
+                type: 'regexp'
+              ]
+          ]
         entries:
-          type: 'string'
-      ,
-        type: 'regexp'
-      ]
-    entries:
-      type: 'object'
-      optional: true
+          type: 'array'
+          optional: true
+        keys:
+          type: 'object'
+          optional: true
+    value: schema
+  , cb
+

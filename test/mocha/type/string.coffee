@@ -192,7 +192,7 @@ describe "String", ->
         matchNot: /\d/
       , cb
 
-  describe.skip "selfcheck", ->
+  describe "selfcheck", ->
 
     it "should validate simple options", (cb) ->
       test.selfcheck schema, cb
@@ -209,7 +209,7 @@ describe "String", ->
         stripTags: true
         lowerCase: true
         upperCase: 'first'
-        replace: ['test', 'done']
+        replace: [/test/, 'done']
         trim: true
         crop: 50
         minLength: 5

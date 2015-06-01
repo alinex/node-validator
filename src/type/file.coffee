@@ -198,7 +198,7 @@ module.exports = file =
     validator.check name,
       type: 'object'
       allowedKeys: true
-      entries:
+      keys:
         type:
           type: 'string'
         title:

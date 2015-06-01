@@ -38,5 +38,5 @@ exports.check = (spec, cb) ->
 # Check validation rules
 # -------------------------------------------------
 # This may be used in tests to check the validator check options if they are valid.
-exports.selfcheck = (spec, cb) ->
-  check.selfcheck spec, cb
+exports.selfcheck = (schema, cb) ->
+  check.selfcheck schema, cb

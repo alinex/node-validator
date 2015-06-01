@@ -105,7 +105,7 @@ describe "Float", ->
         max: 20
       , cb
 
-  describe.skip "selfcheck", ->
+  describe "selfcheck", ->
 
     it "should validate simple options", (cb) ->
       test.selfcheck schema, cb

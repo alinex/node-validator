@@ -115,19 +115,16 @@ exports.run = (work, cb) ->
 
 # ### Selfcheck of schema
 # This may be called using the spec or an already created work instance.
-exports.selfcheck = (work, cb) ->
-  work = new Work work unless work instanceof Work
+exports.selfcheck = (schema, cb) ->
+  debug "check schema #{util.inspect schema}"
   # load library and call check
   try
-    lib = getTypeLib work.pos, (err, lib) ->
+    lib = getTypeLib schema, (err, lib) ->
     unless lib.selfcheck?
-      return cb new Error "Type '#{work.pos.type}' has no selfcheck() method"
+      return cb new Error "Type '#{schema.type}' has no selfcheck() method"
   catch err
-    return cb new Error "Type '#{work.pos.type}' not supported"
-  lib.run
-    name: 'selfcheck'
-    schema: lib.selfcheck work
-  , cb
+    return cb new Error "Type '#{schema.type}' not supported"
+  lib.selfcheck schema, cb
 
 # General checks
 # -------------------------------------------------
@@ -153,3 +150,16 @@ exports.optional =
       return false
     return true if work.pos.optional # end this test without value
     throw new Error "A value is needed"
+
+exports.base =
+  title:
+    type: 'string'
+    optional: true
+  description:
+    type: 'string'
+    optional: true
+  type:
+    type: 'string'
+  optional:
+    type: 'boolean'
+    optional: true

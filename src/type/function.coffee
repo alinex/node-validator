@@ -7,6 +7,8 @@
 debug = require('debug')('validator:function')
 util = require 'util'
 chalk = require 'chalk'
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
 
@@ -38,21 +40,14 @@ exports.run = (work, cb) ->
   debug "#{work.debug} result #{util.inspect value}"
   cb null, value
 
-exports.selfcheck =
-  type: 'object'
-  allowedKeys: true
-  entries:
-    type:
-      type: 'string'
-    title:
-      type: 'string'
-      optional: true
-    description:
-      type: 'string'
-      optional: true
-    optional:
-      type: 'boolean'
-      optional: true
-    default:
-      type: 'function'
-      optional: true
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: object.extend {}, check.base,
+        default:
+          type: 'function'
+          optional: true
+    value: schema
+  , cb

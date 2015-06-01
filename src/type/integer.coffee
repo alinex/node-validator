@@ -22,6 +22,8 @@ debug = require('debug')('validator:integer')
 util = require 'util'
 chalk = require 'chalk'
 math = require 'mathjs'
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
 
@@ -127,68 +129,47 @@ exports.run = (work, cb) ->
   debug "#{work.debug} result #{util.inspect value}"
   cb null, value
 
-exports.selfcheck =
-  type: 'object'
-  allowedKeys: true
-  entries:
-    type:
-      type: 'string'
-    title:
-      type: 'string'
-      optional: true
-    description:
-      type: 'string'
-      optional: true
-    optional:
-      type: 'boolean'
-      optional: true
-    default:
-      type: 'integer'
-      optional: true
-    sanitize:
-      type: 'boolean'
-      optional: true
-    unit:
-      type: 'string'
-      optional: true
-      minLength: 1
-    round:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'boolean'
-      ,
-        type: 'string'
-        values: ['floor', 'ceil']
-      ]
-    min:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'integer'
-      ,
-  #      rules.selfcheck.reference
-      ]
-    max:
-      type: 'any'
-      optional: true
-      min:
-        reference: 'relative'
-        source: '<min'
-      entries: [
-        type: 'integer'
-      ,
-  #      rules.selfcheck.reference
-      ]
-    inttype:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'integer'
-      ,
-        type: 'string'
-        values: ['byte', 'short','long','quad', 'safe']
-      ]
-    unsigned:
-      type: 'boolean'
-      optional: true
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: object.extend {}, check.base,
+        default:
+          type: 'integer'
+          optional: true
+        sanitize:
+          type: 'boolean'
+          optional: true
+        unit:
+          type: 'string'
+          optional: true
+          minLength: 1
+        round:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['floor', 'ceil']
+          ]
+        min:
+          type: 'integer'
+        max:
+          type: 'integer'
+#          min: '<<<min>>>'
+        inttype:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'integer'
+          ,
+            type: 'string'
+            values: ['byte', 'short','long','quad', 'safe']
+          ]
+        unsigned:
+          type: 'boolean'
+          optional: true
+    value: schema
+  , cb

@@ -46,7 +46,7 @@ describe "Function", ->
         default: RegExp
       , cb
 
-  describe.skip "selfcheck", ->
+  describe "selfcheck", ->
 
     it "should validate simple options", (cb) ->
       test.selfcheck schema, cb

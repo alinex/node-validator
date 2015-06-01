@@ -32,6 +32,8 @@
 debug = require('debug')('validator:string')
 util = require 'util'
 chalk = require 'chalk'
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
 
@@ -204,124 +206,108 @@ exports.run = (work, cb) ->
   debug "#{work.debug} result #{util.inspect value}"
   cb null, value
 
-exports.selfcheck =
-  type: 'object'
-  allowedKeys: true
-  entries:
-    type:
-      type: 'string'
-    title:
-      type: 'string'
-      optional: true
-    description:
-      type: 'string'
-      optional: true
-    optional:
-      type: 'boolean'
-      optional: true
-    default:
-      type: 'string'
-      optional: true
-    tostring:
-      type: 'boolean'
-      optional: true
-    allowControls:
-      type: 'boolean'
-      optional: true
-    stripTags:
-      type: 'boolean'
-      optional: true
-    lowerCase:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'boolean'
-      ,
-        type: 'string'
-        values: ['first']
-      ]
-    upperCase:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'boolean'
-      ,
-        type: 'string'
-        values: ['first']
-      ]
-    replace:
-      type: 'array'
-      optional: true
-      entries: [
-        type: 'any'
-        entries: [
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: object.extend {}, check.base,
+        default:
           type: 'string'
-        ,
-          type: 'object'
-          instanceOf: RegExp
-        ,
+          optional: true
+        toString:
+          type: 'boolean'
+          optional: true
+        allowControls:
+          type: 'boolean'
+          optional: true
+        stripTags:
+          type: 'boolean'
+          optional: true
+        lowerCase:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['first']
+          ]
+        upperCase:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['first']
+          ]
+        replace:
+          type: 'or'
+          or: [
+            type: 'array'
+            list:
+              0:
+                type: 'object'
+                instanceOf: RegExp
+              1:
+                type: 'string'
+          ,
+            type: 'array'
+            entries:
+              type: 'array'
+              list:
+                0:
+                  type: 'object'
+                  instanceOf: RegExp
+                1:
+                  type: 'string'
+          ]
+        trim:
+          type: 'boolean'
+          optional: true
+        crop:
+          type: 'integer'
+          optional: true
+          min: 1
+        minLength:
+          type: 'integer'
+          optional: true
+          min: 0
+        maxLength:
+          type: 'integer'
+          optional: true
+#          min: '<<<min>>>'
+        values:
           type: 'array'
-          entries: [
+          optional: true
+          entries:
+            type: 'string'
+        startsWith:
+          type: 'string'
+          optional: true
+        endsWith:
+          type: 'string'
+          optional: true
+        match:
+          type: 'or'
+          optional: true
+          or: [
             type: 'string'
           ,
             type: 'object'
             instanceOf: RegExp
           ]
-        ]
-      ,
-        type: 'any'
-        entries: [
-          type: 'string'
-        ,
-          type: 'array'
-          entries:
+        matchNot:
+          type: 'or'
+          optional: true
+          or: [
             type: 'string'
-        ]
-      ]
-    trim:
-      type: 'boolean'
-      optional: true
-    crop:
-      type: 'integer'
-      optional: true
-      min: 1
-    minLength:
-      type: 'integer'
-      optional: true
-      min: 0
-    maxLength:
-      type: 'integer'
-      optional: true
-      min:
-        reference: 'relative'
-        source: '<minLength'
-    values:
-      type: 'array'
-      optional: true
-      entries:
-        type: 'string'
-    startsWith:
-      type: 'string'
-      optional: true
-    endsWith:
-      type: 'string'
-      optional: true
-    match:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'string'
-      ,
-        type: 'object'
-        instanceOf: RegExp
-      ]
-    matchNot:
-      type: 'any'
-      optional: true
-      entries: [
-        type: 'string'
-      ,
-        type: 'object'
-        instanceOf: RegExp
-      ]
+          ,
+            type: 'object'
+            instanceOf: RegExp
+          ]
+    value: schema
+  , cb
+
 

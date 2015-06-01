@@ -117,7 +117,7 @@ describe "Array", ->
         ]
       , cb
 
-  describe.skip "selfcheck", ->
+  describe.only "selfcheck", ->
 
     it "should validate simple options", (cb) ->
       test.selfcheck schema, cb
