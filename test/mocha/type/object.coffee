@@ -103,10 +103,10 @@ describe "Object", ->
             type: 'string'
       , cb
 
-  describe.skip "selfcheck", ->
+  describe "selfcheck", ->
 
     it "should validate simple options", (cb) ->
-      test.selfcheck options, cb
+      test.selfcheck schema, cb
 
     it "should validate instance options", (cb) ->
       test.selfcheck
@@ -121,7 +121,7 @@ describe "Object", ->
         type: 'object'
         mandatoryKeys: ['one']
         allowedKeys: ['two']
-        entries:
+        keys:
           one:
             type: 'integer'
           two:

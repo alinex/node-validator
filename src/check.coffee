@@ -158,6 +158,9 @@ exports.base =
   description:
     type: 'string'
     optional: true
+  key:
+    type: 'regexp'
+    optional: true
   type:
     type: 'string'
   optional:

@@ -16,10 +16,13 @@ debug = require('debug')('validator:ipaddr')
 util = require 'util'
 chalk = require 'chalk'
 ipaddr = require 'ipaddr.js'
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
-ValidatorCheck = require '../check'
-rules = require '../rules'
+check = require '../check'
 
+# Configuration
+# -------------------------------------------------
 specialRanges =
   unspecified: [
     '0.0.0.0/8'
@@ -62,128 +65,127 @@ all = []
 all.concat list for name, list of specialRanges
 specialRanges.special = all
 
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) ->
+  text = 'A valid IP address. '
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  if work.pos.version
+    if work.pos.version is 'ipv4'
+      text += "Only IPv4 addresses are valid. "
+    else
+      text += "Only IPv6 addresses are valid. "
+    if work.pos.ipv4Mapping
+      text += "IPv4 addresses may be automatically converted. "
+  if work.pos.deny
+    text += "The IP address should not be in the ranges: '#{work.pos.deny.join '\', \''}'. "
+    if work.pos.allow
+      text += "But IP address in the ranges: '#{work.pos.allow.join '\', \''}' are allowed. "
+  else if work.pos.allow
+    text += "The IP address have to be in the ranges: '#{work.pos.allow.join '\', \''}'. "
+  switch work.pos.format
+    when 'short'
+      text += 'An IPv6 address will be compressed as possible. '
+    when 'long'
+      text += 'An IPv6 address will be normalized with all octets visible. '
+  cb null, text
 
-suboptions = (options) ->
-  settings =
-    type: 'string'
-  settings
-
-module.exports =
-
-  # Description
-  # -------------------------------------------------
-  describe:
-
-    # ### Type Description
-    type: (options) ->
-      text = 'A valid IP address. '
-      text += rules.describe.optional options
-      text = text.replace /\. It's/, ' which is'
-      if options.deny
-        text += "The IP address should not be in the ranges: '#{options.deny.join '\', \''}'. "
-        if options.allow
-          text += "But IP address in the ranges: '#{options.allow.join '\', \''}' are allowed. "
-      else if options.allow
-        text += "The IP address have to be in the ranges: '#{options.allow.join '\', \''}'. "
-      switch options.format
-        when 'short'
-          text += 'An IPv6 address will be compressed as possible. '
-        when 'long'
-          text += 'An IPv6 address will be normalized with all octets visible. '
-      text
-
-
-  # Synchronous check
-  # -------------------------------------------------
-  sync:
-
-    # ### Check Type
-    type: (check, path, options, value) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      # first check input type
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      value = check.subcall path, suboptions(options), value
-      # validate
-      unless ipaddr.isValid value
-        throw check.error path, options, value,
-        new Error "The given value '#{value}' is no valid IPv6 or IPv4 address"
-      ip = ipaddr.parse value
-      debug "analyzed #{ip.kind()}", ip
-      # format value
-      if options.version
-        if options.version is 'ipv4'
-          if ip.kind() is 'ipv6'
-            if ip.isIPv4MappedAddress()
-              debug 'convert to ipv4'
-              ip = ip.toIPv4Address()
-            else
-              throw check.error path, options, value,
-              new Error "The given value '#{value}' is no valid IPv#{options.version} address"
-        else
-          if ip.kind() is 'ipv4'
-            debug 'convert to ipv4mapped'
-            ip = ip.toIPv4MappedAddress()
-      if ip.kind() is 'ipv6'
-        value = if options.format is 'long' then ip.toNormalizedString() else ip.toString()
+exports.run = (work, cb) ->
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    return cb() if check.optional.run work
+  catch err
+    return work.report err, cb
+  value = work.value
+  # first check input type
+  check.run
+    name: "#{work.spec.name ? 'value'}/#{work.path.join '/'}"
+    value: work.value
+    schema:
+      type: 'string'
+  , (err, value) ->
+    return cb err if err
+    # validate
+    unless ipaddr.isValid value
+      return work.report (new Error "The given value '#{value}' is no valid IPv6
+        or IPv4 address"), cb
+    ip = ipaddr.parse value
+    debug "analyzed #{ip.kind()}", ip
+    # format value
+    if work.pos.version
+      if work.pos.version is 'ipv4'
+        if ip.kind() is 'ipv6'
+          if ip.isIPv4MappedAddress() and work.pos.ipv4Mapping
+            debug 'convert to ipv4'
+            ip = ip.toIPv4Address()
+          else
+            return work.report (new Error "The given value '#{value}' is no valid
+              IPv#{work.pos.version} address"), cb
       else
-        value = ip.toString()
-      # check ranges
-      if options.allow
-        for entry in options.allow
-          if specialRanges[entry]?
-            for subentry in specialRanges[entry]
-              [addr, bits] = subentry.split /\//
-              return value if ip.match ipaddr.parse(addr), bits
-          else
-            [addr, bits] = entry.split /\//
-            return value if ip.match ipaddr.parse(addr), bits
-        # ip not in the allowed range
-        unless options.deny
-          throw check.error path, options, value,
-          new Error "The given ip address '#{value}' is not in the allowed ranges"
-      if options.deny
-        for entry in options.deny
-          if specialRanges[entry]?
-            for subentry in specialRanges[entry]
-              [addr, bits] = subentry.split /\//
-              if ip.match ipaddr.parse(addr), bits
-                throw check.error path, options, value,
-                new Error "The given ip address '#{value}' is denied because in range #{entry}"
-          else
-            [addr, bits] = entry.split /\//
+        if ip.kind() is 'ipv4'
+          unless work.pos.ipv4Mapping
+            return work.report (new Error "The given value '#{value}' is no valid
+              IPv#{work.pos.version} address"), cb
+          debug 'convert to ipv4mapped'
+          ip = ip.toIPv4MappedAddress()
+    if ip.kind() is 'ipv6'
+      value = if work.pos.format is 'long' then ip.toNormalizedString() else ip.toString()
+    else
+      value = ip.toString()
+    # check ranges
+    if work.pos.allow
+      for entry in work.pos.allow
+        if specialRanges[entry]?
+          for subentry in specialRanges[entry]
+            [addr, bits] = subentry.split /\//
             if ip.match ipaddr.parse(addr), bits
-              throw check.error path, options, value,
-              new Error "The given ip address '#{value}' is denied because in range #{entry}"
-      # ip also not in the denied range so allowed again
-      value
+              debug "#{work.debug} result #{util.inspect value}"
+              return cb null, value
+        else
+          [addr, bits] = entry.split /\//
+          if ip.match ipaddr.parse(addr), bits
+            debug "#{work.debug} result #{util.inspect value}"
+            return cb null, value
+      # ip not in the allowed range
+      unless work.pos.deny
+        return work.report (new Error "The given ip address '#{value}' is not in
+          the allowed ranges"), cb
+    if work.pos.deny
+      for entry in work.pos.deny
+        if specialRanges[entry]?
+          for subentry in specialRanges[entry]
+            [addr, bits] = subentry.split /\//
+            if ip.match ipaddr.parse(addr), bits
+              return work.report (new Error "The given ip address '#{value}' is
+                denied because in range #{entry}"), cb
+        else
+          [addr, bits] = entry.split /\//
+          if ip.match ipaddr.parse(addr), bits
+            return work.report (new Error "The given ip address '#{value}' is
+              denied because in range #{entry}"), cb
+    # ip also not in the denied range so allowed again
+    # done return resulting value
+    debug "#{work.debug} result #{util.inspect value}"
+    cb null, value
 
-  # Selfcheck
-  # -------------------------------------------------
-  selfcheck: (name, options) ->
-    validator = require '../index'
-    validator.check name,
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
       type: 'object'
       allowedKeys: true
-      entries:
-        type:
-          type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
+      keys: object.extend {}, check.base,
         default:
           type: 'string'
           optional: true
         version:
           type: 'string'
           values: ['ipv4', 'ipv6']
+          optional: true
+        ipv4Mapping:
+          type: 'boolean'
           optional: true
         deny:
           type: 'array'
@@ -287,5 +289,6 @@ module.exports =
           type: 'string'
           default: 'short'
           values: ['short', 'long']
-    , options
+    value: schema
+  , cb
 

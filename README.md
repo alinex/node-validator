@@ -114,6 +114,8 @@ attributes. The common attributes are:
 - title - gives a short title for the element
 - description - has a more descriptive information
 - type - check type
+- key - used in object's entries to give a regexp matchhing the keys for which
+  the rule is specified.
 
 In it's easiest way the schema definition includes only a type:
 
@@ -879,6 +881,8 @@ The value has to be a IP address.
 __Check options:__
 
 - `version` - one of 'ipv4' or 'ipv6' and the value will be converted, if possible
+- `ipv4Mapping` - (boolean) set to true to allow mapping ipv4 addresses in both
+  directions to succeed version specification if possible.
 - `allow` - the allowed ip ranges
 - `deny` - the denied ip ranges
 
