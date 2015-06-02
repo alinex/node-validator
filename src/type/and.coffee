@@ -53,6 +53,9 @@ exports.selfcheck = (schema, cb) ->
       type: 'object'
       allowedKeys: true
       keys: object.extend {}, check.base,
+        default:
+          type: 'any'
+          optional: true
         and:
           type: 'array'
           entries:

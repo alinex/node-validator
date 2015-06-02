@@ -26,7 +26,7 @@ describe "String", ->
 
   describe "simple check", ->
 
-    it "should match float objects", (cb) ->
+    it "should match string objects", (cb) ->
       test.same schema, ['hello', '1', ''], cb
 
     it "should fail on other objects", (cb) ->

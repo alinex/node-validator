@@ -492,6 +492,9 @@ it "should has correct validator rules", (cb) ->
 Basic Check Types
 -------------------------------------------------
 
+The type `any` is only used internally and matches any value. It is used as default
+if nothing is specified for an value and makes the checks homogeneous.
+
 ### boolean
 
 The value has to be a boolean. The value will be true for 1, 'true', 'on',
@@ -932,7 +935,7 @@ checks it's configuration file.
 title: "Monitoring Configuration"
 type: 'object'
 allowedKeys: ['runat', 'contacts', 'email']
-entries:
+keys:
   runat:
     title: "Location"
     description: "the location of this machine to run only tests which have
@@ -945,7 +948,7 @@ entries:
       email alerts"
     type: 'object'
     entries:
-      type: 'any'
+      type: 'or'
       entries: [
         title: "Contact Group"
         description: "the list of references in the group specifies the individual

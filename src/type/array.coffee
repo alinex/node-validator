@@ -160,14 +160,8 @@ exports.selfcheck = (schema, cb) ->
             type: 'array'
           ]
         entries:
-          type: 'or'
-          or: [
-            type: 'object'
-          ,
-            type: 'array'
-          ,
-            type: 'string'
-          ]
+          type: 'any'
+          optional: true
 
     value: schema
   , cb
