@@ -68,7 +68,7 @@ specialRanges.special = all
 # Type implementation
 # -------------------------------------------------
 exports.describe = (work, cb) ->
-  text = 'A valid IP address. '
+  text = 'A valid IP address as string. '
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
   if work.pos.version
@@ -101,8 +101,11 @@ exports.run = (work, cb) ->
     return work.report err, cb
   value = work.value
   # first check input type
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
   check.run
-    name: "#{work.spec.name ? 'value'}/#{work.path.join '/'}"
+    name: name
     value: work.value
     schema:
       type: 'string'

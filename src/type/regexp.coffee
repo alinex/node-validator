@@ -11,68 +11,80 @@
 debug = require('debug')('validator:regexp')
 util = require 'util'
 chalk = require 'chalk'
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
-ValidatorCheck = require '../check'
-rules = require '../rules'
+check = require '../check'
 
-suboptions =
-  type: 'string'
-  match: /^\/.*?\/[gim]*$/
+subcheck =
+  type: 'or'
+  or: [
+    type: 'object'
+    instanceOf: RegExp
+  ,
+    type: 'string'
+    match: /^\/.*?\/[gim]*$/
+  ]
 
-module.exports = hostname =
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) ->
+  text = 'A valid regular expression. '
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
+  check.describe
+    name: name
+    schema: subcheck
+  , (err, subtext) ->
+    return cb err if err
+    cb null, text + subtext
 
-  # Description
-  # -------------------------------------------------
-  describe:
+exports.run = (work, cb) ->
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    return cb() if check.optional.run work
+  catch err
+    return work.report err, cb
+  value = work.value
+  # first check input type
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
+  check.run
+    name: name
+    value: work.value
+    schema: subcheck
+  , (err, value) ->
+    return cb err if err
+    # if it already is an regexp return it
+    if value instanceof RegExp
+      debug "#{work.debug} result #{util.inspect value}"
+      return cb null, value
+    # transform into regexp
+    parts = value.match /^\/(.*?)\/([gim]*)$/
+    try
+      value = new RegExp parts[1], parts[2]
+    catch err
+      return work.report err, cb
+    # done return resulting value
+    debug "#{work.debug} result #{util.inspect value}"
+    cb null, value
 
-    # ### Type Description
-    type: (options) ->
-      text = 'A valid regular expression. '
-      text += rules.describe.optional options
-      text = text.replace /\. It's/, ' which is'
-      text += ValidatorCheck.describe suboptions
-
-  # Synchronous check
-  # -------------------------------------------------
-  sync:
-
-    # ### Check Type
-    type: (check, path, options, value) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      # first check input type
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      # if it already is an regexp return it
-      return value if value instanceof RegExp
-      # validate
-      value = check.subcall path, suboptions, value
-      # transform into regexp
-      parts = value.match /^\/(.*?)\/([gim]*)$/
-      new RegExp parts[1], parts[2]
-
-
-  # Selfcheck
-  # -------------------------------------------------
-  selfcheck: (name, options) ->
-    validator = require '../index'
-    validator.check name,
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
       type: 'object'
       allowedKeys: true
-      entries:
-        type:
-          type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
+      keys: object.extend {}, check.base,
         default:
-          type: 'string'
+          type: 'regexp'
           optional: true
-    , options
+    value: schema
+  , cb
+
 
