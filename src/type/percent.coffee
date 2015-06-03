@@ -18,107 +18,129 @@
 debug = require('debug')('validator:percent')
 util = require 'util'
 chalk = require 'chalk'
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
-rules = require '../rules'
-float = require './float'
+check = require '../check'
 
-module.exports = percent =
+# Optimize options setting
+# -------------------------------------------------
+optimize = (schema) ->
+  if schema.decimals and not schema.round?
+    schema.round = true
+  if schema.round and not schema.decimals?
+    schema.decimals = 2
+  schema
 
-  # Description
-  # -------------------------------------------------
-  describe:
+subcheck =
+  type: 'or'
+  or: [
+    type: 'float'
+  ,
+    type: 'string'
+    match: ///
+      ^\s*      # start with possible spaces
+      [+-]?     # sign possible
+      \s*\d+(\.\d*)? # float number
+      \s*%?     # percent sign with spaces
+      \s*$      # end of text with spaces
+      ///
+  ]
 
-    # ### Type Description
-    type: (options) ->
-      options = optimize options
-      # combine into message
-      text = 'A percentage value as decimal like 0.3 but it may be given
-      as percent value like 30%, too. '
-      text += rules.describe.optional options
-      text = text.replace /\. It's/, ' which is'
-      text += float.describe.round options
-      text += float.describe.minmax options
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) ->
+  work.pos = optimize work.pos
+  # combine into message
+  text = 'A percentage value as decimal like 0.3 but it may be given
+  as percent value text like 30%, too. '
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  # subcheck
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
+  check.describe
+    name: name
+    schema:
+      type: 'float'
+      round: work.pos.round
+      decimals: work.pos.decimals
+      min: work.pos.min
+      max: work.pos.max
+  , (err, subtext) ->
+    return cb err if err
+    cb null, text + subtext
 
-  # Synchronous check
-  # -------------------------------------------------
-  sync:
+exports.run = (work, cb) ->
+  work.pos = optimize work.pos
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    return cb() if check.optional.run work
+  catch err
+    return work.report err, cb
+  # first check input type
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
+  check.run
+    name: name
+    value: work.value
+    schema: subcheck
+  , (err, value) ->
+    return cb err if err
+    # get float from string
+    if typeof value is 'string' and value.trim().slice(-1) is '%'
+      value = value[0..-2]
+      unless not isNaN(parseFloat value) and isFinite value
+        throw check.error path, options, value,
+        new Error "The given value '#{value}' is no number as needed"
+      value = value / 100
+    else
+      value = parseFloat value
+    # validate number
+    console.log work.pos
+    check.run
+      name: name
+      value: value
+      schema:
+        type: 'float'
+        round: work.pos.round
+        decimals: work.pos.decimals
+        min: work.pos.min
+        max: work.pos.max
+    , cb
 
-    # ### Check Type
-    type: (check, path, options, value) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      options = optimize options
-      # sanitize
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      if typeof value is 'string' and value.trim().slice(-1) is '%'
-        value = value[0..-2]
-        unless not isNaN(parseFloat value) and isFinite value
-          throw check.error path, options, value,
-          new Error "The given value '#{value}' is no number as needed"
-        value = value / 100
-      return value unless value?
-      value = float.sync.round check, path, options, value
-      # validate
-      value = float.sync.number check, path, options, value
-      value = float.sync.minmax check, path, options, value
-      # done return resulting value
-      value
-
-
-  # Selfcheck
-  # -------------------------------------------------
-  selfcheck: (name, options) ->
-    validator = require '../index'
-    validator.check name,
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
       type: 'object'
       allowedKeys: true
-      entries:
-        type:
-          type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
+      keys: object.extend {}, check.base,
         default:
           type: 'float'
           optional: true
         round:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['floor', 'ceil']
+          ]
+        decimals:
           type: 'integer'
           optional: true
           min: 0
         min:
-          type: 'any'
+          type: 'float'
           optional: true
-          entries: [
-            type: 'float'
-          ,
-            rules.selfcheck.reference
-          ]
         max:
-          type: 'any'
+          type: 'float'
           optional: true
-          min:
-            reference: 'relative'
-            source: '<min'
-          entries: [
-            type: 'float'
-          ,
-            rules.selfcheck.reference
-          ]
-    , options
-
-
-# Optimize options setting
-# -------------------------------------------------
-optimize = (options) ->
-  if options.decimals and not options.round?
-    options.round = true
-  if options.round and not options.decimals?
-    options.decimals = 2
-  options
+#          min: '<<<min>>>'
+    value: schema
+  , cb

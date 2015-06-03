@@ -131,6 +131,15 @@ exports.selfcheck = (schema, cb) ->
           optional: true
           minLength: 1
         round:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['floor', 'ceil']
+          ]
+        decimals:
           type: 'integer'
           optional: true
           min: 0
