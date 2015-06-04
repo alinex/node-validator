@@ -40,7 +40,7 @@ check = require '../check'
 # Type implementation
 # -------------------------------------------------
 exports.describe = (work, cb) ->
-  text = 'A simple text entry. '
+  text = 'A text entry. '
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
   if typeof work.pos.toString is 'boolean' and work.pos.toString

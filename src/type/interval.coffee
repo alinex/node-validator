@@ -6,6 +6,7 @@
 # - `unit` - (string) type of unit to convert if not integer given
 # - `round` - (bool) rounding can be set to true for arithmetic rounding
 #   or use `floor` or `ceil` for the corresponding methods
+# - `decimals` - (int) number of decimal digits to round to (defaults to 2)
 #
 # Check options:
 #
@@ -18,92 +19,117 @@ debug = require('debug')('validator:interval')
 util = require 'util'
 chalk = require 'chalk'
 # include alinex packages
-{number} = require 'alinex-util'
+# alinex modules
+{object,number} = require 'alinex-util'
 # include classes and helper
-rules = require '../rules'
-float = require './float'
+check = require '../check'
 
-module.exports = interval =
+# Optimize options setting
+# -------------------------------------------------
+optimize = (schema) ->
+  if schema.decimals and not schema.round?
+    schema.round = true
+  if schema.round and not schema.decimals?
+    schema.decimals = 0
+  schema
 
-  # Description
-  # -------------------------------------------------
-  describe:
+subcheck =
+  type: 'or'
+  or: [
+    type: 'float'
+  ,
+    type: 'string'
+    match: /^\d\d?:\d\d?(:\d\d?)?(\.\d+)?$/
+  ,
+    type: 'string'
+    match: /^([+-]?\d+(?:\.\d+)?)\s*([smhd]|ms)$/
+  ]
 
-    # ### Type Description
-    type: (options) ->
-      options = optimize options
-      # combine into message
-      text = 'A time interval. '
-      text += "If defined as a text it may use a combination of values with the
-        units: ms, s, m, h, d. "
-      text = text.replace /\. If/, ' which if'
-      text += rules.describe.optional options
-      if options.unit
-        text += "The result will be given as the number of #{options.unit}. "
-      text += float.describe.round options
-      text += float.describe.minmax options
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) ->
+  work.pos = optimize work.pos
+  # combine into message
+  text = "A time interval as float, in time format or as text which may use a
+  combination of values with the units: ms, s, m, h, d. "
+  text += check.optional.describe work
+  if work.pos.unit
+    text += "The result will be given as the number of #{work.pos.unit}. "
+  # subcheck
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
+  check.describe
+    name: name
+    schema:
+      type: 'float'
+      round: work.pos.round
+      decimals: work.pos.decimals
+      min: work.pos.min
+      max: work.pos.max
+  , (err, subtext) ->
+    return cb err if err
+    cb null, text + subtext
 
-  # Synchronous check
-  # -------------------------------------------------
-  sync:
+exports.run = (work, cb) ->
+  work.pos = optimize work.pos
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    return cb() if check.optional.run work
+  catch err
+    return work.report err, cb
+  # first check input type
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
+  check.run
+    name: name
+    value: work.value
+    schema: subcheck
+  , (err, value) ->
+    return cb err if err
+    # support time format
+    if typeof value is 'string'
+      if value.trim().match /^(\d\d?)(:\d\d?)(:\d\d?)?(\.\d+)?$/
+        parts = value.split ':'
+        value = "#{parts[0]}h #{parts[1]}m"
+        value += " #{parts[2]}s" if parts.length is 3
+      parsed = number.parseMSeconds value
+      if isNaN parsed
+        return work.report (new Error "The given value '#{value}' is not parse
+          able as interval"), cb
+      unit = work.pos.unit ? 'ms'
+      unless unit is 'ms'
+        parsed /= switch unit
+          when 's'
+            1000
+          when 'm'
+            1000 * 60
+          when 'h'
+            1000 * 60 * 60
+          when 'd'
+            1000 * 60 * 60 * 24
+      value = parsed
+    # run float check
+    check.run
+      name: name
+      value: value
+      schema:
+        type: 'float'
+        round: work.pos.round
+        decimals: work.pos.decimals
+        min: work.pos.min
+        max: work.pos.max
+    , cb
 
-    # ### Check Type
-    type: (check, path, options, value) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      options = optimize options
-      # sanitize
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      # support time format
-      if typeof value is 'string'
-        if value.trim().match /^(\d\d?)(:\d\d?)(:\d\d?)?(\.\d+)?$/
-          parts = value.split ':'
-          value = "#{parts[0]}h #{parts[1]}m"
-          value += " #{parts[2]}s" if parts.length is 3
-        parsed = number.parseMSeconds value
-        if isNaN parsed
-          throw check.error path, options, value,
-          new Error "The given value '#{value}' is not parse able as interval"
-        unit = options.unit ? 'ms'
-        unless unit is 'ms'
-          parsed /= switch unit
-            when 's'
-              1000
-            when 'm'
-              1000 * 60
-            when 'h'
-              1000 * 60 * 60
-            when 'd'
-              1000 * 60 * 60 * 24
-        value = parsed
-      value = float.sync.round check, path, options, value
-      # validate
-      value = float.sync.number check, path, options, value
-      value = float.sync.minmax check, path, options, value
-      # done return resulting value
-      value
-
-
-  # Selfcheck
-  # -------------------------------------------------
-  selfcheck: (name, options) ->
-    validator = require '../index'
-    validator.check name,
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
       type: 'object'
       allowedKeys: true
-      entries:
-        type:
-          type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
+      keys: object.extend {}, check.base,
         default:
           type: 'float'
           optional: true
@@ -112,41 +138,24 @@ module.exports = interval =
           optional: true
           values: ['d', 'h', 'm', 's', 'ms']
         round:
-          type: 'any'
+          type: 'or'
           optional: true
-          entries: [
+          or: [
             type: 'boolean'
           ,
             type: 'string'
             values: ['floor', 'ceil']
           ]
+        decimals:
+          type: 'integer'
+          optional: true
+          min: 0
         min:
-          type: 'any'
+          type: 'float'
           optional: true
-          entries: [
-            type: 'float'
-          ,
-            rules.selfcheck.reference
-          ]
         max:
-          type: 'any'
+          type: 'float'
           optional: true
-          min:
-            reference: 'relative'
-            source: '<min'
-          entries: [
-            type: 'float'
-          ,
-            rules.selfcheck.reference
-          ]
-    , options
-
-
-# Optimize options setting
-# -------------------------------------------------
-optimize = (options) ->
-  if options.decimals and not options.round?
-    options.round = true
-  if options.round and not options.decimals?
-    options.decimals = 0
-  options
+#          min: '<<<min>>>'
+    value: schema
+  , cb

@@ -3,14 +3,14 @@ async = require 'alinex-async'
 
 test = require '../../test'
 
-describe "Float", ->
+describe "Interval", ->
 
   schema = null
   beforeEach ->
     schema =
-      type: 'float'
+      type: 'interval'
 
-  describe "base check", ->
+  describe "check", ->
 
     it "should support optional option", (cb) ->
       schema.optional = true
@@ -18,7 +18,7 @@ describe "Float", ->
 
     it "should support default option", (cb) ->
       schema.optional = true
-      schema.default = 1
+      schema.default = 18
       test.equal schema, [
         [null, schema.default]
         [undefined, schema.default]
@@ -26,28 +26,43 @@ describe "Float", ->
 
   describe "simple check", ->
 
-    it "should match float objects", (cb) ->
-      test.same schema, [1.0, -12.3, 2678.999, 10], cb
+    it "should match numbers", (cb) ->
+      test.same schema, [18, 0, 11837], cb
 
-    it "should fail on other objects", (cb) ->
-      test.fail schema, ['', null, [], (new Error '????'), {}], cb
-
-  describe "options check", ->
-
-    it "should support sanitize option", (cb) ->
-      schema.sanitize = true
+    it "should match string definitions", (cb) ->
       test.equal schema, [
-        ['go4now', 4]
-        ['15.8kg', 15.8]
-        ['-18.6%', -18.6]
-      ], ->
-        test.fail schema, ['gonow', 'one'], cb
+        ['12ms', 12]
+        ['1s', 1000]
+        ['1m', 60000]
+        ['+18.6s', 18600]
+      ], cb
+
+    it "should match time strings", (cb) ->
+      test.equal schema, [
+        ['1:02', 3720000]
+        ['01:02', 3720000]
+        ['1:2', 3720000]
+        ['01:02:30', 3750000]
+      ], cb
+
+    it "should fail on other elements", (cb) ->
+      test.fail schema, ['hello', null, [], (new Error '????'), {}], cb
+
+  describe "option check", ->
+
+    it "should support unit option", (cb) ->
+      schema.unit = 's'
+      test.equal schema, [
+        ['1600ms', 1.6]
+        ['+18.6s', 18.6]
+      ], cb
 
     it "should support round option", (cb) ->
       schema.round = true
+      schema.decimals = 0
       test.equal schema, [
         [13.5, 14]
-        [-9.49, -9]
+        [-9.489, -9]
         ['+18.6', 19]
       ], cb
 
@@ -62,6 +77,7 @@ describe "Float", ->
 
     it "should support round (floor) option", (cb) ->
       schema.round = 'floor'
+      schema.decimals = 0
       test.equal schema, [
         [13.5, 13]
         [-9.49, -10]
@@ -70,6 +86,7 @@ describe "Float", ->
 
     it "should support round (ceil) option", (cb) ->
       schema.round = 'ceil'
+      schema.decimals = 0
       test.equal schema, [
         [13.5, 14]
         [-9.49, -9]
@@ -96,11 +113,11 @@ describe "Float", ->
       test.describe
         title: 'test'
         description: 'Some test rules'
-        type: 'float'
+        type: 'interval'
         optional: true
-        default: 5.4
-        sanitize: true
-        round: true
+        default: 5
+        unit: 's'
+        round: 'floor'
         decimals: 2
         min: 2
         max: 20
@@ -115,11 +132,11 @@ describe "Float", ->
       test.selfcheck
         title: 'test'
         description: 'Some test rules'
-        type: 'float'
+        type: 'interval'
         optional: true
-        default: 5.4
-        sanitize: true
-        round: true
+        default: 5
+        unit: 's'
+        round: 'floor'
         decimals: 2
         min: 2
         max: 20

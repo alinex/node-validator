@@ -32,6 +32,7 @@ exports.describe = (work, cb) ->
   text = 'A valid regular expression. '
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
+  # subcheck
   name = work.spec.name ? 'value'
   if work.path.length
     name += "/#{work.path.join '/'}"
