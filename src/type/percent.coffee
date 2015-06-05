@@ -95,8 +95,7 @@ exports.run = (work, cb) ->
     if typeof value is 'string' and value.trim().slice(-1) is '%'
       value = value[0..-2]
       unless not isNaN(parseFloat value) and isFinite value
-        throw check.error path, options, value,
-        new Error "The given value '#{value}' is no number as needed"
+        return work.report (new Error "The given value '#{value}' is no number as needed"), cb
       value = value / 100
     else
       value = parseFloat value

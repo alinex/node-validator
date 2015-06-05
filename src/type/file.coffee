@@ -20,196 +20,117 @@
 debug = require('debug')('validator:file')
 util = require 'util'
 chalk = require 'chalk'
-fs = require 'alinex-fs'
 fspath = require 'path'
+# alinex modules
+fs = require 'alinex-fs'
 async = require 'alinex-async'
+object = require('alinex-util').object
 # include classes and helper
-ValidatorCheck = require '../check'
-rules = require '../rules'
+check = require '../check'
 
-module.exports = file =
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) ->
+  text = 'A valid filesystem entry. '
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  if work.pos.exists
+    text += "The file has to exist. "
+  if work.pos.basedir
+    text += "Relative paths are calculated from #{work.pos.basedir}. "
+  if work.pos.resolve
+    text += "The path will be resolved to it's absolute path. "
+  if work.pos.find
+    text += "A search for the file will be done. "
+  if work.pos.filetype
+    text += "The file have to be of type '#{work.pos.filetype}'. "
+  cb null, text
 
-  # Description
-  # -------------------------------------------------
-  describe:
-
-    # ### Type Description
-    type: (options) ->
-      text = 'A valid filesystem entry. '
-      text += rules.describe.optional options
-      text = text.replace /\. It's/, ' which is'
-      if options.exists
-        text += "The file has to exist. "
-      if options.basedir
-        text += "Relative paths are calculated from #{options.basedir}. "
-      if options.resolve
-        text += "The path will be resolved to it's absolute path. "
-      if options.find
-        text += "A search for the file will be done. "
-      if options.filetype
-        text += "The file have to be of type '#{options.filetype}'. "
-      text
-
-  # Synchronous check
-  # -------------------------------------------------
-  sync:
-
-    # ### Check Type
-    type: (check, path, options, value) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      # first check input type
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      # sanitize
-      value = fspath.normalize value
-      value = value[..-2] if value[-1..] is '/'
-      # get basedir
-      basedir = fspath.resolve options.basedir ? '.'
-      # find
-      if options.find
-        search =  if typeof options.find is 'function' then options.find() else options.find
-        unless search?.length
-          throw new Error "Wrong find option, array is needed for file validation."
-        for dir in search
-          debug "search in #{dir}..."
-          list = fs.findSync dir,
-            include: value
-          break if list
-        return null unless list
-        value = list[0]
-      # resolve
-      filepath = fspath.resolve basedir, value
-      value = filepath if options.resolve
-      # exists
-      if options.exists or options.filetype
-        unless fs.existsSync filepath
-          throw check.error path, options, value,
-          new Error "The given file '#{value}' has to exist."
-      # filetype
-      if options.filetype?
-        stats = fs.statSync filepath
-        switch options.filetype
-          when 'file', 'f'
-            return value if stats.isFile()
-            debug "skip #{file} because not a file entry"
-          when 'directory', 'dir', 'd'
-            return value if stats.isDirectory()
-            debug "skip #{file} because not a directory entry"
-          when 'link', 'l'
-            return value if stats.isSymbolicLink()
-            debug "skip #{file} because not a link entry"
-          when 'fifo', 'pipe', 'p'
-            return value if stats.isFIFO()
-            debug "skip #{file} because not a FIFO entry"
-          when 'socket', 's'
-            return value if stats.isSocket()
-            debug "skip #{file} because not a socket entry"
-        throw check.error path, options, value,
-        new Error "The given file '#{value}' is not a #{filetype} entry."
-      # return value
-      value
-
-  async:
-    # ### Check Type
-    type: (check, path, options, value, cb) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      # first check input type
-      try
-        value = rules.sync.optional check, path, options, value
-      catch err
-        return cb err
-      return cb null, value unless value?
-      # sanitize
-      value = fspath.normalize value
-      value = value[..-2] if value[-1..] is '/'
-      # get basedir
-      basedir = fspath.resolve options.basedir ? '.'
-      # validate
-      file.async.find check, path, options, value, (err, found) ->
+exports.run = (work, cb) ->
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    return cb() if check.optional.run work
+  catch err
+    return work.report err, cb
+  value = work.value
+  # sanitize
+  if typeof value isnt 'string'
+    return work.report (new Error "Could not find the file #{value}"), cb
+  value = fspath.normalize value
+  value = value[..-2] if value[-1..] is '/'
+  # get basedir
+  basedir = fspath.resolve work.pos.basedir ? '.'
+  # validate
+  find work, value, (err, found) ->
+    return cb err if err
+    unless found
+      return work.report (new Error "Could not find the file #{value}"), cb
+    # resolve
+    filepath = fspath.resolve basedir, found
+    found = filepath if work.pos.resolve
+    exists work, found, (err, found) ->
+      return cb err if err
+      filetype work, found, (err, found) ->
         return cb err if err
-        unless found
-          return cb new Error "Could not find the file #{value} in #{check.pathname path}"
-        # resolve
-        filepath = fspath.resolve basedir, found
-        found = filepath if options.resolve
-        file.async.exists check, path, options, found, (err, found) ->
-          return cb err if err
-          file.async.filetype check, path, options, found, (err, found) ->
-            return cb err if err
-            cb null, found
-
-    find: (check, path, options, value, cb) ->
-      return cb null, value unless options.find
-      search =  if typeof options.find is 'function' then options.find() else options.find
-      unless search?.length
-        return cb new Error "Wrong find option, array is needed for file validation."
-      # search in list
-      async.map search, (dir, cb) ->
-        debug "search in #{dir}..."
-        fs.find dir,
-          include: value
-        , (err, list) ->
-          cb null, list
-      , (err, lists) ->
-        for list in lists
-          # retrieve first found
-          return cb null, list[0] if list?.length
-        # return null if nothing found
-        cb()
-
-    exists: (check, path, options, value, cb) ->
-      return cb null, value unless options.exists or options.filetype
-      fs.exists value, (exists) ->
-        unless exists
-          return cb check.error path, options, value,
-          cb new Error "The given file '#{value}' has to exist."
-        cb null, value
-
-    filetype: (check, path, options, value, cb) ->
-      return cb null, value unless options.filetype
-      fs.stat value, (err, stats) ->
-        return cb err if err
-        switch options.filetype
-          when 'file', 'f'
-            return cb null, value if stats.isFile()
-            debug "skip #{file} because not a file entry"
-          when 'directory', 'dir', 'd'
-            return cb null, value if stats.isDirectory()
-            debug "skip #{file} because not a directory entry"
-          when 'link', 'l'
-            return cb null, value if stats.isSymbolicLink()
-            debug "skip #{file} because not a link entry"
-          when 'fifo', 'pipe', 'p'
-            return cb null, value if stats.isFIFO()
-            debug "skip #{file} because not a FIFO entry"
-          when 'socket', 's'
-            return cb null, value if stats.isSocket()
-            debug "skip #{file} because not a socket entry"
-        return cb check.error path, options, value,
-        cb new Error "The given file '#{value}' is not a #{filetype} entry."
+        cb null, found
 
 
-  # Selfcheck
-  # -------------------------------------------------
-  selfcheck: (name, options) ->
-    validator = require '../index'
-    validator.check name,
+find = (work, value, cb) ->
+  return cb null, value unless work.pos.find
+  search =  if typeof work.pos.find is 'function' then work.pos.find() else work.pos.find
+  unless search?.length
+    return work.report (new Error "Wrong find option, array is needed for file validation."), cb
+  # search in list
+  async.map search, (dir, cb) ->
+    debug "#{work.debug} search in #{dir}..."
+    fs.find dir,
+      include: value
+    , (err, list) ->
+      cb null, list
+  , (err, lists) ->
+    for list in lists
+      # retrieve first found
+      return cb null, list[0] if list?.length
+    # return null if nothing found
+    cb()
+
+exists = (work, value, cb) ->
+  return cb null, value unless work.pos.exists or work.pos.filetype
+  fs.exists value, (exists) ->
+    unless exists
+      return work.report (new Error "The given file '#{value}' has to exist."), cb
+    cb null, value
+
+filetype = (work, value, cb) ->
+  return cb null, value unless work.pos.filetype
+  fs.stat value, (err, stats) ->
+    return cb err if err
+    switch work.pos.filetype
+      when 'file', 'f'
+        return cb null, value if stats.isFile()
+        debug "#{work.debug} skip #{file} because not a file entry"
+      when 'directory', 'dir', 'd'
+        return cb null, value if stats.isDirectory()
+        debug "#{work.debug} skip #{file} because not a directory entry"
+      when 'link', 'l'
+        return cb null, value if stats.isSymbolicLink()
+        debug "#{work.debug} skip #{file} because not a link entry"
+      when 'fifo', 'pipe', 'p'
+        return cb null, value if stats.isFIFO()
+        debug "#{work.debug} skip #{file} because not a FIFO entry"
+      when 'socket', 's'
+        return cb null, value if stats.isSocket()
+        debug "#{work.debug} skip #{file} because not a socket entry"
+    return work.report (new Error "The given file '#{value}' is not a #{filetype} entry."), cb
+
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
       type: 'object'
       allowedKeys: true
-      keys:
-        type:
-          type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
+      keys: object.extend {}, check.base,
         default:
           type: 'string'
           optional: true
@@ -236,5 +157,6 @@ module.exports = file =
             'l', 'link'
           ]
           optional: true
-    , options
+    value: schema
+  , cb
 
