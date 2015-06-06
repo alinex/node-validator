@@ -8,7 +8,7 @@ path = require 'path'
 test = require '../test'
 reference = require '../../lib/reference'
 
-describe.only "References", ->
+describe "References", ->
 
   describe "detect", ->
 
@@ -224,12 +224,10 @@ describe.only "References", ->
       , cb
 
   describe "web", ->
+    @timeout 10000
 
     it "should find http/https value", (cb) ->
       values =
-        "<<<http://www.thomas-bayer.com/sqlrest/CUSTOMER/18/>>>": '<?xml version="1.0"?><CUSTOMER xmlns:xlink="http://www.w3.org/1999/xlink">\
-        \n    <ID>18</ID>\n    <FIRSTNAME>Sylvia</FIRSTNAME>\n    <LASTNAME>Fuller</LASTNAME>\n    <STREET>158 - 20th Ave.</STREET>\
-        \n    <CITY>Paris</CITY>\n</CUSTOMER>'
         '<<<https://raw.githubusercontent.com/alinex/node-validator/master/test/data/textfile>>>': '123'
       async.forEachOfSeries values, (check, value, cb) ->
         reference.replace value, (err, result) ->

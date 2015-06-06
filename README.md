@@ -592,8 +592,8 @@ __Sanitize options:__
 
 - `sanitize` - (bool) remove invalid characters
 - `unit` - (string) unit to convert to if no number is given
-- `round` - (bool) rounding of float can be set to true for arithmetic rounding
-  or use `floor` or `ceil` for the corresponding methods
+- `round` - (bool or string) rounding of float can be set to true for arithmetic
+  rounding or use `floor` or `ceil` for the corresponding methods
 
 __Validate options:__
 
@@ -611,7 +611,9 @@ __Sanitize options:__
 
 - `sanitize` - (bool) remove invalid characters
 - `unit` - (string) unit to convert to if no number is given
-- `round` - (int) number of decimal digits to round to
+- `round` - (bool or string) rounding of float can be set to true for arithmetic
+  rounding or use `floor` or `ceil` for the corresponding methods
+- `decimals` - (int) number of decimal digits to round to
 
 __Check options:__
 
@@ -812,6 +814,9 @@ To test for byte values which may contain prefixes like `18M` or `6.2 GB`.
 __Sanitize options:__
 
 - `unit` - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...
+- `round` - (bool or string) rounding of float can be set to true for arithmetic
+  rounding or use `floor` or `ceil` for the corresponding methods
+- `decimals` - (int) number of decimal digits to round to
 
 __Validate options:__
 
@@ -841,10 +846,12 @@ syntax. This will be compiled into a function which if called with the context
 object will return the resulting text.
 
 ``` coffee
-  # first do the validation
-  value = validator.check 'test',
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: 'hello {{name}}' # value to check
+  schema:             # definition of checks
     type: 'handlebars'
-  , 'hello {{name}}'
+, (err, result) ->
   # then use it
   console.log value
     name: 'alex'
@@ -866,8 +873,9 @@ A time interval may be given:
 __Sanitize options:__
 
 - `unit` - (string) type of unit to convert if not integer given
-- `round` - (bool) rounding of float can be set to true for arithmetic rounding
-  or use `floor` or `ceil` for the corresponding methods
+- `round` - (bool or string) rounding of float can be set to true for arithmetic
+  rounding or use `floor` or `ceil` for the corresponding methods
+- `decimals` - (int) number of decimal digits to round to
 
 __Check options:__
 
@@ -916,7 +924,9 @@ like 50% are converted to floats like 0.5.
 
 __Sanitize options:__
 
-- `round` - (int) number of decimal digits to round to
+- `round` - (bool or string) rounding of float can be set to true for arithmetic
+  rounding or use `floor` or `ceil` for the corresponding methods
+- `decimals` - (int) number of decimal digits to round to
 
 __Check options:__
 
@@ -929,54 +939,11 @@ Check that the given value is a regular expression. If a text is given it will b
 compiled into an regular expression.
 
 
-Complete Example
--------------------------------------------------
-
-The following check structure comes from an coffee script program which
-checks it's configuration file.
-
-``` coffee
-title: "Monitoring Configuration"
-type: 'object'
-allowedKeys: ['runat', 'contacts', 'email']
-keys:
-  runat:
-    title: "Location"
-    description: "the location of this machine to run only tests which have
-      the same location or no location at all"
-    type: 'string'
-    optional: true
-  contacts:
-    title: "Contacts"
-    description: "the possible contacts to be referred from controller for
-      email alerts"
-    type: 'object'
-    entries:
-      type: 'or'
-      entries: [
-        title: "Contact Group"
-        description: "the list of references in the group specifies the individual
-          contacts"
-        type: 'array'
-        entries:
-          type: 'string'
-      ,
-        title: "Contact Details"
-        description: "the name and email address for a specific contact"
-        type: 'object'
-        mandatoryKeys: ['email']
-        allowedKeys: ['name']
-        entries:
-          type: 'string'
-      ]
-```
-
-
 Package structure
 -------------------------------------------------
 The validator is implemented as `index` which has the public available methods,
-`helper` which is used for all data exchange and calls the real check
-implementations.
+`check` is used for the real check calls and each type has it's own module
+with the implementation loaded on demand (type-subfolder).
 
 
 License
