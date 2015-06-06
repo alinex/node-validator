@@ -110,7 +110,7 @@ exports.run = (work, cb) ->
         min: work.pos.min
         max: work.pos.max
     , (err, value) ->
-      return err if err
+      return cb err if err
       debug "#{work.debug} result #{util.inspect value}"
       cb null, value
 

@@ -20,11 +20,10 @@ debug = require('debug')('validator:byte')
 util = require 'util'
 chalk = require 'chalk'
 math = require 'mathjs'
-# include alinex packages
-{number} = require 'alinex-util'
+# alinex modules
+{object, number} = require 'alinex-util'
 # include classes and helper
-rules = require '../rules'
-float = require './float'
+check = require '../check'
 
 pattern = /^[0-9]+(\.?[0-9]*) *(k|Ki|[MGTPEZY]i?)?([Bb]|bps)?$/
 
@@ -37,113 +36,118 @@ math.type.Unit.UNITS.bps =
   prefixes: math.type.Unit.PREFIXES.BINARY_SHORT
   value: 1, offset: 0
 
-module.exports = byte =
+# Optimize options setting
+# -------------------------------------------------
+optimize = (schema) ->
+  if schema.decimals and not schema.round?
+    schema.round = true
+  if schema.round and not schema.decimals?
+    schema.decimals = 2
+  unless schema.min
+    schema.min = 0
+  schema
 
-  # Description
-  # -------------------------------------------------
-  describe:
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) ->
+  work.pos = optimize work.pos
+  # combine into message
+  text = 'A byte value. '
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  text += "If defined as a text you may use a prefix like: k, M, G, P, T, E, Z, Y
+  also with the unit B like '12MB' or '3.7 GiB'. "
+  # subcheck
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
+  check.describe
+    name: name
+    schema:
+      type: 'float'
+      round: work.pos.round
+      decimals: work.pos.decimals
+      min: work.pos.min
+      max: work.pos.max
+  , (err, subtext) ->
+    return cb err if err
+    cb null, text + subtext
 
-    # ### Type Description
-    type: (options) ->
-      options = optimize options
-      # combine into message
-      text = 'A byte value. '
-      text += rules.describe.optional options
-      text = text.replace /\. It's/, ' which is'
-      text += "If defined as a text you may use a prefix like: k, M, G, P, T, E, Z, Y
-      also with the unit B like '12MB' or '3.7 GiB'. "
-      text += float.describe.minmax options
+exports.run = (work, cb) ->
+  work.pos = optimize work.pos
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    return cb() if check.optional.run work
+  catch err
+    return work.report err, cb
+  value = work.value
+  # support byte format
+  if typeof value is 'string'
+    unless value.trim().match pattern
+      return work.report (new Error "A byte value with optional prefixes is needed"), cb
+    # sanitize string
+    value = value.trim()
+    work.pos.unit ?= if value.match /(b|bits|bps)$/ then 'b' else 'B'
+    unless value.match /([bB]|bps)$/
+      value += work.pos.unit
+    value = math.unit value
+    value = value.toNumber work.pos.unit
+  else if typeof value isnt 'number'
+    unless value is (value | 0)
+      return work.report (new Error "The given value '#{value}' is no byte or
+        float number as needed"), cb
+  # validate
+  name = work.spec.name ? 'value'
+  if work.path.length
+    name += "/#{work.path.join '/'}"
+  check.run
+    name: name
+    value: value
+    schema:
+      type: if work.pos.unit?.match /^[kMGTPEZY]([bB]|bps)$/ then 'float' else 'integer'
+      round: work.pos.round
+      decimals: work.pos.decimals
+      min: work.pos.min
+      max: work.pos.max
+  , (err, value) ->
+    return cb err if err
+    debug "#{work.debug} result #{util.inspect value}"
+    cb null, value
 
-  # Synchronous check
-  # -------------------------------------------------
-  sync:
-
-    # ### Check Type
-    type: (check, path, options, value) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      options = optimize options
-      # sanitize
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      # support byte format
-      if typeof value is 'number'
-        unless value is (value | 0)
-          throw check.error path, options, value,
-          new Error "The given value '#{value}' is no byte or integer number as needed"
-        return float.sync.minmax check, path, options, value
-      unless typeof value is 'string' and value.trim().match pattern
-        throw check.error path, options, value,
-        new Error "A byte value with optional prefixes is needed"
-      # sanitize string
-      value = value.trim()
-      options.unit ?= if value.match /(b|bits|bps)$/ then 'b' else 'B'
-      unless value.match /([bB]|bps)$/
-        value += options.unit
-      value = math.unit value
-      value = value.toNumber options.unit
-      # validate
-      value = float.sync.minmax check, path, options, value
-      # done return resulting value
-      value
-
-
-  # Selfcheck
-  # -------------------------------------------------
-  selfcheck: (name, options) ->
-    validator = require '../index'
-    validator.check name,
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
       type: 'object'
       allowedKeys: true
-      entries:
-        type:
-          type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
+      keys: object.extend {}, check.base,
         default:
-          type: 'integer'
+          type: 'float'
           optional: true
         unit:
           type: 'string'
           default: 'B'
           matches: /^[kMGTPEZY]?([bB]|bps)$/
+        round:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['floor', 'ceil']
+          ]
+        decimals:
+          type: 'integer'
+          optional: true
+          min: 0
         min:
-          type: 'any'
+          type: 'float'
           optional: true
-          entries: [
-            type: 'integer'
-            min: 0
-          ,
-            rules.selfcheck.reference
-          ]
         max:
-          type: 'any'
+          type: 'float'
           optional: true
-          min:
-            reference: 'relative'
-            source: '<min'
-          entries: [
-            type: 'integer'
-          ,
-            rules.selfcheck.reference
-          ]
-    , options
-
-
-# Optimize options setting
-# -------------------------------------------------
-optimize = (options) ->
-  if options.decimals and not options.round?
-    options.round = true
-  if options.round and not options.decimals?
-    options.decimals = 0
-  unless options.min
-    options.min = 0
-  options
+#          min: '<<<min>>>'
+    value: schema
+  , cb
