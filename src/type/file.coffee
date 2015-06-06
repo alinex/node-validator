@@ -74,8 +74,8 @@ exports.run = (work, cb) ->
       return cb err if err
       filetype work, found, (err, found) ->
         return cb err if err
+        debug "#{work.debug} result #{util.inspect value}"
         cb null, found
-
 
 find = (work, value, cb) ->
   return cb null, value unless work.pos.find

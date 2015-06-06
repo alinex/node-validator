@@ -12,64 +12,49 @@ debug = require('debug')('validator:handlebars')
 util = require 'util'
 chalk = require 'chalk'
 handlebars = require 'handlebars'
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
-ValidatorCheck = require '../check'
-rules = require '../rules'
+check = require '../check'
 
-module.exports =
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) ->
+  text = 'A valid text which may contain handlebar syntax and variables. '
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  cb null, text
 
-  # Description
-  # -------------------------------------------------
-  describe:
+exports.run = (work, cb) ->
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    return cb() if check.optional.run work
+  catch err
+    return work.report err, cb
+  value = work.value
+  # sanitize
+  unless typeof value is 'string'
+    return work.report (new Error "The given value '#{value}' is no integer as needed"), cb
+  # compile if handlebars syntax found
+  if value.match /\{\{.*?\}\}/
+    debug "#{work.debug} compile handlebars"
+    fn = handlebars.compile value
+  else
+    fn = -> return value
+  debug "#{work.debug} result #{util.inspect value}"
+  cb null, fn
 
-    # ### Type Description
-    type: (options) ->
-      text = 'A valid text which may contain handlebar syntax and variables. '
-      text += rules.describe.optional options
-      text = text.replace /\. It's/, ' which is'
-
-  # Asynchronous check
-  # -------------------------------------------------
-  sync:
-    # ### Check Type
-    type: (check, path, options, value) ->
-      debug "#{check.pathname path} check: #{util.inspect(value).replace /\n/g, ''}"
-      , chalk.grey util.inspect options
-      # first check input type
-      value = rules.sync.optional check, path, options, value
-      return value unless value?
-      # sanitize
-      unless typeof value is 'string'
-        throw check.error path, options, value,
-        new Error "The given value '#{value}' is no integer as needed"
-      # compile if handlebars syntax found
-      if value.match /\{\{.*?\}\}/
-        debug "#{check.pathname path} compile handlebars"
-        return handlebars.compile value
-      -> value
-
-
-  # Selfcheck
-  # -------------------------------------------------
-  selfcheck: (name, options) ->
-    validator = require '../index'
-    validator.check name,
+exports.selfcheck = (schema, cb) ->
+  check.run
+    schema:
       type: 'object'
       allowedKeys: true
-      entries:
-        type:
-          type: 'string'
-        title:
-          type: 'string'
-          optional: true
-        description:
-          type: 'string'
-          optional: true
-        optional:
-          type: 'boolean'
-          optional: true
+      keys: object.extend {}, check.base,
         default:
           type: 'string'
           optional: true
-    , options
+    value: schema
+  , cb
 

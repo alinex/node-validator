@@ -100,7 +100,6 @@ exports.run = (work, cb) ->
     else
       value = parseFloat value
     # validate number
-    console.log work.pos
     check.run
       name: name
       value: value
@@ -110,7 +109,10 @@ exports.run = (work, cb) ->
         decimals: work.pos.decimals
         min: work.pos.min
         max: work.pos.max
-    , cb
+    , (err, value) ->
+      return err if err
+      debug "#{work.debug} result #{util.inspect value}"
+      cb null, value
 
 exports.selfcheck = (schema, cb) ->
   check.run

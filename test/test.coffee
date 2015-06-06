@@ -92,5 +92,19 @@ exports.equal = (schema, values, cb) ->
       cb()
   , cb
 
+exports.function = (schema, values, cb) ->
+  num = 0
+  async.each values, ([value, params, goal], cb) ->
+    validator.check
+      name: "equal-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.not.exist
+      expect(result, 'result').to.be.a 'function'
+      expect(result params, 'test function').to.deep.equal goal
+      cb()
+  , cb
+
 exports.selfcheck = (schema, cb) ->
   validator.selfcheck schema, cb

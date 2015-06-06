@@ -122,7 +122,10 @@ exports.run = (work, cb) ->
         decimals: work.pos.decimals
         min: work.pos.min
         max: work.pos.max
-    , cb
+    , (err, value) ->
+      return err if err
+      debug "#{work.debug} result #{util.inspect value}"
+      cb null, value
 
 exports.selfcheck = (schema, cb) ->
   check.run
