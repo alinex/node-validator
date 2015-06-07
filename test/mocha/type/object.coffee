@@ -32,6 +32,12 @@ describe "Object", ->
     it "should fail on other elements", (cb) ->
       test.fail schema, [null, 16, []], cb
 
+    it.only "should run check on all sub elements", (cb) ->
+      test.same schema, [
+        {array: [1], number: 2, list: [3]}
+        {string: 'one', map: {two: 2}}
+      ], cb
+
   describe "options check", ->
 
     it "should support instanceOf option", (cb) ->

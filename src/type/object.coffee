@@ -187,7 +187,22 @@ exports.run = (work, cb) ->
         else
           sub = work.goInto 'entries', i
           sub.value = sub.value[key]
-    return cb() unless sub?
+    else
+      name = work.spec.name ? 'value'
+      path = work.path.concat key
+      name += "/#{path.join '/'}"
+      sub =
+        name: name
+        value: value[key]
+        schema:
+          type: switch
+            when Array.isArray value[key]
+              'array'
+            when typeof value[key] is 'object'
+              'object'
+            else
+              'any'
+          optional: true
     check.run sub, cb
   , (err) ->
     return cb err if err

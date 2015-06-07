@@ -37,6 +37,13 @@ describe "Array", ->
     it "should fail on other objects", (cb) ->
       test.fail schema, ['', null, 16, (new Error '????'), {}], cb
 
+    it "should run check on all sub elements", (cb) ->
+      test.same schema, [
+        [[1],2,[3]]
+        ['one', {two: 2}]
+        new Array()
+      ], cb
+
   describe "option check", ->
 
     it "should support delimiter option", (cb) ->
