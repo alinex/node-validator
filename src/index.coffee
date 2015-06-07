@@ -9,6 +9,11 @@ util = require 'util'
 # internal classes and helper
 check = require './check'
 
+# Specification
+# -------------------------------------------------
+# - name - (string) descriptive name of the data
+# - schema - (object) structure to check
+# - context - (object) additional data structure
 
 # Create human readable description
 # -------------------------------------------------

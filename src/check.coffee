@@ -8,6 +8,7 @@ util = require 'util'
 async = require 'alinex-async'
 chalk = require 'chalk'
 # internal classes and helper
+reference = require './reference'
 
 # Work management
 # -------------------------------------------------
@@ -21,6 +22,7 @@ chalk = require 'chalk'
 # - pos - reference to schema position at this path
 # - value - value at this path
 # - debug - output of current path for debugging
+
 class Work
 
   constructor: (@spec) ->
@@ -102,6 +104,11 @@ exports.describe = (work, cb) ->
 # This may be called using the spec or an already created work instance.
 exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
+  # check for references
+#  reference.check work.value,
+#    data: work.spec.schema
+#    pos: work.pos
+#    context: work.spec.context
   # load library and call check
   try
     lib = getTypeLib work.pos, (err, lib) ->
@@ -111,7 +118,6 @@ exports.run = (work, cb) ->
     debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
     return cb new Error "Type '#{work.pos.type}' not supported"
   lib.run work, cb
-
 
 # ### Selfcheck of schema
 # This may be called using the spec or an already created work instance.

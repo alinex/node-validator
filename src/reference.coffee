@@ -41,6 +41,10 @@ typePrecedence =
 # Helper methods
 # -------------------------------------------------
 
+exports.check = (value, work, cb) ->
+  return cb null,value unless exists value
+  replace value, work, cb
+
 # check that there are references in the object
 exists = module.exports.exists = (value) ->
   return false unless typeof value is 'string'
