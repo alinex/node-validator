@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "alinex-builder": "1.x",
-    "chai": "2.x",
+    "chai": "3.x",
     "alinex-error": "1.x"
   },
   "optionalDependencies": {},

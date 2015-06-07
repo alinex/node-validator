@@ -285,3 +285,12 @@ describe "References", ->
   describe "multipath", ->
 
   describe "multiref", ->
+
+  describe "integration", ->
+
+    it.skip "should call references in values", (cb) ->
+      test.equal
+        type: 'string'
+      , [
+        ['<<<name>>>', 'name']
+      ], cb
