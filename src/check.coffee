@@ -18,10 +18,14 @@ reference = require './reference'
 # The following properties are used:
 #
 # - spec - reference to the original validation call
+#   - name - (string) descriptive name of the data
+#   - schema - (object) structure to check
+#   - context - (object) additional data structure
+#   - dir - set to base directory for file relative file paths
 # - path - array containing the current path
 # - pos - reference to schema position at this path
-# - value - value at this path
 # - debug - output of current path for debugging
+# - value - value at this path
 
 class Work
 
@@ -106,9 +110,8 @@ exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
   # check for references
   reference.check work.value,
-    data: work.spec.schema
-    pos: work.pos
-    context: work.spec.context
+    spec: work.spec
+    path: work.path[0..]    # clone ecause it will change
   , (err, value) ->
     return cb err if err
     work.value = value

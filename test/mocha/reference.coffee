@@ -128,7 +128,7 @@ describe "References", ->
           cb()
       , cb
 
-    it "should find relative path", (cb) ->
+    it.only "should find relative path", (cb) ->
       struct =
         europe:
           germany:
@@ -190,7 +190,8 @@ describe "References", ->
       ]
       async.eachSeries values, (value, cb) ->
         reference.replace value,
-          context: struct
+          spec:
+            context: struct
         , (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal struct.absolute

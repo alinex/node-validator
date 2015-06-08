@@ -1,14 +1,23 @@
 # IP Address validation
 # =================================================
 
-# work values
+# The following properties are used:
 #
+# - spec - reference to the original validation call
+#   - name - (string) descriptive name of the data
+#   - schema - (object) structure to check
+#   - context - (object) additional data structure
+#   - dir - set to base directory for file relative file paths
+# - path - array containing the current path
+# - pos - reference to schema position at this path
+# - debug - output of current path for debugging
+# - value - value at this path
+
+# While working on the data the following values will be added:
+#
+# - data - structure to work on (schema or context)
 # - lastType - the type of the last checked reference to ensure security
-# - data - structure to work on
-# - pos - array defining the current position in data
-# - dir - set to base directory for file relative file paths
 # - structSearch - set if first element is done (within findData())
-# - context - alternative data object
 
 
 # Node modules
@@ -20,7 +29,7 @@ chalk = require 'chalk'
 async = require 'alinex-async'
 {object,array} = require 'alinex-util'
 # include classes and helper
-ValidatorCheck = require './check'
+check = require './check'
 
 # Configuration
 # -------------------------------------------------
@@ -55,6 +64,7 @@ replace = module.exports.replace = (value, work={}, cb) ->
     cb = work
     work = {}
   return cb null, value unless exists value
+  work.data ?= work.spec?.schema
   debug "replace #{util.inspect value}..."
   # step over parts
   refs = value.split /(<<<.*?>>>)/
@@ -78,7 +88,7 @@ findAlternative = (value, work={}, cb) ->
   # replace <<< and >>> and split into alternatives
   async.map value[3..-4].split(/\s+\|\s+/), (alt, cb) ->
     # split into paths and call
-    uris = alt.split(/#/)
+    uris = alt.split /#/
     # return default value
     if uris.length is 1 and not ~alt.indexOf '://'
       debug chalk.grey "#{util.inspect alt} -> default value: #{util.inspect alt}"
@@ -147,6 +157,12 @@ findType =
   check:  (proto, path, work, cb) ->
     vm = require 'vm'
     check = util.inspect vm.runInNewContext "x=#{path}"
+#    check.run
+#      name: name
+#      value: work.value
+#      schema: subcheck
+#    , (err, value) ->
+#      return cb err if err
     (new ValidatorCheck 'work.refname', check, work.data).async cb
   range:  (proto, path, work, cb) ->
     value
@@ -158,11 +174,11 @@ findType =
     cb null, findData path, work
   context: (proto, path, work, cb) ->
     cb null, findData path, object.extend {}, work,
-      data: work.context
+      data: work.spec.context
   file: (proto, path, work, cb) ->
     fs = require 'alinex-fs'
     fspath = require 'path'
-    path = fspath.resolve work.dir, path if work.dir?
+    path = fspath.resolve work.spec.dir, path if work.spec.dir?
     fs.realpath path, (err, path) ->
       return cb err if err
       fs.readFile path, 'utf-8', cb
@@ -181,7 +197,7 @@ findType =
   cmd: (proto, path, work, cb) ->
     exec = require('child_process').exec
     opt = {}
-    opt.cwd = work.dir if work.dir?
+    opt.cwd = work.spec.dir if work.spec.dir?
     exec path, opt, cb
 
 
@@ -190,35 +206,35 @@ findData = (path, work) ->
     work = object.clone work
   # split path
   path = path.replace('/\/+$/','').split /\/+/ if typeof path is 'string'
-  work.pos ?= []
+  work.path ?= []
   # process first level
   cur = path.shift()
   if cur is ''
-    work.pos = []
+    work.path = []
   else
-    if getData(work.data, work.pos)?[cur]?
-      work.pos.push cur
+    if getData(work.data, work.path)?[cur]?
+      work.path.push cur
     else
       return undefined if work.structSearch
       # search backwards neighbors and parent
       done = false
-      if work.pos.length > 1
-        for i in [work.pos.length-2..0]
-          if getData(work.data, work.pos[0..i])[cur]?
-            work.pos = work.pos[0..i]
-            work.pos.push cur
+      if work.path.length > 1
+        for i in [work.path.length-2..0]
+          if getData(work.data, work.path[0..i])[cur]?
+            work.path = work.path[0..i]
+            work.path.push cur
             done = true
             break
       unless done
         if work.data[cur]?
-          work.pos = [cur]
+          work.path = [cur]
           done = true
       return undefined unless done
   work.structSearch = true
   # go on for more level if existing
   return findData path, work if path.length
   # if not use the current path and return this value
-  getData work.data, work.pos
+  getData work.data, work.path
 
 getData = (data, pos) ->
   return data unless pos.length
