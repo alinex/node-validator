@@ -105,19 +105,22 @@ exports.describe = (work, cb) ->
 exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
   # check for references
-#  reference.check work.value,
-#    data: work.spec.schema
-#    pos: work.pos
-#    context: work.spec.context
-  # load library and call check
-  try
-    lib = getTypeLib work.pos, (err, lib) ->
-    unless lib.run?
-      return cb new Error "Type '#{work.pos.type}' has no run() method"
-  catch err
-    debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
-    return cb new Error "Type '#{work.pos.type}' not supported"
-  lib.run work, cb
+  reference.check work.value,
+    data: work.spec.schema
+    pos: work.pos
+    context: work.spec.context
+  , (err, value) ->
+    return cb err if err
+    work.value = value
+    # load library and call check
+    try
+      lib = getTypeLib work.pos, (err, lib) ->
+      unless lib.run?
+        return cb new Error "Type '#{work.pos.type}' has no run() method"
+    catch err
+      debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
+      return cb new Error "Type '#{work.pos.type}' not supported"
+    lib.run work, cb
 
 # ### Selfcheck of schema
 # This may be called using the spec or an already created work instance.

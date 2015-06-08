@@ -288,7 +288,7 @@ describe "References", ->
 
   describe "integration", ->
 
-    it.skip "should call references in values", (cb) ->
+    it "should call references in values", (cb) ->
       test.equal
         type: 'string'
       , [
