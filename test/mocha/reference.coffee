@@ -297,6 +297,34 @@ describe "References", ->
         expect(result[1].length, 'columns').to.equal 12
         cb()
 
+    it "should split into lines and tab separated", (cb) ->
+      text = ''
+      text += "#{i*1}\t#{i*2}\t#{i*3}\t#{i*4}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#%%\n%%\t%%>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.exist
+        expect(result.length, 'rows').to.equal 11
+        expect(result[0], 'row 0').to.not.exist
+        expect(result[1].length, 'columns').to.equal 5
+        cb()
+
+    it "should split csv", (cb) ->
+      text = ''
+      text += "#{i*1}; #{i*2}; #{i*3}; #{i*4}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#%%\n%%;\\s*%%>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.exist
+        expect(result.length, 'rows').to.equal 11
+        expect(result[0], 'row 0').to.not.exist
+        expect(result[1].length, 'columns').to.equal 5
+        cb()
+
   describe "ranges", ->
 
     it.skip "should get specific line", (cb) ->

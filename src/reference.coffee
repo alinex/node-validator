@@ -181,7 +181,7 @@ findType =
         return cb()
       cb null, value
   split:  (proto, path, work, cb) ->
-    splitter = path.split '%%'
+    splitter = path.split('%%').map (s) -> new RegExp s
     result = work.data.split(splitter[1]).map (t) ->
       col = t.split splitter[2]
       col.unshift t
