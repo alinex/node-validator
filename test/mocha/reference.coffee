@@ -8,7 +8,7 @@ path = require 'path'
 test = require '../test'
 reference = require '../../lib/reference'
 
-describe "References", ->
+describe.only "References", ->
 
   describe "detect", ->
 
@@ -102,14 +102,14 @@ describe "References", ->
   describe "structure", ->
 
     it "should find absolute path", (cb) ->
-      struct =
+      data =
         absolute: 123
       value = '<<<struct:///absolute>>>'
       reference.replace value,
-        data: struct
+        data: data
       , (err, result) ->
         expect(err, 'error').to.not.exist
-        expect(result, value).to.equal struct.absolute
+        expect(result, value).to.equal data.absolute
         cb()
 
     it "should fail with absolute path", (cb) ->
@@ -128,7 +128,7 @@ describe "References", ->
           cb()
       , cb
 
-    it.only "should find relative path", (cb) ->
+    it "should find relative path", (cb) ->
       struct =
         europe:
           germany:
@@ -148,7 +148,7 @@ describe "References", ->
       async.forEachOfSeries values, (check, value, cb) ->
         reference.replace value,
           data: struct
-          pos: ['europe','germany']
+          path: ['europe','germany']
         , (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
@@ -174,7 +174,7 @@ describe "References", ->
       async.eachSeries values, (value, cb) ->
         reference.replace value,
           data: struct
-          pos: ['europe','germany']
+          path: ['europe','germany']
         , (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist

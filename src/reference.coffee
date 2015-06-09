@@ -174,11 +174,11 @@ findType =
     cb null, findData path, work
   context: (proto, path, work, cb) ->
     cb null, findData path, object.extend {}, work,
-      data: work.spec.context
+      data: work.spec?.context
   file: (proto, path, work, cb) ->
     fs = require 'alinex-fs'
     fspath = require 'path'
-    path = fspath.resolve work.spec.dir, path if work.spec.dir?
+    path = fspath.resolve work.spec.dir, path if work.spec?.dir?
     fs.realpath path, (err, path) ->
       return cb err if err
       fs.readFile path, 'utf-8', cb
@@ -197,7 +197,7 @@ findType =
   cmd: (proto, path, work, cb) ->
     exec = require('child_process').exec
     opt = {}
-    opt.cwd = work.spec.dir if work.spec.dir?
+    opt.cwd = work.spec.dir if work.spec?.dir?
     exec path, opt, cb
 
 
