@@ -289,15 +289,29 @@ line.
 
 #### Context
 
+Additional to the validating structure which have to be completely checked an
+additional context structure may be given. The values therein are not validated
+but can be used in the references.
+
+This allows you to reference to already validated or system internal information.
+
 ``` text
 <<<context:///absolute/*/min>>>
 ```
 
+The syntax is nearly the same as for the value structure but relative paths makes
+no sense because you don't have a base position in the structure.
+
 #### Environment
+
+The following syntax allows to read from an environment variable which may be
+set on start of the program or before.
 
 ``` text
 <<<env://MY_HOME>>>
 ```
+
+This uses the content of the `MY_HOME` environment variable.
 
 #### File
 
