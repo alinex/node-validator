@@ -433,7 +433,7 @@ Within a text element you may use the following ranges:
 3-5 - specific row range
 3,5 - specific row and column
 3,5-8 - specific column range in row
-3-5,5-8 - specific row and column range
+1-2,5-8 - specific row and column range
 ```
 
 __Structure__

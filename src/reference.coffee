@@ -88,13 +88,13 @@ findAlternative = (value, work={}, cb) ->
   # replace <<< and >>> and split into alternatives
   async.map value[3..-4].split(/\s+\|\s+/), (alt, cb) ->
     # split into paths and call
-    uris = alt.split /#/
+    uriPart = alt.split /#/
     # return default value
-    if uris.length is 1 and not ~alt.indexOf '://'
+    if uriPart.length is 1 and not ~alt.indexOf '://'
       debug chalk.grey "#{util.inspect alt} -> default value: #{util.inspect alt}"
       return cb null, alt
-    # search the uris
-    find uris, work, (err, result) ->
+    # search the uriPart
+    find uriPart, work, (err, result) ->
       if err
         debug chalk.grey "#{util.inspect alt} -> failed: #{err.message}"
         return cb err
@@ -136,34 +136,37 @@ find = (list, work={}, cb) ->
   work.lastType = type
   findType[type] proto, path, work, (err, result) ->
     return cb err if err
+    unless result # no result so stop this uri
+      debug chalk.grey "'#{proto}://#{path}' -> result: ---"
+      return cb()
+    debug chalk.grey "'#{proto}://#{path}' -> result: #{util.inspect result}"
+    # no reference in result
     unless exists result
-      return cb null, result unless list.length
-      debug chalk.grey "'#{proto}://#{path}' -> result: #{util.inspect result}"
+      return cb null, result unless list.length # stop if last entry of uri path
       work = object.extend {}, work,
         data: result
-        pos: undefined
-      find list, work, cb
-    debug chalk.grey 'rerun replace on subdata'
-    replace data, object.clone(work), (err, result) ->
-      return cb err if err
-      return cb null, result unless list.length
-      debug chalk.grey "'#{proto}://#{path}' -> result: #{util.inspect result}"
-      work = object.extend {}, work,
-        data: result
-        pos: undefined
-      find list, work, cb
+      return find list, work, cb
+    # result with reference
+    # do another round on the result's reference
+    # mabe use path of the found reference's position
+    # go on in list
 
 findType =
   check:  (proto, path, work, cb) ->
+    # get the check schema reading as js
     vm = require 'vm'
-    check = util.inspect vm.runInNewContext "x=#{path}"
-#    check.run
-#      name: name
-#      value: work.value
-#      schema: subcheck
-#    , (err, value) ->
-#      return cb err if err
-    (new ValidatorCheck 'work.refname', check, work.data).async cb
+    schema = vm.runInNewContext "x=#{path}"
+    # run the subcheck
+    name = work.spec?.name ? 'value'
+    check.run
+      name: name + '#ref'
+      schema: schema
+      value: work.data
+    , (err, value) ->
+      if err
+        debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
+        return cb()
+      cb null, value
   range:  (proto, path, work, cb) ->
     value
   match:  (proto, path, work, cb) ->

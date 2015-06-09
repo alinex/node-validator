@@ -8,7 +8,7 @@ path = require 'path'
 test = require '../test'
 reference = require '../../lib/reference'
 
-describe.only "References", ->
+describe "References", ->
 
   describe "detect", ->
 
@@ -263,9 +263,7 @@ describe.only "References", ->
           cb()
       , cb
 
-  describe "value search", ->
-
-  describe.skip "checks", ->
+  describe "checks", ->
 
     it "should check against integer", (cb) ->
       struct =
@@ -283,9 +281,31 @@ describe.only "References", ->
           cb()
       , cb
 
-  describe "multipath", ->
+  describe "ranges", ->
+
+    #3
+    #3-5
+    #3,5
+    #3,5-8
+    #1-2,5-8
+
+  describe "matches", ->
+
+    #name
+    #name/*/min
+    #name/*/*/min
+    #name/**/min
+    #name/test?/min
+    #name/test*/min
+    #name/test[AB]/min
+    #name/test\d+/min
 
   describe "multiref", ->
+
+    # struct -> env
+    # struct -> env -> file
+    # struct -> struct (checked)
+    # struct -> struct (unchecked) -> runAgain...
 
   describe "integration", ->
 
@@ -295,3 +315,5 @@ describe.only "References", ->
       , [
         ['<<<name>>>', 'name']
       ], cb
+
+    # references in options
