@@ -129,7 +129,11 @@ find = (list, work={}, cb) ->
     proto = 'split'
     path = '%%\n'
   # check for impossible result data
-  if proto is 'range' and not Array.isArray work.data
+  if (
+    (not Array.isArray(work.data) and proto is 'range') or
+    (typeof work.data isnt 'string' and proto in ['split','match','parse']) or
+    (typeof work.data isnt 'object' and proto is 'object')
+    )
     debug chalk.grey "stop at part #{proto}://#{path} because wrong result type"
     return cb()
   # find type handler
@@ -189,8 +193,9 @@ findType =
     result.unshift null
     cb null, result
   match:  (proto, path, work, cb) ->
-    console.log proto,path,work
-    cb null, value
+    re = path.match /\/([^]*)\/(i?)/
+    re = new RegExp re[1], "#{re[2]}g"
+    cb null, work.data.match re
   parse:  (proto, path, work, cb) ->
     console.log proto,path,work
     cb null, value

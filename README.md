@@ -438,8 +438,10 @@ It is used for range selections.
 %%\n%% - split in lines and characters
 %%\n%%\t%% - split by newline and tab
 %%\n%%\t%% - split by newline and tab
+%%\n%%;\\s*%% - csv like reader with optional spaces
 ```
 
+The separator may be a simple string or an regular expression (as string).
 The resulting array has:
 
 ``` text

@@ -325,6 +325,20 @@ describe "References", ->
         expect(result[1].length, 'columns').to.equal 5
         cb()
 
+  describe.only "match", ->
+
+    it "should find words", (cb) ->
+      reference.replace "<<<struct:///text#/\\w+/>>>",
+        data:
+          text: 'This is a normal text with 8 words.'
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.exist
+        expect(result.length, 'words').to.equal 8
+        cb()
+
+  describe "parser", ->
+
   describe "ranges", ->
 
     it.skip "should get specific line", (cb) ->
@@ -350,7 +364,7 @@ describe "References", ->
 
     #/\n# split by
 
-  describe "matches", ->
+  describe "objects", ->
 
     #name
     #name/*/min
