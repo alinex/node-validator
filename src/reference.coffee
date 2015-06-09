@@ -197,8 +197,34 @@ findType =
     re = new RegExp re[1], "#{re[2]}g"
     cb null, work.data.match re
   parse:  (proto, path, work, cb) ->
-    console.log proto,path,work
-    cb null, value
+    switch path
+      when '$js'
+        vm = require 'vm'
+        cb null, vm.runInNewContext "x=#{work.data}"
+      when '$json'
+        try
+          result = JSON.parse work.data
+        catch err
+          debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
+          return cb()
+        cb null, result
+      when '$yaml'
+        yaml = require 'js-yaml'
+        try
+          result = yaml.safeLoad work.data
+        catch err
+          debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
+          return cb()
+        cb null, result
+      when '$xml'
+        xml2js = require 'xml2js'
+        xml2js.parseString work.data, (err, result) ->
+          if err
+            debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
+            return cb()
+          cb null, result
+      else
+        cb()
   range:  (proto, path, work, cb) ->
     console.log proto,path,work
     cb null, value

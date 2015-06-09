@@ -325,7 +325,7 @@ describe "References", ->
         expect(result[1].length, 'columns').to.equal 5
         cb()
 
-  describe.only "match", ->
+  describe "match", ->
 
     it "should find words", (cb) ->
       reference.replace "<<<struct:///text#/\\w+/>>>",
@@ -337,7 +337,51 @@ describe "References", ->
         expect(result.length, 'words').to.equal 8
         cb()
 
-  describe "parser", ->
+  describe.only "parser", ->
+
+    it "should analyze js", (cb) ->
+      reference.replace "<<<struct:///text#$js>>>",
+        data:
+          text: '{one: 1, two: 2}'
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.exist
+        expect(result.one, 'one').to.equal 1
+        expect(result.two, 'two').to.equal 2
+        cb()
+
+    it "should analyze json", (cb) ->
+      reference.replace "<<<struct:///text#$json>>>",
+        data:
+          text: '{"one": 1, "two": 2}'
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.exist
+        expect(result.one, 'one').to.equal 1
+        expect(result.two, 'two').to.equal 2
+        cb()
+
+    it "should analyze yaml", (cb) ->
+      reference.replace "<<<struct:///text#$yaml>>>",
+        data:
+          text: 'one: 1\ntwo: 2'
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.exist
+        expect(result.one, 'one').to.equal 1
+        expect(result.two, 'two').to.equal 2
+        cb()
+
+    it "should analyze xml", (cb) ->
+      reference.replace "<<<struct:///text#$xml>>>",
+        data:
+          text: '<data><one>1</one><two>2</two></data>'
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.exist
+        expect(result.data.one, 'one').to.deep.equal ['1']
+        expect(result.data.two, 'two').to.deep.equal ['2']
+        cb()
 
   describe "ranges", ->
 

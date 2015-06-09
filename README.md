@@ -468,8 +468,10 @@ Additional to the two methods above this can do complex transformations into
 object structures to do object selections later.
 
 ``` text
-$json
-$xml
+$js - parse javascript to object
+$json - JSON to object
+$yaml - YAML to object
+$xml - XML to object
 ```
 
 __Range Selection__

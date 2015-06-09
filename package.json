@@ -47,7 +47,11 @@
     "chai": "3.x",
     "alinex-error": "1.x"
   },
-  "optionalDependencies": {},
+  "optionalDependencies": {
+    "coffee-script": "1.x",
+    "js-yaml": "3.x",
+    "xml2js": "0.4.x"
+  },
   "engines": {
     "node": ">=0.10"
   },
