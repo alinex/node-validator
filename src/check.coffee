@@ -111,9 +111,9 @@ exports.run = (work, cb) ->
   # check for references
   reference.check work.value,
     spec: work.spec
-    path: work.path[0..]    # clone ecause it will change
+    path: work.path[0..]    # clone because it may change
   , (err, value) ->
-    return cb err if err
+    return work.report err, cb if err
     work.value = value
     # load library and call check
     try

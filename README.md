@@ -424,19 +424,69 @@ Within the same level references between both are possible.
 This keeps the security, so that a user can not compromise the system by injecting
 references to extract internal data.
 
-__Text Range__
+To use the resulting value as datasource and only use some part of it you may
+first convert it if it is a text entry. If nothing of the following is specified
+but a range or object selection comes it will be automatically converted
+using defaults.
+
+__Split__
+
+A split generates a two-dimensional array (rows and columns) out of a simple text.
+It is used for range selections.
+
+``` text
+%%\n%% - split in lines and characters
+%%\n%%\t%% - split by newline and tab
+%%\n%%\t%% - split by newline and tab
+```
+
+The resulting array has:
+
+``` text
+[0] = null
+[1][0] = row 1 as text
+[1][1] = text of row 1, column 1
+...
+```
+
+__Match__
+
+Alternatively to splits you may use an regular expression on your text. You can
+use range selections also, but without column specifier.
+
+``` text
+/.../ - give an regular expression `/g` is used automatically
+```
+
+The resulting array has the found results in elements 1..n.
+
+__Parse__
+
+Additional to the two methods above this can do complex transformations into
+object structures to do object selections later.
+
+``` text
+$json
+$xml
+```
+
+__Range Selection__
+
+If the given value is a text it will be splitted into lines and characters.
 
 Within a text element you may use the following ranges:
 
 ``` text
-3 - specific row
-3-5 - specific row range
-3,5 - specific row and column
-3,5-8 - specific column range in row
-1-2,5-8 - specific row and column range
+3 - specific row as string
+3-5 - specific row range as array
+3,5 - specific row and column as array
+3,5-8 - specific column range in row as array
+1-2,5-8 - specific row and column range as array
+3[2] - specific element (2nd element of third line) as string
+3[2-4] - specific elements (2nd to 4th element of third line) as array
 ```
 
-__Structure__
+__Object Selection__
 
 If it is a structured information you may specify the path by name:
 

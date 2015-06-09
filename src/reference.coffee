@@ -57,7 +57,7 @@ exports.check = (value, work, cb) ->
 # check that there are references in the object
 exists = module.exports.exists = (value) ->
   return false unless typeof value is 'string'
-  Boolean value.match /<<<.*>>>/
+  Boolean value.match /<<<[^]*>>>/
 
 replace = module.exports.replace = (value, work={}, cb) ->
   if typeof work is 'function'
@@ -67,7 +67,7 @@ replace = module.exports.replace = (value, work={}, cb) ->
   work.data ?= work.spec?.schema
   debug "replace #{util.inspect value}..."
   # step over parts
-  refs = value.split /(<<<.*?>>>)/
+  refs = value.split /(<<<[^]*?>>>)/
   refs = [refs[1]] if refs.length is 3 and refs[0] is '' and refs[2] is ''
   # check alternatives
   async.map refs, (v, cb) ->
@@ -107,24 +107,35 @@ findAlternative = (value, work={}, cb) ->
     cb()
 
 find = (list, work={}, cb) ->
-  # get first element of path
-  [proto,path] = list.shift().split /:\/\//
-  unless path
-    # return if no data to work on
-    return cb() unless work.data?
-    # set protocol missing uris
-    path = proto
-    proto = switch
-      when path.trim()[0] is '{'
-        'check'
-      when work.data is 'string'
-        'range'
-      else
-        'match'
-  debug chalk.grey "check part #{proto}://#{path}"
+  # get type of uri part
+  def = list.shift().trim()
+  return cb null, work.data unless def # empty anchor
+  [proto,path] = def.split /:\/\//
+  path ?= proto
+  proto = switch proto[0]
+    when '{' then 'check'
+    when '%' then 'split'
+    when '/' then 'match'
+    when '$' then 'parse'
+    else
+      if def.match /^\d/ then 'range'
+      else unless path then 'object'
+      else proto
+  # return if not possible without data
+  return cb() if def[0..proto.length-1] isnt proto and not work.data?
+  # run automatic conversion if needed
+  if typeof work.data is 'string' and proto is 'range'
+    list.unshift def
+    proto = 'split'
+    path = '%%\n'
+  # check for impossible result data
+  if proto is 'range' and not Array.isArray work.data
+    debug chalk.grey "stop at part #{proto}://#{path} because wrong result type"
+    return cb()
   # find type handler
   proto = proto.toLowerCase()
   type = protocolMap[proto] ? proto
+  debug chalk.grey "check part " + util.inspect "#{proto}://#{path}"
   # check for correct handler
   unless findType[type]?
     return cb new Error "No handler for protocol #{proto} for references defined"
@@ -137,9 +148,11 @@ find = (list, work={}, cb) ->
   findType[type] proto, path, work, (err, result) ->
     return cb err if err
     unless result # no result so stop this uri
-      debug chalk.grey "'#{proto}://#{path}' -> result: ---"
+      if list.length
+        debug chalk.grey util.inspect("#{proto}://#{path}") + " -> result: ---"
       return cb()
-    debug chalk.grey "'#{proto}://#{path}' -> result: #{util.inspect result}"
+    if list.length
+      debug chalk.grey util.inspect("#{proto}://#{path}") + " -> result: #{util.inspect result}"
     # no reference in result
     unless exists result
       return cb null, result unless list.length # stop if last entry of uri path
@@ -167,10 +180,26 @@ findType =
         debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
         return cb()
       cb null, value
-  range:  (proto, path, work, cb) ->
-    value
+  split:  (proto, path, work, cb) ->
+    splitter = path.split '%%'
+    result = work.data.split(splitter[1]).map (t) ->
+      col = t.split splitter[2]
+      col.unshift t
+      col
+    result.unshift null
+    cb null, result
   match:  (proto, path, work, cb) ->
-    value
+    console.log proto,path,work
+    cb null, value
+  parse:  (proto, path, work, cb) ->
+    console.log proto,path,work
+    cb null, value
+  range:  (proto, path, work, cb) ->
+    console.log proto,path,work
+    cb null, value
+  object:  (proto, path, work, cb) ->
+    console.log proto,path,work
+    cb null, value
   env: (proto, path, work, cb) ->
     cb null, process.env[path]
   struct: (proto, path, work, cb) ->

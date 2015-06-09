@@ -281,13 +281,46 @@ describe "References", ->
           cb()
       , cb
 
+  describe "split", ->
+
+    it "should split into lines and characters", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#%%\n%%>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.exist
+        expect(result.length, 'rows').to.equal 11
+        expect(result[0], 'row 0').to.not.exist
+        expect(result[1].length, 'columns').to.equal 12
+        cb()
+
   describe "ranges", ->
 
+    it.skip "should get specific line", (cb) ->
+      struct =
+        text: [1000..1010].join '\n'
+      values =
+        '<<<struct:///text#3>>>': '1003'
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value,
+          data: struct
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.equal check
+          cb()
+      , cb
     #3
     #3-5
     #3,5
     #3,5-8
     #1-2,5-8
+
+    #3[10-15]
+
+    #/\n# split by
 
   describe "matches", ->
 
