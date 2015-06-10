@@ -88,6 +88,7 @@ findAlternative = (value, work={}, cb) ->
   # replace <<< and >>> and split into alternatives
   async.map value[3..-4].split(/\s+\|\s+/), (alt, cb) ->
     # split into paths and call
+    alt = alt[0..alt.length-2] while alt[alt.length-1] is '#'
     uriPart = alt.split /#/
     # return default value
     if uriPart.length is 1 and not ~alt.indexOf '://'
@@ -164,6 +165,7 @@ find = (list, work={}, cb) ->
       return cb null, result unless list.length # stop if last entry of uri path
       work = object.extend {}, work,
         data: result
+
       return find list, work, cb
     # result with reference
     # do another round on the result's reference
@@ -187,9 +189,11 @@ findType =
         return cb()
       cb null, value
   split:  (proto, path, work, cb) ->
-    splitter = path.split('%%').map (s) -> new RegExp s
-    result = work.data.split(splitter[1]).map (t) ->
-      col = t.split splitter[2]
+    path = path[1..]
+    splitter = path.split('//').map (s) -> new RegExp s
+    splitter.push '' if splitter.length is 1
+    result = work.data.split(splitter[0]).map (t) ->
+      col = t.split splitter[1]
       col.unshift t
       col
     result.unshift null

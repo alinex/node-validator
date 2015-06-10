@@ -435,10 +435,10 @@ A split generates a two-dimensional array (rows and columns) out of a simple tex
 It is used for range selections.
 
 ``` text
-%%\n%% - split in lines and characters
-%%\n%%\t%% - split by newline and tab
-%%\n%%\t%% - split by newline and tab
-%%\n%%;\\s*%% - csv like reader with optional spaces
+%\n - split in lines and characters
+%\n//\t - split by newline and tab
+%\n//\t - split by newline and tab
+%\n//;\\s* - csv like reader with optional spaces
 ```
 
 The separator may be a simple string or an regular expression (as string).
@@ -450,6 +450,9 @@ The resulting array has:
 [1][1] = text of row 1, column 1
 ...
 ```
+
+If no other path follows better always add a `#` at the end to prevent problems
+if last separsator is a whitespace.
 
 __Match__
 
@@ -516,6 +519,20 @@ name/test\d+/min - pattern match with multiple missing characters
 
 See the [Mozilla Developer Network](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
 for the possible syntax but without modifier.
+
+__join__
+
+As opposite to split and match the results maybe joined together into a single
+string using some separators.
+
+``` text
+$join , - using , as separator
+$join \n//, - using newline for first level and , as separator below
+name/test\d+/min - pattern match with multiple missing characters
+```
+
+If no other path follows better always add a `#` at the end to prevent problems
+if last separsator is a whitespace.
 
 
 Descriptive reporting

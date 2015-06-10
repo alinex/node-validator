@@ -281,12 +281,12 @@ describe "References", ->
           cb()
       , cb
 
-  describe "split", ->
+  describe.only "split", ->
 
     it "should split into lines and characters", (cb) ->
       text = ''
       text += "#{i*10123456789}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%%\n%%>>>",
+      reference.replace "<<<struct:///text#%\n#>>>",
         data:
           text: text
       , (err, result) ->
@@ -297,10 +297,10 @@ describe "References", ->
         expect(result[1].length, 'columns').to.equal 12
         cb()
 
-    it "should split into lines and tab separated", (cb) ->
+    it "should split into lines and columns tab separated", (cb) ->
       text = ''
       text += "#{i*1}\t#{i*2}\t#{i*3}\t#{i*4}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%%\n%%\t%%>>>",
+      reference.replace "<<<struct:///text#%\n//\t#>>>",
         data:
           text: text
       , (err, result) ->
@@ -314,7 +314,7 @@ describe "References", ->
     it "should split csv", (cb) ->
       text = ''
       text += "#{i*1}; #{i*2}; #{i*3}; #{i*4}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%%\n%%;\\s*%%>>>",
+      reference.replace "<<<struct:///text#%\n//;\\s*>>>",
         data:
           text: text
       , (err, result) ->
