@@ -276,7 +276,7 @@ line 2 makes no difference but line 3 of the examples goes one level up.
 
 __Matching__
 
-See below in the path locator description for the more complex search pattern.
+See below in the path locator description for the more complex search patterns.
 
 __Subchecks__
 
@@ -504,11 +504,16 @@ If it is a structured information you may specify the path by name:
 
 ``` text
 name - get first element with this name
+group/sub/name - get element with path
+```
+
+You can search by using asterix as directory placeholder or a double asterix to
+go multiple level depth:
+
+``` text
 name/*/min - within any subelement
 name/*/*/min - within any subelement (two level depth)
 name/**/min - within any subelement in any depth
-name/test?/min - pattern match with one missing character
-name/test*/min - pattern match with multiple missing characters
 ```
 
 You may also use regexp notation to find the correct element:

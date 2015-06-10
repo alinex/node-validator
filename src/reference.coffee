@@ -169,9 +169,8 @@ find = (list, work={}, cb) ->
     # no reference in result
     unless exists result
       return cb null, result unless list.length # stop if last entry of uri path
-      work = object.extend {}, work,
-        data: result
-
+      work = object.extend {}, work
+      work.data = result
       return find list, work, cb
     # result with reference
     # do another round on the result's reference
@@ -287,8 +286,7 @@ findType =
     result = result[0] if result.length is 1
     cb null, result
   object:  (proto, path, work, cb) ->
-    console.log proto,path,work
-    cb null, value
+    cb null, getData work.data, path.split '/'
   join:  (proto, path, work, cb) ->
     console.log proto,path,work
     cb null, value
@@ -297,8 +295,9 @@ findType =
   struct: (proto, path, work, cb) ->
     cb null, findData path, work
   context: (proto, path, work, cb) ->
-    cb null, findData path, object.extend {}, work,
-      data: work.spec?.context
+    cb null, getData work.spec?.context, path.split '/'
+#    cb null, findData path, object.extend {}, work,
+#      data: work.spec?.context
   file: (proto, path, work, cb) ->
     fs = require 'alinex-fs'
     fspath = require 'path'
@@ -360,12 +359,43 @@ findData = (path, work) ->
   # if not use the current path and return this value
   getData work.data, work.path
 
-getData = (data, pos) ->
-  return data unless pos.length
-  result = data
-  for i in [0..pos.length-1]
-    #console.log '-->', result, pos[i]
-    result = result[pos[i]]
-    #console.log '--=', result
-  return result
+getData = (data, path) ->
+  return data unless path.length
+#  result = data
+#  console.log 'pppp', path
+#  for i in [0..path.length-1]
+#    console.log '-->', path[i]
+#    result = result[path[i]]
+#    console.log '--=', result
+#  return result
 
+#  console.log '???', path
+  cur = path.shift()
+  result = data
+#  console.log '===', data
+#  console.log '-->', cur
+  switch
+    when cur is '*'
+      unless path.length
+        result = []
+        result.push val for key,val of data
+        return result
+      for key,val of data
+        result = getData val, path[0..]
+        return result if result?
+      return
+    when cur is '**'
+      return data unless path.length
+      result = getData result, path[0..]
+      return result if result?
+      path.unshift cur
+      for key,val of data
+        result = getData val, path[0..]
+        console.log '111', result
+        return result if result?
+      return
+    else
+      result = data[cur]
+      return unless result?
+      return getData result, path if path.length
+      result

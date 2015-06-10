@@ -101,6 +101,17 @@ describe "References", ->
 
   describe "structure", ->
 
+    soccer =
+      europe:
+        germany:
+          stuttgart: 'VFB Stuttgart'
+          munich: 'FC Bayern'
+        spain:
+          madrid: 'Real Madrid'
+      southamerica:
+        brazil:
+          saopaulo: 'FC Sao Paulo'
+
     it "should find absolute path", (cb) ->
       data =
         absolute: 123
@@ -129,16 +140,6 @@ describe "References", ->
       , cb
 
     it "should find relative path", (cb) ->
-      struct =
-        europe:
-          germany:
-            stuttgart: 'VFB Stuttgart'
-            munich: 'FC Bayern'
-          spain:
-            madrid: 'Real Madrid'
-        southamerica:
-          brazil:
-            saopaulo: 'FC Sao Paulo'
       values =
         '<<<struct://stuttgart>>>': struct.europe.germany.stuttgart
         '<<<struct://munich>>>': struct.europe.germany.munich
@@ -147,7 +148,7 @@ describe "References", ->
         '<<<struct://southamerica/brazil/saopaulo>>>': struct.southamerica.brazil.saopaulo
       async.forEachOfSeries values, (check, value, cb) ->
         reference.replace value,
-          data: struct
+          data: soccer
           path: ['europe','germany']
         , (err, result) ->
           expect(err, 'error').to.not.exist
@@ -156,16 +157,6 @@ describe "References", ->
       , cb
 
     it "should fail with relative path", (cb) ->
-      struct =
-        europe:
-          germany:
-            stuttgart: 'VFB Stuttgart'
-            munich: 'FC Bayern'
-          spain:
-            madrid: 'Real Madrid'
-        southamerica:
-          brazil:
-            saopaulo: 'FC Sao Paulo'
       values = [
         '<<<struct:///berlin>>>'
         '<<<struct:///america/newyork>>>'
@@ -173,7 +164,7 @@ describe "References", ->
       ]
       async.eachSeries values, (value, cb) ->
         reference.replace value,
-          data: struct
+          data: soccer
           path: ['europe','germany']
         , (err, result) ->
           expect(err, 'error').to.not.exist
@@ -385,9 +376,10 @@ describe "References", ->
 
   describe "ranges", ->
 
+    text = ''
+    text += "#{i*10123456789}\n" for i in [1..9]
+
     it "should get specific line", (cb) ->
-      text = ''
-      text += "#{i*10123456789}\n" for i in [1..9]
       reference.replace "<<<struct:///text#3>>>",
         data:
           text: text
@@ -397,8 +389,6 @@ describe "References", ->
         cb()
 
     it "should get line range", (cb) ->
-      text = ''
-      text += "#{i*10123456789}\n" for i in [1..9]
       reference.replace "<<<struct:///text#3-5>>>",
         data:
           text: text
@@ -408,8 +398,6 @@ describe "References", ->
         cb()
 
     it "should get line list", (cb) ->
-      text = ''
-      text += "#{i*10123456789}\n" for i in [1..9]
       reference.replace "<<<struct:///text#3,5>>>",
         data:
           text: text
@@ -419,8 +407,6 @@ describe "References", ->
         cb()
 
     it "should get line range + list", (cb) ->
-      text = ''
-      text += "#{i*10123456789}\n" for i in [1..9]
       reference.replace "<<<struct:///text#3-5,8>>>",
         data:
           text: text
@@ -432,8 +418,6 @@ describe "References", ->
         cb()
 
     it "should get specific column", (cb) ->
-      text = ''
-      text += "#{i*10123456789}\n" for i in [1..9]
       reference.replace "<<<struct:///text#3[3]>>>",
         data:
           text: text
@@ -443,8 +427,6 @@ describe "References", ->
         cb()
 
     it "should get specific column range", (cb) ->
-      text = ''
-      text += "#{i*10123456789}\n" for i in [1..9]
       reference.replace "<<<struct:///text#3[3-5]>>>",
         data:
           text: text
@@ -454,8 +436,6 @@ describe "References", ->
         cb()
 
     it "should get specific column list", (cb) ->
-      text = ''
-      text += "#{i*10123456789}\n" for i in [1..9]
       reference.replace "<<<struct:///text#3[3,5]>>>",
         data:
           text: text
@@ -465,8 +445,6 @@ describe "References", ->
         cb()
 
     it "should allow alltogether", (cb) ->
-      text = ''
-      text += "#{i*10123456789}\n" for i in [1..9]
       reference.replace "<<<struct:///text#3-5[3],8[5-6,9]>>>",
         data:
           text: text
@@ -478,9 +456,78 @@ describe "References", ->
         ]
         cb()
 
-  describe.only "objects", ->
+  describe "objects", ->
 
-    it "should analyze js", (cb) ->
+    soccer =
+      clubs:
+        europe:
+          germany:
+            stuttgart: 'VFB Stuttgart'
+            munich: 'FC Bayern'
+            hamburg: 'Hamburger SV'
+          spain:
+            madrid: 'Real Madrid'
+            barcelona: 'FC Barcelona'
+        southamerica:
+          brazil:
+            saopaulo: 'FC Sao Paulo'
+
+    it "should access element per path", (cb) ->
+      values =
+        '<<<struct://clubs#europe/germany/stuttgart>>>': 'VFB Stuttgart'
+        '<<<struct://clubs#southamerica/brazil>>>': {saopaulo: 'FC Sao Paulo'}
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value,
+          data: soccer
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.deep.equal check
+          cb()
+      , cb
+
+    it "should be undefined if not existing", (cb) ->
+      values = [
+        '<<<struct://clubs#europe/germany/berlin>>>'
+        '<<<struct://clubs#asia>>>'
+        '<<<struct://clubs#asia/china/peking>>>'
+      ]
+      async.each values, (value, cb) ->
+        reference.replace value,
+          data: soccer
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, 'result').to.not.exist
+          cb()
+      , cb
+
+    it.only "should find using asterisk", (cb) ->
+      values =
+        '<<<struct://clubs#europe/*/stuttgart>>>': 'VFB Stuttgart'
+        '<<<struct://clubs#**/stuttgart>>>': 'VFB Stuttgart'
+        '<<<struct://clubs#*/brazil>>>': {saopaulo: 'FC Sao Paulo'}
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value,
+          data: soccer
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.deep.equal check
+          cb()
+      , cb
+
+    it "should find using regular expressions", (cb) ->
+      values =
+        '<<<struct://clubs#europe/germany/\\w*m\\w*>>>': ['FC Bayern', 'Hamburger SV']
+        '<<<struct://clubs#europe/germany/.*[ic].*>>>': 'FC Bayern'
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value,
+          data: soccer
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.deep.equal check
+          cb()
+      , cb
+
+    it "should auto parse and access element", (cb) ->
       reference.replace "<<<struct:///text#one>>>",
         data:
           text: '{one: 1, two: 2}'
