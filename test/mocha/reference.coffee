@@ -375,7 +375,7 @@ describe "References", ->
     it "should analyze xml", (cb) ->
       reference.replace "<<<struct:///text#$xml>>>",
         data:
-          text: '<data><one>1</one><two>2</two></data>'
+          text: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<data><one>1</one><two>2</two></data>'
       , (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
@@ -478,7 +478,16 @@ describe "References", ->
         ]
         cb()
 
-  describe "objects", ->
+  describe.only "objects", ->
+
+    it "should analyze js", (cb) ->
+      reference.replace "<<<struct:///text#one>>>",
+        data:
+          text: '{one: 1, two: 2}'
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.equal 1
+        cb()
 
     #name
     #name/*/min
@@ -488,6 +497,8 @@ describe "References", ->
     #name/test*/min
     #name/test[AB]/min
     #name/test\d+/min
+
+  describe "join", ->
 
   describe "multiref", ->
 

@@ -475,6 +475,7 @@ $js - parse javascript to object
 $json - JSON to object
 $yaml - YAML to object
 $xml - XML to object
+$auto - try to autodetect correct parser
 ```
 
 __Range Selection__

@@ -120,17 +120,23 @@ find = (list, work={}, cb) ->
     when '$' then 'parse'
     else
       if def.match /^\d/ then 'range'
-      else unless path then 'object'
+      else unless ~def.indexOf '://'  then 'object'
       else proto
   if proto is '$' and ~path.indexOf '$join'
     proto = 'join'
   # return if not possible without data
   return cb() if def[0..proto.length-1] isnt proto and not work.data?
   # run automatic conversion if needed
-  if typeof work.data is 'string' and proto is 'range'
-    list.unshift def
-    proto = 'split'
-    path = '%%\n%%'
+  if typeof work.data is 'string'
+    switch proto
+      when 'range'
+        list.unshift def
+        proto = 'split'
+        path = '%\n'
+      when 'object'
+        list.unshift def
+        proto = 'parse'
+        path = '$auto'
   # check for impossible result data
   if (
     (not Array.isArray(work.data) and proto is 'range') or
@@ -228,6 +234,14 @@ findType =
           if err
             debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
             return cb()
+          cb null, result
+      when '$auto'
+        result = null
+        async.detectSeries ['$yaml','$xml','$json','$js'], (path, cb) ->
+          find [path], work, (err, val) ->
+            result = val
+            cb()
+        , ->
           cb null, result
       else
         cb()
