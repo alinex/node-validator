@@ -108,7 +108,7 @@ findAlternative = (value, work={}, cb) ->
 
 find = (list, work={}, cb) ->
   # get type of uri part
-  def = list.shift().trim()
+  def = list.shift()
   return cb null, work.data unless def # empty anchor
   [proto,path] = def.split /:\/\//
   path ?= proto
@@ -121,13 +121,15 @@ find = (list, work={}, cb) ->
       if def.match /^\d/ then 'range'
       else unless path then 'object'
       else proto
+  if proto is '$' and ~path.indexOf '$join'
+    proto = 'join'
   # return if not possible without data
   return cb() if def[0..proto.length-1] isnt proto and not work.data?
   # run automatic conversion if needed
   if typeof work.data is 'string' and proto is 'range'
     list.unshift def
     proto = 'split'
-    path = '%%\n'
+    path = '%%\n%%'
   # check for impossible result data
   if (
     (not Array.isArray(work.data) and proto is 'range') or
@@ -226,9 +228,50 @@ findType =
       else
         cb()
   range:  (proto, path, work, cb) ->
+    # split multiple specifiers
+    rows = path.match ///
+      \d+ # first row
+      (?:-\d+)? # end of row range
+      (?:\[[^\]]+\])? # column specification
+      ///g #path.split ','
+    result = []
+    # go over rows
+    for row in rows
+      row = row.match ///
+        (\d+) # first row
+        (?:-(\d+))? # end of row range
+        (?:\[([^\]]+)\])? # column specification
+        /// #path.split ','
+      row.from = parseInt row[1]
+      row.to = if row[2]? then parseInt row[2] else row.from
+      cols = row[3]?.split ','
+#      console.log 'row:', row
+      if cols? and Array.isArray work.data[1]
+        # get columns
+        for drow in work.data[row.from..row.to]
+          data = []
+          for col in cols
+            col = col.match ///
+              (\d+) # first column
+              (?:-(\d+))? # end of column range
+              /// #path.split ','
+            col.from = parseInt col[1]
+            col.to = if col[2]? then parseInt col[2] else col.from
+#            console.log 'col:', col
+            data = data.concat drow[col.from..col.to]
+          result.push data
+      else
+        # get single row
+        for drow in work.data[row.from..row.to]
+          result.push drow[0]
+    return cb() unless result.length
+    result = result[0] if result.length is 1
+    result = result[0] if result.length is 1
+    cb null, result
+  object:  (proto, path, work, cb) ->
     console.log proto,path,work
     cb null, value
-  object:  (proto, path, work, cb) ->
+  join:  (proto, path, work, cb) ->
     console.log proto,path,work
     cb null, value
   env: (proto, path, work, cb) ->

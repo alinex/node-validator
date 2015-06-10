@@ -337,7 +337,7 @@ describe "References", ->
         expect(result.length, 'words').to.equal 8
         cb()
 
-  describe.only "parser", ->
+  describe "parser", ->
 
     it "should analyze js", (cb) ->
       reference.replace "<<<struct:///text#$js>>>",
@@ -385,28 +385,98 @@ describe "References", ->
 
   describe "ranges", ->
 
-    it.skip "should get specific line", (cb) ->
-      struct =
-        text: [1000..1010].join '\n'
-      values =
-        '<<<struct:///text#3>>>': '1003'
-      async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value,
-          data: struct
-        , (err, result) ->
-          expect(err, 'error').to.not.exist
-          expect(result, value).to.equal check
-          cb()
-      , cb
-    #3
-    #3-5
-    #3,5
-    #3,5-8
-    #1-2,5-8
+    it "should get specific line", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#3>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.equal '30370370367'
+        cb()
 
-    #3[10-15]
+    it "should get line range", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#3-5>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.deep.equal ['30370370367','40493827156','50617283945']
+        cb()
 
-    #/\n# split by
+    it "should get line list", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#3,5>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.deep.equal ['30370370367','50617283945']
+        cb()
+
+    it "should get line range + list", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#3-5,8>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.deep.equal [
+          '30370370367','40493827156','50617283945'
+          '80987654312']
+        cb()
+
+    it "should get specific column", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#3[3]>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.equal '3'
+        cb()
+
+    it "should get specific column range", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#3[3-5]>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.deep.equal ['3', '7', '0']
+        cb()
+
+    it "should get specific column list", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#3[3,5]>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.deep.equal ['3', '0']
+        cb()
+
+    it "should allow alltogether", (cb) ->
+      text = ''
+      text += "#{i*10123456789}\n" for i in [1..9]
+      reference.replace "<<<struct:///text#3-5[3],8[5-6,9]>>>",
+        data:
+          text: text
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.deep.equal [
+          [ '3' ], [ '4' ], [ '6' ]
+          [ '7', '6', '3' ]
+        ]
+        cb()
 
   describe "objects", ->
 

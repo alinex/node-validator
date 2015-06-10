@@ -488,7 +488,11 @@ Within a text element you may use the following ranges:
 1-2,5-8 - specific row and column range as array
 3[2] - specific element (2nd element of third line) as string
 3[2-4] - specific elements (2nd to 4th element of third line) as array
+3[2-4,8],4[2] - and all combined ;-)
 ```
+
+The result may be a single value, an array or an array of arrays depending on the
+selected result.
 
 __Object Selection__
 
