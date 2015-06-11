@@ -587,4 +587,24 @@ describe.only "References", ->
         ['<<<name>>>', 'name']
       ], cb
 
-    # references in options
+    it "should call references in options", (cb) ->
+      struc =
+        type: 'object'
+        keys:
+          min:
+            type: 'integer'
+          max:
+            type: 'integer'
+            min: '<<<min>>>'
+      test.same struc, [
+        min: 5
+        max: 7
+      ,
+        min: 5
+        max: 5
+      ], ->
+        test.fail struc, [
+          min: 5
+          max: 4
+        ], cb
+
