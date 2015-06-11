@@ -8,7 +8,7 @@ path = require 'path'
 test = require '../test'
 reference = require '../../lib/reference'
 
-describe "References", ->
+describe.only "References", ->
 
   describe "detect", ->
 
@@ -141,11 +141,11 @@ describe "References", ->
 
     it "should find relative path", (cb) ->
       values =
-        '<<<struct://stuttgart>>>': struct.europe.germany.stuttgart
-        '<<<struct://munich>>>': struct.europe.germany.munich
-        '<<<struct://spain>>>': struct.europe.spain
-        '<<<struct://spain/madrid>>>': struct.europe.spain.madrid
-        '<<<struct://southamerica/brazil/saopaulo>>>': struct.southamerica.brazil.saopaulo
+        '<<<struct://stuttgart>>>': soccer.europe.germany.stuttgart
+        '<<<struct://munich>>>': soccer.europe.germany.munich
+        '<<<struct://spain>>>': soccer.europe.spain
+        '<<<struct://spain/madrid>>>': soccer.europe.spain.madrid
+        '<<<struct://southamerica/brazil/saopaulo>>>': soccer.southamerica.brazil.saopaulo
       async.forEachOfSeries values, (check, value, cb) ->
         reference.replace value,
           data: soccer
@@ -500,7 +500,7 @@ describe "References", ->
           cb()
       , cb
 
-    it.only "should find using asterisk", (cb) ->
+    it "should find using asterisk", (cb) ->
       values =
         '<<<struct://clubs#europe/*/stuttgart>>>': 'VFB Stuttgart'
         '<<<struct://clubs#**/stuttgart>>>': 'VFB Stuttgart'

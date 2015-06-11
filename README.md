@@ -507,7 +507,7 @@ name - get first element with this name
 group/sub/name - get element with path
 ```
 
-You can search by using asterix as directory placeholder or a double asterix to
+You can search by using asterisk as directory placeholder or a double asterisk to
 go multiple level depth:
 
 ``` text

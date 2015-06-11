@@ -37,19 +37,19 @@
     "alinex-util": "0.2.x",
     "chalk": "1.x",
     "debug": ">=0.8.0 <3.0.0",
-    "handlebars": "3.x",
+    "request": "^2.55.0"
+  },
+  "optionalDependencies": {
     "ipaddr.js": "1.x",
     "mathjs": "1.x",
-    "request": "^2.55.0"
+    "handlebars": "3.x",
+    "js-yaml": "3.x",
+    "xml2js": "0.4.x"
   },
   "devDependencies": {
     "alinex-builder": "1.x",
     "chai": "3.x",
     "alinex-error": "1.x"
-  },
-  "optionalDependencies": {
-    "js-yaml": "3.x",
-    "xml2js": "0.4.x"
   },
   "engines": {
     "node": ">=0.10"

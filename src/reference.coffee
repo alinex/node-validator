@@ -17,7 +17,6 @@
 #
 # - data - structure to work on (schema or context)
 # - lastType - the type of the last checked reference to ensure security
-# - structSearch - set if first element is done (within findData())
 
 
 # Node modules
@@ -262,7 +261,6 @@ findType =
       row.from = parseInt row[1]
       row.to = if row[2]? then parseInt row[2] else row.from
       cols = row[3]?.split ','
-#      console.log 'row:', row
       if cols? and Array.isArray work.data[1]
         # get columns
         for drow in work.data[row.from..row.to]
@@ -274,7 +272,6 @@ findType =
               /// #path.split ','
             col.from = parseInt col[1]
             col.to = if col[2]? then parseInt col[2] else col.from
-#            console.log 'col:', col
             data = data.concat drow[col.from..col.to]
           result.push data
       else
@@ -325,53 +322,32 @@ findType =
 
 
 findData = (path, work) ->
-  unless work.structSearch?
-    work = object.clone work
+#  console.log 'find:', path, work
   # split path
   path = path.replace('/\/+$/','').split /\/+/ if typeof path is 'string'
   work.path ?= []
-  # process first level
-  cur = path.shift()
-  if cur is ''
-    work.path = []
-  else
-    if getData(work.data, work.path)?[cur]?
-      work.path.push cur
-    else
-      return undefined if work.structSearch
-      # search backwards neighbors and parent
-      done = false
-      if work.path.length > 1
-        for i in [work.path.length-2..0]
-          if getData(work.data, work.path[0..i])[cur]?
-            work.path = work.path[0..i]
-            work.path.push cur
-            done = true
-            break
-      unless done
-        if work.data[cur]?
-          work.path = [cur]
-          done = true
-      return undefined unless done
-  work.structSearch = true
-  # go on for more level if existing
-  return findData path, work if path.length
-  # if not use the current path and return this value
-  getData work.data, work.path
+  # find first level
+  first = path[0]
+  # absolute path, go on
+  return getData work.data, path[1..] if first is ''
+  # search at current position
+  result = getData work.data, work.path.concat path
+  return result if result
+  # check if not at the end
+  return unless work.path.length
+  # search neighbors by sub call on parent
+  sub = object.clone work
+  sub.path.pop()
+  return findData path, sub
 
 getData = (data, path) ->
   return data unless path.length
-#  result = data
-#  console.log 'pppp', path
-#  for i in [0..path.length-1]
-#    console.log '-->', path[i]
-#    result = result[path[i]]
-#    console.log '--=', result
-#  return result
-
 #  console.log '???', path
   cur = path.shift()
+  # step over empty paths like //
+  cur = path.shift() while cur is '' and path.length
   result = data
+#  console.log '???', cur, path
 #  console.log '===', data
 #  console.log '-->', cur
   switch
@@ -391,9 +367,16 @@ getData = (data, path) ->
       path.unshift cur
       for key,val of data
         result = getData val, path[0..]
-        console.log '111', result
         return result if result?
       return
+    when cur.match /\W/
+      cur = new RegExp "^#{cur}$"
+      result = []
+      for key,val of data
+        result.push val if key.match cur
+      return unless result.length
+      result = result[0] if result.length is 1
+      result
     else
       result = data[cur]
       return unless result?
