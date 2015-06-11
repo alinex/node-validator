@@ -536,16 +536,40 @@ describe.only "References", ->
         expect(result, 'result').to.equal 1
         cb()
 
-    #name
-    #name/*/min
-    #name/*/*/min
-    #name/**/min
-    #name/test?/min
-    #name/test*/min
-    #name/test[AB]/min
-    #name/test\d+/min
-
   describe "join", ->
+
+    it "should join array together", (cb) ->
+      reference.replace "<<<struct:///text#$join>>>",
+        data:
+          text: [1, 2, 3, 4]
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.equal '1, 2, 3, 4'
+        cb()
+
+    it "should join multilevel array together", (cb) ->
+      reference.replace "<<<struct:///text#$join  and //, #{}>>>",
+        data:
+          text: [
+            [1, 2, 3, 4]
+            [8, 9]
+          ]
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.equal '1, 2, 3, 4 and 8, 9'
+        cb()
+
+    it "should join multilevel with same phrase together", (cb) ->
+      reference.replace "<<<struct:///text#$join , #{}>>>",
+        data:
+          text: [
+            [1, 2, 3, 4]
+            [8, 9]
+          ]
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.equal '1, 2, 3, 4, 8, 9'
+        cb()
 
   describe "multiref", ->
 

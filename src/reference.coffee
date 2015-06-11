@@ -121,24 +121,31 @@ find = (list, work={}, cb) ->
       if def.match /^\d/ then 'range'
       else unless ~def.indexOf '://'  then 'object'
       else proto
-  if proto is '$' and ~path.indexOf '$join'
+  if proto is 'parse' and ~path.indexOf '$join'
     proto = 'join'
   # return if not possible without data
   return cb() if def[0..proto.length-1] isnt proto and not work.data?
   # run automatic conversion if needed
-  if typeof work.data is 'string'
-    switch proto
-      when 'range'
-        list.unshift def
-        proto = 'split'
-        path = '%\n'
-      when 'object'
-        list.unshift def
-        proto = 'parse'
-        path = '$auto'
+  switch typeof work.data
+    when 'string'
+      switch proto
+        when 'range'
+          list.unshift def
+          proto = 'split'
+          path = '%\n'
+        when 'object'
+          list.unshift def
+          proto = 'parse'
+          path = '$auto'
+    when 'array'
+      switch proto
+        when 'object'
+          list.unshift def
+          proto = 'join'
+          path = '$join'
   # check for impossible result data
   if (
-    (not Array.isArray(work.data) and proto is 'range') or
+    (not Array.isArray(work.data) and proto in ['range','join']) or
     (typeof work.data isnt 'string' and proto in ['split','match','parse']) or
     (typeof work.data isnt 'object' and proto is 'object')
     )
@@ -285,16 +292,15 @@ findType =
   object:  (proto, path, work, cb) ->
     cb null, getData work.data, path.split '/'
   join:  (proto, path, work, cb) ->
-    console.log proto,path,work
-    cb null, value
+    path = path[6..]
+    splitter = if path then path.split '//' else [', ']
+    cb null, arrayJoin work.data, splitter
   env: (proto, path, work, cb) ->
     cb null, process.env[path]
   struct: (proto, path, work, cb) ->
     cb null, findData path, work
   context: (proto, path, work, cb) ->
     cb null, getData work.spec?.context, path.split '/'
-#    cb null, findData path, object.extend {}, work,
-#      data: work.spec?.context
   file: (proto, path, work, cb) ->
     fs = require 'alinex-fs'
     fspath = require 'path'
@@ -382,3 +388,12 @@ getData = (data, path) ->
       return unless result?
       return getData result, path if path.length
       result
+
+arrayJoin = (data, splitter) ->
+  glue = if splitter.length is 1 then splitter[0] else splitter.shift()
+  result = ''
+  for v in data
+    v = arrayJoin v, splitter if Array.isArray v
+    result += glue if result
+    result += v
+  result
