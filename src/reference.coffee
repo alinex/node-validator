@@ -63,7 +63,7 @@ replace = module.exports.replace = (value, work={}, cb) ->
     cb = work
     work = {}
   return cb null, value unless exists value
-  work.data ?= work.spec?.schema
+  work.data ?= work.spec?.value
   debug "replace #{util.inspect value}..."
   # step over parts
   refs = value.split /(<<<[^]*?>>>)/
@@ -337,7 +337,11 @@ findData = (path, work) ->
   # absolute path, go on
   return getData work.data, path[1..] if first is ''
   # search at current position
-  result = getData work.data, work.path.concat path
+  skip = 1
+  while path[0] is '..'
+    skip++
+    path.shift()
+  result = getData work.data, work.path[0..work.path.length-skip].concat path
   return result if result
   # check if not at the end
   return unless work.path.length

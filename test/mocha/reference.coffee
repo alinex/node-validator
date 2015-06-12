@@ -8,7 +8,7 @@ path = require 'path'
 test = require '../test'
 reference = require '../../lib/reference'
 
-describe.only "References", ->
+describe "References", ->
 
   describe "detect", ->
 
@@ -172,6 +172,33 @@ describe.only "References", ->
           cb()
       , cb
 
+    it "should find backreferenced path", (cb) ->
+      values =
+        '<<<struct://../germany/stuttgart>>>': soccer.europe.germany.stuttgart
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value,
+          data: soccer
+          path: ['europe','germany']
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.deep.equal check
+          cb()
+      , cb
+
+    it "should fail with backreferenced path", (cb) ->
+      values = [
+        '<<<struct:///../stuttgart>>>'
+      ]
+      async.eachSeries values, (value, cb) ->
+        reference.replace value,
+          data: soccer
+          path: ['europe','germany']
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.not.exist
+          cb()
+      , cb
+
     it "should find context path", (cb) ->
       struct =
         absolute: 123
@@ -272,7 +299,7 @@ describe.only "References", ->
           cb()
       , cb
 
-  describe.only "split", ->
+  describe "split", ->
 
     it "should split into lines and characters", (cb) ->
       text = ''
@@ -587,7 +614,21 @@ describe.only "References", ->
         ['<<<name>>>', 'name']
       ], cb
 
-    it "should call references in options", (cb) ->
+    it "should call references in sub values", (cb) ->
+      test.equal
+        type: 'object'
+      , [
+        [{name:'<<<name>>>'}, {name:'name'}]
+      ], cb
+
+    it "should call struct references in sub values", (cb) ->
+      test.equal
+        type: 'object'
+      , [
+        [{min: 5, max:'<<<struct://min>>>'}, {min:5,max:5}]
+      ], cb
+
+    it.skip "should call references in options", (cb) ->
       struc =
         type: 'object'
         keys:
@@ -595,7 +636,7 @@ describe.only "References", ->
             type: 'integer'
           max:
             type: 'integer'
-            min: '<<<min>>>'
+            min: '<<<struct://min>>>'
       test.same struc, [
         min: 5
         max: 7
@@ -608,3 +649,16 @@ describe.only "References", ->
           max: 4
         ], cb
 
+    it.skip "should call references in options", (cb) ->
+      struc =
+        type: 'object'
+        keys:
+          min:
+            type: 'integer'
+          max:
+            type: 'integer'
+            min: '<<<struct://../../min>>>'
+      test.fail struc, [
+        min: 5
+        max: 4
+      ], cb

@@ -177,33 +177,33 @@ exports.run = (work, cb) ->
     # find sub-check
     if work.pos.keys?[key]?
       sub = work.goInto 'keys', key
-      sub.value = sub.value[key]
     else if work.pos.entries?
       for rule, i in work.pos.entries
         if rule.key?.match key
           sub = work.goInto 'entries', i
-          sub.value = sub.value[key]
           break
         else
           sub = work.goInto 'entries', i
-          sub.value = sub.value[key]
     else
+      # keys that have no specification
       name = work.spec.name ? 'value'
       path = work.path.concat key
       name += "/#{path.join '/'}"
-      sub =
-        name: name
-        value: value[key]
-        schema:
-          type: switch
-            when Array.isArray value[key]
-              'array'
-            when typeof value[key] is 'object'
-              'object'
-            else
-              'any'
-          optional: true
-    check.run sub, cb
+      sub = work.goInto key
+      sub.pos =
+        type: switch
+          when Array.isArray work.value[key]
+            'array'
+          when typeof work.value[key] is 'object'
+            'object'
+          else
+            'any'
+        optional: true
+    sub.value = work.value[key]
+    check.run sub, (err, result) ->
+      return cb err if err
+      value[key] = result
+      cb()
   , (err) ->
     return cb err if err
     # done return resulting value

@@ -263,7 +263,6 @@ __Relative path__
 
 ``` text
 <<<struct://relative/field>>>
-<<<struct://./relative/field>>>
 <<<struct://../relative/field>>>
 ```
 

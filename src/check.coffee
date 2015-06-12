@@ -22,6 +22,7 @@ reference = require './reference'
 #   - schema - (object) structure to check
 #   - context - (object) additional data structure
 #   - dir - set to base directory for file relative file paths
+#   - value - original value (not changed)
 # - path - array containing the current path
 # - pos - reference to schema position at this path
 # - debug - output of current path for debugging
@@ -56,14 +57,15 @@ class Work
       cb err
 
   goInto: (names...) ->
-    #console.log names, @
     name = names.shift()
+#    console.log name, '>>>', @
     sub = new Work @spec
     sub.path = @path.concat name
-    sub.pos = @pos[name]
+    sub.pos = if @pos[name]? then  @pos[name] else @pos
     sub.value = @value
     sub.debug = chalk.grey "#{sub.spec.name ? 'value'}/#{sub.path.join '/'}"
     #console.log name, sub
+#    console.log name, '<<<', sub
     return sub unless names.length
     sub.goInto names...
 
@@ -108,7 +110,8 @@ exports.describe = (work, cb) ->
 # This may be called using the spec or an already created work instance.
 exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
-  # check for references
+#  console.log 'check:', work
+  # check for references in values
   reference.check work.value,
     spec: work.spec
     path: work.path[0..]    # clone because it may change
