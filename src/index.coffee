@@ -21,9 +21,8 @@ check = require './check'
 # -------------------------------------------------
 # This will directly return the description of how the value has to be.
 exports.describe = (spec, cb) ->
-  checkSchema spec, (err) ->
-    return cb err if err
-    check.describe spec, cb
+  return cb err if err
+  check.describe spec, cb
 
 # Check value and sanitize
 # -------------------------------------------------
@@ -36,28 +35,17 @@ exports.check = (spec, cb) ->
   # optimize data
   spec.debug = chalk.grey spec.name ? 'value'
   # run the check
-  checkSchema spec, (err) ->
-    return cb err if err
-    debug "#{spec.debug} check as #{spec.schema.title ? spec.schema.type}"
-    check.run spec, (err, result) ->
-      if err
-        debug "#{spec.debug} failed with: #{err.message}"
-      else
-        debug "#{spec.debug} succeeded with: #{util.inspect result}"
-      cb err, result
+  return cb err if err
+  debug "#{spec.debug} check as #{spec.schema.title ? spec.schema.type}"
+  check.run spec, (err, result) ->
+    if err
+      debug "#{spec.debug} failed with: #{err.message}"
+    else
+      debug "#{spec.debug} succeeded with: #{util.inspect result}"
+    cb err, result
 
 # Check validation rules
 # -------------------------------------------------
 # This may be used in tests to check the validator check options if they are valid.
 exports.selfcheck = (schema, cb) ->
   check.selfcheck schema, cb
-
-checkSchema = (spec, cb) ->
-  return cb()
-  debug "check schema for references"
-  check.run
-    name: spec.name + '#schema'
-    schema:
-      type: 'object'
-    value: spec.schema
-  , cb
