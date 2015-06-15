@@ -158,7 +158,7 @@ exports.selfcheck = (schema, cb) ->
           type: 'integer'
         max:
           type: 'integer'
-#          min: '<<<min>>>'
+          min: '<<<min>>>'
         inttype:
           type: 'or'
           optional: true

@@ -165,7 +165,7 @@ exports.selfcheck = (schema, cb) ->
         maxLength:
           type: 'integer'
           optional: true
-#          min: '<<<minLength>>>'
+          min: '<<<minLength>>>'
         list:
           type: 'or'
           optional: true

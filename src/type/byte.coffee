@@ -148,6 +148,6 @@ exports.selfcheck = (schema, cb) ->
         max:
           type: 'float'
           optional: true
-#          min: '<<<min>>>'
+          min: '<<<min>>>'
     value: schema
   , cb
