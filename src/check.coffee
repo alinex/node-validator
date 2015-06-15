@@ -23,6 +23,8 @@ reference = require './reference'
 #   - context - (object) additional data structure
 #   - dir - set to base directory for file relative file paths
 #   - value - original value (not changed)
+#   - done - list of checked paths
+#   - runAgain - set tot true if it have to be rerun in cause of references
 # - path - array containing the current path
 # - pos - reference to schema position at this path
 # - debug - output of current path for debugging
@@ -39,6 +41,7 @@ class Work
     @pos ?= @spec.schema
     @value = @spec.value
     @debug = chalk.grey "#{@spec.name ? 'value'}/#{@path.join '/'}"
+    @spec.done = []
 
   report: (err, cb) ->
     message = "#{err.message} in #{@spec.name ? 'value'}/#{@path.join '/'}"
@@ -126,6 +129,8 @@ exports.run = (work, cb) ->
       path: work.path[0..]    # clone because it may change
     , (err, value) ->
       return work.report err, cb if err
+      work.spec.done.push work.path.join '/'
+#      console.log 'done', work.spec.done
       work.value = value
       # load library and call check
       try

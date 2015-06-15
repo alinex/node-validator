@@ -18,6 +18,7 @@
 # - data - structure to work on (schema or context)
 # - lastType - the type of the last checked reference to ensure security
 
+MAXWAIT = 10000 # wait a maximum of seconds for references to resolve
 
 # Node modules
 # -------------------------------------------------
@@ -182,10 +183,16 @@ find = (list, work={}, cb) ->
       work = object.extend {}, work
       work.data = result
       return find list, work, cb
-    # result with reference
-    # do another round on the result's reference
-    # mabe use path of the found reference's position
-    # go on in list
+    # check for retry
+    work.retry ?= 0
+    if work.retry > MAXWAIT/100
+      throw Error "Stopped because of circular references at #{work.spec.name}/#{work.path.join '/'}"
+    list.unshift def
+    setTimeout ->
+      work.retry++
+      console.log work.retry
+      find list, work, cb
+    , 100
 
 findType =
   check:  (proto, path, work, cb) ->

@@ -604,13 +604,6 @@ describe "References", ->
         expect(result, 'result').to.equal '1, 2, 3, 4, 8, 9'
         cb()
 
-  describe "multiref", ->
-
-    # struct -> env
-    # struct -> env -> file
-    # struct -> struct (checked)
-    # struct -> struct (unchecked) -> runAgain...
-
   describe "integration", ->
 
     it "should call references in values", (cb) ->
@@ -675,3 +668,64 @@ describe "References", ->
           min: 5
           max: 4
         ], cb
+
+  describe "multiref", ->
+
+    it "should call struct -> env", (cb) ->
+      process.env.MIN = 5
+      struc =
+        type: 'object'
+        keys:
+          minmax:
+            type: 'string'
+          max:
+            type: 'integer'
+            min: '<<<minmax>>>'
+      test.same struc, [
+        minmax: '<<<env://MIN>>>'
+        max: 7
+      ], ->
+        test.fail struc, [
+          minmax: '<<<env://MIN>>>'
+          max: 4
+        ], cb
+
+    it "should call struct -> struct (checked)", (cb) ->
+      test.equal
+        type: 'object'
+      , [
+        [
+          one: 5
+          two: '<<<one>>>'
+          three: '<<<two>>>'
+        ,
+          one: 5
+          two: 5
+          three: 5
+        ]
+      ], cb
+
+    it "should call struct -> struct (unchecked)", (cb) ->
+      test.equal
+        type: 'object'
+      , [
+        [
+          three: '<<<two>>>'
+          two: '<<<one>>>'
+          one: 5
+        ,
+          three: 5
+          two: 5
+          one: 5
+        ]
+      ], cb
+
+    it.skip "should fail on circular reference", (cb) ->
+      test.fail
+        type: 'object'
+      , [
+          three: '<<<two>>>'
+          two: '<<<one>>>'
+          one: '<<<three>>>'
+      ], cb
+
