@@ -85,7 +85,11 @@ replace = module.exports.replace = (value, work={}, cb) ->
 findAlternative = (value, work={}, cb) ->
   return cb null, value unless ~value.indexOf '<<<'
   # replace <<< and >>> and split into alternatives
+  first = true
   async.map value[3..-4].split(/\s+\|\s+/), (alt, cb) ->
+    if first and not ~alt.indexOf '://'
+      alt = "struct://#{alt}"
+    first = false
     # split into paths and call
     alt = alt[0..alt.length-2] while alt[alt.length-1] is '#'
     uriPart = alt.split /#/
@@ -388,7 +392,7 @@ getData = (data, path) ->
       result = result[0] if result.length is 1
       result
     else
-      result = data[cur]
+      result = data?[cur]
       return unless result?
       return getData result, path if path.length
       result

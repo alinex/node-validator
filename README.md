@@ -249,6 +249,16 @@ The following are the diffferent data sources to use.
 
 The `struct` protocol is used to search for the value in the current data structure.
 
+If you don't use a protocol on the first alternative it is assumed as structure
+call so you may use the shortcut:
+
+``` text
+<<<name>>>            # shortcut
+<<<struct://name>>>   # same result
+```
+But this is really only possible in the first alternative because in each other
+it will be assumed as default value.
+
 __Absolute path__
 
 ``` text

@@ -277,7 +277,7 @@ exports.selfcheck = (schema, cb) ->
         maxLength:
           type: 'integer'
           optional: true
-#          min: '<<<min>>>'
+          min: '<<<min>>>'
         values:
           type: 'array'
           optional: true

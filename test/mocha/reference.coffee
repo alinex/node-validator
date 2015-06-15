@@ -57,10 +57,9 @@ describe "References", ->
 
     it "should replace references with default value", (cb) ->
       values =
-        '<<<>>>': '' # empty default value
-        '<<<name>>>': 'name' # whole reference
-        'My name is <<<alex>>>': 'My name is alex' # reference in string
-        '<<<firstname>>> <<<lastname>>>': 'firstname lastname' #concatenate
+        '<<<notthere | name>>>': 'name' # whole reference
+        'My name is <<<notthere | alex>>>': 'My name is alex' # reference in string
+        '<<<notthere | firstname>>> <<<notthere | lastname>>>': 'firstname lastname' #concatenate
       async.forEachOfSeries values, (check, value, cb) ->
         reference.replace value, (err, result) ->
           expect(err, 'error').to.not.exist
@@ -81,6 +80,13 @@ describe "References", ->
           expect(result, value).to.equal check
           cb()
       , cb
+
+    it "should fail for empty reference", (cb) ->
+      value = '<<<>>>'
+      reference.replace value, (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, value).to.not.exist
+        cb()
 
   describe "environment", ->
 
@@ -611,14 +617,14 @@ describe "References", ->
       test.equal
         type: 'string'
       , [
-        ['<<<name>>>', 'name']
+        ['<<<notthere | name>>>', 'name']
       ], cb
 
     it "should call references in sub values", (cb) ->
       test.equal
         type: 'object'
       , [
-        [{name:'<<<name>>>'}, {name:'name'}]
+        [{name:'<<<notthere | name>>>'}, {name:'name'}]
       ], cb
 
     it "should call struct references in sub values", (cb) ->
@@ -637,6 +643,27 @@ describe "References", ->
           max:
             type: 'integer'
             min: '<<<struct://min>>>'
+      test.same struc, [
+        min: 5
+        max: 7
+      ,
+        min: 5
+        max: 5
+      ], ->
+        test.fail struc, [
+          min: 5
+          max: 4
+        ], cb
+
+    it "should call references in options with short syntax", (cb) ->
+      struc =
+        type: 'object'
+        keys:
+          min:
+            type: 'integer'
+          max:
+            type: 'integer'
+            min: '<<<min>>>'
       test.same struc, [
         min: 5
         max: 7
