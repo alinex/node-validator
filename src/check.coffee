@@ -111,22 +111,32 @@ exports.describe = (work, cb) ->
 exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
 #  console.log 'check:', work
-  # check for references in values
-  reference.check work.value,
-    spec: work.spec
-    path: work.path[0..]    # clone because it may change
-  , (err, value) ->
+  # check for references in schema
+  console.log work.pos
+  async.mapOf work.pos, (v, k, cb) ->
+    reference.check v,
+      spec: work.spec
+      path: work.path[0..]    # clone because it may change
+    , cb
+  , (err, result) ->
     return work.report err, cb if err
-    work.value = value
-    # load library and call check
-    try
-      lib = getTypeLib work.pos, (err, lib) ->
-      unless lib.run?
-        return cb new Error "Type '#{work.pos.type}' has no run() method"
-    catch err
-      debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
-      return cb new Error "Type '#{work.pos.type}' not supported"
-    lib.run work, cb
+    work.pos = result
+    # check for references in values
+    reference.check work.value,
+      spec: work.spec
+      path: work.path[0..]    # clone because it may change
+    , (err, value) ->
+      return work.report err, cb if err
+      work.value = value
+      # load library and call check
+      try
+        lib = getTypeLib work.pos, (err, lib) ->
+        unless lib.run?
+          return cb new Error "Type '#{work.pos.type}' has no run() method"
+      catch err
+        debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
+        return cb new Error "Type '#{work.pos.type}' not supported"
+      lib.run work, cb
 
 # ### Selfcheck of schema
 # This may be called using the spec or an already created work instance.
