@@ -628,7 +628,7 @@ describe "References", ->
         [{min: 5, max:'<<<struct://min>>>'}, {min:5,max:5}]
       ], cb
 
-    it.skip "should call references in options", (cb) ->
+    it "should call references in options", (cb) ->
       struc =
         type: 'object'
         keys:
@@ -648,17 +648,3 @@ describe "References", ->
           min: 5
           max: 4
         ], cb
-
-    it.skip "should call references in options", (cb) ->
-      struc =
-        type: 'object'
-        keys:
-          min:
-            type: 'integer'
-          max:
-            type: 'integer'
-            min: '<<<struct://../../min>>>'
-      test.fail struc, [
-        min: 5
-        max: 4
-      ], cb

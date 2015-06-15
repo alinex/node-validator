@@ -112,7 +112,6 @@ exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
 #  console.log 'check:', work
   # check for references in schema
-  console.log work.pos
   async.mapOf work.pos, (v, k, cb) ->
     reference.check v,
       spec: work.spec
