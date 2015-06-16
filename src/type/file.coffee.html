@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/filecoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/file.coffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -29,22 +29,7 @@
         <a href="#node%20modules">Node modules</a>
       </div>
       <div class="heading h2">
-        <a href="#description">Description</a>
-      </div>
-      <div class="heading h3">
-        <a href="#type%20description">Type Description</a>
-      </div>
-      <div class="heading h2">
-        <a href="#synchronous%20check">Synchronous check</a>
-      </div>
-      <div class="heading h3">
-        <a href="#check%20type">Check Type</a>
-      </div>
-      <div class="heading h3">
-        <a href="#check%20type">Check Type</a>
-      </div>
-      <div class="heading h2">
-        <a href="#selfcheck">Selfcheck</a>
+        <a href="#type%20implementation">Type implementation</a>
       </div>
     </div>
   </div>
@@ -108,9 +93,7 @@
 <span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:file&#39;</span><span class="p">)</span>
 <span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
 <span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
-<span class="nv">fs = </span><span class="nx">require</span> <span class="s">&#39;alinex-fs&#39;</span>
 <span class="nv">fspath = </span><span class="nx">require</span> <span class="s">&#39;path&#39;</span>
-<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
 
 </pre></div>
         </td>
@@ -120,13 +103,25 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
+<p>alinex modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">fs = </span><span class="nx">require</span> <span class="s">&#39;alinex-fs&#39;</span>
+<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
 <p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">ValidatorCheck = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
-<span class="nv">rules = </span><span class="nx">require</span> <span class="s">&#39;../rules&#39;</span>
-
-<span class="nv">module.exports = file =</span>
+<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
 
 
 </pre></div>
@@ -134,83 +129,67 @@
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="description">
+<div class="pilwrap" id="type%20implementation">
   <h2>
-    <a href="#description" name="description" class="pilcrow">&#182;</a>
-    Description
+    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
+    Type implementation
   </h2>
 </div>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">describe:</span>
+<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nv">text = </span><span class="s">&#39;A valid filesystem entry. &#39;</span>
+  <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
+  <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">exists</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The file has to exist. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">basedir</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Relative paths are calculated from </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">basedir</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">resolve</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The path will be resolved to it&#39;s absolute path. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">find</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;A search for the file will be done. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">filetype</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The file have to be of type &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">filetype</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="type%20description">
-  <h3>
-    <a href="#type%20description" name="type%20description" class="pilcrow">&#182;</a>
-    Type Description
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
-      <span class="nv">text = </span><span class="s">&#39;A valid filesystem entry. &#39;</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
-      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">exists</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The file has to exist. &quot;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">basedir</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Relative paths are calculated from </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">basedir</span><span class="si">}</span><span class="s">. &quot;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">resolve</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The path will be resolved to it&#39;s absolute path. &quot;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;A search for the file will be done. &quot;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The file have to be of type &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
-      <span class="nx">text</span>
-
+<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="synchronous%20check">
-  <h2>
-    <a href="#synchronous%20check" name="synchronous%20check" class="pilcrow">&#182;</a>
-    Synchronous check
-  </h2>
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
-
+<p>base checks</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">sync:</span>
-
+  <span class="k">try</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+  <span class="k">catch</span> <span class="nx">err</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="check%20type">
-  <h3>
-    <a href="#check%20type" name="check%20type" class="pilcrow">&#182;</a>
-    Check Type
-  </h3>
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
-
+<p>sanitize</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(check, path, options, value) -&gt;</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s"> check: </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="p">,</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">options</span>
+  <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">isnt</span> <span class="s">&#39;string&#39;</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Could not find the file </span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+  <span class="nv">value = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">normalize</span> <span class="nx">value</span>
+  <span class="nv">value = </span><span class="nx">value</span><span class="p">[..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nx">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">..]</span> <span class="o">is</span> <span class="s">&#39;/&#39;</span>
 
 </pre></div>
         </td>
@@ -220,11 +199,10 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
-<p>first check input type</p>
+<p>get basedir</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">value = </span><span class="nx">rules</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-      <span class="k">return</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
+  <span class="nv">basedir = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">resolve</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">basedir</span> <span class="o">?</span> <span class="s">&#39;.&#39;</span>
 
 </pre></div>
         </td>
@@ -234,11 +212,13 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
-<p>sanitize</p>
+<p>validate</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">value = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">normalize</span> <span class="nx">value</span>
-      <span class="nv">value = </span><span class="nx">value</span><span class="p">[..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nx">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">..]</span> <span class="o">is</span> <span class="s">&#39;/&#39;</span>
+  <span class="nx">find</span> <span class="nx">work</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(err, found) -&gt;</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+    <span class="k">unless</span> <span class="nx">found</span>
+      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Could not find the file </span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
 </pre></div>
         </td>
@@ -248,10 +228,23 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
-<p>get basedir</p>
+<p>resolve</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">basedir = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">resolve</span> <span class="nx">options</span><span class="p">.</span><span class="nx">basedir</span> <span class="o">?</span> <span class="s">&#39;.&#39;</span>
+    <span class="nv">filepath = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">resolve</span> <span class="nx">basedir</span><span class="p">,</span> <span class="nx">found</span>
+    <span class="nv">found = </span><span class="nx">filepath</span> <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">resolve</span>
+    <span class="nx">exists</span> <span class="nx">work</span><span class="p">,</span> <span class="nx">found</span><span class="p">,</span> <span class="nf">(err, found) -&gt;</span>
+      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+      <span class="nx">filetype</span> <span class="nx">work</span><span class="p">,</span> <span class="nx">found</span><span class="p">,</span> <span class="nf">(err, found) -&gt;</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+        <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+        <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">found</span>
+
+<span class="nv">find = </span><span class="nf">(work, value, cb) -&gt;</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">find</span>
+  <span class="nv">search = </span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">find</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span> <span class="k">then</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span> <span class="k">else</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">find</span>
+  <span class="k">unless</span> <span class="nx">search</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Wrong find option, array is needed for file validation.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
 </pre></div>
         </td>
@@ -261,20 +254,17 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
-<p>find</p>
+<p>search in list</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
-        <span class="nv">search = </span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span> <span class="k">then</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span> <span class="k">else</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
-        <span class="k">unless</span> <span class="nx">search</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
-          <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Wrong find option, array is needed for file validation.&quot;</span>
-        <span class="k">for</span> <span class="nx">dir</span> <span class="k">in</span> <span class="nx">search</span>
-          <span class="nx">debug</span> <span class="s">&quot;search in </span><span class="si">#{</span><span class="nx">dir</span><span class="si">}</span><span class="s">...&quot;</span>
-          <span class="nv">list = </span><span class="nx">fs</span><span class="p">.</span><span class="nx">findSync</span> <span class="nx">dir</span><span class="p">,</span>
-            <span class="nv">include: </span><span class="nx">value</span>
-          <span class="k">break</span> <span class="k">if</span> <span class="nx">list</span>
-        <span class="k">return</span> <span class="kc">null</span> <span class="k">unless</span> <span class="nx">list</span>
-        <span class="nv">value = </span><span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">search</span><span class="p">,</span> <span class="nf">(dir, cb) -&gt;</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> search in </span><span class="si">#{</span><span class="nx">dir</span><span class="si">}</span><span class="s">...&quot;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">find</span> <span class="nx">dir</span><span class="p">,</span>
+      <span class="nv">include: </span><span class="nx">value</span>
+    <span class="p">,</span> <span class="nf">(err, list) -&gt;</span>
+      <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">list</span>
+  <span class="p">,</span> <span class="nf">(err, lists) -&gt;</span>
+    <span class="k">for</span> <span class="nx">list</span> <span class="k">in</span> <span class="nx">lists</span>
 
 </pre></div>
         </td>
@@ -284,11 +274,10 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
-<p>resolve</p>
+<p>retrieve first found</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">filepath = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">resolve</span> <span class="nx">basedir</span><span class="p">,</span> <span class="nx">value</span>
-      <span class="nv">value = </span><span class="nx">filepath</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">resolve</span>
+      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">list</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
 
 </pre></div>
         </td>
@@ -298,274 +287,46 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
-<p>exists</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">exists</span> <span class="o">or</span> <span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span>
-        <span class="k">unless</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span> <span class="nx">filepath</span>
-          <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-          <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given file &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; has to exist.&quot;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
-</div>
-<p>filetype</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span><span class="o">?</span>
-        <span class="nv">stats = </span><span class="nx">fs</span><span class="p">.</span><span class="nx">statSync</span> <span class="nx">filepath</span>
-        <span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span>
-          <span class="k">when</span> <span class="s">&#39;file&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span>
-            <span class="k">return</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isFile</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a file entry&quot;</span>
-          <span class="k">when</span> <span class="s">&#39;directory&#39;</span><span class="p">,</span> <span class="s">&#39;dir&#39;</span><span class="p">,</span> <span class="s">&#39;d&#39;</span>
-            <span class="k">return</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isDirectory</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a directory entry&quot;</span>
-          <span class="k">when</span> <span class="s">&#39;link&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span>
-            <span class="k">return</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isSymbolicLink</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a link entry&quot;</span>
-          <span class="k">when</span> <span class="s">&#39;fifo&#39;</span><span class="p">,</span> <span class="s">&#39;pipe&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span>
-            <span class="k">return</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isFIFO</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a FIFO entry&quot;</span>
-          <span class="k">when</span> <span class="s">&#39;socket&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
-            <span class="k">return</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isSocket</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a socket entry&quot;</span>
-        <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-        <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given file &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not a </span><span class="si">#{</span><span class="nx">filetype</span><span class="si">}</span><span class="s"> entry.&quot;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
-</div>
-<p>return value</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nx">value</span>
-
-  <span class="nv">async:</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="check%20type">
-  <h3>
-    <a href="#check%20type" name="check%20type" class="pilcrow">&#182;</a>
-    Check Type
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(check, path, options, value, cb) -&gt;</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s"> check: </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="p">,</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">options</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
-</div>
-<p>first check input type</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">try</span>
-        <span class="nv">value = </span><span class="nx">rules</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-      <span class="k">catch</span> <span class="nx">err</span>
-        <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
-</div>
-<p>sanitize</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">value = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">normalize</span> <span class="nx">value</span>
-      <span class="nv">value = </span><span class="nx">value</span><span class="p">[..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">if</span> <span class="nx">value</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">..]</span> <span class="o">is</span> <span class="s">&#39;/&#39;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
-</div>
-<p>get basedir</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">basedir = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">resolve</span> <span class="nx">options</span><span class="p">.</span><span class="nx">basedir</span> <span class="o">?</span> <span class="s">&#39;.&#39;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
-</div>
-<p>validate</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nx">file</span><span class="p">.</span><span class="nx">async</span><span class="p">.</span><span class="nx">find</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(err, found) -&gt;</span>
-        <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-        <span class="k">unless</span> <span class="nx">found</span>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Could not find the file </span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s">&quot;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
-</div>
-<p>resolve</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nv">filepath = </span><span class="nx">fspath</span><span class="p">.</span><span class="nx">resolve</span> <span class="nx">basedir</span><span class="p">,</span> <span class="nx">found</span>
-        <span class="nv">found = </span><span class="nx">filepath</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">resolve</span>
-        <span class="nx">file</span><span class="p">.</span><span class="nx">async</span><span class="p">.</span><span class="nx">exists</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">found</span><span class="p">,</span> <span class="nf">(err, found) -&gt;</span>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-          <span class="nx">file</span><span class="p">.</span><span class="nx">async</span><span class="p">.</span><span class="nx">filetype</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">found</span><span class="p">,</span> <span class="nf">(err, found) -&gt;</span>
-            <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-            <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">found</span>
-
-    <span class="nv">find: </span><span class="nf">(check, path, options, value, cb) -&gt;</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
-      <span class="nv">search = </span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span> <span class="k">then</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span><span class="p">()</span> <span class="k">else</span> <span class="nx">options</span><span class="p">.</span><span class="nx">find</span>
-      <span class="k">unless</span> <span class="nx">search</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
-        <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Wrong find option, array is needed for file validation.&quot;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
-</div>
-<p>search in list</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">search</span><span class="p">,</span> <span class="nf">(dir, cb) -&gt;</span>
-        <span class="nx">debug</span> <span class="s">&quot;search in </span><span class="si">#{</span><span class="nx">dir</span><span class="si">}</span><span class="s">...&quot;</span>
-        <span class="nx">fs</span><span class="p">.</span><span class="nx">find</span> <span class="nx">dir</span><span class="p">,</span>
-          <span class="nv">include: </span><span class="nx">value</span>
-        <span class="p">,</span> <span class="nf">(err, list) -&gt;</span>
-          <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">list</span>
-      <span class="p">,</span> <span class="nf">(err, lists) -&gt;</span>
-        <span class="k">for</span> <span class="nx">list</span> <span class="k">in</span> <span class="nx">lists</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
-</div>
-<p>retrieve first found</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">list</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
-</div>
 <p>return null if nothing found</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">cb</span><span class="p">()</span>
+    <span class="nx">cb</span><span class="p">()</span>
 
-    <span class="nv">exists: </span><span class="nf">(check, path, options, value, cb) -&gt;</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">exists</span> <span class="o">or</span> <span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span>
-      <span class="nx">fs</span><span class="p">.</span><span class="nx">exists</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(exists) -&gt;</span>
-        <span class="k">unless</span> <span class="nx">exists</span>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-          <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given file &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; has to exist.&quot;</span>
-        <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
+<span class="nv">exists = </span><span class="nf">(work, value, cb) -&gt;</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">exists</span> <span class="o">or</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">filetype</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">exists</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(exists) -&gt;</span>
+    <span class="k">unless</span> <span class="nx">exists</span>
+      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given file &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; has to exist.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
-    <span class="nv">filetype: </span><span class="nf">(check, path, options, value, cb) -&gt;</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span>
-      <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(err, stats) -&gt;</span>
-        <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-        <span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">filetype</span>
-          <span class="k">when</span> <span class="s">&#39;file&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span>
-            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isFile</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a file entry&quot;</span>
-          <span class="k">when</span> <span class="s">&#39;directory&#39;</span><span class="p">,</span> <span class="s">&#39;dir&#39;</span><span class="p">,</span> <span class="s">&#39;d&#39;</span>
-            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isDirectory</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a directory entry&quot;</span>
-          <span class="k">when</span> <span class="s">&#39;link&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span>
-            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isSymbolicLink</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a link entry&quot;</span>
-          <span class="k">when</span> <span class="s">&#39;fifo&#39;</span><span class="p">,</span> <span class="s">&#39;pipe&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span>
-            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isFIFO</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a FIFO entry&quot;</span>
-          <span class="k">when</span> <span class="s">&#39;socket&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
-            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isSocket</span><span class="p">()</span>
-            <span class="nx">debug</span> <span class="s">&quot;skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a socket entry&quot;</span>
-        <span class="k">return</span> <span class="nx">cb</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-        <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given file &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not a </span><span class="si">#{</span><span class="nx">filetype</span><span class="si">}</span><span class="s"> entry.&quot;</span>
+<span class="nv">filetype = </span><span class="nf">(work, value, cb) -&gt;</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">filetype</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">stat</span> <span class="nx">value</span><span class="p">,</span> <span class="nf">(err, stats) -&gt;</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+    <span class="k">switch</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">filetype</span>
+      <span class="k">when</span> <span class="s">&#39;file&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isFile</span><span class="p">()</span>
+        <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a file entry&quot;</span>
+      <span class="k">when</span> <span class="s">&#39;directory&#39;</span><span class="p">,</span> <span class="s">&#39;dir&#39;</span><span class="p">,</span> <span class="s">&#39;d&#39;</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isDirectory</span><span class="p">()</span>
+        <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a directory entry&quot;</span>
+      <span class="k">when</span> <span class="s">&#39;link&#39;</span><span class="p">,</span> <span class="s">&#39;l&#39;</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isSymbolicLink</span><span class="p">()</span>
+        <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a link entry&quot;</span>
+      <span class="k">when</span> <span class="s">&#39;fifo&#39;</span><span class="p">,</span> <span class="s">&#39;pipe&#39;</span><span class="p">,</span> <span class="s">&#39;p&#39;</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isFIFO</span><span class="p">()</span>
+        <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a FIFO entry&quot;</span>
+      <span class="k">when</span> <span class="s">&#39;socket&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span>
+        <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">stats</span><span class="p">.</span><span class="nx">isSocket</span><span class="p">()</span>
+        <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> skip </span><span class="si">#{</span><span class="nx">file</span><span class="si">}</span><span class="s"> because not a socket entry&quot;</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given file &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not a </span><span class="si">#{</span><span class="nx">filetype</span><span class="si">}</span><span class="s"> entry.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="selfcheck">
-  <h2>
-    <a href="#selfcheck" name="selfcheck" class="pilcrow">&#182;</a>
-    Selfcheck
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">selfcheck: </span><span class="nf">(name, options) -&gt;</span>
-    <span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;../index&#39;</span>
-    <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span>
+<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+    <span class="nv">schema:</span>
       <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
       <span class="nv">allowedKeys: </span><span class="kc">true</span>
-      <span class="nv">entries:</span>
-        <span class="nv">type:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-        <span class="nv">title:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">description:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">optional:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
+      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
         <span class="nv">default:</span>
           <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
@@ -592,7 +353,8 @@
             <span class="s">&#39;l&#39;</span><span class="p">,</span> <span class="s">&#39;link&#39;</span>
           <span class="p">]</span>
           <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="p">,</span> <span class="nx">options</span>
+    <span class="nv">value: </span><span class="nx">schema</span>
+  <span class="p">,</span> <span class="nx">cb</span>
 </pre></div>
         </td>
       </tr>

@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/intervalcoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/interval.coffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -29,22 +29,10 @@
         <a href="#node%20modules">Node modules</a>
       </div>
       <div class="heading h2">
-        <a href="#description">Description</a>
-      </div>
-      <div class="heading h3">
-        <a href="#type%20description">Type Description</a>
-      </div>
-      <div class="heading h2">
-        <a href="#synchronous%20check">Synchronous check</a>
-      </div>
-      <div class="heading h3">
-        <a href="#check%20type">Check Type</a>
-      </div>
-      <div class="heading h2">
-        <a href="#selfcheck">Selfcheck</a>
-      </div>
-      <div class="heading h2">
         <a href="#optimize%20options%20setting">Optimize options setting</a>
+      </div>
+      <div class="heading h2">
+        <a href="#type%20implementation">Type implementation</a>
       </div>
     </div>
   </div>
@@ -76,6 +64,7 @@
 <li><code>unit</code> - (string) type of unit to convert if not integer given</li>
 <li><code>round</code> - (bool) rounding can be set to true for arithmetic rounding
 or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+<li><code>decimals</code> - (int) number of decimal digits to round to (defaults to 2)</li>
 </ul>
 
 <p>Check options:</p>
@@ -114,10 +103,11 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
-<p>include alinex packages</p>
+<p>include alinex packages
+alinex modules</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="p">{</span><span class="nx">number</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
+<span class="p">{</span><span class="nx">object</span><span class="p">,</span><span class="nx">number</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
 
 </pre></div>
         </td>
@@ -130,249 +120,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">rules = </span><span class="nx">require</span> <span class="s">&#39;../rules&#39;</span>
-<span class="nv">float = </span><span class="nx">require</span> <span class="s">&#39;./float&#39;</span>
-
-<span class="nv">module.exports = interval =</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="description">
-  <h2>
-    <a href="#description" name="description" class="pilcrow">&#182;</a>
-    Description
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">describe:</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="type%20description">
-  <h3>
-    <a href="#type%20description" name="type%20description" class="pilcrow">&#182;</a>
-    Type Description
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
-      <span class="nv">options = </span><span class="nx">optimize</span> <span class="nx">options</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
-</div>
-<p>combine into message</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">text = </span><span class="s">&#39;A time interval. &#39;</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;If defined as a text it may use a combination of values with the</span>
-<span class="s">        units: ms, s, m, h, d. &quot;</span>
-      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. If/</span><span class="p">,</span> <span class="s">&#39; which if&#39;</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">unit</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The result will be given as the number of </span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">unit</span><span class="si">}</span><span class="s">. &quot;</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">float</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">round</span> <span class="nx">options</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">float</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">minmax</span> <span class="nx">options</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="synchronous%20check">
-  <h2>
-    <a href="#synchronous%20check" name="synchronous%20check" class="pilcrow">&#182;</a>
-    Synchronous check
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">sync:</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="check%20type">
-  <h3>
-    <a href="#check%20type" name="check%20type" class="pilcrow">&#182;</a>
-    Check Type
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(check, path, options, value) -&gt;</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s"> check: </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="p">,</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">options</span>
-      <span class="nv">options = </span><span class="nx">optimize</span> <span class="nx">options</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
-</div>
-<p>sanitize</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">value = </span><span class="nx">rules</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-      <span class="k">return</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
-</div>
-<p>support time format</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
-        <span class="k">if</span> <span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">match</span> <span class="sr">/^(\d\d?)(:\d\d?)(:\d\d?)?(\.\d+)?$/</span>
-          <span class="nv">parts = </span><span class="nx">value</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;:&#39;</span>
-          <span class="nv">value = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s">h </span><span class="si">#{</span><span class="nx">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s">m&quot;</span>
-          <span class="nx">value</span> <span class="o">+=</span> <span class="s">&quot; </span><span class="si">#{</span><span class="nx">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s">s&quot;</span> <span class="k">if</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">3</span>
-        <span class="nv">parsed = </span><span class="nx">number</span><span class="p">.</span><span class="nx">parseMSeconds</span> <span class="nx">value</span>
-        <span class="k">if</span> <span class="nb">isNaN</span> <span class="nx">parsed</span>
-          <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-          <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not parse able as interval&quot;</span>
-        <span class="nv">unit = </span><span class="nx">options</span><span class="p">.</span><span class="nx">unit</span> <span class="o">?</span> <span class="s">&#39;ms&#39;</span>
-        <span class="k">unless</span> <span class="nx">unit</span> <span class="o">is</span> <span class="s">&#39;ms&#39;</span>
-          <span class="nx">parsed</span> <span class="o">/=</span> <span class="k">switch</span> <span class="nx">unit</span>
-            <span class="k">when</span> <span class="s">&#39;s&#39;</span>
-              <span class="mi">1000</span>
-            <span class="k">when</span> <span class="s">&#39;m&#39;</span>
-              <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span>
-            <span class="k">when</span> <span class="s">&#39;h&#39;</span>
-              <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>
-            <span class="k">when</span> <span class="s">&#39;d&#39;</span>
-              <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
-        <span class="nv">value = </span><span class="nx">parsed</span>
-      <span class="nv">value = </span><span class="nx">float</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">round</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
-</div>
-<p>validate</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">value = </span><span class="nx">float</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">number</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-      <span class="nv">value = </span><span class="nx">float</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">minmax</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
-</div>
-<p>done return resulting value</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nx">value</span>
-
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="selfcheck">
-  <h2>
-    <a href="#selfcheck" name="selfcheck" class="pilcrow">&#182;</a>
-    Selfcheck
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">selfcheck: </span><span class="nf">(name, options) -&gt;</span>
-    <span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;../index&#39;</span>
-    <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span>
-      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-      <span class="nv">allowedKeys: </span><span class="kc">true</span>
-      <span class="nv">entries:</span>
-        <span class="nv">type:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-        <span class="nv">title:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">description:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">optional:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">default:</span>
-          <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">unit:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;ms&#39;</span><span class="p">]</span>
-        <span class="nv">round:</span>
-          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">entries: </span><span class="p">[</span>
-            <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="p">,</span>
-            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-            <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;floor&#39;</span><span class="p">,</span> <span class="s">&#39;ceil&#39;</span><span class="p">]</span>
-          <span class="p">]</span>
-        <span class="nv">min:</span>
-          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">entries: </span><span class="p">[</span>
-            <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
-          <span class="p">,</span>
-            <span class="nx">rules</span><span class="p">.</span><span class="nx">selfcheck</span><span class="p">.</span><span class="nx">reference</span>
-          <span class="p">]</span>
-        <span class="nv">max:</span>
-          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">min:</span>
-            <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
-            <span class="nv">source: </span><span class="s">&#39;&lt;min&#39;</span>
-          <span class="nv">entries: </span><span class="p">[</span>
-            <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
-          <span class="p">,</span>
-            <span class="nx">rules</span><span class="p">.</span><span class="nx">selfcheck</span><span class="p">.</span><span class="nx">reference</span>
-          <span class="p">]</span>
-    <span class="p">,</span> <span class="nx">options</span>
-
+<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
 
 
 </pre></div>
@@ -389,12 +137,221 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">optimize = </span><span class="nf">(options) -&gt;</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">decimals</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span><span class="o">?</span>
-    <span class="nv">options.round = </span><span class="kc">true</span>
-  <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">round</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">options</span><span class="p">.</span><span class="nx">decimals</span><span class="o">?</span>
-    <span class="nv">options.decimals = </span><span class="mi">0</span>
-  <span class="nx">options</span>
+<span class="nv">optimize = </span><span class="nf">(schema) -&gt;</span>
+  <span class="k">if</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">decimals</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">round</span><span class="o">?</span>
+    <span class="nv">schema.round = </span><span class="kc">true</span>
+  <span class="k">if</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">round</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">decimals</span><span class="o">?</span>
+    <span class="nv">schema.decimals = </span><span class="mi">0</span>
+  <span class="nx">schema</span>
+
+<span class="nv">subcheck =</span>
+  <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
+  <span class="o">or:</span> <span class="p">[</span>
+    <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+  <span class="p">,</span>
+    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">match: </span><span class="sr">/^\d\d?:\d\d?(:\d\d?)?(\.\d+)?$/</span>
+  <span class="p">,</span>
+    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+    <span class="nv">match: </span><span class="sr">/^([+-]?\d+(?:\.\d+)?)\s*([smhd]|ms)$/</span>
+  <span class="p">]</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="type%20implementation">
+  <h2>
+    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
+    Type implementation
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nv">work.pos = </span><span class="nx">optimize</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>combine into message</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">text = </span><span class="s">&quot;A time interval as float, in time format or as text which may use a</span>
+<span class="s">  combination of values with the units: ms, s, m, h, d. &quot;</span>
+  <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">unit</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The result will be given as the number of </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">unit</span><span class="si">}</span><span class="s">. &quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>subcheck</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">name = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
+    <span class="nx">name</span> <span class="o">+=</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span>
+    <span class="nv">name: </span><span class="nx">name</span>
+    <span class="nv">schema:</span>
+      <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+      <span class="nv">round: </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">round</span>
+      <span class="nv">decimals: </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">decimals</span>
+      <span class="nv">min: </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">min</span>
+      <span class="nv">max: </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">max</span>
+  <span class="p">,</span> <span class="nf">(err, subtext) -&gt;</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span> <span class="o">+</span> <span class="nx">subtext</span>
+
+<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nv">work.pos = </span><span class="nx">optimize</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>base checks</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">try</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+  <span class="k">catch</span> <span class="nx">err</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+</div>
+<p>first check input type</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">name = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
+    <span class="nx">name</span> <span class="o">+=</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+    <span class="nv">name: </span><span class="nx">name</span>
+    <span class="nv">value: </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
+    <span class="nv">schema: </span><span class="nx">subcheck</span>
+  <span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>support time format</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+      <span class="k">if</span> <span class="nx">value</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">match</span> <span class="sr">/^(\d\d?)(:\d\d?)(:\d\d?)?(\.\d+)?$/</span>
+        <span class="nv">parts = </span><span class="nx">value</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;:&#39;</span>
+        <span class="nv">value = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s">h </span><span class="si">#{</span><span class="nx">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s">m&quot;</span>
+        <span class="nx">value</span> <span class="o">+=</span> <span class="s">&quot; </span><span class="si">#{</span><span class="nx">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s">s&quot;</span> <span class="k">if</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">3</span>
+      <span class="nv">parsed = </span><span class="nx">number</span><span class="p">.</span><span class="nx">parseMSeconds</span> <span class="nx">value</span>
+      <span class="k">if</span> <span class="nb">isNaN</span> <span class="nx">parsed</span>
+        <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not parse</span>
+<span class="s">          able as interval&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+      <span class="nv">unit = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">unit</span> <span class="o">?</span> <span class="s">&#39;ms&#39;</span>
+      <span class="k">unless</span> <span class="nx">unit</span> <span class="o">is</span> <span class="s">&#39;ms&#39;</span>
+        <span class="nx">parsed</span> <span class="o">/=</span> <span class="k">switch</span> <span class="nx">unit</span>
+          <span class="k">when</span> <span class="s">&#39;s&#39;</span>
+            <span class="mi">1000</span>
+          <span class="k">when</span> <span class="s">&#39;m&#39;</span>
+            <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span>
+          <span class="k">when</span> <span class="s">&#39;h&#39;</span>
+            <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span>
+          <span class="k">when</span> <span class="s">&#39;d&#39;</span>
+            <span class="mi">1000</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">24</span>
+      <span class="nv">value = </span><span class="nx">parsed</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+</div>
+<p>run float check</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+      <span class="nv">name: </span><span class="nx">name</span>
+      <span class="nv">value: </span><span class="nx">value</span>
+      <span class="nv">schema:</span>
+        <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+        <span class="nv">round: </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">round</span>
+        <span class="nv">decimals: </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">decimals</span>
+        <span class="nv">min: </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">min</span>
+        <span class="nv">max: </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">max</span>
+    <span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
+      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
+
+<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+    <span class="nv">schema:</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
+        <span class="nv">default:</span>
+          <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">unit:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="s">&#39;m&#39;</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="s">&#39;ms&#39;</span><span class="p">]</span>
+        <span class="nv">round:</span>
+          <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="o">or:</span> <span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;floor&#39;</span><span class="p">,</span> <span class="s">&#39;ceil&#39;</span><span class="p">]</span>
+          <span class="p">]</span>
+        <span class="nv">decimals:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">min: </span><span class="mi">0</span>
+        <span class="nv">min:</span>
+          <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">max:</span>
+          <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">min: </span><span class="s">&#39;&lt;&lt;&lt;min&gt;&gt;&gt;&#39;</span>
+    <span class="nv">value: </span><span class="nx">schema</span>
+  <span class="p">,</span> <span class="nx">cb</span>
 </pre></div>
         </td>
       </tr>

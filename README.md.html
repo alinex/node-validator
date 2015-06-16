@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "home/alex/a3/node-validator/READMEmd", defaultSidebar = true;
+    var relativeDir = "", thisFile = "home/alex/a3/node-validator/README.md", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
   <script src="fileSearch.js"></script>
@@ -106,8 +106,11 @@
       <div class="heading h3">
         <a href="#object">object</a>
       </div>
+      <div class="heading h2">
+        <a href="#alternative-%2Fmultiple%20checks">Alternative-/Multiple Checks</a>
+      </div>
       <div class="heading h3">
-        <a href="#any">any</a>
+        <a href="#or">or</a>
       </div>
       <div class="heading h3">
         <a href="#and">and</a>
@@ -140,9 +143,6 @@
         <a href="#regexp">regexp</a>
       </div>
       <div class="heading h2">
-        <a href="#complete%20example">Complete Example</a>
-      </div>
-      <div class="heading h2">
         <a href="#package%20structure">Package structure</a>
       </div>
       <div class="heading h2">
@@ -163,25 +163,26 @@
 <p><a href="https://travis-ci.org/alinex/node-validator"><img src="https://travis-ci.org/alinex/node-validator.svg?branch=master" alt="Build Status" title="" /></a>
 <a href="https://gemnasium.com/alinex/node-validator"><img src="https://gemnasium.com/alinex/node-validator.png" alt="Dependency Status" title="" /></a></p>
 
-<p>This module will help validating complex structures. And may be used for all
+<p>This module will help validating complex structures. And should be used on all
 external information.</p>
 
 <ul>
 <li>check value against configuration</li>
-<li>easy checking of values</li>
-<li>may check complex structures</li>
-<li>understandable errors</li>
+<li>easy checking of values and complex structures</li>
+<li>in detail checks for different data types</li>
 <li>can give a human readable description</li>
+<li>also supports dependency checks within the structure</li>
 </ul>
 
 <p>The validation rules are really simple, but they will get more complex as your
 data structure gains complexity. But if you know the basic rules it's all
-a composition of some simple structures.</p>
+a composition of some simple structures. Like you will see below.</p>
 
 <p>This library can help you make your life secure and easy but you have to run
 every external data through it using a detailed data description. If you do so
-you can trust and use the values and get also the benefit that they are optimized
-as with the <code>handlebars</code> type you get a ready to use handlebar function back.</p>
+you can trust and use the values as they are without further checks.
+And you'll get the benefit of automatically optimized values like for <code>handlebars</code>
+type you get a ready to use handlebar function back.</p>
 
 <p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
 following the code standards defined there.</p>
@@ -227,6 +228,9 @@ npm install
 </div>
 
 
+<p>This library is implemented completely asynchronous, to allow io based checks
+and references within the structure.</p>
+
 <p>To use the validator you have to first include it:</p>
 
 
@@ -251,7 +255,7 @@ npm install
 
 <p>The checks are completely asynchronous because they may contain some IO checks.</p>
 
-<p>To get a human readable description:</p>
+<p>To get a human readable description call:</p>
 
 
 <div class="highlight"><pre><code><span class="nv">message = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span>
@@ -259,16 +263,20 @@ npm install
   <span class="nv">schema: </span><span class="nx">schema</span>      <span class="c1"># definition of checks</span>
   <span class="nv">pos: </span><span class="s">&#39;&#39;</span>             <span class="c1"># position which to describe (optional)</span>
   <span class="nv">depth: </span><span class="mi">2</span>            <span class="c1"># level of depth to describe (optional)</span>
+<span class="p">,</span> <span class="nf">(err, text) -&gt;</span>
+  <span class="c1"># do something</span>
 </code></pre></div>
 
 
+
+<p>This will get the description un markdown format.</p>
 
 <p>Within your tests you may check your schema configurations:</p>
 
 
 <div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">selfcheck</span>
   <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors</span>
-  <span class="nv">schema: </span><span class="nx">schema</span>      <span class="c1"># definition of checks</span>
+  <span class="nv">schema: </span><span class="nx">schema</span>      <span class="c1"># definition to check</span>
 <span class="p">,</span> <span class="nf">(err) -&gt;</span>
   <span class="c1"># do something</span>
 </code></pre></div>
@@ -300,6 +308,8 @@ attributes. The common attributes are:</p>
 <li>title - gives a short title for the element</li>
 <li>description - has a more descriptive information</li>
 <li>type - check type</li>
+<li>key - used in object's entries to give a regexp matchhing the keys for which
+the rule is specified.</li>
 </ul>
 
 <p>In it's easiest way the schema definition includes only a type:</p>
@@ -483,7 +493,8 @@ string:</p>
 </div>
 
 
-<p>The following are the diffferent data sources to use.</p>
+<p>The following examples shows the different possible data sources with their URI
+syntax and usage.</p>
 
 
 <div class="pilwrap" id="value%20structure">
@@ -495,6 +506,19 @@ string:</p>
 
 
 <p>The <code>struct</code> protocol is used to search for the value in the current data structure.</p>
+
+<p>If you don't use a protocol on the first alternative it is assumed as structure
+call so you may use the shortcut:</p>
+
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;name&gt;&gt;&gt;            # shortcut
+&lt;&lt;&lt;struct://name&gt;&gt;&gt;   # same result
+</code></pre></div>
+
+
+
+<p>But this is really only possible in the first alternative because in each other
+it will be assumed as default value.</p>
 
 <p><strong>Absolute path</strong></p>
 
@@ -512,7 +536,6 @@ second line <code>field</code> is an array and the first value of it will be use
 
 
 <div class="highlight"><pre><code>&lt;&lt;&lt;struct://relative/field&gt;&gt;&gt;
-&lt;&lt;&lt;struct://./relative/field&gt;&gt;&gt;
 &lt;&lt;&lt;struct://../relative/field&gt;&gt;&gt;
 </code></pre></div>
 
@@ -527,13 +550,17 @@ line 2 makes no difference but line 3 of the examples goes one level up.</p>
 
 <p><strong>Matching</strong></p>
 
-<p>See below in the path locator description for the more complex search pattern.</p>
+<p>See below in the path locator description for the more complex search patterns.</p>
 
 <p><strong>Subchecks</strong></p>
 
 <p>Here you may also go into a file which is referenced:</p>
 
-<p>&lt;&lt;<struct://file#address.info#1>>></p>
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;struct://file#address.info#1&gt;&gt;&gt;
+</code></pre></div>
+
+
 
 <p>Searches for a field, reads the file path there, loads the file and gets the first
 line.</p>
@@ -547,11 +574,20 @@ line.</p>
 </div>
 
 
+<p>Additional to the validating structure which have to be completely checked an
+additional context structure may be given. The values therein are not validated
+but can be used in the references.</p>
+
+<p>This allows you to reference to already validated or system internal information.</p>
+
 
 <div class="highlight"><pre><code>&lt;&lt;&lt;context:///absolute/*/min&gt;&gt;&gt;
 </code></pre></div>
 
 
+
+<p>The syntax is nearly the same as for the value structure but relative paths makes
+no sense because you don't have a base position in the structure.</p>
 
 
 <div class="pilwrap" id="environment">
@@ -562,11 +598,16 @@ line.</p>
 </div>
 
 
+<p>The following syntax allows to read from an environment variable which may be
+set on start of the program or before.</p>
+
 
 <div class="highlight"><pre><code>&lt;&lt;&lt;env://MY_HOME&gt;&gt;&gt;
 </code></pre></div>
 
 
+
+<p>This uses the content of the <code>MY_HOME</code> environment variable.</p>
 
 
 <div class="pilwrap" id="file">
@@ -618,8 +659,8 @@ But you may use the <code>#</code> anchor to access a specific line or structure
 <p>Possible protocols are:</p>
 
 <ul>
-<li><a href='http://domain:port/'>http://domain:port/</a>...</li>
-<li><a href='https://domain:port/'>https://domain:port/</a>...</li>
+<li>http like <code>http://domain:port/...</code></li>
+<li>https like <code>https://domain:port/...</code></li>
 </ul>
 
 <p>And you may connect to UNIX Sockets like <code>http://unix:/absolute/unix.socket:/request/path</code>
@@ -665,8 +706,11 @@ both it is recognized as alternative reference.</p>
 </div>
 
 
+<p>This connector is not implemented so far and will come in one of the next
+releases. But in the example below I show how it will be used.</p>
 
-<div class="highlight"><pre><code>&lt;&lt;&lt;mysql://user:password@host:port/database/table/field?id=15&gt;&gt;&gt;
+
+<div class="highlight"><pre><code>&lt;&lt;&lt;mysql://user:password@host:port/database/table/id=15/field&gt;&gt;&gt;
 &lt;&lt;&lt;mysql:///dataname/table/id=15/field&gt;&gt;&gt;
 &lt;&lt;&lt;mysql:///dataname/select name from xxx where id=15&gt;&gt;&gt;
 </code></pre></div>
@@ -730,31 +774,108 @@ Following list shows the precedence and can only be used top to bottom.</p>
 <p>This keeps the security, so that a user can not compromise the system by injecting
 references to extract internal data.</p>
 
-<p><strong>Text Range</strong></p>
+<p>To use the resulting value as datasource and only use some part of it you may
+first convert it if it is a text entry. If nothing of the following is specified
+but a range or object selection comes it will be automatically converted
+using defaults.</p>
 
-<p>Within a text element you may use the following ranges:</p>
+<p><strong>Split</strong></p>
+
+<p>A split generates a two-dimensional array (rows and columns) out of a simple text.
+It is used for range selections.</p>
 
 
-<div class="highlight"><pre><code>3 - specific row
-3-5 - specific row range
-3,5 - specific row and column
-3,5-8 - specific column range in row
-3-5,5-8 - specific row and column range
+<div class="highlight"><pre><code>%\n - split in lines and characters
+%\n//\t - split by newline and tab
+%\n//\t - split by newline and tab
+%\n//;\\s* - csv like reader with optional spaces
 </code></pre></div>
 
 
 
-<p><strong>Structure</strong></p>
+<p>The separator may be a simple string or an regular expression (as string).
+The resulting array has:</p>
+
+
+<div class="highlight"><pre><code>[0] = null
+[1][0] = row 1 as text
+[1][1] = text of row 1, column 1
+...
+</code></pre></div>
+
+
+
+<p>If no other path follows better always add a <code>#</code> at the end to prevent problems
+if last separsator is a whitespace.</p>
+
+<p><strong>Match</strong></p>
+
+<p>Alternatively to splits you may use an regular expression on your text. You can
+use range selections also, but without column specifier.</p>
+
+
+<div class="highlight"><pre><code>/.../ - give an regular expression `/g` is used automatically
+</code></pre></div>
+
+
+
+<p>The resulting array has the found results in elements 1..n.</p>
+
+<p><strong>Parse</strong></p>
+
+<p>Additional to the two methods above this can do complex transformations into
+object structures to do object selections later.</p>
+
+
+<div class="highlight"><pre><code>$js - parse javascript to object
+$json - JSON to object
+$yaml - YAML to object
+$xml - XML to object
+$auto - try to autodetect correct parser
+</code></pre></div>
+
+
+
+<p><strong>Range Selection</strong></p>
+
+<p>If the given value is a text it will be splitted into lines and characters.</p>
+
+<p>Within a text element you may use the following ranges:</p>
+
+
+<div class="highlight"><pre><code>3 - specific row as string
+3-5 - specific row range as array
+3,5 - specific row and column as array
+3,5-8 - specific column range in row as array
+1-2,5-8 - specific row and column range as array
+3[2] - specific element (2nd element of third line) as string
+3[2-4] - specific elements (2nd to 4th element of third line) as array
+3[2-4,8],4[2] - and all combined ;-)
+</code></pre></div>
+
+
+
+<p>The result may be a single value, an array or an array of arrays depending on the
+selected result.</p>
+
+<p><strong>Object Selection</strong></p>
 
 <p>If it is a structured information you may specify the path by name:</p>
 
 
 <div class="highlight"><pre><code>name - get first element with this name
-name/*/min - within any subelement
+group/sub/name - get element with path
+</code></pre></div>
+
+
+
+<p>You can search by using asterisk as directory placeholder or a double asterisk to
+go multiple level depth:</p>
+
+
+<div class="highlight"><pre><code>name/*/min - within any subelement
 name/*/*/min - within any subelement (two level depth)
 name/**/min - within any subelement in any depth
-name/test?/min - pattern match with one missing character
-name/test*/min - pattern match with multiple missing characters
 </code></pre></div>
 
 
@@ -770,6 +891,22 @@ name/test\d+/min - pattern match with multiple missing characters
 
 <p>See the <a href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp">Mozilla Developer Network</a>
 for the possible syntax but without modifier.</p>
+
+<p><strong>Join</strong></p>
+
+<p>As opposite to split and match the results maybe joined together into a single
+string using some separators.</p>
+
+
+<div class="highlight"><pre><code>$join , - using , as separator
+$join \n//, - using newline for first level and , as separator below
+name/test\d+/min - pattern match with multiple missing characters
+</code></pre></div>
+
+
+
+<p>If no other path follows better always add a <code>#</code> at the end to prevent problems
+if last separsator is a whitespace.</p>
 
 
 <div class="pilwrap" id="descriptive%20reporting">
@@ -843,6 +980,9 @@ To do this you have to add it in your tests:</p>
 </div>
 
 
+<p>The type <code>any</code> is only used internally and matches any value. It is used as default
+if nothing is specified for an value and makes the checks homogeneous.</p>
+
 
 <div class="pilwrap" id="boolean">
   <h3>
@@ -889,7 +1029,7 @@ Other values are not allowed.</p>
 <p>The value has to be a function.
 Other values are not allowed.</p>
 
-<p><strong>Options:</strong> None</p>
+<p><strong>Options:</strong> none</p>
 
 <p><strong>Example:</strong></p>
 
@@ -979,8 +1119,8 @@ match (or list of expressions)</li>
 <ul>
 <li><code>sanitize</code> - (bool) remove invalid characters</li>
 <li><code>unit</code> - (string) unit to convert to if no number is given</li>
-<li><code>round</code> - (bool) rounding of float can be set to true for arithmetic rounding
-or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
+rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
 </ul>
 
 <p><strong>Validate options:</strong></p>
@@ -1009,7 +1149,9 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <ul>
 <li><code>sanitize</code> - (bool) remove invalid characters</li>
 <li><code>unit</code> - (string) unit to convert to if no number is given</li>
-<li><code>round</code> - (int) number of decimal digits to round to</li>
+<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
+rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+<li><code>decimals</code> - (int) number of decimal digits to round to</li>
 </ul>
 
 <p><strong>Check options:</strong></p>
@@ -1033,6 +1175,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <ul>
 <li><code>delimiter</code> - allow value text with specified list separator
 (it can also be an regular expression)</li>
+<li><code>toArray</code> - will convert single values into array with one element</li>
 </ul>
 
 <p><strong>Check options:</strong></p>
@@ -1046,7 +1189,8 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p><strong>Validating children:</strong></p>
 
 <ul>
-<li><code>entries</code> - specification for all entries or as array for each element</li>
+<li><code>entries</code> - default specification for all entries</li>
+<li><code>list</code> - specification for entries per each key number</li>
 </ul>
 
 
@@ -1189,10 +1333,19 @@ three attributes are strings.</p>
 for all keys which has no own specification.</p>
 
 
-<div class="pilwrap" id="any">
+<div class="pilwrap" id="alternative-%2Fmultiple%20checks">
+  <h2>
+    <a href="#alternative-%2Fmultiple%20checks" name="alternative-%2Fmultiple%20checks" class="pilcrow">&#182;</a>
+    Alternative-/Multiple Checks
+  </h2>
+</div>
+
+
+
+<div class="pilwrap" id="or">
   <h3>
-    <a href="#any" name="any" class="pilcrow">&#182;</a>
-    any
+    <a href="#or" name="or" class="pilcrow">&#182;</a>
+    or
   </h3>
 </div>
 
@@ -1203,7 +1356,7 @@ succeed. The first one succeeding will work.</p>
 <p><strong>Option:</strong></p>
 
 <ul>
-<li><code>entries</code> - (array) with different check alternatives</li>
+<li><code>or</code> - (array) with different check alternatives</li>
 </ul>
 
 
@@ -1221,8 +1374,32 @@ all have to succeed.</p>
 <p><strong>Option:</strong></p>
 
 <ul>
-<li><code>entries</code> - (array) with multiple check rules</li>
+<li><code>and</code> - (array) with multiple check rules</li>
 </ul>
+
+<p>With this it is possible to use a string-check to sanitize and then use an
+other test to finalize the value like:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;and&#39;</span>
+    <span class="o">and:</span> <span class="p">[</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">toString: </span><span class="kc">true</span>
+      <span class="nv">replace: </span><span class="p">[</span><span class="sr">/,/g</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">]</span>
+    <span class="p">,</span>
+      <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+    <span class="p">]</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
+</code></pre></div>
+
+
+
+<p>This allows to give float numbers in the european format: xx,x</p>
 
 
 <div class="pilwrap" id="additional%20check%20types">
@@ -1248,6 +1425,9 @@ all have to succeed.</p>
 
 <ul>
 <li><code>unit</code> - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...</li>
+<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
+rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+<li><code>decimals</code> - (int) number of decimal digits to round to</li>
 </ul>
 
 <p><strong>Validate options:</strong></p>
@@ -1298,10 +1478,12 @@ syntax. This will be compiled into a function which if called with the context
 object will return the resulting text.</p>
 
 
-<div class="highlight"><pre><code>  <span class="c1"># first do the validation</span>
-  <span class="nv">value = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="s">&#39;test&#39;</span><span class="p">,</span>
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="s">&#39;hello {{name}}&#39;</span> <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
     <span class="nv">type: </span><span class="s">&#39;handlebars&#39;</span>
-  <span class="p">,</span> <span class="s">&#39;hello {{name}}&#39;</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
   <span class="c1"># then use it</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="nx">value</span>
     <span class="nv">name: </span><span class="s">&#39;alex&#39;</span>
@@ -1342,8 +1524,9 @@ object will return the resulting text.</p>
 
 <ul>
 <li><code>unit</code> - (string) type of unit to convert if not integer given</li>
-<li><code>round</code> - (bool) rounding of float can be set to true for arithmetic rounding
-or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
+rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+<li><code>decimals</code> - (int) number of decimal digits to round to</li>
 </ul>
 
 <p><strong>Check options:</strong></p>
@@ -1368,6 +1551,8 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 
 <ul>
 <li><code>version</code> - one of 'ipv4' or 'ipv6' and the value will be converted, if possible</li>
+<li><code>ipv4Mapping</code> - (boolean) set to true to allow mapping ipv4 addresses in both
+directions to succeed version specification if possible.</li>
 <li><code>allow</code> - the allowed ip ranges</li>
 <li><code>deny</code> - the denied ip ranges</li>
 </ul>
@@ -1412,7 +1597,9 @@ like 50% are converted to floats like 0.5.</p>
 <p><strong>Sanitize options:</strong></p>
 
 <ul>
-<li><code>round</code> - (int) number of decimal digits to round to</li>
+<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
+rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
+<li><code>decimals</code> - (int) number of decimal digits to round to</li>
 </ul>
 
 <p><strong>Check options:</strong></p>
@@ -1435,56 +1622,6 @@ like 50% are converted to floats like 0.5.</p>
 compiled into an regular expression.</p>
 
 
-<div class="pilwrap" id="complete%20example">
-  <h2>
-    <a href="#complete%20example" name="complete%20example" class="pilcrow">&#182;</a>
-    Complete Example
-  </h2>
-</div>
-
-
-<p>The following check structure comes from an coffee script program which
-checks it's configuration file.</p>
-
-
-<div class="highlight"><pre><code><span class="nv">title: </span><span class="s">&quot;Monitoring Configuration&quot;</span>
-<span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-<span class="nv">allowedKeys: </span><span class="p">[</span><span class="s">&#39;runat&#39;</span><span class="p">,</span> <span class="s">&#39;contacts&#39;</span><span class="p">,</span> <span class="s">&#39;email&#39;</span><span class="p">]</span>
-<span class="nv">entries:</span>
-  <span class="nv">runat:</span>
-    <span class="nv">title: </span><span class="s">&quot;Location&quot;</span>
-    <span class="nv">description: </span><span class="s">&quot;the location of this machine to run only tests which have</span>
-<span class="s">      the same location or no location at all&quot;</span>
-    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-  <span class="nv">contacts:</span>
-    <span class="nv">title: </span><span class="s">&quot;Contacts&quot;</span>
-    <span class="nv">description: </span><span class="s">&quot;the possible contacts to be referred from controller for</span>
-<span class="s">      email alerts&quot;</span>
-    <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-    <span class="nv">entries:</span>
-      <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-      <span class="nv">entries: </span><span class="p">[</span>
-        <span class="nv">title: </span><span class="s">&quot;Contact Group&quot;</span>
-        <span class="nv">description: </span><span class="s">&quot;the list of references in the group specifies the individual</span>
-<span class="s">          contacts&quot;</span>
-        <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
-        <span class="nv">entries:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-      <span class="p">,</span>
-        <span class="nv">title: </span><span class="s">&quot;Contact Details&quot;</span>
-        <span class="nv">description: </span><span class="s">&quot;the name and email address for a specific contact&quot;</span>
-        <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-        <span class="nv">mandatoryKeys: </span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span>
-        <span class="nv">allowedKeys: </span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
-        <span class="nv">entries:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-      <span class="p">]</span>
-</code></pre></div>
-
-
-
-
 <div class="pilwrap" id="package%20structure">
   <h2>
     <a href="#package%20structure" name="package%20structure" class="pilcrow">&#182;</a>
@@ -1494,8 +1631,8 @@ checks it's configuration file.</p>
 
 
 <p>The validator is implemented as <code>index</code> which has the public available methods,
-<code>helper</code> which is used for all data exchange and calls the real check
-implementations.</p>
+<code>check</code> is used for the real check calls and each type has it's own module
+with the implementation loaded on demand (type-subfolder).</p>
 
 
 <div class="pilwrap" id="license">

@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/ipaddrcoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/ipaddr.coffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -29,19 +29,10 @@
         <a href="#node%20modules">Node modules</a>
       </div>
       <div class="heading h2">
-        <a href="#description">Description</a>
-      </div>
-      <div class="heading h3">
-        <a href="#type%20description">Type Description</a>
+        <a href="#configuration">Configuration</a>
       </div>
       <div class="heading h2">
-        <a href="#synchronous%20check">Synchronous check</a>
-      </div>
-      <div class="heading h3">
-        <a href="#check%20type">Check Type</a>
-      </div>
-      <div class="heading h2">
-        <a href="#selfcheck">Selfcheck</a>
+        <a href="#type%20implementation">Type implementation</a>
       </div>
     </div>
   </div>
@@ -108,12 +99,39 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
+<p>alinex modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
 <p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">ValidatorCheck = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
-<span class="nv">rules = </span><span class="nx">require</span> <span class="s">&#39;../rules&#39;</span>
+<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="configuration">
+  <h2>
+    <a href="#configuration" name="configuration" class="pilcrow">&#182;</a>
+    Configuration
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">specialRanges =</span>
   <span class="nv">unspecified: </span><span class="p">[</span>
     <span class="s">&#39;0.0.0.0/8&#39;</span>
@@ -144,7 +162,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>Reserved and testing-only ranges; RFCs 5735, 5737, 2544, 1700</p>
         </td>
@@ -168,98 +186,64 @@
 <span class="nv">specialRanges.special = </span><span class="nx">all</span>
 
 
-<span class="nv">suboptions = </span><span class="nf">(options) -&gt;</span>
-  <span class="nv">settings =</span>
-    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-  <span class="nx">settings</span>
-
-<span class="nv">module.exports =</span>
-
-
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="description">
+<div class="pilwrap" id="type%20implementation">
   <h2>
-    <a href="#description" name="description" class="pilcrow">&#182;</a>
-    Description
+    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
+    Type implementation
   </h2>
 </div>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">describe:</span>
+<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nv">text = </span><span class="s">&#39;A valid IP address as string. &#39;</span>
+  <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
+  <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">version</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">version</span> <span class="o">is</span> <span class="s">&#39;ipv4&#39;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only IPv4 addresses are valid. &quot;</span>
+    <span class="k">else</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only IPv6 addresses are valid. &quot;</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">ipv4Mapping</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;IPv4 addresses may be automatically converted. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The IP address should not be in the ranges: &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;But IP address in the ranges: &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39; are allowed. &quot;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The IP address have to be in the ranges: &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+  <span class="k">switch</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">format</span>
+    <span class="k">when</span> <span class="s">&#39;short&#39;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&#39;An IPv6 address will be compressed as possible. &#39;</span>
+    <span class="k">when</span> <span class="s">&#39;long&#39;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&#39;An IPv6 address will be normalized with all octets visible. &#39;</span>
+  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="type%20description">
-  <h3>
-    <a href="#type%20description" name="type%20description" class="pilcrow">&#182;</a>
-    Type Description
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(options) -&gt;</span>
-      <span class="nv">text = </span><span class="s">&#39;A valid IP address. &#39;</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="nx">rules</span><span class="p">.</span><span class="nx">describe</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">options</span>
-      <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">deny</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The IP address should not be in the ranges: &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">deny</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
-        <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allow</span>
-          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;But IP address in the ranges: &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">allow</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39; are allowed. &quot;</span>
-      <span class="k">else</span> <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allow</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The IP address have to be in the ranges: &#39;</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">allow</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
-      <span class="k">switch</span> <span class="nx">options</span><span class="p">.</span><span class="nx">format</span>
-        <span class="k">when</span> <span class="s">&#39;short&#39;</span>
-          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&#39;An IPv6 address will be compressed as possible. &#39;</span>
-        <span class="k">when</span> <span class="s">&#39;long&#39;</span>
-          <span class="nx">text</span> <span class="o">+=</span> <span class="s">&#39;An IPv6 address will be normalized with all octets visible. &#39;</span>
-      <span class="nx">text</span>
-
-
+<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="synchronous%20check">
-  <h2>
-    <a href="#synchronous%20check" name="synchronous%20check" class="pilcrow">&#182;</a>
-    Synchronous check
-  </h2>
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
-
+<p>base checks</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">sync:</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="check%20type">
-  <h3>
-    <a href="#check%20type" name="check%20type" class="pilcrow">&#182;</a>
-    Check Type
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">type: </span><span class="nf">(check, path, options, value) -&gt;</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">check</span><span class="p">.</span><span class="nx">pathname</span> <span class="nx">path</span><span class="si">}</span><span class="s"> check: </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="p">,</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">options</span>
+  <span class="k">try</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+  <span class="k">catch</span> <span class="nx">err</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
 
 </pre></div>
         </td>
@@ -272,9 +256,16 @@
 <p>first check input type</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">value = </span><span class="nx">rules</span><span class="p">.</span><span class="nx">sync</span><span class="p">.</span><span class="nx">optional</span> <span class="nx">check</span><span class="p">,</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span>
-      <span class="k">return</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
-      <span class="nv">value = </span><span class="nx">check</span><span class="p">.</span><span class="nx">subcall</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">suboptions</span><span class="p">(</span><span class="nx">options</span><span class="p">),</span> <span class="nx">value</span>
+  <span class="nv">name = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
+    <span class="nx">name</span> <span class="o">+=</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+    <span class="nv">name: </span><span class="nx">name</span>
+    <span class="nv">value: </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
+    <span class="nv">schema:</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+  <span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
 
 </pre></div>
         </td>
@@ -287,11 +278,11 @@
 <p>validate</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">unless</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">isValid</span> <span class="nx">value</span>
-        <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-        <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no valid IPv6 or IPv4 address&quot;</span>
-      <span class="nv">ip = </span><span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">value</span>
-      <span class="nx">debug</span> <span class="s">&quot;analyzed </span><span class="si">#{</span><span class="nx">ip</span><span class="p">.</span><span class="nx">kind</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">ip</span>
+    <span class="k">unless</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">isValid</span> <span class="nx">value</span>
+      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no valid IPv6</span>
+<span class="s">        or IPv4 address&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+    <span class="nv">ip = </span><span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">value</span>
+    <span class="nx">debug</span> <span class="s">&quot;analyzed </span><span class="si">#{</span><span class="nx">ip</span><span class="p">.</span><span class="nx">kind</span><span class="p">()</span><span class="si">}</span><span class="s">&quot;</span><span class="p">,</span> <span class="nx">ip</span>
 
 </pre></div>
         </td>
@@ -304,23 +295,26 @@
 <p>format value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">version</span>
-        <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">version</span> <span class="o">is</span> <span class="s">&#39;ipv4&#39;</span>
-          <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">kind</span><span class="p">()</span> <span class="o">is</span> <span class="s">&#39;ipv6&#39;</span>
-            <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">isIPv4MappedAddress</span><span class="p">()</span>
-              <span class="nx">debug</span> <span class="s">&#39;convert to ipv4&#39;</span>
-              <span class="nv">ip = </span><span class="nx">ip</span><span class="p">.</span><span class="nx">toIPv4Address</span><span class="p">()</span>
-            <span class="k">else</span>
-              <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-              <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no valid IPv</span><span class="si">#{</span><span class="nx">options</span><span class="p">.</span><span class="nx">version</span><span class="si">}</span><span class="s"> address&quot;</span>
-        <span class="k">else</span>
-          <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">kind</span><span class="p">()</span> <span class="o">is</span> <span class="s">&#39;ipv4&#39;</span>
-            <span class="nx">debug</span> <span class="s">&#39;convert to ipv4mapped&#39;</span>
-            <span class="nv">ip = </span><span class="nx">ip</span><span class="p">.</span><span class="nx">toIPv4MappedAddress</span><span class="p">()</span>
-      <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">kind</span><span class="p">()</span> <span class="o">is</span> <span class="s">&#39;ipv6&#39;</span>
-        <span class="nv">value = </span><span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">format</span> <span class="o">is</span> <span class="s">&#39;long&#39;</span> <span class="k">then</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">toNormalizedString</span><span class="p">()</span> <span class="k">else</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">version</span>
+      <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">version</span> <span class="o">is</span> <span class="s">&#39;ipv4&#39;</span>
+        <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">kind</span><span class="p">()</span> <span class="o">is</span> <span class="s">&#39;ipv6&#39;</span>
+          <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">isIPv4MappedAddress</span><span class="p">()</span> <span class="o">and</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">ipv4Mapping</span>
+            <span class="nx">debug</span> <span class="s">&#39;convert to ipv4&#39;</span>
+            <span class="nv">ip = </span><span class="nx">ip</span><span class="p">.</span><span class="nx">toIPv4Address</span><span class="p">()</span>
+          <span class="k">else</span>
+            <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no valid</span>
+<span class="s">              IPv</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">version</span><span class="si">}</span><span class="s"> address&quot;</span><span class="p">),</span> <span class="nx">cb</span>
       <span class="k">else</span>
-        <span class="nv">value = </span><span class="nx">ip</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">kind</span><span class="p">()</span> <span class="o">is</span> <span class="s">&#39;ipv4&#39;</span>
+          <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">ipv4Mapping</span>
+            <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no valid</span>
+<span class="s">              IPv</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">version</span><span class="si">}</span><span class="s"> address&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+          <span class="nx">debug</span> <span class="s">&#39;convert to ipv4mapped&#39;</span>
+          <span class="nv">ip = </span><span class="nx">ip</span><span class="p">.</span><span class="nx">toIPv4MappedAddress</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">kind</span><span class="p">()</span> <span class="o">is</span> <span class="s">&#39;ipv6&#39;</span>
+      <span class="nv">value = </span><span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">format</span> <span class="o">is</span> <span class="s">&#39;long&#39;</span> <span class="k">then</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">toNormalizedString</span><span class="p">()</span> <span class="k">else</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+    <span class="k">else</span>
+      <span class="nv">value = </span><span class="nx">ip</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
 
 </pre></div>
         </td>
@@ -333,15 +327,19 @@
 <p>check ranges</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allow</span>
-        <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">allow</span>
-          <span class="k">if</span> <span class="nx">specialRanges</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span><span class="o">?</span>
-            <span class="k">for</span> <span class="nx">subentry</span> <span class="k">in</span> <span class="nx">specialRanges</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span>
-              <span class="p">[</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">bits</span><span class="p">]</span> <span class="o">=</span> <span class="nx">subentry</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\//</span>
-              <span class="k">return</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">match</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">addr</span><span class="p">),</span> <span class="nx">bits</span>
-          <span class="k">else</span>
-            <span class="p">[</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">bits</span><span class="p">]</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\//</span>
-            <span class="k">return</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">match</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">addr</span><span class="p">),</span> <span class="nx">bits</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span>
+      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span>
+        <span class="k">if</span> <span class="nx">specialRanges</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span><span class="o">?</span>
+          <span class="k">for</span> <span class="nx">subentry</span> <span class="k">in</span> <span class="nx">specialRanges</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span>
+            <span class="p">[</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">bits</span><span class="p">]</span> <span class="o">=</span> <span class="nx">subentry</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\//</span>
+            <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">match</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">addr</span><span class="p">),</span> <span class="nx">bits</span>
+              <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+              <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
+        <span class="k">else</span>
+          <span class="p">[</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">bits</span><span class="p">]</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\//</span>
+          <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">match</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">addr</span><span class="p">),</span> <span class="nx">bits</span>
+            <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
 </pre></div>
         </td>
@@ -354,22 +352,22 @@
 <p>ip not in the allowed range</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="k">unless</span> <span class="nx">options</span><span class="p">.</span><span class="nx">deny</span>
-          <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-          <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given ip address &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not in the allowed ranges&quot;</span>
-      <span class="k">if</span> <span class="nx">options</span><span class="p">.</span><span class="nx">deny</span>
-        <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">options</span><span class="p">.</span><span class="nx">deny</span>
-          <span class="k">if</span> <span class="nx">specialRanges</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span><span class="o">?</span>
-            <span class="k">for</span> <span class="nx">subentry</span> <span class="k">in</span> <span class="nx">specialRanges</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span>
-              <span class="p">[</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">bits</span><span class="p">]</span> <span class="o">=</span> <span class="nx">subentry</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\//</span>
-              <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">match</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">addr</span><span class="p">),</span> <span class="nx">bits</span>
-                <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-                <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given ip address &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is denied because in range </span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&quot;</span>
-          <span class="k">else</span>
-            <span class="p">[</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">bits</span><span class="p">]</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\//</span>
+      <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span>
+        <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given ip address &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not in</span>
+<span class="s">          the allowed ranges&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span>
+      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span>
+        <span class="k">if</span> <span class="nx">specialRanges</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span><span class="o">?</span>
+          <span class="k">for</span> <span class="nx">subentry</span> <span class="k">in</span> <span class="nx">specialRanges</span><span class="p">[</span><span class="nx">entry</span><span class="p">]</span>
+            <span class="p">[</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">bits</span><span class="p">]</span> <span class="o">=</span> <span class="nx">subentry</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\//</span>
             <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">match</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">addr</span><span class="p">),</span> <span class="nx">bits</span>
-              <span class="k">throw</span> <span class="nx">check</span><span class="p">.</span><span class="nx">error</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">options</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span>
-              <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given ip address &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is denied because in range </span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&quot;</span>
+              <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given ip address &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is</span>
+<span class="s">                denied because in range </span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+        <span class="k">else</span>
+          <span class="p">[</span><span class="nx">addr</span><span class="p">,</span> <span class="nx">bits</span><span class="p">]</span> <span class="o">=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\//</span>
+          <span class="k">if</span> <span class="nx">ip</span><span class="p">.</span><span class="nx">match</span> <span class="nx">ipaddr</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">addr</span><span class="p">),</span> <span class="nx">bits</span>
+            <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given ip address &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is</span>
+<span class="s">              denied because in range </span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
 </pre></div>
         </td>
@@ -379,49 +377,28 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
-<p>ip also not in the denied range so allowed again</p>
+<p>ip also not in the denied range so allowed again
+done return resulting value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-      <span class="nx">value</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="selfcheck">
-  <h2>
-    <a href="#selfcheck" name="selfcheck" class="pilcrow">&#182;</a>
-    Selfcheck
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">selfcheck: </span><span class="nf">(name, options) -&gt;</span>
-    <span class="nv">validator = </span><span class="nx">require</span> <span class="s">&#39;../index&#39;</span>
-    <span class="nx">validator</span><span class="p">.</span><span class="nx">check</span> <span class="nx">name</span><span class="p">,</span>
+<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+    <span class="nv">schema:</span>
       <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
       <span class="nv">allowedKeys: </span><span class="kc">true</span>
-      <span class="nv">entries:</span>
-        <span class="nv">type:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-        <span class="nv">title:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">description:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">optional:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
+      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
         <span class="nv">default:</span>
           <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
         <span class="nv">version:</span>
           <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
           <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;ipv4&#39;</span><span class="p">,</span> <span class="s">&#39;ipv6&#39;</span><span class="p">]</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">ipv4Mapping:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
         <span class="nv">deny:</span>
           <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
@@ -439,7 +416,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>ipv6 mask</p>
         </td>
@@ -452,7 +429,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>1:2:3:4:5:6:7:8</p>
         </td>
@@ -465,7 +442,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
 <p>1::                              1:2:3:4:5:6:7::</p>
         </td>
@@ -478,7 +455,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8</p>
         </td>
@@ -491,7 +468,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8</p>
         </td>
@@ -504,7 +481,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8</p>
         </td>
@@ -517,7 +494,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8</p>
         </td>
@@ -530,7 +507,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8</p>
         </td>
@@ -543,7 +520,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8</p>
         </td>
@@ -556,7 +533,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::</p>
         </td>
@@ -569,7 +546,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)</p>
         </td>
@@ -582,7 +559,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
 (IPv4-mapped IPv6 addresses and IPv4-translated addresses)</p>
@@ -598,7 +575,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)</p>
         </td>
@@ -613,7 +590,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>/128</p>
         </td>
@@ -626,7 +603,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>ipv4 mask 255.255.255.255/32</p>
         </td>
@@ -653,7 +630,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>ipv6 mask</p>
         </td>
@@ -666,7 +643,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>1:2:3:4:5:6:7:8</p>
         </td>
@@ -679,7 +656,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>1::                              1:2:3:4:5:6:7::</p>
         </td>
@@ -692,7 +669,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8</p>
         </td>
@@ -705,7 +682,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8</p>
         </td>
@@ -718,7 +695,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
 <p>1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8</p>
         </td>
@@ -731,7 +708,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
 </div>
 <p>1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8</p>
         </td>
@@ -744,7 +721,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
 </div>
 <p>1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8</p>
         </td>
@@ -757,7 +734,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
 </div>
 <p>1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8</p>
         </td>
@@ -770,7 +747,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
 <p>::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::</p>
         </td>
@@ -783,7 +760,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)</p>
         </td>
@@ -796,7 +773,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
 </div>
 <p>::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
 (IPv4-mapped IPv6 addresses and IPv4-translated addresses)</p>
@@ -812,7 +789,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
 </div>
 <p>2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)</p>
         </td>
@@ -827,7 +804,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
+  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
 </div>
 <p>/128</p>
         </td>
@@ -840,7 +817,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
+  <a class="pilcrow" href="#section-45" id="section-45">&#182;</a>
 </div>
 <p>ipv4 mask 255.255.255.255/32</p>
         </td>
@@ -855,7 +832,8 @@
           <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
           <span class="nv">default: </span><span class="s">&#39;short&#39;</span>
           <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;short&#39;</span><span class="p">,</span> <span class="s">&#39;long&#39;</span><span class="p">]</span>
-    <span class="p">,</span> <span class="nx">options</span>
+    <span class="nv">value: </span><span class="nx">schema</span>
+  <span class="p">,</span> <span class="nx">cb</span>
 </pre></div>
         </td>
       </tr>

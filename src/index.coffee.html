@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/indexcoffee", defaultSidebar = true;
+    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/index.coffee", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
   <script src="../fileSearch.js"></script>
@@ -27,6 +27,9 @@
       </div>
       <div class="heading h2">
         <a href="#node%20modules">Node modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#specification">Specification</a>
       </div>
       <div class="heading h2">
         <a href="#create%20human%20readable%20description">Create human readable description</a>
@@ -85,6 +88,29 @@
 <span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;./check&#39;</span>
 
 
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="specification">
+  <h2>
+    <a href="#specification" name="specification" class="pilcrow">&#182;</a>
+    Specification
+  </h2>
+</div>
+
+
+<ul>
+<li>name - (string) descriptive name of the data</li>
+<li>schema - (object) structure to check</li>
+<li>context - (object) additional data structure</li>
+<li>dir - set to base directory for file relative file paths</li>
+<li>value - original value (not changed)</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
 
 </pre></div>
         </td>
@@ -102,8 +128,8 @@
 <p>This will directly return the description of how the value has to be.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(spec) -&gt;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">spec</span>
+<span class="nv">exports.describe = </span><span class="nf">(spec, cb) -&gt;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">spec</span><span class="p">,</span> <span class="nx">cb</span>
 
 
 </pre></div>
@@ -131,7 +157,7 @@ Error to the callback.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>check the given data</p>
         </td>
@@ -145,7 +171,7 @@ Error to the callback.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>optimize data</p>
         </td>
@@ -158,7 +184,7 @@ Error to the callback.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>run the check</p>
         </td>
@@ -188,8 +214,8 @@ Error to the callback.</p>
 <p>This may be used in tests to check the validator check options if they are valid.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.selfcheck = </span><span class="nf">(spec, cb) -&gt;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="nx">spec</span><span class="p">,</span> <span class="nx">cb</span>
+<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="nx">schema</span><span class="p">,</span> <span class="nx">cb</span>
 </pre></div>
         </td>
       </tr>

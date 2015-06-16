@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/integercoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/integer.coffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -107,11 +107,23 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
 </div>
+<p>alinex modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
 <p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
-<span class="nv">float = </span><span class="nx">require</span> <span class="s">&#39;./float&#39;</span>
 
 
 </pre></div>
@@ -150,7 +162,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(work) -&gt;</span>
+<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
 
 </pre></div>
         </td>
@@ -158,7 +170,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>combine into message</p>
         </td>
@@ -175,7 +187,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>round</p>
         </td>
@@ -193,7 +205,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>integer type</p>
         </td>
@@ -215,7 +227,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
 <p>minmax</p>
         </td>
@@ -228,7 +240,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
     <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be greater than </span><span class="si">#{</span><span class="nx">min</span><span class="si">}</span><span class="s">. &quot;</span>
   <span class="k">else</span> <span class="k">if</span> <span class="nx">max</span><span class="o">?</span>
     <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The value should be lower than </span><span class="si">#{</span><span class="nx">max</span><span class="si">}</span><span class="s">. &quot;</span>
-  <span class="nx">text</span>
+  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
 
 <span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
   <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
@@ -240,7 +252,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>base checks</p>
         </td>
@@ -248,7 +260,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
   <span class="k">try</span>
     <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
   <span class="k">catch</span> <span class="nx">err</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
   <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
 
 </pre></div>
@@ -257,7 +269,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>convert units</p>
         </td>
@@ -274,7 +286,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>sanitize string</p>
         </td>
@@ -294,7 +306,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>round</p>
         </td>
@@ -311,13 +323,14 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>check integer</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">unless</span> <span class="nx">value</span> <span class="o">is</span> <span class="p">(</span><span class="nx">value</span> <span class="o">|</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no integer as needed&quot;</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no integer</span>
+<span class="s">      as needed&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
 </pre></div>
         </td>
@@ -325,7 +338,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>integer type</p>
         </td>
@@ -337,24 +350,7 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
     <span class="nv">max = </span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">type</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="nx">unsigned</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
     <span class="nv">min = </span><span class="p">(</span><span class="nx">unsigned</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">max</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">unsigned</span>
     <span class="k">if</span> <span class="nx">value</span> <span class="o">&lt;</span> <span class="nx">min</span> <span class="o">or</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="nx">max</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The value is out of range for</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
-</div>
-<p>{work.pos.inttype}#{unit}-integer"
-minmax</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="s">  if work.pos.min? and value &lt; work.pos.min</span>
-<span class="s">    return cb work.report new Error &quot;</span><span class="nx">The</span> <span class="nx">value</span> <span class="o">is</span> <span class="nx">to</span> <span class="nx">low</span><span class="p">,</span> <span class="nx">it</span> <span class="nx">has</span> <span class="nx">to</span> <span class="nx">be</span> <span class="nx">at</span> <span class="nx">least</span> <span class="c1">#{work.pos.min}&quot;</span>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">max</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The value is to high, it has to be&#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">&#39; or lower&quot;</span>
+      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The value is out of range for</span>
 
 </pre></div>
         </td>
@@ -364,51 +360,12 @@ minmax</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
 </div>
-<p>done return resulting value</p>
+<p>{work.pos.inttype}#{unit}-integer"), cb
+min/max</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
-
-<span class="nv">exports.selfcheck =</span>
-<span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-<span class="nv">allowedKeys: </span><span class="kc">true</span>
-<span class="nv">entries:</span>
-  <span class="nv">type:</span>
-    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-  <span class="nv">title:</span>
-    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-  <span class="nv">description:</span>
-    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-  <span class="nv">optional:</span>
-    <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-  <span class="nv">default:</span>
-    <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-  <span class="nv">sanitize:</span>
-    <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-  <span class="nv">unit:</span>
-    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">minLength: </span><span class="mi">1</span>
-  <span class="nv">round:</span>
-    <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">entries: </span><span class="p">[</span>
-      <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-    <span class="p">,</span>
-      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-      <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;floor&#39;</span><span class="p">,</span> <span class="s">&#39;ceil&#39;</span><span class="p">]</span>
-    <span class="p">]</span>
-  <span class="nv">min:</span>
-    <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">entries: </span><span class="p">[</span>
-      <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-    <span class="p">,</span>
+<span class="s">  if work.pos.min? and value &lt; work.pos.min</span>
+<span class="s">    return work.report (new Error &quot;</span><span class="nx">The</span> <span class="nx">value</span> <span class="o">is</span> <span class="nx">to</span> <span class="nx">low</span><span class="p">,</span> <span class="nx">it</span> <span class="nx">has</span> <span class="nx">to</span> <span class="nx">be</span> <span class="nx">at</span> <span class="nx">least</span>
 
 </pre></div>
         </td>
@@ -418,23 +375,12 @@ minmax</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
-
-<div class="highlight"><pre><code> <span class="nx">rules</span><span class="p">.</span><span class="nx">selfcheck</span><span class="p">.</span><span class="nx">reference</span>
-</code></pre></div>
-
-
+<p>{work.pos.min}"), cb</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="p">]</span>
-  <span class="nv">max:</span>
-    <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">min:</span>
-      <span class="nv">reference: </span><span class="s">&#39;relative&#39;</span>
-      <span class="nv">source: </span><span class="s">&#39;&lt;min&#39;</span>
-    <span class="nv">entries: </span><span class="p">[</span>
-      <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-    <span class="p">,</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">max</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">max</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The value is to high, it has to be&#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">max</span><span class="si">}</span><span class="s">&#39;</span>
+<span class="s">      or lower&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
 </pre></div>
         </td>
@@ -444,26 +390,56 @@ minmax</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
-
-<div class="highlight"><pre><code> <span class="nx">rules</span><span class="p">.</span><span class="nx">selfcheck</span><span class="p">.</span><span class="nx">reference</span>
-</code></pre></div>
-
-
+<p>done return resulting value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="p">]</span>
-  <span class="nv">inttype:</span>
-    <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">entries: </span><span class="p">[</span>
-      <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-    <span class="p">,</span>
-      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-      <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;byte&#39;</span><span class="p">,</span> <span class="s">&#39;short&#39;</span><span class="p">,</span><span class="s">&#39;long&#39;</span><span class="p">,</span><span class="s">&#39;quad&#39;</span><span class="p">,</span> <span class="s">&#39;safe&#39;</span><span class="p">]</span>
-    <span class="p">]</span>
-  <span class="nv">unsigned:</span>
-    <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-    <span class="nv">optional: </span><span class="kc">true</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
+
+<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+    <span class="nv">schema:</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
+        <span class="nv">default:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">sanitize:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">unit:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="nv">minLength: </span><span class="mi">1</span>
+        <span class="nv">round:</span>
+          <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="o">or:</span> <span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;floor&#39;</span><span class="p">,</span> <span class="s">&#39;ceil&#39;</span><span class="p">]</span>
+          <span class="p">]</span>
+        <span class="nv">min:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+        <span class="nv">max:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">min: </span><span class="s">&#39;&lt;&lt;&lt;min&gt;&gt;&gt;&#39;</span>
+        <span class="nv">inttype:</span>
+          <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="o">or:</span> <span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+            <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;byte&#39;</span><span class="p">,</span> <span class="s">&#39;short&#39;</span><span class="p">,</span><span class="s">&#39;long&#39;</span><span class="p">,</span><span class="s">&#39;quad&#39;</span><span class="p">,</span> <span class="s">&#39;safe&#39;</span><span class="p">]</span>
+          <span class="p">]</span>
+        <span class="nv">unsigned:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+    <span class="nv">value: </span><span class="nx">schema</span>
+  <span class="p">,</span> <span class="nx">cb</span>
 </pre></div>
         </td>
       </tr>

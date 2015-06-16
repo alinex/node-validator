@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/booleancoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/boolean.coffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -78,6 +78,19 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
 </div>
+<p>alinex modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
 <p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -116,7 +129,7 @@
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(work) -&gt;</span>
+<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
 
 </pre></div>
         </td>
@@ -124,7 +137,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
 <p>get possible values</p>
         </td>
@@ -138,7 +151,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
 </div>
 <p>combine into message</p>
         </td>
@@ -146,6 +159,7 @@
   <span class="nv">text = </span><span class="s">&quot;A boolean value, which will be true for </span><span class="si">#{</span><span class="nx">vTrue</span><span class="si">}</span><span class="s"> and</span>
 <span class="s">  will be considered as false for </span><span class="si">#{</span><span class="nx">vFalse</span><span class="si">}</span><span class="s">. &quot;</span>
   <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
+  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
 
 <span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
   <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
@@ -157,7 +171,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>base checks</p>
         </td>
@@ -165,7 +179,7 @@
   <span class="k">try</span>
     <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
   <span class="k">catch</span> <span class="nx">err</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
   <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
 
 </pre></div>
@@ -174,7 +188,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>sanitize</p>
         </td>
@@ -187,13 +201,17 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
 <p>boolean values check</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span> <span class="k">if</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">valuesTrue</span>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">false</span> <span class="k">if</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">valuesFalse</span>
+  <span class="k">if</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">valuesTrue</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="kc">true</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">true</span>
+  <span class="k">if</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">valuesFalse</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="kc">false</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">false</span>
 
 </pre></div>
         </td>
@@ -201,31 +219,24 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>failed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nx">cb</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No boolean value given&quot;</span>
+  <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No boolean value given&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
-<span class="nv">exports.selfcheck =</span>
-  <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-  <span class="nv">allowedKeys: </span><span class="kc">true</span>
-  <span class="nv">entries:</span>
-    <span class="nv">type:</span>
-      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-    <span class="nv">title:</span>
-      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-      <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">description:</span>
-      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-      <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">optional:</span>
-      <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-      <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">default:</span>
-      <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-      <span class="nv">optional: </span><span class="kc">true</span>
+<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+    <span class="nv">schema:</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
+        <span class="nv">default:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+    <span class="nv">value: </span><span class="nx">schema</span>
+  <span class="p">,</span> <span class="nx">cb</span>
 </pre></div>
         </td>
       </tr>
