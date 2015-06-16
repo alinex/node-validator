@@ -18,7 +18,7 @@ exports.describe = (work, cb) ->
   text = "All of the following checks have to succeed:"
   async.map [0..work.pos.and.length-1], (num, cb) ->
     # run subcheck
-    check.describe work.goInto('and', num), (err, text) ->
+    check.describe work.goInto(['and', num]), (err, text) ->
       return cb err if err
       cb null, "\n- #{text.replace /\n/g, '\n  '}"
   , (err, results) ->
@@ -37,8 +37,8 @@ exports.run = (work, cb) ->
     return work.report err, cb
   # run async checks
   async.eachSeries [0..(work.pos.and.length-1)], (num, cb) ->
-    sub = work.goInto('and', num)
-    sub.value = work.value
+    sub = work.goInto(['and', num])
+#    sub.value = work.value
     check.run sub, (err, result) ->
       return cb err if err
       work.value = result

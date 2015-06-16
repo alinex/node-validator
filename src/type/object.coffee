@@ -36,12 +36,12 @@ exports.describe = (work, cb) ->
   if work.pos.entries?
     text += "The entries should be:"
     if Array.isArray work.pos.entries
-      entries = work.goInto 'entries'
+      entries = work.goInto ['entries']
       for num in [0..entries.length-1]
-        sub = entries.goInto num
+        sub = entries.goInto [num]
         text += "\n- #{sub.key ? 'other'}: " + check.describe(sub).replace /\n/g, '\n  '
     else
-      sub = work.goInto 'entries'
+      sub = work.goInto ['entries']
       text += "\n- " + check.describe(sub).replace /\n/g, '\n  '
     text += '\n'
   # mandatoryKeys
@@ -77,7 +77,7 @@ exports.describe = (work, cb) ->
       subtext = "The following entries have a specific format: "
       async.map Object.keys(work.pos.keys), (key, cb) ->
         # run subcheck
-        check.describe work.goInto('keys', key), (err, text) ->
+        check.describe work.goInto(['keys', key]), (err, text) ->
           return cb err if err
           cb null, "\n- #{key}: #{text.replace /\n/g, '\n  '}"
       , (err, results) ->
@@ -93,7 +93,7 @@ exports.describe = (work, cb) ->
         else
           ruletext = "\n- other keys: "
         # run subcheck
-        check.describe work.goInto('entries', num), (err, text) ->
+        check.describe work.goInto(['entries', num]), (err, text) ->
           return cb err if err
           cb null, ruletext + text.replace /\n/g, '\n  '
       , (err, results) ->
@@ -176,30 +176,29 @@ exports.run = (work, cb) ->
   async.each Object.keys(value), (key, cb) ->
     # find sub-check
     if work.pos.keys?[key]?
-      sub = work.goInto 'keys', key
+      sub = work.goInto ['keys', key], [key]
     else if work.pos.entries?
       for rule, i in work.pos.entries
         if rule.key?.match key
-          sub = work.goInto 'entries', i
+          sub = work.goInto ['entries', i], [key]
           break
         else
-          sub = work.goInto 'entries', i
+          sub = work.goInto ['entries', i], [key]
     else
       # keys that have no specification
       name = work.spec.name ? 'value'
       path = work.path.concat key
       name += "/#{path.join '/'}"
-      sub = work.goInto key
+      sub = work.goInto [key], [key]
       sub.pos =
         type: switch
-          when Array.isArray work.value[key]
+          when Array.isArray sub.value
             'array'
-          when typeof work.value[key] is 'object'
+          when typeof sub.value is 'object'
             'object'
           else
             'any'
         optional: true
-    sub.value = work.value[key]
     check.run sub, (err, result) ->
       return cb err if err
       value[key] = result

@@ -52,7 +52,7 @@ exports.describe = (work, cb) ->
       subtext = "The following entries have a specific format:"
       async.map [0..work.pos.list.length-1], (num, cb) ->
         # run subcheck
-        check.describe work.goInto('list', num), (err, text) ->
+        check.describe work.goInto(['list', num]), (err, text) ->
           return cb err if err
           cb null, "\n- #{num}: #{text.replace /\n/g, '\n  '}"
       , (err, results) ->
@@ -62,7 +62,7 @@ exports.describe = (work, cb) ->
       return cb() unless work.pos.entries?
       subtext = "And all other entries have to be:\n- "
       # run subcheck
-      check.describe work.goInto('entries'), (err, text) ->
+      check.describe work.goInto(['entries']), (err, text) ->
         return cb err if err
         cb null, subtext + (text.replace /\n/g, '\n  ') + '\n'
   ], (err, results) ->
@@ -106,27 +106,25 @@ exports.run = (work, cb) ->
   async.each [0..value.length-1], (num, cb) ->
     # find sub-check
     if work.pos.list?[num]?
-      sub = work.goInto 'list', num
-      sub.value = sub.value[num]
+      sub = work.goInto ['list', num], [num]
     else if work.pos.entries?
-      sub = work.goInto 'entries'
-      sub.value = value[num]
+      sub = work.goInto ['entries'], [num]
     else
       name = work.spec.name ? 'value'
       path = work.path.concat num
       name += "/#{path.join '/'}"
-      sub =
-        name: name
-        value: value[num]
-        schema:
-          type: switch
-            when Array.isArray value[num]
-              'array'
-            when typeof value[num] is 'object'
-              'object'
-            else
-              'any'
-          optional: true
+      sub = work.goInto null, [num]
+      sub.spec.schema =
+        type: switch
+          when Array.isArray value[num]
+            'array'
+          when typeof value[num] is 'object'
+            'object'
+          else
+            'any'
+        optional: true
+      sub.path = []
+      sub.pos = sub.spec.schema
     check.run sub, cb
   , (err) ->
     return cb err if err

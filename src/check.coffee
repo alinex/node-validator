@@ -23,12 +23,14 @@ reference = require './reference'
 #   - context - (object) additional data structure
 #   - dir - set to base directory for file relative file paths
 #   - value - original value (not changed)
-#   - done - list of checked paths
-#   - runAgain - set tot true if it have to be rerun in cause of references
+#   - failed - internally used to check for references to unchecked parts
+#   - done - internally used as list of checked paths
 # - path - array containing the current path
 # - pos - reference to schema position at this path
 # - debug - output of current path for debugging
 # - value - value at this path
+# - vpath - path of value
+# - retry counter for retry to get references checked
 
 class Work
 
@@ -37,11 +39,12 @@ class Work
 
   init: ->
     # optimize work
+    @spec.done ?= []
     @path ?= []
     @pos ?= @spec.schema
     @value = @spec.value
     @debug = chalk.grey "#{@spec.name ? 'value'}/#{@path.join '/'}"
-    @spec.done = []
+    @vpath ?= []
 
   report: (err, cb) ->
     message = "#{err.message} in #{@spec.name ? 'value'}/#{@path.join '/'}"
@@ -59,18 +62,31 @@ class Work
       err.description = detail if detail
       cb err
 
-  goInto: (names...) ->
-    name = names.shift()
-#    console.log name, '>>>', @
+  goInto: (schema = [], value = []) ->
     sub = new Work @spec
-    sub.path = @path.concat name
-    sub.pos = if @pos[name]? then  @pos[name] else @pos
-    sub.value = @value
-    sub.debug = chalk.grey "#{sub.spec.name ? 'value'}/#{sub.path.join '/'}"
+    if schema.length
+      name = schema.shift()
+#      console.log name, '>>> schema', @
+      sub.path = @path.concat name
+      sub.pos = if @pos[name]? then  @pos[name] else @pos
+      sub.debug = chalk.grey "#{sub.spec.name ? 'value'}/#{sub.path.join '/'}"
+    else
+      sub.path = @path[0..]
+      sub.pos = @pos
+      sub.debug = @debug
+    # go into value
+    if value.length
+      v = value.shift()
+#      console.log v, '>>> value', @
+      sub.vpath = @vpath.concat v
+      sub.value = if @value[v]? then  @value[v] else undefined
+    else
+      sub.vpath = @vpath[0..]
+      sub.value = @value
     #console.log name, sub
 #    console.log name, '<<<', sub
-    return sub unless names.length
-    sub.goInto names...
+    return sub unless schema.length or value.length
+    sub.goInto schema, value
 
 # Helper methods
 # -------------------------------------------------
@@ -113,7 +129,7 @@ exports.describe = (work, cb) ->
 # This may be called using the spec or an already created work instance.
 exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
-#  console.log 'check:', work
+  debug "#{work.debug} checking..."
   # check for references in schema
   async.mapOf work.pos, (v, k, cb) ->
     reference.check v,
@@ -129,8 +145,13 @@ exports.run = (work, cb) ->
       path: work.path[0..]    # clone because it may change
     , (err, value) ->
       return work.report err, cb if err
-      work.spec.done.push work.path.join '/'
-#      console.log 'done', work.spec.done
+      # change value in spec
+      obj = work.spec.value
+      for n in work.vpath
+        obj = obj?[n]
+      obj = value if obj?
+      # and set as done
+      work.spec.done.push work.vpath.join '/'
       work.value = value
       # load library and call check
       try

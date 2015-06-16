@@ -184,14 +184,15 @@ find = (list, work={}, cb) ->
       work.data = result
       return find list, work, cb
     # check for retry
-    work.spec.retry ?= 0
-    if work.spec.retry > MAXRETRY/10
-      work.spec.retry = -100
-      return throw Error "Stopped because of circular references at #{work.spec.name}/#{work.path.join '/'}"
+    work.retry ?= 0
+    if work.retry > MAXRETRY/10
+      work.spec.failed = true
+      return throw Error "Stopped because of circular references at
+      #{work.spec.name}/#{work.path.join '/'}"
     list.unshift def
     setTimeout ->
-      return if work.spec.retry < 0 # processing already stopped
-      work.spec.retry++
+      return if work.spec.failed # processing already stopped
+      work.retry++
       find list, work, cb
     , 10
 
@@ -310,7 +311,7 @@ findType =
   env: (proto, path, work, cb) ->
     cb null, process.env[path]
   struct: (proto, path, work, cb) ->
-    cb null, findData path, work
+    findData path, work, cb
   context: (proto, path, work, cb) ->
     cb null, getData work.spec?.context, path.split '/'
   file: (proto, path, work, cb) ->
@@ -339,7 +340,7 @@ findType =
     exec path, opt, cb
 
 
-findData = (path, work) ->
+findData = (path, work, cb) ->
 #  console.log 'find:', path, work
   # split path
   path = path.replace('/\/+$/','').split /\/+/ if typeof path is 'string'
@@ -347,20 +348,34 @@ findData = (path, work) ->
   # find first level
   first = path[0]
   # absolute path, go on
-  return getData work.data, path[1..] if first is ''
+  return cb null, getData work.data, path[1..] if first is ''
   # search at current position
-  skip = 1
-  while path[0] is '..'
-    skip++
-    path.shift()
-  result = getData work.data, work.path[0..work.path.length-skip].concat path
-  return result if result
+  skip = 0
+  skip++ while path[skip] is '..'
+  result = getData work.data, work.path[0..work.path.length-skip-1].concat path[skip..]
+  if result and work.spec?.done?
+    checkpath = work.path[0..work.path.length-skip-1].concat(path[skip..]).join '/'
+    unless checkpath in work.spec.done
+      # check for retry
+      work.retry ?= 0
+      if work.retry > MAXRETRY/10
+        work.spec.failed = true
+        return throw Error "Stopped because of uncheckable #{work.spec.name}/#{checkpath}"
+      return setTimeout ->
+        return if work.spec.failed # processing already stopped
+        work.retry++
+        # reread value from spec
+        work.data = work.spec.value
+        findData path, work, cb
+      , 10
+  return cb null, result if result
   # check if not at the end
-  return unless work.path.length
+  return cb() unless work.path.length
   # search neighbors by sub call on parent
   sub = object.clone work
+  sub.spec = work.spec
   sub.path.pop()
-  return findData path, sub
+  findData path, sub, cb
 
 getData = (data, path) ->
   return data unless path.length

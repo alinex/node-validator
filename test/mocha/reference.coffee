@@ -720,7 +720,7 @@ describe "References", ->
         ]
       ], cb
 
-    it.only "should fail on circular reference", (cb) ->
+    it "should fail on circular reference", (cb) ->
       @timeout 20000
       domain = require('domain').create()
       domain.on 'error', -> cb()
@@ -737,4 +737,23 @@ describe "References", ->
         expect(err).to.exist
         cb()
       domain.exit()
+
+    it "should use reference after value is checked", (cb) ->
+      test.equal
+        type: 'object'
+        keys:
+          one:
+            type: 'integer'
+            round: true
+      , [
+        [
+          three: '<<<two>>>'
+          two: '<<<one>>>'
+          one: 5.6
+        ,
+          three: 6
+          two: 6
+          one: 6
+        ]
+      ], cb
 
