@@ -4,23 +4,24 @@ Package: alinex-validator
 [![Build Status] (https://travis-ci.org/alinex/node-validator.svg?branch=master)](https://travis-ci.org/alinex/node-validator)
 [![Dependency Status] (https://gemnasium.com/alinex/node-validator.png)](https://gemnasium.com/alinex/node-validator)
 
-This module will help validating complex structures. And may be used for all
+This module will help validating complex structures. And should be used on all
 external information.
 
 - check value against configuration
-- easy checking of values
-- may check complex structures
-- understandable errors
+- easy checking of values and complex structures
+- in detail checks for different data types
 - can give a human readable description
+- also supports dependency checks within the structure
 
 The validation rules are really simple, but they will get more complex as your
 data structure gains complexity. But if you know the basic rules it's all
-a composition of some simple structures.
+a composition of some simple structures. Like you will see below.
 
 This library can help you make your life secure and easy but you have to run
 every external data through it using a detailed data description. If you do so
-you can trust and use the values and get also the benefit that they are optimized
-as with the `handlebars` type you get a ready to use handlebar function back.
+you can trust and use the values as they are without further checks.
+And you'll get the benefit of automatically optimized values like for `handlebars`
+type you get a ready to use handlebar function back.
 
 It is one of the modules of the [Alinex Universe](http://alinex.github.io/node-alinex)
 following the code standards defined there.
@@ -51,8 +52,8 @@ npm install
 Usage
 -------------------------------------------------
 
-This library is implemented completely asynchronous, to allow io-operations
-and others within the validation.
+This library is implemented completely asynchronous, to allow io based checks
+and references within the structure.
 
 To use the validator you have to first include it:
 
@@ -74,7 +75,7 @@ validator.check
 
 The checks are completely asynchronous because they may contain some IO checks.
 
-To get a human readable description:
+To get a human readable description call:
 
 ``` coffee
 message = validator.describe
@@ -243,7 +244,8 @@ This will result in `localhost:8080` as example.
 
 ### Data Sources
 
-The following are the diffferent data sources to use.
+The following examples shows the different possible data sources with their URI
+syntax and usage.
 
 #### Value Structure
 
@@ -291,7 +293,9 @@ __Subchecks__
 
 Here you may also go into a file which is referenced:
 
+``` text
 <<<struct://file#address.info#1>>>
+```
 
 Searches for a field, reads the file path there, loads the file and gets the first
 line.
@@ -353,8 +357,8 @@ But you may use the `#` anchor to access a specific line or structured element.
 
 Possible protocols are:
 
-- http://domain:port/...
-- https://domain:port/...
+- http like `http://domain:port/...`
+- https like `https://domain:port/...`
 
 And you may connect to UNIX Sockets like `http://unix:/absolute/unix.socket:/request/path`
 but the paths have to be absoulte.
@@ -382,8 +386,11 @@ both it is recognized as alternative reference.
 
 #### Database (to be implemented later)
 
+This connector is not implemented so far and will come in one of the next
+releases. But in the example below I show how it will be used.
+
 ``` text
-<<<mysql://user:password@host:port/database/table/field?id=15>>>
+<<<mysql://user:password@host:port/database/table/id=15/field>>>
 <<<mysql:///dataname/table/id=15/field>>>
 <<<mysql:///dataname/select name from xxx where id=15>>>
 ```
@@ -535,7 +542,7 @@ name/test\d+/min - pattern match with multiple missing characters
 See the [Mozilla Developer Network](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
 for the possible syntax but without modifier.
 
-__join__
+__Join__
 
 As opposite to split and match the results maybe joined together into a single
 string using some separators.
