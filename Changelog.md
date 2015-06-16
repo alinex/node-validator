@@ -4,6 +4,110 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.0 (2015-06-16)
+-------------------------------------------------
+- Updated documentation.
+- Only use values for references after they are checked.
+- Added test for circular reference.
+- Allow references to references.
+- Extend selfchecks to checck that max >= min values.
+- Allow shortcut for structure references.
+- Allow references in schema definition.
+- Fixed bug with old option reference implementation.
+- Remove first try to get option variables running.
+- Add backreference support in references and fix some bugs since the last changes.
+- Added test case for references in options.
+- Added support to join arrays together in references.
+- Fixed structure and object matching in references and allowed regexp to work.
+- Allow structure references to search with asterisk.
+- Audded autodetect parser for references.
+- Change separator in split values from %% to //.
+- Implemented range selection for references.
+- Added parse option for references.
+- Added match support for references.
+- Allow split to use regular expressions as separator.
+- Added split functionality for references.
+- Added comments for additional checks to fullfill references.
+- Updated documentation about context and environment references.
+- Fixed reference tests.
+- Renamed reference work structure internally.
+- Integrate references into values.
+- Add hooks for integration.
+- Removed old unused code.
+- Check all entries of array or object to later add reference checks everywhere.
+- Updated documentation for all types.
+- Updated byte check.
+- Upgraded handlebars check.
+- Upgraded file checks.
+- Upgraded hostname check.
+- Upgraded the interval check.
+- Upgraded percent check.
+- Upgraded regexp check.
+- Upgraded the ipaddr checks.
+- Added type any for internal use.
+- Added selfcheck tests.
+- Optimize schema definition for and and or for better readability.
+- Upgraded the and test.
+- Rewritten any check as or test.
+- Make describe method also asynchronous.
+- Upgraded array check to work in new validator.
+- Update the function check.
+- Restructured object validator with optimized syntax.
+- Updated string tests and renamed tostring option to toString.
+- Optimized type checks integer and float.
+- Restructured library and updated boolean to new structure.
+- Added the command references.
+- Added command references.
+- Finished web references.
+- Make the reference.replace() method async.
+- Added file and web references.
+- Reference can now read struct and context information.
+- Added new reference function (basic routines only).
+- Integrade concept for regexp in reference path.
+- Change the reference syntax description to be more readable and powerful.
+- Updated description.
+- Document more simple reference syntax.
+- Added DATA references code.
+- Added possibility to specify allowedKeys in object as RegExp.
+- Add reference checks to array.
+- Fixed bug in boolean check.
+- Move reference check to general rules.
+- Fixed code to run async reference tests.
+- Make all reference tests work.
+- Updated debug messages to have new style in all types.
+- Added/updated inline code documentation.
+- Optimized line length of comments for better readiness.
+- Optimized second run to make only things nit done in the first run.
+- Made references for values work using a second round if needed.
+- Optimized debug output in check and object.
+- Merge branch 'master' of https://github.com/alinex/node-validator
+- Text changes.
+- Try to restructure again loop.
+- Finished struct references to use different path mappings.
+- Added debug message with results for calls and subcalls.
+- Basic unit checks running.
+- First rudimentary implementation.
+- Document compositing by example.
+- Add rudimentary reference type used for new reference checks.
+- Glue first sentences of description text into one to make it more natural sounding.
+- Optimize headings in documentation.
+- Don't support leading 0 as optional but read it as octal notation.
+- Changed reference plan.
+- Planing referenc restructuring.
+- Give file checks more time on slow test machines.
+- Fixed test assert values for byte tests.
+- Extended selfchecks to be more strict in allow and deny ranges.
+- Finished ipaddr type with api description.
+- Changed ipv4 and ipv6 types to combined ipaddr type.
+- Initial ipv6 check and planing for new references.
+- Finished ipv4 check with tests.
+- Added ip version 4 checks.
+- Extended allowed time to run some tests.
+- Fixed handlebars check to also return function if no handlebars are included.
+- Added example for reference checks in the documentation.
+- Added tests for regexp and made small fixes.
+- Add simple handlebar validation.
+
 Version 0.3.15 (2015-03-20)
 -------------------------------------------------
 - Added debug message for directory search paths.
