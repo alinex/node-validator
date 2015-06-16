@@ -720,12 +720,21 @@ describe "References", ->
         ]
       ], cb
 
-    it.skip "should fail on circular reference", (cb) ->
-      test.fail
-        type: 'object'
-      , [
-          three: '<<<two>>>'
-          two: '<<<one>>>'
-          one: '<<<three>>>'
-      ], cb
+    it.only "should fail on circular reference", (cb) ->
+      @timeout 20000
+      domain = require('domain').create()
+      domain.on 'error', -> cb()
+      domain.enter()
+      try
+        test.fail
+          type: 'object'
+        , [
+            three: '<<<two>>>'
+            two: '<<<one>>>'
+            one: '<<<three>>>'
+        ], cb
+      catch err
+        expect(err).to.exist
+        cb()
+      domain.exit()
 
