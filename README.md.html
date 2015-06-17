@@ -15,7 +15,17 @@
   <link rel="stylesheet" href="goToLine.css" />
 </head>
 <body>
-  <div id="sidebar_wrapper">
+  <nav>
+<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='http://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='http://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="lllogo" src="http://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+  </a>
+  <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
+</div>
+<div class="links">
+  <a href="http://alinex.github.io/blog.html" class="btn btn-primary"><span class="glyphicon-cog"></span> Blog</a>
+  <a href="http://alinex.github.io/code.html" class="btn btn-warning"><span class="glyphicon-pencil"></span> Code</a>
+</div>
+</nav><div id="sidebar_wrapper">
     <div id="sidebar_switch">
       <span class="tree">Files</span>
       <span class="headings">Headings</span>
@@ -163,26 +173,25 @@
 <p><a href="https://travis-ci.org/alinex/node-validator"><img src="https://travis-ci.org/alinex/node-validator.svg?branch=master" alt="Build Status" title="" /></a>
 <a href="https://gemnasium.com/alinex/node-validator"><img src="https://gemnasium.com/alinex/node-validator.png" alt="Dependency Status" title="" /></a></p>
 
-<p>This module will help validating complex structures. And should be used on all
+<p>This module will help validating complex structures. And may be used for all
 external information.</p>
 
 <ul>
 <li>check value against configuration</li>
-<li>easy checking of values and complex structures</li>
-<li>in detail checks for different data types</li>
+<li>easy checking of values</li>
+<li>may check complex structures</li>
+<li>understandable errors</li>
 <li>can give a human readable description</li>
-<li>also supports dependency checks within the structure</li>
 </ul>
 
 <p>The validation rules are really simple, but they will get more complex as your
 data structure gains complexity. But if you know the basic rules it's all
-a composition of some simple structures. Like you will see below.</p>
+a composition of some simple structures.</p>
 
 <p>This library can help you make your life secure and easy but you have to run
 every external data through it using a detailed data description. If you do so
-you can trust and use the values as they are without further checks.
-And you'll get the benefit of automatically optimized values like for <code>handlebars</code>
-type you get a ready to use handlebar function back.</p>
+you can trust and use the values and get also the benefit that they are optimized
+as with the <code>handlebars</code> type you get a ready to use handlebar function back.</p>
 
 <p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
 following the code standards defined there.</p>
@@ -228,8 +237,8 @@ npm install
 </div>
 
 
-<p>This library is implemented completely asynchronous, to allow io based checks
-and references within the structure.</p>
+<p>This library is implemented completely asynchronous, to allow io-operations
+and others within the validation.</p>
 
 <p>To use the validator you have to first include it:</p>
 
@@ -255,7 +264,7 @@ and references within the structure.</p>
 
 <p>The checks are completely asynchronous because they may contain some IO checks.</p>
 
-<p>To get a human readable description call:</p>
+<p>To get a human readable description:</p>
 
 
 <div class="highlight"><pre><code><span class="nv">message = </span><span class="nx">validator</span><span class="p">.</span><span class="nx">describe</span>
@@ -493,8 +502,7 @@ string:</p>
 </div>
 
 
-<p>The following examples shows the different possible data sources with their URI
-syntax and usage.</p>
+<p>The following are the diffferent data sources to use.</p>
 
 
 <div class="pilwrap" id="value%20structure">
@@ -506,19 +514,6 @@ syntax and usage.</p>
 
 
 <p>The <code>struct</code> protocol is used to search for the value in the current data structure.</p>
-
-<p>If you don't use a protocol on the first alternative it is assumed as structure
-call so you may use the shortcut:</p>
-
-
-<div class="highlight"><pre><code>&lt;&lt;&lt;name&gt;&gt;&gt;            # shortcut
-&lt;&lt;&lt;struct://name&gt;&gt;&gt;   # same result
-</code></pre></div>
-
-
-
-<p>But this is really only possible in the first alternative because in each other
-it will be assumed as default value.</p>
 
 <p><strong>Absolute path</strong></p>
 
@@ -556,11 +551,7 @@ line 2 makes no difference but line 3 of the examples goes one level up.</p>
 
 <p>Here you may also go into a file which is referenced:</p>
 
-
-<div class="highlight"><pre><code>&lt;&lt;&lt;struct://file#address.info#1&gt;&gt;&gt;
-</code></pre></div>
-
-
+<p>&lt;&lt;<struct://file#address.info#1>>></p>
 
 <p>Searches for a field, reads the file path there, loads the file and gets the first
 line.</p>
@@ -659,8 +650,8 @@ But you may use the <code>#</code> anchor to access a specific line or structure
 <p>Possible protocols are:</p>
 
 <ul>
-<li>http like <code>http://domain:port/...</code></li>
-<li>https like <code>https://domain:port/...</code></li>
+<li><a href='http://domain:port/'>http://domain:port/</a>...</li>
+<li><a href='https://domain:port/'>https://domain:port/</a>...</li>
 </ul>
 
 <p>And you may connect to UNIX Sockets like <code>http://unix:/absolute/unix.socket:/request/path</code>
@@ -706,11 +697,8 @@ both it is recognized as alternative reference.</p>
 </div>
 
 
-<p>This connector is not implemented so far and will come in one of the next
-releases. But in the example below I show how it will be used.</p>
 
-
-<div class="highlight"><pre><code>&lt;&lt;&lt;mysql://user:password@host:port/database/table/id=15/field&gt;&gt;&gt;
+<div class="highlight"><pre><code>&lt;&lt;&lt;mysql://user:password@host:port/database/table/field?id=15&gt;&gt;&gt;
 &lt;&lt;&lt;mysql:///dataname/table/id=15/field&gt;&gt;&gt;
 &lt;&lt;&lt;mysql:///dataname/select name from xxx where id=15&gt;&gt;&gt;
 </code></pre></div>
@@ -892,7 +880,7 @@ name/test\d+/min - pattern match with multiple missing characters
 <p>See the <a href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp">Mozilla Developer Network</a>
 for the possible syntax but without modifier.</p>
 
-<p><strong>Join</strong></p>
+<p><strong>join</strong></p>
 
 <p>As opposite to split and match the results maybe joined together into a single
 string using some separators.</p>

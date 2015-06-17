@@ -15,7 +15,17 @@
   <link rel="stylesheet" href="../../goToLine.css" />
 </head>
 <body>
-  <div id="sidebar_wrapper">
+  <nav>
+<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='http://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='http://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="lllogo" src="http://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+  </a>
+  <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
+</div>
+<div class="links">
+  <a href="http://alinex.github.io/blog.html" class="btn btn-primary"><span class="glyphicon-cog"></span> Blog</a>
+  <a href="http://alinex.github.io/code.html" class="btn btn-warning"><span class="glyphicon-pencil"></span> Code</a>
+</div>
+</nav><div id="sidebar_wrapper">
     <div id="sidebar_switch">
       <span class="tree">Files</span>
       <span class="headings">Headings</span>
@@ -122,7 +132,7 @@
 <p>run subcheck</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]),</span> <span class="nf">(err, text) -&gt;</span>
+    <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">(</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">),</span> <span class="nf">(err, text) -&gt;</span>
       <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span><span class="si">}</span><span class="s">&quot;</span>
   <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
@@ -164,7 +174,7 @@
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">error = </span><span class="p">[]</span>
   <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..(</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">or</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)],</span> <span class="nf">(num, cb) -&gt;</span>
-    <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]),</span> <span class="nf">(err, result) -&gt;</span>
+    <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">(</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">),</span> <span class="nf">(err, result) -&gt;</span>
       <span class="nx">error</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span> <span class="o">=</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
