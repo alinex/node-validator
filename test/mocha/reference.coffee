@@ -223,6 +223,7 @@ describe "References", ->
       , cb
 
   describe "file", ->
+    @timeout 5000
 
     it "should find file value", (cb) ->
       values = [

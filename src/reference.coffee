@@ -18,7 +18,6 @@
 # - data - structure to work on (schema or context)
 # - lastType - the type of the last checked reference to ensure security
 
-MAXRETRY = 10 #10000 # waiting for 10 seconds at max
 
 # Node modules
 # -------------------------------------------------
@@ -33,6 +32,10 @@ check = require './check'
 
 # Configuration
 # -------------------------------------------------
+# MAXRETRY defines the time to wait till the references should be solved
+MAXRETRY = 10000 # waiting for 10 seconds at max
+TIMEOUT = 10 # checking every 10ms
+
 # defines specific type handler for some protocols
 protocolMap =
   http: 'web'
@@ -47,19 +50,19 @@ typePrecedence =
   cmd: 2
   web: 1
 
-# Helper methods
+# Have references
 # -------------------------------------------------
-
-exports.check = (value, work, cb) ->
-  return cb null,value unless exists value
-  replace value, work, cb
-
-# check that there are references in the object
+# Check if there are references in the object.
 exists = module.exports.exists = (value) ->
   return false unless typeof value is 'string'
   Boolean value.match /<<<[^]*>>>/
 
+# Replace references
+# -------------------------------------------------
+# This is called from the check to resolve the references first before running
+# the real check. If there are no references it will return immediately.
 replace = module.exports.replace = (value, work={}, cb) ->
+  # maybe called without work (mostly for)
   if typeof work is 'function'
     cb = work
     work = {}
@@ -69,36 +72,43 @@ replace = module.exports.replace = (value, work={}, cb) ->
   # step over parts
   refs = value.split /(<<<[^]*?>>>)/
   refs = [refs[1]] if refs.length is 3 and refs[0] is '' and refs[2] is ''
-  # check alternatives
+  # check all references
   async.map refs, (v, cb) ->
     findAlternative v, work, cb
   , (err, results) ->
     return cb() if err
     if results.length is 1
+      # return first result if only one reference used
       debug "#{util.inspect value} is replaced by #{util.inspect results[0]}"
       return cb null, results[0]
-    # combine together
+    # combine reference together
     result = results.join ''
     debug "#{util.inspect value} is replaced by #{util.inspect result}"
     cb null, result
 
+# Helper methods
+# -------------------------------------------------
 
+# ### search through alternative sources
+# Alternative sources are separated by ` | ` and the first possible alternative
+# should be used.
 findAlternative = (value, work={}, cb) ->
   return cb null, value unless ~value.indexOf '<<<'
   # replace <<< and >>> and split into alternatives
   first = true
   async.map value[3..-4].split(/\s+\|\s+/), (alt, cb) ->
+    # automatically set first element to `struct` if no other protocol set
     if first and not ~alt.indexOf '://'
       alt = "struct://#{alt}"
     first = false
-    # split into paths and call
+    # split uri into anchored separated paths
     alt = alt[0..alt.length-2] while alt[alt.length-1] is '#'
     uriPart = alt.split /#/
     # return default value
     if uriPart.length is 1 and not ~alt.indexOf '://'
       debug chalk.grey "#{util.inspect alt} -> default value: #{util.inspect alt}"
       return cb null, alt
-    # search the uriPart
+    # read value from given uri parts
     find uriPart, work, (err, result) ->
       if err
         debug chalk.grey "#{util.inspect alt} -> failed: #{err.message}"
@@ -111,10 +121,15 @@ findAlternative = (value, work={}, cb) ->
       return cb null, result if result?
     cb()
 
+# ### Find reference
+# This method is called with all the uri parts as list and will search the
+# value of the first uri part, pass it on to the second search as data and so
+# on. The result will be from the last uri path.
 find = (list, work={}, cb) ->
   # get type of uri part
   def = list.shift()
   return cb null, work.data unless def # empty anchor
+  # detect protocol
   [proto,path] = def.split /:\/\//
   path ?= proto
   proto = switch proto[0]
@@ -128,9 +143,9 @@ find = (list, work={}, cb) ->
       else proto
   if proto is 'parse' and ~path.indexOf '$join'
     proto = 'join'
-  # return if not possible without data
+  # return if not possible without data (incorrect use)
   return cb() if def[0..proto.length-1] isnt proto and not work.data?
-  # run automatic conversion if needed
+  # run automatic conversion of data if needed
   switch typeof work.data
     when 'string'
       switch proto
@@ -185,18 +200,22 @@ find = (list, work={}, cb) ->
       return find list, work, cb
     # check for retry
     work.retry ?= 0
-    if work.retry > MAXRETRY/10
+    if work.retry > MAXRETRY/TIMEOUT
       work.spec.failed = true
       return throw Error "Stopped because of circular references at
       #{work.spec.name}/#{work.path.join '/'}"
+    # retry the same call again
     list.unshift def
     setTimeout ->
       return if work.spec.failed # processing already stopped
       work.retry++
       find list, work, cb
-    , 10
+    , TIMEOUT
 
+# ### Find value of specific type
+# This is a collection of methods for specific protocols.
 findType =
+  # #### Value checks
   check:  (proto, path, work, cb) ->
     # get the check schema reading as js
     vm = require 'vm'
@@ -212,6 +231,7 @@ findType =
         debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
         return cb()
       cb null, value
+  # #### Splitting of strings
   split:  (proto, path, work, cb) ->
     path = path[1..]
     splitter = path.split('//').map (s) -> new RegExp s
@@ -222,10 +242,12 @@ findType =
       col
     result.unshift null
     cb null, result
+  # #### Matching strings
   match:  (proto, path, work, cb) ->
     re = path.match /\/([^]*)\/(i?)/
     re = new RegExp re[1], "#{re[2]}g"
     cb null, work.data.match re
+  # #### Special parsing of string
   parse:  (proto, path, work, cb) ->
     switch path
       when '$js'
@@ -263,6 +285,7 @@ findType =
           cb null, result
       else
         cb()
+  # #### Range selection in array
   range:  (proto, path, work, cb) ->
     # split multiple specifiers
     rows = path.match ///
@@ -302,18 +325,24 @@ findType =
     result = result[0] if result.length is 1
     result = result[0] if result.length is 1
     cb null, result
+  # #### Path selection in object
   object:  (proto, path, work, cb) ->
     cb null, getData work.data, path.split '/'
+  # #### Join array together
   join:  (proto, path, work, cb) ->
     path = path[6..]
     splitter = if path then path.split '//' else [', ']
     cb null, arrayJoin work.data, splitter
+  # #### Accessing environment variable
   env: (proto, path, work, cb) ->
     cb null, process.env[path]
+  # #### Read from value structure
   struct: (proto, path, work, cb) ->
     findData path, work, cb
+  # #### Read from additional context
   context: (proto, path, work, cb) ->
     cb null, getData work.spec?.context, path.split '/'
+  # #### Read from file
   file: (proto, path, work, cb) ->
     fs = require 'alinex-fs'
     fspath = require 'path'
@@ -321,6 +350,7 @@ findType =
     fs.realpath path, (err, path) ->
       return cb err if err
       fs.readFile path, 'utf-8', cb
+  # #### Read from web resource
   web: (proto, path, work, cb) ->
     request = require 'request'
     request
@@ -333,15 +363,15 @@ findType =
         return cb new Error "Server send wrong return code: #{response.statusCode}"
       return cb() unless body?
       cb null, body
+  # #### Read from command output
   cmd: (proto, path, work, cb) ->
     exec = require('child_process').exec
     opt = {}
     opt.cwd = work.spec.dir if work.spec?.dir?
     exec path, opt, cb
 
-
+# ### Read from value structure
 findData = (path, work, cb) ->
-#  console.log 'find:', path, work
   # split path
   path = path.replace('/\/+$/','').split /\/+/ if typeof path is 'string'
   work.path ?= []
@@ -358,7 +388,7 @@ findData = (path, work, cb) ->
     unless checkpath in work.spec.done
       # check for retry
       work.retry ?= 0
-      if work.retry > MAXRETRY/10
+      if work.retry > MAXRETRY/TIMEOUT
         work.spec.failed = true
         return throw Error "Stopped because of uncheckable #{work.spec.name}/#{checkpath}"
       return setTimeout ->
@@ -367,7 +397,7 @@ findData = (path, work, cb) ->
         # reread value from spec
         work.data = work.spec.value
         findData path, work, cb
-      , 10
+      , TIMEOUT
   return cb null, result if result
   # check if not at the end
   return cb() unless work.path.length
@@ -377,17 +407,15 @@ findData = (path, work, cb) ->
   sub.path.pop()
   findData path, sub, cb
 
+# ### Read from data structure by path
 getData = (data, path) ->
   return data unless path.length
-#  console.log '???', path
   cur = path.shift()
   # step over empty paths like //
   cur = path.shift() while cur is '' and path.length
   result = data
-#  console.log '???', cur, path
-#  console.log '===', data
-#  console.log '-->', cur
   switch
+    # wildcard path
     when cur is '*'
       unless path.length
         result = []
@@ -397,6 +425,7 @@ getData = (data, path) ->
         result = getData val, path[0..]
         return result if result?
       return
+    # recursive wildcard
     when cur is '**'
       return data unless path.length
       result = getData result, path[0..]
@@ -406,6 +435,7 @@ getData = (data, path) ->
         result = getData val, path[0..]
         return result if result?
       return
+    # regexp matching
     when cur.match /\W/
       cur = new RegExp "^#{cur}$"
       result = []
@@ -414,12 +444,14 @@ getData = (data, path) ->
       return unless result.length
       result = result[0] if result.length is 1
       result
+    # concrete name
     else
       result = data?[cur]
       return unless result?
       return getData result, path if path.length
       result
 
+# ### Recursively join array of arrays together
 arrayJoin = (data, splitter) ->
   glue = if splitter.length is 1 then splitter[0] else splitter.shift()
   result = ''

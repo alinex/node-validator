@@ -34,58 +34,72 @@ reference = require './reference'
 
 class Work
 
+  # ### Create a new work instance
+  # Initialize the work structure and set some defaults.
   constructor: (@spec) ->
-    @init()
-
-  init: ->
-    # optimize work
-    @spec.done ?= []
-    @path ?= []
-    @pos ?= @spec.schema
-    @value = @spec.value
+    @spec.done ?= []      # list of checked paths
+    @path ?= []           # current path in schema structure
+    @pos ?= @spec.schema  # reference to schema at path (root)
+    @vpath ?= []          # current path in value structure
+    @value = @spec.value  # reference to value at path (root)
     @debug = chalk.grey "#{@spec.name ? 'value'}/#{@path.join '/'}"
-    @vpath ?= []
 
+  # ### Report an error
+  # This method will use the given Error and make it more readable by adding
+  # context information. And adding an additional `description` property
+  # containing a detailed description of what is allowed at the current
+  # position.
   report: (err, cb) ->
+    # create title with context info
     message = "#{err.message} in #{@spec.name ? 'value'}/#{@path.join '/'}"
     message += " '#{@pos.title}'" if @pos.title?
     message += '. '
+    # create description
     detail = ''
     if @pos.description?
       desc = @pos.description[0].toLowerCase() + @pos.description[1..]
       desc = desc.replace /\.\s*$/, ''
       detail = "It should contain #{desc}. \n"
-    detail +=
+    # add type specific information
     exports.describe @, (err, text) ->
       detail += text
+      # create new Error object
       err = new Error message
       err.description = detail if detail
+      # send error through callback
       cb err
 
+  # ### Go into
+  # Get a new work object representing the inner position of the current work
+  # object. The position may change in the schema and/or value position.
+  # This makes the new object containing the information at the old path
+  # concatenated with the given paths.
   goInto: (schema = [], value = []) ->
+    # create new instance
     sub = new Work @spec
     if schema.length
+      # go one step into schema structure
       name = schema.shift()
-#      console.log name, '>>> schema', @
       sub.path = @path.concat name
       sub.pos = if @pos[name]? then  @pos[name] else @pos
       sub.debug = chalk.grey "#{sub.spec.name ? 'value'}/#{sub.path.join '/'}"
     else
+      # keep schema position but clone path
       sub.path = @path[0..]
       sub.pos = @pos
       sub.debug = @debug
-    # go into value
     if value.length
+      # go one step into value structure
       v = value.shift()
-#      console.log v, '>>> value', @
       sub.vpath = @vpath.concat v
       sub.value = if @value[v]? then  @value[v] else undefined
     else
+      # keep value position but clone path
       sub.vpath = @vpath[0..]
       sub.value = @value
-    #console.log name, sub
-#    console.log name, '<<<', sub
+    # end call if no more steps to go into
     return sub unless schema.length or value.length
+    # recursively go one step further
     sub.goInto schema, value
 
 # Helper methods
@@ -115,14 +129,20 @@ isEmpty = (value) ->
 
 # Main routines
 # -------------------------------------------------
+
 # ### Get description of schema
 # This may be called using the spec or an already created work instance.
 exports.describe = (work, cb) ->
   work = new Work work unless work instanceof Work
-  # load library and call check
-  lib = getTypeLib work.pos, (err, lib) ->
-  unless lib.describe?
-    throw new Error "Type '#{work.pos.type}' has no describe() method"
+  # load library
+  try
+    lib = getTypeLib work.pos
+    unless lib.describe?
+      throw new Error "Type '#{work.pos.type}' has no describe() method"
+  catch err
+    debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
+    return cb new Error "Type '#{work.pos.type}' not supported"
+  # call description on that library
   lib.describe work, cb
 
 # ### Run check
@@ -132,7 +152,7 @@ exports.run = (work, cb) ->
   debug "#{work.debug} checking..."
   # check for references in schema
   async.mapOf work.pos, (v, k, cb) ->
-    reference.check v,
+    reference.replace v,
       spec: work.spec
       path: work.path[0..]    # clone because it may change
     , cb
@@ -140,12 +160,12 @@ exports.run = (work, cb) ->
     return work.report err, cb if err
     work.pos = result
     # check for references in values
-    reference.check work.value,
+    reference.replace work.value,
       spec: work.spec
       path: work.path[0..]    # clone because it may change
     , (err, value) ->
       return work.report err, cb if err
-      # change value in spec
+      # store result also in spec for references to use
       obj = work.spec.value
       for n in work.vpath
         obj = obj?[n]
@@ -153,14 +173,15 @@ exports.run = (work, cb) ->
       # and set as done
       work.spec.done.push work.vpath.join '/'
       work.value = value
-      # load library and call check
+      # load library
       try
-        lib = getTypeLib work.pos, (err, lib) ->
+        lib = getTypeLib work.pos
         unless lib.run?
           return cb new Error "Type '#{work.pos.type}' has no run() method"
       catch err
         debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
         return cb new Error "Type '#{work.pos.type}' not supported"
+      # and call library to run the real check
       lib.run work, cb
 
 # ### Selfcheck of schema
@@ -169,15 +190,17 @@ exports.selfcheck = (schema, cb) ->
   debug "check schema #{util.inspect schema}"
   # load library and call check
   try
-    lib = getTypeLib schema, (err, lib) ->
+    lib = getTypeLib schema
     unless lib.selfcheck?
       return cb new Error "Type '#{schema.type}' has no selfcheck() method"
   catch err
     return cb new Error "Type '#{schema.type}' not supported"
+  # run the selfcheck
   lib.selfcheck schema, cb
 
 # General checks
 # -------------------------------------------------
+
 # ### Optional and default checks
 exports.optional =
   describe: (work) ->
@@ -201,6 +224,7 @@ exports.optional =
     return true if work.pos.optional # end this test without value
     throw new Error "A value is needed"
 
+# ### selfcheck schema for base options
 exports.base =
   title:
     type: 'string'
