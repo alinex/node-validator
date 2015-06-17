@@ -27,7 +27,7 @@ h1, h2, h3, h4 {
 }
 a { text-decoration: none; }
 h1 {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 
 #tree, #headings {
@@ -349,7 +349,7 @@ td.linenos { background-color: #f0f0f0; padding-right: 10px; }
 span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
 pre { line-height: 125%; }
 body .highlight .hll { background-color: #ffffcc }
-body .highlight  { background: #333333; }
+body .highlight  { background: #151515; }
 body .highlight .c { color: #aaaaaa; font-style: italic } /* Comment */
 body .highlight .err { color: #FF0000; background-color: #FFAAAA } /* Error */
 body .highlight .k { color: #aaaaff } /* Keyword */
@@ -419,7 +419,7 @@ body .highlight .il { color: #009999 } /* Literal.Number.Integer.Long */
     bottom: auto;
   }
 }
-#container {
+#sidebar-toggle {
   background: url(https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png);
 }
 #fork {
@@ -442,6 +442,10 @@ h1, h2, h3, h4, h5, h6 {
 
 a[href^="http://alinex.github.io/node-"], .alinex {
   font-family: 'Xcelsion';
+}
+
+#container {
+  background: #151515;
 }
 
 /*  HEADER LINE */
@@ -533,7 +537,8 @@ nav .btn-warning {
   border-right-color: rgb(238, 162, 54);
   border-top-color: rgb(238, 162, 54);
 }
-.sidebar #sidebar_wrapper, .sidebar #container, .sidebar #sidebar-toggle {
+.sidebar #sidebar_wrapper, .sidebar #container, .sidebar #sidebar-toggle,
+.slidey #container {
   top: 50px;
 }
 /*
