@@ -284,12 +284,12 @@ body {
   color: #eeeeee; }
 
 a {
-  color: #63C0F5; }
+  color: #337ab7; }
 a:visited {
-  color: #63C0F5;
+  color: #337ab7;
 }
 a:hover {
-  color: #337ab7;
+  color: #f0ad4e;
 }
 
 #sidebar_wrapper {
