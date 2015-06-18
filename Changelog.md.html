@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "home/alex/a3/node-validator/Changelog.md", defaultSidebar = true;
+    var relativeDir = "", thisFile = "home/alex/a3/node-validator/Changelogmd", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
   <script src="fileSearch.js"></script>
@@ -34,6 +34,9 @@
     <div id="headings">
       <div class="heading h1">
         <a href="#version%20changes">Version changes</a>
+      </div>
+      <div class="heading h2">
+        <a href="#version%201.0.0%20(2015-06-16)">Version 1.0.0 (2015-06-16)</a>
       </div>
       <div class="heading h2">
         <a href="#version%200.3.15%20(2015-03-20)">Version 0.3.15 (2015-03-20)</a>
@@ -130,6 +133,119 @@
 
 <p>The following list gives a short overview about what is changed between
 individual versions:</p>
+
+
+<div class="pilwrap" id="version%201.0.0%20(2015-06-16)">
+  <h2>
+    <a href="#version%201.0.0%20(2015-06-16)" name="version%201.0.0%20(2015-06-16)" class="pilcrow">&#182;</a>
+    Version 1.0.0 (2015-06-16)
+  </h2>
+</div>
+
+
+<ul>
+<li>Updated documentation.</li>
+<li>Only use values for references after they are checked.</li>
+<li>Added test for circular reference.</li>
+<li>Allow references to references.</li>
+<li>Extend selfchecks to checck that max >= min values.</li>
+<li>Allow shortcut for structure references.</li>
+<li>Allow references in schema definition.</li>
+<li>Fixed bug with old option reference implementation.</li>
+<li>Remove first try to get option variables running.</li>
+<li>Add backreference support in references and fix some bugs since the last changes.</li>
+<li>Added test case for references in options.</li>
+<li>Added support to join arrays together in references.</li>
+<li>Fixed structure and object matching in references and allowed regexp to work.</li>
+<li>Allow structure references to search with asterisk.</li>
+<li>Audded autodetect parser for references.</li>
+<li>Change separator in split values from %% to //.</li>
+<li>Implemented range selection for references.</li>
+<li>Added parse option for references.</li>
+<li>Added match support for references.</li>
+<li>Allow split to use regular expressions as separator.</li>
+<li>Added split functionality for references.</li>
+<li>Added comments for additional checks to fullfill references.</li>
+<li>Updated documentation about context and environment references.</li>
+<li>Fixed reference tests.</li>
+<li>Renamed reference work structure internally.</li>
+<li>Integrate references into values.</li>
+<li>Add hooks for integration.</li>
+<li>Removed old unused code.</li>
+<li>Check all entries of array or object to later add reference checks everywhere.</li>
+<li>Updated documentation for all types.</li>
+<li>Updated byte check.</li>
+<li>Upgraded handlebars check.</li>
+<li>Upgraded file checks.</li>
+<li>Upgraded hostname check.</li>
+<li>Upgraded the interval check.</li>
+<li>Upgraded percent check.</li>
+<li>Upgraded regexp check.</li>
+<li>Upgraded the ipaddr checks.</li>
+<li>Added type any for internal use.</li>
+<li>Added selfcheck tests.</li>
+<li>Optimize schema definition for and and or for better readability.</li>
+<li>Upgraded the and test.</li>
+<li>Rewritten any check as or test.</li>
+<li>Make describe method also asynchronous.</li>
+<li>Upgraded array check to work in new validator.</li>
+<li>Update the function check.</li>
+<li>Restructured object validator with optimized syntax.</li>
+<li>Updated string tests and renamed tostring option to toString.</li>
+<li>Optimized type checks integer and float.</li>
+<li>Restructured library and updated boolean to new structure.</li>
+<li>Added the command references.</li>
+<li>Added command references.</li>
+<li>Finished web references.</li>
+<li>Make the reference.replace() method async.</li>
+<li>Added file and web references.</li>
+<li>Reference can now read struct and context information.</li>
+<li>Added new reference function (basic routines only).</li>
+<li>Integrade concept for regexp in reference path.</li>
+<li>Change the reference syntax description to be more readable and powerful.</li>
+<li>Updated description.</li>
+<li>Document more simple reference syntax.</li>
+<li>Added DATA references code.</li>
+<li>Added possibility to specify allowedKeys in object as RegExp.</li>
+<li>Add reference checks to array.</li>
+<li>Fixed bug in boolean check.</li>
+<li>Move reference check to general rules.</li>
+<li>Fixed code to run async reference tests.</li>
+<li>Make all reference tests work.</li>
+<li>Updated debug messages to have new style in all types.</li>
+<li>Added/updated inline code documentation.</li>
+<li>Optimized line length of comments for better readiness.</li>
+<li>Optimized second run to make only things nit done in the first run.</li>
+<li>Made references for values work using a second round if needed.</li>
+<li>Optimized debug output in check and object.</li>
+<li>Merge branch 'master' of <a href='https://github.com/alinex/node-validator'>https://github.com/alinex/node-validator</a></li>
+<li>Text changes.</li>
+<li>Try to restructure again loop.</li>
+<li>Finished struct references to use different path mappings.</li>
+<li>Added debug message with results for calls and subcalls.</li>
+<li>Basic unit checks running.</li>
+<li>First rudimentary implementation.</li>
+<li>Document compositing by example.</li>
+<li>Add rudimentary reference type used for new reference checks.</li>
+<li>Glue first sentences of description text into one to make it more natural sounding.</li>
+<li>Optimize headings in documentation.</li>
+<li>Don't support leading 0 as optional but read it as octal notation.</li>
+<li>Changed reference plan.</li>
+<li>Planing referenc restructuring.</li>
+<li>Give file checks more time on slow test machines.</li>
+<li>Fixed test assert values for byte tests.</li>
+<li>Extended selfchecks to be more strict in allow and deny ranges.</li>
+<li>Finished ipaddr type with api description.</li>
+<li>Changed ipv4 and ipv6 types to combined ipaddr type.</li>
+<li>Initial ipv6 check and planing for new references.</li>
+<li>Finished ipv4 check with tests.</li>
+<li>Added ip version 4 checks.</li>
+<li>Extended allowed time to run some tests.</li>
+<li>Fixed handlebars check to also return function if no handlebars are included.</li>
+<li>Added example for reference checks in the documentation.</li>
+<li>Added tests for regexp and made small fixes.</li>
+<li>Add simple handlebar validation.</li>
+</ul>
 
 
 <div class="pilwrap" id="version%200.3.15%20(2015-03-20)">

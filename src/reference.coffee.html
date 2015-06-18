@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/reference.coffee", defaultSidebar = true;
+    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/referencecoffee", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
   <script src="../fileSearch.js"></script>
@@ -42,7 +42,70 @@
         <a href="#configuration">Configuration</a>
       </div>
       <div class="heading h2">
+        <a href="#have%20references">Have references</a>
+      </div>
+      <div class="heading h2">
+        <a href="#replace%20references">Replace references</a>
+      </div>
+      <div class="heading h2">
         <a href="#helper%20methods">Helper methods</a>
+      </div>
+      <div class="heading h3">
+        <a href="#search%20through%20alternative%20sources">search through alternative sources</a>
+      </div>
+      <div class="heading h3">
+        <a href="#find%20reference">Find reference</a>
+      </div>
+      <div class="heading h3">
+        <a href="#find%20value%20of%20specific%20type">Find value of specific type</a>
+      </div>
+      <div class="heading h4">
+        <a href="#value%20checks">Value checks</a>
+      </div>
+      <div class="heading h4">
+        <a href="#splitting%20of%20strings">Splitting of strings</a>
+      </div>
+      <div class="heading h4">
+        <a href="#matching%20strings">Matching strings</a>
+      </div>
+      <div class="heading h4">
+        <a href="#special%20parsing%20of%20string">Special parsing of string</a>
+      </div>
+      <div class="heading h4">
+        <a href="#range%20selection%20in%20array">Range selection in array</a>
+      </div>
+      <div class="heading h4">
+        <a href="#path%20selection%20in%20object">Path selection in object</a>
+      </div>
+      <div class="heading h4">
+        <a href="#join%20array%20together">Join array together</a>
+      </div>
+      <div class="heading h4">
+        <a href="#accessing%20environment%20variable">Accessing environment variable</a>
+      </div>
+      <div class="heading h4">
+        <a href="#read%20from%20value%20structure">Read from value structure</a>
+      </div>
+      <div class="heading h4">
+        <a href="#read%20from%20additional%20context">Read from additional context</a>
+      </div>
+      <div class="heading h4">
+        <a href="#read%20from%20file">Read from file</a>
+      </div>
+      <div class="heading h4">
+        <a href="#read%20from%20web%20resource">Read from web resource</a>
+      </div>
+      <div class="heading h4">
+        <a href="#read%20from%20command%20output">Read from command output</a>
+      </div>
+      <div class="heading h3">
+        <a href="#read%20from%20value%20structure">Read from value structure</a>
+      </div>
+      <div class="heading h3">
+        <a href="#read%20from%20data%20structure%20by%20path">Read from data structure by path</a>
+      </div>
+      <div class="heading h3">
+        <a href="#recursively%20join%20array%20of%20arrays%20together">Recursively join array of arrays together</a>
       </div>
     </div>
   </div>
@@ -163,6 +226,21 @@
 </div>
 
 
+<p>MAXRETRY defines the time to wait till the references should be solved</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">MAXRETRY = </span><span class="mi">10000</span> <span class="c1"># waiting for 10 seconds at max</span>
+<span class="nv">TIMEOUT = </span><span class="mi">10</span> <span class="c1"># checking every 10ms</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
 <p>defines specific type handler for some protocols</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -177,7 +255,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>to ensure security a reference can only call references with lower precedence</p>
         </td>
@@ -196,19 +274,20 @@
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap" id="helper%20methods">
+<div class="pilwrap" id="have%20references">
   <h2>
-    <a href="#helper%20methods" name="helper%20methods" class="pilcrow">&#182;</a>
-    Helper methods
+    <a href="#have%20references" name="have%20references" class="pilcrow">&#182;</a>
+    Have references
   </h2>
 </div>
 
+
+<p>Check if there are references in the object.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-
-<span class="nv">exports.check = </span><span class="nf">(value, work, cb) -&gt;</span>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span><span class="nx">value</span> <span class="k">unless</span> <span class="nx">exists</span> <span class="nx">value</span>
-  <span class="nx">replace</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">work</span><span class="p">,</span> <span class="nx">cb</span>
+<span class="nv">exists = module.exports.exists = </span><span class="nf">(value) -&gt;</span>
+  <span class="k">return</span> <span class="kc">false</span> <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+  <span class="nb">Boolean</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/&lt;&lt;&lt;[^]*&gt;&gt;&gt;/</span>
 
 
 </pre></div>
@@ -216,17 +295,31 @@
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+<div class="pilwrap" id="replace%20references">
+  <h2>
+    <a href="#replace%20references" name="replace%20references" class="pilcrow">&#182;</a>
+    Replace references
+  </h2>
 </div>
-<p>check that there are references in the object</p>
+
+
+<p>This is called from the check to resolve the references first before running
+the real check. If there are no references it will return immediately.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exists = module.exports.exists = </span><span class="nf">(value) -&gt;</span>
-  <span class="k">return</span> <span class="kc">false</span> <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
-  <span class="nb">Boolean</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/&lt;&lt;&lt;[^]*&gt;&gt;&gt;/</span>
-
 <span class="nv">replace = module.exports.replace = </span><span class="nf">(value, work={}, cb) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+</div>
+<p>maybe called without work (mostly for)</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="k">if</span> <span class="k">typeof</span> <span class="nx">work</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span>
     <span class="nv">cb = </span><span class="nx">work</span>
     <span class="nv">work = </span><span class="p">{}</span>
@@ -240,7 +333,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>step over parts</p>
         </td>
@@ -254,9 +347,9 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
-<p>check alternatives</p>
+<p>check all references</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">refs</span><span class="p">,</span> <span class="nf">(v, cb) -&gt;</span>
@@ -264,40 +357,6 @@
   <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
     <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">err</span>
     <span class="k">if</span> <span class="nx">results</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">1</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s"> is replaced by </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
-</div>
-<p>combine together</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">result = </span><span class="nx">results</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;&#39;</span>
-    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s"> is replaced by </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">result</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
-
-
-<span class="nv">findAlternative = </span><span class="nf">(value, work={}, cb) -&gt;</span>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="s">&#39;&lt;&lt;&lt;&#39;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
-</div>
-<p>replace &lt;&lt;&lt; and >>> and split into alternatives</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">value</span><span class="p">[</span><span class="mi">3</span><span class="p">..</span><span class="o">-</span><span class="mi">4</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s+\|\s+/</span><span class="p">),</span> <span class="nf">(alt, cb) -&gt;</span>
 
 </pre></div>
         </td>
@@ -307,7 +366,102 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
-<p>split into paths and call</p>
+<p>return first result if only one reference used</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s"> is replaced by </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+</div>
+<p>combine reference together</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="nv">result = </span><span class="nx">results</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;&#39;</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s"> is replaced by </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">result</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="helper%20methods">
+  <h2>
+    <a href="#helper%20methods" name="helper%20methods" class="pilcrow">&#182;</a>
+    Helper methods
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="search%20through%20alternative%20sources">
+  <h3>
+    <a href="#search%20through%20alternative%20sources" name="search%20through%20alternative%20sources" class="pilcrow">&#182;</a>
+    search through alternative sources
+  </h3>
+</div>
+
+
+<p>Alternative sources are separated by <code>|</code> and the first possible alternative
+should be used.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">findAlternative = </span><span class="nf">(value, work={}, cb) -&gt;</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="o">~</span><span class="nx">value</span><span class="p">.</span><span class="nx">indexOf</span> <span class="s">&#39;&lt;&lt;&lt;&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+</div>
+<p>replace &lt;&lt;&lt; and >>> and split into alternatives</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">first = </span><span class="kc">true</span>
+  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="nx">value</span><span class="p">[</span><span class="mi">3</span><span class="p">..</span><span class="o">-</span><span class="mi">4</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="sr">/\s+\|\s+/</span><span class="p">),</span> <span class="nf">(alt, cb) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+</div>
+<p>automatically set first element to <code>struct</code> if no other protocol set</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="nx">first</span> <span class="o">and</span> <span class="o">not</span> <span class="o">~</span><span class="nx">alt</span><span class="p">.</span><span class="nx">indexOf</span> <span class="s">&#39;://&#39;</span>
+      <span class="nv">alt = </span><span class="s">&quot;struct://</span><span class="si">#{</span><span class="nx">alt</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nv">first = </span><span class="kc">false</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+</div>
+<p>split uri into anchored separated paths</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nv">alt = </span><span class="nx">alt</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">alt</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">while</span> <span class="nx">alt</span><span class="p">[</span><span class="nx">alt</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;#&#39;</span>
@@ -319,7 +473,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>return default value</p>
         </td>
@@ -334,9 +488,9 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
-<p>search the uriPart</p>
+<p>read value from given uri parts</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">find</span> <span class="nx">uriPart</span><span class="p">,</span> <span class="nx">work</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
@@ -353,7 +507,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>find first alternative</p>
         </td>
@@ -362,6 +516,25 @@
       <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
     <span class="nx">cb</span><span class="p">()</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="find%20reference">
+  <h3>
+    <a href="#find%20reference" name="find%20reference" class="pilcrow">&#182;</a>
+    Find reference
+  </h3>
+</div>
+
+
+<p>This method is called with all the uri parts as list and will search the
+value of the first uri part, pass it on to the second search as data and so
+on. The result will be from the last uri path.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">find = </span><span class="nf">(list, work={}, cb) -&gt;</span>
 
 </pre></div>
@@ -370,13 +543,25 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>get type of uri part</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">def = </span><span class="nx">list</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span>
   <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span> <span class="k">unless</span> <span class="nx">def</span> <span class="c1"># empty anchor</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+</div>
+<p>detect protocol</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="p">[</span><span class="nx">proto</span><span class="p">,</span><span class="nx">path</span><span class="p">]</span> <span class="o">=</span> <span class="nx">def</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/:\/\//</span>
   <span class="nx">path</span> <span class="o">?=</span> <span class="nx">proto</span>
   <span class="nv">proto = </span><span class="k">switch</span> <span class="nx">proto</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -397,9 +582,9 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
-<p>return if not possible without data</p>
+<p>return if not possible without data (incorrect use)</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">def</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">proto</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">isnt</span> <span class="nx">proto</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="o">?</span>
@@ -410,13 +595,13 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
-<p>run automatic conversion if needed</p>
+<p>run automatic conversion of data if needed</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">switch</span> <span class="k">typeof</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span>
-    <span class="k">when</span> <span class="s">&#39;string&#39;</span>
+  <span class="k">switch</span>
+    <span class="k">when</span> <span class="k">typeof</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
       <span class="k">switch</span> <span class="nx">proto</span>
         <span class="k">when</span> <span class="s">&#39;range&#39;</span>
           <span class="nx">list</span><span class="p">.</span><span class="nx">unshift</span> <span class="nx">def</span>
@@ -426,9 +611,9 @@
           <span class="nx">list</span><span class="p">.</span><span class="nx">unshift</span> <span class="nx">def</span>
           <span class="nv">proto = </span><span class="s">&#39;parse&#39;</span>
           <span class="nv">path = </span><span class="s">&#39;$auto&#39;</span>
-    <span class="k">when</span> <span class="s">&#39;array&#39;</span>
+    <span class="k">when</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span>
       <span class="k">switch</span> <span class="nx">proto</span>
-        <span class="k">when</span> <span class="s">&#39;object&#39;</span>
+        <span class="k">when</span> <span class="s">&#39;object&#39;</span><span class="p">,</span> <span class="s">&#39;split&#39;</span><span class="p">,</span> <span class="s">&#39;match&#39;</span>
           <span class="nx">list</span><span class="p">.</span><span class="nx">unshift</span> <span class="nx">def</span>
           <span class="nv">proto = </span><span class="s">&#39;join&#39;</span>
           <span class="nv">path = </span><span class="s">&#39;$join&#39;</span>
@@ -439,7 +624,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
 </div>
 <p>check for impossible result data</p>
         </td>
@@ -458,7 +643,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
 </div>
 <p>find type handler</p>
         </td>
@@ -473,7 +658,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
 </div>
 <p>check for correct handler</p>
         </td>
@@ -487,7 +672,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
 </div>
 <p>check precedence for next uri</p>
         </td>
@@ -502,7 +687,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
 </div>
 <p>run type handler and return if nothing found</p>
         </td>
@@ -523,7 +708,7 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
 </div>
 <p>no reference in result</p>
         </td>
@@ -540,17 +725,15 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
 </div>
-<p>result with reference
-do another round on the result's reference
-mabe use path of the found reference's position
-go on in list</p>
+<p>check for retry</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-
-<span class="nv">findType =</span>
-  <span class="nv">check: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
+    <span class="nx">work</span><span class="p">.</span><span class="nx">retry</span> <span class="o">?=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">retry</span> <span class="o">&gt;</span> <span class="nx">MAXRETRY</span><span class="o">/</span><span class="nx">TIMEOUT</span>
+      <span class="nv">work.spec.failed = </span><span class="kc">true</span>
+      <span class="k">return</span> <span class="k">throw</span> <span class="nb">Error</span> <span class="s">&quot;Stopped because of circular references at</span>
 
 </pre></div>
         </td>
@@ -558,13 +741,67 @@ go on in list</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
+  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+</div>
+<p>{work.spec.name}/#{work.path.join '/'}"
+retry the same call again</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">    list.unshift def</span>
+<span class="s">    setTimeout -&gt;</span>
+<span class="s">      return if work.spec.failed </span><span class="err">#</span><span class="s"> processing already stopped</span>
+<span class="s">      work.retry++</span>
+<span class="s">      find list, work, cb</span>
+<span class="s">    , TIMEOUT</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="find%20value%20of%20specific%20type">
+  <h3>
+    <a href="#find%20value%20of%20specific%20type" name="find%20value%20of%20specific%20type" class="pilcrow">&#182;</a>
+    Find value of specific type
+  </h3>
+</div>
+
+
+<p>This is a collection of methods for specific protocols.</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">findType =</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="value%20checks">
+  <h4>
+    <a href="#value%20checks" name="value%20checks" class="pilcrow">&#182;</a>
+    Value checks
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="s">  check:  (proto, path, work, cb) -&gt;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
 </div>
 <p>get the check schema reading as js</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">vm = </span><span class="nx">require</span> <span class="s">&#39;vm&#39;</span>
-    <span class="nv">schema = </span><span class="nx">vm</span><span class="p">.</span><span class="nx">runInNewContext</span> <span class="s">&quot;x=</span><span class="si">#{</span><span class="nx">path</span><span class="si">}</span><span class="s">&quot;</span>
+<span class="s">    vm = require &#39;vm&#39;</span>
+<span class="s">    schema = vm.runInNewContext &quot;</span><span class="nx">x</span><span class="o">=</span><span class="c1">#{path}&quot;</span>
 
 </pre></div>
         </td>
@@ -572,7 +809,7 @@ go on in list</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30">&#182;</a>
+  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
 </div>
 <p>run the subcheck</p>
         </td>
@@ -587,6 +824,21 @@ go on in list</p>
         <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">proto</span><span class="si">}</span><span class="s">://</span><span class="si">#{</span><span class="nx">path</span><span class="si">}</span><span class="s">&#39; -&gt; check failed: </span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span>
         <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
       <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="splitting%20of%20strings">
+  <h4>
+    <a href="#splitting%20of%20strings" name="splitting%20of%20strings" class="pilcrow">&#182;</a>
+    Splitting of strings
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">split: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">path = </span><span class="nx">path</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span>
     <span class="nv">splitter = </span><span class="nx">path</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&#39;//&#39;</span><span class="p">).</span><span class="nx">map</span> <span class="nf">(s) -&gt;</span> <span class="k">new</span> <span class="nb">RegExp</span> <span class="nx">s</span>
@@ -597,10 +849,40 @@ go on in list</p>
       <span class="nx">col</span>
     <span class="nx">result</span><span class="p">.</span><span class="nx">unshift</span> <span class="kc">null</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="matching%20strings">
+  <h4>
+    <a href="#matching%20strings" name="matching%20strings" class="pilcrow">&#182;</a>
+    Matching strings
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">match: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">re = </span><span class="nx">path</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/\/([^]*)\/(i?)/</span>
     <span class="nv">re = </span><span class="k">new</span> <span class="nb">RegExp</span> <span class="nx">re</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">re</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s">g&quot;</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">match</span> <span class="nx">re</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="special%20parsing%20of%20string">
+  <h4>
+    <a href="#special%20parsing%20of%20string" name="special%20parsing%20of%20string" class="pilcrow">&#182;</a>
+    Special parsing of string
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">parse: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="k">switch</span> <span class="nx">path</span>
       <span class="k">when</span> <span class="s">&#39;$js&#39;</span>
@@ -638,6 +920,21 @@ go on in list</p>
           <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
       <span class="k">else</span>
         <span class="nx">cb</span><span class="p">()</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="range%20selection%20in%20array">
+  <h4>
+    <a href="#range%20selection%20in%20array" name="range%20selection%20in%20array" class="pilcrow">&#182;</a>
+    Range selection in array
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">range: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
 
 </pre></div>
@@ -646,7 +943,7 @@ go on in list</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31">&#182;</a>
+  <a class="pilcrow" href="#section-46" id="section-46">&#182;</a>
 </div>
 <p>split multiple specifiers</p>
         </td>
@@ -664,7 +961,7 @@ go on in list</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32">&#182;</a>
+  <a class="pilcrow" href="#section-47" id="section-47">&#182;</a>
 </div>
 <p>go over rows</p>
         </td>
@@ -686,7 +983,7 @@ go on in list</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33">&#182;</a>
+  <a class="pilcrow" href="#section-48" id="section-48">&#182;</a>
 </div>
 <p>get columns</p>
         </td>
@@ -710,7 +1007,7 @@ go on in list</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34">&#182;</a>
+  <a class="pilcrow" href="#section-49" id="section-49">&#182;</a>
 </div>
 <p>get single row</p>
         </td>
@@ -721,18 +1018,108 @@ go on in list</p>
     <span class="nv">result = </span><span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">result</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">1</span>
     <span class="nv">result = </span><span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">result</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">1</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="path%20selection%20in%20object">
+  <h4>
+    <a href="#path%20selection%20in%20object" name="path%20selection%20in%20object" class="pilcrow">&#182;</a>
+    Path selection in object
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">object: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;/&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="join%20array%20together">
+  <h4>
+    <a href="#join%20array%20together" name="join%20array%20together" class="pilcrow">&#182;</a>
+    Join array together
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">join: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">path = </span><span class="nx">path</span><span class="p">[</span><span class="mi">6</span><span class="p">..]</span>
     <span class="nv">splitter = </span><span class="k">if</span> <span class="nx">path</span> <span class="k">then</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;//&#39;</span> <span class="k">else</span> <span class="p">[</span><span class="s">&#39;, &#39;</span><span class="p">]</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">arrayJoin</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">splitter</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="accessing%20environment%20variable">
+  <h4>
+    <a href="#accessing%20environment%20variable" name="accessing%20environment%20variable" class="pilcrow">&#182;</a>
+    Accessing environment variable
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">env: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">[</span><span class="nx">path</span><span class="p">]</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="read%20from%20value%20structure">
+  <h4>
+    <a href="#read%20from%20value%20structure" name="read%20from%20value%20structure" class="pilcrow">&#182;</a>
+    Read from value structure
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">struct: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
-    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">findData</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">work</span>
+    <span class="nx">findData</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">work</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="read%20from%20additional%20context">
+  <h4>
+    <a href="#read%20from%20additional%20context" name="read%20from%20additional%20context" class="pilcrow">&#182;</a>
+    Read from additional context
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">context: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="o">?</span><span class="p">.</span><span class="nx">context</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;/&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="read%20from%20file">
+  <h4>
+    <a href="#read%20from%20file" name="read%20from%20file" class="pilcrow">&#182;</a>
+    Read from file
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">file: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">fs = </span><span class="nx">require</span> <span class="s">&#39;alinex-fs&#39;</span>
     <span class="nv">fspath = </span><span class="nx">require</span> <span class="s">&#39;path&#39;</span>
@@ -740,6 +1127,21 @@ go on in list</p>
     <span class="nx">fs</span><span class="p">.</span><span class="nx">realpath</span> <span class="nx">path</span><span class="p">,</span> <span class="nf">(err, path) -&gt;</span>
       <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span> <span class="nx">path</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="read%20from%20web%20resource">
+  <h4>
+    <a href="#read%20from%20web%20resource" name="read%20from%20web%20resource" class="pilcrow">&#182;</a>
+    Read from web resource
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">web: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">request = </span><span class="nx">require</span> <span class="s">&#39;request&#39;</span>
     <span class="nx">request</span>
@@ -753,7 +1155,7 @@ go on in list</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35">&#182;</a>
+  <a class="pilcrow" href="#section-57" id="section-57">&#182;</a>
 </div>
 <p>error checking</p>
         </td>
@@ -763,6 +1165,21 @@ go on in list</p>
         <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Server send wrong return code: </span><span class="si">#{</span><span class="nx">response</span><span class="p">.</span><span class="nx">statusCode</span><span class="si">}</span><span class="s">&quot;</span>
       <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">body</span><span class="o">?</span>
       <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">body</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="read%20from%20command%20output">
+  <h4>
+    <a href="#read%20from%20command%20output" name="read%20from%20command%20output" class="pilcrow">&#182;</a>
+    Read from command output
+  </h4>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">cmd: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">exec = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;child_process&#39;</span><span class="p">).</span><span class="nx">exec</span>
     <span class="nv">opt = </span><span class="p">{}</span>
@@ -770,7 +1187,21 @@ go on in list</p>
     <span class="nx">exec</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">opt</span><span class="p">,</span> <span class="nx">cb</span>
 
 
-<span class="nv">findData = </span><span class="nf">(path, work) -&gt;</span>
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="read%20from%20value%20structure">
+  <h3>
+    <a href="#read%20from%20value%20structure" name="read%20from%20value%20structure" class="pilcrow">&#182;</a>
+    Read from value structure
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">findData = </span><span class="nf">(path, work, cb) -&gt;</span>
 
 </pre></div>
         </td>
@@ -778,10 +1209,9 @@ go on in list</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36">&#182;</a>
+  <a class="pilcrow" href="#section-60" id="section-60">&#182;</a>
 </div>
-<p>console.log 'find:', path, work
-split path</p>
+<p>split path</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">path = </span><span class="nx">path</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s">&#39;/\/+$/&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">).</span><span class="nx">split</span> <span class="sr">/\/+/</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">path</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
@@ -793,7 +1223,7 @@ split path</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37">&#182;</a>
+  <a class="pilcrow" href="#section-61" id="section-61">&#182;</a>
 </div>
 <p>find first level</p>
         </td>
@@ -806,12 +1236,12 @@ split path</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38">&#182;</a>
+  <a class="pilcrow" href="#section-62" id="section-62">&#182;</a>
 </div>
 <p>absolute path, go on</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">return</span> <span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span> <span class="k">if</span> <span class="nx">first</span> <span class="o">is</span> <span class="s">&#39;&#39;</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span> <span class="k">if</span> <span class="nx">first</span> <span class="o">is</span> <span class="s">&#39;&#39;</span>
 
 </pre></div>
         </td>
@@ -819,17 +1249,17 @@ split path</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39">&#182;</a>
+  <a class="pilcrow" href="#section-63" id="section-63">&#182;</a>
 </div>
 <p>search at current position</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">skip = </span><span class="mi">1</span>
-  <span class="k">while</span> <span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;..&#39;</span>
-    <span class="nx">skip</span><span class="o">++</span>
-    <span class="nx">path</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span>
-  <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">skip</span><span class="p">].</span><span class="nx">concat</span> <span class="nx">path</span>
-  <span class="k">return</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span>
+  <span class="nv">skip = </span><span class="mi">0</span>
+  <span class="nx">skip</span><span class="o">++</span> <span class="k">while</span> <span class="nx">path</span><span class="p">[</span><span class="nx">skip</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;..&#39;</span>
+  <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">skip</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">concat</span> <span class="nx">path</span><span class="p">[</span><span class="nx">skip</span><span class="p">..]</span>
+  <span class="k">if</span> <span class="nx">result</span> <span class="o">and</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="o">?</span><span class="p">.</span><span class="nx">done</span><span class="o">?</span>
+    <span class="nv">checkpath = </span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">skip</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">path</span><span class="p">[</span><span class="nx">skip</span><span class="p">..]).</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span>
+    <span class="k">unless</span> <span class="nx">checkpath</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">done</span>
 
 </pre></div>
         </td>
@@ -837,12 +1267,47 @@ split path</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40">&#182;</a>
+  <a class="pilcrow" href="#section-64" id="section-64">&#182;</a>
+</div>
+<p>check for retry</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+      <span class="nx">work</span><span class="p">.</span><span class="nx">retry</span> <span class="o">?=</span> <span class="mi">0</span>
+      <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">retry</span> <span class="o">&gt;</span> <span class="nx">MAXRETRY</span><span class="o">/</span><span class="nx">TIMEOUT</span>
+        <span class="nv">work.spec.failed = </span><span class="kc">true</span>
+        <span class="k">return</span> <span class="k">throw</span> <span class="nb">Error</span> <span class="s">&quot;Stopped because of uncheckable </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">checkpath</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="k">return</span> <span class="nx">setTimeout</span> <span class="nf">-&gt;</span>
+        <span class="k">return</span> <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">failed</span> <span class="c1"># processing already stopped</span>
+        <span class="nx">work</span><span class="p">.</span><span class="nx">retry</span><span class="o">++</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-65" id="section-65">&#182;</a>
+</div>
+<p>reread value from spec</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+        <span class="nv">work.data = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">value</span>
+        <span class="nx">findData</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">work</span><span class="p">,</span> <span class="nx">cb</span>
+      <span class="p">,</span> <span class="nx">TIMEOUT</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-66" id="section-66">&#182;</a>
 </div>
 <p>check if not at the end</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">return</span> <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
+  <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
 
 </pre></div>
         </td>
@@ -850,29 +1315,33 @@ split path</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41">&#182;</a>
+  <a class="pilcrow" href="#section-67" id="section-67">&#182;</a>
 </div>
 <p>search neighbors by sub call on parent</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">sub = </span><span class="nx">object</span><span class="p">.</span><span class="nx">clone</span> <span class="nx">work</span>
+  <span class="nv">sub.spec = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span>
   <span class="nx">sub</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
-  <span class="k">return</span> <span class="nx">findData</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">sub</span>
+  <span class="nx">findData</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">sub</span><span class="p">,</span> <span class="nx">cb</span>
 
-<span class="nv">getData = </span><span class="nf">(data, path) -&gt;</span>
-  <span class="k">return</span> <span class="nx">data</span> <span class="k">unless</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
 
 </pre></div>
         </td>
       </tr>
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42">&#182;</a>
+<div class="pilwrap" id="read%20from%20data%20structure%20by%20path">
+  <h3>
+    <a href="#read%20from%20data%20structure%20by%20path" name="read%20from%20data%20structure%20by%20path" class="pilcrow">&#182;</a>
+    Read from data structure by path
+  </h3>
 </div>
-<p>console.log '???', path</p>
+
         </td>
         <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">getData = </span><span class="nf">(data, path) -&gt;</span>
+  <span class="k">return</span> <span class="nx">data</span> <span class="k">unless</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
   <span class="nv">cur = </span><span class="nx">path</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span>
 
 </pre></div>
@@ -881,13 +1350,14 @@ split path</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43">&#182;</a>
+  <a class="pilcrow" href="#section-69" id="section-69">&#182;</a>
 </div>
 <p>step over empty paths like //</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">cur = </span><span class="nx">path</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span> <span class="k">while</span> <span class="nx">cur</span> <span class="o">is</span> <span class="s">&#39;&#39;</span> <span class="o">and</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
   <span class="nv">result = </span><span class="nx">data</span>
+  <span class="k">switch</span>
 
 </pre></div>
         </td>
@@ -895,14 +1365,11 @@ split path</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44">&#182;</a>
+  <a class="pilcrow" href="#section-70" id="section-70">&#182;</a>
 </div>
-<p>console.log '???', cur, path
- console.log '===', data
- console.log '-->', cur</p>
+<p>wildcard path</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">switch</span>
     <span class="k">when</span> <span class="nx">cur</span> <span class="o">is</span> <span class="s">&#39;*&#39;</span>
       <span class="k">unless</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
         <span class="nv">result = </span><span class="p">[]</span>
@@ -912,6 +1379,18 @@ split path</p>
         <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..]</span>
         <span class="k">return</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
       <span class="k">return</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-71" id="section-71">&#182;</a>
+</div>
+<p>recursive wildcard</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="k">when</span> <span class="nx">cur</span> <span class="o">is</span> <span class="s">&#39;**&#39;</span>
       <span class="k">return</span> <span class="nx">data</span> <span class="k">unless</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
       <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..]</span>
@@ -921,6 +1400,18 @@ split path</p>
         <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..]</span>
         <span class="k">return</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
       <span class="k">return</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-72" id="section-72">&#182;</a>
+</div>
+<p>regexp matching</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="k">when</span> <span class="nx">cur</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/\W/</span>
       <span class="nv">cur = </span><span class="k">new</span> <span class="nb">RegExp</span> <span class="s">&quot;^</span><span class="si">#{</span><span class="nx">cur</span><span class="si">}</span><span class="s">$&quot;</span>
       <span class="nv">result = </span><span class="p">[]</span>
@@ -929,12 +1420,39 @@ split path</p>
       <span class="k">return</span> <span class="k">unless</span> <span class="nx">result</span><span class="p">.</span><span class="nx">length</span>
       <span class="nv">result = </span><span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">result</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">1</span>
       <span class="nx">result</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-73" id="section-73">&#182;</a>
+</div>
+<p>concrete name</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="k">else</span>
-      <span class="nv">result = </span><span class="nx">data</span><span class="p">[</span><span class="nx">cur</span><span class="p">]</span>
+      <span class="nv">result = </span><span class="nx">data</span><span class="o">?</span><span class="p">[</span><span class="nx">cur</span><span class="p">]</span>
       <span class="k">return</span> <span class="k">unless</span> <span class="nx">result</span><span class="o">?</span>
       <span class="k">return</span> <span class="nx">getData</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">path</span> <span class="k">if</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
       <span class="nx">result</span>
 
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="recursively%20join%20array%20of%20arrays%20together">
+  <h3>
+    <a href="#recursively%20join%20array%20of%20arrays%20together" name="recursively%20join%20array%20of%20arrays%20together" class="pilcrow">&#182;</a>
+    Recursively join array of arrays together
+  </h3>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">arrayJoin = </span><span class="nf">(data, splitter) -&gt;</span>
   <span class="nv">glue = </span><span class="k">if</span> <span class="nx">splitter</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">1</span> <span class="k">then</span> <span class="nx">splitter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="nx">splitter</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span>
   <span class="nv">result = </span><span class="s">&#39;&#39;</span>

@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/object.coffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/objectcoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -176,12 +176,12 @@ or true to use the list from entries definition</li>
   <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
     <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The entries should be:&quot;</span>
     <span class="k">if</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span>
-      <span class="nv">entries = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="s">&#39;entries&#39;</span>
+      <span class="nv">entries = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="s">&#39;entries&#39;</span><span class="p">]</span>
       <span class="k">for</span> <span class="nx">num</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">entries</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="nv">sub = </span><span class="nx">entries</span><span class="p">.</span><span class="nx">goInto</span> <span class="nx">num</span>
+        <span class="nv">sub = </span><span class="nx">entries</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="nx">num</span><span class="p">]</span>
         <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">sub</span><span class="p">.</span><span class="nx">key</span> <span class="o">?</span> <span class="s">&#39;other&#39;</span><span class="si">}</span><span class="s">: &quot;</span> <span class="o">+</span> <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span><span class="p">(</span><span class="nx">sub</span><span class="p">).</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span>
     <span class="k">else</span>
-      <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="s">&#39;entries&#39;</span>
+      <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="s">&#39;entries&#39;</span><span class="p">]</span>
       <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;\n- &quot;</span> <span class="o">+</span> <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span><span class="p">(</span><span class="nx">sub</span><span class="p">).</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span>
     <span class="nx">text</span> <span class="o">+=</span> <span class="s">&#39;\n&#39;</span>
 
@@ -294,7 +294,7 @@ or true to use the list from entries definition</li>
 <p>run subcheck</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">(</span><span class="s">&#39;keys&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">),</span> <span class="nf">(err, text) -&gt;</span>
+        <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;keys&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">]),</span> <span class="nf">(err, text) -&gt;</span>
           <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
           <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">: </span><span class="si">#{</span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span><span class="si">}</span><span class="s">&quot;</span>
       <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
@@ -321,7 +321,7 @@ or true to use the list from entries definition</li>
 <p>run subcheck</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-        <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">(</span><span class="s">&#39;entries&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">),</span> <span class="nf">(err, text) -&gt;</span>
+        <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;entries&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]),</span> <span class="nf">(err, text) -&gt;</span>
           <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
           <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">ruletext</span> <span class="o">+</span> <span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span>
       <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
@@ -525,14 +525,14 @@ or true to use the list from entries definition</li>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span><span class="o">?</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span><span class="o">?</span>
-      <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="s">&#39;keys&#39;</span><span class="p">,</span> <span class="nx">key</span>
+      <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="s">&#39;keys&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">],</span> <span class="p">[</span><span class="nx">key</span><span class="p">]</span>
     <span class="k">else</span> <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
       <span class="k">for</span> <span class="nx">rule</span><span class="p">,</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span>
         <span class="k">if</span> <span class="nx">rule</span><span class="p">.</span><span class="nx">key</span><span class="o">?</span><span class="p">.</span><span class="nx">match</span> <span class="nx">key</span>
-          <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="s">&#39;entries&#39;</span><span class="p">,</span> <span class="nx">i</span>
+          <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="s">&#39;entries&#39;</span><span class="p">,</span> <span class="nx">i</span><span class="p">],</span> <span class="p">[</span><span class="nx">key</span><span class="p">]</span>
           <span class="k">break</span>
         <span class="k">else</span>
-          <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="s">&#39;entries&#39;</span><span class="p">,</span> <span class="nx">i</span>
+          <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="s">&#39;entries&#39;</span><span class="p">,</span> <span class="nx">i</span><span class="p">],</span> <span class="p">[</span><span class="nx">key</span><span class="p">]</span>
     <span class="k">else</span>
 
 </pre></div>
@@ -549,17 +549,16 @@ or true to use the list from entries definition</li>
       <span class="nv">name = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span>
       <span class="nv">path = </span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">concat</span> <span class="nx">key</span>
       <span class="nx">name</span> <span class="o">+=</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="nx">key</span>
+      <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="p">[</span><span class="nx">key</span><span class="p">]</span>
       <span class="nv">sub.pos =</span>
         <span class="nv">type: </span><span class="k">switch</span>
-          <span class="k">when</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+          <span class="k">when</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">sub</span><span class="p">.</span><span class="nx">value</span>
             <span class="s">&#39;array&#39;</span>
-          <span class="k">when</span> <span class="k">typeof</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span>
+          <span class="k">when</span> <span class="k">typeof</span> <span class="nx">sub</span><span class="p">.</span><span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span>
             <span class="s">&#39;object&#39;</span>
           <span class="k">else</span>
             <span class="s">&#39;any&#39;</span>
         <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">sub.value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
     <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">sub</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
       <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>

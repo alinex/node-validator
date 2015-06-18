@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/or.coffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/orcoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -132,7 +132,7 @@
 <p>run subcheck</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">(</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">),</span> <span class="nf">(err, text) -&gt;</span>
+    <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]),</span> <span class="nf">(err, text) -&gt;</span>
       <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span><span class="si">}</span><span class="s">&quot;</span>
   <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
@@ -174,7 +174,7 @@
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">error = </span><span class="p">[]</span>
   <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..(</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">or</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)],</span> <span class="nf">(num, cb) -&gt;</span>
-    <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">(</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">),</span> <span class="nf">(err, result) -&gt;</span>
+    <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]),</span> <span class="nf">(err, result) -&gt;</span>
       <span class="nx">error</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span> <span class="o">=</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>

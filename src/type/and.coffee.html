@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/and.coffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/andcoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -132,7 +132,7 @@
 <p>run subcheck</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">(</span><span class="s">&#39;and&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">),</span> <span class="nf">(err, text) -&gt;</span>
+    <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;and&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]),</span> <span class="nf">(err, text) -&gt;</span>
       <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span><span class="si">}</span><span class="s">&quot;</span>
   <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
@@ -173,8 +173,19 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nx">async</span><span class="p">.</span><span class="nx">eachSeries</span> <span class="p">[</span><span class="mi">0</span><span class="p">..(</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">and</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)],</span> <span class="nf">(num, cb) -&gt;</span>
-    <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">(</span><span class="s">&#39;and&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">)</span>
-    <span class="nv">sub.value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
+    <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;and&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">])</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>sub.value = work.value</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">sub</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
       <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
       <span class="nv">work.value = </span><span class="nx">result</span>
