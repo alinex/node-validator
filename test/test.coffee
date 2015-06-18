@@ -3,15 +3,23 @@ expect = chai.expect
 async = require 'alinex-async'
 chalk = require 'chalk'
 
-validator = require '../lib/index'
+validator = require '../src/index'
 
 exports.describe = (schema, cb) ->
   validator.describe
     schema: schema
   , (err, text) ->
+    expect(err, 'error').to.not.exist
     expect(text).to.be.a 'string'
     expect(text).to.have.length.of.at.least 8
     console.log chalk.yellow text
+    cb()
+
+exports.describeFail = (schema, cb) ->
+  validator.describe
+    schema: schema
+  , (err, text) ->
+    expect(err, 'error').to.exist
     cb()
 
 exports.true = (schema, values, cb) ->

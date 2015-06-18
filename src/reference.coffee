@@ -146,8 +146,8 @@ find = (list, work={}, cb) ->
   # return if not possible without data (incorrect use)
   return cb() if def[0..proto.length-1] isnt proto and not work.data?
   # run automatic conversion of data if needed
-  switch typeof work.data
-    when 'string'
+  switch
+    when typeof work.data is 'string'
       switch proto
         when 'range'
           list.unshift def
@@ -157,9 +157,9 @@ find = (list, work={}, cb) ->
           list.unshift def
           proto = 'parse'
           path = '$auto'
-    when 'array'
+    when Array.isArray work.data
       switch proto
-        when 'object'
+        when 'object', 'split', 'match'
           list.unshift def
           proto = 'join'
           path = '$join'

@@ -118,12 +118,12 @@ getTypeLib = (type) ->
 # ### Is value empty?
 isEmpty = (value) ->
   return true unless value?
-  switch typeof value
-    when 'object'
+  switch
+#    when Array.isArray value
+#      if value.length is 0
+#        return true
+    when typeof value is 'object'
       if value.constructor.name is 'Object' and Object.keys(value).length is 0
-        return true
-    when 'array'
-      if value.length is 0
         return true
   false
 

@@ -1,5 +1,7 @@
 require('alinex-error').install()
 async = require 'alinex-async'
+chai = require 'chai'
+expect = chai.expect
 
 test = require '../../test'
 
@@ -51,6 +53,32 @@ describe "Boolean", ->
 
     it "should fail on other types", (cb) ->
       test.fail schema, [[], new Error('????'), {}], cb
+
+  describe "problems", ->
+
+    it "should fail with title and description added", (cb) ->
+      test.fail
+        title: 'test'
+        description: 'Some test rules'
+        type: 'boolean'
+      , [[]], cb
+
+    it "should fail on missing schema", (cb) ->
+      test.fail undefined, 'true', cb
+
+    it "should fail on missing callback", (cb) ->
+      test.fail undefined, 'true', cb
+
+    it "should fail on missing type", (cb) ->
+      test.fail {}, 'true', cb
+
+    it "should fail on missing type in description", (cb) ->
+      test.describeFail {}, cb
+
+    it "should fail on missing type in selfcheck", (cb) ->
+      test.selfcheck {}, (err) ->
+        expect(err, 'error').to.exist
+        cb()
 
   describe "description", ->
 

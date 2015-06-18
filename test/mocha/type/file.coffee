@@ -84,6 +84,9 @@ describe "File", ->
         ['file.js', 'lib/type/file.js']
       ], cb
 
+    # exists
+    # filetype
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
@@ -99,6 +102,7 @@ describe "File", ->
         basedir: '/anywhere'
         exists: true
         filetype: 'file'
+        resolve: true
       , cb
 
     it "should give complete find description", (cb) ->
@@ -128,4 +132,5 @@ describe "File", ->
         find: ['.']
         exists: true
         filetype: 'file'
+        resolve: true
       , cb

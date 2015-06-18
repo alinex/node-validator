@@ -6,7 +6,7 @@ async = require 'alinex-async'
 path = require 'path'
 
 test = require '../test'
-reference = require '../../lib/reference'
+reference = require '../../src/reference'
 
 describe "References", ->
 
@@ -548,6 +548,18 @@ describe "References", ->
           cb()
       , cb
 
+    it "should find multi value using asterisk", (cb) ->
+      values =
+        '<<<struct://clubs#europe/germany/*>>>': [ 'VFB Stuttgart', 'FC Bayern', 'Hamburger SV' ]
+      async.forEachOfSeries values, (check, value, cb) ->
+        reference.replace value,
+          data: soccer
+        , (err, result) ->
+          expect(err, 'error').to.not.exist
+          expect(result, value).to.deep.equal check
+          cb()
+      , cb
+
     it "should find using regular expressions", (cb) ->
       values =
         '<<<struct://clubs#europe/germany/\\w*m\\w*>>>': ['FC Bayern', 'Hamburger SV']
@@ -603,6 +615,15 @@ describe "References", ->
       , (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '1, 2, 3, 4, 8, 9'
+        cb()
+
+    it "should auto join array together", (cb) ->
+      reference.replace "<<<struct:///text#%, #>>>",
+        data:
+          text: [1, 2, 3, 4]
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.deep.equal [ null, [ '1', '1' ], [ '2', '2' ], [ '3', '3' ], [ '4', '4' ] ]
         cb()
 
   describe "integration", ->
