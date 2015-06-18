@@ -2,6 +2,7 @@ Package: alinex-validator
 =================================================
 
 [![Build Status] (https://travis-ci.org/alinex/node-validator.svg?branch=master)](https://travis-ci.org/alinex/node-validator)
+[![Coverage Status](https://coveralls.io/repos/alinex/node-validator/badge.svg?branch=master)](https://coveralls.io/r/alinex/node-validator?branch=master)
 [![Dependency Status] (https://gemnasium.com/alinex/node-validator.png)](https://gemnasium.com/alinex/node-validator)
 
 This module will help validating complex structures. And should be used on all
