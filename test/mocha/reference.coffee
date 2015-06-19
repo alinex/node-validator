@@ -490,6 +490,15 @@ describe "References", ->
         ]
         cb()
 
+    it "should fail for wrong data type", (cb) ->
+      reference.replace "<<<struct:///text#3>>>",
+        data:
+          text: { one:1 }
+      , (err, result) ->
+        expect(err, 'error').to.not.exist
+        expect(result, 'result').to.not.exist
+        cb()
+
   describe "objects", ->
 
     soccer =

@@ -16,6 +16,11 @@ describe "Any", ->
       schema.optional = true
       test.undefined schema, [null, undefined], cb
 
+    it "should support default option", (cb) ->
+      schema.optional = true
+      schema.default = true
+      test.true schema, [null, undefined], cb
+
   describe "simple check", ->
 
     it "should match boolean", (cb) ->
