@@ -26,7 +26,7 @@ check = require '../check'
 # Optimize options setting
 # -------------------------------------------------
 optimize = (schema) ->
-  if schema.decimals and not schema.round?
+  if schema.decimals? and not schema.round
     schema.round = true
   if schema.round and not schema.decimals?
     schema.decimals = 2
@@ -69,7 +69,7 @@ exports.describe = (work, cb) ->
       min: work.pos.min
       max: work.pos.max
   , (err, subtext) ->
-    return cb err if err
+    # the float check will never throw an error, so go on
     cb null, text + subtext
 
 exports.run = (work, cb) ->
@@ -93,10 +93,7 @@ exports.run = (work, cb) ->
     return cb err if err
     # get float from string
     if typeof value is 'string' and value.trim().slice(-1) is '%'
-      value = value[0..-2]
-      unless not isNaN(parseFloat value) and isFinite value
-        return work.report (new Error "The given value '#{value}' is no number as needed"), cb
-      value = value / 100
+      value = value[0..-2] / 100
     else
       value = parseFloat value
     # validate number

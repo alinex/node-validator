@@ -27,7 +27,7 @@ check = require '../check'
 # Optimize options setting
 # -------------------------------------------------
 optimize = (schema) ->
-  if schema.decimals and not schema.round?
+  if schema.decimals? and not schema.round
     schema.round = true
   if schema.round and not schema.decimals?
     schema.decimals = 0
@@ -42,7 +42,12 @@ subcheck =
     match: /^\d\d?:\d\d?(:\d\d?)?(\.\d+)?$/
   ,
     type: 'string'
-    match: /^([+-]?\d+(?:\.\d+)?)\s*([smhd]|ms)$/
+    match: ///
+      ^
+      ([+-]?\d+(?:\.\d+)?)  # a float
+      \s*([smhd]|ms)        # with unit
+      $
+    ///
   ]
 
 # Type implementation
@@ -68,7 +73,7 @@ exports.describe = (work, cb) ->
       min: work.pos.min
       max: work.pos.max
   , (err, subtext) ->
-    return cb err if err
+    # no error possible for float description, so go on
     cb null, text + subtext
 
 exports.run = (work, cb) ->
@@ -97,9 +102,6 @@ exports.run = (work, cb) ->
         value = "#{parts[0]}h #{parts[1]}m"
         value += " #{parts[2]}s" if parts.length is 3
       parsed = number.parseMSeconds value
-      if isNaN parsed
-        return work.report (new Error "The given value '#{value}' is not parse
-          able as interval"), cb
       unit = work.pos.unit ? 'ms'
       unless unit is 'ms'
         parsed /= switch unit

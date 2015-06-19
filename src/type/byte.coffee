@@ -39,7 +39,7 @@ math.type.Unit.UNITS.bps =
 # Optimize options setting
 # -------------------------------------------------
 optimize = (schema) ->
-  if schema.decimals and not schema.round?
+  if schema.decimals? and not schema.round
     schema.round = true
   if schema.round and not schema.decimals?
     schema.decimals = 2
@@ -70,7 +70,7 @@ exports.describe = (work, cb) ->
       min: work.pos.min
       max: work.pos.max
   , (err, subtext) ->
-    return cb err if err
+    # no error possible from float check, so go on
     cb null, text + subtext
 
 exports.run = (work, cb) ->

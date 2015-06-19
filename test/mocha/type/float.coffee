@@ -52,7 +52,6 @@ describe "Float", ->
       ], cb
 
     it "should support decimal option", (cb) ->
-      schema.round = true
       schema.decimals = 1
       test.equal schema, [
         [13.5, 13.5]
@@ -86,6 +85,19 @@ describe "Float", ->
       test.same schema, [6, 0, -2, 12], ->
         schema.max = -2
         test.fail schema, [100, -1], cb
+
+  describe "unit checks", ->
+
+    it "should parse meters", (cb) ->
+      schema.unit = 'm'
+      test.equal schema, [
+        [100.6, 100.6]
+        ['100.6m', 100.6]
+        ['100.6 m', 100.6]
+        ['1.2km', 1200]
+        ['106cm', 1.06]
+        ['10600mm', 10.6]
+      ], cb
 
   describe "description", ->
 

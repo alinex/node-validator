@@ -55,11 +55,22 @@ describe "Interval", ->
       test.equal schema, [
         ['1600ms', 1.6]
         ['+18.6s', 18.6]
-      ], cb
+      ], ->
+        schema.unit = 'm'
+        test.equal schema, [
+          ['600s', 10]
+        ], ->
+          schema.unit = 'h'
+          test.equal schema, [
+            ['7200s', 2]
+          ], ->
+            schema.unit = 'd'
+            test.equal schema, [
+              ['48h', 2]
+            ], cb
 
     it "should support round option", (cb) ->
       schema.round = true
-      schema.decimals = 0
       test.equal schema, [
         [13.5, 14]
         [-9.489, -9]
@@ -67,7 +78,6 @@ describe "Interval", ->
       ], cb
 
     it "should support decimal option", (cb) ->
-      schema.round = true
       schema.decimals = 1
       test.equal schema, [
         [13.5, 13.5]

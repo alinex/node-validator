@@ -56,9 +56,8 @@ exports.describe = (work, cb) ->
   max = min = null
   if work.pos.inttype?
     type = integerTypes[work.pos.inttype] ? work.pos.inttype
-    unit = if integerTypes[work.pos.inttype] then '' else 'byte'
     unsigned = if work.pos.unsigned then 'an unsigned' else 'a signed'
-    text += "Only values in the range of #{unsigned} #{work.pos.inttype}#{unit}-integer
+    text += "Only values in the range of #{unsigned} #{work.pos.inttype}#{type}-integer
       are allowed. "
     unsigned = if work.pos.unsigned then 1 else 0
     max = (Math.pow 2, type-1+unsigned)-1
@@ -111,13 +110,12 @@ exports.run = (work, cb) ->
   # integer type
   if work.pos.inttype
     type = integerTypes[work.pos.inttype] ? work.pos.inttype
-    unit = if integerTypes[work.pos.inttype] then '' else 'byte'
     unsigned = if work.pos.unsigned then 1 else 0
     max = (Math.pow 2, type-1+unsigned)-1
     min = (unsigned-1) * max - 1 + unsigned
     if value < min or value > max
       return work.report (new Error "The value is out of range for
-      #{work.pos.inttype}#{unit}-integer"), cb
+      #{work.pos.inttype}#{type}-integer"), cb
   # min/max
   if work.pos.min? and value < work.pos.min
     return work.report (new Error "The value is to low, it has to be at least

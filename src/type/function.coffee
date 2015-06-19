@@ -16,10 +16,7 @@ check = require '../check'
 # -------------------------------------------------
 exports.describe = (work, cb) ->
   # combine into message
-  text = if work.pos.class?
-    "A #{if work.pos.class then 'class' else 'function'} reference. "
-  else
-    "The value has to be a function/class. "
+  text = "The value has to be a function/class. "
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
   cb null, text

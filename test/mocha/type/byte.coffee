@@ -88,7 +88,6 @@ describe "Byte", ->
 
     it "should support decimal option", (cb) ->
       schema.unit = 'kbps'
-      schema.round = true
       schema.decimals = 1
       test.equal schema, [
         [13.5, 13.5]

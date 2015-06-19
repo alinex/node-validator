@@ -41,21 +41,19 @@ describe "Percent", ->
       ], cb
 
     it "should fail on other elements", (cb) ->
-      test.fail schema, ['8 percent', null, [], (new Error '????'), {}], cb
+      test.fail schema, ['8 percent', null, [], (new Error '????'), {}, 'no%'], cb
 
   describe "option check", ->
 
     it "should support round option", (cb) ->
       schema.round = true
-      schema.decimals = 0
       test.equal schema, [
-        [13.5, 14]
-        [-9.489, -9]
-        ['+18.6', 19]
+        [13.005, 13.01]
+        [-9.489, -9.49]
+        ['+18.6', 18.6]
       ], cb
 
     it "should support decimal option", (cb) ->
-      schema.round = true
       schema.decimals = 1
       test.equal schema, [
         [13.5, 13.5]

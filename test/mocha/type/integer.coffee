@@ -50,6 +50,16 @@ describe "Integer", ->
       ], ->
         test.fail schema, ['gonow', 'one'], cb
 
+    it "should support sanitize and round option", (cb) ->
+      schema.sanitize = true
+      schema.round = true
+      test.equal schema, [
+        ['go4.5now', 5]
+        ['15.06kg', 15]
+        ['-18.00089%', -18]
+      ], ->
+        test.fail schema, ['gonow', 'one'], cb
+
     it "should support round option", (cb) ->
       schema.round = true
       test.equal schema, [
@@ -123,11 +133,23 @@ describe "Integer", ->
         optional: true
         default: 5
         sanitize: true
-        round: 'floor'
+        round: true
         inttype: 'byte'
         unsigned: true
         min: -6
         max: 20
+      , cb
+
+    it "should work with floor round", (cb) ->
+      test.describe
+        type: 'integer'
+        round: 'floor'
+      , cb
+
+    it "should work with ceil round", (cb) ->
+      test.describe
+        type: 'integer'
+        round: 'ceil'
       , cb
 
   describe "selfcheck", ->
