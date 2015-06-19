@@ -4,6 +4,19 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.1 (2015-06-19)
+-------------------------------------------------
+- Extended tests.
+- Fixed key checking in objects.
+- Fixed description of object types.
+- Added test for interval to run with multiple unit parts.
+- Extended test coverage.
+- Fixed bugs in file check with exists and filetype.
+- Add coveralls badge.
+- Remove io.js from travis tests.
+- Added more tests and fixed bug in references with auto join.
+- Optimized API documentation.
+
 Version 1.0.0 (2015-06-16)
 -------------------------------------------------
 - Updated documentation.
