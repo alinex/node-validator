@@ -57,9 +57,9 @@ exports.describe = (work, cb) ->
         allowedKeys.push entry.key if entry.key
   if allowedKeys.length
     # remove the already mandatory ones
-    list = allowedKeys.filter (e) -> not e in mandatoryKeys
+    list = allowedKeys.filter (e) -> not (e in mandatoryKeys)
     if list.length
-      text += "And the following keys are also allowed: #{list.join ', '}. "
+      text += "And the following keys are allowed: #{list.join ', '}. "
   # subchecks
   async.parallel [
     (cb) ->
@@ -126,7 +126,7 @@ exports.run = (work, cb) ->
     if mandatory instanceof RegExp
       fail = true
       for key of value
-        if key.matches mandatory
+        if key.match mandatory
           fail = false
           break
       if fail
@@ -169,7 +169,7 @@ exports.run = (work, cb) ->
       sub = work.goInto ['keys', key], [key]
     else if work.pos.entries?
       for rule, i in work.pos.entries
-        if rule.key?.match key
+        if rule.key? and key.match rule.key
           sub = work.goInto ['entries', i], [key]
           break
         else

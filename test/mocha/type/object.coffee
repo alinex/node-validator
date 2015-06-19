@@ -52,7 +52,10 @@ describe "Object", ->
           type: 'integer'
         two:
           type: 'integer'
-      test.same schema, [{ one:1, two:2 }], ->
+      schema.entries = [
+        { key: /test\d/, type: 'integer' }
+      ]
+      test.same schema, [{ one:1, two:2, test1:1 }], ->
         test.fail schema, [{ one:1, two:2, three:3 }], cb
 
     it "should support allowedKeys list option", (cb) ->
@@ -66,9 +69,30 @@ describe "Object", ->
         test.fail schema, [{ one:1, two:2, three:3 }], cb
 
     it "should support mandatoryKeys option", (cb) ->
+      schema.mandatoryKeys = true
+      schema.keys =
+        one:
+          type: 'integer'
+        two:
+          type: 'integer'
+      schema.entries = [
+        { key: /test\d/, type: 'integer' }
+      ]
+      test.same schema, [{ one:1, two:2, three:3, test1:1 }], ->
+        test.fail schema, [{ one:1, three:3 }], cb
+
+    it "should support mandatoryKeys list option", (cb) ->
       schema.mandatoryKeys = ['three']
       test.same schema, [{ one:1, two:2, three:3 }], ->
-        test.fail schema, [{ one:1, two:2 }], cb
+        test.fail schema, [{ one:1, two:2 }], ->
+          schema.mandatoryKeys = [/test\d/]
+          test.fail schema, [{ one:1, two:2 }], cb
+
+    it "should support mandatory and allowedKeys together", (cb) ->
+      schema.mandatoryKeys = ['one']
+      schema.allowedKeys = ['two']
+      test.same schema, [{ one:1, two:2 }], ->
+        test.fail schema, [{ one:1, two:2, three:3 }], cb
 
     it "should support subchecks", (cb) ->
       schema.keys =
@@ -114,6 +138,12 @@ describe "Object", ->
             type: 'integer'
           two:
             type: 'string'
+      , cb
+
+    it "should give allowedKeys description", (cb) ->
+      test.describe
+        type: 'object'
+        allowedKeys: ['one', 'two']
       , cb
 
   describe "selfcheck", ->

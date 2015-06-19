@@ -11,6 +11,7 @@ describe "Complex", ->
   describe "structures", ->
 
     it "should work with deep located types", (cb) ->
+      @timeout 8000
       test.equal
         type: 'object'
         keys:
