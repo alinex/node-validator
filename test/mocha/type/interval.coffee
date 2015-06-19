@@ -37,6 +37,11 @@ describe "Interval", ->
         ['+18.6s', 18600]
       ], cb
 
+    it "should match multiple unit string definitions", (cb) ->
+      test.equal schema, [
+        ['1s 12ms', 1012]
+      ], cb
+
     it "should match time strings", (cb) ->
       test.equal schema, [
         ['1:02', 3720000]

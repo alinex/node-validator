@@ -44,8 +44,11 @@ subcheck =
     type: 'string'
     match: ///
       ^
-      ([+-]?\d+(?:\.\d+)?)  # a float
-      \s*([smhd]|ms)        # with unit
+      (
+        ([+-]?\d+(?:\.\d+)?)  # a float
+        \s*([smhd]|ms)        # with unit
+        \s*                   # separator between values
+      )*                      # multiple value pairs
       $
     ///
   ]
