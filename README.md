@@ -327,7 +327,7 @@ set on start of the program or before.
 
 This uses the content of the `MY_HOME` environment variable.
 
-#### File
+#### File Paths
 
 File paths should be given absolute because relative paths are calculated from
 the current working directory.

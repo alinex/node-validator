@@ -11,7 +11,7 @@
 # __Check options:__
 #
 # - `exists` - (bool) true to check for already existing entry
-# - `find` - (array) list of directories in which to search for the file
+# - `find` - (array or function) list of directories in which to search for the file
 # - `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
 
 
@@ -70,9 +70,9 @@ exports.run = (work, cb) ->
     # resolve
     filepath = fspath.resolve basedir, found
     found = filepath if work.pos.resolve
-    exists work, found, (err, found) ->
+    exists work, filepath, (err) ->
       return cb err if err
-      filetype work, found, (err, found) ->
+      filetype work, found, (err) ->
         return cb err if err
         debug "#{work.debug} result #{util.inspect value}"
         cb null, found
@@ -97,33 +97,32 @@ find = (work, value, cb) ->
     cb()
 
 exists = (work, value, cb) ->
-  return cb null, value unless work.pos.exists or work.pos.filetype
+  return cb() unless work.pos.exists or work.pos.filetype
   fs.exists value, (exists) ->
-    unless exists
-      return work.report (new Error "The given file '#{value}' has to exist."), cb
-    cb null, value
+    return cb() if exists
+    work.report (new Error "The given file '#{value}' has to exist."), cb
 
 filetype = (work, value, cb) ->
-  return cb null, value unless work.pos.filetype
-  fs.stat value, (err, stats) ->
+  return cb() unless work.pos.filetype
+  fs.lstat value, (err, stats) ->
     return cb err if err
     switch work.pos.filetype
       when 'file', 'f'
-        return cb null, value if stats.isFile()
-        debug "#{work.debug} skip #{file} because not a file entry"
+        return cb() if stats.isFile()
+        debug "#{work.debug} skip #{value} because not a file entry"
       when 'directory', 'dir', 'd'
-        return cb null, value if stats.isDirectory()
-        debug "#{work.debug} skip #{file} because not a directory entry"
+        return cb() if stats.isDirectory()
+        debug "#{work.debug} skip #{value} because not a directory entry"
       when 'link', 'l'
-        return cb null, value if stats.isSymbolicLink()
-        debug "#{work.debug} skip #{file} because not a link entry"
+        return cb() if stats.isSymbolicLink()
+        debug "#{work.debug} skip #{value} because not a link entry"
       when 'fifo', 'pipe', 'p'
-        return cb null, value if stats.isFIFO()
-        debug "#{work.debug} skip #{file} because not a FIFO entry"
+        return cb() if stats.isFIFO()
+        debug "#{work.debug} skip #{value} because not a FIFO entry"
       when 'socket', 's'
-        return cb null, value if stats.isSocket()
-        debug "#{work.debug} skip #{file} because not a socket entry"
-    return work.report (new Error "The given file '#{value}' is not a #{filetype} entry."), cb
+        return cb() if stats.isSocket()
+        debug "#{work.debug} skip #{value} because not a socket entry"
+    work.report (new Error "The given file '#{value}' is not a #{work.pos.filetype} entry."), cb
 
 exports.selfcheck = (schema, cb) ->
   check.run

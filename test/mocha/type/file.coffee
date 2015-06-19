@@ -3,6 +3,7 @@ async = require 'alinex-async'
 
 test = require '../../test'
 path = require 'path'
+{exec} = require 'child_process'
 
 describe "File", ->
 
@@ -84,8 +85,81 @@ describe "File", ->
         ['file.js', 'lib/type/file.js']
       ], cb
 
-    # exists
-    # filetype
+    it "should fail for empty find list", (cb) ->
+      schema.find = -> []
+      test.fail schema, ['file.js'], cb
+
+    it "should fail for empty find result", (cb) ->
+      schema.find = -> ['.']
+      test.fail schema, ['not-to-be-found-anywhere.js'], cb
+
+    it "should exist as file", (cb) ->
+      schema.exists = true
+      test.same schema, [
+        'test/test.coffee'
+        'test/data/poem'
+        'test'
+      ], ->
+        test.fail schema, [
+          'myfile.txt'
+          'anywhere/myfile.txt'
+          '/anywhere'
+        ], cb
+
+    it "should check for filetype: file", (cb) ->
+      schema.filetype = 'f'
+      test.same schema, [
+        'test/test.coffee'
+        'test/data/poem'
+      ], ->
+        test.fail schema, [
+          'test'
+        ], cb
+
+    it "should check for filetype: dir", (cb) ->
+      schema.filetype = 'd'
+      test.same schema, [
+        'test'
+      ], ->
+        test.fail schema, [
+          'test/test.coffee'
+          'test/data/poem'
+        ], cb
+
+    it "should check for filetype: link", (cb) ->
+      schema.filetype = 'l'
+      test.same schema, [
+        'test/data/poem.link'
+      ], ->
+        test.fail schema, [
+          'test/test.coffee'
+          'test/data/poem'
+          'test'
+        ], cb
+
+    it "should check for filetype: fifo", (cb) ->
+      exec 'mkfifo test/data/fifo', ->
+        schema.filetype = 'fifo'
+        test.same schema, [
+          'test/data/fifo'
+        ], ->
+          exec 'rm test/data/fifo', ->
+            test.fail schema, [
+              'test/test.coffee'
+              'test/data/poem'
+              'test'
+            ], cb
+
+    it "should check for filetype: socket", (cb) ->
+      schema.filetype = 'socket'
+      test.same schema, [
+        '/run/udev/control'
+      ], ->
+        test.fail schema, [
+          'test/test.coffee'
+          'test/data/poem'
+          'test'
+        ], cb
 
   describe "description", ->
 
