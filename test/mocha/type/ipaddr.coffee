@@ -88,6 +88,21 @@ describe "IP Address", ->
         ['ffff::1', 'ffff:0:0:0:0:0:0:1']
       ], cb
 
+    it "should support ipv4Mapping to ipv6", (cb) ->
+      schema.version = 'ipv6'
+      schema.ipv4Mapping = true
+      test.equal schema, [
+        ['127.0.0.1', '::ffff:7f00:1']
+        ['127.0.0.1', '::ffff:7f00:1']
+      ], cb
+
+    it "should support ipv4Mapping from ipv6", (cb) ->
+      schema.version = 'ipv4'
+      schema.ipv4Mapping = true
+      test.equal schema, [
+        ['::ffff:7f00:1', '127.0.0.1']
+      ], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
@@ -104,6 +119,14 @@ describe "IP Address", ->
         format: 'short'
         deny: ['private']
         allow: ['192.168.1.0/24']
+        ipv4Mapping: true
+      , cb
+
+    it "should be given for full ipv6 addresses", (cb) ->
+      test.describe
+        type: 'ipaddr'
+        version: 'ipv6'
+        format: 'long'
       , cb
 
   describe "selfcheck", ->
@@ -122,4 +145,5 @@ describe "IP Address", ->
         format: 'short'
         deny: ['private']
         allow: ['192.168.1.0/24']
+        ipv4Mapping: true
       , cb

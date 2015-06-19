@@ -100,8 +100,15 @@ describe "Object", ->
         title: 'test'
         description: 'Some test rules'
         type: 'object'
-        mandatoryKeys: ['one']
+        mandatoryKeys: true
         allowedKeys: true
+        instanceOf: Object
+        entries: [
+          key: /^num-\d+/
+          type: 'integer'
+        ,
+          type: 'string'
+        ]
         keys:
           one:
             type: 'integer'

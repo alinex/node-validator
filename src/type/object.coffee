@@ -31,19 +31,8 @@ exports.describe = (work, cb) ->
   text = text.replace /\. It's/, ' which is'
   # instanceof
   if work.pos.instanceOf?
-    text += "The object has to be an instance of #{work.pos.instanceOf.name}. "
-  # same type for all keys
-  if work.pos.entries?
-    text += "The entries should be:"
-    if Array.isArray work.pos.entries
-      entries = work.goInto ['entries']
-      for num in [0..entries.length-1]
-        sub = entries.goInto [num]
-        text += "\n- #{sub.key ? 'other'}: " + check.describe(sub).replace /\n/g, '\n  '
-    else
-      sub = work.goInto ['entries']
-      text += "\n- " + check.describe(sub).replace /\n/g, '\n  '
-    text += '\n'
+    text += "The object has to be an instance of class #{work.pos.instanceOf.name}. "
+  text = text.replace /object\. The object/, 'object which'
   # mandatoryKeys
   mandatoryKeys = work.pos.mandatoryKeys ? []
   if mandatoryKeys and typeof mandatoryKeys is 'boolean'
@@ -55,7 +44,7 @@ exports.describe = (work, cb) ->
       for entry in work.pos.entries
         mandatoryKeys.push entry.key if entry.key?
   if mandatoryKeys.length
-    text += "The following keys have to be present: #{mandatoryKeys.join ','}"
+    text += "The following keys have to be present: #{mandatoryKeys.join ', '}. "
   # allowedKeys
   allowedKeys = work.pos.allowedKeys ? []
   if allowedKeys and typeof allowedKeys is 'boolean'
@@ -69,7 +58,8 @@ exports.describe = (work, cb) ->
   if allowedKeys.length
     # remove the already mandatory ones
     list = allowedKeys.filter (e) -> not e in mandatoryKeys
-    text += "The following keys are also allowed: #{list.join ','}"
+    if list.length
+      text += "And the following keys are also allowed: #{list.join ', '}. "
   # subchecks
   async.parallel [
     (cb) ->
@@ -85,7 +75,7 @@ exports.describe = (work, cb) ->
         cb null, subtext + results.join('') + '\n'
     (cb) ->
       return cb() unless work.pos.entries?
-      subtext = "And all keys which are: "
+      subtext = "And all other keys which are: "
       async.map [0..work.pos.entries.length-1], (num, cb) ->
         rule = work.pos.entries[num]
         if rule.key?

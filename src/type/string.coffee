@@ -196,9 +196,10 @@ exports.run = (work, cb) ->
       unless success
         return work.report (new Error "The given string '#{value}' shouldn't match
         against '#{work.pos.match}'"), cb
-    else if work.pos.matchNot instanceof RegExp and value.matchNot work.pos.match
-      return work.report (new Error "The given string '#{value}' shouldn't match
-      against '#{work.pos.matchNot}'"), cb
+    else if work.pos.matchNot instanceof RegExp
+      if value.match work.pos.matchNot
+        return work.report (new Error "The given string '#{value}' shouldn't match
+        against '#{work.pos.matchNot}'"), cb
     else if ~value.indexOf work.pos.matchNot
       return work.report (new Error "The given string '#{value}' shouldn't contain
       '#{work.pos.matchNot}'"), cb

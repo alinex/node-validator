@@ -39,7 +39,7 @@ exports.describe = (work, cb) ->
     name: name
     schema: subcheck
   , (err, subtext) ->
-    return cb err if err
+    # no error in string describe possible, so go on
     cb null, text + subtext
 
 exports.run = (work, cb) ->

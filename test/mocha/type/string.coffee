@@ -149,7 +149,7 @@ describe "String", ->
         test.fail schema, ['ciao'], cb
 
     it "should support multi match option", (cb) ->
-      schema.match = ['he', 'll']
+      schema.match = ['he', /ll/]
       test.same schema, ['hello'], ->
         test.fail schema, ['ciao', 'hero', 'call'], cb
 
@@ -158,8 +158,13 @@ describe "String", ->
       test.same schema, ['ciao'], ->
         test.fail schema, ['hello'], cb
 
+    it "should support matchNot option with regexp", (cb) ->
+      schema.matchNot = /ll/
+      test.same schema, ['ciao'], ->
+        test.fail schema, ['hello'], cb
+
     it "should support multi matchNot option", (cb) ->
-      schema.matchNot = ['he', 'll']
+      schema.matchNot = ['he', /ll/]
       test.same schema, ['ciao'], ->
         test.fail schema, ['hello'], cb
 
@@ -180,7 +185,7 @@ describe "String", ->
         stripTags: true
         lowerCase: true
         upperCase: 'first'
-        replace: ['test', 'done']
+        replace: [['test', 'done'], ['name', 'alex']]
         trim: true
         crop: 50
         minLength: 5
@@ -191,6 +196,14 @@ describe "String", ->
         match: /\w+/
         matchNot: /\d/
       , cb
+
+    it "should give uppercase all lowercase first description", (cb) ->
+      test.describe
+        type: 'string'
+        upperCase: true
+        lowerCase: 'first'
+      , cb
+
 
   describe "selfcheck", ->
 
