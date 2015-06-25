@@ -34,7 +34,7 @@
   "dependencies": {
     "alinex-async": "0.2.x",
     "alinex-fs": "0.2.x",
-    "alinex-util": "0.2.x",
+    "alinex-util": "0.x",
     "chalk": "1.x",
     "debug": ">=0.8.0 <3.0.0",
     "request": "^2.55.0"
