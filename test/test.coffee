@@ -3,7 +3,7 @@ expect = chai.expect
 async = require 'alinex-async'
 chalk = require 'chalk'
 
-validator = require '../lib/index'
+validator = require '../src/index'
 
 exports.describe = (schema, cb) ->
   validator.describe
