@@ -24,31 +24,32 @@ you can trust and use the values as they are without further checks.
 And you'll get the benefit of automatically optimized values like for `handlebars`
 type you get a ready to use handlebar function back.
 
-It is one of the modules of the [Alinex Universe](http://alinex.github.io/node-alinex)
-following the code standards defined there.
-
-Also see the last [changes](Changelog.md).
+> It is one of the modules of the [Alinex Universe](http://alinex.github.io/code.html)
+> following the code standards defined in the [General Docs](http://alinex.github.io/node-alinex).
 
 
 Install
 -------------------------------------------------
 
-The easiest way is to let npm add the module directly:
+[![NPM](https://nodei.co/npm/alinex-validator.png?downloads=true&downloadRank=true&stars=true)
+ ![Downloads](https://nodei.co/npm-dl/alinex-validator.png?months=9&height=3)
+](https://www.npmjs.com/package/alinex-validator)
 
-``` bash
+The easiest way is to let npm add the module directly to your modules
+(from within you node modules directory):
+
+``` sh
 npm install alinex-validator --save
 ```
 
-[![NPM](https://nodei.co/npm/alinex-validator.png?downloads=true&stars=true)](https://nodei.co/npm/alinex-validator/)
+And update it to the latest version later:
 
-But you can also get the sources from github and install the subpackages using
-npm:
-
-``` bash
-git clone git://github.com/alinex/node-validator alinex-validator
-cd alinex-validator
-npm install
+``` sh
+npm update alinex-validator --save
 ```
+
+Always have a look at the latest [changes](Changelog.md).
+
 
 Usage
 -------------------------------------------------
