@@ -16,8 +16,8 @@
 </head>
 <body>
   <nav>
-<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='http://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='http://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="lllogo" src="http://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="lllogo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
   </a>
   <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
 </div>
@@ -195,10 +195,10 @@ you can trust and use the values as they are without further checks.
 And you'll get the benefit of automatically optimized values like for <code>handlebars</code>
 type you get a ready to use handlebar function back.</p>
 
-<p>It is one of the modules of the <a href="http://alinex.github.io/node-alinex">Alinex Universe</a>
-following the code standards defined there.</p>
-
-<p>Also see the last <a href="Changelog.md.html">changes</a>.</p>
+<blockquote>
+  <p>It is one of the modules of the <a href="http://alinex.github.io/code.html">Alinex Universe</a>
+  following the code standards defined in the <a href="http://alinex.github.io/node-alinex">General Docs</a>.</p>
+</blockquote>
 
 
 <div class="pilwrap" id="install">
@@ -209,7 +209,12 @@ following the code standards defined there.</p>
 </div>
 
 
-<p>The easiest way is to let npm add the module directly:</p>
+<p><a href="https://www.npmjs.com/package/alinex-validator"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM" title="" />
+ <img src="https://nodei.co/npm-dl/alinex-validator.png?months=9&amp;height=3" alt="Downloads" title="" />
+</a></p>
+
+<p>The easiest way is to let npm add the module directly to your modules
+(from within you node modules directory):</p>
 
 
 <div class="highlight"><pre><code>npm install alinex-validator --save
@@ -217,18 +222,15 @@ following the code standards defined there.</p>
 
 
 
-<p><a href="https://nodei.co/npm/alinex-validator/"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;stars=true" alt="NPM" title="" /></a></p>
-
-<p>But you can also get the sources from github and install the subpackages using
-npm:</p>
+<p>And update it to the latest version later:</p>
 
 
-<div class="highlight"><pre><code>git clone git://github.com/alinex/node-validator alinex-validator
-<span class="nb">cd </span>alinex-validator
-npm install
+<div class="highlight"><pre><code>npm update alinex-validator --save
 </code></pre></div>
 
 
+
+<p>Always have a look at the latest <a href="Changelog.md.html">changes</a>.</p>
 
 
 <div class="pilwrap" id="usage">

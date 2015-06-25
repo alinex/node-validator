@@ -322,7 +322,7 @@ a:hover {
     background: #f0ad4e; }
 
 .docs.markdown {
-  background: #333; }
+  background: #222; }
 .docs pre {
   border-color: #999999; }
 .docs p tt, .docs p code, .docs li tt, .docs li code {
@@ -552,3 +552,8 @@ nav .btn-warning {
 }
 */
 
+blockquote {
+  border-left: 4px solid #555;
+  padding-left: 36px;
+  margin-left: 0;
+}
