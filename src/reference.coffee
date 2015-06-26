@@ -327,7 +327,7 @@ findType =
     cb null, result
   # #### Path selection in object
   object:  (proto, path, work, cb) ->
-    cb null, getData work.data, path.split '/'
+    cb null, object.pathSearch work.data, path
   # #### Join array together
   join:  (proto, path, work, cb) ->
     path = path[6..]
@@ -341,7 +341,7 @@ findType =
     findData path, work, cb
   # #### Read from additional context
   context: (proto, path, work, cb) ->
-    cb null, getData work.spec?.context, path.split '/'
+    cb null, object.pathSearch work.spec?.context, path
   # #### Read from file
   file: (proto, path, work, cb) ->
     fs = require 'alinex-fs'
@@ -378,11 +378,11 @@ findData = (path, work, cb) ->
   # find first level
   first = path[0]
   # absolute path, go on
-  return cb null, getData work.data, path[1..] if first is ''
+  return cb null, object.pathSearch work.data, path[1..] if first is ''
   # search at current position
   skip = 0
   skip++ while path[skip] is '..'
-  result = getData work.data, work.path[0..work.path.length-skip-1].concat path[skip..]
+  result = object.pathSearch work.data, work.path[0..work.path.length-skip-1].concat path[skip..]
   if result and work.spec?.done?
     checkpath = work.path[0..work.path.length-skip-1].concat(path[skip..]).join '/'
     unless checkpath in work.spec.done
@@ -406,50 +406,6 @@ findData = (path, work, cb) ->
   sub.spec = work.spec
   sub.path.pop()
   findData path, sub, cb
-
-# ### Read from data structure by path
-getData = (data, path) ->
-  return data unless path.length
-  cur = path.shift()
-  # step over empty paths like //
-  cur = path.shift() while cur is '' and path.length
-  result = data
-  switch
-    # wildcard path
-    when cur is '*'
-      unless path.length
-        result = []
-        result.push val for key,val of data
-        return result
-      for key,val of data
-        result = getData val, path[0..]
-        return result if result?
-      return
-    # recursive wildcard
-    when cur is '**'
-      return data unless path.length
-      result = getData result, path[0..]
-      return result if result?
-      path.unshift cur
-      for key,val of data
-        result = getData val, path[0..]
-        return result if result?
-      return
-    # regexp matching
-    when cur.match /\W/
-      cur = new RegExp "^#{cur}$"
-      result = []
-      for key,val of data
-        result.push val if key.match cur
-      return unless result.length
-      result = result[0] if result.length is 1
-      result
-    # concrete name
-    else
-      result = data?[cur]
-      return unless result?
-      return getData result, path if path.length
-      result
 
 # ### Recursively join array of arrays together
 arrayJoin = (data, splitter) ->
