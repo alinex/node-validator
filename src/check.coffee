@@ -66,6 +66,7 @@ class Work
       # create new Error object
       err = new Error message
       err.description = detail if detail
+      err.path = @vpath.join '/'
       # send error through callback
       cb err
 
