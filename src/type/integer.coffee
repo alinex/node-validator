@@ -32,7 +32,7 @@ check = require '../check'
 integerTypes =
   byte: 8
   short: 16
-  long : 32
+  long: 32
   safe: 53
   quad: 64
 
@@ -164,7 +164,7 @@ exports.selfcheck = (schema, cb) ->
             type: 'integer'
           ,
             type: 'string'
-            values: ['byte', 'short','long','quad', 'safe']
+            values: ['byte', 'short', 'long', 'quad', 'safe']
           ]
         unsigned:
           type: 'boolean'

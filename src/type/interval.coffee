@@ -20,7 +20,7 @@ util = require 'util'
 chalk = require 'chalk'
 # include alinex packages
 # alinex modules
-{object,number} = require 'alinex-util'
+{object, number} = require 'alinex-util'
 # include classes and helper
 check = require '../check'
 

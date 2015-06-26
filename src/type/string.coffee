@@ -163,7 +163,7 @@ exports.run = (work, cb) ->
   if work.pos.startsWith? and value[..work.pos.startsWith.length-1] isnt work.pos.startsWith
     return work.report (new Error "The given string '#{value}' should start with
     '#{work.pos.startsWith}'"), cb
-  if work.pos.endsWith? and value[value.length-work.pos.endsWith.length..] isnt work.pos.endsWith
+  if work.pos.endsWith? and value[value.length - work.pos.endsWith.length..] isnt work.pos.endsWith
     return work.report (new Error "The given string '#{value}' should end with
     '#{work.pos.endsWith}'"), cb
   # matching

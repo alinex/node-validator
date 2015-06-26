@@ -26,7 +26,7 @@ util = require 'util'
 chalk = require 'chalk'
 # alinex modules
 async = require 'alinex-async'
-{object,array} = require 'alinex-util'
+{object, array} = require 'alinex-util'
 # include classes and helper
 check = require './check'
 
@@ -45,7 +45,7 @@ protocolMap =
 typePrecedence =
   env: 5
   struct: 4
-  context : 3
+  context: 3
   file: 2
   cmd: 2
   web: 1
@@ -130,7 +130,7 @@ find = (list, work={}, cb) ->
   def = list.shift()
   return cb null, work.data unless def # empty anchor
   # detect protocol
-  [proto,path] = def.split /:\/\//
+  [proto, path] = def.split /:\/\//
   path ?= proto
   proto = switch proto[0]
     when '{' then 'check'
@@ -165,8 +165,8 @@ find = (list, work={}, cb) ->
           path = '$join'
   # check for impossible result data
   if (
-    (not Array.isArray(work.data) and proto in ['range','join']) or
-    (typeof work.data isnt 'string' and proto in ['split','match','parse']) or
+    (not Array.isArray(work.data) and proto in ['range', 'join']) or
+    (typeof work.data isnt 'string' and proto in ['split', 'match', 'parse']) or
     (typeof work.data isnt 'object' and proto is 'object')
     )
     debug chalk.grey "stop at part #{proto}://#{path} because wrong result type"
@@ -216,7 +216,7 @@ find = (list, work={}, cb) ->
 # This is a collection of methods for specific protocols.
 findType =
   # #### Value checks
-  check:  (proto, path, work, cb) ->
+  check: (proto, path, work, cb) ->
     # get the check schema reading as js
     vm = require 'vm'
     schema = vm.runInNewContext "x=#{path}"
@@ -232,7 +232,7 @@ findType =
         return cb()
       cb null, value
   # #### Splitting of strings
-  split:  (proto, path, work, cb) ->
+  split: (proto, path, work, cb) ->
     path = path[1..]
     splitter = path.split('//').map (s) -> new RegExp s
     splitter.push '' if splitter.length is 1
@@ -243,12 +243,12 @@ findType =
     result.unshift null
     cb null, result
   # #### Matching strings
-  match:  (proto, path, work, cb) ->
+  match: (proto, path, work, cb) ->
     re = path.match /\/([^]*)\/(i?)/
     re = new RegExp re[1], "#{re[2]}g"
     cb null, work.data.match re
   # #### Special parsing of string
-  parse:  (proto, path, work, cb) ->
+  parse: (proto, path, work, cb) ->
     switch path
       when '$js'
         vm = require 'vm'
@@ -277,7 +277,7 @@ findType =
           cb null, result
       when '$auto'
         result = null
-        async.detectSeries ['$yaml','$xml','$json','$js'], (path, cb) ->
+        async.detectSeries ['$yaml', '$xml', '$json', '$js'], (path, cb) ->
           find [path], work, (err, val) ->
             result = val
             cb()
@@ -286,7 +286,7 @@ findType =
       else
         cb()
   # #### Range selection in array
-  range:  (proto, path, work, cb) ->
+  range: (proto, path, work, cb) ->
     # split multiple specifiers
     rows = path.match ///
       \d+ # first row
@@ -326,10 +326,10 @@ findType =
     result = result[0] if result.length is 1
     cb null, result
   # #### Path selection in object
-  object:  (proto, path, work, cb) ->
+  object: (proto, path, work, cb) ->
     cb null, object.pathSearch work.data, path
   # #### Join array together
-  join:  (proto, path, work, cb) ->
+  join: (proto, path, work, cb) ->
     path = path[6..]
     splitter = if path then path.split '//' else [', ']
     cb null, arrayJoin work.data, splitter
@@ -373,7 +373,7 @@ findType =
 # ### Read from value structure
 findData = (path, work, cb) ->
   # split path
-  path = path.replace('/\/+$/','').split /\/+/ if typeof path is 'string'
+  path = path.replace('/\/+$/', '').split /\/+/ if typeof path is 'string'
   work.path ?= []
   # find first level
   first = path[0]

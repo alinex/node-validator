@@ -56,11 +56,11 @@ specialRanges =
     '2001:db8::/32' # RFC4291
   ]
   uniquelocal: [ 'fc00::/7' ]
-  ipv4mapped:  [ '::ffff:0:0/96' ]
-  rfc6145:     [ '::ffff:0:0:0/96' ] # RFC6145
-  rfc6052:     [ '64:ff9b::/96' ] # RFC6052
-  '6to4':      [ '2002::/16' ] # RFC3056
-  teredo:      [ '2001::/32' ] # RFC6052, RFC6146
+  ipv4mapped: [ '::ffff:0:0/96' ]
+  rfc6145: [ '::ffff:0:0:0/96' ] # RFC6145
+  rfc6052: [ '64:ff9b::/96' ] # RFC6052
+  '6to4': [ '2002::/16' ] # RFC3056
+  teredo: [ '2001::/32' ] # RFC6052, RFC6146
 all = []
 all.concat list for name, list of specialRanges
 specialRanges.special = all
