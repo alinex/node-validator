@@ -997,7 +997,7 @@ __Check options:__
 
 ### ipaddr
 
-The value has to be a IP address.
+The value has to be an IP address.
 
 __Check options:__
 
