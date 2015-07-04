@@ -258,7 +258,7 @@ position.</p>
 <p>add type specific information</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">exports</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">@</span><span class="p">,</span> <span class="nf">(err, text) -&gt;</span>
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">describe</span> <span class="k">this</span><span class="p">,</span> <span class="nf">(err, text) -&gt;</span>
       <span class="nx">detail</span> <span class="o">+=</span> <span class="nx">text</span>
 
 </pre></div>
@@ -274,6 +274,7 @@ position.</p>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nv">err = </span><span class="k">new</span> <span class="nb">Error</span> <span class="nx">message</span>
       <span class="nv">err.description = </span><span class="nx">detail</span> <span class="k">if</span> <span class="nx">detail</span>
+      <span class="nv">err.path = </span><span class="nx">@vpath</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span>
 
 </pre></div>
         </td>

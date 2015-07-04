@@ -102,9 +102,6 @@
         <a href="#read%20from%20value%20structure">Read from value structure</a>
       </div>
       <div class="heading h3">
-        <a href="#read%20from%20data%20structure%20by%20path">Read from data structure by path</a>
-      </div>
-      <div class="heading h3">
         <a href="#recursively%20join%20array%20of%20arrays%20together">Recursively join array of arrays together</a>
       </div>
     </div>
@@ -197,7 +194,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
-<span class="p">{</span><span class="nx">object</span><span class="p">,</span><span class="nx">array</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
+<span class="p">{</span><span class="nx">object</span><span class="p">,</span> <span class="nx">array</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
 
 </pre></div>
         </td>
@@ -263,7 +260,7 @@
 <span class="nv">typePrecedence =</span>
   <span class="nv">env: </span><span class="mi">5</span>
   <span class="nv">struct: </span><span class="mi">4</span>
-  <span class="nv">context : </span><span class="mi">3</span>
+  <span class="nv">context: </span><span class="mi">3</span>
   <span class="nv">file: </span><span class="mi">2</span>
   <span class="nv">cmd: </span><span class="mi">2</span>
   <span class="nv">web: </span><span class="mi">1</span>
@@ -562,7 +559,7 @@ on. The result will be from the last uri path.</p>
 <p>detect protocol</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="p">[</span><span class="nx">proto</span><span class="p">,</span><span class="nx">path</span><span class="p">]</span> <span class="o">=</span> <span class="nx">def</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/:\/\//</span>
+  <span class="p">[</span><span class="nx">proto</span><span class="p">,</span> <span class="nx">path</span><span class="p">]</span> <span class="o">=</span> <span class="nx">def</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/:\/\//</span>
   <span class="nx">path</span> <span class="o">?=</span> <span class="nx">proto</span>
   <span class="nv">proto = </span><span class="k">switch</span> <span class="nx">proto</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">when</span> <span class="s">&#39;{&#39;</span> <span class="k">then</span> <span class="s">&#39;check&#39;</span>
@@ -630,8 +627,8 @@ on. The result will be from the last uri path.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">if</span> <span class="p">(</span>
-    <span class="p">(</span><span class="o">not</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="o">and</span> <span class="nx">proto</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;range&#39;</span><span class="p">,</span><span class="s">&#39;join&#39;</span><span class="p">])</span> <span class="o">or</span>
-    <span class="p">(</span><span class="k">typeof</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span> <span class="o">isnt</span> <span class="s">&#39;string&#39;</span> <span class="o">and</span> <span class="nx">proto</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;split&#39;</span><span class="p">,</span><span class="s">&#39;match&#39;</span><span class="p">,</span><span class="s">&#39;parse&#39;</span><span class="p">])</span> <span class="o">or</span>
+    <span class="p">(</span><span class="o">not</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="o">and</span> <span class="nx">proto</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;range&#39;</span><span class="p">,</span> <span class="s">&#39;join&#39;</span><span class="p">])</span> <span class="o">or</span>
+    <span class="p">(</span><span class="k">typeof</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span> <span class="o">isnt</span> <span class="s">&#39;string&#39;</span> <span class="o">and</span> <span class="nx">proto</span> <span class="k">in</span> <span class="p">[</span><span class="s">&#39;split&#39;</span><span class="p">,</span> <span class="s">&#39;match&#39;</span><span class="p">,</span> <span class="s">&#39;parse&#39;</span><span class="p">])</span> <span class="o">or</span>
     <span class="p">(</span><span class="k">typeof</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span> <span class="o">isnt</span> <span class="s">&#39;object&#39;</span> <span class="o">and</span> <span class="nx">proto</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot;stop at part </span><span class="si">#{</span><span class="nx">proto</span><span class="si">}</span><span class="s">://</span><span class="si">#{</span><span class="nx">path</span><span class="si">}</span><span class="s"> because wrong result type&quot;</span>
@@ -787,7 +784,7 @@ retry the same call again</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="s">  check:  (proto, path, work, cb) -&gt;</span>
+<span class="s">  check: (proto, path, work, cb) -&gt;</span>
 
 </pre></div>
         </td>
@@ -839,7 +836,7 @@ retry the same call again</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">split: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
+  <span class="nv">split: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">path = </span><span class="nx">path</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span>
     <span class="nv">splitter = </span><span class="nx">path</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&#39;//&#39;</span><span class="p">).</span><span class="nx">map</span> <span class="nf">(s) -&gt;</span> <span class="k">new</span> <span class="nb">RegExp</span> <span class="nx">s</span>
     <span class="nx">splitter</span><span class="p">.</span><span class="nx">push</span> <span class="s">&#39;&#39;</span> <span class="k">if</span> <span class="nx">splitter</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">1</span>
@@ -864,7 +861,7 @@ retry the same call again</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">match: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
+  <span class="nv">match: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">re = </span><span class="nx">path</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/\/([^]*)\/(i?)/</span>
     <span class="nv">re = </span><span class="k">new</span> <span class="nb">RegExp</span> <span class="nx">re</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">re</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s">g&quot;</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">match</span> <span class="nx">re</span>
@@ -883,7 +880,7 @@ retry the same call again</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">parse: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
+  <span class="nv">parse: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="k">switch</span> <span class="nx">path</span>
       <span class="k">when</span> <span class="s">&#39;$js&#39;</span>
         <span class="nv">vm = </span><span class="nx">require</span> <span class="s">&#39;vm&#39;</span>
@@ -912,7 +909,7 @@ retry the same call again</p>
           <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
       <span class="k">when</span> <span class="s">&#39;$auto&#39;</span>
         <span class="nv">result = </span><span class="kc">null</span>
-        <span class="nx">async</span><span class="p">.</span><span class="nx">detectSeries</span> <span class="p">[</span><span class="s">&#39;$yaml&#39;</span><span class="p">,</span><span class="s">&#39;$xml&#39;</span><span class="p">,</span><span class="s">&#39;$json&#39;</span><span class="p">,</span><span class="s">&#39;$js&#39;</span><span class="p">],</span> <span class="nf">(path, cb) -&gt;</span>
+        <span class="nx">async</span><span class="p">.</span><span class="nx">detectSeries</span> <span class="p">[</span><span class="s">&#39;$yaml&#39;</span><span class="p">,</span> <span class="s">&#39;$xml&#39;</span><span class="p">,</span> <span class="s">&#39;$json&#39;</span><span class="p">,</span> <span class="s">&#39;$js&#39;</span><span class="p">],</span> <span class="nf">(path, cb) -&gt;</span>
           <span class="nx">find</span> <span class="p">[</span><span class="nx">path</span><span class="p">],</span> <span class="nx">work</span><span class="p">,</span> <span class="nf">(err, val) -&gt;</span>
             <span class="nv">result = </span><span class="nx">val</span>
             <span class="nx">cb</span><span class="p">()</span>
@@ -935,7 +932,7 @@ retry the same call again</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">range: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
+  <span class="nv">range: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
 
 </pre></div>
         </td>
@@ -1033,8 +1030,8 @@ retry the same call again</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">object: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
-    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;/&#39;</span>
+  <span class="nv">object: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
+    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">object</span><span class="p">.</span><span class="nx">pathSearch</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">path</span>
 
 </pre></div>
         </td>
@@ -1050,7 +1047,7 @@ retry the same call again</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">join: </span> <span class="nf">(proto, path, work, cb) -&gt;</span>
+  <span class="nv">join: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
     <span class="nv">path = </span><span class="nx">path</span><span class="p">[</span><span class="mi">6</span><span class="p">..]</span>
     <span class="nv">splitter = </span><span class="k">if</span> <span class="nx">path</span> <span class="k">then</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;//&#39;</span> <span class="k">else</span> <span class="p">[</span><span class="s">&#39;, &#39;</span><span class="p">]</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">arrayJoin</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">splitter</span>
@@ -1104,7 +1101,7 @@ retry the same call again</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">context: </span><span class="nf">(proto, path, work, cb) -&gt;</span>
-    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="o">?</span><span class="p">.</span><span class="nx">context</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">split</span> <span class="s">&#39;/&#39;</span>
+    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">object</span><span class="p">.</span><span class="nx">pathSearch</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="o">?</span><span class="p">.</span><span class="nx">context</span><span class="p">,</span> <span class="nx">path</span>
 
 </pre></div>
         </td>
@@ -1214,7 +1211,7 @@ retry the same call again</p>
 <p>split path</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">path = </span><span class="nx">path</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s">&#39;/\/+$/&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">).</span><span class="nx">split</span> <span class="sr">/\/+/</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">path</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+  <span class="nv">path = </span><span class="nx">path</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s">&#39;/\/+$/&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">).</span><span class="nx">split</span> <span class="sr">/\/+/</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">path</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
   <span class="nx">work</span><span class="p">.</span><span class="nx">path</span> <span class="o">?=</span> <span class="p">[]</span>
 
 </pre></div>
@@ -1241,7 +1238,7 @@ retry the same call again</p>
 <p>absolute path, go on</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span> <span class="k">if</span> <span class="nx">first</span> <span class="o">is</span> <span class="s">&#39;&#39;</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">object</span><span class="p">.</span><span class="nx">pathSearch</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">1</span><span class="p">..]</span> <span class="k">if</span> <span class="nx">first</span> <span class="o">is</span> <span class="s">&#39;&#39;</span>
 
 </pre></div>
         </td>
@@ -1256,7 +1253,7 @@ retry the same call again</p>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">skip = </span><span class="mi">0</span>
   <span class="nx">skip</span><span class="o">++</span> <span class="k">while</span> <span class="nx">path</span><span class="p">[</span><span class="nx">skip</span><span class="p">]</span> <span class="o">is</span> <span class="s">&#39;..&#39;</span>
-  <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">skip</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">concat</span> <span class="nx">path</span><span class="p">[</span><span class="nx">skip</span><span class="p">..]</span>
+  <span class="nv">result = </span><span class="nx">object</span><span class="p">.</span><span class="nx">pathSearch</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">skip</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">concat</span> <span class="nx">path</span><span class="p">[</span><span class="nx">skip</span><span class="p">..]</span>
   <span class="k">if</span> <span class="nx">result</span> <span class="o">and</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="o">?</span><span class="p">.</span><span class="nx">done</span><span class="o">?</span>
     <span class="nv">checkpath = </span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="nx">skip</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">path</span><span class="p">[</span><span class="nx">skip</span><span class="p">..]).</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span>
     <span class="k">unless</span> <span class="nx">checkpath</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">done</span>
@@ -1324,119 +1321,6 @@ retry the same call again</p>
   <span class="nv">sub.spec = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span>
   <span class="nx">sub</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
   <span class="nx">findData</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">sub</span><span class="p">,</span> <span class="nx">cb</span>
-
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap" id="read%20from%20data%20structure%20by%20path">
-  <h3>
-    <a href="#read%20from%20data%20structure%20by%20path" name="read%20from%20data%20structure%20by%20path" class="pilcrow">&#182;</a>
-    Read from data structure by path
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">getData = </span><span class="nf">(data, path) -&gt;</span>
-  <span class="k">return</span> <span class="nx">data</span> <span class="k">unless</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
-  <span class="nv">cur = </span><span class="nx">path</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-69" id="section-69">&#182;</a>
-</div>
-<p>step over empty paths like //</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">cur = </span><span class="nx">path</span><span class="p">.</span><span class="nx">shift</span><span class="p">()</span> <span class="k">while</span> <span class="nx">cur</span> <span class="o">is</span> <span class="s">&#39;&#39;</span> <span class="o">and</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
-  <span class="nv">result = </span><span class="nx">data</span>
-  <span class="k">switch</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-70" id="section-70">&#182;</a>
-</div>
-<p>wildcard path</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">when</span> <span class="nx">cur</span> <span class="o">is</span> <span class="s">&#39;*&#39;</span>
-      <span class="k">unless</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
-        <span class="nv">result = </span><span class="p">[]</span>
-        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span> <span class="nx">val</span> <span class="k">for</span> <span class="nx">key</span><span class="p">,</span><span class="nx">val</span> <span class="k">of</span> <span class="nx">data</span>
-        <span class="k">return</span> <span class="nx">result</span>
-      <span class="k">for</span> <span class="nx">key</span><span class="p">,</span><span class="nx">val</span> <span class="k">of</span> <span class="nx">data</span>
-        <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..]</span>
-        <span class="k">return</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
-      <span class="k">return</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-71" id="section-71">&#182;</a>
-</div>
-<p>recursive wildcard</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">when</span> <span class="nx">cur</span> <span class="o">is</span> <span class="s">&#39;**&#39;</span>
-      <span class="k">return</span> <span class="nx">data</span> <span class="k">unless</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
-      <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..]</span>
-      <span class="k">return</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
-      <span class="nx">path</span><span class="p">.</span><span class="nx">unshift</span> <span class="nx">cur</span>
-      <span class="k">for</span> <span class="nx">key</span><span class="p">,</span><span class="nx">val</span> <span class="k">of</span> <span class="nx">data</span>
-        <span class="nv">result = </span><span class="nx">getData</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">path</span><span class="p">[</span><span class="mi">0</span><span class="p">..]</span>
-        <span class="k">return</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
-      <span class="k">return</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-72" id="section-72">&#182;</a>
-</div>
-<p>regexp matching</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">when</span> <span class="nx">cur</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/\W/</span>
-      <span class="nv">cur = </span><span class="k">new</span> <span class="nb">RegExp</span> <span class="s">&quot;^</span><span class="si">#{</span><span class="nx">cur</span><span class="si">}</span><span class="s">$&quot;</span>
-      <span class="nv">result = </span><span class="p">[]</span>
-      <span class="k">for</span> <span class="nx">key</span><span class="p">,</span><span class="nx">val</span> <span class="k">of</span> <span class="nx">data</span>
-        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span> <span class="nx">val</span> <span class="k">if</span> <span class="nx">key</span><span class="p">.</span><span class="nx">match</span> <span class="nx">cur</span>
-      <span class="k">return</span> <span class="k">unless</span> <span class="nx">result</span><span class="p">.</span><span class="nx">length</span>
-      <span class="nv">result = </span><span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nx">result</span><span class="p">.</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">1</span>
-      <span class="nx">result</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-73" id="section-73">&#182;</a>
-</div>
-<p>concrete name</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">else</span>
-      <span class="nv">result = </span><span class="nx">data</span><span class="o">?</span><span class="p">[</span><span class="nx">cur</span><span class="p">]</span>
-      <span class="k">return</span> <span class="k">unless</span> <span class="nx">result</span><span class="o">?</span>
-      <span class="k">return</span> <span class="nx">getData</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">path</span> <span class="k">if</span> <span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
-      <span class="nx">result</span>
 
 
 </pre></div>
