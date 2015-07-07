@@ -51,9 +51,9 @@ class Work
   # position.
   report: (err, cb) ->
     # create title with context info
-    message = "#{err.message} in #{@spec.name ? 'value'}/#{@path.join '/'}"
+    message = "#{err.message} in #{@spec.name ? 'value'}/#{@vpath.join '/'}"
     message += " '#{@pos.title}'" if @pos.title?
-    message += '. '
+    message += "(described in #{@path.join '/'}). "
     # create description
     detail = ''
     if @pos.description?
