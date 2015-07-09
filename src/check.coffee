@@ -61,7 +61,7 @@ class Work
       desc = desc.replace /\.\s*$/, ''
       detail = "It should contain #{desc}. \n"
     # add type specific information
-    exports.describe this, (err, text) ->
+    exports.describe this, (err, text) =>
       detail += text
       # create new Error object
       err = new Error message
