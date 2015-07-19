@@ -7,8 +7,8 @@
 # - `default` - the value to use if none given
 # - `version` - one of 'ipv4' or 'ipv6' and the value will be converted, if possible
 # - `format` - compression method to use: 'short', 'long'
-# - `allow` - the allowed ip ranges
-# - `deny` - the denied ip ranges
+# - `allow` - (list) the allowed ip ranges
+# - `deny` - (list) the denied ip ranges
 
 # Node modules
 # -------------------------------------------------
