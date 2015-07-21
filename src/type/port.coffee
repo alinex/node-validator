@@ -22,6 +22,8 @@ check = require '../check'
 # cat /etc/services | sed 's/\/.*//' | sed 's/[ \t][ \t]*/: /'
 # | sed "s/\([0-9a-z-]*\)/'\1'/" | sort -u
 ports =
+  'rtmp': 1935
+  # from /etc/services
   'acr-nema': 104
   'afbackup': 2988
   'afmbackup': 2989
