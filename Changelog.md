@@ -4,6 +4,22 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.2 (2015-07-21)
+-------------------------------------------------
+- Removed .only from tests
+- Added port validator.
+- Start adding a tcp port validator.
+- Fixed bug with context access in report().
+- Show value path in error messages.
+- Added paging for blog posts.
+- Optimized code style.
+- Report path as Error attribute.
+- Moved reference.getData() -> alinex-util:object.pathSearch().
+- Changed tests to work on source again.
+- Upgrade util package.
+- Updated insstall documentation.
+- Made badge links npm compatible in documentation.
+
 Version 1.0.1 (2015-06-19)
 -------------------------------------------------
 - Extended tests.
