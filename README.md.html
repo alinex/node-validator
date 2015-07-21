@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "home/alex/a3/node-validator/README.md", defaultSidebar = true;
+    var relativeDir = "", thisFile = "home/alex/a3/node-validator/READMEmd", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
   <script src="fileSearch.js"></script>
@@ -148,6 +148,9 @@
       </div>
       <div class="heading h3">
         <a href="#percent">percent</a>
+      </div>
+      <div class="heading h3">
+        <a href="#port">port</a>
       </div>
       <div class="heading h3">
         <a href="#regexp">regexp</a>
@@ -1621,6 +1624,39 @@ rounding or use <code>floor</code> or <code>ceil</code> for the corresponding me
 <li><code>min</code> - (numeric) the smalles allowed number</li>
 <li><code>max</code> - (numeric) the biggest allowed number</li>
 </ul>
+
+
+<div class="pilwrap" id="port">
+  <h3>
+    <a href="#port" name="port" class="pilcrow">&#182;</a>
+    port
+  </h3>
+</div>
+
+
+<p>The value has to be a TCP/UDP port number.</p>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>allow</code> - the allowed ports or ranges</li>
+<li><code>deny</code> - the denied ports or ranges</li>
+</ul>
+
+<p>The ports can also be given as standardized names as known in the /etc/services
+list.</p>
+
+<p>Ranges for <code>deny</code> and <code>allow</code> may contain a list of multiple ports or ranges. Ranges
+are 'system', 'registered' and 'dynamic' representing the three range parts.</p>
+
+<p>The table shows how the result is detected if both given:</p>
+
+<p style="font-family:monospace;white-space:pre">|  has allow  |  has deny | in allow | in deny | in both | in other |
+|-------------|-----------|----------|---------|---------|----------|
+|   no        |   no      |    -     |    -    |    -    |   ok     |
+|   yes       |   no      |    ok    |    -    |    -    |   fail   |
+|   no        |   yes     |    -     |   fail  |    -    |   ok     |
+|   yes       |   yes     |    ok    |   fail  |    ok   |   ok     |</p>
 
 
 <div class="pilwrap" id="regexp">

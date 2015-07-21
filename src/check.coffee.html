@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/check.coffee", defaultSidebar = true;
+    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/checkcoffee", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
   <script src="../fileSearch.js"></script>
@@ -226,9 +226,9 @@ position.</p>
 <p>create title with context info</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">message = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">@spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">@path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nv">message = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s"> in </span><span class="si">#{</span><span class="nx">@spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span><span class="si">}</span><span class="s">/</span><span class="si">#{</span><span class="nx">@vpath</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
     <span class="nx">message</span> <span class="o">+=</span> <span class="s">&quot; &#39;</span><span class="si">#{</span><span class="nx">@pos</span><span class="p">.</span><span class="nx">title</span><span class="si">}</span><span class="s">&#39;&quot;</span> <span class="k">if</span> <span class="nx">@pos</span><span class="p">.</span><span class="nx">title</span><span class="o">?</span>
-    <span class="nx">message</span> <span class="o">+=</span> <span class="s">&#39;. &#39;</span>
+    <span class="nx">message</span> <span class="o">+=</span> <span class="s">&quot;(described in </span><span class="si">#{</span><span class="nx">@path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">). &quot;</span>
 
 </pre></div>
         </td>
@@ -258,7 +258,7 @@ position.</p>
 <p>add type specific information</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">exports</span><span class="p">.</span><span class="nx">describe</span> <span class="k">this</span><span class="p">,</span> <span class="nf">(err, text) -&gt;</span>
+    <span class="nx">exports</span><span class="p">.</span><span class="nx">describe</span> <span class="k">this</span><span class="p">,</span> <span class="nf">(err, text) =&gt;</span>
       <span class="nx">detail</span> <span class="o">+=</span> <span class="nx">text</span>
 
 </pre></div>
