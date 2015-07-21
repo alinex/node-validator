@@ -1,7 +1,6 @@
 chai = require 'chai'
 expect = chai.expect
 
-require('alinex-error').install()
 async = require 'alinex-async'
 test = require '../../test'
 

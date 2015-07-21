@@ -1,4 +1,3 @@
-require('alinex-error').install()
 chai = require 'chai'
 expect = chai.expect
 

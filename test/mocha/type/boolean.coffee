@@ -1,4 +1,3 @@
-require('alinex-error').install()
 async = require 'alinex-async'
 chai = require 'chai'
 expect = chai.expect

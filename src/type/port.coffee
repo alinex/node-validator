@@ -11,7 +11,8 @@
 debug = require('debug')('validator:port')
 util = require 'util'
 chalk = require 'chalk'
-# include alinex packages
+# alinex modules
+object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
 
@@ -392,7 +393,7 @@ subcheck =
     max: 65535
   ,
     type: 'string'
-    values: Object.keys port
+    values: Object.keys ports
   ]
 
 exports.run = (work, cb) ->
@@ -414,42 +415,37 @@ exports.run = (work, cb) ->
   , (err, value) ->
     return cb err if err
     # transform string to int
+    value = ports[value] if typeof value is 'string'
     # check allow / deny
-
-
-    # support time format
-    if typeof value is 'string'
-      if value.trim().match /^(\d\d?)(:\d\d?)(:\d\d?)?(\.\d+)?$/
-        parts = value.split ':'
-        value = "#{parts[0]}h #{parts[1]}m"
-        value += " #{parts[2]}s" if parts.length is 3
-      parsed = number.parseMSeconds value
-      unit = work.pos.unit ? 'ms'
-      unless unit is 'ms'
-        parsed /= switch unit
-          when 's'
-            1000
-          when 'm'
-            1000 * 60
-          when 'h'
-            1000 * 60 * 60
-          when 'd'
-            1000 * 60 * 60 * 24
-      value = parsed
-    # run float check
-    check.run
-      name: name
-      value: value
-      schema:
-        type: 'float'
-        round: work.pos.round
-        decimals: work.pos.decimals
-        min: work.pos.min
-        max: work.pos.max
-    , (err, value) ->
-      return cb err if err
-      debug "#{work.debug} result #{util.inspect value}"
-      cb null, value
+    if work.pos.allow
+      for entry in (work.pos.allow.map (e) -> ports[e] ? e)
+        if typeof entry is 'string'
+          if (entry is 'system' and value < 1024) or
+          (entry is 'registered' and 1024 <= value <= 49151) or
+          (entry is 'dynamic' and 49152 <= value <= 65535)
+            debug "#{work.debug} result #{util.inspect value}"
+            return cb null, value
+        else if value is entry
+          debug "#{work.debug} result #{util.inspect value}"
+          return cb null, value
+      # ip not in the allowed range
+      unless work.pos.deny
+        return work.report (new Error "The given tcp/udp port '#{value}' is not in
+          the allowed ranges"), cb
+    if work.pos.deny
+      for entry in (work.pos.deny.map (e) -> ports[e] ? e)
+        if typeof entry is 'string'
+          if (entry is 'system' and value < 1024) or
+          (entry is 'registered' and 1024 <= value <= 49151) or
+          (entry is 'dynamic' and 49152 <= value <= 65535)
+            return work.report (new Error "The given tcp/udp port '#{value}' is
+              denied because in range #{entry}"), cb
+        else if value is entry
+          return work.report (new Error "The given tcp/udp port '#{value}' is denied."), cb
+    # ip also not in the denied range so allowed again
+    # done return resulting value
+    debug "#{work.debug} result #{util.inspect value}"
+    cb null, value
 
 exports.selfcheck = (schema, cb) ->
   check.run
@@ -469,7 +465,21 @@ exports.selfcheck = (schema, cb) ->
               type: 'integer'
             ,
               type: 'string'
-              values: ['special', 'registered', 'dynamic']
+              values: ['system', 'registered', 'dynamic']
+            ,
+              type: 'string'
+              values: Object.keys ports
+            ]
+        deny:
+          type: 'array'
+          optional: true
+          entries:
+            type: 'or'
+            or: [
+              type: 'integer'
+            ,
+              type: 'string'
+              values: ['system', 'registered', 'dynamic']
             ,
               type: 'string'
               values: Object.keys ports

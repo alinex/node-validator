@@ -1046,6 +1046,30 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
+### port
+
+The value has to be a TCP/UDP port number.
+
+__Check options:__
+
+- `allow` - the allowed ports or ranges
+- `deny` - the denied ports or ranges
+
+The ports can also be given as standardized names as known in the /etc/services
+list.
+
+Ranges for `deny` and `allow` may contain a list of multiple ports or ranges. Ranges
+are 'system', 'registered' and 'dynamic' representing the three range parts.
+
+The table shows how the result is detected if both given:
+
+|  has allow  |  has deny | in allow | in deny | in both | in other |
+|-------------|-----------|----------|---------|---------|----------|
+|   no        |   no      |    -     |    -    |    -    |   ok     |
+|   yes       |   no      |    ok    |    -    |    -    |   fail   |
+|   no        |   yes     |    -     |   fail  |    -    |   ok     |
+|   yes       |   yes     |    ok    |   fail  |    ok   |   ok     |
+
 ### regexp
 
 Check that the given value is a regular expression. If a text is given it will be
