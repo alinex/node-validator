@@ -80,7 +80,7 @@ describe "TCP/UDP Port", ->
         allow: [80]
       , cb
 
-  describe.only "selfcheck", ->
+  describe "selfcheck", ->
 
     it "should validate simple options", (cb) ->
       test.selfcheck schema, cb
