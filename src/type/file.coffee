@@ -154,6 +154,8 @@ exports.selfcheck = (schema, cb) ->
             'f', 'file'
             'd', 'dir', 'directory'
             'l', 'link'
+            'fifo', 'pipe', 'p'
+            'socket', 's'
           ]
           optional: true
     value: schema

@@ -950,7 +950,8 @@ __Check options:__
 - `exists` - (bool) true to check for already existing entry
 - `find` - (array or function) list of directories in which to search for the file
   The function should return an array if called without parameters.
-- `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
+- `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link,
+  p, pipe, fifo, s, socket
 
 ### handlebars
 
