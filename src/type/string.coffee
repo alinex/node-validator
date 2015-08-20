@@ -83,7 +83,7 @@ exports.describe = (work, cb) ->
   else if work.pos.maxLength?
     text += "It has to be not more than #{work.pos.maxLength} characters long. "
   # specific values
-  if work.pos.values?
+  if work.pos.values? and Array.isArray work.pos.values
     text += "Only the values: #{work.pos.values.join ', '} are allowed. "
   # matching
   if work.pos.startsWith?
