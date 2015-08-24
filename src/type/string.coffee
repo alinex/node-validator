@@ -151,13 +151,13 @@ exports.run = (work, cb) ->
     value = value.substring 0, work.pos.crop
   # string length
   if work.pos.minLength? and value.length < work.pos.minLength
-    return work.report (new Error "The given string '#{value}' is too short at most
-    #{work.pos.minlength} characters are needed"), cb
+    return work.report (new Error "The given string '#{value}' is too short at least
+    #{work.pos.minLength} characters are needed"), cb
   if work.pos.maxLength? and value.length > work.pos.maxLength
     return work.report (new Error "The given string '#{value}' is too long for
-      at least #{work.pos.maxlength} characters are allowed"), cb
+      at least #{work.pos.maxLength} characters are allowed"), cb
   # specific values
-  if work.pos.values? and not (value in work.pos.values)
+  if work.pos.values? and not (Array.isArray(work.pos.values) or value in work.pos.values)
     return work.report (new Error "The given string '#{value}' is not in the list of
       allowed phrases (#{work.pos.values})"), cb
   if work.pos.startsWith? and value[..work.pos.startsWith.length-1] isnt work.pos.startsWith
