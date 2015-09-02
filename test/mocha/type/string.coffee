@@ -127,7 +127,7 @@ describe "String", ->
       test.same schema, ["", "123", "hello"], ->
         test.fail schema, ["hello to everybody"], cb
 
-    it "should support values option", (cb) ->
+    it.only "should support values option", (cb) ->
       schema.values = ['one', 'two', 'three']
       test.same schema, schema.values, ->
         test.fail schema, ['nine', 'bananas'], cb

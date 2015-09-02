@@ -90,7 +90,7 @@ describe "File", ->
       test.fail schema, ['file.js'], cb
 
     it "should fail for empty find result", (cb) ->
-      @timeout 8000
+      @timeout 10000
       schema.find = -> ['.']
       test.fail schema, ['not-to-be-found-anywhere.js'], cb
 

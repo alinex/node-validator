@@ -157,7 +157,7 @@ exports.run = (work, cb) ->
     return work.report (new Error "The given string '#{value}' is too long for
       at least #{work.pos.maxLength} characters are allowed"), cb
   # specific values
-  if work.pos.values? and not (Array.isArray(work.pos.values) or value in work.pos.values)
+  if work.pos.values? and not (Array.isArray(work.pos.values) and value in work.pos.values)
     return work.report (new Error "The given string '#{value}' is not in the list of
       allowed phrases (#{work.pos.values})"), cb
   if work.pos.startsWith? and value[..work.pos.startsWith.length-1] isnt work.pos.startsWith
