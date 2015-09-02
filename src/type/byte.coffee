@@ -30,10 +30,12 @@ pattern = /^[0-9]+(\.?[0-9]*) *(k|Ki|[MGTPEZY]i?)?([Bb]|bps)?$/
 # Extend Math.js
 # -------------------------------------------------
 # Additional derived binary units are added:
-math.type.Unit.UNITS.bps =
+Unit = math.type.Unit
+Unit.UNITS.bps =
   name: 'bps'
-  base: math.type.Unit.BASE_UNITS.BIT
-  prefixes: math.type.Unit.PREFIXES.BINARY_SHORT
+  base: Unit.BASE_UNITS.BIT
+  dimensions: Unit.BASE_UNITS.BIT.dimensions
+  prefixes: Unit.PREFIXES.BINARY_SHORT
   value: 1, offset: 0
 
 # Optimize options setting

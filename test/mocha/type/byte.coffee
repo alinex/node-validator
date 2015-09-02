@@ -49,6 +49,7 @@ describe "Byte", ->
       test.fail schema, ['hello', null, [], (new Error '????'), {}], cb
 
   describe "derived bps", ->
+    @timeout 5000
 
     it "should match string definition", (cb) ->
       test.equal schema, [

@@ -45,6 +45,7 @@ describe "File", ->
       test.fail schema, [1, null, [], (new Error '????'), {}], cb
 
   describe "option check", ->
+    @timeout 14000
 
     it "should support resolve option", (cb) ->
       schema.resolve = true
@@ -63,14 +64,12 @@ describe "File", ->
       ], cb
 
     it "should support find option", (cb) ->
-      @timeout 10000
       schema.find = ['.']
       test.equal schema, [
         ['file.js', 'lib/type/file.js']
       ], cb
 
     it "should support find and resolve option", (cb) ->
-      @timeout 10000
       schema.find = ['.']
       schema.resolve = true
       test.equal schema, [
@@ -78,19 +77,16 @@ describe "File", ->
       ], cb
 
     it "should support find option with dynamic values", (cb) ->
-      @timeout 10000
       schema.find = -> ['.']
       test.equal schema, [
         ['file.js', 'lib/type/file.js']
       ], cb
 
     it "should fail for empty find list", (cb) ->
-      @timeout 8000
       schema.find = -> []
       test.fail schema, ['file.js'], cb
 
     it "should fail for empty find result", (cb) ->
-      @timeout 10000
       schema.find = -> ['.']
       test.fail schema, ['not-to-be-found-anywhere.js'], cb
 
