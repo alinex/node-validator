@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/bytecoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/byte.coffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -155,10 +155,12 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
 <p>Additional derived binary units are added:</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">math.type.Unit.UNITS.bps =</span>
+<span class="nv">Unit = </span><span class="nx">math</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">Unit</span>
+<span class="nv">Unit.UNITS.bps =</span>
   <span class="nv">name: </span><span class="s">&#39;bps&#39;</span>
-  <span class="nv">base: </span><span class="nx">math</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">Unit</span><span class="p">.</span><span class="nx">BASE_UNITS</span><span class="p">.</span><span class="nx">BIT</span>
-  <span class="nv">prefixes: </span><span class="nx">math</span><span class="p">.</span><span class="nx">type</span><span class="p">.</span><span class="nx">Unit</span><span class="p">.</span><span class="nx">PREFIXES</span><span class="p">.</span><span class="nx">BINARY_SHORT</span>
+  <span class="nv">base: </span><span class="nx">Unit</span><span class="p">.</span><span class="nx">BASE_UNITS</span><span class="p">.</span><span class="nx">BIT</span>
+  <span class="nv">dimensions: </span><span class="nx">Unit</span><span class="p">.</span><span class="nx">BASE_UNITS</span><span class="p">.</span><span class="nx">BIT</span><span class="p">.</span><span class="nx">dimensions</span>
+  <span class="nv">prefixes: </span><span class="nx">Unit</span><span class="p">.</span><span class="nx">PREFIXES</span><span class="p">.</span><span class="nx">BINARY_SHORT</span>
   <span class="nv">value: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">offset: </span><span class="mi">0</span>
 
 
