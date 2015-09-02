@@ -4,6 +4,17 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.3 (2015-09-02)
+-------------------------------------------------
+- Fixed bps type definition to work in newer mathjs lib.
+- Fix bug in string with values.
+- Updated dependent packages.
+- Updated dependent packages.
+- Fixed description to write string min- and maxLength.
+- Small fix in string description if values is an unresolved reference.
+- Also allow pipe and socket filetypes for file validator.
+- Added rtmp port (1935).
+
 Version 1.0.2 (2015-07-21)
 -------------------------------------------------
 - Removed .only from tests
