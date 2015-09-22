@@ -158,6 +158,11 @@ exports.run = (work, cb) ->
             break
       unless isAllowed
         return work.report (new Error "The key '#{key}' is not allowed"), cb
+  # key checks
+#  list = Object.keys(value).concat allowedKeys
+
+
+
   # values
   unless Object.keys(value).length
     # done return resulting value

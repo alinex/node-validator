@@ -107,6 +107,72 @@ describe "Object", ->
       test.same schema, [{ one:1, two:2, three:3 }, { one:100, two:2 }], ->
         test.fail schema, [{ one:1.1, two:2 }, { one:'nnn', two:2 }], cb
 
+  describe.only "subchecks", ->
+
+    it "should support optional option", (cb) ->
+      schema.allowedKeys = true
+      schema.keys =
+        one:
+          type: 'integer'
+        two:
+          type: 'integer'
+          optional: true
+      test.equal schema, [
+        [
+          { one: 1, two: null }
+          { one: 1 }
+        ]
+        [
+          { one: null, two: 2 }
+          { two: 2 }
+        ]
+      ], cb
+
+    it "should support default option", (cb) ->
+      schema.allowedKeys = true
+      schema.keys =
+        one:
+          type: 'integer'
+        max:
+          type: 'integer'
+          default: 5
+      test.equal schema, [
+        [
+          { one: 1, two: null }
+          { one: 1, max: 5 }
+        ]
+      ], cb
+
+    it "should support optional in mandatory option", (cb) ->
+      schema.mandatoryKeys = true
+      schema.keys =
+        one:
+          type: 'integer'
+        two:
+          type: 'integer'
+          optional: true
+      test.equal schema, [
+        [
+          { one: 1, two: null }
+          { one: 1 }
+        ]
+      ], cb
+
+    it "should support default in mandatory option", (cb) ->
+      schema.mandatoryKeys = true
+      schema.keys =
+        one:
+          type: 'integer'
+        max:
+          type: 'integer'
+          default: 5
+      test.equal schema, [
+        [
+          { one: 1, two: null }
+          { one: 1 }
+        ]
+      ], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
