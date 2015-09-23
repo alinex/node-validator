@@ -18,7 +18,7 @@ debug = require('debug')('validator:object')
 util = require 'util'
 chalk = require 'chalk'
 # alinex modules
-object = require('alinex-util').object
+{array, object} = require 'alinex-util'
 async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
@@ -98,7 +98,9 @@ exports.run = (work, cb) ->
   debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
   # base checks
   try
-    return cb() if check.optional.run work
+    if check.optional.run work
+      debug "#{work.debug} result #{util.inspect value}"
+      return cb()
   catch err
     return work.report err, cb
   value = work.value
@@ -111,10 +113,9 @@ exports.run = (work, cb) ->
   if typeof value isnt 'object' or Array.isArray value
     return work.report (new Error "The value has to be an object"), cb
   # check object keys
-  keys = Object.keys value
-  # check mandatoryKeys
+  usedKeys = Object.keys value
   mandatoryKeys = work.pos.mandatoryKeys ? []
-  if mandatoryKeys and typeof mandatoryKeys is 'boolean'
+  if typeof mandatoryKeys is 'boolean'
     # use from entries and keys
     mandatoryKeys = []
     if work.pos.keys?
@@ -122,21 +123,8 @@ exports.run = (work, cb) ->
     if work.pos.entries?
       for entry in work.pos.entries
         mandatoryKeys.push entry.key if entry.key?
-  for mandatory in mandatoryKeys
-    if mandatory instanceof RegExp
-      fail = true
-      for key of value
-        if key.match mandatory
-          fail = false
-          break
-      if fail
-        return work.report (new Error "The mandatory key '#{key}' is missing"), cb
-    else
-      unless value[mandatory]?
-        return work.report (new Error "The mandatory key '#{mandatory}' is missing"), cb
-  # check allowedKeys
   allowedKeys = work.pos.allowedKeys ? []
-  if allowedKeys and typeof allowedKeys is 'boolean'
+  if typeof allowedKeys is 'boolean'
     # use from entries and keys
     allowedKeys = []
     if work.pos.keys?
@@ -144,31 +132,10 @@ exports.run = (work, cb) ->
     if work.pos.entries?
       for entry in work.pos.entries
         allowedKeys.push entry.key if entry.key
-  if allowedKeys.length
-    for key of value
-      isAllowed = false
-      for allow in allowedKeys
-        if key is allow or (allow instanceof RegExp and key.match allow)
-          isAllowed = true
-          break
-      unless isAllowed
-        for allow in mandatoryKeys
-          if key is allow or (allow instanceof RegExp and key.match allow)
-            isAllowed = true
-            break
-      unless isAllowed
-        return work.report (new Error "The key '#{key}' is not allowed"), cb
-  # key checks
-#  list = Object.keys(value).concat allowedKeys
-
-
-
+  keys = array.unique usedKeys.concat mandatoryKeys, allowedKeys
   # values
-  unless Object.keys(value).length
-    # done return resulting value
-    debug "#{work.debug} result #{util.inspect value}"
-    return cb null, value
-  async.each Object.keys(value), (key, cb) ->
+  async.each keys, (key, cb) ->
+    console.log '==>', key
     # find sub-check
     if work.pos.keys?[key]?
       sub = work.goInto ['keys', key], [key]
@@ -199,7 +166,35 @@ exports.run = (work, cb) ->
       value[key] = result
       cb()
   , (err) ->
-    return cb err if err
+    # check mandatoryKeys
+    for mandatory in mandatoryKeys
+      if mandatory instanceof RegExp
+        fail = true
+        for key of value
+          if key.match mandatory
+            fail = false
+            break
+        if fail
+          return work.report (new Error "The mandatory key '#{key}' is missing"), cb
+      else
+        unless value[mandatory]?
+          return work.report (new Error "The mandatory key '#{mandatory}' is missing"), cb
+    # check allowedKeys
+    if allowedKeys.length
+      for key of value
+        isAllowed = false
+        for allow in allowedKeys
+          if key is allow or (allow instanceof RegExp and key.match allow)
+            isAllowed = true
+            break
+        unless isAllowed
+          for allow in mandatoryKeys
+            if key is allow or (allow instanceof RegExp and key.match allow)
+              isAllowed = true
+              break
+        unless isAllowed
+          return work.report (new Error "The key '#{key}' is not allowed"), cb
+      return cb err if err
     # done return resulting value
     debug "#{work.debug} result #{util.inspect value}"
     cb null, value

@@ -107,9 +107,9 @@ describe "Object", ->
       test.same schema, [{ one:1, two:2, three:3 }, { one:100, two:2 }], ->
         test.fail schema, [{ one:1.1, two:2 }, { one:'nnn', two:2 }], cb
 
-  describe.only "subchecks", ->
+  describe "subchecks", ->
 
-    it "should support optional option", (cb) ->
+    it.only "should support optional option", (cb) ->
       schema.allowedKeys = true
       schema.keys =
         one:

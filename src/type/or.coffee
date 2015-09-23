@@ -32,7 +32,9 @@ exports.run = (work, cb) ->
   debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
   # base checks
   try
-    return cb() if check.optional.run work
+    if check.optional.run work
+      debug "#{work.debug} result #{util.inspect value}"
+      return cb()
   catch err
     return work.report err, cb
   # run async checks
