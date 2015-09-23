@@ -109,7 +109,7 @@ describe "Object", ->
 
   describe "subchecks", ->
 
-    it.only "should support optional option", (cb) ->
+    it "should support optional option", (cb) ->
       schema.allowedKeys = true
       schema.keys =
         one:
@@ -158,7 +158,7 @@ describe "Object", ->
         ]
       ], cb
 
-    it "should support default in mandatory option", (cb) ->
+    it.only "should support default in mandatory option", (cb) ->
       schema.mandatoryKeys = true
       schema.keys =
         one:
@@ -168,8 +168,8 @@ describe "Object", ->
           default: 5
       test.equal schema, [
         [
-          { one: 1, two: null }
-          { one: 1 }
+          { oe: 1, two: null }
+          { one: 1, max: 1 }
         ]
       ], cb
 

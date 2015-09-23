@@ -135,6 +135,7 @@ exports.run = (work, cb) ->
   keys = array.unique usedKeys.concat mandatoryKeys, allowedKeys
   # values
   async.each keys, (key, cb) ->
+    return cb() if key instanceof RegExp # skip expressions here
     # find sub-check
     if work.pos.keys?[key]?
       sub = work.goInto ['keys', key], [key]
@@ -161,7 +162,7 @@ exports.run = (work, cb) ->
             'any'
         optional: true
     check.run sub, (err, result) ->
-      return cb err if err and not key in mandatoryKeys
+      return cb err if err and not (sub.pos.optional or key not in mandatoryKeys)
       if result
         value[key] = result
       else
@@ -179,7 +180,7 @@ exports.run = (work, cb) ->
         if fail
           return work.report (new Error "The mandatory key '#{key}' is missing"), cb
       else
-        unless value[mandatory]?
+        unless value[mandatory]? or work.pos.keys[mandatory]?.optional
           return work.report (new Error "The mandatory key '#{mandatory}' is missing"), cb
     # check allowedKeys
     if allowedKeys.length
