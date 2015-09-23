@@ -162,13 +162,14 @@ exports.run = (work, cb) ->
             'any'
         optional: true
     check.run sub, (err, result) ->
-      return cb err if err and not (sub.pos.optional or key not in mandatoryKeys)
+      return cb err if err and (sub.value and not sub.pos.optional)
       if result
         value[key] = result
       else
         delete value[key]
       cb()
   , (err) ->
+    return cb err if err
     # check mandatoryKeys
     for mandatory in mandatoryKeys
       if mandatory instanceof RegExp
@@ -180,7 +181,7 @@ exports.run = (work, cb) ->
         if fail
           return work.report (new Error "The mandatory key '#{key}' is missing"), cb
       else
-        unless value[mandatory]? or work.pos.keys[mandatory]?.optional
+        unless value[mandatory]? or work.pos.keys?[mandatory]?.optional
           return work.report (new Error "The mandatory key '#{mandatory}' is missing"), cb
     # check allowedKeys
     if allowedKeys.length

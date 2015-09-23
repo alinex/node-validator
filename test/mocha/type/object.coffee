@@ -2,7 +2,7 @@ async = require 'alinex-async'
 
 test = require '../../test'
 
-describe "Object", ->
+describe.only "Object", ->
 
   schema = null
   beforeEach ->
@@ -158,7 +158,7 @@ describe "Object", ->
         ]
       ], cb
 
-    it.only "should support default in mandatory option", (cb) ->
+    it "should support default in mandatory option", (cb) ->
       schema.mandatoryKeys = true
       schema.keys =
         one:
@@ -168,8 +168,8 @@ describe "Object", ->
           default: 5
       test.equal schema, [
         [
-          { oe: 1, two: null }
-          { one: 1, max: 1 }
+          { one: 1, two: null }
+          { one: 1, max: 5}
         ]
       ], cb
 
