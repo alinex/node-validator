@@ -135,7 +135,6 @@ exports.run = (work, cb) ->
   keys = array.unique usedKeys.concat mandatoryKeys, allowedKeys
   # values
   async.each keys, (key, cb) ->
-    console.log '==>', key
     # find sub-check
     if work.pos.keys?[key]?
       sub = work.goInto ['keys', key], [key]
@@ -162,8 +161,11 @@ exports.run = (work, cb) ->
             'any'
         optional: true
     check.run sub, (err, result) ->
-      return cb err if err
-      value[key] = result
+      return cb err if err and not key in mandatoryKeys
+      if result
+        value[key] = result
+      else
+        delete value[key]
       cb()
   , (err) ->
     # check mandatoryKeys
