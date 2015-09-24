@@ -4,6 +4,15 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.4 (2015-09-24)
+-------------------------------------------------
+- Fixed null pointer error in optional check.
+- Fix other object checks to work again.
+- Added mandatory with optional support in objects.
+- Correctly check mandatory and optional fields of object.
+- Added debug message for optional setting.
+- Add new tests for default and option in objects.
+
 Version 1.0.3 (2015-09-02)
 -------------------------------------------------
 - Fixed bps type definition to work in newer mathjs lib.
