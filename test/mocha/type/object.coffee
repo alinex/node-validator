@@ -2,7 +2,7 @@ async = require 'alinex-async'
 
 test = require '../../test'
 
-describe.only "Object", ->
+describe "Object", ->
 
   schema = null
   beforeEach ->

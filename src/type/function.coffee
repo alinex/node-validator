@@ -27,7 +27,7 @@ exports.run = (work, cb) ->
   # base checks
   try
     if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
   catch err
     return work.report err, cb
@@ -36,7 +36,7 @@ exports.run = (work, cb) ->
   unless value instanceof Function
     return work.report (new Error "No function given as value"), cb
   # done return resulting value
-  debug "#{work.debug} result #{util.inspect value}"
+  debug "#{work.debug} result #{util.inspect value ? null}"
   cb null, value
 
 exports.selfcheck = (schema, cb) ->

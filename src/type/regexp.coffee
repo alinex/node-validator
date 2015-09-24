@@ -49,7 +49,7 @@ exports.run = (work, cb) ->
   # base checks
   try
     if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
   catch err
     return work.report err, cb
@@ -66,7 +66,7 @@ exports.run = (work, cb) ->
     return cb err if err
     # if it already is an regexp return it
     if value instanceof RegExp
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       return cb null, value
     # transform into regexp
     parts = value.match /^\/(.*?)\/([gim]*)$/
@@ -75,7 +75,7 @@ exports.run = (work, cb) ->
     catch err
       return work.report err, cb
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value}"
+    debug "#{work.debug} result #{util.inspect value ? null}"
     cb null, value
 
 exports.selfcheck = (schema, cb) ->

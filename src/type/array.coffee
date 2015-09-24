@@ -75,7 +75,7 @@ exports.run = (work, cb) ->
   # base checks
   try
     if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
   catch err
     return work.report err, cb
@@ -103,7 +103,7 @@ exports.run = (work, cb) ->
   # values
   unless value.length
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value}"
+    debug "#{work.debug} result #{util.inspect value ? null}"
     return cb null, value
   async.each [0..value.length-1], (num, cb) ->
     # find sub-check
@@ -131,7 +131,7 @@ exports.run = (work, cb) ->
   , (err) ->
     return cb err if err
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value}"
+    debug "#{work.debug} result #{util.inspect value ? null}"
     cb null, value
 
 exports.selfcheck = (schema, cb) ->

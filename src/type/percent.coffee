@@ -79,7 +79,7 @@ exports.run = (work, cb) ->
   # base checks
   try
     if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
   catch err
     return work.report err, cb
@@ -110,7 +110,7 @@ exports.run = (work, cb) ->
         max: work.pos.max
     , (err, value) ->
       return cb err if err
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       cb null, value
 
 exports.selfcheck = (schema, cb) ->

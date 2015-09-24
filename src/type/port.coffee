@@ -404,7 +404,7 @@ exports.run = (work, cb) ->
   # base checks
   try
     if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
   catch err
     return work.report err, cb
@@ -427,10 +427,10 @@ exports.run = (work, cb) ->
           if (entry is 'system' and value < 1024) or
           (entry is 'registered' and 1024 <= value <= 49151) or
           (entry is 'dynamic' and 49152 <= value <= 65535)
-            debug "#{work.debug} result #{util.inspect value}"
+            debug "#{work.debug} result #{util.inspect value ? null}"
             return cb null, value
         else if value is entry
-          debug "#{work.debug} result #{util.inspect value}"
+          debug "#{work.debug} result #{util.inspect value ? null}"
           return cb null, value
       # ip not in the allowed range
       unless work.pos.deny
@@ -448,7 +448,7 @@ exports.run = (work, cb) ->
           return work.report (new Error "The given tcp/udp port '#{value}' is denied."), cb
     # ip also not in the denied range so allowed again
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value}"
+    debug "#{work.debug} result #{util.inspect value ? null}"
     cb null, value
 
 exports.selfcheck = (schema, cb) ->

@@ -97,7 +97,7 @@ exports.run = (work, cb) ->
   # base checks
   try
     if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
   catch err
     return work.report err, cb
@@ -147,12 +147,12 @@ exports.run = (work, cb) ->
           for subentry in specialRanges[entry]
             [addr, bits] = subentry.split /\//
             if ip.match ipaddr.parse(addr), bits
-              debug "#{work.debug} result #{util.inspect value}"
+              debug "#{work.debug} result #{util.inspect value ? null}"
               return cb null, value
         else
           [addr, bits] = entry.split /\//
           if ip.match ipaddr.parse(addr), bits
-            debug "#{work.debug} result #{util.inspect value}"
+            debug "#{work.debug} result #{util.inspect value ? null}"
             return cb null, value
       # ip not in the allowed range
       unless work.pos.deny
@@ -173,7 +173,7 @@ exports.run = (work, cb) ->
               denied because in range #{entry}"), cb
     # ip also not in the denied range so allowed again
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value}"
+    debug "#{work.debug} result #{util.inspect value ? null}"
     cb null, value
 
 exports.selfcheck = (schema, cb) ->

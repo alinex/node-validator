@@ -52,7 +52,7 @@ exports.run = (work, cb) ->
   # base checks
   try
     if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value}"
+      debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
   catch err
     return work.report err, cb
@@ -76,7 +76,7 @@ exports.run = (work, cb) ->
       return cb err if err
       filetype work, found, (err) ->
         return cb err if err
-        debug "#{work.debug} result #{util.inspect value}"
+        debug "#{work.debug} result #{util.inspect value ? null}"
         cb null, found
 
 find = (work, value, cb) ->
