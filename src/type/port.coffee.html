@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/port.coffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/portcoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -569,7 +569,9 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">try</span>
-    <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+    <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
   <span class="k">catch</span> <span class="nx">err</span>
     <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
 
@@ -624,10 +626,10 @@
           <span class="k">if</span> <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;system&#39;</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">)</span> <span class="o">or</span>
           <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;registered&#39;</span> <span class="o">and</span> <span class="mi">1024</span> <span class="o">&lt;=</span> <span class="nx">value</span> <span class="o">&lt;=</span> <span class="mi">49151</span><span class="p">)</span> <span class="o">or</span>
           <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;dynamic&#39;</span> <span class="o">and</span> <span class="mi">49152</span> <span class="o">&lt;=</span> <span class="nx">value</span> <span class="o">&lt;=</span> <span class="mi">65535</span><span class="p">)</span>
-            <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+            <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
             <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
         <span class="k">else</span> <span class="k">if</span> <span class="nx">value</span> <span class="o">is</span> <span class="nx">entry</span>
-          <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+          <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
           <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
 </pre></div>
@@ -667,7 +669,7 @@
 done return resulting value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
 <span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>

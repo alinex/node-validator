@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/object.coffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/objectcoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -112,7 +112,7 @@ or true to use the list from entries definition</li>
 <p>alinex modules</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+<span class="p">{</span><span class="nx">array</span><span class="p">,</span> <span class="nx">object</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
 <span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
 
 </pre></div>
@@ -326,7 +326,9 @@ or true to use the list from entries definition</li>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">try</span>
-    <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+    <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
   <span class="k">catch</span> <span class="nx">err</span>
     <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
   <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
@@ -372,7 +374,9 @@ or true to use the list from entries definition</li>
 <p>check object keys</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">keys = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span>
+  <span class="nv">usedKeys = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">value</span>
+  <span class="nv">mandatoryKeys = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">mandatoryKeys</span> <span class="o">?</span> <span class="p">[]</span>
+  <span class="k">if</span> <span class="k">typeof</span> <span class="nx">mandatoryKeys</span> <span class="o">is</span> <span class="s">&#39;boolean&#39;</span>
 
 </pre></div>
         </td>
@@ -382,11 +386,17 @@ or true to use the list from entries definition</li>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
-<p>check mandatoryKeys</p>
+<p>use from entries and keys</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">mandatoryKeys = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">mandatoryKeys</span> <span class="o">?</span> <span class="p">[]</span>
-  <span class="k">if</span> <span class="nx">mandatoryKeys</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">mandatoryKeys</span> <span class="o">is</span> <span class="s">&#39;boolean&#39;</span>
+    <span class="nv">mandatoryKeys = </span><span class="p">[]</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span><span class="o">?</span>
+      <span class="nv">mandatoryKeys = </span><span class="nx">mandatoryKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
+      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span>
+        <span class="nx">mandatoryKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span> <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span><span class="o">?</span>
+  <span class="nv">allowedKeys = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowedKeys</span> <span class="o">?</span> <span class="p">[]</span>
+  <span class="k">if</span> <span class="k">typeof</span> <span class="nx">allowedKeys</span> <span class="o">is</span> <span class="s">&#39;boolean&#39;</span>
 
 </pre></div>
         </td>
@@ -399,24 +409,13 @@ or true to use the list from entries definition</li>
 <p>use from entries and keys</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">mandatoryKeys = </span><span class="p">[]</span>
+    <span class="nv">allowedKeys = </span><span class="p">[]</span>
     <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span><span class="o">?</span>
-      <span class="nv">mandatoryKeys = </span><span class="nx">mandatoryKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span>
+      <span class="nv">allowedKeys = </span><span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span>
     <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
       <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span>
-        <span class="nx">mandatoryKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span> <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span><span class="o">?</span>
-  <span class="k">for</span> <span class="nx">mandatory</span> <span class="k">in</span> <span class="nx">mandatoryKeys</span>
-    <span class="k">if</span> <span class="nx">mandatory</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
-      <span class="nv">fail = </span><span class="kc">true</span>
-      <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">value</span>
-        <span class="k">if</span> <span class="nx">key</span><span class="p">.</span><span class="nx">match</span> <span class="nx">mandatory</span>
-          <span class="nv">fail = </span><span class="kc">false</span>
-          <span class="k">break</span>
-      <span class="k">if</span> <span class="nx">fail</span>
-        <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The mandatory key &#39;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&#39; is missing&quot;</span><span class="p">),</span> <span class="nx">cb</span>
-    <span class="k">else</span>
-      <span class="k">unless</span> <span class="nx">value</span><span class="p">[</span><span class="nx">mandatory</span><span class="p">]</span><span class="o">?</span>
-        <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The mandatory key &#39;</span><span class="si">#{</span><span class="nx">mandatory</span><span class="si">}</span><span class="s">&#39; is missing&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+        <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span> <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span>
+  <span class="nv">keys = </span><span class="nx">array</span><span class="p">.</span><span class="nx">unique</span> <span class="nx">usedKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nx">mandatoryKeys</span><span class="p">,</span> <span class="nx">allowedKeys</span>
 
 </pre></div>
         </td>
@@ -426,11 +425,11 @@ or true to use the list from entries definition</li>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
-<p>check allowedKeys</p>
+<p>values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">allowedKeys = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowedKeys</span> <span class="o">?</span> <span class="p">[]</span>
-  <span class="k">if</span> <span class="nx">allowedKeys</span> <span class="o">and</span> <span class="k">typeof</span> <span class="nx">allowedKeys</span> <span class="o">is</span> <span class="s">&#39;boolean&#39;</span>
+  <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="nx">keys</span><span class="p">,</span> <span class="nf">(key, cb) -&gt;</span>
+    <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="c1"># skip expressions here</span>
 
 </pre></div>
         </td>
@@ -439,66 +438,6 @@ or true to use the list from entries definition</li>
         <td class="docs">
 <div class="pilwrap">
   <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
-</div>
-<p>use from entries and keys</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">allowedKeys = </span><span class="p">[]</span>
-    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span><span class="o">?</span>
-      <span class="nv">allowedKeys = </span><span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">concat</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span>
-    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span><span class="o">?</span>
-      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">entries</span>
-        <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">push</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span> <span class="k">if</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">key</span>
-  <span class="k">if</span> <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">length</span>
-    <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">value</span>
-      <span class="nv">isAllowed = </span><span class="kc">false</span>
-      <span class="k">for</span> <span class="nx">allow</span> <span class="k">in</span> <span class="nx">allowedKeys</span>
-        <span class="k">if</span> <span class="nx">key</span> <span class="o">is</span> <span class="nx">allow</span> <span class="o">or</span> <span class="p">(</span><span class="nx">allow</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="o">and</span> <span class="nx">key</span><span class="p">.</span><span class="nx">match</span> <span class="nx">allow</span><span class="p">)</span>
-          <span class="nv">isAllowed = </span><span class="kc">true</span>
-          <span class="k">break</span>
-      <span class="k">unless</span> <span class="nx">isAllowed</span>
-        <span class="k">for</span> <span class="nx">allow</span> <span class="k">in</span> <span class="nx">mandatoryKeys</span>
-          <span class="k">if</span> <span class="nx">key</span> <span class="o">is</span> <span class="nx">allow</span> <span class="o">or</span> <span class="p">(</span><span class="nx">allow</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="o">and</span> <span class="nx">key</span><span class="p">.</span><span class="nx">match</span> <span class="nx">allow</span><span class="p">)</span>
-            <span class="nv">isAllowed = </span><span class="kc">true</span>
-            <span class="k">break</span>
-      <span class="k">unless</span> <span class="nx">isAllowed</span>
-        <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The key &#39;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&#39; is not allowed&quot;</span><span class="p">),</span> <span class="nx">cb</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
-</div>
-<p>values</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">unless</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">length</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
-</div>
-<p>done return resulting value</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
-  <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">value</span><span class="p">),</span> <span class="nf">(key, cb) -&gt;</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>find sub-check</p>
         </td>
@@ -520,7 +459,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>keys that have no specification</p>
         </td>
@@ -539,8 +478,11 @@ or true to use the list from entries definition</li>
             <span class="s">&#39;any&#39;</span>
         <span class="nv">optional: </span><span class="kc">true</span>
     <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">sub</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-      <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
+      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span> <span class="o">and</span> <span class="p">(</span><span class="nx">sub</span><span class="p">.</span><span class="nx">value</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">sub</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">optional</span><span class="p">)</span>
+      <span class="k">if</span> <span class="nx">result</span>
+        <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">result</span>
+      <span class="k">else</span>
+        <span class="k">delete</span> <span class="nx">value</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
       <span class="nx">cb</span><span class="p">()</span>
   <span class="p">,</span> <span class="nf">(err) -&gt;</span>
     <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
@@ -551,12 +493,63 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+</div>
+<p>check mandatoryKeys</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">for</span> <span class="nx">mandatory</span> <span class="k">in</span> <span class="nx">mandatoryKeys</span>
+      <span class="k">if</span> <span class="nx">mandatory</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+        <span class="nv">fail = </span><span class="kc">true</span>
+        <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">value</span>
+          <span class="k">if</span> <span class="nx">key</span><span class="p">.</span><span class="nx">match</span> <span class="nx">mandatory</span>
+            <span class="nv">fail = </span><span class="kc">false</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="nx">fail</span>
+          <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The mandatory key &#39;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&#39; is missing&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+      <span class="k">else</span>
+        <span class="k">unless</span> <span class="nx">value</span><span class="p">[</span><span class="nx">mandatory</span><span class="p">]</span><span class="o">?</span> <span class="o">or</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">keys</span><span class="o">?</span><span class="p">[</span><span class="nx">mandatory</span><span class="p">]</span><span class="o">?</span><span class="p">.</span><span class="nx">optional</span>
+          <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The mandatory key &#39;</span><span class="si">#{</span><span class="nx">mandatory</span><span class="si">}</span><span class="s">&#39; is missing&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+</div>
+<p>check allowedKeys</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+    <span class="k">if</span> <span class="nx">allowedKeys</span><span class="p">.</span><span class="nx">length</span>
+      <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">value</span>
+        <span class="nv">isAllowed = </span><span class="kc">false</span>
+        <span class="k">for</span> <span class="nx">allow</span> <span class="k">in</span> <span class="nx">allowedKeys</span>
+          <span class="k">if</span> <span class="nx">key</span> <span class="o">is</span> <span class="nx">allow</span> <span class="o">or</span> <span class="p">(</span><span class="nx">allow</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="o">and</span> <span class="nx">key</span><span class="p">.</span><span class="nx">match</span> <span class="nx">allow</span><span class="p">)</span>
+            <span class="nv">isAllowed = </span><span class="kc">true</span>
+            <span class="k">break</span>
+        <span class="k">unless</span> <span class="nx">isAllowed</span>
+          <span class="k">for</span> <span class="nx">allow</span> <span class="k">in</span> <span class="nx">mandatoryKeys</span>
+            <span class="k">if</span> <span class="nx">key</span> <span class="o">is</span> <span class="nx">allow</span> <span class="o">or</span> <span class="p">(</span><span class="nx">allow</span> <span class="k">instanceof</span> <span class="nb">RegExp</span> <span class="o">and</span> <span class="nx">key</span><span class="p">.</span><span class="nx">match</span> <span class="nx">allow</span><span class="p">)</span>
+              <span class="nv">isAllowed = </span><span class="kc">true</span>
+              <span class="k">break</span>
+        <span class="k">unless</span> <span class="nx">isAllowed</span>
+          <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The key &#39;</span><span class="si">#{</span><span class="nx">key</span><span class="si">}</span><span class="s">&#39; is not allowed&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>done return resulting value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
 <span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>

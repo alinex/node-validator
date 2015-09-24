@@ -6,7 +6,7 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/array.coffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/arraycoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
   <script src="../../fileSearch.js"></script>
@@ -227,7 +227,9 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">try</span>
-    <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span> <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+    <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
   <span class="k">catch</span> <span class="nx">err</span>
     <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
   <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
@@ -320,7 +322,7 @@
 <p>done return resulting value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
     <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
   <span class="nx">async</span><span class="p">.</span><span class="nx">each</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">value</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nf">(num, cb) -&gt;</span>
 
@@ -370,7 +372,7 @@
 <p>done return resulting value</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span>
+    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
     <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
 <span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
