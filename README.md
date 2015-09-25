@@ -886,6 +886,72 @@ __Option:__
 
 - `or` - (array) with different check alternatives
 
+__Example:__
+
+You may allow numeric and special format input:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'or'
+    or: [
+      type: 'float'
+    ,
+      type: 'string'
+      match: ///
+        ^\s*      # start with possible spaces
+        [+-]?     # sign possible
+        \s*\d+(\.\d*)? # float number
+        \s*%?     # percent sign with spaces
+        \s*$      # end of text with spaces
+        ///
+    ]
+, (err, result) ->
+  # do something
+```
+
+With this type you can also use different option alternatives:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'or'
+    or: [
+      type: 'object'
+      allowedKeys: true
+      keys:
+        type:
+          type: 'string'
+          lowerCase: true
+          values: ['mysql']
+        port:
+          type: 'integer'
+          default: 3306
+        # ...
+    ,
+      type: 'object'
+      allowedKeys: true
+      keys:
+        type:
+          type: 'string'
+          lowerCase: true
+          values: ['postgres']
+        port:
+          type: 'integer'
+          default: 5432
+        # ...
+    ]
+, (err, result) ->
+  # do something
+```
+
+In the example above only the default port is changed, but you may also add different
+options.
+
 ### and
 
 This is used to give multiple rules which will be executed in a series and
