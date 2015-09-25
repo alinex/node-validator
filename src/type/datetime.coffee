@@ -16,7 +16,7 @@ debug = require('debug')('validator:datetime')
 util = require 'util'
 chalk = require 'chalk'
 moment = require 'moment'
-chrono = require 'chrono'
+chrono = require 'chrono-node'
 
 # include alinex packages
 # alinex modules
@@ -40,9 +40,6 @@ exports.describe = (work, cb) ->
   text += check.optional.describe work
   cb null, text
 
-#day = moment value
-#unless day.isValid()
-#date = chrono.parseDate value
 
 
 exports.run = (work, cb) ->
@@ -58,8 +55,11 @@ exports.run = (work, cb) ->
     return work.report err, cb
 
   # first check using chrono
+  #day = moment value
+  #unless day.isValid()
+  value = chrono.parseDate work.value
   # try moment parsing
-  cb null, work.value
+  cb null, value
 
 exports.selfcheck = (schema, cb) ->
   check.run

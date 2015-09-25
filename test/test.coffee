@@ -1,4 +1,5 @@
 chai = require 'chai'
+chai.use require 'chai-datetime'
 expect = chai.expect
 async = require 'alinex-async'
 chalk = require 'chalk'
@@ -97,6 +98,19 @@ exports.equal = (schema, values, cb) ->
     , (err, result) ->
       expect(err, 'error').to.not.exist
       expect(result, 'result').to.deep.equal goal
+      cb()
+  , cb
+
+exports.equalTime = (schema, values, cb) ->
+  num = 0
+  async.each values, ([value, goal], cb) ->
+    validator.check
+      name: "equalTime-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.not.exist
+      expect(result, 'result').to.exist.and.be.equalTime goal
       cb()
   , cb
 

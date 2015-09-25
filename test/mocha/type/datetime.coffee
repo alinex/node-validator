@@ -9,7 +9,7 @@ describe "Datetime", ->
     schema =
       type: 'datetime'
 
-  describe.only "check", ->
+  describe "check", ->
 
     it "should support optional option", (cb) ->
       schema.optional = true
@@ -25,11 +25,11 @@ describe "Datetime", ->
 
   describe "ISO 8601", ->
 
-    it "should parse date", (cb) ->
-      test.equal schema, [
-        ['2013-02-08', new Date '2013-02-08']
-        ['2013-W06-5', new Date '2013-02-08']
-        ['2013-039', new Date '2013-02-08']
+    it.only "should parse date", (cb) ->
+      test.equalTime schema, [
+        ['2013-02-08', new Date '2013-02-08 12:00']
+        ['2013-W06-5', new Date '2013-02-08 12:00']
+        ['2013-039', new Date '2013-02-08 12:00']
       ], cb
 
     it "should parse date with time", (cb) ->

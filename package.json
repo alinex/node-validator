@@ -36,7 +36,7 @@
     "alinex-fs": "0.2.x",
     "alinex-util": "0.x",
     "chalk": "1.x",
-    "chrono": "^1.0.5",
+    "chrono-node": "^1.0.8",
     "debug": ">=0.8.0 <3.0.0",
     "moment": "^2.10.6",
     "request": "^2.55.0"
@@ -50,8 +50,9 @@
   },
   "devDependencies": {
     "alinex-builder": "1.x",
+    "alinex-error": "1.x",
     "chai": "3.x",
-    "alinex-error": "1.x"
+    "chai-datetime": "^1.4.0"
   },
   "engines": {
     "node": ">=0.10"
