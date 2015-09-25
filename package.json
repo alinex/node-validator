@@ -36,7 +36,9 @@
     "alinex-fs": "0.2.x",
     "alinex-util": "0.x",
     "chalk": "1.x",
+    "chrono": "^1.0.5",
     "debug": ">=0.8.0 <3.0.0",
+    "moment": "^2.10.6",
     "request": "^2.55.0"
   },
   "optionalDependencies": {

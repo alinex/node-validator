@@ -10,7 +10,7 @@
 #
 # Check options:
 #
-# - `min` - (integer) the smalles allowed number
+# - `min` - (integer) the smallest allowed number
 # - `max` - (integer) the biggest allowed number
 
 # Node modules
