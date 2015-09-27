@@ -8,7 +8,7 @@
 # - `min` - (integer) the date should be after
 # - `max` - (integer) the date should be before
 # - format
-
+# - language array
 
 # Node modules
 # -------------------------------------------------
@@ -54,13 +54,16 @@ exports.run = (work, cb) ->
   catch err
     return work.report err, cb
 
-  # first check using chrono
+  # parse date
+  moment.createFromInputFallback = (config) ->
+    config._d = chrono.parseDate work.value
   console.log '??? ', work.value
-  value = moment work.value
-  if value.isValid()
-    value = value.toDate()
-  else
-    value = chrono.parseDate work.value
+  m = moment work.value
+  unless m.isValid()
+    return work.report (new Error "The given text '#{work.value}' is not parse able
+      as date/time."), cb
+  # format value
+  value = m.toDate()
   console.log '--->', value
 
   # try moment parsing

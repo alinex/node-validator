@@ -24,7 +24,7 @@ describe "Datetime", ->
         [undefined, schema.default]
       ], cb
 
-  describe "ISO 8601", ->
+  describe.only "ISO 8601", ->
 
     it "should parse date", (cb) ->
       test.equalTime schema, [
@@ -45,12 +45,10 @@ describe "Datetime", ->
 
     it "should parse time", (cb) ->
       test.equal schema, [
-#        ['09', new Date '2013-02-08 09:00']
         ['9:30', moment(new Date()).hour(9).minute(30).second(0).millisecond(0).toDate()]
         ['09:30', moment(new Date()).hour(9).minute(30).second(0).millisecond(0).toDate()]
         ['09:30:26', moment(new Date()).hour(9).minute(30).second(26).millisecond(0).toDate()]
-#        ['09:30:26.123', moment(new Date()).hour(9).minute(30).second(26).millisecond(123).toDate()]
-        ['24:00:00.00', moment(new Date()).hour(24).minute(0).second(0).millisecond(0).toDate()]
+        ['24:00:00', moment(new Date()).hour(24).minute(0).second(0).millisecond(0).toDate()]
       ], cb
 
     it "should parse date parts with time", (cb) ->
@@ -68,14 +66,14 @@ describe "Datetime", ->
         ['2013-02-08 09:30:26.123+07:00', new Date '2013-02-08 03:30:26.123']
       ], cb
 
-  describe.only "natural language", ->
+  describe "natural language", ->
 
     it "should parse reference names", (cb) ->
       test.equal schema, [
         ['today', moment(new Date).hour(12).minute(0).second(0).millisecond(0).toDate()]
-        ['tomorrow', new Date '2013-02-08 11:00']
-        ['yesterday', new Date '2013-02-08 10:00']
-        ['last friday', new Date '2013-02-08 03:30:26.123']
+        ['tomorrow', moment(new Date).add(1, 'day').hour(12).minute(0).second(0).millisecond(0).toDate()]
+        ['yesterday', moment(new Date).subtract(1, 'day').hour(12).minute(0).second(0).millisecond(0).toDate()]
+        ['last friday', moment(new Date).subtract(7, 'days').day(5).hour(12).minute(0).second(0).millisecond(0).toDate()]
       ], cb
 
 # 17 August 2013 - 19 August 2013
