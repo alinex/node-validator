@@ -1,4 +1,5 @@
 async = require 'alinex-async'
+moment = require 'moment'
 
 test = require '../../test'
 
@@ -25,11 +26,11 @@ describe "Datetime", ->
 
   describe "ISO 8601", ->
 
-    it.only "should parse date", (cb) ->
+    it "should parse date", (cb) ->
       test.equalTime schema, [
-        ['2013-02-08', new Date '2013-02-08 12:00']
-        ['2013-W06-5', new Date '2013-02-08 12:00']
-        ['2013-039', new Date '2013-02-08 12:00']
+        ['2013-02-08', new Date '2013-02-08 00:00']
+        ['2013-W06-5', new Date '2013-02-08 00:00']
+        ['2013-039', new Date '2013-02-08 00:00']
       ], cb
 
     it "should parse date with time", (cb) ->
@@ -39,17 +40,17 @@ describe "Datetime", ->
         ['2013-02-08 09:30', new Date '2013-02-08 09:30']
         ['2013-02-08 09:30:26', new Date '2013-02-08 09:30:26']
         ['2013-02-08 09:30:26.123', new Date '2013-02-08 09:30:26.123']
-        ['2013-02-08 24:00:00.00', new Date '2013-02-00 00:00:0']
+        ['2013-02-08 24:00:00.00', new Date '2013-02-09 00:00:0']
       ], cb
 
     it "should parse time", (cb) ->
       test.equal schema, [
-        ['09', new Date '2013-02-08 09:00']
-        ['9:30', new Date '2013-02-08 09:30']
-        ['09:30', new Date '2013-02-08 09:30']
-        ['09:30:26', new Date '2013-02-08 09:30:26']
-        ['09:30:26.123', new Date '2013-02-08 09:30:26.123']
-        ['24:00:00.00', new Date '2013-02-00 00:00:0']
+#        ['09', new Date '2013-02-08 09:00']
+        ['9:30', moment(new Date()).hour(9).minute(30).second(0).millisecond(0).toDate()]
+        ['09:30', moment(new Date()).hour(9).minute(30).second(0).millisecond(0).toDate()]
+        ['09:30:26', moment(new Date()).hour(9).minute(30).second(26).millisecond(0).toDate()]
+#        ['09:30:26.123', moment(new Date()).hour(9).minute(30).second(26).millisecond(123).toDate()]
+        ['24:00:00.00', moment(new Date()).hour(24).minute(0).second(0).millisecond(0).toDate()]
       ], cb
 
     it "should parse date parts with time", (cb) ->
@@ -61,23 +62,22 @@ describe "Datetime", ->
 
     it "should parse date with time and timezone", (cb) ->
       test.equal schema, [
-        ['2013-02-08 09+07:00', new Date '2013-02-08 09:00']
-        ['2013-02-08 09-0100', new Date '2013-02-08 09:00']
-        ['2013-02-08 09Z', new Date '2013-02-08 09:00']
-        ['2013-02-08 09:30:26.123+07:00', new Date '2013-02-08 09:00']
+        ['2013-02-08 09+07:00', new Date '2013-02-08 03:00']
+        ['2013-02-08 09-0100', new Date '2013-02-08 11:00']
+        ['2013-02-08 09Z', new Date '2013-02-08 10:00']
+        ['2013-02-08 09:30:26.123+07:00', new Date '2013-02-08 03:30:26.123']
       ], cb
 
-  describe "natural language", ->
+  describe.only "natural language", ->
 
     it "should parse reference names", (cb) ->
       test.equal schema, [
-        ['2013-02-08 09+07:00', new Date '2013-02-08 09:00']
-        ['2013-02-08 09-0100', new Date '2013-02-08 09:00']
-        ['2013-02-08 09Z', new Date '2013-02-08 09:00']
-        ['2013-02-08 09:30:26.123+07:00', new Date '2013-02-08 09:00']
+        ['today', moment(new Date).hour(12).minute(0).second(0).millisecond(0).toDate()]
+        ['tomorrow', new Date '2013-02-08 11:00']
+        ['yesterday', new Date '2013-02-08 10:00']
+        ['last friday', new Date '2013-02-08 03:30:26.123']
       ], cb
 
-# Today, Tomorrow, Yesterday, Last Friday, etc
 # 17 August 2013 - 19 August 2013
 # This Friday from 13:00 - 16.00
 # 5 days ago

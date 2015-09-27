@@ -55,9 +55,14 @@ exports.run = (work, cb) ->
     return work.report err, cb
 
   # first check using chrono
-  #day = moment value
-  #unless day.isValid()
-  value = chrono.parseDate work.value
+  console.log '??? ', work.value
+  value = moment work.value
+  if value.isValid()
+    value = value.toDate()
+  else
+    value = chrono.parseDate work.value
+  console.log '--->', value
+
   # try moment parsing
   cb null, value
 
