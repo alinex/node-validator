@@ -27,7 +27,6 @@ check = require '../check'
 # Setup parsing
 # -------------------------------------------------
 moment.createFromInputFallback = (config) ->
-  console.log config._i
   config._d = switch config._i.toLowerCase()
     when 'now' then new Date()
     else chrono.parseDate config._i
@@ -36,30 +35,18 @@ moment.createFromInputFallback = (config) ->
 # -------------------------------------------------
 optimize = (schema, cb) ->
   schema.part ?= 'datetime'
-  async.parallel [
-    (cb) ->
-      return cb() unless schema.min?
-      validator.check
-        name: "min-datetime"
-        schema:
-          type: 'datetime'
-        value: schema.min
-      , (err, result) ->
-        return cb err if err
-        schema.min = result
-        cb()
-    (cb) ->
-      return cb() unless schema.min?
-      validator.check
-        name: "max-datetime"
-        schema:
-          type: 'datetime'
-        value: schema.max
-      , (err, result) ->
-        return cb err if err
-        schema.max = result
-        cb()
-  ], ->
+  async.each ['default', 'min', 'max'], (i, cb) ->
+    return cb() unless schema[i]?
+    check.run
+      name: "option-#{}{i}-datetime"
+      schema:
+        type: 'datetime'
+      value: schema[i]
+    , (err, result) ->
+      return cb err if err
+      schema[i] = result
+      cb()
+  , ->
     cb schema
 
 # Type implementation
@@ -72,7 +59,8 @@ exports.describe = (work, cb) ->
     or in natural language."
     text += check.optional.describe work
     if work.pos.min? and work.pos.max?
-      text += "The #{work.pos.part} should be between #{min} and #{max}. "
+      text += "The #{work.pos.part} should be between #{work.pos.min} and
+      #{work.pos.max}. "
     else if work.pos.min?
       text += "The #{work.pos.part} should be before #{work.pos.min}. "
     else if work.pos.max?
@@ -83,7 +71,6 @@ exports.describe = (work, cb) ->
 exports.run = (work, cb) ->
   optimize work.pos, (result) ->
     work.pos = result
-    console.log work.pos
     debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.part}"
     debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
     # base checks
@@ -95,7 +82,7 @@ exports.run = (work, cb) ->
       return work.report err, cb
 
     # parse date
-    console.log '??? ', work.value
+#    console.log '??? ', work.value
     m = moment work.value
     unless m.isValid()
       return work.report (new Error "The given text '#{work.value}' is not parse able
@@ -111,9 +98,9 @@ exports.run = (work, cb) ->
         #{work.pos.max}"), cb
 
     # format value
-    console.log '--->', value
 
     # try moment parsing
+ #   console.log '--->', value
     cb null, value
 
 exports.selfcheck = (schema, cb) ->

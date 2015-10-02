@@ -62,6 +62,19 @@ exports.fail = (schema, values, cb) ->
       cb()
   , cb
 
+exports.success = (schema, values, cb) ->
+  num = 0
+  async.each values, (value, cb) ->
+    validator.check
+      name: "success-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.not.exist
+      expect(result, 'result').to.exist
+      cb()
+  , cb
+
 exports.undefined = (schema, values, cb) ->
   num = 0
   async.each values, (value, cb) ->

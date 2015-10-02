@@ -6,7 +6,7 @@ expect = chai.expect
 test = require '../../test'
 validator = require '../../../src/index'
 
-describe "Datetime", ->
+describe.only "Datetime", ->
 
   schema = null
   beforeEach ->
@@ -21,7 +21,7 @@ describe "Datetime", ->
 
     it "should support default option", (cb) ->
       schema.optional = true
-      schema.default = '1974-01-23'
+      schema.default = new Date '1974-01-23'
       test.equal schema, [
         [null, schema.default]
         [undefined, schema.default]
@@ -71,7 +71,7 @@ describe "Datetime", ->
         ['2013-02-08 09:30:26.123+07:00', new Date '2013-02-08 03:30:26.123']
       ], cb
 
-  describe.only "natural language", ->
+  describe "natural language", ->
 
     it "should parse reference names", (cb) ->
       test.equal schema, [
@@ -114,18 +114,17 @@ describe "Datetime", ->
 # 2014-11-30T08:15:30-05:30
 
 
-  describe.skip "option check", ->
+  describe "option check", ->
 
     it "should support min option", (cb) ->
-      schema.min = -2
-      test.same schema, [6, 0, -2], ->
-        test.fail schema, [-8], cb
+      schema.min = 'now'
+      test.success schema, ['now', 'tomorrow'], ->
+        test.fail schema, ['yesterday'], cb
 
     it "should support max option", (cb) ->
-      schema.max = 12
-      test.same schema, [6, 0, -2, 12], ->
-        schema.max = -2
-        test.fail schema, [100, -1], cb
+      schema.max = 'now'
+      test.success schema, ['yesterday'], ->
+        test.fail schema, ['tomorrow'], cb
 
   describe "description", ->
 
@@ -137,6 +136,9 @@ describe "Datetime", ->
         title: 'test'
         description: 'Some test rules'
         type: 'datetime'
+        default: 'now'
+        min: 'now'
+        max: '2020-01-01'
       , cb
 
   describe "selfcheck", ->
@@ -149,4 +151,7 @@ describe "Datetime", ->
         title: 'test'
         description: 'Some test rules'
         type: 'datetime'
+        default: 'now'
+        min: 'now'
+        max: '2020-01-01'
       , cb
