@@ -33,6 +33,18 @@ moment.createFromInputFallback = (config) ->
     when 'now' then new Date()
     else chrono.parseDate config._i
 
+alias =
+  datetime:
+    ISO8601: 'YYYY-MM-DDTHH:mm:ssZ'
+    RFC1123: 'ddd, DD MMM YYYY HH:mm:ss z'
+    RFC2822: 'ddd, DD MMM YYYY HH:mm:ss ZZ'
+    RFC822: 'ddd, DD MMM YY HH:mm:ss ZZ'
+    RFC1036: 'ddd, D MMM YY HH:mm:ss ZZ'
+#    RFC850:  'dddd, D-MMM-ZZ HH:mm:ss Europe/Paris'
+#    COOKIE:  'Friday, 13-Feb-09 14:53:27 Europe/Paris'
+
+
+
 # Optimize options setting
 # -------------------------------------------------
 optimize = (schema, cb) ->
@@ -104,6 +116,8 @@ exports.run = (work, cb) ->
 
     # format value
     if work.pos.format?
+      if alias[work.pos.part][work.pos.format]?
+        work.pos.format = alias[work.pos.part][work.pos.format]
       if work.pos.locale?
         m.locale work.pos.locale
       value = switch work.pos.format

@@ -147,6 +147,12 @@ describe.only "Datetime", ->
         ['L', moment(date).locale('de').format 'L']
       ], cb
 
+    it "should format using defined datetime formats", (cb) ->
+      date = new Date('2015-01-17 09:00')
+      testFormat schema, date, [
+        ['ISO8601', moment(date).format 'YYYY-MM-DDTHH:mm:ssZ']
+      ], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
