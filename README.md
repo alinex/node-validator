@@ -1002,6 +1002,76 @@ __Validate options:__
 - `min` - (integer) the smalles allowed number
 - `max` - (integer) the biggest allowed number
 
+### datetime
+
+Check for date and time.
+
+This validator will parse the given format using different technologies in nearly
+all common formats:
+
+- ISO 8601 datetimes
+  - '2013-02-08'
+  - '2013-W06-5'
+  - '2013-039'
+  - '2013-02-08 09'
+  - '2013-02-08T09'
+  - '2013-02-08 09:30'
+  - '2013-02-08T09:30'
+  - '2013-02-08 09:30:26'
+  - '2013-02-08T09:30:26'
+  - '2013-02-08 09:30:26.123'
+  - '2013-02-08 24:00:00.00'
+- ISO 8601 time
+  - '9:30'
+  - '09:30'
+  - '09:30:26'
+  - '24:00:00'
+- ISO 8601 date
+  - '2013-02-08 09'
+  - '2013-W06-5 09'
+  - '2013-039 09'
+- ISO 8601 with timezone
+  - '2013-02-08 09+07:00'
+  - '2013-02-08 09-0100'
+  - '2013-02-08 09Z'
+  - '2013-02-08 09:30:26.123+07:00'
+- natural language"
+  - 'today'
+  - 'tomorrow'
+  - 'yesterday'
+  - 'last friday'
+- named dates
+  - '17 August 2013'
+  - '19 Aug 2013'
+  - '20 Aug. 2013'
+  - 'Sat Aug 17 2013 18:40:39 GMT+0900 (JST)'
+- relative dates
+  - 'This Friday at 13:00'
+  - '5 days ago'
+- specials
+  - 'now'
+
+__Check options:__
+
+- `min` - (datetime) time has to be at or after this
+- `max` - (datetime) time has to be at or before this
+
+__Format options:__
+
+- `part` - 'date', 'time' or 'datetime'
+- `format` - how the output should be formatted
+
+__ Output formats__
+
+If not specified it is a Date object.
+
+If `format = 'unix'` it will be an unix timestamp (seconds since January 1,
+1970.
+
+For all other format settings a corresponding output string will be generated.
+
+Also see the interval validator for time ranges without context.
+
 ### file
 
 Check the value as valid file or directory entry.

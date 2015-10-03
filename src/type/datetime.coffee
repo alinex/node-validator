@@ -6,8 +6,8 @@
 # - `part` - 'date', 'time' or 'datetime'
 # - `min` - (integer) the date should be after
 # - `max` - (integer) the date should be before
-
 # - `format` - how to format result as string
+
 # - 'locale' - used for formatting
 
 # - language array
