@@ -114,7 +114,7 @@ describe.only "Datetime", ->
 # 2014-11-30T08:15:30-05:30
 
 
-  describe "option check", ->
+  describe "range check", ->
 
     it "should support min option", (cb) ->
       schema.min = 'now'
@@ -125,6 +125,27 @@ describe.only "Datetime", ->
       schema.max = 'now'
       test.success schema, ['yesterday'], ->
         test.fail schema, ['tomorrow'], cb
+
+  describe "format check", ->
+
+    it "should get the unix timestamp", (cb) ->
+      schema.format = 'unix'
+      test.equal schema, [
+        ['2015-01-17 09:00', new Date('2015-01-17 09:00').getTime()/1000]
+      ], cb
+
+    it "should format using moment.js custom strings", (cb) ->
+      date = new Date('2015-01-17 09:00')
+      testFormat schema, date, [
+        ['YYYY-MM-DD', moment(date).format 'YYYY-MM-DD']
+      ], cb
+
+    it "should format using moment.js local strings", (cb) ->
+      schema.locale = 'de'
+      date = new Date('2015-01-17 09:00')
+      testFormat schema, date, [
+        ['L', moment(date).locale('de').format 'L']
+      ], cb
 
   describe "description", ->
 
@@ -155,3 +176,19 @@ describe.only "Datetime", ->
         min: 'now'
         max: '2020-01-01'
       , cb
+
+
+
+testFormat = (schema, value, formats, cb) ->
+  num = 0
+  async.each formats, ([format, goal], cb) ->
+    schema.format = format
+    validator.check
+      name: "format-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.not.exist
+      expect(result, 'result').to.deep.equal goal
+      cb()
+  , cb

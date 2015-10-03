@@ -3,11 +3,13 @@
 
 # Check options:
 #
+# - `part` - 'date', 'time' or 'datetime'
 # - `min` - (integer) the date should be after
 # - `max` - (integer) the date should be before
 
-# - `part` - 'date', 'time' or 'datetime'
-# - format
+# - `format` - how to format result as string
+# - 'locale' - used for formatting
+
 # - language array
 # - multiple - allow from-to....
 
@@ -65,6 +67,9 @@ exports.describe = (work, cb) ->
       text += "The #{work.pos.part} should be before #{work.pos.min}. "
     else if work.pos.max?
       text += "The #{work.pos.part} should be after #{work.pos.max}. "
+    if work.pos.format?
+      text += "The #{work.pos.part} will be converted to #{work.pos.format}
+      #{if work.pos.locale? then '('+work.pos.locale+') ' else ''}format. "
     cb null, text
 
 
@@ -98,9 +103,15 @@ exports.run = (work, cb) ->
         #{work.pos.max}"), cb
 
     # format value
+    if work.pos.format?
+      if work.pos.locale?
+        m.locale work.pos.locale
+      value = switch work.pos.format
+        when 'unix' then  m.unix()
+        else m.format work.pos.format
 
     # try moment parsing
- #   console.log '--->', value
+    console.log '--->', value
     cb null, value
 
 exports.selfcheck = (schema, cb) ->
