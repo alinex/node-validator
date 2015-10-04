@@ -8,10 +8,9 @@
 # - `max` - (integer) the date should be before
 # - `format` - how to format result as string
 
+# - `range` - boolean
 # - 'locale' - used for formatting
-
 # - language array
-# - multiple - allow from-to....
 
 # Node modules
 # -------------------------------------------------
@@ -100,32 +99,60 @@ exports.run = (work, cb) ->
 
     # parse date
 #    console.log '??? ', work.value
-    m = moment work.value
-    unless m.isValid()
-      return work.report (new Error "The given text '#{work.value}' is not parse able
-        as date/time."), cb
-    value = m.toDate()
+    if work.pos.range?
+      console.log work.value
+      results = chrono.parse work.value
+      if results[0].start? and results[0].end?
+        value = [results[0].start.date(), results[0].end.date()]
+      else
+        return work.report (new Error "The #{work.pos.part} has to be a range."), cb
+    else
+      m = moment work.value
+      unless m.isValid()
+        return work.report (new Error "The given text '#{work.value}' is not parse able
+          as date/time."), cb
+      value = m.toDate()
 
     # min/max
-    if work.pos.min? and value < work.pos.min
-      return work.report (new Error "The #{work.pos.part} has to be at after
-        #{work.pos.min}"), cb
-    if work.pos.max? and value > work.pos.max
-      return work.report (new Error "The #{work.pos.part} has to be before
-        #{work.pos.max}"), cb
+    if work.pos.range?
+      if work.pos.min? and value[0] < work.pos.min or value[1] < work.pos.min
+        return work.report (new Error "The #{work.pos.part} has to be at or after
+          #{work.pos.min}"), cb
+      if work.pos.max? and value[0] > work.pos.max or value[1] > work.pos.max
+        return work.report (new Error "The #{work.pos.part} has to be at or before
+          #{work.pos.max}"), cb
+    else
+      if work.pos.min? and value < work.pos.min
+        return work.report (new Error "The #{work.pos.part} has to be at or after
+          #{work.pos.min}"), cb
+      if work.pos.max? and value > work.pos.max
+        return work.report (new Error "The #{work.pos.part} has to be at or before
+          #{work.pos.max}"), cb
 
     # format value
-    if work.pos.format?
-      if alias[work.pos.part][work.pos.format]?
-        work.pos.format = alias[work.pos.part][work.pos.format]
-      if work.pos.locale?
-        m.locale work.pos.locale
-      value = switch work.pos.format
-        when 'unix' then  m.unix()
-        else m.format work.pos.format
+    if work.pos.range?
+      if work.pos.format?
+        if alias[work.pos.part][work.pos.format]?
+          work.pos.format = alias[work.pos.part][work.pos.format]
+        for p in [0, 1]
+          m = moment value[p]
+          if work.pos.locale?
+            m.locale work.pos.locale
+          value[p] = switch work.pos.format
+            when 'unix' then  m.unix()
+            else m.format work.pos.format
+    else
+      if work.pos.format?
+        if alias[work.pos.part][work.pos.format]?
+          work.pos.format = alias[work.pos.part][work.pos.format]
+        if work.pos.locale?
+          m.locale work.pos.locale
+        value = switch work.pos.format
+          when 'unix' then  m.unix()
+          else m.format work.pos.format
 
     # try moment parsing
-    console.log '--->', value
+#    console.log '--->', value
     cb null, value
 
 exports.selfcheck = (schema, cb) ->

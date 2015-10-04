@@ -1021,12 +1021,8 @@ all common formats:
   - '2013-02-08T09:30:26'
   - '2013-02-08 09:30:26.123'
   - '2013-02-08 24:00:00.00'
-- ISO 8601 time
-  - '9:30'
-  - '09:30'
-  - '09:30:26'
-  - '24:00:00'
-- ISO 8601 date
+- ISO 8601 time only
+- ISO 8601 date only
   - '2013-02-08 09'
   - '2013-W06-5 09'
   - '2013-039 09'
@@ -1035,11 +1031,7 @@ all common formats:
   - '2013-02-08 09-0100'
   - '2013-02-08 09Z'
   - '2013-02-08 09:30:26.123+07:00'
-- natural language"
-  - 'today'
-  - 'tomorrow'
-  - 'yesterday'
-  - 'last friday'
+- natural language: 'today', 'tomorrow', 'yesterday', 'last friday'
 - named dates
   - '17 August 2013'
   - '19 Aug 2013'
@@ -1048,8 +1040,11 @@ all common formats:
 - relative dates
   - 'This Friday at 13:00'
   - '5 days ago'
-- specials
-  - 'now'
+- specials: 'now'
+
+__Parse options:__
+
+- `range` - (boolean) parsing ranges contains two dates (start/end)
 
 __Check options:__
 

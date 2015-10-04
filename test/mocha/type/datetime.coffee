@@ -6,7 +6,7 @@ expect = chai.expect
 test = require '../../test'
 validator = require '../../../src/index'
 
-describe.only "Datetime", ->
+describe "Datetime", ->
 
   schema = null
   beforeEach ->
@@ -110,9 +110,14 @@ describe.only "Datetime", ->
         expect(result.getTime(), 'result').to.be.within now-1000, now
         cb()
 
-# This Friday from 13:00 - 16.00
-# 2014-11-30T08:15:30-05:30
-
+    it "should parse ranges", (cb) ->
+      schema.range = true
+      test.equal schema, [
+        ['This Friday from 13:00 - 16.00', [
+          moment(new Date).day(5).hour(13).minute(0).second(0).millisecond(0).toDate()
+          moment(new Date).day(5).hour(16).minute(0).second(0).millisecond(0).toDate()
+        ]]
+      ], cb
 
   describe "range check", ->
 
