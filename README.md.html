@@ -132,6 +132,9 @@
         <a href="#byte">byte</a>
       </div>
       <div class="heading h3">
+        <a href="#datetime">datetime</a>
+      </div>
+      <div class="heading h3">
         <a href="#file">file</a>
       </div>
       <div class="heading h3">
@@ -1375,6 +1378,76 @@ succeed. The first one succeeding will work.</p>
 <li><code>or</code> - (array) with different check alternatives</li>
 </ul>
 
+<p><strong>Example:</strong></p>
+
+<p>You may allow numeric and special format input:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
+    <span class="o">or:</span> <span class="p">[</span>
+      <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
+    <span class="p">,</span>
+      <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+      <span class="nv">match: </span><span class="sr">///</span>
+<span class="sr">        ^\s*      # start with possible spaces</span>
+<span class="sr">        [+-]?     # sign possible</span>
+<span class="sr">        \s*\d+(\.\d*)? # float number</span>
+<span class="sr">        \s*%?     # percent sign with spaces</span>
+<span class="sr">        \s*$      # end of text with spaces</span>
+<span class="sr">        ///</span>
+    <span class="p">]</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
+</code></pre></div>
+
+
+
+<p>With this type you can also use different option alternatives:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
+    <span class="o">or:</span> <span class="p">[</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">keys:</span>
+        <span class="nv">type:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="nv">lowerCase: </span><span class="kc">true</span>
+          <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;mysql&#39;</span><span class="p">]</span>
+        <span class="nv">port:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">default: </span><span class="mi">3306</span>
+        <span class="c1"># ...</span>
+    <span class="p">,</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">keys:</span>
+        <span class="nv">type:</span>
+          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="nv">lowerCase: </span><span class="kc">true</span>
+          <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;postgres&#39;</span><span class="p">]</span>
+        <span class="nv">port:</span>
+          <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
+          <span class="nv">default: </span><span class="mi">5432</span>
+        <span class="c1"># ...</span>
+    <span class="p">]</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
+</code></pre></div>
+
+
+
+<p>In the example above only the default port is changed, but you may also add different
+options.</p>
+
 
 <div class="pilwrap" id="and">
   <h3>
@@ -1452,6 +1525,86 @@ rounding or use <code>floor</code> or <code>ceil</code> for the corresponding me
 <li><code>min</code> - (integer) the smalles allowed number</li>
 <li><code>max</code> - (integer) the biggest allowed number</li>
 </ul>
+
+
+<div class="pilwrap" id="datetime">
+  <h3>
+    <a href="#datetime" name="datetime" class="pilcrow">&#182;</a>
+    datetime
+  </h3>
+</div>
+
+
+<p>Check for date and time.</p>
+
+<p>This validator will parse the given format using different technologies in nearly
+all common formats:</p>
+
+<ul>
+<li>ISO 8601 datetimes
+<ul><li>'2013-02-08'</li>
+<li>'2013-W06-5'</li>
+<li>'2013-039'</li>
+<li>'2013-02-08 09'</li>
+<li>'2013-02-08T09'</li>
+<li>'2013-02-08 09:30'</li>
+<li>'2013-02-08T09:30'</li>
+<li>'2013-02-08 09:30:26'</li>
+<li>'2013-02-08T09:30:26'</li>
+<li>'2013-02-08 09:30:26.123'</li>
+<li>'2013-02-08 24:00:00.00'</li></ul></li>
+<li>ISO 8601 time only</li>
+<li>ISO 8601 date only
+<ul><li>'2013-02-08 09'</li>
+<li>'2013-W06-5 09'</li>
+<li>'2013-039 09'</li></ul></li>
+<li>ISO 8601 with timezone
+<ul><li>'2013-02-08 09+07:00'</li>
+<li>'2013-02-08 09-0100'</li>
+<li>'2013-02-08 09Z'</li>
+<li>'2013-02-08 09:30:26.123+07:00'</li></ul></li>
+<li>natural language: 'today', 'tomorrow', 'yesterday', 'last friday'</li>
+<li>named dates
+<ul><li>'17 August 2013'</li>
+<li>'19 Aug 2013'</li>
+<li>'20 Aug. 2013'</li>
+<li>'Sat Aug 17 2013 18:40:39 GMT+0900 (JST)'</li></ul></li>
+<li>relative dates
+<ul><li>'This Friday at 13:00'</li>
+<li>'5 days ago'</li></ul></li>
+<li>specials: 'now'</li>
+</ul>
+
+<p><strong>Parse options:</strong></p>
+
+<ul>
+<li><code>range</code> - (boolean) parsing ranges contains two dates (start/end)</li>
+</ul>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>min</code> - (datetime) time has to be at or after this</li>
+<li><code>max</code> - (datetime) time has to be at or before this</li>
+</ul>
+
+<p><strong>Format options:</strong></p>
+
+<ul>
+<li><code>part</code> - 'date', 'time' or 'datetime'</li>
+<li><code>format</code> - how the output should be formatted</li>
+</ul>
+
+<p><em>_ Output formats_</em></p>
+
+<p>If not specified it is a Date object.</p>
+
+<p>If <code>format = 'unix'</code> it will be an unix timestamp (seconds since January 1,
+1970.</p>
+
+<p>For all other format settings a corresponding output string will be generated.</p>
+
+<p>Also see the interval validator for time ranges without context.</p>
 
 
 <div class="pilwrap" id="file">
