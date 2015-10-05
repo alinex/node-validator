@@ -4,6 +4,21 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.5 (2015-10-05)
+-------------------------------------------------
+- Finished datetime validation.
+- Add description for datetime validator.
+- Added support for defined datetime aliases.
+- Added local formatting and unix timestamp to datetime validator.
+- Support min/max options.
+- Allow parsing 'now'.
+- Added parsing of natural language times.
+- Parse ISO date and time strings.
+- Parse first date using chrono-node.
+- Start datetime validator with base checks.
+- Add example to make a switch configuration using the or-type.
+- Add travis tests in node v4.
+
 Version 1.0.4 (2015-09-24)
 -------------------------------------------------
 - Fixed null pointer error in optional check.
