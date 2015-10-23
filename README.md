@@ -317,6 +317,32 @@ This allows you to reference to already validated or system internal information
 The syntax is nearly the same as for the value structure but relative paths makes
 no sense because you don't have a base position in the structure.
 
+This is also used if you want to reference some part of the value from the schema
+definition. You can check for a valid name which is defined elsewhere in the value
+structure like follows:
+
+Schema:
+
+``` text
+templates:
+  type: 'object'
+  entries: [
+    type: 'handlebars'
+  ]
+default:
+  type: 'string'
+  list: '<<<context:///templates>>>'
+```
+
+Value:
+
+``` text
+templates:
+  first: "Wellcome {{name}}"
+  ongoing: "Hello {{name}}"
+default: 'ongoing'
+```
+
 #### Environment
 
 The following syntax allows to read from an environment variable which may be

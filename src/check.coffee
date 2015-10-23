@@ -156,6 +156,7 @@ exports.run = (work, cb) ->
     reference.replace v,
       spec: work.spec
       path: work.path[0..]    # clone because it may change
+      context: work.value
     , cb
   , (err, result) ->
     return work.report err, cb if err
