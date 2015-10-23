@@ -608,6 +608,36 @@ but can be used in the references.</p>
 <p>The syntax is nearly the same as for the value structure but relative paths makes
 no sense because you don't have a base position in the structure.</p>
 
+<p>This is also used if you want to reference some part of the value from the schema
+definition. You can check for a valid name which is defined elsewhere in the value
+structure like follows:</p>
+
+<p>Schema:</p>
+
+
+<div class="highlight"><pre><code>templates:
+  type: &#39;object&#39;
+  entries: [
+    type: &#39;handlebars&#39;
+  ]
+default:
+  type: &#39;string&#39;
+  list: &#39;&lt;&lt;&lt;context:///templates&gt;&gt;&gt;&#39;
+</code></pre></div>
+
+
+
+<p>Value:</p>
+
+
+<div class="highlight"><pre><code>templates:
+  first: &quot;Wellcome {{name}}&quot;
+  ongoing: &quot;Hello {{name}}&quot;
+default: &#39;ongoing&#39;
+</code></pre></div>
+
+
+
 
 <div class="pilwrap" id="environment">
   <h4>
