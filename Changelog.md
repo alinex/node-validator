@@ -4,6 +4,12 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.6 (2015-10-23)
+-------------------------------------------------
+- Fixed code style.
+- Document and fix possibility to reference value from schema.
+- Better display of paths in error messages.
+
 Version 1.0.5 (2015-10-05)
 -------------------------------------------------
 - Finished datetime validation.
