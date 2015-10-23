@@ -169,8 +169,8 @@ find = (list, work={}, cb) ->
     (typeof work.data isnt 'string' and proto in ['split', 'match', 'parse']) or
     (typeof work.data isnt 'object' and proto is 'object')
     )
-    debug chalk.grey "stop at part #{proto}://#{path} because wrong result type"
-    return cb()
+      debug chalk.grey "stop at part #{proto}://#{path} because wrong result type"
+      return cb()
   # find type handler
   proto = proto.toLowerCase()
   type = protocolMap[proto] ? proto

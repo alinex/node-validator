@@ -66,4 +66,3 @@ exports.selfcheck = (schema, cb) ->
             type: 'object'
     value: schema
   , cb
-

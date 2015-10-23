@@ -296,4 +296,3 @@ exports.selfcheck = (schema, cb) ->
           values: ['short', 'long']
     value: schema
   , cb
-

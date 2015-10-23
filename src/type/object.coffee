@@ -253,4 +253,3 @@ exports.selfcheck = (schema, cb) ->
           optional: true
     value: schema
   , cb
-

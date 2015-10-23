@@ -180,4 +180,3 @@ exports.selfcheck = (schema, cb) ->
           min: '<<<min>>>'
     value: schema
   , cb
-

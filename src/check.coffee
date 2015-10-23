@@ -103,6 +103,7 @@ class Work
     # recursively go one step further
     sub.goInto schema, value
 
+
 # Helper methods
 # -------------------------------------------------
 

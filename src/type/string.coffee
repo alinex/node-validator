@@ -312,5 +312,3 @@ exports.selfcheck = (schema, cb) ->
           ]
     value: schema
   , cb
-
-
