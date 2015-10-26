@@ -36,6 +36,8 @@ exports.run = (work, cb) ->
   catch err
     return work.report err, cb
   value = work.value
+  # check for already converted values
+  return cb null, value if typeof value is 'function'
   # sanitize
   unless typeof value is 'string'
     return work.report (new Error "The given value '#{value}' is no integer as needed"), cb
