@@ -4,6 +4,12 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.7 (2015-10-27)
+-------------------------------------------------
+- Fix version number.
+- Added information for version 1.0.7
+- Allow revalidation of handlebars type.
+
 Version 1.0.7 (2015-10-26)
 -------------------------------------------------
 - Allow revalidation of handlebars type.
