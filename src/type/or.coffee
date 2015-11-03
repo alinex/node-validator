@@ -40,9 +40,13 @@ exports.run = (work, cb) ->
   # run async checks
   error = []
   async.map [0..(work.pos.or.length-1)], (num, cb) ->
-    check.run work.goInto(['or', num]), (err, result) ->
+    sub = work.goInto ['or', num]
+    check.run sub, (err, result) ->
       error[num] = err if err
-      return cb() if err
+      if err
+        debug "#{sub.debug} result ##{num}: failed"
+        return cb()
+      debug "#{sub.debug} result ##{num}: #{util.inspect result}"
       cb null, result
   , (err, results) ->
     for result in results

@@ -5,8 +5,9 @@
 # -------------------------------------------------
 debug = require('debug')('validator:check')
 util = require 'util'
-async = require 'alinex-async'
 chalk = require 'chalk'
+async = require 'alinex-async'
+{object} = require 'alinex-util'
 # internal classes and helper
 reference = require './reference'
 
@@ -63,6 +64,7 @@ class Work
     # add type specific information
     exports.describe this, (err, text) =>
       detail += text
+      debug @debug + chalk.magenta " Error: #{message}"
       # create new Error object
       err = new Error message
       err.description = detail if detail
@@ -97,7 +99,7 @@ class Work
     else
       # keep value position but clone path
       sub.vpath = @vpath[0..]
-      sub.value = @value
+      sub.value = object.clone @value
     # end call if no more steps to go into
     return sub unless schema.length or value.length
     # recursively go one step further
@@ -151,7 +153,6 @@ exports.describe = (work, cb) ->
 # This may be called using the spec or an already created work instance.
 exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
-  debug "#{work.debug} checking..."
   # check for references in schema
   async.mapOf work.pos, (v, k, cb) ->
     reference.replace v,
