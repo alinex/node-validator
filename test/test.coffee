@@ -97,7 +97,7 @@ exports.same = (schema, values, cb) ->
       value: value
     , (err, result) ->
       expect(err, 'error').to.not.exist
-      expect(result, 'result').to.equal value
+      expect(result, 'result').to.deep.equal value
       cb()
   , cb
 
