@@ -112,8 +112,9 @@
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:check&#39;</span><span class="p">)</span>
 <span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
-<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
 <span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
+<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
+<span class="p">{</span><span class="nx">object</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
 
 </pre></div>
         </td>
@@ -260,6 +261,7 @@ position.</p>
         <td class="code highlight"><div class="highlight"><pre>
     <span class="nx">exports</span><span class="p">.</span><span class="nx">describe</span> <span class="k">this</span><span class="p">,</span> <span class="nf">(err, text) =&gt;</span>
       <span class="nx">detail</span> <span class="o">+=</span> <span class="nx">text</span>
+      <span class="nx">debug</span> <span class="nx">@debug</span> <span class="o">+</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">magenta</span> <span class="s">&quot; Error: </span><span class="si">#{</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span>
 
 </pre></div>
         </td>
@@ -386,7 +388,7 @@ concatenated with the given paths.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
       <span class="nv">sub.vpath = </span><span class="nx">@vpath</span><span class="p">[</span><span class="mi">0</span><span class="p">..]</span>
-      <span class="nv">sub.value = </span><span class="nx">@value</span>
+      <span class="nv">sub.value = </span><span class="nx">object</span><span class="p">.</span><span class="nx">clone</span> <span class="nx">@value</span>
 
 </pre></div>
         </td>
@@ -602,7 +604,6 @@ concatenated with the given paths.</p>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
   <span class="nv">work = </span><span class="k">new</span> <span class="nx">Work</span> <span class="nx">work</span> <span class="k">unless</span> <span class="nx">work</span> <span class="k">instanceof</span> <span class="nx">Work</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> checking...&quot;</span>
 
 </pre></div>
         </td>
