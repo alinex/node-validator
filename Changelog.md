@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.8 (2015-11-06)
+-------------------------------------------------
+- Small fix in test routine.
+- Fixed bug in or validation in which default values from first try are stored in the successfull second try.
+
 Version 1.0.7 (2015-10-27)
 -------------------------------------------------
 - Fix version number.
