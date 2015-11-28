@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.0.9 (2015-11-28)
+-------------------------------------------------
+- Fixed to allow empty objects if no keys are mandatory.
+
 Version 1.0.8 (2015-11-06)
 -------------------------------------------------
 - Small fix in test routine.
