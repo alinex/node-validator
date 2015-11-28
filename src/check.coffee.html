@@ -497,7 +497,6 @@ concatenated with the given paths.</p>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">isEmpty = </span><span class="nf">(value) -&gt;</span>
   <span class="k">return</span> <span class="kc">true</span> <span class="k">unless</span> <span class="nx">value</span><span class="o">?</span>
-  <span class="k">switch</span>
 
 </pre></div>
         </td>
@@ -507,14 +506,15 @@ concatenated with the given paths.</p>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
-<p>when Array.isArray value
+<p>switch
+   when Array.isArray value
      if value.length is 0
+       return true
+   when typeof value is 'object'
+     if value.constructor.name is 'Object' and Object.keys(value).length is 0
        return true</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">when</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span>
-      <span class="k">if</span> <span class="nx">value</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span> <span class="o">is</span> <span class="s">&#39;Object&#39;</span> <span class="o">and</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">length</span> <span class="o">is</span> <span class="mi">0</span>
-        <span class="k">return</span> <span class="kc">true</span>
   <span class="kc">false</span>
 
 
