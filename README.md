@@ -788,6 +788,7 @@ uses subchecks on each entry.
 
 __Options:__
 
+- `flatten` - (boolean) flatten deep structures
 - `instanceOf` - (class) only objects of given class type are allowed
 - `mandatoryKeys` - (list or boolean) the list of elements which are mandatory
 - `allowedKeys` - (list or boolean) gives a list of elements which are
@@ -899,6 +900,37 @@ three attributes are strings.
 
 If you specify `entries` and `keys`, the entries check will only be used as default
 for all keys which has no own specification.
+
+Another option is to flatten the structure before checking it:
+
+``` coffee
+# value to check
+input =
+  first:
+    num: { one: 1, two: 2 }
+  second:
+    num: { one: 1, two: 2 }
+    name: { anna: 1, berta: 2 }
+# run the validation
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    flatten: true
+, (err, result) ->
+  # do something
+```
+
+This will give you the following result:
+
+``` coffee
+result =
+  'first-num': { one: 1, two: 2 }
+  'second-num': { one: 1, two: 2 }
+  'second-name': { anna: 1, berta: 2 }
+```
+
 
 Alternative-/Multiple Checks
 -------------------------------------------------

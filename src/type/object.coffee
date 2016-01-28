@@ -29,6 +29,9 @@ exports.describe = (work, cb) ->
   text = 'An object. '
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
+  # flat
+  if work.pos.flat
+    text += "Hierarchical paths will be flattened together. "
   # instanceof
   if work.pos.instanceOf?
     text += "The object has to be an instance of class #{work.pos.instanceOf.name}. "
@@ -104,6 +107,9 @@ exports.run = (work, cb) ->
   catch err
     return work.report err, cb
   value = work.value
+  # flat
+  if work.pos.flat
+    value = flatten work.value
   # instanceof
   if work.pos.instanceOf?
     unless value instanceof work.pos.instanceOf
@@ -212,6 +218,9 @@ exports.selfcheck = (schema, cb) ->
         default:
           type: 'object'
           optional: true
+        flatten:
+          type: 'boolean'
+          optional: true
         instanceOf:
           type: 'function'
           optional: true
@@ -253,3 +262,12 @@ exports.selfcheck = (schema, cb) ->
           optional: true
     value: schema
   , cb
+
+
+# Helper
+# -------------------------------------------------
+flatten = (obj) ->
+  n = {}
+  for k, v of obj
+    return obj unless typeof v is 'object'
+    n["#{k}-#{j}"] = w for j, w of v

@@ -173,6 +173,18 @@ describe "Object", ->
         ]
       ], cb
 
+    it "should support flat objects", (cb) ->
+      schema.flatten = true
+      test.equal schema, [
+        [
+          { num: { one: 1, two: 2 } }
+          { num: { one: 1, two: 2 } }
+        ,
+          { first: { num: { one: 1, two: 2 } } }
+          { 'first-num': { one: 1, two: 2 } }
+        ]
+      ], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
@@ -189,6 +201,7 @@ describe "Object", ->
         title: 'test'
         description: 'Some test rules'
         type: 'object'
+        flatten: true
         mandatoryKeys: true
         allowedKeys: true
         instanceOf: Object
@@ -227,6 +240,7 @@ describe "Object", ->
         title: 'test'
         description: 'Some test rules'
         type: 'object'
+        flatten: true
         mandatoryKeys: ['one']
         allowedKeys: ['two']
         keys:
