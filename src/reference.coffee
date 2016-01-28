@@ -26,7 +26,7 @@ util = require 'util'
 chalk = require 'chalk'
 # alinex modules
 async = require 'alinex-async'
-{object, array} = require 'alinex-util'
+{object} = require 'alinex-util'
 # include classes and helper
 check = require './check'
 
@@ -53,7 +53,7 @@ typePrecedence =
 # Have references
 # -------------------------------------------------
 # Check if there are references in the object.
-exists = module.exports.exists = (value) ->
+exists = exports.exists = (value) ->
   return false unless typeof value is 'string'
   Boolean value.match /<<<[^]*>>>/
 
@@ -61,7 +61,7 @@ exists = module.exports.exists = (value) ->
 # -------------------------------------------------
 # This is called from the check to resolve the references first before running
 # the real check. If there are no references it will return immediately.
-replace = module.exports.replace = (value, work={}, cb) ->
+exports.replace = (value, work={}, cb) ->
   # maybe called without work (mostly for)
   if typeof work is 'function'
     cb = work
@@ -180,7 +180,7 @@ find = (list, work={}, cb) ->
     return cb new Error "No handler for protocol #{proto} for references defined"
   # check precedence for next uri
   if work.lastType? and typePrecedence[type] > typePrecedence[work.lastType?]
-    return cb new Error "#{next}-reference can not be called from #{proto}-reference
+    return cb new Error "#{type}-reference can not be called from #{proto}-reference
     for security reasons"
   # run type handler and return if nothing found
   work.lastType = type

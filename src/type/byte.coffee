@@ -21,7 +21,7 @@ util = require 'util'
 chalk = require 'chalk'
 math = require 'mathjs'
 # alinex modules
-{object, number} = require 'alinex-util'
+{object} = require 'alinex-util'
 # include classes and helper
 check = require '../check'
 

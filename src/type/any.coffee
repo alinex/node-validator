@@ -7,8 +7,6 @@
 debug = require('debug')('validator:any')
 util = require 'util'
 chalk = require 'chalk'
-# alinex modules
-object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
 
@@ -26,7 +24,7 @@ exports.run = (work, cb) ->
   # base checks
   try
     if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value ? null}"
+      debug "#{work.debug} result #{util.inspect work.value ? null}"
       return cb()
   catch err
     return work.report err, cb

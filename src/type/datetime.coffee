@@ -20,7 +20,7 @@ chalk = require 'chalk'
 moment = require 'moment'
 chrono = require 'chrono-node'
 # include alinex packages
-{object, number} = require 'alinex-util'
+{object} = require 'alinex-util'
 async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
