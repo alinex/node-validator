@@ -1,6 +1,5 @@
-async = require 'alinex-async'
-
 test = require '../../test'
+### eslint-env node, mocha ###
 
 describe "IP Address", ->
 

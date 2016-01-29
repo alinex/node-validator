@@ -1,5 +1,6 @@
 chai = require 'chai'
 expect = chai.expect
+### eslint-env node, mocha ###
 
 async = require 'alinex-async'
 path = require 'path'
@@ -786,4 +787,3 @@ describe "References", ->
           one: 6
         ]
       ], cb
-

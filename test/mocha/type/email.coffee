@@ -1,8 +1,7 @@
-async = require 'alinex-async'
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe.only "Email", ->
+describe "Email", ->
 
   schema = null
   beforeEach ->

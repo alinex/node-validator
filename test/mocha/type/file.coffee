@@ -1,8 +1,7 @@
-async = require 'alinex-async'
-
 test = require '../../test'
 path = require 'path'
 {exec} = require 'child_process'
+### eslint-env node, mocha ###
 
 describe "File", ->
 

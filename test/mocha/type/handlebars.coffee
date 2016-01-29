@@ -1,8 +1,5 @@
-chai = require 'chai'
-expect = chai.expect
-
-async = require 'alinex-async'
 test = require '../../test'
+### eslint-env node, mocha ###
 
 describe "Handlebars", ->
 

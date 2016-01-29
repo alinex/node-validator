@@ -19,7 +19,7 @@ exports.describe = (schema, cb) ->
 exports.describeFail = (schema, cb) ->
   validator.describe
     schema: schema
-  , (err, text) ->
+  , (err) ->
     expect(err, 'error').to.exist
     cb()
 

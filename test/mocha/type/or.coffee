@@ -1,6 +1,5 @@
-async = require 'alinex-async'
-
 test = require '../../test'
+### eslint-env node, mocha ###
 
 describe "Or", ->
 
@@ -72,4 +71,3 @@ describe "Or", ->
           type: 'string'
         ]
       , cb
-

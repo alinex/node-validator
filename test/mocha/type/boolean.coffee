@@ -1,6 +1,6 @@
-async = require 'alinex-async'
 chai = require 'chai'
 expect = chai.expect
+### eslint-env node, mocha ###
 
 test = require '../../test'
 
