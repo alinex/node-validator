@@ -5,6 +5,10 @@
 #
 # - `optional` - the value must not be present (will return null)
 
+#!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$website)) {
+#  $websiteErr = "Invalid URL";
+
+
 
 # Node modules
 # -------------------------------------------------
@@ -18,7 +22,6 @@ check = require '../check'
 
 subcheck =
   type: 'string'
-  lowerCase: true
   match: ///
     ^
     [a-zA-Z0-9]
