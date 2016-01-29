@@ -4,6 +4,15 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.1.0 (2016-01-29)
+-------------------------------------------------
+- Optimized tests for linter and removed unused variables.
+- Added server check for email addresses.
+- Added basic email validation based on text checking.
+- Added flatten option to object sanititzer.
+- Merge branch 'master' of https://github.com/alinex/node-validator
+- Fixed some minor linter warnings.
+
 Version 1.0.9 (2015-11-28)
 -------------------------------------------------
 - Fixed to allow empty objects if no keys are mandatory.
