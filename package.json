@@ -39,7 +39,7 @@
     "chrono-node": "^1.0.8",
     "debug": ">=0.8.0 <3.0.0",
     "moment": "^2.10.6",
-    "request": "^2.55.0"
+    "request": "^2.69.0"
   },
   "optionalDependencies": {
     "ipaddr.js": "1.x",

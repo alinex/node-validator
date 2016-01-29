@@ -56,6 +56,16 @@ describe.only "Email", ->
         ['alexander.schilling+test@googlemail.com', 'alexanderschilling@gmail.com']
       ], cb
 
+    it "should check server", (cb) ->
+      @timeout 5000
+      schema.checkServer = true
+      test.same schema, ['alexander.schilling@divibib.com', 'info@alinex.de'], cb
+
+    it "should fail to check server", (cb) ->
+      @timeout 5000
+      schema.checkServer = true
+      test.fail schema, ['alexander.schilling@nqqnnddajc.de'], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
@@ -70,6 +80,7 @@ describe.only "Email", ->
         default: 'root@localhost'
         lowerCase: true
         normalize: true
+        checkServer: true
       , cb
 
   describe "selfcheck", ->
@@ -86,4 +97,5 @@ describe.only "Email", ->
         default: 'root@localhost'
         lowerCase: true
         normalize: true
+        checkServer: true
       , cb

@@ -1125,6 +1125,24 @@ For all other format settings a corresponding output string will be generated.
 
 Also see the interval validator for time ranges without context.
 
+### emails
+
+There are a lot of crazy possibilities in the RFC2822 which  specifies the Email
+format. Perhaps it came from letting different existing email systems represented
+their account, to encompass anything that was valid before.
+
+So this check will not aim to allow all emails allowed through RFC but only
+those which are reasonable and commonly used.
+
+__Sanitize options:__
+
+- `lowerCase` domain and gmail addresses completely
+- `normalize` (boolean) remove tags, alternative domains and subdomains
+
+__Check options:__
+
+- `checkServer` (boolean) also check for working email servers
+
 ### file
 
 Check the value as valid file or directory entry.

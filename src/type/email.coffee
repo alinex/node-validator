@@ -1,6 +1,6 @@
 # Email validation
 # =================================================
-# There are a lot of crazy üossibilities in the RFC2822 which  specifies the Email
+# There are a lot of crazy possibilities in the RFC2822 which  specifies the Email
 # format. Perhaps it came from letting different existing email systems represented
 # their account, to encompass anything that was valid before.
 #
@@ -20,17 +20,22 @@ util = require 'util'
 chalk = require 'chalk'
 # alinex modules
 object = require('alinex-util').object
+async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
 
+# Subchecks
+# -------------------------------------------------
 subcheck =
   type: 'string'
   minLength: 5
 
+# Host specific normalization
+# -------------------------------------------------
 normalize = (host) ->
   return switch
     when host.match /^g(oogle)?mail\.com$/i
-      (local, host) ->
+      (local) ->
         [local.replace(/\.|\+.*$/g, ''), 'gmail.com']
     else
       (local, host) ->
@@ -94,16 +99,28 @@ exports.run = (work, cb) ->
       # normalize
       [local, host] = normalize(host) local, host
       # done everything ok
-      cb null, "#{local}@#{host}"
+      value = "#{local}@#{host}"
+      return cb null, value unless work.pos.checkServer
+      return cb null, value if host is 'localhost'
+      # check server
+      getMyIP (err, ip) ->
+        if err
+          debug chalk.magenta "could not detect own ip address"
+          return cb null, value
+        # find mx records
+        dns = require 'dns'
+        dns.resolveMx host, (err, addresses) ->
+          checkMailServer addresses, ip, (ok) ->
+            return cb null, value if ok
+            # find a-record
+            dns.resolve host, (err, addresses) ->
+              checkMailServer addresses, ip, (ok) ->
+                return cb null, value if ok
+                return work.report (new Error "No correct responding mail server
+                could be detected for this domain."), cb
 
-      # don't check for localhost
-      # find mx records
-      #functions.getMxRecord(hostname).then ((mxRecords) ->
-      # check email exchange server
-      #functions.checkMailExchanger(mxRecord, options.externalIpAddress).then((data) ->
-      # find a record
-      #return functions.checkEmailExchangerForARecord(hostname, options)
-
+# Schema check
+# -------------------------------------------------
 exports.selfcheck = (schema, cb) ->
   check.run
     schema:
@@ -117,5 +134,47 @@ exports.selfcheck = (schema, cb) ->
         normalize:
           type: 'boolean'
           optional: true
+        checkServer:
+          type: 'boolean'
+          optional: true
     value: schema
+  , cb
+
+
+# Helper
+# -------------------------------------------------
+# ### get own IP
+# for later mail server checks
+getMyIP = (cb) ->
+  request = require 'request'
+  request 'http://ipinfo.io/ip', (err, response, body) ->
+    return cb err if err
+    if not err and response.statusCode is 200
+      cb null, body.trim()
+    else
+      cb new Error 'could not get IP address'
+
+# ### contact the server
+checkMailServer = (list, ip, cb) ->
+  return cb false unless list?.length
+  net = require 'net'
+  # check email exchange server
+  list = list.sort (a, b) -> a.priority - b.priority
+  .map (e) -> e.exchange
+  async.detect list, (domain, cb) ->
+    debug chalk.grey "check mail server under #{domain}"
+    res = ''
+    client = net.connect
+      port: 25
+      host: domain
+    , ->
+      client.write "HELO #{ip}\r\n"
+      client.end()
+    client.on 'data', (data) ->
+      res += data.toString()
+    client.on 'error', (err) ->
+      debug chalk.magenta err
+    client.on 'end', ->
+      debug chalk.grey l for l in res.split /\n/
+      cb res?.length > 0
   , cb
