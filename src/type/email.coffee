@@ -145,7 +145,9 @@ exports.selfcheck = (schema, cb) ->
 # -------------------------------------------------
 # ### get own IP
 # for later mail server checks
+myIP = null
 getMyIP = (cb) ->
+  return cb myIP if myIP
   request = require 'request'
   request 'http://ipinfo.io/ip', (err, response, body) ->
     return cb err if err
