@@ -4,6 +4,14 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.2.0 (2016-01-31)
+-------------------------------------------------
+- Allow objects as string.values option.
+- Added documentation for url.
+- Completed tests for url checks.
+- New url check basically working.
+- Store my ip globally.
+
 Version 1.1.0 (2016-01-29)
 -------------------------------------------------
 - Optimized tests for linter and removed unused variables.
