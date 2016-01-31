@@ -131,6 +131,13 @@ describe "String", ->
       test.same schema, schema.values, ->
         test.fail schema, ['nine', 'bananas'], cb
 
+    it "should support values option with object", (cb) ->
+      schema.values =
+        one: 1
+        two: 2
+        three: 3
+      test.same schema, ['one', 'two', 'three'], cb
+
     it "should support startsWith option", (cb) ->
       schema.startsWith = 'he'
       test.same schema, ['hello', 'hero'], ->

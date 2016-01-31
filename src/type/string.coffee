@@ -83,8 +83,12 @@ exports.describe = (work, cb) ->
   else if work.pos.maxLength?
     text += "It has to be not more than #{work.pos.maxLength} characters long. "
   # specific values
-  if work.pos.values? and Array.isArray work.pos.values
-    text += "Only the values: #{work.pos.values.join ', '} are allowed. "
+  if list = work.pos.values
+    if typeof list is 'string'
+      list = list.split /,\s*/
+    else if typeof list is 'object' and not Array.isArray list
+      list = Object.keys list
+    text += "Only the values: #{list} are allowed. "
   # matching
   if work.pos.startsWith?
     text += "It has to start with #{work.pos.startsWith}... "
@@ -159,9 +163,14 @@ exports.run = (work, cb) ->
     return work.report (new Error "The given string '#{value}' is too long for
       at least #{work.pos.maxLength} characters are allowed"), cb
   # specific values
-  if work.pos.values? and not (Array.isArray(work.pos.values) and value in work.pos.values)
-    return work.report (new Error "The given string '#{value}' is not in the list of
-      allowed phrases (#{work.pos.values})"), cb
+  if list = work.pos.values
+    if typeof list is 'string'
+      list = list.split /,\s*/
+    else if typeof list is 'object' and not Array.isArray list
+      list = Object.keys list
+    unless Array.isArray(list) and value in list
+      return work.report (new Error "The given string '#{value}' is not in the list of
+        allowed phrases (#{list})"), cb
   if work.pos.startsWith? and value[..work.pos.startsWith.length-1] isnt work.pos.startsWith
     return work.report (new Error "The given string '#{value}' should start with
     '#{work.pos.startsWith}'"), cb
@@ -282,10 +291,17 @@ exports.selfcheck = (schema, cb) ->
           optional: true
           min: '<<<min>>>'
         values:
-          type: 'array'
+          type: 'or'
           optional: true
-          entries:
+          or: [
+            type: 'array'
+            entries:
+              type: 'string'
+          ,
+            type: 'object'
+          ,
             type: 'string'
+          ]
         startsWith:
           type: 'string'
           optional: true

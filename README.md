@@ -700,7 +700,7 @@ __Validate options:__
 
 - `minLength` - minimum text length in characters
 - `maxLength` - maximum text length in characters
-- `values` - array of possible values (complete text)
+- `values` - array of possible values (complete text) or object keys
 - `startsWith` - start of text
 - `endsWith` - end of text
 - `match` - string or regular expression which have to be matched
