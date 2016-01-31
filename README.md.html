@@ -6,13 +6,9 @@
   <link rel="stylesheet" media="all" href="doc-style.css" />
   <script src="doc-filelist.js"></script>
   <script>
-    var relativeDir = "", thisFile = "home/alex/a3/node-validator/READMEmd", defaultSidebar = true;
+    var relativeDir = "", thisFile = "home/alex/github/node-validator/READMEmd", defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
-  <script src="fileSearch.js"></script>
-  <script src="goToLine.js"></script>
-  <link rel="stylesheet" href="fileSearch.css" />
-  <link rel="stylesheet" href="goToLine.css" />
 </head>
 <body>
   <nav>
@@ -135,6 +131,9 @@
         <a href="#datetime">datetime</a>
       </div>
       <div class="heading h3">
+        <a href="#emails">emails</a>
+      </div>
+      <div class="heading h3">
         <a href="#file">file</a>
       </div>
       <div class="heading h3">
@@ -157,6 +156,9 @@
       </div>
       <div class="heading h3">
         <a href="#regexp">regexp</a>
+      </div>
+      <div class="heading h3">
+        <a href="#url">url</a>
       </div>
       <div class="heading h2">
         <a href="#package%20structure">Package structure</a>
@@ -1126,7 +1128,7 @@ replacement text] while search may be a string or RegExp</li>
 <ul>
 <li><code>minLength</code> - minimum text length in characters</li>
 <li><code>maxLength</code> - maximum text length in characters</li>
-<li><code>values</code> - array of possible values (complete text)</li>
+<li><code>values</code> - array of possible values (complete text) or object keys</li>
 <li><code>startsWith</code> - start of text</li>
 <li><code>endsWith</code> - end of text</li>
 <li><code>match</code> - string or regular expression which have to be matched
@@ -1260,6 +1262,7 @@ uses subchecks on each entry.</p>
 <p><strong>Options:</strong></p>
 
 <ul>
+<li><code>flatten</code> - (boolean) flatten deep structures</li>
 <li><code>instanceOf</code> - (class) only objects of given class type are allowed</li>
 <li><code>mandatoryKeys</code> - (list or boolean) the list of elements which are mandatory</li>
 <li><code>allowedKeys</code> - (list or boolean) gives a list of elements which are
@@ -1380,6 +1383,40 @@ three attributes are strings.</p>
 
 <p>If you specify <code>entries</code> and <code>keys</code>, the entries check will only be used as default
 for all keys which has no own specification.</p>
+
+<p>Another option is to flatten the structure before checking it:</p>
+
+
+<div class="highlight"><pre><code><span class="c1"># value to check</span>
+<span class="nv">input =</span>
+  <span class="nv">first:</span>
+    <span class="nv">num: </span><span class="p">{</span> <span class="nv">one: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">two: </span><span class="mi">2</span> <span class="p">}</span>
+  <span class="nv">second:</span>
+    <span class="nv">num: </span><span class="p">{</span> <span class="nv">one: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">two: </span><span class="mi">2</span> <span class="p">}</span>
+    <span class="nv">name: </span><span class="p">{</span> <span class="nv">anna: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">berta: </span><span class="mi">2</span> <span class="p">}</span>
+<span class="c1"># run the validation</span>
+<span class="nx">validator</span><span class="p">.</span><span class="nx">check</span>
+  <span class="nv">name: </span><span class="s">&#39;test&#39;</span>        <span class="c1"># name to be displayed in errors (optional)</span>
+  <span class="nv">value: </span><span class="nx">input</span>        <span class="c1"># value to check</span>
+  <span class="nv">schema: </span>            <span class="c1"># definition of checks</span>
+    <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+    <span class="nv">flatten: </span><span class="kc">true</span>
+<span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+  <span class="c1"># do something</span>
+</code></pre></div>
+
+
+
+<p>This will give you the following result:</p>
+
+
+<div class="highlight"><pre><code><span class="nv">result =</span>
+  <span class="s">&#39;first-num&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="nv">one: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">two: </span><span class="mi">2</span> <span class="p">}</span>
+  <span class="s">&#39;second-num&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="nv">one: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">two: </span><span class="mi">2</span> <span class="p">}</span>
+  <span class="s">&#39;second-name&#39;</span><span class="o">:</span> <span class="p">{</span> <span class="nv">anna: </span><span class="mi">1</span><span class="p">,</span> <span class="nv">berta: </span><span class="mi">2</span> <span class="p">}</span>
+</code></pre></div>
+
+
 
 
 <div class="pilwrap" id="alternative-%2Fmultiple%20checks">
@@ -1637,6 +1674,35 @@ all common formats:</p>
 <p>Also see the interval validator for time ranges without context.</p>
 
 
+<div class="pilwrap" id="emails">
+  <h3>
+    <a href="#emails" name="emails" class="pilcrow">&#182;</a>
+    emails
+  </h3>
+</div>
+
+
+<p>There are a lot of crazy possibilities in the RFC2822 which  specifies the Email
+format. Perhaps it came from letting different existing email systems represented
+their account, to encompass anything that was valid before.</p>
+
+<p>So this check will not aim to allow all emails allowed through RFC but only
+those which are reasonable and commonly used.</p>
+
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>lowerCase</code> domain and gmail addresses completely</li>
+<li><code>normalize</code> (boolean) remove tags, alternative domains and subdomains</li>
+</ul>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>checkServer</code> (boolean) also check for working email servers</li>
+</ul>
+
+
 <div class="pilwrap" id="file">
   <h3>
     <a href="#file" name="file" class="pilcrow">&#182;</a>
@@ -1855,6 +1921,33 @@ are 'system', 'registered' and 'dynamic' representing the three range parts.</p>
 compiled into an regular expression.</p>
 
 
+<div class="pilwrap" id="url">
+  <h3>
+    <a href="#url" name="url" class="pilcrow">&#182;</a>
+    url
+  </h3>
+</div>
+
+
+<p>Check the given string for a valid url.</p>
+
+<p><strong>Sanitize options:</strong></p>
+
+<ul>
+<li><code>toAbsoluteBase</code> - convert to absolute with given base</li>
+<li><code>removeQuery</code> - (boolean) remove query and hash from url</li>
+</ul>
+
+<p><strong>Check options:</strong></p>
+
+<ul>
+<li><code>hostsAllowed</code> - list of allowed hosts by string or regexp</li>
+<li><code>hostsDenied</code> - list of denied hosts by string or regexp</li>
+<li><code>allowProtocols</code> - lust of allowed protocols</li>
+<li><code>allowRelative</code> - (boolean) to allow also relative urls</li>
+</ul>
+
+
 <div class="pilwrap" id="package%20structure">
   <h2>
     <a href="#package%20structure" name="package%20structure" class="pilcrow">&#182;</a>
@@ -1876,7 +1969,7 @@ with the implementation loaded on demand (type-subfolder).</p>
 </div>
 
 
-<p>Copyright 2014-2015 Alexander Schilling</p>
+<p>Copyright 2014-2016 Alexander Schilling</p>
 
 <p>Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

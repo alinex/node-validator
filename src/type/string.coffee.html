@@ -6,13 +6,9 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/stringcoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/stringcoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
-  <script src="../../fileSearch.js"></script>
-  <script src="../../goToLine.js"></script>
-  <link rel="stylesheet" href="../../fileSearch.css" />
-  <link rel="stylesheet" href="../../goToLine.css" />
 </head>
 <body>
   <nav>
@@ -267,8 +263,12 @@ match (or list of expressions)</li>
 <p>specific values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span><span class="o">?</span> <span class="o">and</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only the values: </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;, &#39;</span><span class="si">}</span><span class="s"> are allowed. &quot;</span>
+  <span class="k">if</span> <span class="nv">list = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">list</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+      <span class="nv">list = </span><span class="nx">list</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/,\s*/</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">list</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span> <span class="o">and</span> <span class="o">not</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">list</span>
+      <span class="nv">list = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">list</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only the values: </span><span class="si">#{</span><span class="nx">list</span><span class="si">}</span><span class="s"> are allowed. &quot;</span>
 
 </pre></div>
         </td>
@@ -453,9 +453,14 @@ match (or list of expressions)</li>
 <p>specific values</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span><span class="o">?</span> <span class="o">and</span> <span class="o">not</span> <span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span><span class="p">)</span> <span class="o">and</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not in the list of</span>
-<span class="s">      allowed phrases (</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span><span class="si">}</span><span class="s">)&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nv">list = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">values</span>
+    <span class="k">if</span> <span class="k">typeof</span> <span class="nx">list</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+      <span class="nv">list = </span><span class="nx">list</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/,\s*/</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">list</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span> <span class="o">and</span> <span class="o">not</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">list</span>
+      <span class="nv">list = </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">list</span>
+    <span class="k">unless</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">list</span><span class="p">)</span> <span class="o">and</span> <span class="nx">value</span> <span class="k">in</span> <span class="nx">list</span>
+      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not in the list of</span>
+<span class="s">        allowed phrases (</span><span class="si">#{</span><span class="nx">list</span><span class="si">}</span><span class="s">)&quot;</span><span class="p">),</span> <span class="nx">cb</span>
   <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">startsWith</span><span class="o">?</span> <span class="o">and</span> <span class="nx">value</span><span class="p">[..</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">isnt</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">startsWith</span>
     <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given string &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; should start with</span>
 <span class="s">    &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">startsWith</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">),</span> <span class="nx">cb</span>
@@ -598,10 +603,17 @@ match (or list of expressions)</li>
           <span class="nv">optional: </span><span class="kc">true</span>
           <span class="nv">min: </span><span class="s">&#39;&lt;&lt;&lt;min&gt;&gt;&gt;&#39;</span>
         <span class="nv">values:</span>
-          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+          <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">entries:</span>
+          <span class="o">or:</span> <span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+            <span class="nv">entries:</span>
+              <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+          <span class="p">,</span>
             <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="p">]</span>
         <span class="nv">startsWith:</span>
           <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>

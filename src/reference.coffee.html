@@ -6,13 +6,9 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/a3/node-validator/src/referencecoffee", defaultSidebar = true;
+    var relativeDir = "../", thisFile = "home/alex/github/node-validator/src/referencecoffee", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
-  <script src="../fileSearch.js"></script>
-  <script src="../goToLine.js"></script>
-  <link rel="stylesheet" href="../fileSearch.css" />
-  <link rel="stylesheet" href="../goToLine.css" />
 </head>
 <body>
   <nav>
@@ -194,7 +190,7 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
-<span class="p">{</span><span class="nx">object</span><span class="p">,</span> <span class="nx">array</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
+<span class="p">{</span><span class="nx">object</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span> <span class="s">&#39;alinex-util&#39;</span>
 
 </pre></div>
         </td>
@@ -282,7 +278,7 @@
 <p>Check if there are references in the object.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exists = module.exports.exists = </span><span class="nf">(value) -&gt;</span>
+<span class="nv">exists = exports.exists = </span><span class="nf">(value) -&gt;</span>
   <span class="k">return</span> <span class="kc">false</span> <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
   <span class="nb">Boolean</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/&lt;&lt;&lt;[^]*&gt;&gt;&gt;/</span>
 
@@ -304,7 +300,7 @@
 the real check. If there are no references it will return immediately.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">replace = module.exports.replace = </span><span class="nf">(value, work={}, cb) -&gt;</span>
+<span class="nv">exports.replace = </span><span class="nf">(value, work={}, cb) -&gt;</span>
 
 </pre></div>
         </td>
@@ -675,7 +671,7 @@ on. The result will be from the last uri path.</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">lastType</span><span class="o">?</span> <span class="o">and</span> <span class="nx">typePrecedence</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">typePrecedence</span><span class="p">[</span><span class="nx">work</span><span class="p">.</span><span class="nx">lastType</span><span class="o">?</span><span class="p">]</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">next</span><span class="si">}</span><span class="s">-reference can not be called from </span><span class="si">#{</span><span class="nx">proto</span><span class="si">}</span><span class="s">-reference</span>
+    <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">type</span><span class="si">}</span><span class="s">-reference can not be called from </span><span class="si">#{</span><span class="nx">proto</span><span class="si">}</span><span class="s">-reference</span>
 <span class="s">    for security reasons&quot;</span>
 
 </pre></div>

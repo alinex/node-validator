@@ -6,13 +6,9 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/anycoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/anycoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
-  <script src="../../fileSearch.js"></script>
-  <script src="../../goToLine.js"></script>
-  <link rel="stylesheet" href="../../fileSearch.css" />
-  <link rel="stylesheet" href="../../goToLine.css" />
 </head>
 <body>
   <nav>
@@ -85,19 +81,6 @@
 <div class="pilwrap">
   <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
 </div>
-<p>alinex modules</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
-
-</pre></div>
-        </td>
-      </tr>
-      <tr>
-        <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
-</div>
 <p>include classes and helper</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -134,14 +117,14 @@
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
 </div>
 <p>base checks</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="k">try</span>
     <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
       <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
   <span class="k">catch</span> <span class="nx">err</span>
     <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>

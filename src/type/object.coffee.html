@@ -6,13 +6,9 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/a3/node-validator/src/type/objectcoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/objectcoffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
-  <script src="../../fileSearch.js"></script>
-  <script src="../../goToLine.js"></script>
-  <link rel="stylesheet" href="../../fileSearch.css" />
-  <link rel="stylesheet" href="../../goToLine.css" />
 </head>
 <body>
   <nav>
@@ -40,6 +36,9 @@
       </div>
       <div class="heading h2">
         <a href="#type%20implementation">Type implementation</a>
+      </div>
+      <div class="heading h2">
+        <a href="#helper">Helper</a>
       </div>
     </div>
   </div>
@@ -156,6 +155,20 @@ or true to use the list from entries definition</li>
 <div class="pilwrap">
   <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
 </div>
+<p>flat</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">flat</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Hierarchical paths will be flattened together. &quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
 <p>instanceof</p>
         </td>
         <td class="code highlight"><div class="highlight"><pre>
@@ -169,7 +182,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
 </div>
 <p>mandatoryKeys</p>
         </td>
@@ -183,7 +196,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>use from entries and keys</p>
         </td>
@@ -203,7 +216,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
 </div>
 <p>allowedKeys</p>
         </td>
@@ -217,7 +230,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>use from entries and keys</p>
         </td>
@@ -236,7 +249,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>remove the already mandatory ones</p>
         </td>
@@ -251,7 +264,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>subchecks</p>
         </td>
@@ -268,7 +281,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>run subcheck</p>
         </td>
@@ -295,7 +308,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
 </div>
 <p>run subcheck</p>
         </td>
@@ -320,7 +333,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
 </div>
 <p>base checks</p>
         </td>
@@ -339,7 +352,21 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+</div>
+<p>flat</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">flat</span>
+    <span class="nv">value = </span><span class="nx">flatten</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
 </div>
 <p>instanceof</p>
         </td>
@@ -355,7 +382,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
 </div>
 <p>is object</p>
         </td>
@@ -369,7 +396,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
 </div>
 <p>check object keys</p>
         </td>
@@ -384,7 +411,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20">&#182;</a>
+  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
 </div>
 <p>use from entries and keys</p>
         </td>
@@ -404,7 +431,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21">&#182;</a>
+  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
 </div>
 <p>use from entries and keys</p>
         </td>
@@ -423,7 +450,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22">&#182;</a>
+  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
 </div>
 <p>values</p>
         </td>
@@ -437,7 +464,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
 </div>
 <p>find sub-check</p>
         </td>
@@ -459,7 +486,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24">&#182;</a>
+  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
 </div>
 <p>keys that have no specification</p>
         </td>
@@ -493,7 +520,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25">&#182;</a>
+  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
 </div>
 <p>check mandatoryKeys</p>
         </td>
@@ -517,7 +544,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26">&#182;</a>
+  <a class="pilcrow" href="#section-28" id="section-28">&#182;</a>
 </div>
 <p>check allowedKeys</p>
         </td>
@@ -544,7 +571,7 @@ or true to use the list from entries definition</li>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27">&#182;</a>
+  <a class="pilcrow" href="#section-29" id="section-29">&#182;</a>
 </div>
 <p>done return resulting value</p>
         </td>
@@ -560,6 +587,9 @@ or true to use the list from entries definition</li>
       <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
         <span class="nv">default:</span>
           <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">flatten:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
           <span class="nv">optional: </span><span class="kc">true</span>
         <span class="nv">instanceOf:</span>
           <span class="nv">type: </span><span class="s">&#39;function&#39;</span>
@@ -602,6 +632,28 @@ or true to use the list from entries definition</li>
           <span class="nv">optional: </span><span class="kc">true</span>
     <span class="nv">value: </span><span class="nx">schema</span>
   <span class="p">,</span> <span class="nx">cb</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="helper">
+  <h2>
+    <a href="#helper" name="helper" class="pilcrow">&#182;</a>
+    Helper
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">flatten = </span><span class="nf">(obj) -&gt;</span>
+  <span class="nv">n = </span><span class="p">{}</span>
+  <span class="k">for</span> <span class="nx">k</span><span class="p">,</span> <span class="nx">v</span> <span class="k">of</span> <span class="nx">obj</span>
+    <span class="k">return</span> <span class="nx">obj</span> <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">v</span> <span class="o">is</span> <span class="s">&#39;object&#39;</span>
+    <span class="nx">n</span><span class="p">[</span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">k</span><span class="si">}</span><span class="s">-</span><span class="si">#{</span><span class="nx">j</span><span class="si">}</span><span class="s">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">w</span> <span class="k">for</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">w</span> <span class="k">of</span> <span class="nx">v</span>
 </pre></div>
         </td>
       </tr>
