@@ -34,11 +34,11 @@ exports.describe = (work, cb) ->
   if work.pos.removeQuery
     text += "Existing query parameters are removed. "
   if work.pos.hostsAllowed
-    text += "Only the hosts matching #{work.pos.hostsAllowed.join ', '} are allowed. "
+    text += "Only the hosts matching #{work.pos.hostsAllowed} are allowed. "
   if work.pos.hostsDenied
-    text += "But hosts matching #{work.pos.hostsAllowed.join ', '} are not allowed. "
+    text += "But hosts matching #{work.pos.hostsAllowed} are not allowed. "
   if work.pos.allowProtocols
-    text += "The protocol have to be: #{work.pos.allowProtocols.join ', '}. "
+    text += "The protocol have to be: #{work.pos.allowProtocols}. "
   unless work.pos.allowRelative
     text += "Relative URLs are also allowed. "
   cb null, text
@@ -59,13 +59,16 @@ exports.run = (work, cb) ->
     return work.report (new Error "The url has to be a string object."), cb
   if work.pos.toAbsoluteBase
     value = url.resolve work.pos.toAbsoluteBase, value
-  parts = url.parse work.value
-# if work.pos.removeQuery
+  parts = url.parse value
+  if work.pos.removeQuery
+    delete parts.search
+    delete parts.hash
   # check the hostname
   if parts.host
     delete parts.host
     if work.pos.hostsAllowed
       success = true
+      work.pos.hostsAllowed = [work.pos.hostsAllowed] unless Array.isArray work.pos.hostsAllowed
       for match in work.pos.hostsAllowed
         if match instanceof RegExp
           success = success and parts.hostname.match match
@@ -76,6 +79,7 @@ exports.run = (work, cb) ->
         against '#{work.pos.hostsAllowed}'"), cb
     if work.pos.hostsDenied
       success = true
+      work.pos.hostsDenied = [work.pos.hostsDenied] unless Array.isArray work.pos.hostsDenied
       for match in work.pos.hostsDenied
         if match instanceof RegExp
           success = success and not parts.hostname.match match
@@ -88,7 +92,7 @@ exports.run = (work, cb) ->
   if work.pos.allowProtocols
     unless parts.protocol
       return work.report (new Error "The protocol is missing."), cb
-    unless parts.protocol in work.pos.allowProtocols
+    unless parts.protocol.replace(/:/, '') in work.pos.allowProtocols
       return work.report (new Error "The protocol #{parts.protocol} is not allowed."), cb
   unless work.pos.allowRelative or parts.hostname
     return work.report (new Error "Relative URLs are not allowed."), cb

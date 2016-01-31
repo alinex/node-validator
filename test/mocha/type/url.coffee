@@ -30,12 +30,61 @@ describe.only "URL", ->
     it "should fail on other elements", (cb) ->
       test.fail schema, [null, [], (new Error '????'), {}], cb
 
+  describe "options", ->
 
+    it "should normalize url", (cb) ->
+      test.equal schema, [
+        ['http://alinex.de', 'http://alinex.de/']
+      ], cb
 
+    it "should make url absolute", (cb) ->
+      schema.toAbsoluteBase = 'http://alinex.de/doc/'
+      test.equal schema, [
+        ['index.html', 'http://alinex.de/doc/index.html']
+      ], cb
 
+    it "should remove query and hash params", (cb) ->
+      schema.removeQuery = true
+      test.equal schema, [
+        ['http://alinex.de/?search=test#page1', 'http://alinex.de/']
+      ], cb
 
+    it "should allow correct hosts", (cb) ->
+      schema.hostsAllowed = /\.de$/
+      test.equal schema, [
+        ['http://alinex.de/?search=test#page1', 'http://alinex.de/?search=test#page1']
+      ], cb
+    it "should fail on not allowed host", (cb) ->
+      schema.hostsAllowed = /\.com$/
+      test.fail schema, ['http://alinex.de/'], cb
 
+    it "should work if host not disallowed", (cb) ->
+      schema.hostsDenied = /\.com$/
+      test.equal schema, [
+        ['http://alinex.de/?search=test#page1', 'http://alinex.de/?search=test#page1']
+      ], cb
+    it "should disallow hosts", (cb) ->
+      schema.hostsDenied = /\.de$/
+      test.fail schema, ['http://alinex.de/'], cb
 
+    it "should work for listed protocols", (cb) ->
+      schema.allowProtocols = ['http']
+      test.equal schema, [
+        ['http://alinex.de/?search=test#page1', 'http://alinex.de/?search=test#page1']
+      ], cb
+    it "should fail on not allowed protocols", (cb) ->
+      schema.allowProtocols = ['http']
+      test.fail schema, ['https://alinex.de/'], cb
+
+    it "should allow relative urls", (cb) ->
+      schema.allowRelative = true
+      test.same schema, ['index.html'], cb
+    it "should disallow relative urls", (cb) ->
+      schema.allowRelative = false
+      test.fail schema, ['index.html'], cb
+
+#        allowProtocols: ['http']
+#        allowRelative: true
 
   describe "description", ->
 
