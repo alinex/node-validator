@@ -1283,6 +1283,22 @@ The table shows how the result is detected if both given:
 Check that the given value is a regular expression. If a text is given it will be
 compiled into an regular expression.
 
+### url
+
+Check the given string for a valid url.
+
+__Sanitize options:__
+
+- `toAbsoluteBase` - convert to absolute with given base
+- `removeQuery` - (boolean) remove query and hash from url
+
+__Check options:__
+
+- `hostsAllowed` - list of allowed hosts by string or regexp
+- `hostsDenied` - list of denied hosts by string or regexp
+- `allowProtocols` - lust of allowed protocols
+- `allowRelative` - (boolean) to allow also relative urls
+
 
 Package structure
 -------------------------------------------------

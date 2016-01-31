@@ -3,12 +3,12 @@
 
 # Check options:
 #
-# - `toAbsoluteBase`
-# - `removeQuery`
-# - `hostsAllowed`
-# - `hostsDenied` with string or regexp
-# - `allowProtocols` with list
-# - `allowRelative`
+# - `toAbsoluteBase` - convert to absolute with given base
+# - `removeQuery` - (boolean) remove query and hash from url
+# - `hostsAllowed` - list of allowed hosts by string or regexp
+# - `hostsDenied` - list of denied hosts by string or regexp
+# - `allowProtocols` - lust of allowed protocols
+# - `allowRelative` - (boolean) to allow also relative urls
 
 
 # Node modules
