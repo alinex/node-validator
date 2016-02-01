@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.2.1 (2016-02-01)
+-------------------------------------------------
+- Allow all tests to run again.
+- Fixed flatten option on object.
+
 Version 1.2.0 (2016-01-31)
 -------------------------------------------------
 - Allow objects as string.values option.
