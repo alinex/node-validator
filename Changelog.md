@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.2.2 (2016-02-01)
+-------------------------------------------------
+- 
+
 Version 1.2.1 (2016-02-01)
 -------------------------------------------------
 - Allow all tests to run again.
