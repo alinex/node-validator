@@ -7,13 +7,6 @@ individual versions:
 Version 1.2.3 (2016-02-01)
 -------------------------------------------------
 - publish again because was buggy.
-
-Version 1.2.2 (2016-02-01)
--------------------------------------------------
-- 
-
-Version 1.2.1 (2016-02-01)
--------------------------------------------------
 - Allow all tests to run again.
 - Fixed flatten option on object.
 
@@ -429,4 +422,3 @@ Version 0.0.1 (2014-08-06)
 - Added type.string check with sanitize options.
 - First runable version with only a boolean check.
 - Initial commit
-
