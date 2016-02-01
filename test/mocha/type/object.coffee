@@ -172,7 +172,7 @@ describe "Object", ->
         ]
       ], cb
 
-    it.only "should support flatten of objects", (cb) ->
+    it "should support flatten of objects", (cb) ->
       schema.flatten = true
       test.equal schema, [
         [
