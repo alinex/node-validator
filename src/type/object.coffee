@@ -30,7 +30,7 @@ exports.describe = (work, cb) ->
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
   # flat
-  if work.pos.flat
+  if work.pos.flatten
     text += "Hierarchical paths will be flattened together. "
   # instanceof
   if work.pos.instanceOf?
@@ -107,8 +107,8 @@ exports.run = (work, cb) ->
   catch err
     return work.report err, cb
   value = work.value
-  # flat
-  if work.pos.flat
+  # flatten
+  if work.pos.flatten
     value = flatten work.value
   # instanceof
   if work.pos.instanceOf?
@@ -139,6 +139,7 @@ exports.run = (work, cb) ->
       for entry in work.pos.entries
         allowedKeys.push entry.key if entry.key
   keys = array.unique usedKeys.concat mandatoryKeys, allowedKeys
+  work.value = value
   # values
   async.each keys, (key, cb) ->
     return cb() if key instanceof RegExp # skip expressions here
@@ -270,4 +271,8 @@ flatten = (obj) ->
   n = {}
   for k, v of obj
     return obj unless typeof v is 'object'
+    for j, w of v
+      return obj unless typeof w is 'object'
+    v = flatten v
     n["#{k}-#{j}"] = w for j, w of v
+  n
