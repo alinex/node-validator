@@ -24,7 +24,6 @@ Version 1.1.0 (2016-01-29)
 - Added server check for email addresses.
 - Added basic email validation based on text checking.
 - Added flatten option to object sanititzer.
-- Merge branch 'master' of https://github.com/alinex/node-validator
 - Fixed some minor linter warnings.
 
 Version 1.0.9 (2015-11-28)
