@@ -27,7 +27,7 @@ describe "Complex", ->
             type: 'ipaddr'
       , [[
         percent: '8%'
-        interval:  '1s'
+        interval: '1s'
         byte: '1kB'
         regexp: /test/
         hostname: 'localhost'

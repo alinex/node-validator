@@ -76,10 +76,13 @@ describe "Datetime", ->
 
     it "should parse reference names", (cb) ->
       test.equal schema, [
-        ['today', moment(new Date).hour(12).minute(0).second(0).millisecond(0).toDate()]
-        ['tomorrow', moment(new Date).add(1, 'day').hour(12).minute(0).second(0).millisecond(0).toDate()]
-        ['yesterday', moment(new Date).subtract(1, 'day').hour(12).minute(0).second(0).millisecond(0).toDate()]
-        ['last friday', moment(new Date).subtract(7, 'days').day(5).hour(12).minute(0).second(0).millisecond(0).toDate()]
+        ['today', moment(new Date()).hour(12).minute(0).second(0).millisecond(0).toDate()]
+        ['tomorrow', moment(new Date()).add(1, 'day').hour(12).minute(0).second(0)
+        .millisecond(0).toDate()]
+        ['yesterday', moment(new Date()).subtract(1, 'day').hour(12).minute(0).second(0)
+        .millisecond(0).toDate()]
+        ['last friday', moment(new Date()).subtract(7, 'days').day(5).hour(12).minute(0)
+        .second(0).millisecond(0).toDate()]
       ], cb
 
     it "should parse named dates", (cb) ->
@@ -96,8 +99,10 @@ describe "Datetime", ->
 
     it "should parse relative date", (cb) ->
       test.equal schema, [
-        ['This Friday at 13:00', moment(new Date).day(5).hour(13).minute(0).second(0).millisecond(0).toDate()]
-        ['5 days ago', moment(new Date).subtract(5, 'days').hour(12).minute(0).second(0).millisecond(0).toDate()]
+        ['This Friday at 13:00', moment(new Date()).day(5).hour(13).minute(0)
+        .second(0).millisecond(0).toDate()]
+        ['5 days ago', moment(new Date()).subtract(5, 'days').hour(12).minute(0)
+        .second(0).millisecond(0).toDate()]
       ], cb
 
     it "should parse now", (cb) ->
@@ -115,8 +120,8 @@ describe "Datetime", ->
       schema.range = true
       test.equal schema, [
         ['This Friday from 13:00 - 16.00', [
-          moment(new Date).day(5).hour(13).minute(0).second(0).millisecond(0).toDate()
-          moment(new Date).day(5).hour(16).minute(0).second(0).millisecond(0).toDate()
+          moment(new Date()).day(5).hour(13).minute(0).second(0).millisecond(0).toDate()
+          moment(new Date()).day(5).hour(16).minute(0).second(0).millisecond(0).toDate()
         ]]
       ], cb
 

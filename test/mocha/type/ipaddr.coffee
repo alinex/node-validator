@@ -28,7 +28,7 @@ describe "IP Address", ->
       test.same schema, ['127.0.0.1', '192.12.1.1', 'ffff::'], cb
 
     it "should fail on other elements", (cb) ->
-      test.fail schema, [1, null, [], (new Error '????'), { }], cb
+      test.fail schema, [1, null, [], (new Error '????'), {}], cb
 
     it "should fail on incorrect addresses", (cb) ->
       test.fail schema, ['300.92.16.2', '192.168.5', '12.0.0.0.1'], cb
@@ -51,7 +51,7 @@ describe "IP Address", ->
         'private'
       ]
       test.same schema, ['217.122.0.1'], ->
-        test.fail schema, ['172.16.0.1', '192.168.15.1','10.8.0.1',
+        test.fail schema, ['172.16.0.1', '192.168.15.1', '10.8.0.1',
         '216.122.0.1'], cb
 
     it "should support allow range", (cb) ->

@@ -26,8 +26,8 @@ describe "Array", ->
 
     it "should match array objects", (cb) ->
       test.same schema, [
-        [1,2,3]
-        ['one','two']
+        [1, 2, 3]
+        ['one', 'two']
         []
         new Array()
       ], cb
@@ -37,7 +37,7 @@ describe "Array", ->
 
     it "should run check on all sub elements", (cb) ->
       test.same schema, [
-        [[1],2,[3]]
+        [[1], 2, [3]]
         ['one', {two: 2}]
         new Array()
       ], cb
@@ -47,7 +47,7 @@ describe "Array", ->
     it "should support delimiter option", (cb) ->
       schema.delimiter = ','
       test.equal schema, [
-        ['1,2,3', ['1','2','3']]
+        ['1,2,3', ['1', '2', '3']]
         ['123', ['123']]
       ], cb
 
@@ -57,35 +57,35 @@ describe "Array", ->
         ['123', ['123']]
         [15, [15]]
         [(new Error 'xxx'), [(new Error 'xxx')]]
-        [[1,2,3], [1,2,3]]
+        [[1, 2, 3], [1, 2, 3]]
       ], cb
 
     it "should support notEmpty option", (cb) ->
       schema.notEmpty = true
-      test.same schema, [[1,2,3], ['one','two']], ->
+      test.same schema, [[1, 2, 3], ['one', 'two']], ->
         test.fail schema, [[], new Array()], cb
 
     it "should support minLength option", (cb) ->
       schema.minLength = 2
-      test.same schema, [[1,2,3], ['one','two']], ->
+      test.same schema, [[1, 2, 3], ['one', 'two']], ->
         test.fail schema, [[], new Array(), [1]], cb
 
     it "should support maxLength option", (cb) ->
       schema.maxLength = 2
-      test.same schema, [[1], ['one','two'], [], new Array()], ->
-        test.fail schema, [[1,2,3]], cb
+      test.same schema, [[1], ['one', 'two'], [], new Array()], ->
+        test.fail schema, [[1, 2, 3]], cb
 
     it "should support exact length option", (cb) ->
       schema.minLength = 2
       schema.maxLength = 2
-      test.same schema, [[1,2], ['one','two']], ->
-        test.fail schema, [[1,2,3], [1], []], cb
+      test.same schema, [[1, 2], ['one', 'two']], ->
+        test.fail schema, [[1, 2, 3], [1], []], cb
 
     it "should support default subchecks", (cb) ->
       schema.entries =
         type: 'integer'
-      test.same schema, [[1,2], []], ->
-        test.fail schema, [['one'], [1,'two']], cb
+      test.same schema, [[1, 2], []], ->
+        test.fail schema, [['one'], [1, 'two']], cb
 
     it "should support specific subchecks", (cb) ->
       schema.list = [
@@ -93,8 +93,8 @@ describe "Array", ->
       ,
         type: 'float'
       ]
-      test.same schema, [[1,2.0], [], [-1,0.7]], ->
-        test.fail schema, [[1.5,2.0], [-1.4,0]], cb
+      test.same schema, [[1, 2.0], [], [-1, 0.7]], ->
+        test.fail schema, [[1.5, 2.0], [-1.4, 0]], cb
 
   describe "description", ->
 

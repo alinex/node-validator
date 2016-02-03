@@ -16,8 +16,8 @@ describe "References", ->
       values = [
         'one'
         1
-        [1,2,3]
-        { one: 1 }
+        [1, 2, 3]
+        {one: 1}
         new Error '????'
         undefined
         null
@@ -42,8 +42,8 @@ describe "References", ->
       values = [
         'one'
         1
-        [1,2,3]
-        { one: 1 }
+        [1, 2, 3]
+        {one: 1}
         new Error '????'
         undefined
         null
@@ -155,7 +155,7 @@ describe "References", ->
       async.forEachOfSeries values, (check, value, cb) ->
         reference.replace value,
           data: soccer
-          path: ['europe','germany']
+          path: ['europe', 'germany']
         , (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
@@ -171,7 +171,7 @@ describe "References", ->
       async.eachSeries values, (value, cb) ->
         reference.replace value,
           data: soccer
-          path: ['europe','germany']
+          path: ['europe', 'germany']
         , (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
@@ -184,7 +184,7 @@ describe "References", ->
       async.forEachOfSeries values, (check, value, cb) ->
         reference.replace value,
           data: soccer
-          path: ['europe','germany']
+          path: ['europe', 'germany']
         , (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
@@ -198,7 +198,7 @@ describe "References", ->
       async.eachSeries values, (value, cb) ->
         reference.replace value,
           data: soccer
-          path: ['europe','germany']
+          path: ['europe', 'germany']
         , (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
@@ -428,7 +428,7 @@ describe "References", ->
           text: text
       , (err, result) ->
         expect(err, 'error').to.not.exist
-        expect(result, 'result').to.deep.equal ['30370370367','40493827156','50617283945']
+        expect(result, 'result').to.deep.equal ['30370370367', '40493827156', '50617283945']
         cb()
 
     it "should get line list", (cb) ->
@@ -437,7 +437,7 @@ describe "References", ->
           text: text
       , (err, result) ->
         expect(err, 'error').to.not.exist
-        expect(result, 'result').to.deep.equal ['30370370367','50617283945']
+        expect(result, 'result').to.deep.equal ['30370370367', '50617283945']
         cb()
 
     it "should get line range + list", (cb) ->
@@ -447,7 +447,7 @@ describe "References", ->
       , (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal [
-          '30370370367','40493827156','50617283945'
+          '30370370367', '40493827156', '50617283945'
           '80987654312']
         cb()
 
@@ -493,7 +493,7 @@ describe "References", ->
     it "should fail for wrong data type", (cb) ->
       reference.replace "<<<struct:///text#3>>>",
         data:
-          text: { one:1 }
+          text: {one: 1}
       , (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.not.exist
@@ -648,14 +648,14 @@ describe "References", ->
       test.equal
         type: 'object'
       , [
-        [{name:'<<<notthere | name>>>'}, {name:'name'}]
+        [{name: '<<<notthere | name>>>'}, {name: 'name'}]
       ], cb
 
     it "should call struct references in sub values", (cb) ->
       test.equal
         type: 'object'
       , [
-        [{min: 5, max:'<<<struct://min>>>'}, {min:5,max:5}]
+        [{min: 5, max: '<<<struct://min>>>'}, {min: 5, max: 5}]
       ], cb
 
     it "should call references in options", (cb) ->
@@ -764,8 +764,8 @@ describe "References", ->
             two: '<<<one>>>'
             one: '<<<three>>>'
         ], cb
-      catch err
-        expect(err).to.exist
+      catch error
+        expect(error).to.exist
         cb()
       domain.exit()
 

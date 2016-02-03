@@ -28,7 +28,7 @@ describe "TCP/UDP Port", ->
       test.same schema, [22, 80, 62016], cb
 
     it "should fail on other elements", (cb) ->
-      test.fail schema, [null, [], (new Error '????'), { }], cb
+      test.fail schema, [null, [], (new Error '????'), {}], cb
 
     it "should fail on incorrect values", (cb) ->
       test.fail schema, [-1, 3.5, 1234567890], cb

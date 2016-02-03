@@ -35,8 +35,8 @@ describe "Any", ->
 
     it "should match array objects", (cb) ->
       test.same schema, [
-        [1,2,3]
-        ['one','two']
+        [1, 2, 3]
+        ['one', 'two']
         []
         new Array()
       ], cb
@@ -45,7 +45,7 @@ describe "Any", ->
       test.same schema, [beforeEach, RegExp, Array], cb
 
     it "should match an object", (cb) ->
-      test.same schema, [{one:1,two:2,three:3}, new Error 'xxx'], cb
+      test.same schema, [{one: 1, two: 2, three: 3}, new Error 'xxx'], cb
 
   describe "description", ->
 
