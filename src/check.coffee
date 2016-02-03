@@ -143,8 +143,8 @@ exports.describe = (work, cb) ->
     lib = getTypeLib work.pos
     unless lib.describe?
       throw new Error "Type '#{work.pos.type}' has no describe() method"
-  catch err
-    debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
+  catch error
+    debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{error}"
     return cb new Error "Type '#{work.pos.type}' not supported"
   # call description on that library
   lib.describe work, cb
@@ -197,7 +197,7 @@ exports.selfcheck = (schema, cb) ->
     lib = getTypeLib schema
     unless lib.selfcheck?
       return cb new Error "Type '#{schema.type}' has no selfcheck() method"
-  catch err
+  catch
     return cb new Error "Type '#{schema.type}' not supported"
   # run the selfcheck
   lib.selfcheck schema, cb

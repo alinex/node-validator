@@ -16,7 +16,8 @@ check = require '../check'
 # -------------------------------------------------
 exports.describe = (work, cb) ->
   text = "At least one of the following checks have to succeed:"
-  async.map [0..work.pos.or.length-1], (num, cb) ->
+  max = work.pos.or.length - 1
+  async.map [0..max], (num, cb) ->
     # run subcheck
     check.describe work.goInto(['or', num]), (err, text) ->
       return cb err if err
@@ -35,11 +36,12 @@ exports.run = (work, cb) ->
     if check.optional.run work
       debug "#{work.debug} result #{util.inspect work.value ? null}"
       return cb()
-  catch err
-    return work.report err, cb
+  catch error
+    return work.report error, cb
   # run async checks
   error = []
-  async.map [0..(work.pos.or.length-1)], (num, cb) ->
+  max = work.pos.or.length - 1
+  async.map [0..max], (num, cb) ->
     sub = work.goInto ['or', num]
     check.run sub, (err, result) ->
       error[num] = err if err

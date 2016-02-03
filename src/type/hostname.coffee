@@ -51,8 +51,8 @@ exports.run = (work, cb) ->
     if check.optional.run work
       debug "#{work.debug} result #{util.inspect work.value ? null}"
       return cb()
-  catch err
-    return work.report err, cb
+  catch error
+    return work.report error, cb
   # validate using subcheck
   name = work.spec.name ? 'value'
   if work.path.length

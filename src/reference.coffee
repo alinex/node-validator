@@ -256,16 +256,16 @@ findType =
       when '$json'
         try
           result = JSON.parse work.data
-        catch err
-          debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
+        catch error
+          debug chalk.grey "'#{proto}://#{path}' -> check failed: #{error.message}"
           return cb()
         cb null, result
       when '$yaml'
         yaml = require 'js-yaml'
         try
           result = yaml.safeLoad work.data
-        catch err
-          debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
+        catch error
+          debug chalk.grey "'#{proto}://#{path}' -> check failed: #{error.message}"
           return cb()
         cb null, result
       when '$xml'

@@ -99,8 +99,8 @@ exports.run = (work, cb) ->
     if check.optional.run work
       debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
-  catch err
-    return work.report err, cb
+  catch error
+    return work.report error, cb
   value = work.value
   # first check input type
   name = work.spec.name ? 'value'

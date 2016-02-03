@@ -79,7 +79,8 @@ exports.describe = (work, cb) ->
     (cb) ->
       return cb() unless work.pos.entries?
       subtext = "And all other keys which are: "
-      async.map [0..work.pos.entries.length-1], (num, cb) ->
+      max = work.pos.entries.length - 1
+      async.map [0..max], (num, cb) ->
         rule = work.pos.entries[num]
         if rule.key?
           ruletext = "\n- matching #{rule.key}: "
@@ -104,8 +105,8 @@ exports.run = (work, cb) ->
     if check.optional.run work
       debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
-  catch err
-    return work.report err, cb
+  catch error
+    return work.report error, cb
   value = work.value
   # flatten
   if work.pos.flatten

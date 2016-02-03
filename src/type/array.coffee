@@ -50,7 +50,8 @@ exports.describe = (work, cb) ->
     (cb) ->
       return cb() unless work.pos.list?
       subtext = "The following entries have a specific format:"
-      async.map [0..work.pos.list.length-1], (num, cb) ->
+      max = work.pos.list.length - 1
+      async.map [0..max], (num, cb) ->
         # run subcheck
         check.describe work.goInto(['list', num]), (err, text) ->
           return cb err if err
@@ -77,8 +78,8 @@ exports.run = (work, cb) ->
     if check.optional.run work
       debug "#{work.debug} result #{util.inspect value ? null}"
       return cb()
-  catch err
-    return work.report err, cb
+  catch error
+    return work.report error, cb
   value = work.value
   # string to array
   if typeof value is 'string' and work.pos.delimiter?
@@ -105,7 +106,8 @@ exports.run = (work, cb) ->
     # done return resulting value
     debug "#{work.debug} result #{util.inspect value ? null}"
     return cb null, value
-  async.each [0..value.length-1], (num, cb) ->
+  max = value.length - 1
+  async.each [0..max], (num, cb) ->
     # find sub-check
     if work.pos.list?[num]?
       sub = work.goInto ['list', num], [num]

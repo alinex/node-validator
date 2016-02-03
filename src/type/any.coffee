@@ -26,8 +26,8 @@ exports.run = (work, cb) ->
     if check.optional.run work
       debug "#{work.debug} result #{util.inspect work.value ? null}"
       return cb()
-  catch err
-    return work.report err, cb
+  catch error
+    return work.report error, cb
   debug "#{work.debug} result #{util.inspect work.value}"
   cb null, work.value
 
