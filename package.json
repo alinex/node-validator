@@ -32,13 +32,13 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "alinex-async": "^0.2.3",
-    "alinex-fs": "0.2.x",
-    "alinex-util": "0.x",
+    "alinex-async": "^1.0.0",
+    "alinex-fs": "^2.0.0",
+    "alinex-util": "^0.3.15",
     "chalk": "1.x",
     "chrono-node": "^1.0.8",
     "debug": ">=0.8.0 <3.0.0",
-    "moment": "^2.10.6",
+    "moment": "^2.11.2",
     "request": "^2.69.0"
   },
   "optionalDependencies": {
@@ -49,8 +49,7 @@
     "xml2js": "0.4.x"
   },
   "devDependencies": {
-    "alinex-builder": "1.x",
-    "alinex-error": "1.x",
+    "alinex-builder": "^1.1.16",
     "chai": "3.x",
     "chai-datetime": "^1.4.0"
   },
