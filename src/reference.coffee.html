@@ -6,13 +6,9 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/github/node-validator/src/referencecoffee", defaultSidebar = true;
+    var relativeDir = "../", thisFile = "home/alex/github/node-validator/src/reference.coffee", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
-  <script src="../fileSearch.js"></script>
-  <script src="../goToLine.js"></script>
-  <link rel="stylesheet" href="../fileSearch.css" />
-  <link rel="stylesheet" href="../goToLine.css" />
 </head>
 <body>
   <nav>
@@ -888,16 +884,16 @@ retry the same call again</p>
       <span class="k">when</span> <span class="s">&#39;$json&#39;</span>
         <span class="k">try</span>
           <span class="nv">result = </span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span>
-        <span class="k">catch</span> <span class="nx">err</span>
-          <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">proto</span><span class="si">}</span><span class="s">://</span><span class="si">#{</span><span class="nx">path</span><span class="si">}</span><span class="s">&#39; -&gt; check failed: </span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span>
+        <span class="k">catch</span> <span class="nx">error</span>
+          <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">proto</span><span class="si">}</span><span class="s">://</span><span class="si">#{</span><span class="nx">path</span><span class="si">}</span><span class="s">&#39; -&gt; check failed: </span><span class="si">#{</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span>
           <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
         <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
       <span class="k">when</span> <span class="s">&#39;$yaml&#39;</span>
         <span class="nv">yaml = </span><span class="nx">require</span> <span class="s">&#39;js-yaml&#39;</span>
         <span class="k">try</span>
           <span class="nv">result = </span><span class="nx">yaml</span><span class="p">.</span><span class="nx">safeLoad</span> <span class="nx">work</span><span class="p">.</span><span class="nx">data</span>
-        <span class="k">catch</span> <span class="nx">err</span>
-          <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">proto</span><span class="si">}</span><span class="s">://</span><span class="si">#{</span><span class="nx">path</span><span class="si">}</span><span class="s">&#39; -&gt; check failed: </span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span>
+        <span class="k">catch</span> <span class="nx">error</span>
+          <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot;&#39;</span><span class="si">#{</span><span class="nx">proto</span><span class="si">}</span><span class="s">://</span><span class="si">#{</span><span class="nx">path</span><span class="si">}</span><span class="s">&#39; -&gt; check failed: </span><span class="si">#{</span><span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span>
           <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
         <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
       <span class="k">when</span> <span class="s">&#39;$xml&#39;</span>

@@ -6,13 +6,9 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/orcoffee", defaultSidebar = true;
+    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/or.coffee", defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
-  <script src="../../fileSearch.js"></script>
-  <script src="../../goToLine.js"></script>
-  <link rel="stylesheet" href="../../fileSearch.css" />
-  <link rel="stylesheet" href="../../goToLine.css" />
 </head>
 <body>
   <nav>
@@ -119,7 +115,8 @@
         <td class="code highlight"><div class="highlight"><pre>
 <span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
   <span class="nv">text = </span><span class="s">&quot;At least one of the following checks have to succeed:&quot;</span>
-  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">or</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nf">(num, cb) -&gt;</span>
+  <span class="nv">max = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">or</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span>
+  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">max</span><span class="p">],</span> <span class="nf">(num, cb) -&gt;</span>
 
 </pre></div>
         </td>
@@ -160,8 +157,8 @@
     <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
       <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
       <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
-  <span class="k">catch</span> <span class="nx">err</span>
-    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">cb</span>
+  <span class="k">catch</span> <span class="nx">error</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">error</span><span class="p">,</span> <span class="nx">cb</span>
 
 </pre></div>
         </td>
@@ -175,7 +172,8 @@
         </td>
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">error = </span><span class="p">[]</span>
-  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..(</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">or</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)],</span> <span class="nf">(num, cb) -&gt;</span>
+  <span class="nv">max = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">or</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span>
+  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">max</span><span class="p">],</span> <span class="nf">(num, cb) -&gt;</span>
     <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]</span>
     <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">sub</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
       <span class="nx">error</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span> <span class="o">=</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>

@@ -6,13 +6,9 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/github/node-validator/src/checkcoffee", defaultSidebar = true;
+    var relativeDir = "../", thisFile = "home/alex/github/node-validator/src/check.coffee", defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
-  <script src="../fileSearch.js"></script>
-  <script src="../goToLine.js"></script>
-  <link rel="stylesheet" href="../fileSearch.css" />
-  <link rel="stylesheet" href="../goToLine.css" />
 </head>
 <body>
   <nav>
@@ -568,8 +564,8 @@ concatenated with the given paths.</p>
     <span class="nv">lib = </span><span class="nx">getTypeLib</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span>
     <span class="k">unless</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">describe</span><span class="o">?</span>
       <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Type &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&#39; has no describe() method&quot;</span>
-  <span class="k">catch</span> <span class="nx">err</span>
-    <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">red</span> <span class="s">&quot;Failed to load &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&#39; lib because of: </span><span class="si">#{</span><span class="nx">err</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="k">catch</span> <span class="nx">error</span>
+    <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">red</span> <span class="s">&quot;Failed to load &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&#39; lib because of: </span><span class="si">#{</span><span class="nx">error</span><span class="si">}</span><span class="s">&quot;</span>
     <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Type &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&#39; not supported&quot;</span>
 
 </pre></div>
@@ -740,7 +736,7 @@ concatenated with the given paths.</p>
     <span class="nv">lib = </span><span class="nx">getTypeLib</span> <span class="nx">schema</span>
     <span class="k">unless</span> <span class="nx">lib</span><span class="p">.</span><span class="nx">selfcheck</span><span class="o">?</span>
       <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Type &#39;</span><span class="si">#{</span><span class="nx">schema</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&#39; has no selfcheck() method&quot;</span>
-  <span class="k">catch</span> <span class="nx">err</span>
+  <span class="k">catch</span>
     <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Type &#39;</span><span class="si">#{</span><span class="nx">schema</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&#39; not supported&quot;</span>
 
 </pre></div>
