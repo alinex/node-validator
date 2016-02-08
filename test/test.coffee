@@ -137,7 +137,21 @@ exports.function = (schema, values, cb) ->
     , (err, result) ->
       expect(err, 'error').to.not.exist
       expect(result, 'result').to.be.a 'function'
-      expect(result params, 'test function').to.deep.equal goal
+      expect(result(params), 'test function').to.deep.equal goal
+      cb()
+  , cb
+
+exports.function2 = (schema, values, cb) ->
+  num = 0
+  async.each values, ([value, params1, params2, goal], cb) ->
+    validator.check
+      name: "equal-#{++num}"
+      schema: schema
+      value: value
+    , (err, result) ->
+      expect(err, 'error').to.not.exist
+      expect(result, 'result').to.be.a 'function'
+      expect(result(params1, params2), 'test function').to.deep.equal goal
       cb()
   , cb
 

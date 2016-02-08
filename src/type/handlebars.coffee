@@ -13,7 +13,7 @@ util = require 'util'
 chalk = require 'chalk'
 handlebars = require 'handlebars'
 handlebarsIntl = require 'handlebars-intl'
-#GLOBAL.Intl = require 'intl'
+global.Intl = require 'intl'
 # alinex modules
 object = require('alinex-util').object
 # include classes and helper
@@ -21,7 +21,15 @@ check = require '../check'
 
 # ### Setup modules
 handlebarsIntl.registerWith handlebars
-
+base =
+  intl:
+    locales: 'en-US'
+    formats:
+      date:
+        short:
+          day: 'numeric'
+          month: 'long'
+          year: 'numeric'
 
 # Type implementation
 # -------------------------------------------------
@@ -50,7 +58,10 @@ exports.run = (work, cb) ->
   # compile if handlebars syntax found
   if value.match /\{\{.*?\}\}/
     debug "#{work.debug} compile handlebars"
-    fn = handlebars.compile value
+    template = handlebars.compile value
+    fn = (context, data) ->
+      return template context,
+        data: object.extend {}, base, data
   else
     fn = -> return value
   debug "#{work.debug} result #{util.inspect value ? null}"

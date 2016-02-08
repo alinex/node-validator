@@ -47,7 +47,7 @@ describe "Handlebars", ->
       test.function schema, [
         ['{{formatNumber num}}', context, '42,000']
         ['{{formatNumber completed style="percent"}}', context, '90%']
-        ['{{formatNumber price style="currency" currency="USD"}}', context, 'US$ 100.95']
+        ['{{formatNumber price style="currency" currency="USD"}}', context, '$100.95']
       ], cb
 
     it "should format relative dates", (cb) ->
@@ -61,21 +61,21 @@ describe "Handlebars", ->
         ['{{formatRelative meetingDate}}', context, 'in 1 hour']
       ], cb
 
-    it.skip "should format dates", (cb) ->
+    it "should format dates", (cb) ->
       context =
         now: new Date()
       test.function schema, [
         ['{{formatDate now day="numeric" month="long" year="numeric"}}'
         context, 'February 8, 2016']
-        ['{{formatDate now "short"}}', context, '2016 M02 8']
+        ['{{formatDate now "short"}}', context, 'February 8, 2016']
         ], cb
 
-    it.skip "should format dates intl", (cb) ->
+    it "should format dates intl", (cb) ->
       context =
         now: new Date()
-      test.function schema, [
-        ['{{#intl locales="de-DE"}}{{formatDate now "short"}}{{/intl}}'
-          context, 'February 8, 2016']
+      test.function2 schema, [
+        ['{{formatDate now "short"}}'
+          context, {intl: locale: 'de-DE'}, 'February 8, 2016']
       ], cb
 
   describe "description", ->
