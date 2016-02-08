@@ -38,6 +38,7 @@
     "chalk": "1.x",
     "chrono-node": "^1.0.8",
     "debug": ">=0.8.0 <3.0.0",
+    "handlebars-intl": "^1.1.2",
     "moment": "^2.11.2",
     "request": "^2.69.0"
   },

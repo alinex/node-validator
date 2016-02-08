@@ -12,10 +12,16 @@ debug = require('debug')('validator:handlebars')
 util = require 'util'
 chalk = require 'chalk'
 handlebars = require 'handlebars'
+handlebarsIntl = require 'handlebars-intl'
+#GLOBAL.Intl = require 'intl'
 # alinex modules
 object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
+
+# ### Setup modules
+handlebarsIntl.registerWith handlebars
+
 
 # Type implementation
 # -------------------------------------------------
