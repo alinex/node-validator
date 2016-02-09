@@ -26,7 +26,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "prepublish": "node_modules/.bin/builder -c compile",
-    "test": "node_modules/.bin/builder -c test"
+    "test": "node_modules/.bin/builder -c test --icu-data-dir=node_modules/full-icu"
   },
   "directories": {
     "lib": "./lib"
@@ -39,17 +39,14 @@
     "chrono-node": "^1.0.8",
     "debug": "^2.2.0",
     "handlebars": "^4.0.5",
-    "handlebars-intl": "^1.1.2",
-    "intl": "^1.0.1",
     "moment": "^2.11.2",
-    "request": "^2.69.0"
-  },
-  "optionalDependencies": {
+    "request": "^2.69.0",
     "ipaddr.js": "1.x",
     "mathjs": "^2.2.0",
-    "handlebars": "^4.0.0",
     "js-yaml": "3.x",
     "xml2js": "0.4.x"
+  },
+  "optionalDependencies": {
   },
   "devDependencies": {
     "alinex-builder": "^1.1.16",

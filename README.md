@@ -1179,24 +1179,20 @@ validator.check
   # this will output 'hello alex'
 ```
 
-You can also use the [international helper](http://formatjs.io/handlebars/)
-with an easy to use syntax:
+You can also use the some of the additional helpers:
 
-``` coffee
-validator.check
-  name: 'test'        # name to be displayed in errors (optional)
-  value: 'heute ist der {{formatDate now "short"}}' # value to check
-  schema:             # definition of checks
-    type: 'handlebars'
-, (err, result) ->
-  # then use it
-  console.log result
-    now: new Date()
-  , intl: locale: 'de-DE'
-  # this will output 'heute ist der 23. Januar 2016'
-```
+**dateFormat**
 
-Wird kein 'locale' angegeben, so wird 'en-US' benutzt.
+Examples:
+
+    usage: {{dateFormat date format="MMMM YYYY"}}
+    usage: {{dateFormat date format="LL"}}
+
+See the description of [moment.js](http://momentjs.com/docs/#/displaying/) for
+the possible format strings.
+
+The language for the date format can be set by using `moment.locale 'de'` or any
+other locale before executing the handlebars template.
 
 ### hostname
 

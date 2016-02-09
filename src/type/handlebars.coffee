@@ -12,24 +12,23 @@ debug = require('debug')('validator:handlebars')
 util = require 'util'
 chalk = require 'chalk'
 handlebars = require 'handlebars'
-handlebarsIntl = require 'handlebars-intl'
-global.Intl = require 'intl'
+moment = require 'moment'
 # alinex modules
 object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
 
 # ### Setup modules
-handlebarsIntl.registerWith handlebars
-base =
-  intl:
-    locales: 'en-US'
-    formats:
-      date:
-        short:
-          day: 'numeric'
-          month: 'long'
-          year: 'numeric'
+
+#  format an ISO date using Moment.js
+#  http://momentjs.com/
+#  moment syntax example: moment(Date("2011-07-18T15:50:52")).format("MMMM YYYY")
+#  usage: {{dateFormat date format="MMMM YYYY"}}
+#  usage: {{dateFormat date format="LL"}}
+handlebars.registerHelper 'dateFormat', (context, block) ->
+  format = block.hash.format or 'MMM Do, YYYY'
+  moment(new Date context).format format
+
 
 # Type implementation
 # -------------------------------------------------
@@ -59,12 +58,10 @@ exports.run = (work, cb) ->
   if value.match /\{\{.*?\}\}/
     debug "#{work.debug} compile handlebars"
     template = handlebars.compile value
-    fn = (context, data) ->
-#      console.log util.inspect object.extend({}, base, data), {depth: null}
+    fn = (context) ->
       debug "#{work.debug} execute #{util.inspect value}" +
-        chalk.grey " with #{util.inspect context} using #{util.inspect data}"
-      return template context,
-        data: object.extend {}, base, data
+        chalk.grey " with #{util.inspect context}"
+      return template context
   else
     fn = -> value
   debug "#{work.debug} result #{util.inspect value ? null}"
