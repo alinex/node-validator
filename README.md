@@ -1183,16 +1183,42 @@ You can also use the some of the additional helpers:
 
 **dateFormat**
 
+Parameter:
+
+- date - to be printed
+- format - defining the display format
+
 Examples:
 
-    usage: {{dateFormat date format="MMMM YYYY"}}
-    usage: {{dateFormat date format="LL"}}
+    {{dateFormat date "MMMM YYYY"}}
+    # January 2016
+    {{dateFormat date "LL"}}
+    # January 18, 2016
 
 See the description of [moment.js](http://momentjs.com/docs/#/displaying/) for
 the possible format strings.
 
 The language for the date format can be set by using `moment.locale 'de'` or any
 other locale before executing the handlebars template.
+
+**join**
+
+Joins all elements of a collection into a string using a separator if specified.
+
+Parameter:
+
+- array - list to join
+- separator - phrase to use as separator
+
+Examples:
+
+    array = [1, 2, 3]
+    {{join array}}
+    # '1 2 3'
+    {{join array ", "}}
+    # '1, 2, 3'
+
+
 
 ### hostname
 

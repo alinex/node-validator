@@ -18,16 +18,45 @@ object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
 
-# ### Setup modules
+# Handlebars Helper
+# -------------------------------------------------
+# Find more at https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers
 
-#  format an ISO date using Moment.js
-#  http://momentjs.com/
-#  moment syntax example: moment(Date("2011-07-18T15:50:52")).format("MMMM YYYY")
-#  usage: {{dateFormat date format="MMMM YYYY"}}
-#  usage: {{dateFormat date format="LL"}}
-handlebars.registerHelper 'dateFormat', (context, block) ->
-  format = block.hash.format or 'MMM Do, YYYY'
-  moment(new Date context).format format
+helper =
+
+  # ### dateFormat
+  #
+  # format an ISO date using Moment.js - http://momentjs.com/
+  # https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers
+  #
+  #     date = new Date()
+  #     {{dateFormat date "MMMM YYYY"}}
+  #     # January 2016
+  #     {{dateFormat date "LL"}}
+  #     # January 18, 2016
+  dateFormat: ->
+    args = [].slice.call(arguments)
+    [date, format] = args[0..-2]
+    moment(new Date date).format format ? 'MMM Do, YYYY'
+
+  # ### join
+  #
+  # Joins all elements of a collection into a string
+  # using a separator if specified.
+  #
+  #     array = [1, 2, 3]
+  #     {{join array}}
+  #     # '1 2 3'
+  #     {{join array ", "}}
+  #     # '1, 2, 3'
+  join: ->
+    args = [].slice.call(arguments)
+    [array, separator] = args[0..-2]
+    array.join separator ? ' '
+
+# register helper
+for key, fn of helper
+  handlebars.registerHelper key, fn
 
 
 # Type implementation
