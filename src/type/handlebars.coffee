@@ -60,10 +60,13 @@ exports.run = (work, cb) ->
     debug "#{work.debug} compile handlebars"
     template = handlebars.compile value
     fn = (context, data) ->
+#      console.log util.inspect object.extend({}, base, data), {depth: null}
+      debug "#{work.debug} execute #{util.inspect value}" +
+        chalk.grey " with #{util.inspect context} using #{util.inspect data}"
       return template context,
         data: object.extend {}, base, data
   else
-    fn = -> return value
+    fn = -> value
   debug "#{work.debug} result #{util.inspect value ? null}"
   cb null, fn
 

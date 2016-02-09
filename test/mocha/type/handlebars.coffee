@@ -37,7 +37,7 @@ describe "Handlebars", ->
     it "should fail on other objects", (cb) ->
       test.fail schema, [null, [], (new Error '????'), {}], cb
 
-  describe.only "intl", ->
+  describe "intl", ->
 
     it "should replace numbers", (cb) ->
       context =
@@ -63,19 +63,22 @@ describe "Handlebars", ->
 
     it "should format dates", (cb) ->
       context =
-        now: new Date()
+        date: new Date('1974-01-23')
       test.function schema, [
-        ['{{formatDate now day="numeric" month="long" year="numeric"}}'
-        context, 'February 8, 2016']
-        ['{{formatDate now "short"}}', context, 'February 8, 2016']
+        ['{{formatDate date day="numeric" month="long" year="numeric"}}'
+        context, 'January 23, 1974']
+        ['{{formatDate date "short"}}', context, 'January 23, 1974']
         ], cb
 
-    it "should format dates intl", (cb) ->
+    it.only "should format dates intl", (cb) ->
       context =
-        now: new Date()
+        date: new Date('1974-01-23')
       test.function2 schema, [
-        ['{{formatDate now "short"}}'
-          context, {intl: locale: 'de-DE'}, 'February 8, 2016']
+        ['{{formatDate date "short"}}'
+          context,
+            intl:
+              locales: 'de-DE'
+          , '23. Januar 1974']
       ], cb
 
   describe "description", ->
