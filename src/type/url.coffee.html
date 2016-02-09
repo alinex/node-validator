@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>url.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="../../doc-style.css" />
+  <script src="../../doc-filelist.js"></script>
+  <script>
+    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/urlcoffee", defaultSidebar = true;
+  </script>
+  <script src="../../doc-script.js"></script>
+</head>
+<body>
+  <nav>
+<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="lllogo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+  </a>
+  <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
+</div>
+<div class="links">
+  <a href="http://alinex.github.io/blog" class="btn btn-primary"><span class="glyphicon-cog"></span> Blog</a>
+  <a href="http://alinex.github.io/code.html" class="btn btn-warning"><span class="glyphicon-pencil"></span> Code</a>
+</div>
+</nav><div id="sidebar_wrapper">
+    <div id="sidebar_switch">
+      <span class="tree">Files</span>
+      <span class="headings">Headings</span>
+    </div>
+    <div id="tree"></div>
+    <div id="headings">
+      <div class="heading h1">
+        <a href="#url%20validation">URL validation</a>
+      </div>
+      <div class="heading h2">
+        <a href="#node%20modules">Node modules</a>
+      </div>
+      <div class="heading h2">
+        <a href="#type%20implementation">Type implementation</a>
+      </div>
+    </div>
+  </div>
+  <div id="sidebar-toggle"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+<table cellpadding="0" cellspacing="0">
+  <tbody>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="url%20validation">
+  <h1>
+    <a href="#url%20validation" name="url%20validation" class="pilcrow">&#182;</a>
+    URL validation
+  </h1>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+</div>
+<p>Check options:</p>
+
+<ul>
+<li><code>toAbsoluteBase</code> - convert to absolute with given base</li>
+<li><code>removeQuery</code> - (boolean) remove query and hash from url</li>
+<li><code>hostsAllowed</code> - list of allowed hosts by string or regexp</li>
+<li><code>hostsDenied</code> - list of denied hosts by string or regexp</li>
+<li><code>allowProtocols</code> - lust of allowed protocols</li>
+<li><code>allowRelative</code> - (boolean) to allow also relative urls</li>
+</ul>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="node%20modules">
+  <h2>
+    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
+    Node modules
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:url&#39;</span><span class="p">)</span>
+<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
+<span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
+<span class="nv">url = </span><span class="nx">require</span> <span class="s">&#39;url&#39;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+</div>
+<p>alinex modules</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+</div>
+<p>include classes and helper</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
+
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="type%20implementation">
+  <h2>
+    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
+    Type implementation
+  </h2>
+</div>
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nv">text = </span><span class="s">&#39;A valid url (unified resource locator). &#39;</span>
+  <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
+  <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">toAbsoluteBase</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It will be made absolute from &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">toAbsoluteBase</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">removeQuery</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Existing query parameters are removed. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsAllowed</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Only the hosts matching </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsAllowed</span><span class="si">}</span><span class="s"> are allowed. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsDenied</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;But hosts matching </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsAllowed</span><span class="si">}</span><span class="s"> are not allowed. &quot;</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowProtocols</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The protocol have to be: </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowProtocols</span><span class="si">}</span><span class="s">. &quot;</span>
+  <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowRelative</span>
+    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Relative URLs are also allowed. &quot;</span>
+  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
+
+<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
+  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+</div>
+<p>base checks</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">try</span>
+    <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
+      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
+      <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
+  <span class="k">catch</span> <span class="nx">error</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">error</span><span class="p">,</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+</div>
+<p>split into parts</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
+  <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The url has to be a string object.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">toAbsoluteBase</span>
+    <span class="nv">value = </span><span class="nx">url</span><span class="p">.</span><span class="nx">resolve</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">toAbsoluteBase</span><span class="p">,</span> <span class="nx">value</span>
+  <span class="nv">parts = </span><span class="nx">url</span><span class="p">.</span><span class="nx">parse</span> <span class="nx">value</span>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">removeQuery</span>
+    <span class="k">delete</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">search</span>
+    <span class="k">delete</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">hash</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+</div>
+<p>check the hostname</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">if</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">host</span>
+    <span class="k">delete</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">host</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsAllowed</span>
+      <span class="nv">success = </span><span class="kc">true</span>
+      <span class="nv">work.pos.hostsAllowed = </span><span class="p">[</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsAllowed</span><span class="p">]</span> <span class="k">unless</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsAllowed</span>
+      <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsAllowed</span>
+        <span class="k">if</span> <span class="nx">match</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+          <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">hostname</span><span class="p">.</span><span class="nx">match</span> <span class="nx">match</span>
+        <span class="k">else</span>
+          <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">~</span><span class="nx">parts</span><span class="p">.</span><span class="nx">hostname</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">match</span>
+      <span class="k">unless</span> <span class="nx">success</span>
+        <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The hostname &#39;</span><span class="si">#{</span><span class="nx">parts</span><span class="p">.</span><span class="nx">hostname</span><span class="si">}</span><span class="s">&#39; should match</span>
+<span class="s">        against &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsAllowed</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsDenied</span>
+      <span class="nv">success = </span><span class="kc">true</span>
+      <span class="nv">work.pos.hostsDenied = </span><span class="p">[</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsDenied</span><span class="p">]</span> <span class="k">unless</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsDenied</span>
+      <span class="k">for</span> <span class="nx">match</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsDenied</span>
+        <span class="k">if</span> <span class="nx">match</span> <span class="k">instanceof</span> <span class="nb">RegExp</span>
+          <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">not</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">hostname</span><span class="p">.</span><span class="nx">match</span> <span class="nx">match</span>
+        <span class="k">else</span>
+          <span class="nv">success = </span><span class="nx">success</span> <span class="o">and</span> <span class="o">not</span> <span class="o">~</span><span class="nx">parts</span><span class="p">.</span><span class="nx">hostname</span><span class="p">.</span><span class="nx">indexOf</span> <span class="nx">match</span>
+      <span class="k">unless</span> <span class="nx">success</span>
+        <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The hostname &#39;</span><span class="si">#{</span><span class="nx">parts</span><span class="p">.</span><span class="nx">hostname</span><span class="si">}</span><span class="s">&#39; should not match</span>
+<span class="s">        against &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">hostsDenied</span><span class="si">}</span><span class="s">&#39;&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+</div>
+<p>check allowed protocols</p>
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowProtocols</span>
+    <span class="k">unless</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">protocol</span>
+      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The protocol is missing.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+    <span class="k">unless</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">protocol</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/:/</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span> <span class="k">in</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowProtocols</span>
+      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The protocol </span><span class="si">#{</span><span class="nx">parts</span><span class="p">.</span><span class="nx">protocol</span><span class="si">}</span><span class="s"> is not allowed.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+  <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allowRelative</span> <span class="o">or</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">hostname</span>
+    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;Relative URLs are not allowed.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+  <span class="nv">value = </span><span class="nx">url</span><span class="p">.</span><span class="nx">format</span> <span class="nx">parts</span>
+  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
+
+<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
+  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
+    <span class="nv">schema:</span>
+      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
+      <span class="nv">allowedKeys: </span><span class="kc">true</span>
+      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
+        <span class="nv">default:</span>
+          <span class="nv">type: </span><span class="s">&#39;url&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">toAbsoluteBase:</span>
+          <span class="nv">type: </span><span class="s">&#39;url&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">removeQuery:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">hostsAllowed:</span>
+          <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="o">or:</span> <span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;regexp&#39;</span>
+          <span class="p">]</span>
+        <span class="nv">hostsDenied:</span>
+          <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+          <span class="o">or:</span> <span class="p">[</span>
+            <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
+          <span class="p">,</span>
+            <span class="nv">type: </span><span class="s">&#39;regexp&#39;</span>
+          <span class="p">]</span>
+        <span class="nv">allowProtocols:</span>
+          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
+          <span class="nv">toArray: </span><span class="kc">true</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+        <span class="nv">allowRelative:</span>
+          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
+          <span class="nv">optional: </span><span class="kc">true</span>
+    <span class="nv">value: </span><span class="nx">schema</span>
+  <span class="p">,</span> <span class="nx">cb</span>
+</pre></div>
+        </td>
+      </tr>
+  </tbody>
+</table>
+  </div>
+</body>
+</html>
