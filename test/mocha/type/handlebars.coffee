@@ -39,7 +39,7 @@ describe "Handlebars", ->
     it "should fail on other objects", (cb) ->
       test.fail schema, [null, [], (new Error '????'), {}], cb
 
-  describe.only "helper", ->
+  describe "helper", ->
 
     it "should format dates", (cb) ->
       context =

@@ -182,10 +182,8 @@ exports.run = (work, cb) ->
     if Array.isArray work.pos.match
       success = true
       for match in work.pos.match
-        if match instanceof RegExp
-          success = success and value.match match
-        else
-          success = success and ~value.indexOf match
+        match = new RegExp match unless match instanceof RegExp
+        success = success and value.match match
       unless success
         return work.report (new Error "The given string '#{value}' should match
         against '#{work.pos.match}'"), cb
@@ -200,10 +198,8 @@ exports.run = (work, cb) ->
     if Array.isArray work.pos.matchNot
       success = true
       for match in work.pos.matchNot
-        if match instanceof RegExp
-          success = success and not value.match match
-        else
-          success = success and not ~value.indexOf match
+        match = new RegExp match unless match instanceof RegExp
+        success = success and not value.match match
       unless success
         return work.report (new Error "The given string '#{value}' shouldn't match
         against '#{work.pos.match}'"), cb

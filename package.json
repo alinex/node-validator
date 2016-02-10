@@ -36,18 +36,17 @@
     "alinex-fs": "^2.0.0",
     "alinex-util": "^0.3.15",
     "chalk": "^1.1.1",
-    "chrono-node": "^1.0.8",
+    "chrono-node": "^1.1.2",
     "debug": "^2.2.0",
     "handlebars": "^4.0.5",
+    "ipaddr.js": "1.x",
+    "js-yaml": "^3.5.2",
+    "mathjs": "^2.7.0",
     "moment": "^2.11.2",
     "request": "^2.69.0",
-    "ipaddr.js": "1.x",
-    "mathjs": "^2.2.0",
-    "js-yaml": "3.x",
-    "xml2js": "0.4.x"
+    "xml2js": "^0.4.16"
   },
-  "optionalDependencies": {
-  },
+  "optionalDependencies": {},
   "devDependencies": {
     "alinex-builder": "^1.1.16",
     "chai": "3.x",
