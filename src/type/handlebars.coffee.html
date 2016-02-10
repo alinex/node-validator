@@ -174,8 +174,10 @@
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">dateFormat: </span><span class="nf">(date, format = &#39;MMM Do, YYYY&#39;) -&gt;</span>
-    <span class="nx">moment</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span> <span class="nx">date</span><span class="p">).</span><span class="nx">format</span> <span class="nx">format</span>
+  <span class="nv">dateFormat: </span><span class="nf">-&gt;</span>
+    <span class="nv">args = </span><span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
+    <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">format</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="nx">moment</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span> <span class="nx">date</span><span class="p">).</span><span class="nx">format</span> <span class="nx">format</span> <span class="o">?</span> <span class="s">&#39;MMM Do, YYYY&#39;</span>
 
 
 </pre></div>
@@ -205,8 +207,10 @@ using a separator if specified.</p>
 
         </td>
         <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">join: </span><span class="nf">(array, separator = &#39; &#39;) -&gt;</span>
-    <span class="nx">array</span><span class="p">.</span><span class="nx">join</span> <span class="nx">separator</span>
+  <span class="nv">join: </span><span class="nf">-&gt;</span>
+    <span class="nv">args = </span><span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
+    <span class="p">[</span><span class="nx">array</span><span class="p">,</span> <span class="nx">separator</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="nx">array</span><span class="p">.</span><span class="nx">join</span> <span class="nx">separator</span> <span class="o">?</span> <span class="s">&#39; &#39;</span>
 
 
 </pre></div>

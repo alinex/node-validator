@@ -1766,7 +1766,7 @@ object will return the resulting text.</p>
 
 <ul>
 <li>date - to be printed</li>
-<li>format (string) - to display</li>
+<li>format - defining the display format</li>
 </ul>
 
 <p>Examples:</p>
@@ -1785,6 +1785,29 @@ the possible format strings.</p>
 
 <p>The language for the date format can be set by using <code>moment.locale 'de'</code> or any
 other locale before executing the handlebars template.</p>
+
+<p><strong>join</strong></p>
+
+<p>Joins all elements of a collection into a string using a separator if specified.</p>
+
+<p>Parameter:</p>
+
+<ul>
+<li>array - list to join</li>
+<li>separator - phrase to use as separator</li>
+</ul>
+
+<p>Examples:</p>
+
+
+<div class="highlight"><pre><code><span class="nx">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="p">{{</span><span class="nx">join</span> <span class="nx">array</span><span class="p">}}</span>
+<span class="err">#</span> <span class="s1">&#39;1 2 3&#39;</span>
+<span class="p">{{</span><span class="nx">join</span> <span class="nx">array</span> <span class="s2">&quot;, &quot;</span><span class="p">}}</span>
+<span class="err">#</span> <span class="s1">&#39;1, 2, 3&#39;</span>
+</code></pre></div>
+
+
 
 
 <div class="pilwrap" id="hostname">
