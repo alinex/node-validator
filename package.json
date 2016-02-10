@@ -26,7 +26,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "prepublish": "node_modules/.bin/builder -c compile",
-    "test": "node_modules/.bin/builder -c test --icu-data-dir=node_modules/full-icu"
+    "test": "node_modules/.bin/builder -c test"
   },
   "directories": {
     "lib": "./lib"
