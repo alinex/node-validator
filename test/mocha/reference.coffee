@@ -278,9 +278,9 @@ describe "References", ->
 
     it "should execute commands", (cb) ->
       values =
-        '<<<cmd://uname>>>': 'Linux\n'
+        '<<<cmd://uname>>>': 'Linux'
         '<<<cmd://cat test/data/textfile>>>': '123'
-        '<<<cmd://cat test/data/poem| head -1>>>': 'William B Yeats (1865-1939)\n'
+        '<<<cmd://cat test/data/poem| head -1>>>': 'William B Yeats (1865-1939)'
       async.forEachOfSeries values, (check, value, cb) ->
         reference.replace value, (err, result) ->
           expect(err, 'error').to.not.exist

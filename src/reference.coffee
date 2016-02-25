@@ -368,7 +368,9 @@ findType =
     exec = require('child_process').exec
     opt = {}
     opt.cwd = work.spec.dir if work.spec?.dir?
-    exec path, opt, cb
+    exec path, opt, (err, result) ->
+      return cb err if err
+      cb null, result.trim()
 
 # ### Read from value structure
 findData = (path, work, cb) ->
