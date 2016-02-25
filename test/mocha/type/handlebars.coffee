@@ -55,9 +55,19 @@ describe "Handlebars", ->
       moment.locale 'de'
       test.function schema, [
         ['{{dateFormat date "LL"}}', context, '23. Januar 1974']
+        ['{{#dateFormat "LL"}}1974-01-23{{/dateFormat}}', context, '23. Januar 1974']
       ], ->
         moment.locale oldLocale
         cb()
+
+    it "should add date interval", (cb) ->
+      context =
+        date: new Date('1974-01-23')
+      test.function schema, [
+        ['{{#dateFormat "LL"}}{{dateAdd date 1 "month"}}{{/dateFormat}}', context, 'February 23, 1974']
+        ['{{#dateFormat "LL"}}{{dateAdd date -1 "month"}}{{/dateFormat}}', context, 'December 23, 1973']
+        ['{{#dateFormat "LL"}}{{#dateAdd 1 "month"}}1974-01-23{{/dateAdd}}{{/dateFormat}}', context, 'February 23, 1974']
+      ], cb
 
     it "should join arrays", (cb) ->
       context =

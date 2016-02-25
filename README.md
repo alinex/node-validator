@@ -1185,7 +1185,7 @@ You can also use the some of the additional helpers:
 
 Parameter:
 
-- date - to be printed
+- date - to be printed (alternatively given as content)
 - format - defining the display format
 
 Examples:
@@ -1194,12 +1194,27 @@ Examples:
     # January 2016
     {{dateFormat date "LL"}}
     # January 18, 2016
+    {{#dateFormat "LL"}}2016-01-20{{/dateFormat}}
+    # January 18, 2016
 
 See the description of [moment.js](http://momentjs.com/docs/#/displaying/) for
 the possible format strings.
 
 The language for the date format can be set by using `moment.locale 'de'` or any
 other locale before executing the handlebars template.
+
+**dateFormat**
+
+Parameter:
+
+- date - to be changed (alternatively given as content)
+- count - number of interval units (negative to go back)
+- interval - type of interval steps like 'seconds', 'minutes', 'hours', 'days'...
+
+Examples:
+
+    {{#dateFormat "LL"}}{{dateAdd date 1 "month"}}{{/dateFormat}}
+    # February 23, 1974
 
 **join**
 

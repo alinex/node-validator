@@ -34,10 +34,33 @@ helper =
   #     # January 2016
   #     {{dateFormat date "LL"}}
   #     # January 18, 2016
+  #     {{#dateFormat "LL"}}2016-01-18{{/dateFormat}}
+  #     # January 18, 2016
   dateFormat: ->
     args = [].slice.call(arguments)
-    [date, format] = args[0..-2]
+    if args[args.length-1].fn
+      date = args[args.length-1].fn this
+      format = args[0]
+    else
+      [date, format] = args[0..-2]
     moment(new Date date).format format ? 'MMM Do, YYYY'
+
+  # ### dateAdd
+  #
+  # Add interval to date.
+  #
+  #     date = new Date()
+  #     {{dateAdd date 1 "month"}}
+  #     {{#dateAdd 1 "month"}}2016-01-18{{/dateAdd}}
+  dateAdd: ->
+    args = [].slice.call(arguments)
+    if args[args.length-1].fn
+      date = args[args.length-1].fn this
+      [count, interval] = args[0..-2]
+    else
+      [date, count, interval] = args[0..-2]
+    m = moment(new Date date).add count, interval
+    m.toDate()
 
   # ### join
   #
