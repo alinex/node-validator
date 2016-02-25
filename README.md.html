@@ -1765,7 +1765,7 @@ object will return the resulting text.</p>
 <p>Parameter:</p>
 
 <ul>
-<li>date - to be printed</li>
+<li>date - to be printed (alternatively given as content)</li>
 <li>format - defining the display format</li>
 </ul>
 
@@ -1776,6 +1776,8 @@ object will return the resulting text.</p>
 <span class="err">#</span> <span class="nx">January</span> <span class="mi">2016</span>
 <span class="p">{{</span><span class="nx">dateFormat</span> <span class="nx">date</span> <span class="s2">&quot;LL&quot;</span><span class="p">}}</span>
 <span class="err">#</span> <span class="nx">January</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">2016</span>
+<span class="p">{{</span><span class="err">#</span><span class="nx">dateFormat</span> <span class="s2">&quot;LL&quot;</span><span class="p">}}</span><span class="mi">2016</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">20</span><span class="p">{{</span><span class="err">/dateFormat}}</span>
+<span class="err">#</span> <span class="nx">January</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">2016</span>
 </code></pre></div>
 
 
@@ -1785,6 +1787,25 @@ the possible format strings.</p>
 
 <p>The language for the date format can be set by using <code>moment.locale 'de'</code> or any
 other locale before executing the handlebars template.</p>
+
+<p><strong>dateFormat</strong></p>
+
+<p>Parameter:</p>
+
+<ul>
+<li>date - to be changed (alternatively given as content)</li>
+<li>count - number of interval units (negative to go back)</li>
+<li>interval - type of interval steps like 'seconds', 'minutes', 'hours', 'days'...</li>
+</ul>
+
+<p>Examples:</p>
+
+
+<div class="highlight"><pre><code><span class="p">{{</span><span class="err">#</span><span class="nx">dateFormat</span> <span class="s2">&quot;LL&quot;</span><span class="p">}}{{</span><span class="nx">dateAdd</span> <span class="nx">date</span> <span class="mi">1</span> <span class="s2">&quot;month&quot;</span><span class="p">}}{{</span><span class="err">/dateFormat}}</span>
+<span class="err">#</span> <span class="nx">February</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">1974</span>
+</code></pre></div>
+
+
 
 <p><strong>join</strong></p>
 

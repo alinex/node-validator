@@ -41,6 +41,9 @@
         <a href="#dateformat">dateFormat</a>
       </div>
       <div class="heading h3">
+        <a href="#dateadd">dateAdd</a>
+      </div>
+      <div class="heading h3">
         <a href="#join">join</a>
       </div>
       <div class="heading h2">
@@ -169,6 +172,8 @@
 <span class="err">#</span> <span class="nx">January</span> <span class="mi">2016</span>
 <span class="p">{{</span><span class="nx">dateFormat</span> <span class="nx">date</span> <span class="s2">&quot;LL&quot;</span><span class="p">}}</span>
 <span class="err">#</span> <span class="nx">January</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">2016</span>
+<span class="p">{{</span><span class="err">#</span><span class="nx">dateFormat</span> <span class="s2">&quot;LL&quot;</span><span class="p">}}</span><span class="mi">2016</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">18</span><span class="p">{{</span><span class="err">/dateFormat}}</span>
+<span class="err">#</span> <span class="nx">January</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">2016</span>
 </code></pre></div>
 
 
@@ -176,8 +181,47 @@
         <td class="code highlight"><div class="highlight"><pre>
   <span class="nv">dateFormat: </span><span class="nf">-&gt;</span>
     <span class="nv">args = </span><span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
-    <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">format</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nx">args</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">fn</span>
+      <span class="nv">date = </span><span class="nx">args</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">fn</span> <span class="k">this</span>
+      <span class="nv">format = </span><span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span>
+      <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">format</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
     <span class="nx">moment</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span> <span class="nx">date</span><span class="p">).</span><span class="nx">format</span> <span class="nx">format</span> <span class="o">?</span> <span class="s">&#39;MMM Do, YYYY&#39;</span>
+
+
+</pre></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="docs">
+<div class="pilwrap" id="dateadd">
+  <h3>
+    <a href="#dateadd" name="dateadd" class="pilcrow">&#182;</a>
+    dateAdd
+  </h3>
+</div>
+
+
+<p>Add interval to date.</p>
+
+
+<div class="highlight"><pre><code><span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
+<span class="p">{{</span><span class="nx">dateAdd</span> <span class="nx">date</span> <span class="mi">1</span> <span class="s2">&quot;month&quot;</span><span class="p">}}</span>
+<span class="p">{{</span><span class="err">#</span><span class="nx">dateAdd</span> <span class="mi">1</span> <span class="s2">&quot;month&quot;</span><span class="p">}}</span><span class="mi">2016</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">18</span><span class="p">{{</span><span class="err">/dateAdd}}</span>
+</code></pre></div>
+
+
+        </td>
+        <td class="code highlight"><div class="highlight"><pre>
+  <span class="nv">dateAdd: </span><span class="nf">-&gt;</span>
+    <span class="nv">args = </span><span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">args</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">fn</span>
+      <span class="nv">date = </span><span class="nx">args</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">fn</span> <span class="k">this</span>
+      <span class="p">[</span><span class="nx">count</span><span class="p">,</span> <span class="nx">interval</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">else</span>
+      <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">count</span><span class="p">,</span> <span class="nx">interval</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="nv">m = </span><span class="nx">moment</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span> <span class="nx">date</span><span class="p">).</span><span class="nx">add</span> <span class="nx">count</span><span class="p">,</span> <span class="nx">interval</span>
+    <span class="nx">m</span><span class="p">.</span><span class="nx">toDate</span><span class="p">()</span>
 
 
 </pre></div>
@@ -219,7 +263,7 @@ using a separator if specified.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
 </div>
 <p>register helper</p>
         </td>
@@ -259,7 +303,7 @@ using a separator if specified.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
 </div>
 <p>base checks</p>
         </td>
@@ -278,7 +322,7 @@ using a separator if specified.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
 </div>
 <p>check for already converted values</p>
         </td>
@@ -291,7 +335,7 @@ using a separator if specified.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
 </div>
 <p>sanitize</p>
         </td>
@@ -305,7 +349,7 @@ using a separator if specified.</p>
       <tr>
         <td class="docs">
 <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
 </div>
 <p>compile if handlebars syntax found</p>
         </td>

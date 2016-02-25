@@ -1177,7 +1177,9 @@ retry the same call again</p>
     <span class="nv">exec = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;child_process&#39;</span><span class="p">).</span><span class="nx">exec</span>
     <span class="nv">opt = </span><span class="p">{}</span>
     <span class="nv">opt.cwd = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">dir</span> <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="o">?</span><span class="p">.</span><span class="nx">dir</span><span class="o">?</span>
-    <span class="nx">exec</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">opt</span><span class="p">,</span> <span class="nx">cb</span>
+    <span class="nx">exec</span> <span class="nx">path</span><span class="p">,</span> <span class="nx">opt</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
+      <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
 
 
 </pre></div>
