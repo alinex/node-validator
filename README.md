@@ -1203,7 +1203,7 @@ the possible format strings.
 The language for the date format can be set by using `moment.locale 'de'` or any
 other locale before executing the handlebars template.
 
-**dateFormat**
+**dateAdd**
 
 Parameter:
 
