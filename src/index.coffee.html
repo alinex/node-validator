@@ -6,20 +6,31 @@
   <link rel="stylesheet" media="all" href="../doc-style.css" />
   <script src="../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../", thisFile = "home/alex/github/node-validator/src/indexcoffee", defaultSidebar = true;
+    var relativeDir = "../";
+    var thisFile = "home/alex/github/node-validator/src/index.coffee";
+    var defaultSidebar = true;
   </script>
   <script src="../doc-script.js"></script>
-</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head
 <body>
   <nav>
-<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="lllogo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+<div class="logo"><a href="http://alinex.github.io"
+  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
+  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
+    width="150" title="Alinex Universe Homepage" />
   </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
+  <img src="http://alinex.github.io/images/Alinex-200.png"
+    style="display:none" alt="preloading" />
 </div>
 <div class="links">
-  <a href="http://alinex.github.io/blog" class="btn btn-primary"><span class="glyphicon-cog"></span> Blog</a>
-  <a href="http://alinex.github.io/code.html" class="btn btn-warning"><span class="glyphicon-pencil"></span> Code</a>
+  <a href="http://alinex.github.io/blog"
+    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
+  <a href="http://alinex.github.io/develop"
+    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
+  <a href="http://alinex.github.io/code.html"
+    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
 </div>
 </nav><div id="sidebar_wrapper">
     <div id="sidebar_switch">
@@ -28,85 +39,97 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
         <a href="#validator">Validator</a>
       </div>
+
       <div class="heading h2">
-        <a href="#node%20modules">Node modules</a>
+        <a href="#node-modules">Node modules</a>
       </div>
+
       <div class="heading h2">
         <a href="#specification">Specification</a>
       </div>
+
       <div class="heading h2">
-        <a href="#create%20human%20readable%20description">Create human readable description</a>
+        <a href="#create-human-readable-description">Create human readable description</a>
       </div>
+
       <div class="heading h2">
-        <a href="#check%20value%20and%20sanitize">Check value and sanitize</a>
+        <a href="#check-value-and-sanitize">Check value and sanitize</a>
       </div>
+
       <div class="heading h2">
-        <a href="#check%20validation%20rules">Check validation rules</a>
+        <a href="#check-validation-rules">Check validation rules</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="validator">
+          <div class="pilwrap" id="validator">
   <h1>
-    <a href="#validator" name="validator" class="pilcrow">&#182;</a>
-    Validator
+    <a href="#validator" name="validator" class="pilcrow"></a>
+Validator
   </h1>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="node%20modules">
+          <div class="pilwrap" id="node-modules">
   <h2>
-    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
-    Node modules
+    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
+Node modules
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator&#39;</span><span class="p">)</span>
-<span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
-<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator'</span>)
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3"></a>
 </div>
 <p>internal classes and helper</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;./check&#39;</span>
+        <td class="code highlight">
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'./check'</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="specification">
+          <div class="pilwrap" id="specification">
   <h2>
-    <a href="#specification" name="specification" class="pilcrow">&#182;</a>
-    Specification
+    <a href="#specification" name="specification" class="pilcrow"></a>
+Specification
   </h2>
 </div>
-
-
 <ul>
 <li>name - (string) descriptive name of the data</li>
 <li>schema - (object) structure to check</li>
@@ -114,119 +137,123 @@
 <li>dir - set to base directory for file relative file paths</li>
 <li>value - original value (not changed)</li>
 </ul>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="create%20human%20readable%20description">
+          <div class="pilwrap" id="create-human-readable-description">
   <h2>
-    <a href="#create%20human%20readable%20description" name="create%20human%20readable%20description" class="pilcrow">&#182;</a>
-    Create human readable description
+    <a href="#create-human-readable-description" name="create-human-readable-description" class="pilcrow"></a>
+Create human readable description
   </h2>
 </div>
-
-
 <p>This will directly return the description of how the value has to be.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(spec, cb) -&gt;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">spec</span><span class="p">,</span> <span class="nx">cb</span>
+        <td class="code highlight">
+          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(spec, cb)</span> -&gt;</span>
+  check.describe spec, cb
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="check%20value%20and%20sanitize">
+          <div class="pilwrap" id="check-value-and-sanitize">
   <h2>
-    <a href="#check%20value%20and%20sanitize" name="check%20value%20and%20sanitize" class="pilcrow">&#182;</a>
-    Check value and sanitize
+    <a href="#check-value-and-sanitize" name="check-value-and-sanitize" class="pilcrow"></a>
+Check value and sanitize
   </h2>
 </div>
-
-
 <p>This will check the given value, sanitize it and return the new value or an
 Error to the callback.</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.check = </span><span class="nf">(spec, cb) -&gt;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">exports.check = <span class="hljs-function"><span class="hljs-params">(spec, cb)</span> -&gt;</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7"></a>
 </div>
 <p>check the given data</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No callback method given&quot;</span> <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">cb</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No schema definition given&quot;</span> <span class="k">unless</span> <span class="nx">spec</span><span class="p">.</span><span class="nx">schema</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"No callback method given"</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> cb <span class="hljs-keyword">is</span> <span class="hljs-string">'function'</span>
+  <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"No schema definition given"</span> <span class="hljs-keyword">unless</span> spec.schema
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8"></a>
 </div>
 <p>optimize data</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">spec.debug = </span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  spec.debug = chalk.grey spec.name ? <span class="hljs-string">'value'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9"></a>
 </div>
 <p>run the check</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">spec</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> check as </span><span class="si">#{</span><span class="nx">spec</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">title</span> <span class="o">?</span> <span class="nx">spec</span><span class="p">.</span><span class="nx">schema</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">spec</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
-    <span class="k">if</span> <span class="nx">err</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">spec</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> failed with: </span><span class="si">#{</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="k">else</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">spec</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> succeeded with: </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">result</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="nx">cb</span> <span class="nx">err</span><span class="p">,</span> <span class="nx">result</span>
+        <td class="code highlight">
+          <pre class="coffeescript">  debug <span class="hljs-string">"<span class="hljs-subst">#{spec.debug}</span> check as <span class="hljs-subst">#{spec.schema.title ? spec.schema.type}</span>"</span>
+  check.run spec, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
+    <span class="hljs-keyword">if</span> err
+      debug <span class="hljs-string">"<span class="hljs-subst">#{spec.debug}</span> failed with: <span class="hljs-subst">#{err.message}</span>"</span>
+    <span class="hljs-keyword">else</span>
+      debug <span class="hljs-string">"<span class="hljs-subst">#{spec.debug}</span> succeeded with: <span class="hljs-subst">#{util.inspect result}</span>"</span>
+    cb err, result
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="check%20validation%20rules">
+          <div class="pilwrap" id="check-validation-rules">
   <h2>
-    <a href="#check%20validation%20rules" name="check%20validation%20rules" class="pilcrow">&#182;</a>
-    Check validation rules
+    <a href="#check-validation-rules" name="check-validation-rules" class="pilcrow"></a>
+Check validation rules
   </h2>
 </div>
-
-
 <p>This may be used in tests to check the validator check options if they are valid.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">selfcheck</span> <span class="nx">schema</span><span class="p">,</span> <span class="nx">cb</span>
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
+  check.selfcheck schema, cb
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

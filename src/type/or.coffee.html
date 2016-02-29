@@ -6,20 +6,31 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/orcoffee", defaultSidebar = true;
+    var relativeDir = "../../";
+    var thisFile = "home/alex/github/node-validator/src/type/or.coffee";
+    var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
-</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head
 <body>
   <nav>
-<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="lllogo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+<div class="logo"><a href="http://alinex.github.io"
+  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
+  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
+    width="150" title="Alinex Universe Homepage" />
   </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
+  <img src="http://alinex.github.io/images/Alinex-200.png"
+    style="display:none" alt="preloading" />
 </div>
 <div class="links">
-  <a href="http://alinex.github.io/blog" class="btn btn-primary"><span class="glyphicon-cog"></span> Blog</a>
-  <a href="http://alinex.github.io/code.html" class="btn btn-warning"><span class="glyphicon-pencil"></span> Code</a>
+  <a href="http://alinex.github.io/blog"
+    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
+  <a href="http://alinex.github.io/develop"
+    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
+  <a href="http://alinex.github.io/code.html"
+    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
 </div>
 </nav><div id="sidebar_wrapper">
     <div id="sidebar_switch">
@@ -28,198 +39,217 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
-        <a href="#validator%20to%20match%20any%20of%20the%20possibilities">Validator to match any of the possibilities</a>
+        <a href="#validator-to-match-any-of-the-possibilities">Validator to match any of the possibilities</a>
       </div>
+
       <div class="heading h2">
-        <a href="#node%20modules">Node modules</a>
+        <a href="#node-modules">Node modules</a>
       </div>
+
       <div class="heading h2">
-        <a href="#type%20implementation">Type implementation</a>
+        <a href="#type-implementation">Type implementation</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="validator%20to%20match%20any%20of%20the%20possibilities">
+          <div class="pilwrap" id="validator-to-match-any-of-the-possibilities">
   <h1>
-    <a href="#validator%20to%20match%20any%20of%20the%20possibilities" name="validator%20to%20match%20any%20of%20the%20possibilities" class="pilcrow">&#182;</a>
-    Validator to match any of the possibilities
+    <a href="#validator-to-match-any-of-the-possibilities" name="validator-to-match-any-of-the-possibilities" class="pilcrow"></a>
+Validator to match any of the possibilities
   </h1>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="node%20modules">
+          <div class="pilwrap" id="node-modules">
   <h2>
-    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
-    Node modules
+    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
+Node modules
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:or&#39;</span><span class="p">)</span>
-<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
-<span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:or'</span>)
+util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-3" id="section-3">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-3" id="section-3"></a>
 </div>
 <p>alinex modules</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
-<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4"></a>
 </div>
 <p>include classes and helper</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
+        <td class="code highlight">
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="type%20implementation">
+          <div class="pilwrap" id="type-implementation">
   <h2>
-    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
-    Type implementation
+    <a href="#type-implementation" name="type-implementation" class="pilcrow"></a>
+Type implementation
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
-  <span class="nv">text = </span><span class="s">&quot;At least one of the following checks have to succeed:&quot;</span>
-  <span class="nv">max = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">or</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span>
-  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">max</span><span class="p">],</span> <span class="nf">(num, cb) -&gt;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
+  text = <span class="hljs-string">"At least one of the following checks have to succeed:"</span>
+  max = work.pos.<span class="hljs-keyword">or</span>.length - <span class="hljs-number">1</span>
+  async.map [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-6" id="section-6">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-6" id="section-6"></a>
 </div>
 <p>run subcheck</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">check</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span><span class="p">([</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]),</span> <span class="nf">(err, text) -&gt;</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-      <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="s">&quot;\n- </span><span class="si">#{</span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\n/g</span><span class="p">,</span> <span class="s">&#39;\n  &#39;</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="nx">results</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;\n&#39;</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
-    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
+        <td class="code highlight">
+          <pre class="coffeescript">    check.describe work.goInto([<span class="hljs-string">'or'</span>, num]), <span class="hljs-function"><span class="hljs-params">(err, text)</span> -&gt;</span>
+      <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
+      cb <span class="hljs-literal">null</span>, <span class="hljs-string">"\n- <span class="hljs-subst">#{text.replace <span class="hljs-regexp">/\n/g</span>, <span class="hljs-string">'\n  '</span>}</span>"</span>
+  , <span class="hljs-function"><span class="hljs-params">(err, results)</span> -&gt;</span>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
+    text += results.join(<span class="hljs-string">''</span>) + <span class="hljs-string">'\n'</span>
+    text += check.optional.describe work
+    cb <span class="hljs-literal">null</span>, text
 
-<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
-
-</pre></div>
+exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7"></a>
 </div>
 <p>base checks</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">try</span>
-    <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
-  <span class="k">catch</span> <span class="nx">error</span>
-    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">error</span><span class="p">,</span> <span class="nx">cb</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">try</span>
+    <span class="hljs-keyword">if</span> check.optional.run work
+      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
+      <span class="hljs-keyword">return</span> cb()
+  <span class="hljs-keyword">catch</span> error
+    <span class="hljs-keyword">return</span> work.report error, cb
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-8" id="section-8"></a>
 </div>
 <p>run async checks</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">error = </span><span class="p">[]</span>
-  <span class="nv">max = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="o">or</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span>
-  <span class="nx">async</span><span class="p">.</span><span class="nx">map</span> <span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="nx">max</span><span class="p">],</span> <span class="nf">(num, cb) -&gt;</span>
-    <span class="nv">sub = </span><span class="nx">work</span><span class="p">.</span><span class="nx">goInto</span> <span class="p">[</span><span class="s">&#39;or&#39;</span><span class="p">,</span> <span class="nx">num</span><span class="p">]</span>
-    <span class="nx">check</span><span class="p">.</span><span class="nx">run</span> <span class="nx">sub</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
-      <span class="nx">error</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span> <span class="o">=</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-      <span class="k">if</span> <span class="nx">err</span>
-        <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">sub</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="err">#</span><span class="si">#{</span><span class="nx">num</span><span class="si">}</span><span class="s">: failed&quot;</span>
-        <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">sub</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="err">#</span><span class="si">#{</span><span class="nx">num</span><span class="si">}</span><span class="s">: </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">result</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span>
-  <span class="p">,</span> <span class="nf">(err, results) -&gt;</span>
-    <span class="k">for</span> <span class="nx">result</span> <span class="k">in</span> <span class="nx">results</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">result</span> <span class="k">if</span> <span class="nx">result</span><span class="o">?</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  error = []
+  max = work.pos.<span class="hljs-keyword">or</span>.length - <span class="hljs-number">1</span>
+  async.map [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span>
+    sub = work.goInto [<span class="hljs-string">'or'</span>, num]
+    check.run sub, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
+      error[num] = err <span class="hljs-keyword">if</span> err
+      <span class="hljs-keyword">if</span> err
+        debug <span class="hljs-string">"<span class="hljs-subst">#{sub.debug}</span> result #<span class="hljs-subst">#{num}</span>: failed"</span>
+        <span class="hljs-keyword">return</span> cb()
+      debug <span class="hljs-string">"<span class="hljs-subst">#{sub.debug}</span> result #<span class="hljs-subst">#{num}</span>: <span class="hljs-subst">#{util.inspect result}</span>"</span>
+      cb <span class="hljs-literal">null</span>, result
+  , <span class="hljs-function"><span class="hljs-params">(err, results)</span> -&gt;</span>
+    <span class="hljs-keyword">for</span> result <span class="hljs-keyword">in</span> results
+      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, result <span class="hljs-keyword">if</span> result?
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9"></a>
 </div>
 <p>check response</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;None of the alternatives are matched</span>
-<span class="s">      (</span><span class="si">#{</span><span class="nx">error</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nf">(e) -&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;/ &#39;</span><span class="p">).</span><span class="nx">trim</span><span class="p">()</span><span class="si">}</span><span class="s">)&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
-<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
-    <span class="nv">schema:</span>
-      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-      <span class="nv">allowedKeys: </span><span class="kc">true</span>
-      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
-        <span class="nv">default:</span>
-          <span class="nv">type: </span><span class="s">&#39;any&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="o">or:</span>
-          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
-          <span class="nv">list:</span>
-            <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-    <span class="nv">value: </span><span class="nx">schema</span>
-  <span class="p">,</span> <span class="nx">cb</span>
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"None of the alternatives are matched
+      (<span class="hljs-subst">#{error.map((e) -&gt; e.message).join(<span class="hljs-string">'/ '</span>).trim()}</span>)"</span>), cb
+
+exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
+  check.run
+    <span class="hljs-attribute">schema</span>:
+      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
+      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
+      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+        <span class="hljs-attribute">default</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'any'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">or</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
+          <span class="hljs-attribute">list</span>:
+            <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
+    <span class="hljs-attribute">value</span>: schema
+  , cb
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

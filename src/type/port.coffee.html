@@ -6,20 +6,31 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/portcoffee", defaultSidebar = true;
+    var relativeDir = "../../";
+    var thisFile = "home/alex/github/node-validator/src/type/port.coffee";
+    var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
-</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head
 <body>
   <nav>
-<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="lllogo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+<div class="logo"><a href="http://alinex.github.io"
+  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
+  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
+    width="150" title="Alinex Universe Homepage" />
   </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
+  <img src="http://alinex.github.io/images/Alinex-200.png"
+    style="display:none" alt="preloading" />
 </div>
 <div class="links">
-  <a href="http://alinex.github.io/blog" class="btn btn-primary"><span class="glyphicon-cog"></span> Blog</a>
-  <a href="http://alinex.github.io/code.html" class="btn btn-warning"><span class="glyphicon-pencil"></span> Code</a>
+  <a href="http://alinex.github.io/blog"
+    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
+  <a href="http://alinex.github.io/develop"
+    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
+  <a href="http://alinex.github.io/code.html"
+    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
 </div>
 </nav><div id="sidebar_wrapper">
     <div id="sidebar_switch">
@@ -28,690 +39,713 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
-        <a href="#tcp%2Fudp%20ports">TCP/UDP Ports</a>
+        <a href="#tcpudp-ports">TCP/UDP Ports</a>
       </div>
+
       <div class="heading h2">
-        <a href="#node%20modules">Node modules</a>
+        <a href="#node-modules">Node modules</a>
       </div>
+
       <div class="heading h2">
-        <a href="#named%20ports">Named ports</a>
+        <a href="#named-ports">Named ports</a>
       </div>
+
       <div class="heading h2">
-        <a href="#type%20implementation">Type implementation</a>
+        <a href="#type-implementation">Type implementation</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="tcp%2Fudp%20ports">
+          <div class="pilwrap" id="tcpudp-ports">
   <h1>
-    <a href="#tcp%2Fudp%20ports" name="tcp%2Fudp%20ports" class="pilcrow">&#182;</a>
-    TCP/UDP Ports
+    <a href="#tcpudp-ports" name="tcpudp-ports" class="pilcrow"></a>
+TCP/UDP Ports
   </h1>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2"></a>
 </div>
 <p>Check options:</p>
-
 <ul>
 <li><code>allow</code> - (list) list of allowed ports or ranges 'system', 'registered', 'dynamic'</li>
 <li><code>deny</code> - (list) list of denied ports or ranges 'system', 'registered', 'dynamic'</li>
 </ul>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="node%20modules">
+          <div class="pilwrap" id="node-modules">
   <h2>
-    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
-    Node modules
+    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
+Node modules
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:port&#39;</span><span class="p">)</span>
-<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
-<span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:port'</span>)
+util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4"></a>
 </div>
 <p>alinex modules</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5"></a>
 </div>
 <p>include classes and helper</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
+        <td class="code highlight">
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
 
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="named%20ports">
+          <div class="pilwrap" id="named-ports">
   <h2>
-    <a href="#named%20ports" name="named%20ports" class="pilcrow">&#182;</a>
-    Named ports
+    <a href="#named-ports" name="named-ports" class="pilcrow"></a>
+Named ports
   </h2>
 </div>
+<p>cat /etc/services | sed 's//.<em>//' | sed 's/[ \t][ \t]</em>/: /'
+| sed &quot;s/([0-9a-z-]*)/'\1'/&quot; | sort -u</p>
 
-
-<p>cat /etc/services | sed 's/\/.<em>//' | sed 's/[ \t][ \t]</em>/: /'
-| sed "s/([0-9a-z-]*)/'\1'/" | sort -u</p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">ports =</span>
-  <span class="s">&#39;rtmp&#39;</span><span class="o">:</span> <span class="mi">1935</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">ports =
+  <span class="hljs-string">'rtmp'</span>: <span class="hljs-number">1935</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-7" id="section-7"></a>
 </div>
 <p>from /etc/services</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="s">&#39;acr-nema&#39;</span><span class="o">:</span> <span class="mi">104</span>
-  <span class="s">&#39;afbackup&#39;</span><span class="o">:</span> <span class="mi">2988</span>
-  <span class="s">&#39;afmbackup&#39;</span><span class="o">:</span> <span class="mi">2989</span>
-  <span class="s">&#39;afpovertcp&#39;</span><span class="o">:</span> <span class="mi">548</span>
-  <span class="s">&#39;afs3-bos&#39;</span><span class="o">:</span> <span class="mi">7007</span>
-  <span class="s">&#39;afs3-callback&#39;</span><span class="o">:</span> <span class="mi">7001</span>
-  <span class="s">&#39;afs3-errors&#39;</span><span class="o">:</span> <span class="mi">7006</span>
-  <span class="s">&#39;afs3-fileserver&#39;</span><span class="o">:</span> <span class="mi">7000</span>
-  <span class="s">&#39;afs3-kaserver&#39;</span><span class="o">:</span> <span class="mi">7004</span>
-  <span class="s">&#39;afs3-prserver&#39;</span><span class="o">:</span> <span class="mi">7002</span>
-  <span class="s">&#39;afs3-rmtsys&#39;</span><span class="o">:</span> <span class="mi">7009</span>
-  <span class="s">&#39;afs3-update&#39;</span><span class="o">:</span> <span class="mi">7008</span>
-  <span class="s">&#39;afs3-vlserver&#39;</span><span class="o">:</span> <span class="mi">7003</span>
-  <span class="s">&#39;afs3-volser&#39;</span><span class="o">:</span> <span class="mi">7005</span>
-  <span class="s">&#39;amanda&#39;</span><span class="o">:</span> <span class="mi">10080</span>
-  <span class="s">&#39;amandaidx&#39;</span><span class="o">:</span> <span class="mi">10082</span>
-  <span class="s">&#39;amidxtape&#39;</span><span class="o">:</span> <span class="mi">10083</span>
-  <span class="s">&#39;amqp&#39;</span><span class="o">:</span> <span class="mi">5672</span>
-  <span class="s">&#39;aol&#39;</span><span class="o">:</span> <span class="mi">5190</span>
-  <span class="s">&#39;asf-rmcp&#39;</span><span class="o">:</span> <span class="mi">623</span>
-  <span class="s">&#39;asp&#39;</span><span class="o">:</span> <span class="mi">27374</span>
-  <span class="s">&#39;at-echo&#39;</span><span class="o">:</span> <span class="mi">204</span>
-  <span class="s">&#39;at-nbp&#39;</span><span class="o">:</span> <span class="mi">202</span>
-  <span class="s">&#39;at-rtmp&#39;</span><span class="o">:</span> <span class="mi">201</span>
-  <span class="s">&#39;at-zis&#39;</span><span class="o">:</span> <span class="mi">206</span>
-  <span class="s">&#39;auth&#39;</span><span class="o">:</span> <span class="mi">113</span>
-  <span class="s">&#39;bacula-dir&#39;</span><span class="o">:</span> <span class="mi">9101</span>
-  <span class="s">&#39;bacula-fd&#39;</span><span class="o">:</span> <span class="mi">9102</span>
-  <span class="s">&#39;bacula-sd&#39;</span><span class="o">:</span> <span class="mi">9103</span>
-  <span class="s">&#39;bgp&#39;</span><span class="o">:</span> <span class="mi">179</span>
-  <span class="s">&#39;bgpd&#39;</span><span class="o">:</span> <span class="mi">2605</span>
-  <span class="s">&#39;bgpsim&#39;</span><span class="o">:</span> <span class="mi">5675</span>
-  <span class="s">&#39;biff&#39;</span><span class="o">:</span> <span class="mi">512</span>
-  <span class="s">&#39;binkp&#39;</span><span class="o">:</span> <span class="mi">24554</span>
-  <span class="s">&#39;bootpc&#39;</span><span class="o">:</span> <span class="mi">68</span>
-  <span class="s">&#39;bootps&#39;</span><span class="o">:</span> <span class="mi">67</span>
-  <span class="s">&#39;bpcd&#39;</span><span class="o">:</span> <span class="mi">13782</span>
-  <span class="s">&#39;bpdbm&#39;</span><span class="o">:</span> <span class="mi">13721</span>
-  <span class="s">&#39;bpjava-msvc&#39;</span><span class="o">:</span> <span class="mi">13722</span>
-  <span class="s">&#39;bprd&#39;</span><span class="o">:</span> <span class="mi">13720</span>
-  <span class="s">&#39;canna&#39;</span><span class="o">:</span> <span class="mi">5680</span>
-  <span class="s">&#39;cfengine&#39;</span><span class="o">:</span> <span class="mi">5308</span>
-  <span class="s">&#39;cfinger&#39;</span><span class="o">:</span> <span class="mi">2003</span>
-  <span class="s">&#39;chargen&#39;</span><span class="o">:</span> <span class="mi">19</span>
-  <span class="s">&#39;cisco-sccp&#39;</span><span class="o">:</span> <span class="mi">2000</span>
-  <span class="s">&#39;clc-build-daemon&#39;</span><span class="o">:</span> <span class="mi">8990</span>
-  <span class="s">&#39;clearcase&#39;</span><span class="o">:</span> <span class="mi">371</span>
-  <span class="s">&#39;cmip-agent&#39;</span><span class="o">:</span> <span class="mi">164</span>
-  <span class="s">&#39;cmip-man&#39;</span><span class="o">:</span> <span class="mi">163</span>
-  <span class="s">&#39;codaauth2&#39;</span><span class="o">:</span> <span class="mi">370</span>
-  <span class="s">&#39;codasrv&#39;</span><span class="o">:</span> <span class="mi">2432</span>
-  <span class="s">&#39;codasrv-se&#39;</span><span class="o">:</span> <span class="mi">2433</span>
-  <span class="s">&#39;conference&#39;</span><span class="o">:</span> <span class="mi">531</span>
-  <span class="s">&#39;courier&#39;</span><span class="o">:</span> <span class="mi">530</span>
-  <span class="s">&#39;csnet-ns&#39;</span><span class="o">:</span> <span class="mi">105</span>
-  <span class="s">&#39;csync2&#39;</span><span class="o">:</span> <span class="mi">30865</span>
-  <span class="s">&#39;customs&#39;</span><span class="o">:</span> <span class="mi">1001</span>
-  <span class="s">&#39;cvspserver&#39;</span><span class="o">:</span> <span class="mi">2401</span>
-  <span class="s">&#39;daap&#39;</span><span class="o">:</span> <span class="mi">3689</span>
-  <span class="s">&#39;datametrics&#39;</span><span class="o">:</span> <span class="mi">1645</span>
-  <span class="s">&#39;daytime&#39;</span><span class="o">:</span> <span class="mi">13</span>
-  <span class="s">&#39;db-lsp&#39;</span><span class="o">:</span> <span class="mi">17500</span>
-  <span class="s">&#39;dcap&#39;</span><span class="o">:</span> <span class="mi">22125</span>
-  <span class="s">&#39;dhcpv6-client&#39;</span><span class="o">:</span> <span class="mi">546</span>
-  <span class="s">&#39;dhcpv6-server&#39;</span><span class="o">:</span> <span class="mi">547</span>
-  <span class="s">&#39;dicom&#39;</span><span class="o">:</span> <span class="mi">11112</span>
-  <span class="s">&#39;dict&#39;</span><span class="o">:</span> <span class="mi">2628</span>
-  <span class="s">&#39;dircproxy&#39;</span><span class="o">:</span> <span class="mi">57000</span>
-  <span class="s">&#39;discard&#39;</span><span class="o">:</span> <span class="mi">9</span>
-  <span class="s">&#39;distcc&#39;</span><span class="o">:</span> <span class="mi">3632</span>
-  <span class="s">&#39;distmp3&#39;</span><span class="o">:</span> <span class="mi">4600</span>
-  <span class="s">&#39;domain&#39;</span><span class="o">:</span> <span class="mi">53</span>
-  <span class="s">&#39;echo&#39;</span><span class="o">:</span> <span class="mi">4</span>
-  <span class="s">&#39;echo&#39;</span><span class="o">:</span> <span class="mi">7</span>
-  <span class="s">&#39;eklogin&#39;</span><span class="o">:</span> <span class="mi">2105</span>
-  <span class="s">&#39;enbd-cstatd&#39;</span><span class="o">:</span> <span class="mi">5051</span>
-  <span class="s">&#39;enbd-sstatd&#39;</span><span class="o">:</span> <span class="mi">5052</span>
-  <span class="s">&#39;epmd&#39;</span><span class="o">:</span> <span class="mi">4369</span>
-  <span class="s">&#39;exec&#39;</span><span class="o">:</span> <span class="mi">512</span>
-  <span class="s">&#39;f5-globalsite&#39;</span><span class="o">:</span> <span class="mi">2792</span>
-  <span class="s">&#39;f5-iquery&#39;</span><span class="o">:</span> <span class="mi">4353</span>
-  <span class="s">&#39;fatserv&#39;</span><span class="o">:</span> <span class="mi">347</span>
-  <span class="s">&#39;fax&#39;</span><span class="o">:</span> <span class="mi">4557</span>
-  <span class="s">&#39;fido&#39;</span><span class="o">:</span> <span class="mi">60179</span>
-  <span class="s">&#39;finger&#39;</span><span class="o">:</span> <span class="mi">79</span>
-  <span class="s">&#39;font-service&#39;</span><span class="o">:</span> <span class="mi">7100</span>
-  <span class="s">&#39;freeciv&#39;</span><span class="o">:</span> <span class="mi">5556</span>
-  <span class="s">&#39;frox&#39;</span><span class="o">:</span> <span class="mi">2121</span>
-  <span class="s">&#39;fsp&#39;</span><span class="o">:</span> <span class="mi">21</span>
-  <span class="s">&#39;ftp&#39;</span><span class="o">:</span> <span class="mi">21</span>
-  <span class="s">&#39;ftp-data&#39;</span><span class="o">:</span> <span class="mi">20</span>
-  <span class="s">&#39;ftps&#39;</span><span class="o">:</span> <span class="mi">990</span>
-  <span class="s">&#39;ftps-data&#39;</span><span class="o">:</span> <span class="mi">989</span>
-  <span class="s">&#39;gdomap&#39;</span><span class="o">:</span> <span class="mi">538</span>
-  <span class="s">&#39;gds-db&#39;</span><span class="o">:</span> <span class="mi">3050</span>
-  <span class="s">&#39;ggz&#39;</span><span class="o">:</span> <span class="mi">5688</span>
-  <span class="s">&#39;git&#39;</span><span class="o">:</span> <span class="mi">9418</span>
-  <span class="s">&#39;gnunet&#39;</span><span class="o">:</span> <span class="mi">2086</span>
-  <span class="s">&#39;gnutella-rtr&#39;</span><span class="o">:</span> <span class="mi">6347</span>
-  <span class="s">&#39;gnutella-svc&#39;</span><span class="o">:</span> <span class="mi">6346</span>
-  <span class="s">&#39;gopher&#39;</span><span class="o">:</span> <span class="mi">70</span>
-  <span class="s">&#39;gpsd&#39;</span><span class="o">:</span> <span class="mi">2947</span>
-  <span class="s">&#39;gris&#39;</span><span class="o">:</span> <span class="mi">2135</span>
-  <span class="s">&#39;groupwise&#39;</span><span class="o">:</span> <span class="mi">1677</span>
-  <span class="s">&#39;gsidcap&#39;</span><span class="o">:</span> <span class="mi">22128</span>
-  <span class="s">&#39;gsiftp&#39;</span><span class="o">:</span> <span class="mi">2811</span>
-  <span class="s">&#39;gsigatekeeper&#39;</span><span class="o">:</span> <span class="mi">2119</span>
-  <span class="s">&#39;hkp&#39;</span><span class="o">:</span> <span class="mi">11371</span>
-  <span class="s">&#39;hmmp-ind&#39;</span><span class="o">:</span> <span class="mi">612</span>
-  <span class="s">&#39;hostmon&#39;</span><span class="o">:</span> <span class="mi">5355</span>
-  <span class="s">&#39;hostnames&#39;</span><span class="o">:</span> <span class="mi">101</span>
-  <span class="s">&#39;http&#39;</span><span class="o">:</span> <span class="mi">80</span>
-  <span class="s">&#39;http-alt&#39;</span><span class="o">:</span> <span class="mi">8080</span>
-  <span class="s">&#39;https&#39;</span><span class="o">:</span> <span class="mi">443</span>
-  <span class="s">&#39;hylafax&#39;</span><span class="o">:</span> <span class="mi">4559</span>
-  <span class="s">&#39;iax&#39;</span><span class="o">:</span> <span class="mi">4569</span>
-  <span class="s">&#39;icpv2&#39;</span><span class="o">:</span> <span class="mi">3130</span>
-  <span class="s">&#39;idfp&#39;</span><span class="o">:</span> <span class="mi">549</span>
-  <span class="s">&#39;imap2&#39;</span><span class="o">:</span> <span class="mi">143</span>
-  <span class="s">&#39;imap3&#39;</span><span class="o">:</span> <span class="mi">220</span>
-  <span class="s">&#39;imaps&#39;</span><span class="o">:</span> <span class="mi">993</span>
-  <span class="s">&#39;imsp&#39;</span><span class="o">:</span> <span class="mi">406</span>
-  <span class="s">&#39;ingreslock&#39;</span><span class="o">:</span> <span class="mi">1524</span>
-  <span class="s">&#39;ipp&#39;</span><span class="o">:</span> <span class="mi">631</span>
-  <span class="s">&#39;iprop&#39;</span><span class="o">:</span> <span class="mi">2121</span>
-  <span class="s">&#39;ipsec-nat-t&#39;</span><span class="o">:</span> <span class="mi">4500</span>
-  <span class="s">&#39;ipx&#39;</span><span class="o">:</span> <span class="mi">213</span>
-  <span class="s">&#39;irc&#39;</span><span class="o">:</span> <span class="mi">194</span>
-  <span class="s">&#39;ircd&#39;</span><span class="o">:</span> <span class="mi">6667</span>
-  <span class="s">&#39;ircs&#39;</span><span class="o">:</span> <span class="mi">994</span>
-  <span class="s">&#39;isakmp&#39;</span><span class="o">:</span> <span class="mi">500</span>
-  <span class="s">&#39;iscsi-target&#39;</span><span class="o">:</span> <span class="mi">3260</span>
-  <span class="s">&#39;isdnlog&#39;</span><span class="o">:</span> <span class="mi">20011</span>
-  <span class="s">&#39;isisd&#39;</span><span class="o">:</span> <span class="mi">2608</span>
-  <span class="s">&#39;iso-tsap&#39;</span><span class="o">:</span> <span class="mi">102</span>
-  <span class="s">&#39;kamanda&#39;</span><span class="o">:</span> <span class="mi">10081</span>
-  <span class="s">&#39;kazaa&#39;</span><span class="o">:</span> <span class="mi">1214</span>
-  <span class="s">&#39;kerberos4&#39;</span><span class="o">:</span> <span class="mi">750</span>
-  <span class="s">&#39;kerberos&#39;</span><span class="o">:</span> <span class="mi">88</span>
-  <span class="s">&#39;kerberos-adm&#39;</span><span class="o">:</span> <span class="mi">749</span>
-  <span class="s">&#39;kerberos-master&#39;</span><span class="o">:</span> <span class="mi">751</span>
-  <span class="s">&#39;kermit&#39;</span><span class="o">:</span> <span class="mi">1649</span>
-  <span class="s">&#39;klogin&#39;</span><span class="o">:</span> <span class="mi">543</span>
-  <span class="s">&#39;knetd&#39;</span><span class="o">:</span> <span class="mi">2053</span>
-  <span class="s">&#39;kpasswd&#39;</span><span class="o">:</span> <span class="mi">464</span>
-  <span class="s">&#39;kpop&#39;</span><span class="o">:</span> <span class="mi">1109</span>
-  <span class="s">&#39;krb-prop&#39;</span><span class="o">:</span> <span class="mi">754</span>
-  <span class="s">&#39;krbupdate&#39;</span><span class="o">:</span> <span class="mi">760</span>
-  <span class="s">&#39;kshell&#39;</span><span class="o">:</span> <span class="mi">544</span>
-  <span class="s">&#39;kx&#39;</span><span class="o">:</span> <span class="mi">2111</span>
-  <span class="s">&#39;l2f&#39;</span><span class="o">:</span> <span class="mi">1701</span>
-  <span class="s">&#39;ldap&#39;</span><span class="o">:</span> <span class="mi">389</span>
-  <span class="s">&#39;ldaps&#39;</span><span class="o">:</span> <span class="mi">636</span>
-  <span class="s">&#39;link&#39;</span><span class="o">:</span> <span class="mi">87</span>
-  <span class="s">&#39;linuxconf&#39;</span><span class="o">:</span> <span class="mi">98</span>
-  <span class="s">&#39;loc-srv&#39;</span><span class="o">:</span> <span class="mi">135</span>
-  <span class="s">&#39;login&#39;</span><span class="o">:</span> <span class="mi">513</span>
-  <span class="s">&#39;log-server&#39;</span><span class="o">:</span> <span class="mi">1958</span>
-  <span class="s">&#39;lotusnote&#39;</span><span class="o">:</span> <span class="mi">1352</span>
-  <span class="s">&#39;mailq&#39;</span><span class="o">:</span> <span class="mi">174</span>
-  <span class="s">&#39;mandelspawn&#39;</span><span class="o">:</span> <span class="mi">9359</span>
-  <span class="s">&#39;mdns&#39;</span><span class="o">:</span> <span class="mi">5353</span>
-  <span class="s">&#39;microsoft-ds&#39;</span><span class="o">:</span> <span class="mi">445</span>
-  <span class="s">&#39;mmcc&#39;</span><span class="o">:</span> <span class="mi">5050</span>
-  <span class="s">&#39;moira-db&#39;</span><span class="o">:</span> <span class="mi">775</span>
-  <span class="s">&#39;moira-update&#39;</span><span class="o">:</span> <span class="mi">777</span>
-  <span class="s">&#39;moira-ureg&#39;</span><span class="o">:</span> <span class="mi">779</span>
-  <span class="s">&#39;mon&#39;</span><span class="o">:</span> <span class="mi">2583</span>
-  <span class="s">&#39;mrtd&#39;</span><span class="o">:</span> <span class="mi">5674</span>
-  <span class="s">&#39;msnp&#39;</span><span class="o">:</span> <span class="mi">1863</span>
-  <span class="s">&#39;msp&#39;</span><span class="o">:</span> <span class="mi">18</span>
-  <span class="s">&#39;ms-sql-m&#39;</span><span class="o">:</span> <span class="mi">1434</span>
-  <span class="s">&#39;ms-sql-s&#39;</span><span class="o">:</span> <span class="mi">1433</span>
-  <span class="s">&#39;mtn&#39;</span><span class="o">:</span> <span class="mi">4691</span>
-  <span class="s">&#39;mtp&#39;</span><span class="o">:</span> <span class="mi">57</span>
-  <span class="s">&#39;munin&#39;</span><span class="o">:</span> <span class="mi">4949</span>
-  <span class="s">&#39;mysql&#39;</span><span class="o">:</span> <span class="mi">3306</span>
-  <span class="s">&#39;mysql-proxy&#39;</span><span class="o">:</span> <span class="mi">6446</span>
-  <span class="s">&#39;nameserver&#39;</span><span class="o">:</span> <span class="mi">42</span>
-  <span class="s">&#39;nbd&#39;</span><span class="o">:</span> <span class="mi">10809</span>
-  <span class="s">&#39;nbp&#39;</span><span class="o">:</span> <span class="mi">2</span>
-  <span class="s">&#39;nessus&#39;</span><span class="o">:</span> <span class="mi">1241</span>
-  <span class="s">&#39;netbios-dgm&#39;</span><span class="o">:</span> <span class="mi">138</span>
-  <span class="s">&#39;netbios-ns&#39;</span><span class="o">:</span> <span class="mi">137</span>
-  <span class="s">&#39;netbios-ssn&#39;</span><span class="o">:</span> <span class="mi">139</span>
-  <span class="s">&#39;netnews&#39;</span><span class="o">:</span> <span class="mi">532</span>
-  <span class="s">&#39;netstat&#39;</span><span class="o">:</span> <span class="mi">15</span>
-  <span class="s">&#39;netwall&#39;</span><span class="o">:</span> <span class="mi">533</span>
-  <span class="s">&#39;nextstep&#39;</span><span class="o">:</span> <span class="mi">178</span>
-  <span class="s">&#39;nfs&#39;</span><span class="o">:</span> <span class="mi">2049</span>
-  <span class="s">&#39;ninstall&#39;</span><span class="o">:</span> <span class="mi">2150</span>
-  <span class="s">&#39;nntp&#39;</span><span class="o">:</span> <span class="mi">119</span>
-  <span class="s">&#39;nntps&#39;</span><span class="o">:</span> <span class="mi">563</span>
-  <span class="s">&#39;noclog&#39;</span><span class="o">:</span> <span class="mi">5354</span>
-  <span class="s">&#39;npmp-gui&#39;</span><span class="o">:</span> <span class="mi">611</span>
-  <span class="s">&#39;npmp-local&#39;</span><span class="o">:</span> <span class="mi">610</span>
-  <span class="s">&#39;nqs&#39;</span><span class="o">:</span> <span class="mi">607</span>
-  <span class="s">&#39;nrpe&#39;</span><span class="o">:</span> <span class="mi">5666</span>
-  <span class="s">&#39;nsca&#39;</span><span class="o">:</span> <span class="mi">5667</span>
-  <span class="s">&#39;ntalk&#39;</span><span class="o">:</span> <span class="mi">518</span>
-  <span class="s">&#39;ntp&#39;</span><span class="o">:</span> <span class="mi">123</span>
-  <span class="s">&#39;nut&#39;</span><span class="o">:</span> <span class="mi">3493</span>
-  <span class="s">&#39;omirr&#39;</span><span class="o">:</span> <span class="mi">808</span>
-  <span class="s">&#39;omniorb&#39;</span><span class="o">:</span> <span class="mi">8088</span>
-  <span class="s">&#39;openvpn&#39;</span><span class="o">:</span> <span class="mi">1194</span>
-  <span class="s">&#39;ospf6d&#39;</span><span class="o">:</span> <span class="mi">2606</span>
-  <span class="s">&#39;ospfapi&#39;</span><span class="o">:</span> <span class="mi">2607</span>
-  <span class="s">&#39;ospfd&#39;</span><span class="o">:</span> <span class="mi">2604</span>
-  <span class="s">&#39;passwd-server&#39;</span><span class="o">:</span> <span class="mi">752</span>
-  <span class="s">&#39;pawserv&#39;</span><span class="o">:</span> <span class="mi">345</span>
-  <span class="s">&#39;pcrd&#39;</span><span class="o">:</span> <span class="mi">5151</span>
-  <span class="s">&#39;pipe-server&#39;</span><span class="o">:</span> <span class="mi">2010</span>
-  <span class="s">&#39;pop2&#39;</span><span class="o">:</span> <span class="mi">109</span>
-  <span class="s">&#39;pop3&#39;</span><span class="o">:</span> <span class="mi">110</span>
-  <span class="s">&#39;pop3s&#39;</span><span class="o">:</span> <span class="mi">995</span>
-  <span class="s">&#39;poppassd&#39;</span><span class="o">:</span> <span class="mi">106</span>
-  <span class="s">&#39;postgresql&#39;</span><span class="o">:</span> <span class="mi">5432</span>
-  <span class="s">&#39;predict&#39;</span><span class="o">:</span> <span class="mi">1210</span>
-  <span class="s">&#39;printer&#39;</span><span class="o">:</span> <span class="mi">515</span>
-  <span class="s">&#39;proofd&#39;</span><span class="o">:</span> <span class="mi">1093</span>
-  <span class="s">&#39;prospero&#39;</span><span class="o">:</span> <span class="mi">191</span>
-  <span class="s">&#39;prospero-np&#39;</span><span class="o">:</span> <span class="mi">1525</span>
-  <span class="s">&#39;pwdgen&#39;</span><span class="o">:</span> <span class="mi">129</span>
-  <span class="s">&#39;qmqp&#39;</span><span class="o">:</span> <span class="mi">628</span>
-  <span class="s">&#39;qmtp&#39;</span><span class="o">:</span> <span class="mi">209</span>
-  <span class="s">&#39;qotd&#39;</span><span class="o">:</span> <span class="mi">17</span>
-  <span class="s">&#39;radius&#39;</span><span class="o">:</span> <span class="mi">1812</span>
-  <span class="s">&#39;radius-acct&#39;</span><span class="o">:</span> <span class="mi">1813</span>
-  <span class="s">&#39;radmin-port&#39;</span><span class="o">:</span> <span class="mi">4899</span>
-  <span class="s">&#39;re-mail-ck&#39;</span><span class="o">:</span> <span class="mi">50</span>
-  <span class="s">&#39;remctl&#39;</span><span class="o">:</span> <span class="mi">4373</span>
-  <span class="s">&#39;remotefs&#39;</span><span class="o">:</span> <span class="mi">556</span>
-  <span class="s">&#39;remoteping&#39;</span><span class="o">:</span> <span class="mi">1959</span>
-  <span class="s">&#39;rfe&#39;</span><span class="o">:</span> <span class="mi">5002</span>
-  <span class="s">&#39;ripd&#39;</span><span class="o">:</span> <span class="mi">2602</span>
-  <span class="s">&#39;ripngd&#39;</span><span class="o">:</span> <span class="mi">2603</span>
-  <span class="s">&#39;rje&#39;</span><span class="o">:</span> <span class="mi">77</span>
-  <span class="s">&#39;rlp&#39;</span><span class="o">:</span> <span class="mi">39</span>
-  <span class="s">&#39;rmiregistry&#39;</span><span class="o">:</span> <span class="mi">1099</span>
-  <span class="s">&#39;rmtcfg&#39;</span><span class="o">:</span> <span class="mi">1236</span>
-  <span class="s">&#39;rootd&#39;</span><span class="o">:</span> <span class="mi">1094</span>
-  <span class="s">&#39;route&#39;</span><span class="o">:</span> <span class="mi">520</span>
-  <span class="s">&#39;rpc2portmap&#39;</span><span class="o">:</span> <span class="mi">369</span>
-  <span class="s">&#39;rplay&#39;</span><span class="o">:</span> <span class="mi">5555</span>
-  <span class="s">&#39;rsync&#39;</span><span class="o">:</span> <span class="mi">873</span>
-  <span class="s">&#39;rtcm-sc104&#39;</span><span class="o">:</span> <span class="mi">2101</span>
-  <span class="s">&#39;rtelnet&#39;</span><span class="o">:</span> <span class="mi">107</span>
-  <span class="s">&#39;rtmp&#39;</span><span class="o">:</span> <span class="mi">1</span>
-  <span class="s">&#39;rtsp&#39;</span><span class="o">:</span> <span class="mi">554</span>
-  <span class="s">&#39;saft&#39;</span><span class="o">:</span> <span class="mi">487</span>
-  <span class="s">&#39;sa-msg-port&#39;</span><span class="o">:</span> <span class="mi">1646</span>
-  <span class="s">&#39;sane-port&#39;</span><span class="o">:</span> <span class="mi">6566</span>
-  <span class="s">&#39;search&#39;</span><span class="o">:</span> <span class="mi">2010</span>
-  <span class="s">&#39;sftp&#39;</span><span class="o">:</span> <span class="mi">115</span>
-  <span class="s">&#39;sge-execd&#39;</span><span class="o">:</span> <span class="mi">6445</span>
-  <span class="s">&#39;sge-qmaster&#39;</span><span class="o">:</span> <span class="mi">6444</span>
-  <span class="s">&#39;sgi-cad&#39;</span><span class="o">:</span> <span class="mi">17004</span>
-  <span class="s">&#39;sgi-cmsd&#39;</span><span class="o">:</span> <span class="mi">17001</span>
-  <span class="s">&#39;sgi-crsd&#39;</span><span class="o">:</span> <span class="mi">17002</span>
-  <span class="s">&#39;sgi-gcd&#39;</span><span class="o">:</span> <span class="mi">17003</span>
-  <span class="s">&#39;shell&#39;</span><span class="o">:</span> <span class="mi">514</span>
-  <span class="s">&#39;sieve&#39;</span><span class="o">:</span> <span class="mi">4190</span>
-  <span class="s">&#39;silc&#39;</span><span class="o">:</span> <span class="mi">706</span>
-  <span class="s">&#39;sip&#39;</span><span class="o">:</span> <span class="mi">5060</span>
-  <span class="s">&#39;sip-tls&#39;</span><span class="o">:</span> <span class="mi">5061</span>
-  <span class="s">&#39;skkserv&#39;</span><span class="o">:</span> <span class="mi">1178</span>
-  <span class="s">&#39;smsqp&#39;</span><span class="o">:</span> <span class="mi">11201</span>
-  <span class="s">&#39;smtp&#39;</span><span class="o">:</span> <span class="mi">25</span>
-  <span class="s">&#39;smux&#39;</span><span class="o">:</span> <span class="mi">199</span>
-  <span class="s">&#39;snmp&#39;</span><span class="o">:</span> <span class="mi">161</span>
-  <span class="s">&#39;snmp-trap&#39;</span><span class="o">:</span> <span class="mi">162</span>
-  <span class="s">&#39;snpp&#39;</span><span class="o">:</span> <span class="mi">444</span>
-  <span class="s">&#39;socks&#39;</span><span class="o">:</span> <span class="mi">1080</span>
-  <span class="s">&#39;spamd&#39;</span><span class="o">:</span> <span class="mi">783</span>
-  <span class="s">&#39;ssh&#39;</span><span class="o">:</span> <span class="mi">22</span>
-  <span class="s">&#39;submission&#39;</span><span class="o">:</span> <span class="mi">587</span>
-  <span class="s">&#39;sunrpc&#39;</span><span class="o">:</span> <span class="mi">111</span>
-  <span class="s">&#39;supdup&#39;</span><span class="o">:</span> <span class="mi">95</span>
-  <span class="s">&#39;supfiledbg&#39;</span><span class="o">:</span> <span class="mi">1127</span>
-  <span class="s">&#39;supfilesrv&#39;</span><span class="o">:</span> <span class="mi">871</span>
-  <span class="s">&#39;support&#39;</span><span class="o">:</span> <span class="mi">1529</span>
-  <span class="s">&#39;suucp&#39;</span><span class="o">:</span> <span class="mi">4031</span>
-  <span class="s">&#39;svn&#39;</span><span class="o">:</span> <span class="mi">3690</span>
-  <span class="s">&#39;svrloc&#39;</span><span class="o">:</span> <span class="mi">427</span>
-  <span class="s">&#39;swat&#39;</span><span class="o">:</span> <span class="mi">901</span>
-  <span class="s">&#39;syslog&#39;</span><span class="o">:</span> <span class="mi">514</span>
-  <span class="s">&#39;syslog-tls&#39;</span><span class="o">:</span> <span class="mi">6514</span>
-  <span class="s">&#39;sysrqd&#39;</span><span class="o">:</span> <span class="mi">4094</span>
-  <span class="s">&#39;systat&#39;</span><span class="o">:</span> <span class="mi">11</span>
-  <span class="s">&#39;tacacs&#39;</span><span class="o">:</span> <span class="mi">49</span>
-  <span class="s">&#39;tacacs-ds&#39;</span><span class="o">:</span> <span class="mi">65</span>
-  <span class="s">&#39;talk&#39;</span><span class="o">:</span> <span class="mi">517</span>
-  <span class="s">&#39;tcpmux&#39;</span><span class="o">:</span> <span class="mi">1</span>
-  <span class="s">&#39;telnet&#39;</span><span class="o">:</span> <span class="mi">23</span>
-  <span class="s">&#39;telnets&#39;</span><span class="o">:</span> <span class="mi">992</span>
-  <span class="s">&#39;tempo&#39;</span><span class="o">:</span> <span class="mi">526</span>
-  <span class="s">&#39;tfido&#39;</span><span class="o">:</span> <span class="mi">60177</span>
-  <span class="s">&#39;tftp&#39;</span><span class="o">:</span> <span class="mi">69</span>
-  <span class="s">&#39;time&#39;</span><span class="o">:</span> <span class="mi">37</span>
-  <span class="s">&#39;timed&#39;</span><span class="o">:</span> <span class="mi">525</span>
-  <span class="s">&#39;tinc&#39;</span><span class="o">:</span> <span class="mi">655</span>
-  <span class="s">&#39;tproxy&#39;</span><span class="o">:</span> <span class="mi">8081</span>
-  <span class="s">&#39;ulistserv&#39;</span><span class="o">:</span> <span class="mi">372</span>
-  <span class="s">&#39;unix-status&#39;</span><span class="o">:</span> <span class="mi">1957</span>
-  <span class="s">&#39;urd&#39;</span><span class="o">:</span> <span class="mi">465</span>
-  <span class="s">&#39;uucp&#39;</span><span class="o">:</span> <span class="mi">540</span>
-  <span class="s">&#39;uucp-path&#39;</span><span class="o">:</span> <span class="mi">117</span>
-  <span class="s">&#39;vboxd&#39;</span><span class="o">:</span> <span class="mi">20012</span>
-  <span class="s">&#39;venus&#39;</span><span class="o">:</span> <span class="mi">2430</span>
-  <span class="s">&#39;venus-se&#39;</span><span class="o">:</span> <span class="mi">2431</span>
-  <span class="s">&#39;vnetd&#39;</span><span class="o">:</span> <span class="mi">13724</span>
-  <span class="s">&#39;vopied&#39;</span><span class="o">:</span> <span class="mi">13783</span>
-  <span class="s">&#39;webmin&#39;</span><span class="o">:</span> <span class="mi">10000</span>
-  <span class="s">&#39;webster&#39;</span><span class="o">:</span> <span class="mi">765</span>
-  <span class="s">&#39;who&#39;</span><span class="o">:</span> <span class="mi">513</span>
-  <span class="s">&#39;whois&#39;</span><span class="o">:</span> <span class="mi">43</span>
-  <span class="s">&#39;wipld&#39;</span><span class="o">:</span> <span class="mi">1300</span>
-  <span class="s">&#39;wnn6&#39;</span><span class="o">:</span> <span class="mi">22273</span>
-  <span class="s">&#39;x11-1&#39;</span><span class="o">:</span> <span class="mi">6001</span>
-  <span class="s">&#39;x11-2&#39;</span><span class="o">:</span> <span class="mi">6002</span>
-  <span class="s">&#39;x11-3&#39;</span><span class="o">:</span> <span class="mi">6003</span>
-  <span class="s">&#39;x11-4&#39;</span><span class="o">:</span> <span class="mi">6004</span>
-  <span class="s">&#39;x11-5&#39;</span><span class="o">:</span> <span class="mi">6005</span>
-  <span class="s">&#39;x11&#39;</span><span class="o">:</span> <span class="mi">6000</span>
-  <span class="s">&#39;x11-6&#39;</span><span class="o">:</span> <span class="mi">6006</span>
-  <span class="s">&#39;x11-7&#39;</span><span class="o">:</span> <span class="mi">6007</span>
-  <span class="s">&#39;xdmcp&#39;</span><span class="o">:</span> <span class="mi">177</span>
-  <span class="s">&#39;xinetd&#39;</span><span class="o">:</span> <span class="mi">9098</span>
-  <span class="s">&#39;xmms2&#39;</span><span class="o">:</span> <span class="mi">9667</span>
-  <span class="s">&#39;xmpp-client&#39;</span><span class="o">:</span> <span class="mi">5222</span>
-  <span class="s">&#39;xmpp-server&#39;</span><span class="o">:</span> <span class="mi">5269</span>
-  <span class="s">&#39;xpilot&#39;</span><span class="o">:</span> <span class="mi">15345</span>
-  <span class="s">&#39;xtel&#39;</span><span class="o">:</span> <span class="mi">1313</span>
-  <span class="s">&#39;xtell&#39;</span><span class="o">:</span> <span class="mi">4224</span>
-  <span class="s">&#39;xtelw&#39;</span><span class="o">:</span> <span class="mi">1314</span>
-  <span class="s">&#39;z3950&#39;</span><span class="o">:</span> <span class="mi">210</span>
-  <span class="s">&#39;zabbix-agent&#39;</span><span class="o">:</span> <span class="mi">10050</span>
-  <span class="s">&#39;zabbix-trapper&#39;</span><span class="o">:</span> <span class="mi">10051</span>
-  <span class="s">&#39;zebra&#39;</span><span class="o">:</span> <span class="mi">2601</span>
-  <span class="s">&#39;zebrasrv&#39;</span><span class="o">:</span> <span class="mi">2600</span>
-  <span class="s">&#39;zephyr-clt&#39;</span><span class="o">:</span> <span class="mi">2103</span>
-  <span class="s">&#39;zephyr-hm&#39;</span><span class="o">:</span> <span class="mi">2104</span>
-  <span class="s">&#39;zephyr-srv&#39;</span><span class="o">:</span> <span class="mi">2102</span>
-  <span class="s">&#39;zip&#39;</span><span class="o">:</span> <span class="mi">6</span>
-  <span class="s">&#39;zope&#39;</span><span class="o">:</span> <span class="mi">9673</span>
-  <span class="s">&#39;zope-ftp&#39;</span><span class="o">:</span> <span class="mi">8021</span>
-  <span class="s">&#39;zserv&#39;</span><span class="o">:</span> <span class="mi">346</span>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-string">'acr-nema'</span>: <span class="hljs-number">104</span>
+  <span class="hljs-string">'afbackup'</span>: <span class="hljs-number">2988</span>
+  <span class="hljs-string">'afmbackup'</span>: <span class="hljs-number">2989</span>
+  <span class="hljs-string">'afpovertcp'</span>: <span class="hljs-number">548</span>
+  <span class="hljs-string">'afs3-bos'</span>: <span class="hljs-number">7007</span>
+  <span class="hljs-string">'afs3-callback'</span>: <span class="hljs-number">7001</span>
+  <span class="hljs-string">'afs3-errors'</span>: <span class="hljs-number">7006</span>
+  <span class="hljs-string">'afs3-fileserver'</span>: <span class="hljs-number">7000</span>
+  <span class="hljs-string">'afs3-kaserver'</span>: <span class="hljs-number">7004</span>
+  <span class="hljs-string">'afs3-prserver'</span>: <span class="hljs-number">7002</span>
+  <span class="hljs-string">'afs3-rmtsys'</span>: <span class="hljs-number">7009</span>
+  <span class="hljs-string">'afs3-update'</span>: <span class="hljs-number">7008</span>
+  <span class="hljs-string">'afs3-vlserver'</span>: <span class="hljs-number">7003</span>
+  <span class="hljs-string">'afs3-volser'</span>: <span class="hljs-number">7005</span>
+  <span class="hljs-string">'amanda'</span>: <span class="hljs-number">10080</span>
+  <span class="hljs-string">'amandaidx'</span>: <span class="hljs-number">10082</span>
+  <span class="hljs-string">'amidxtape'</span>: <span class="hljs-number">10083</span>
+  <span class="hljs-string">'amqp'</span>: <span class="hljs-number">5672</span>
+  <span class="hljs-string">'aol'</span>: <span class="hljs-number">5190</span>
+  <span class="hljs-string">'asf-rmcp'</span>: <span class="hljs-number">623</span>
+  <span class="hljs-string">'asp'</span>: <span class="hljs-number">27374</span>
+  <span class="hljs-string">'at-echo'</span>: <span class="hljs-number">204</span>
+  <span class="hljs-string">'at-nbp'</span>: <span class="hljs-number">202</span>
+  <span class="hljs-string">'at-rtmp'</span>: <span class="hljs-number">201</span>
+  <span class="hljs-string">'at-zis'</span>: <span class="hljs-number">206</span>
+  <span class="hljs-string">'auth'</span>: <span class="hljs-number">113</span>
+  <span class="hljs-string">'bacula-dir'</span>: <span class="hljs-number">9101</span>
+  <span class="hljs-string">'bacula-fd'</span>: <span class="hljs-number">9102</span>
+  <span class="hljs-string">'bacula-sd'</span>: <span class="hljs-number">9103</span>
+  <span class="hljs-string">'bgp'</span>: <span class="hljs-number">179</span>
+  <span class="hljs-string">'bgpd'</span>: <span class="hljs-number">2605</span>
+  <span class="hljs-string">'bgpsim'</span>: <span class="hljs-number">5675</span>
+  <span class="hljs-string">'biff'</span>: <span class="hljs-number">512</span>
+  <span class="hljs-string">'binkp'</span>: <span class="hljs-number">24554</span>
+  <span class="hljs-string">'bootpc'</span>: <span class="hljs-number">68</span>
+  <span class="hljs-string">'bootps'</span>: <span class="hljs-number">67</span>
+  <span class="hljs-string">'bpcd'</span>: <span class="hljs-number">13782</span>
+  <span class="hljs-string">'bpdbm'</span>: <span class="hljs-number">13721</span>
+  <span class="hljs-string">'bpjava-msvc'</span>: <span class="hljs-number">13722</span>
+  <span class="hljs-string">'bprd'</span>: <span class="hljs-number">13720</span>
+  <span class="hljs-string">'canna'</span>: <span class="hljs-number">5680</span>
+  <span class="hljs-string">'cfengine'</span>: <span class="hljs-number">5308</span>
+  <span class="hljs-string">'cfinger'</span>: <span class="hljs-number">2003</span>
+  <span class="hljs-string">'chargen'</span>: <span class="hljs-number">19</span>
+  <span class="hljs-string">'cisco-sccp'</span>: <span class="hljs-number">2000</span>
+  <span class="hljs-string">'clc-build-daemon'</span>: <span class="hljs-number">8990</span>
+  <span class="hljs-string">'clearcase'</span>: <span class="hljs-number">371</span>
+  <span class="hljs-string">'cmip-agent'</span>: <span class="hljs-number">164</span>
+  <span class="hljs-string">'cmip-man'</span>: <span class="hljs-number">163</span>
+  <span class="hljs-string">'codaauth2'</span>: <span class="hljs-number">370</span>
+  <span class="hljs-string">'codasrv'</span>: <span class="hljs-number">2432</span>
+  <span class="hljs-string">'codasrv-se'</span>: <span class="hljs-number">2433</span>
+  <span class="hljs-string">'conference'</span>: <span class="hljs-number">531</span>
+  <span class="hljs-string">'courier'</span>: <span class="hljs-number">530</span>
+  <span class="hljs-string">'csnet-ns'</span>: <span class="hljs-number">105</span>
+  <span class="hljs-string">'csync2'</span>: <span class="hljs-number">30865</span>
+  <span class="hljs-string">'customs'</span>: <span class="hljs-number">1001</span>
+  <span class="hljs-string">'cvspserver'</span>: <span class="hljs-number">2401</span>
+  <span class="hljs-string">'daap'</span>: <span class="hljs-number">3689</span>
+  <span class="hljs-string">'datametrics'</span>: <span class="hljs-number">1645</span>
+  <span class="hljs-string">'daytime'</span>: <span class="hljs-number">13</span>
+  <span class="hljs-string">'db-lsp'</span>: <span class="hljs-number">17500</span>
+  <span class="hljs-string">'dcap'</span>: <span class="hljs-number">22125</span>
+  <span class="hljs-string">'dhcpv6-client'</span>: <span class="hljs-number">546</span>
+  <span class="hljs-string">'dhcpv6-server'</span>: <span class="hljs-number">547</span>
+  <span class="hljs-string">'dicom'</span>: <span class="hljs-number">11112</span>
+  <span class="hljs-string">'dict'</span>: <span class="hljs-number">2628</span>
+  <span class="hljs-string">'dircproxy'</span>: <span class="hljs-number">57000</span>
+  <span class="hljs-string">'discard'</span>: <span class="hljs-number">9</span>
+  <span class="hljs-string">'distcc'</span>: <span class="hljs-number">3632</span>
+  <span class="hljs-string">'distmp3'</span>: <span class="hljs-number">4600</span>
+  <span class="hljs-string">'domain'</span>: <span class="hljs-number">53</span>
+  <span class="hljs-string">'echo'</span>: <span class="hljs-number">4</span>
+  <span class="hljs-string">'echo'</span>: <span class="hljs-number">7</span>
+  <span class="hljs-string">'eklogin'</span>: <span class="hljs-number">2105</span>
+  <span class="hljs-string">'enbd-cstatd'</span>: <span class="hljs-number">5051</span>
+  <span class="hljs-string">'enbd-sstatd'</span>: <span class="hljs-number">5052</span>
+  <span class="hljs-string">'epmd'</span>: <span class="hljs-number">4369</span>
+  <span class="hljs-string">'exec'</span>: <span class="hljs-number">512</span>
+  <span class="hljs-string">'f5-globalsite'</span>: <span class="hljs-number">2792</span>
+  <span class="hljs-string">'f5-iquery'</span>: <span class="hljs-number">4353</span>
+  <span class="hljs-string">'fatserv'</span>: <span class="hljs-number">347</span>
+  <span class="hljs-string">'fax'</span>: <span class="hljs-number">4557</span>
+  <span class="hljs-string">'fido'</span>: <span class="hljs-number">60179</span>
+  <span class="hljs-string">'finger'</span>: <span class="hljs-number">79</span>
+  <span class="hljs-string">'font-service'</span>: <span class="hljs-number">7100</span>
+  <span class="hljs-string">'freeciv'</span>: <span class="hljs-number">5556</span>
+  <span class="hljs-string">'frox'</span>: <span class="hljs-number">2121</span>
+  <span class="hljs-string">'fsp'</span>: <span class="hljs-number">21</span>
+  <span class="hljs-string">'ftp'</span>: <span class="hljs-number">21</span>
+  <span class="hljs-string">'ftp-data'</span>: <span class="hljs-number">20</span>
+  <span class="hljs-string">'ftps'</span>: <span class="hljs-number">990</span>
+  <span class="hljs-string">'ftps-data'</span>: <span class="hljs-number">989</span>
+  <span class="hljs-string">'gdomap'</span>: <span class="hljs-number">538</span>
+  <span class="hljs-string">'gds-db'</span>: <span class="hljs-number">3050</span>
+  <span class="hljs-string">'ggz'</span>: <span class="hljs-number">5688</span>
+  <span class="hljs-string">'git'</span>: <span class="hljs-number">9418</span>
+  <span class="hljs-string">'gnunet'</span>: <span class="hljs-number">2086</span>
+  <span class="hljs-string">'gnutella-rtr'</span>: <span class="hljs-number">6347</span>
+  <span class="hljs-string">'gnutella-svc'</span>: <span class="hljs-number">6346</span>
+  <span class="hljs-string">'gopher'</span>: <span class="hljs-number">70</span>
+  <span class="hljs-string">'gpsd'</span>: <span class="hljs-number">2947</span>
+  <span class="hljs-string">'gris'</span>: <span class="hljs-number">2135</span>
+  <span class="hljs-string">'groupwise'</span>: <span class="hljs-number">1677</span>
+  <span class="hljs-string">'gsidcap'</span>: <span class="hljs-number">22128</span>
+  <span class="hljs-string">'gsiftp'</span>: <span class="hljs-number">2811</span>
+  <span class="hljs-string">'gsigatekeeper'</span>: <span class="hljs-number">2119</span>
+  <span class="hljs-string">'hkp'</span>: <span class="hljs-number">11371</span>
+  <span class="hljs-string">'hmmp-ind'</span>: <span class="hljs-number">612</span>
+  <span class="hljs-string">'hostmon'</span>: <span class="hljs-number">5355</span>
+  <span class="hljs-string">'hostnames'</span>: <span class="hljs-number">101</span>
+  <span class="hljs-string">'http'</span>: <span class="hljs-number">80</span>
+  <span class="hljs-string">'http-alt'</span>: <span class="hljs-number">8080</span>
+  <span class="hljs-string">'https'</span>: <span class="hljs-number">443</span>
+  <span class="hljs-string">'hylafax'</span>: <span class="hljs-number">4559</span>
+  <span class="hljs-string">'iax'</span>: <span class="hljs-number">4569</span>
+  <span class="hljs-string">'icpv2'</span>: <span class="hljs-number">3130</span>
+  <span class="hljs-string">'idfp'</span>: <span class="hljs-number">549</span>
+  <span class="hljs-string">'imap2'</span>: <span class="hljs-number">143</span>
+  <span class="hljs-string">'imap3'</span>: <span class="hljs-number">220</span>
+  <span class="hljs-string">'imaps'</span>: <span class="hljs-number">993</span>
+  <span class="hljs-string">'imsp'</span>: <span class="hljs-number">406</span>
+  <span class="hljs-string">'ingreslock'</span>: <span class="hljs-number">1524</span>
+  <span class="hljs-string">'ipp'</span>: <span class="hljs-number">631</span>
+  <span class="hljs-string">'iprop'</span>: <span class="hljs-number">2121</span>
+  <span class="hljs-string">'ipsec-nat-t'</span>: <span class="hljs-number">4500</span>
+  <span class="hljs-string">'ipx'</span>: <span class="hljs-number">213</span>
+  <span class="hljs-string">'irc'</span>: <span class="hljs-number">194</span>
+  <span class="hljs-string">'ircd'</span>: <span class="hljs-number">6667</span>
+  <span class="hljs-string">'ircs'</span>: <span class="hljs-number">994</span>
+  <span class="hljs-string">'isakmp'</span>: <span class="hljs-number">500</span>
+  <span class="hljs-string">'iscsi-target'</span>: <span class="hljs-number">3260</span>
+  <span class="hljs-string">'isdnlog'</span>: <span class="hljs-number">20011</span>
+  <span class="hljs-string">'isisd'</span>: <span class="hljs-number">2608</span>
+  <span class="hljs-string">'iso-tsap'</span>: <span class="hljs-number">102</span>
+  <span class="hljs-string">'kamanda'</span>: <span class="hljs-number">10081</span>
+  <span class="hljs-string">'kazaa'</span>: <span class="hljs-number">1214</span>
+  <span class="hljs-string">'kerberos4'</span>: <span class="hljs-number">750</span>
+  <span class="hljs-string">'kerberos'</span>: <span class="hljs-number">88</span>
+  <span class="hljs-string">'kerberos-adm'</span>: <span class="hljs-number">749</span>
+  <span class="hljs-string">'kerberos-master'</span>: <span class="hljs-number">751</span>
+  <span class="hljs-string">'kermit'</span>: <span class="hljs-number">1649</span>
+  <span class="hljs-string">'klogin'</span>: <span class="hljs-number">543</span>
+  <span class="hljs-string">'knetd'</span>: <span class="hljs-number">2053</span>
+  <span class="hljs-string">'kpasswd'</span>: <span class="hljs-number">464</span>
+  <span class="hljs-string">'kpop'</span>: <span class="hljs-number">1109</span>
+  <span class="hljs-string">'krb-prop'</span>: <span class="hljs-number">754</span>
+  <span class="hljs-string">'krbupdate'</span>: <span class="hljs-number">760</span>
+  <span class="hljs-string">'kshell'</span>: <span class="hljs-number">544</span>
+  <span class="hljs-string">'kx'</span>: <span class="hljs-number">2111</span>
+  <span class="hljs-string">'l2f'</span>: <span class="hljs-number">1701</span>
+  <span class="hljs-string">'ldap'</span>: <span class="hljs-number">389</span>
+  <span class="hljs-string">'ldaps'</span>: <span class="hljs-number">636</span>
+  <span class="hljs-string">'link'</span>: <span class="hljs-number">87</span>
+  <span class="hljs-string">'linuxconf'</span>: <span class="hljs-number">98</span>
+  <span class="hljs-string">'loc-srv'</span>: <span class="hljs-number">135</span>
+  <span class="hljs-string">'login'</span>: <span class="hljs-number">513</span>
+  <span class="hljs-string">'log-server'</span>: <span class="hljs-number">1958</span>
+  <span class="hljs-string">'lotusnote'</span>: <span class="hljs-number">1352</span>
+  <span class="hljs-string">'mailq'</span>: <span class="hljs-number">174</span>
+  <span class="hljs-string">'mandelspawn'</span>: <span class="hljs-number">9359</span>
+  <span class="hljs-string">'mdns'</span>: <span class="hljs-number">5353</span>
+  <span class="hljs-string">'microsoft-ds'</span>: <span class="hljs-number">445</span>
+  <span class="hljs-string">'mmcc'</span>: <span class="hljs-number">5050</span>
+  <span class="hljs-string">'moira-db'</span>: <span class="hljs-number">775</span>
+  <span class="hljs-string">'moira-update'</span>: <span class="hljs-number">777</span>
+  <span class="hljs-string">'moira-ureg'</span>: <span class="hljs-number">779</span>
+  <span class="hljs-string">'mon'</span>: <span class="hljs-number">2583</span>
+  <span class="hljs-string">'mrtd'</span>: <span class="hljs-number">5674</span>
+  <span class="hljs-string">'msnp'</span>: <span class="hljs-number">1863</span>
+  <span class="hljs-string">'msp'</span>: <span class="hljs-number">18</span>
+  <span class="hljs-string">'ms-sql-m'</span>: <span class="hljs-number">1434</span>
+  <span class="hljs-string">'ms-sql-s'</span>: <span class="hljs-number">1433</span>
+  <span class="hljs-string">'mtn'</span>: <span class="hljs-number">4691</span>
+  <span class="hljs-string">'mtp'</span>: <span class="hljs-number">57</span>
+  <span class="hljs-string">'munin'</span>: <span class="hljs-number">4949</span>
+  <span class="hljs-string">'mysql'</span>: <span class="hljs-number">3306</span>
+  <span class="hljs-string">'mysql-proxy'</span>: <span class="hljs-number">6446</span>
+  <span class="hljs-string">'nameserver'</span>: <span class="hljs-number">42</span>
+  <span class="hljs-string">'nbd'</span>: <span class="hljs-number">10809</span>
+  <span class="hljs-string">'nbp'</span>: <span class="hljs-number">2</span>
+  <span class="hljs-string">'nessus'</span>: <span class="hljs-number">1241</span>
+  <span class="hljs-string">'netbios-dgm'</span>: <span class="hljs-number">138</span>
+  <span class="hljs-string">'netbios-ns'</span>: <span class="hljs-number">137</span>
+  <span class="hljs-string">'netbios-ssn'</span>: <span class="hljs-number">139</span>
+  <span class="hljs-string">'netnews'</span>: <span class="hljs-number">532</span>
+  <span class="hljs-string">'netstat'</span>: <span class="hljs-number">15</span>
+  <span class="hljs-string">'netwall'</span>: <span class="hljs-number">533</span>
+  <span class="hljs-string">'nextstep'</span>: <span class="hljs-number">178</span>
+  <span class="hljs-string">'nfs'</span>: <span class="hljs-number">2049</span>
+  <span class="hljs-string">'ninstall'</span>: <span class="hljs-number">2150</span>
+  <span class="hljs-string">'nntp'</span>: <span class="hljs-number">119</span>
+  <span class="hljs-string">'nntps'</span>: <span class="hljs-number">563</span>
+  <span class="hljs-string">'noclog'</span>: <span class="hljs-number">5354</span>
+  <span class="hljs-string">'npmp-gui'</span>: <span class="hljs-number">611</span>
+  <span class="hljs-string">'npmp-local'</span>: <span class="hljs-number">610</span>
+  <span class="hljs-string">'nqs'</span>: <span class="hljs-number">607</span>
+  <span class="hljs-string">'nrpe'</span>: <span class="hljs-number">5666</span>
+  <span class="hljs-string">'nsca'</span>: <span class="hljs-number">5667</span>
+  <span class="hljs-string">'ntalk'</span>: <span class="hljs-number">518</span>
+  <span class="hljs-string">'ntp'</span>: <span class="hljs-number">123</span>
+  <span class="hljs-string">'nut'</span>: <span class="hljs-number">3493</span>
+  <span class="hljs-string">'omirr'</span>: <span class="hljs-number">808</span>
+  <span class="hljs-string">'omniorb'</span>: <span class="hljs-number">8088</span>
+  <span class="hljs-string">'openvpn'</span>: <span class="hljs-number">1194</span>
+  <span class="hljs-string">'ospf6d'</span>: <span class="hljs-number">2606</span>
+  <span class="hljs-string">'ospfapi'</span>: <span class="hljs-number">2607</span>
+  <span class="hljs-string">'ospfd'</span>: <span class="hljs-number">2604</span>
+  <span class="hljs-string">'passwd-server'</span>: <span class="hljs-number">752</span>
+  <span class="hljs-string">'pawserv'</span>: <span class="hljs-number">345</span>
+  <span class="hljs-string">'pcrd'</span>: <span class="hljs-number">5151</span>
+  <span class="hljs-string">'pipe-server'</span>: <span class="hljs-number">2010</span>
+  <span class="hljs-string">'pop2'</span>: <span class="hljs-number">109</span>
+  <span class="hljs-string">'pop3'</span>: <span class="hljs-number">110</span>
+  <span class="hljs-string">'pop3s'</span>: <span class="hljs-number">995</span>
+  <span class="hljs-string">'poppassd'</span>: <span class="hljs-number">106</span>
+  <span class="hljs-string">'postgresql'</span>: <span class="hljs-number">5432</span>
+  <span class="hljs-string">'predict'</span>: <span class="hljs-number">1210</span>
+  <span class="hljs-string">'printer'</span>: <span class="hljs-number">515</span>
+  <span class="hljs-string">'proofd'</span>: <span class="hljs-number">1093</span>
+  <span class="hljs-string">'prospero'</span>: <span class="hljs-number">191</span>
+  <span class="hljs-string">'prospero-np'</span>: <span class="hljs-number">1525</span>
+  <span class="hljs-string">'pwdgen'</span>: <span class="hljs-number">129</span>
+  <span class="hljs-string">'qmqp'</span>: <span class="hljs-number">628</span>
+  <span class="hljs-string">'qmtp'</span>: <span class="hljs-number">209</span>
+  <span class="hljs-string">'qotd'</span>: <span class="hljs-number">17</span>
+  <span class="hljs-string">'radius'</span>: <span class="hljs-number">1812</span>
+  <span class="hljs-string">'radius-acct'</span>: <span class="hljs-number">1813</span>
+  <span class="hljs-string">'radmin-port'</span>: <span class="hljs-number">4899</span>
+  <span class="hljs-string">'re-mail-ck'</span>: <span class="hljs-number">50</span>
+  <span class="hljs-string">'remctl'</span>: <span class="hljs-number">4373</span>
+  <span class="hljs-string">'remotefs'</span>: <span class="hljs-number">556</span>
+  <span class="hljs-string">'remoteping'</span>: <span class="hljs-number">1959</span>
+  <span class="hljs-string">'rfe'</span>: <span class="hljs-number">5002</span>
+  <span class="hljs-string">'ripd'</span>: <span class="hljs-number">2602</span>
+  <span class="hljs-string">'ripngd'</span>: <span class="hljs-number">2603</span>
+  <span class="hljs-string">'rje'</span>: <span class="hljs-number">77</span>
+  <span class="hljs-string">'rlp'</span>: <span class="hljs-number">39</span>
+  <span class="hljs-string">'rmiregistry'</span>: <span class="hljs-number">1099</span>
+  <span class="hljs-string">'rmtcfg'</span>: <span class="hljs-number">1236</span>
+  <span class="hljs-string">'rootd'</span>: <span class="hljs-number">1094</span>
+  <span class="hljs-string">'route'</span>: <span class="hljs-number">520</span>
+  <span class="hljs-string">'rpc2portmap'</span>: <span class="hljs-number">369</span>
+  <span class="hljs-string">'rplay'</span>: <span class="hljs-number">5555</span>
+  <span class="hljs-string">'rsync'</span>: <span class="hljs-number">873</span>
+  <span class="hljs-string">'rtcm-sc104'</span>: <span class="hljs-number">2101</span>
+  <span class="hljs-string">'rtelnet'</span>: <span class="hljs-number">107</span>
+  <span class="hljs-string">'rtmp'</span>: <span class="hljs-number">1</span>
+  <span class="hljs-string">'rtsp'</span>: <span class="hljs-number">554</span>
+  <span class="hljs-string">'saft'</span>: <span class="hljs-number">487</span>
+  <span class="hljs-string">'sa-msg-port'</span>: <span class="hljs-number">1646</span>
+  <span class="hljs-string">'sane-port'</span>: <span class="hljs-number">6566</span>
+  <span class="hljs-string">'search'</span>: <span class="hljs-number">2010</span>
+  <span class="hljs-string">'sftp'</span>: <span class="hljs-number">115</span>
+  <span class="hljs-string">'sge-execd'</span>: <span class="hljs-number">6445</span>
+  <span class="hljs-string">'sge-qmaster'</span>: <span class="hljs-number">6444</span>
+  <span class="hljs-string">'sgi-cad'</span>: <span class="hljs-number">17004</span>
+  <span class="hljs-string">'sgi-cmsd'</span>: <span class="hljs-number">17001</span>
+  <span class="hljs-string">'sgi-crsd'</span>: <span class="hljs-number">17002</span>
+  <span class="hljs-string">'sgi-gcd'</span>: <span class="hljs-number">17003</span>
+  <span class="hljs-string">'shell'</span>: <span class="hljs-number">514</span>
+  <span class="hljs-string">'sieve'</span>: <span class="hljs-number">4190</span>
+  <span class="hljs-string">'silc'</span>: <span class="hljs-number">706</span>
+  <span class="hljs-string">'sip'</span>: <span class="hljs-number">5060</span>
+  <span class="hljs-string">'sip-tls'</span>: <span class="hljs-number">5061</span>
+  <span class="hljs-string">'skkserv'</span>: <span class="hljs-number">1178</span>
+  <span class="hljs-string">'smsqp'</span>: <span class="hljs-number">11201</span>
+  <span class="hljs-string">'smtp'</span>: <span class="hljs-number">25</span>
+  <span class="hljs-string">'smux'</span>: <span class="hljs-number">199</span>
+  <span class="hljs-string">'snmp'</span>: <span class="hljs-number">161</span>
+  <span class="hljs-string">'snmp-trap'</span>: <span class="hljs-number">162</span>
+  <span class="hljs-string">'snpp'</span>: <span class="hljs-number">444</span>
+  <span class="hljs-string">'socks'</span>: <span class="hljs-number">1080</span>
+  <span class="hljs-string">'spamd'</span>: <span class="hljs-number">783</span>
+  <span class="hljs-string">'ssh'</span>: <span class="hljs-number">22</span>
+  <span class="hljs-string">'submission'</span>: <span class="hljs-number">587</span>
+  <span class="hljs-string">'sunrpc'</span>: <span class="hljs-number">111</span>
+  <span class="hljs-string">'supdup'</span>: <span class="hljs-number">95</span>
+  <span class="hljs-string">'supfiledbg'</span>: <span class="hljs-number">1127</span>
+  <span class="hljs-string">'supfilesrv'</span>: <span class="hljs-number">871</span>
+  <span class="hljs-string">'support'</span>: <span class="hljs-number">1529</span>
+  <span class="hljs-string">'suucp'</span>: <span class="hljs-number">4031</span>
+  <span class="hljs-string">'svn'</span>: <span class="hljs-number">3690</span>
+  <span class="hljs-string">'svrloc'</span>: <span class="hljs-number">427</span>
+  <span class="hljs-string">'swat'</span>: <span class="hljs-number">901</span>
+  <span class="hljs-string">'syslog'</span>: <span class="hljs-number">514</span>
+  <span class="hljs-string">'syslog-tls'</span>: <span class="hljs-number">6514</span>
+  <span class="hljs-string">'sysrqd'</span>: <span class="hljs-number">4094</span>
+  <span class="hljs-string">'systat'</span>: <span class="hljs-number">11</span>
+  <span class="hljs-string">'tacacs'</span>: <span class="hljs-number">49</span>
+  <span class="hljs-string">'tacacs-ds'</span>: <span class="hljs-number">65</span>
+  <span class="hljs-string">'talk'</span>: <span class="hljs-number">517</span>
+  <span class="hljs-string">'tcpmux'</span>: <span class="hljs-number">1</span>
+  <span class="hljs-string">'telnet'</span>: <span class="hljs-number">23</span>
+  <span class="hljs-string">'telnets'</span>: <span class="hljs-number">992</span>
+  <span class="hljs-string">'tempo'</span>: <span class="hljs-number">526</span>
+  <span class="hljs-string">'tfido'</span>: <span class="hljs-number">60177</span>
+  <span class="hljs-string">'tftp'</span>: <span class="hljs-number">69</span>
+  <span class="hljs-string">'time'</span>: <span class="hljs-number">37</span>
+  <span class="hljs-string">'timed'</span>: <span class="hljs-number">525</span>
+  <span class="hljs-string">'tinc'</span>: <span class="hljs-number">655</span>
+  <span class="hljs-string">'tproxy'</span>: <span class="hljs-number">8081</span>
+  <span class="hljs-string">'ulistserv'</span>: <span class="hljs-number">372</span>
+  <span class="hljs-string">'unix-status'</span>: <span class="hljs-number">1957</span>
+  <span class="hljs-string">'urd'</span>: <span class="hljs-number">465</span>
+  <span class="hljs-string">'uucp'</span>: <span class="hljs-number">540</span>
+  <span class="hljs-string">'uucp-path'</span>: <span class="hljs-number">117</span>
+  <span class="hljs-string">'vboxd'</span>: <span class="hljs-number">20012</span>
+  <span class="hljs-string">'venus'</span>: <span class="hljs-number">2430</span>
+  <span class="hljs-string">'venus-se'</span>: <span class="hljs-number">2431</span>
+  <span class="hljs-string">'vnetd'</span>: <span class="hljs-number">13724</span>
+  <span class="hljs-string">'vopied'</span>: <span class="hljs-number">13783</span>
+  <span class="hljs-string">'webmin'</span>: <span class="hljs-number">10000</span>
+  <span class="hljs-string">'webster'</span>: <span class="hljs-number">765</span>
+  <span class="hljs-string">'who'</span>: <span class="hljs-number">513</span>
+  <span class="hljs-string">'whois'</span>: <span class="hljs-number">43</span>
+  <span class="hljs-string">'wipld'</span>: <span class="hljs-number">1300</span>
+  <span class="hljs-string">'wnn6'</span>: <span class="hljs-number">22273</span>
+  <span class="hljs-string">'x11-1'</span>: <span class="hljs-number">6001</span>
+  <span class="hljs-string">'x11-2'</span>: <span class="hljs-number">6002</span>
+  <span class="hljs-string">'x11-3'</span>: <span class="hljs-number">6003</span>
+  <span class="hljs-string">'x11-4'</span>: <span class="hljs-number">6004</span>
+  <span class="hljs-string">'x11-5'</span>: <span class="hljs-number">6005</span>
+  <span class="hljs-string">'x11'</span>: <span class="hljs-number">6000</span>
+  <span class="hljs-string">'x11-6'</span>: <span class="hljs-number">6006</span>
+  <span class="hljs-string">'x11-7'</span>: <span class="hljs-number">6007</span>
+  <span class="hljs-string">'xdmcp'</span>: <span class="hljs-number">177</span>
+  <span class="hljs-string">'xinetd'</span>: <span class="hljs-number">9098</span>
+  <span class="hljs-string">'xmms2'</span>: <span class="hljs-number">9667</span>
+  <span class="hljs-string">'xmpp-client'</span>: <span class="hljs-number">5222</span>
+  <span class="hljs-string">'xmpp-server'</span>: <span class="hljs-number">5269</span>
+  <span class="hljs-string">'xpilot'</span>: <span class="hljs-number">15345</span>
+  <span class="hljs-string">'xtel'</span>: <span class="hljs-number">1313</span>
+  <span class="hljs-string">'xtell'</span>: <span class="hljs-number">4224</span>
+  <span class="hljs-string">'xtelw'</span>: <span class="hljs-number">1314</span>
+  <span class="hljs-string">'z3950'</span>: <span class="hljs-number">210</span>
+  <span class="hljs-string">'zabbix-agent'</span>: <span class="hljs-number">10050</span>
+  <span class="hljs-string">'zabbix-trapper'</span>: <span class="hljs-number">10051</span>
+  <span class="hljs-string">'zebra'</span>: <span class="hljs-number">2601</span>
+  <span class="hljs-string">'zebrasrv'</span>: <span class="hljs-number">2600</span>
+  <span class="hljs-string">'zephyr-clt'</span>: <span class="hljs-number">2103</span>
+  <span class="hljs-string">'zephyr-hm'</span>: <span class="hljs-number">2104</span>
+  <span class="hljs-string">'zephyr-srv'</span>: <span class="hljs-number">2102</span>
+  <span class="hljs-string">'zip'</span>: <span class="hljs-number">6</span>
+  <span class="hljs-string">'zope'</span>: <span class="hljs-number">9673</span>
+  <span class="hljs-string">'zope-ftp'</span>: <span class="hljs-number">8021</span>
+  <span class="hljs-string">'zserv'</span>: <span class="hljs-number">346</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="type%20implementation">
+          <div class="pilwrap" id="type-implementation">
   <h2>
-    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
-    Type implementation
+    <a href="#type-implementation" name="type-implementation" class="pilcrow"></a>
+Type implementation
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9"></a>
 </div>
 <p>combine into message</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">text = </span><span class="s">&quot;A TCP/UDP port number or name. &quot;</span>
-  <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
-  <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The port should not be: &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
-    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;But the following ports are allowed: &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39; are allowed. &quot;</span>
-  <span class="k">else</span> <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;The port have to be: &#39;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;\&#39;, \&#39;&#39;</span><span class="si">}</span><span class="s">&#39;. &quot;</span>
-  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
+        <td class="code highlight">
+          <pre class="coffeescript">  text = <span class="hljs-string">"A TCP/UDP port number or name. "</span>
+  text += check.optional.describe work
+  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
+  <span class="hljs-keyword">if</span> work.pos.deny
+    text += <span class="hljs-string">"The port should not be: '<span class="hljs-subst">#{work.pos.deny.join <span class="hljs-string">'\', \''</span>}</span>'. "</span>
+    <span class="hljs-keyword">if</span> work.pos.allow
+      text += <span class="hljs-string">"But the following ports are allowed: '<span class="hljs-subst">#{work.pos.allow.join <span class="hljs-string">'\', \''</span>}</span>' are allowed. "</span>
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.allow
+    text += <span class="hljs-string">"The port have to be: '<span class="hljs-subst">#{work.pos.allow.join <span class="hljs-string">'\', \''</span>}</span>'. "</span>
+  cb <span class="hljs-literal">null</span>, text
 
-<span class="nv">subcheck =</span>
-  <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
-  <span class="o">or:</span> <span class="p">[</span>
-    <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-    <span class="nv">min: </span><span class="mi">0</span>
-    <span class="nv">max: </span><span class="mi">65535</span>
-  <span class="p">,</span>
-    <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-    <span class="nv">values: </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">ports</span>
-  <span class="p">]</span>
+subcheck =
+  <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
+  <span class="hljs-attribute">or</span>: [
+    <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+    <span class="hljs-attribute">min</span>: <span class="hljs-number">0</span>
+    <span class="hljs-attribute">max</span>: <span class="hljs-number">65535</span>
+  ,
+    <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+    <span class="hljs-attribute">values</span>: Object.keys ports
+  ]
 
-<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
-
-</pre></div>
+exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10"></a>
 </div>
 <p>base checks</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">try</span>
-    <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
-  <span class="k">catch</span> <span class="nx">error</span>
-    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">error</span><span class="p">,</span> <span class="nx">cb</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">try</span>
+    <span class="hljs-keyword">if</span> check.optional.run work
+      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
+      <span class="hljs-keyword">return</span> cb()
+  <span class="hljs-keyword">catch</span> error
+    <span class="hljs-keyword">return</span> work.report error, cb
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11"></a>
 </div>
 <p>first check input type</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">name = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
-    <span class="nx">name</span> <span class="o">+=</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
-    <span class="nv">name: </span><span class="nx">name</span>
-    <span class="nv">value: </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
-    <span class="nv">schema: </span><span class="nx">subcheck</span>
-  <span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  name = work.spec.name ? <span class="hljs-string">'value'</span>
+  <span class="hljs-keyword">if</span> work.path.length
+    name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
+  check.run
+    <span class="hljs-attribute">name</span>: name
+    <span class="hljs-attribute">value</span>: work.value
+    <span class="hljs-attribute">schema</span>: subcheck
+  , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12"></a>
 </div>
 <p>transform string to int</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nv">value = </span><span class="nx">ports</span><span class="p">[</span><span class="nx">value</span><span class="p">]</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">    value = ports[value] <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13"></a>
 </div>
 <p>check allow / deny</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span>
-      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="p">(</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">allow</span><span class="p">.</span><span class="nx">map</span> <span class="nf">(e) -&gt;</span> <span class="nx">ports</span><span class="p">[</span><span class="nx">e</span><span class="p">]</span> <span class="o">?</span> <span class="nx">e</span><span class="p">)</span>
-        <span class="k">if</span> <span class="k">typeof</span> <span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;system&#39;</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">)</span> <span class="o">or</span>
-          <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;registered&#39;</span> <span class="o">and</span> <span class="mi">1024</span> <span class="o">&lt;=</span> <span class="nx">value</span> <span class="o">&lt;=</span> <span class="mi">49151</span><span class="p">)</span> <span class="o">or</span>
-          <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;dynamic&#39;</span> <span class="o">and</span> <span class="mi">49152</span> <span class="o">&lt;=</span> <span class="nx">value</span> <span class="o">&lt;=</span> <span class="mi">65535</span><span class="p">)</span>
-            <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
-            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="nx">value</span> <span class="o">is</span> <span class="nx">entry</span>
-          <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.allow
+      <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> (work.pos.allow.map (e) -&gt; ports[e] ? e)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> entry <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+          <span class="hljs-keyword">if</span> (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'system'</span> <span class="hljs-keyword">and</span> value &lt; <span class="hljs-number">1024</span>) <span class="hljs-keyword">or</span>
+          (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'registered'</span> <span class="hljs-keyword">and</span> <span class="hljs-number">1024</span> &lt;= value &lt;= <span class="hljs-number">49151</span>) <span class="hljs-keyword">or</span>
+          (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'dynamic'</span> <span class="hljs-keyword">and</span> <span class="hljs-number">49152</span> &lt;= value &lt;= <span class="hljs-number">65535</span>)
+            debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
+            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> value <span class="hljs-keyword">is</span> entry
+          debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
+          <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14"></a>
 </div>
 <p>ip not in the allowed range</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span>
-        <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given tcp/udp port &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is not in</span>
-<span class="s">          the allowed ranges&quot;</span><span class="p">),</span> <span class="nx">cb</span>
-    <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span>
-      <span class="k">for</span> <span class="nx">entry</span> <span class="k">in</span> <span class="p">(</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">deny</span><span class="p">.</span><span class="nx">map</span> <span class="nf">(e) -&gt;</span> <span class="nx">ports</span><span class="p">[</span><span class="nx">e</span><span class="p">]</span> <span class="o">?</span> <span class="nx">e</span><span class="p">)</span>
-        <span class="k">if</span> <span class="k">typeof</span> <span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;system&#39;</span> <span class="o">and</span> <span class="nx">value</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">)</span> <span class="o">or</span>
-          <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;registered&#39;</span> <span class="o">and</span> <span class="mi">1024</span> <span class="o">&lt;=</span> <span class="nx">value</span> <span class="o">&lt;=</span> <span class="mi">49151</span><span class="p">)</span> <span class="o">or</span>
-          <span class="p">(</span><span class="nx">entry</span> <span class="o">is</span> <span class="s">&#39;dynamic&#39;</span> <span class="o">and</span> <span class="mi">49152</span> <span class="o">&lt;=</span> <span class="nx">value</span> <span class="o">&lt;=</span> <span class="mi">65535</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given tcp/udp port &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is</span>
-<span class="s">              denied because in range </span><span class="si">#{</span><span class="nx">entry</span><span class="si">}</span><span class="s">&quot;</span><span class="p">),</span> <span class="nx">cb</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="nx">value</span> <span class="o">is</span> <span class="nx">entry</span>
-          <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given tcp/udp port &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is denied.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">      <span class="hljs-keyword">unless</span> work.pos.deny
+        <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given tcp/udp port '<span class="hljs-subst">#{value}</span>' is not in
+          the allowed ranges"</span>), cb
+    <span class="hljs-keyword">if</span> work.pos.deny
+      <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> (work.pos.deny.map (e) -&gt; ports[e] ? e)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> entry <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+          <span class="hljs-keyword">if</span> (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'system'</span> <span class="hljs-keyword">and</span> value &lt; <span class="hljs-number">1024</span>) <span class="hljs-keyword">or</span>
+          (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'registered'</span> <span class="hljs-keyword">and</span> <span class="hljs-number">1024</span> &lt;= value &lt;= <span class="hljs-number">49151</span>) <span class="hljs-keyword">or</span>
+          (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'dynamic'</span> <span class="hljs-keyword">and</span> <span class="hljs-number">49152</span> &lt;= value &lt;= <span class="hljs-number">65535</span>)
+            <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given tcp/udp port '<span class="hljs-subst">#{value}</span>' is
+              denied because in range <span class="hljs-subst">#{entry}</span>"</span>), cb
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> value <span class="hljs-keyword">is</span> entry
+          <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given tcp/udp port '<span class="hljs-subst">#{value}</span>' is denied."</span>), cb
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15"></a>
 </div>
 <p>ip also not in the denied range so allowed again
 done return resulting value</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
-<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
-    <span class="nv">schema:</span>
-      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-      <span class="nv">allowedKeys: </span><span class="kc">true</span>
-      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
-        <span class="nv">default:</span>
-          <span class="nv">type: </span><span class="s">&#39;float&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">allow:</span>
-          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">entries:</span>
-            <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
-            <span class="o">or:</span> <span class="p">[</span>
-              <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-            <span class="p">,</span>
-              <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-              <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;system&#39;</span><span class="p">,</span> <span class="s">&#39;registered&#39;</span><span class="p">,</span> <span class="s">&#39;dynamic&#39;</span><span class="p">]</span>
-            <span class="p">,</span>
-              <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-              <span class="nv">values: </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">ports</span>
-            <span class="p">]</span>
-        <span class="nv">deny:</span>
-          <span class="nv">type: </span><span class="s">&#39;array&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-          <span class="nv">entries:</span>
-            <span class="nv">type: </span><span class="s">&#39;or&#39;</span>
-            <span class="o">or:</span> <span class="p">[</span>
-              <span class="nv">type: </span><span class="s">&#39;integer&#39;</span>
-            <span class="p">,</span>
-              <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-              <span class="nv">values: </span><span class="p">[</span><span class="s">&#39;system&#39;</span><span class="p">,</span> <span class="s">&#39;registered&#39;</span><span class="p">,</span> <span class="s">&#39;dynamic&#39;</span><span class="p">]</span>
-            <span class="p">,</span>
-              <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-              <span class="nv">values: </span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span> <span class="nx">ports</span>
-            <span class="p">]</span>
-    <span class="nv">value: </span><span class="nx">schema</span>
-  <span class="p">,</span> <span class="nx">cb</span>
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
+    cb <span class="hljs-literal">null</span>, value
+
+exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
+  check.run
+    <span class="hljs-attribute">schema</span>:
+      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
+      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
+      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+        <span class="hljs-attribute">default</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">allow</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+          <span class="hljs-attribute">entries</span>:
+            <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
+            <span class="hljs-attribute">or</span>: [
+              <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+            ,
+              <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+              <span class="hljs-attribute">values</span>: [<span class="hljs-string">'system'</span>, <span class="hljs-string">'registered'</span>, <span class="hljs-string">'dynamic'</span>]
+            ,
+              <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+              <span class="hljs-attribute">values</span>: Object.keys ports
+            ]
+        <span class="hljs-attribute">deny</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+          <span class="hljs-attribute">entries</span>:
+            <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
+            <span class="hljs-attribute">or</span>: [
+              <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+            ,
+              <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+              <span class="hljs-attribute">values</span>: [<span class="hljs-string">'system'</span>, <span class="hljs-string">'registered'</span>, <span class="hljs-string">'dynamic'</span>]
+            ,
+              <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+              <span class="hljs-attribute">values</span>: Object.keys ports
+            ]
+    <span class="hljs-attribute">value</span>: schema
+  , cb
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

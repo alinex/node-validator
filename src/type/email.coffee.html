@@ -6,20 +6,31 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/emailcoffee", defaultSidebar = true;
+    var relativeDir = "../../";
+    var thisFile = "home/alex/github/node-validator/src/type/email.coffee";
+    var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
-</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head
 <body>
   <nav>
-<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="lllogo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+<div class="logo"><a href="http://alinex.github.io"
+  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
+  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
+    width="150" title="Alinex Universe Homepage" />
   </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
+  <img src="http://alinex.github.io/images/Alinex-200.png"
+    style="display:none" alt="preloading" />
 </div>
 <div class="links">
-  <a href="http://alinex.github.io/blog" class="btn btn-primary"><span class="glyphicon-cog"></span> Blog</a>
-  <a href="http://alinex.github.io/code.html" class="btn btn-warning"><span class="glyphicon-pencil"></span> Code</a>
+  <a href="http://alinex.github.io/blog"
+    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
+  <a href="http://alinex.github.io/develop"
+    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
+  <a href="http://alinex.github.io/code.html"
+    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
 </div>
 </nav><div id="sidebar_wrapper">
     <div id="sidebar_switch">
@@ -28,501 +39,528 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
-        <a href="#email%20validation">Email validation</a>
+        <a href="#email-validation">Email validation</a>
       </div>
+
       <div class="heading h2">
-        <a href="#node%20modules">Node modules</a>
+        <a href="#node-modules">Node modules</a>
       </div>
+
       <div class="heading h2">
         <a href="#subchecks">Subchecks</a>
       </div>
+
       <div class="heading h2">
-        <a href="#host%20specific%20normalization">Host specific normalization</a>
+        <a href="#host-specific-normalization">Host specific normalization</a>
       </div>
+
       <div class="heading h2">
-        <a href="#type%20implementation">Type implementation</a>
+        <a href="#type-implementation">Type implementation</a>
       </div>
+
       <div class="heading h2">
-        <a href="#schema%20check">Schema check</a>
+        <a href="#schema-check">Schema check</a>
       </div>
+
       <div class="heading h2">
         <a href="#helper">Helper</a>
       </div>
+
       <div class="heading h3">
-        <a href="#get%20own%20ip">get own IP</a>
+        <a href="#get-own-ip">get own IP</a>
       </div>
+
       <div class="heading h3">
-        <a href="#contact%20the%20server">contact the server</a>
+        <a href="#contact-the-server">contact the server</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="email%20validation">
+          <div class="pilwrap" id="email-validation">
   <h1>
-    <a href="#email%20validation" name="email%20validation" class="pilcrow">&#182;</a>
-    Email validation
+    <a href="#email-validation" name="email-validation" class="pilcrow"></a>
+Email validation
   </h1>
 </div>
-
-
 <p>There are a lot of crazy possibilities in the RFC2822 which  specifies the Email
 format. Perhaps it came from letting different existing email systems represented
 their account, to encompass anything that was valid before.</p>
-
 <p>So this check will not aim to allow all emails allowed through RFC but only
 those which are reasonable and commonly used.</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2"></a>
 </div>
 <p>Check options:</p>
-
 <ul>
 <li><code>lowerCase</code> domain and gmail addresses completely</li>
 <li><code>normalize</code> (boolean) remove tags, alternative domains and subdomains</li>
 <li><code>checkServer</code> (boolean) also check for working email servers</li>
 </ul>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="node%20modules">
+          <div class="pilwrap" id="node-modules">
   <h2>
-    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
-    Node modules
+    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
+Node modules
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:email&#39;</span><span class="p">)</span>
-<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
-<span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:email'</span>)
+util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4"></a>
 </div>
 <p>alinex modules</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
-<span class="nv">async = </span><span class="nx">require</span> <span class="s">&#39;alinex-async&#39;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5"></a>
 </div>
 <p>include classes and helper</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
+        <td class="code highlight">
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="subchecks">
+          <div class="pilwrap" id="subchecks">
   <h2>
-    <a href="#subchecks" name="subchecks" class="pilcrow">&#182;</a>
-    Subchecks
+    <a href="#subchecks" name="subchecks" class="pilcrow"></a>
+Subchecks
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">subcheck =</span>
-  <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-  <span class="nv">minLength: </span><span class="mi">5</span>
+        <td class="code highlight">
+          <pre class="coffeescript">subcheck =
+  <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+  <span class="hljs-attribute">minLength</span>: <span class="hljs-number">5</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="host%20specific%20normalization">
+          <div class="pilwrap" id="host-specific-normalization">
   <h2>
-    <a href="#host%20specific%20normalization" name="host%20specific%20normalization" class="pilcrow">&#182;</a>
-    Host specific normalization
+    <a href="#host-specific-normalization" name="host-specific-normalization" class="pilcrow"></a>
+Host specific normalization
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">normalize = </span><span class="nf">(host) -&gt;</span>
-  <span class="k">return</span> <span class="k">switch</span>
-    <span class="k">when</span> <span class="nx">host</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^g(oogle)?mail\.com$/i</span>
-      <span class="nf">(local) -&gt;</span>
-        <span class="p">[</span><span class="nx">local</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\.|\+.*$/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span> <span class="s">&#39;gmail.com&#39;</span><span class="p">]</span>
-    <span class="k">else</span>
-      <span class="nf">(local, host) -&gt;</span>
-        <span class="p">[</span><span class="nx">local</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\+.*$/g</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">),</span> <span class="nx">host</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/.*?(\w+\.\w+)$/</span><span class="p">,</span> <span class="s">&#39;$1&#39;</span><span class="p">)]</span>
+        <td class="code highlight">
+          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">normalize</span> = <span class="hljs-params">(host)</span> -&gt;</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">switch</span>
+    <span class="hljs-keyword">when</span> host.match <span class="hljs-regexp">/^g(oogle)?mail\.com$/i</span>
+      (local) -&gt;
+        [local.replace(<span class="hljs-regexp">/\.|\+.*$/g</span>, <span class="hljs-string">''</span>), <span class="hljs-string">'gmail.com'</span>]
+    <span class="hljs-keyword">else</span>
+      (local, host) -&gt;
+        [local.replace(<span class="hljs-regexp">/\+.*$/g</span>, <span class="hljs-string">''</span>), host.replace(<span class="hljs-regexp">/.*?(\w+\.\w+)$/</span>, <span class="hljs-string">'$1'</span>)]
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="type%20implementation">
+          <div class="pilwrap" id="type-implementation">
   <h2>
-    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
-    Type implementation
+    <a href="#type-implementation" name="type-implementation" class="pilcrow"></a>
+Type implementation
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
-  <span class="nv">text = </span><span class="s">&#39;A reasonable working email address. &#39;</span>
-  <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
-  <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
+  text = <span class="hljs-string">'A reasonable working email address. '</span>
+  text += check.optional.describe work
+  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-9" id="section-9"></a>
 </div>
 <p>subcheck</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">name = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
-    <span class="nx">name</span> <span class="o">+=</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nv">subcheck.lowerCase = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">lowerCase</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  name = work.spec.name ? <span class="hljs-string">'value'</span>
+  <span class="hljs-keyword">if</span> work.path.length
+    name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
+  subcheck.lowerCase = work.pos.lowerCase
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10"></a>
 </div>
 <p>no error in string describe possible, so go on</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">lowerCase</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;It will be lowercased. &quot;</span>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">normalize</span>
-    <span class="nx">text</span> <span class="o">+=</span> <span class="s">&quot;Extended formats like additional domains, subdomains and tags which</span>
-<span class="s">    mostly belong to the same mailbox will be removed. &quot;</span>
-  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.lowerCase
+    text += <span class="hljs-string">"It will be lowercased. "</span>
+  <span class="hljs-keyword">if</span> work.pos.normalize
+    text += <span class="hljs-string">"Extended formats like additional domains, subdomains and tags which
+    mostly belong to the same mailbox will be removed. "</span>
+  cb <span class="hljs-literal">null</span>, text
 
-<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
-
-</pre></div>
+exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-11" id="section-11"></a>
 </div>
 <p>base checks</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">try</span>
-    <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
-  <span class="k">catch</span> <span class="nx">error</span>
-    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">error</span><span class="p">,</span> <span class="nx">cb</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">try</span>
+    <span class="hljs-keyword">if</span> check.optional.run work
+      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
+      <span class="hljs-keyword">return</span> cb()
+  <span class="hljs-keyword">catch</span> error
+    <span class="hljs-keyword">return</span> work.report error, cb
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12"></a>
 </div>
 <p>validate using subcheck</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">name = </span><span class="nx">work</span><span class="p">.</span><span class="nx">spec</span><span class="p">.</span><span class="nx">name</span> <span class="o">?</span> <span class="s">&#39;value&#39;</span>
-  <span class="k">if</span> <span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">length</span>
-    <span class="nx">name</span> <span class="o">+=</span> <span class="s">&quot;/</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span> <span class="s">&#39;/&#39;</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nv">subcheck.lowerCase = </span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">lowerCase</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
-    <span class="nv">name: </span><span class="nx">name</span>
-    <span class="nv">value: </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
-    <span class="nv">schema: </span><span class="nx">subcheck</span>
-  <span class="p">,</span> <span class="nf">(err, value) -&gt;</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  name = work.spec.name ? <span class="hljs-string">'value'</span>
+  <span class="hljs-keyword">if</span> work.path.length
+    name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
+  subcheck.lowerCase = work.pos.lowerCase
+  check.run
+    <span class="hljs-attribute">name</span>: name
+    <span class="hljs-attribute">value</span>: work.value
+    <span class="hljs-attribute">schema</span>: subcheck
+  , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13"></a>
 </div>
 <p>validate</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="p">[</span><span class="nx">local</span><span class="p">,</span> <span class="nx">host</span><span class="p">]</span> <span class="o">=</span> <span class="nv">parts = </span><span class="nx">value</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/@/</span>
-    <span class="k">if</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">isnt</span> <span class="mi">2</span>
-      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The address is not a valid format, too few or</span>
-<span class="s">      much @-signs.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
-    <span class="k">if</span> <span class="nx">local</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">64</span>
-      <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The local mailbox name is too long (64 chars max).&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">    [local, host] = parts = value.split <span class="hljs-regexp">/@/</span>
+    <span class="hljs-keyword">if</span> parts.length <span class="hljs-keyword">isnt</span> <span class="hljs-number">2</span>
+      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The address is not a valid format, too few or
+      much @-signs."</span>), cb
+    <span class="hljs-keyword">if</span> local.length &gt; <span class="hljs-number">64</span>
+      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The local mailbox name is too long (64 chars max)."</span>), cb
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14"></a>
 </div>
 <p>check hostname</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-    <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
-      <span class="nv">name: </span><span class="nx">name</span> <span class="o">+</span> <span class="s">&#39;:host&#39;</span>
-      <span class="nv">value: </span><span class="nx">host</span>
-      <span class="nv">schema:</span>
-        <span class="nv">type: </span><span class="s">&#39;hostname&#39;</span>
-    <span class="p">,</span> <span class="nf">(err, host) -&gt;</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">    check.run
+      <span class="hljs-attribute">name</span>: name + <span class="hljs-string">':host'</span>
+      <span class="hljs-attribute">value</span>: host
+      <span class="hljs-attribute">schema</span>:
+        <span class="hljs-attribute">type</span>: <span class="hljs-string">'hostname'</span>
+    , <span class="hljs-function"><span class="hljs-params">(err, host)</span> -&gt;</span>
+      <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15"></a>
 </div>
 <p>normalize</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="p">[</span><span class="nx">local</span><span class="p">,</span> <span class="nx">host</span><span class="p">]</span> <span class="o">=</span> <span class="nx">normalize</span><span class="p">(</span><span class="nx">host</span><span class="p">)</span> <span class="nx">local</span><span class="p">,</span> <span class="nx">host</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">      [local, host] = normalize(host) local, host
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-16" id="section-16"></a>
 </div>
 <p>done everything ok</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nv">value = </span><span class="s">&quot;</span><span class="si">#{</span><span class="nx">local</span><span class="si">}</span><span class="s">@</span><span class="si">#{</span><span class="nx">host</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">unless</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">checkServer</span>
-      <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">host</span> <span class="o">is</span> <span class="s">&#39;localhost&#39;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">      value = <span class="hljs-string">"<span class="hljs-subst">#{local}</span>@<span class="hljs-subst">#{host}</span>"</span>
+      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">unless</span> work.pos.checkServer
+      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> host <span class="hljs-keyword">is</span> <span class="hljs-string">'localhost'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-17" id="section-17"></a>
 </div>
 <p>check server</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-      <span class="nx">getMyIP</span> <span class="nf">(err, ip) -&gt;</span>
-        <span class="k">if</span> <span class="nx">err</span>
-          <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">magenta</span> <span class="s">&quot;could not detect own ip address&quot;</span>
-          <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">      getMyIP (err, ip) -&gt;
+        <span class="hljs-keyword">if</span> err
+          debug chalk.magenta <span class="hljs-string">"could not detect own ip address"</span>
+          <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18"></a>
 </div>
 <p>find mx records</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-        <span class="nv">dns = </span><span class="nx">require</span> <span class="s">&#39;dns&#39;</span>
-        <span class="nx">dns</span><span class="p">.</span><span class="nx">resolveMx</span> <span class="nx">host</span><span class="p">,</span> <span class="nf">(err, addresses) -&gt;</span>
-          <span class="nx">checkMailServer</span> <span class="nx">addresses</span><span class="p">,</span> <span class="nx">ip</span><span class="p">,</span> <span class="nf">(ok) -&gt;</span>
-            <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">ok</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">        dns = <span class="hljs-built_in">require</span> <span class="hljs-string">'dns'</span>
+        dns.resolveMx host, <span class="hljs-function"><span class="hljs-params">(err, addresses)</span> -&gt;</span>
+          checkMailServer addresses, ip, <span class="hljs-function"><span class="hljs-params">(ok)</span> -&gt;</span>
+            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> ok
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-19" id="section-19"></a>
 </div>
 <p>find a-record</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-            <span class="nx">dns</span><span class="p">.</span><span class="nx">resolve</span> <span class="nx">host</span><span class="p">,</span> <span class="nf">(err, addresses) -&gt;</span>
-              <span class="nx">checkMailServer</span> <span class="nx">addresses</span><span class="p">,</span> <span class="nx">ip</span><span class="p">,</span> <span class="nf">(ok) -&gt;</span>
-                <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="nx">ok</span>
-                <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;No correct responding mail server</span>
-<span class="s">                could be detected for this domain.&quot;</span><span class="p">),</span> <span class="nx">cb</span>
+        <td class="code highlight">
+          <pre class="coffeescript">            dns.resolve host, <span class="hljs-function"><span class="hljs-params">(err, addresses)</span> -&gt;</span>
+              checkMailServer addresses, ip, <span class="hljs-function"><span class="hljs-params">(ok)</span> -&gt;</span>
+                <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> ok
+                <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"No correct responding mail server
+                could be detected for this domain."</span>), cb
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="schema%20check">
+          <div class="pilwrap" id="schema-check">
   <h2>
-    <a href="#schema%20check" name="schema%20check" class="pilcrow">&#182;</a>
-    Schema check
+    <a href="#schema-check" name="schema-check" class="pilcrow"></a>
+Schema check
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
-    <span class="nv">schema:</span>
-      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-      <span class="nv">allowedKeys: </span><span class="kc">true</span>
-      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
-        <span class="nv">default: </span><span class="nx">subcheck</span>
-        <span class="nv">lowerCase:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">normalize:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-        <span class="nv">checkServer:</span>
-          <span class="nv">type: </span><span class="s">&#39;boolean&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">value: </span><span class="nx">schema</span>
-  <span class="p">,</span> <span class="nx">cb</span>
+        <td class="code highlight">
+          <pre class="coffeescript">exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
+  check.run
+    <span class="hljs-attribute">schema</span>:
+      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
+      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
+      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+        <span class="hljs-attribute">default</span>: subcheck
+        <span class="hljs-attribute">lowerCase</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">normalize</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">checkServer</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+    <span class="hljs-attribute">value</span>: schema
+  , cb
 
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="helper">
+          <div class="pilwrap" id="helper">
   <h2>
-    <a href="#helper" name="helper" class="pilcrow">&#182;</a>
-    Helper
+    <a href="#helper" name="helper" class="pilcrow"></a>
+Helper
   </h2>
 </div>
-
-
-
-<div class="pilwrap" id="get%20own%20ip">
+<div class="pilwrap" id="get-own-ip">
   <h3>
-    <a href="#get%20own%20ip" name="get%20own%20ip" class="pilcrow">&#182;</a>
-    get own IP
+    <a href="#get-own-ip" name="get-own-ip" class="pilcrow"></a>
+get own IP
   </h3>
 </div>
-
-
 <p>for later mail server checks</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">myIP = </span><span class="kc">null</span>
-<span class="nv">getMyIP = </span><span class="nf">(cb) -&gt;</span>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="nx">myIP</span> <span class="k">if</span> <span class="nx">myIP</span>
-  <span class="nv">request = </span><span class="nx">require</span> <span class="s">&#39;request&#39;</span>
-  <span class="nx">request</span> <span class="s">&#39;http://ipinfo.io/ip&#39;</span><span class="p">,</span> <span class="nf">(err, response, body) -&gt;</span>
-    <span class="k">return</span> <span class="nx">cb</span> <span class="nx">err</span> <span class="k">if</span> <span class="nx">err</span>
-    <span class="k">if</span> <span class="o">not</span> <span class="nx">err</span> <span class="o">and</span> <span class="nx">response</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">is</span> <span class="mi">200</span>
-      <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">body</span><span class="p">.</span><span class="nx">trim</span><span class="p">()</span>
-    <span class="k">else</span>
-      <span class="nx">cb</span> <span class="k">new</span> <span class="nb">Error</span> <span class="s">&#39;could not get IP address&#39;</span>
+        <td class="code highlight">
+          <pre class="coffeescript">myIP = <span class="hljs-literal">null</span>
+<span class="hljs-function"><span class="hljs-title">getMyIP</span> = <span class="hljs-params">(cb)</span> -&gt;</span>
+  <span class="hljs-keyword">return</span> cb myIP <span class="hljs-keyword">if</span> myIP
+  request = <span class="hljs-built_in">require</span> <span class="hljs-string">'request'</span>
+  request <span class="hljs-string">'http://ipinfo.io/ip'</span>, <span class="hljs-function"><span class="hljs-params">(err, response, body)</span> -&gt;</span>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> err <span class="hljs-keyword">and</span> response.statusCode <span class="hljs-keyword">is</span> <span class="hljs-number">200</span>
+      cb <span class="hljs-literal">null</span>, body.trim()
+    <span class="hljs-keyword">else</span>
+      cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">'could not get IP address'</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="contact%20the%20server">
+          <div class="pilwrap" id="contact-the-server">
   <h3>
-    <a href="#contact%20the%20server" name="contact%20the%20server" class="pilcrow">&#182;</a>
-    contact the server
+    <a href="#contact-the-server" name="contact-the-server" class="pilcrow"></a>
+contact the server
   </h3>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">checkMailServer = </span><span class="nf">(list, ip, cb) -&gt;</span>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">false</span> <span class="k">unless</span> <span class="nx">list</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span>
-  <span class="nv">net = </span><span class="nx">require</span> <span class="s">&#39;net&#39;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">checkMailServer</span> = <span class="hljs-params">(list, ip, cb)</span> -&gt;</span>
+  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> list?.length
+  net = <span class="hljs-built_in">require</span> <span class="hljs-string">'net'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-23" id="section-23"></a>
 </div>
 <p>check email exchange server</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">list = </span><span class="nx">list</span><span class="p">.</span><span class="nx">sort</span> <span class="nf">(a, b) -&gt;</span> <span class="nx">a</span><span class="p">.</span><span class="nx">priority</span> <span class="o">-</span> <span class="nx">b</span><span class="p">.</span><span class="nx">priority</span>
-  <span class="p">.</span><span class="nx">map</span> <span class="nf">(e) -&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">exchange</span>
-  <span class="nx">async</span><span class="p">.</span><span class="nx">detect</span> <span class="nx">list</span><span class="p">,</span> <span class="nf">(domain, cb) -&gt;</span>
-    <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot;check mail server under </span><span class="si">#{</span><span class="nx">domain</span><span class="si">}</span><span class="s">&quot;</span>
-    <span class="nv">res = </span><span class="s">&#39;&#39;</span>
-    <span class="nv">client = </span><span class="nx">net</span><span class="p">.</span><span class="nx">connect</span>
-      <span class="nv">port: </span><span class="mi">25</span>
-      <span class="nv">host: </span><span class="nx">domain</span>
-    <span class="p">,</span> <span class="nf">-&gt;</span>
-      <span class="nx">client</span><span class="p">.</span><span class="nx">write</span> <span class="s">&quot;HELO </span><span class="si">#{</span><span class="nx">ip</span><span class="si">}</span><span class="s">\r\n&quot;</span>
-      <span class="nx">client</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
-    <span class="nx">client</span><span class="p">.</span><span class="nx">on</span> <span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="nf">(data) -&gt;</span>
-      <span class="nx">res</span> <span class="o">+=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
-    <span class="nx">client</span><span class="p">.</span><span class="nx">on</span> <span class="s">&#39;error&#39;</span><span class="p">,</span> <span class="nf">(err) -&gt;</span>
-      <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">magenta</span> <span class="nx">err</span>
-    <span class="nx">client</span><span class="p">.</span><span class="nx">on</span> <span class="s">&#39;end&#39;</span><span class="p">,</span> <span class="nf">-&gt;</span>
-      <span class="nx">debug</span> <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">l</span> <span class="k">for</span> <span class="nx">l</span> <span class="k">in</span> <span class="nx">res</span><span class="p">.</span><span class="nx">split</span> <span class="sr">/\n/</span>
-      <span class="nx">cb</span> <span class="nx">res</span><span class="o">?</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
-  <span class="p">,</span> <span class="nx">cb</span>
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">  list = list.sort (a, b) -&gt; a.priority - b.priority
+  .map (e) -&gt; e.exchange
+  async.detect list, <span class="hljs-function"><span class="hljs-params">(domain, cb)</span> -&gt;</span>
+    debug chalk.grey <span class="hljs-string">"check mail server under <span class="hljs-subst">#{domain}</span>"</span>
+    res = <span class="hljs-string">''</span>
+    client = net.connect
+      <span class="hljs-attribute">port</span>: <span class="hljs-number">25</span>
+      <span class="hljs-attribute">host</span>: domain
+    , <span class="hljs-function">-&gt;</span>
+      client.write <span class="hljs-string">"HELO <span class="hljs-subst">#{ip}</span>\r\n"</span>
+      client.end()
+    client.<span class="hljs-literal">on</span> <span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
+      res += data.toString()
+    client.<span class="hljs-literal">on</span> <span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
+      debug chalk.magenta err
+    client.<span class="hljs-literal">on</span> <span class="hljs-string">'end'</span>, <span class="hljs-function">-&gt;</span>
+      debug chalk.grey l <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> res.split <span class="hljs-regexp">/\n/</span>
+      cb res?.length &gt; <span class="hljs-number">0</span>
+  , cb
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>

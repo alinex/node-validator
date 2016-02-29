@@ -6,20 +6,31 @@
   <link rel="stylesheet" media="all" href="../../doc-style.css" />
   <script src="../../doc-filelist.js"></script>
   <script>
-    var relativeDir = "../../", thisFile = "home/alex/github/node-validator/src/type/handlebarscoffee", defaultSidebar = true;
+    var relativeDir = "../../";
+    var thisFile = "home/alex/github/node-validator/src/type/handlebars.coffee";
+    var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
-</head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head
 <body>
   <nav>
-<div class="logo"><a href="http://alinex.github.io" onmouseover="lllogo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="lllogo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="lllogo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Universe Homepage" />
+<div class="logo"><a href="http://alinex.github.io"
+  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
+  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
+    width="150" title="Alinex Universe Homepage" />
   </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png" style="display:none" alt="preloading" />
+  <img src="http://alinex.github.io/images/Alinex-200.png"
+    style="display:none" alt="preloading" />
 </div>
 <div class="links">
-  <a href="http://alinex.github.io/blog" class="btn btn-primary"><span class="glyphicon-cog"></span> Blog</a>
-  <a href="http://alinex.github.io/code.html" class="btn btn-warning"><span class="glyphicon-pencil"></span> Code</a>
+  <a href="http://alinex.github.io/blog"
+    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
+  <a href="http://alinex.github.io/develop"
+    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
+  <a href="http://alinex.github.io/code.html"
+    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
 </div>
 </nav><div id="sidebar_wrapper">
     <div id="sidebar_switch">
@@ -28,360 +39,368 @@
     </div>
     <div id="tree"></div>
     <div id="headings">
+
       <div class="heading h1">
-        <a href="#domain%20name%20validation">Domain name validation</a>
+        <a href="#domain-name-validation">Domain name validation</a>
       </div>
+
       <div class="heading h2">
-        <a href="#node%20modules">Node modules</a>
+        <a href="#node-modules">Node modules</a>
       </div>
+
       <div class="heading h2">
-        <a href="#handlebars%20helper">Handlebars Helper</a>
+        <a href="#handlebars-helper">Handlebars Helper</a>
       </div>
+
       <div class="heading h3">
         <a href="#dateformat">dateFormat</a>
       </div>
+
       <div class="heading h3">
         <a href="#dateadd">dateAdd</a>
       </div>
+
       <div class="heading h3">
         <a href="#join">join</a>
       </div>
+
       <div class="heading h2">
-        <a href="#type%20implementation">Type implementation</a>
+        <a href="#type-implementation">Type implementation</a>
       </div>
+
     </div>
   </div>
   <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a><div class="background highlight"></div>
+  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
+    <div class="background highlight"></div>
 <table cellpadding="0" cellspacing="0">
   <tbody>
+    
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="domain%20name%20validation">
+          <div class="pilwrap" id="domain-name-validation">
   <h1>
-    <a href="#domain%20name%20validation" name="domain%20name%20validation" class="pilcrow">&#182;</a>
-    Domain name validation
+    <a href="#domain-name-validation" name="domain-name-validation" class="pilcrow"></a>
+Domain name validation
   </h1>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre></pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-2" id="section-2"></a>
 </div>
 <p>Check options:</p>
-
 <ul>
 <li><code>optional</code> - the value must not be present (will return null)</li>
 </ul>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="coffeescript">
 
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="node%20modules">
+          <div class="pilwrap" id="node-modules">
   <h2>
-    <a href="#node%20modules" name="node%20modules" class="pilcrow">&#182;</a>
-    Node modules
+    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
+Node modules
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">debug = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)(</span><span class="s">&#39;validator:handlebars&#39;</span><span class="p">)</span>
-<span class="nv">util = </span><span class="nx">require</span> <span class="s">&#39;util&#39;</span>
-<span class="nv">chalk = </span><span class="nx">require</span> <span class="s">&#39;chalk&#39;</span>
-<span class="nv">handlebars = </span><span class="nx">require</span> <span class="s">&#39;handlebars&#39;</span>
-<span class="nv">moment = </span><span class="nx">require</span> <span class="s">&#39;moment&#39;</span>
-
-</pre></div>
+        <td class="code highlight">
+          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:handlebars'</span>)
+util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+handlebars = <span class="hljs-built_in">require</span> <span class="hljs-string">'handlebars'</span>
+moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-4" id="section-4"></a>
 </div>
 <p>alinex modules</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">object = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;alinex-util&#39;</span><span class="p">).</span><span class="nx">object</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-5" id="section-5"></a>
 </div>
 <p>include classes and helper</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">check = </span><span class="nx">require</span> <span class="s">&#39;../check&#39;</span>
+        <td class="code highlight">
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="handlebars%20helper">
+          <div class="pilwrap" id="handlebars-helper">
   <h2>
-    <a href="#handlebars%20helper" name="handlebars%20helper" class="pilcrow">&#182;</a>
-    Handlebars Helper
+    <a href="#handlebars-helper" name="handlebars-helper" class="pilcrow"></a>
+Handlebars Helper
   </h2>
 </div>
+<p>Find more at https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers</p>
 
-
-<p>Find more at <a href='https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers'>https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers</a></p>
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
+        <td class="code highlight">
+          <pre class="coffeescript">
+helper =
 
-<span class="nv">helper =</span>
-
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dateformat">
+          <div class="pilwrap" id="dateformat">
   <h3>
-    <a href="#dateformat" name="dateformat" class="pilcrow">&#182;</a>
-    dateFormat
+    <a href="#dateformat" name="dateformat" class="pilcrow"></a>
+dateFormat
   </h3>
 </div>
-
-
-<p>format an ISO date using Moment.js - <a href='http://momentjs.com/'>http://momentjs.com/</a>
-<a href='https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers'>https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers</a></p>
-
-
-<div class="highlight"><pre><code><span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
-<span class="p">{{</span><span class="nx">dateFormat</span> <span class="nx">date</span> <span class="s2">&quot;MMMM YYYY&quot;</span><span class="p">}}</span>
-<span class="err">#</span> <span class="nx">January</span> <span class="mi">2016</span>
-<span class="p">{{</span><span class="nx">dateFormat</span> <span class="nx">date</span> <span class="s2">&quot;LL&quot;</span><span class="p">}}</span>
-<span class="err">#</span> <span class="nx">January</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">2016</span>
-<span class="p">{{</span><span class="err">#</span><span class="nx">dateFormat</span> <span class="s2">&quot;LL&quot;</span><span class="p">}}</span><span class="mi">2016</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">18</span><span class="p">{{</span><span class="err">/dateFormat}}</span>
-<span class="err">#</span> <span class="nx">January</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">2016</span>
-</code></pre></div>
-
+<p>format an ISO date using Moment.js - http://momentjs.com/
+https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers</p>
+<pre><code>date = new Date()
+{{dateFormat date &quot;MMMM YYYY&quot;}}
+# January 2016
+{{dateFormat date &quot;LL&quot;}}
+# January 18, 2016
+{{#dateFormat &quot;LL&quot;}}2016-01-18{{/dateFormat}}
+# January 18, 2016
+</code></pre>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">dateFormat: </span><span class="nf">-&gt;</span>
-    <span class="nv">args = </span><span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">args</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">fn</span>
-      <span class="nv">date = </span><span class="nx">args</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">fn</span> <span class="k">this</span>
-      <span class="nv">format = </span><span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">else</span>
-      <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">format</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-    <span class="nx">moment</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span> <span class="nx">date</span><span class="p">).</span><span class="nx">format</span> <span class="nx">format</span> <span class="o">?</span> <span class="s">&#39;MMM Do, YYYY&#39;</span>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-attribute">dateFormat</span>: <span class="hljs-function">-&gt;</span>
+    args = [].slice.call(arguments)
+    <span class="hljs-keyword">if</span> args[args.length-<span class="hljs-number">1</span>].fn
+      date = args[args.length-<span class="hljs-number">1</span>].fn <span class="hljs-keyword">this</span>
+      format = args[<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">else</span>
+      [date, format] = args[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>]
+    moment(<span class="hljs-keyword">new</span> Date date).format format ? <span class="hljs-string">'MMM Do, YYYY'</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="dateadd">
+          <div class="pilwrap" id="dateadd">
   <h3>
-    <a href="#dateadd" name="dateadd" class="pilcrow">&#182;</a>
-    dateAdd
+    <a href="#dateadd" name="dateadd" class="pilcrow"></a>
+dateAdd
   </h3>
 </div>
-
-
 <p>Add interval to date.</p>
-
-
-<div class="highlight"><pre><code><span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
-<span class="p">{{</span><span class="nx">dateAdd</span> <span class="nx">date</span> <span class="mi">1</span> <span class="s2">&quot;month&quot;</span><span class="p">}}</span>
-<span class="p">{{</span><span class="err">#</span><span class="nx">dateAdd</span> <span class="mi">1</span> <span class="s2">&quot;month&quot;</span><span class="p">}}</span><span class="mi">2016</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">18</span><span class="p">{{</span><span class="err">/dateAdd}}</span>
-</code></pre></div>
-
+<pre><code>date = new Date()
+{{dateAdd date 1 &quot;month&quot;}}
+{{#dateAdd 1 &quot;month&quot;}}2016-01-18{{/dateAdd}}
+</code></pre>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">dateAdd: </span><span class="nf">-&gt;</span>
-    <span class="nv">args = </span><span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nx">args</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">fn</span>
-      <span class="nv">date = </span><span class="nx">args</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">fn</span> <span class="k">this</span>
-      <span class="p">[</span><span class="nx">count</span><span class="p">,</span> <span class="nx">interval</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-    <span class="k">else</span>
-      <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">count</span><span class="p">,</span> <span class="nx">interval</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-    <span class="nv">m = </span><span class="nx">moment</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span> <span class="nx">date</span><span class="p">).</span><span class="nx">add</span> <span class="nx">count</span><span class="p">,</span> <span class="nx">interval</span>
-    <span class="nx">m</span><span class="p">.</span><span class="nx">toDate</span><span class="p">()</span>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-attribute">dateAdd</span>: <span class="hljs-function">-&gt;</span>
+    args = [].slice.call(arguments)
+    <span class="hljs-keyword">if</span> args[args.length-<span class="hljs-number">1</span>].fn
+      date = args[args.length-<span class="hljs-number">1</span>].fn <span class="hljs-keyword">this</span>
+      [count, interval] = args[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>]
+    <span class="hljs-keyword">else</span>
+      [date, count, interval] = args[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>]
+    m = moment(<span class="hljs-keyword">new</span> Date date).add count, interval
+    m.toDate()
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="join">
+          <div class="pilwrap" id="join">
   <h3>
-    <a href="#join" name="join" class="pilcrow">&#182;</a>
-    join
+    <a href="#join" name="join" class="pilcrow"></a>
+join
   </h3>
 </div>
-
-
 <p>Joins all elements of a collection into a string
 using a separator if specified.</p>
-
-
-<div class="highlight"><pre><code><span class="nx">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-<span class="p">{{</span><span class="nx">join</span> <span class="nx">array</span><span class="p">}}</span>
-<span class="err">#</span> <span class="s1">&#39;1 2 3&#39;</span>
-<span class="p">{{</span><span class="nx">join</span> <span class="nx">array</span> <span class="s2">&quot;, &quot;</span><span class="p">}}</span>
-<span class="err">#</span> <span class="s1">&#39;1, 2, 3&#39;</span>
-</code></pre></div>
-
+<pre><code>array = [1, 2, 3]
+{{join array}}
+# '1 2 3'
+{{join array &quot;, &quot;}}
+# '1, 2, 3'
+</code></pre>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="nv">join: </span><span class="nf">-&gt;</span>
-    <span class="nv">args = </span><span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span>
-    <span class="p">[</span><span class="nx">array</span><span class="p">,</span> <span class="nx">separator</span><span class="p">]</span> <span class="o">=</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">..</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-    <span class="nx">array</span><span class="p">.</span><span class="nx">join</span> <span class="nx">separator</span> <span class="o">?</span> <span class="s">&#39; &#39;</span>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-attribute">join</span>: <span class="hljs-function">-&gt;</span>
+    args = [].slice.call(arguments)
+    [array, separator] = args[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>]
+    array.join separator ? <span class="hljs-string">' '</span>
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-10" id="section-10"></a>
 </div>
 <p>register helper</p>
+
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">fn</span> <span class="k">of</span> <span class="nx">helper</span>
-  <span class="nx">handlebars</span><span class="p">.</span><span class="nx">registerHelper</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">fn</span>
+        <td class="code highlight">
+          <pre class="coffeescript"><span class="hljs-keyword">for</span> key, fn <span class="hljs-keyword">of</span> helper
+  handlebars.registerHelper key, fn
 
 
-
-</pre></div>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap" id="type%20implementation">
+          <div class="pilwrap" id="type-implementation">
   <h2>
-    <a href="#type%20implementation" name="type%20implementation" class="pilcrow">&#182;</a>
-    Type implementation
+    <a href="#type-implementation" name="type-implementation" class="pilcrow"></a>
+Type implementation
   </h2>
 </div>
 
         </td>
-        <td class="code highlight"><div class="highlight"><pre>
-<span class="nv">exports.describe = </span><span class="nf">(work, cb) -&gt;</span>
-  <span class="nv">text = </span><span class="s">&#39;A valid text which may contain handlebar syntax and variables. &#39;</span>
-  <span class="nx">text</span> <span class="o">+=</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">describe</span> <span class="nx">work</span>
-  <span class="nv">text = </span><span class="nx">text</span><span class="p">.</span><span class="nx">replace</span> <span class="sr">/\. It&#39;s/</span><span class="p">,</span> <span class="s">&#39; which is&#39;</span>
-  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">text</span>
+        <td class="code highlight">
+          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
+  text = <span class="hljs-string">'A valid text which may contain handlebar syntax and variables. '</span>
+  text += check.optional.describe work
+  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
+  cb <span class="hljs-literal">null</span>, text
 
-<span class="nv">exports.run = </span><span class="nf">(work, cb) -&gt;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">value</span><span class="si">}</span><span class="s"> as </span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nx">type</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> </span><span class="si">#{</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">work</span><span class="p">.</span><span class="nx">pos</span><span class="si">}</span><span class="s">&quot;</span>
-
-</pre></div>
+exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-12" id="section-12"></a>
 </div>
 <p>base checks</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">try</span>
-    <span class="k">if</span> <span class="nx">check</span><span class="p">.</span><span class="nx">optional</span><span class="p">.</span><span class="nx">run</span> <span class="nx">work</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="k">return</span> <span class="nx">cb</span><span class="p">()</span>
-  <span class="k">catch</span> <span class="nx">error</span>
-    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="nx">error</span><span class="p">,</span> <span class="nx">cb</span>
-  <span class="nv">value = </span><span class="nx">work</span><span class="p">.</span><span class="nx">value</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">try</span>
+    <span class="hljs-keyword">if</span> check.optional.run work
+      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
+      <span class="hljs-keyword">return</span> cb()
+  <span class="hljs-keyword">catch</span> error
+    <span class="hljs-keyword">return</span> work.report error, cb
+  value = work.value
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-13" id="section-13"></a>
 </div>
 <p>check for already converted values</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">return</span> <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">value</span> <span class="k">if</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;function&#39;</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'function'</span>
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-14" id="section-14"></a>
 </div>
 <p>sanitize</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">unless</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">is</span> <span class="s">&#39;string&#39;</span>
-    <span class="k">return</span> <span class="nx">work</span><span class="p">.</span><span class="nx">report</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Error</span> <span class="s">&quot;The given value &#39;</span><span class="si">#{</span><span class="nx">value</span><span class="si">}</span><span class="s">&#39; is no integer as needed&quot;</span><span class="p">),</span> <span class="nx">cb</span>
 
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
+    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{value}</span>' is no integer as needed"</span>), cb
+</pre>
         </td>
       </tr>
+    
       <tr>
         <td class="docs">
-<div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15">&#182;</a>
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-15" id="section-15"></a>
 </div>
 <p>compile if handlebars syntax found</p>
-        </td>
-        <td class="code highlight"><div class="highlight"><pre>
-  <span class="k">if</span> <span class="nx">value</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/\{\{.*?\}\}/</span>
-    <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> compile handlebars&quot;</span>
-    <span class="nv">template = </span><span class="nx">handlebars</span><span class="p">.</span><span class="nx">compile</span> <span class="nx">value</span>
-    <span class="nv">fn = </span><span class="nf">(context) -&gt;</span>
-      <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> execute </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span><span class="si">}</span><span class="s">&quot;</span> <span class="o">+</span>
-        <span class="nx">chalk</span><span class="p">.</span><span class="nx">grey</span> <span class="s">&quot; with </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">context</span><span class="si">}</span><span class="s">&quot;</span>
-      <span class="k">return</span> <span class="nx">template</span> <span class="nx">context</span>
-  <span class="k">else</span>
-    <span class="nv">fn = </span><span class="nf">-&gt;</span> <span class="nx">value</span>
-  <span class="nx">debug</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">work</span><span class="p">.</span><span class="nx">debug</span><span class="si">}</span><span class="s"> result </span><span class="si">#{</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span> <span class="nx">value</span> <span class="o">?</span> <span class="kc">null</span><span class="si">}</span><span class="s">&quot;</span>
-  <span class="nx">cb</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">fn</span>
 
-<span class="nv">exports.selfcheck = </span><span class="nf">(schema, cb) -&gt;</span>
-  <span class="nx">check</span><span class="p">.</span><span class="nx">run</span>
-    <span class="nv">schema:</span>
-      <span class="nv">type: </span><span class="s">&#39;object&#39;</span>
-      <span class="nv">allowedKeys: </span><span class="kc">true</span>
-      <span class="nv">keys: </span><span class="nx">object</span><span class="p">.</span><span class="nx">extend</span> <span class="p">{},</span> <span class="nx">check</span><span class="p">.</span><span class="nx">base</span><span class="p">,</span>
-        <span class="nv">default:</span>
-          <span class="nv">type: </span><span class="s">&#39;string&#39;</span>
-          <span class="nv">optional: </span><span class="kc">true</span>
-    <span class="nv">value: </span><span class="nx">schema</span>
-  <span class="p">,</span> <span class="nx">cb</span>
-</pre></div>
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">if</span> value.match <span class="hljs-regexp">/\{\{.*?\}\}/</span>
+    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> compile handlebars"</span>
+    template = handlebars.compile value
+<span class="hljs-function">    <span class="hljs-title">fn</span> = <span class="hljs-params">(context)</span> -&gt;</span>
+      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> execute <span class="hljs-subst">#{util.inspect value}</span>"</span> +
+        chalk.grey <span class="hljs-string">" with <span class="hljs-subst">#{util.inspect context}</span>"</span>
+      <span class="hljs-keyword">return</span> template context
+  <span class="hljs-keyword">else</span>
+<span class="hljs-function">    <span class="hljs-title">fn</span> = -&gt;</span> value
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
+  cb <span class="hljs-literal">null</span>, fn
+
+exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
+  check.run
+    <span class="hljs-attribute">schema</span>:
+      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
+      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
+      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+        <span class="hljs-attribute">default</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+    <span class="hljs-attribute">value</span>: schema
+  , cb
+
+</pre>
         </td>
       </tr>
+    
   </tbody>
 </table>
+
   </div>
 </body>
 </html>
