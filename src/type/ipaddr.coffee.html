@@ -115,8 +115,7 @@ Node modules
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:ipaddr'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-ipaddr = <span class="hljs-built_in">require</span> <span class="hljs-string">'ipaddr.js'</span>
-</pre>
+ipaddr = <span class="hljs-built_in">require</span> <span class="hljs-string">'ipaddr.js'</span></pre>
         </td>
       </tr>
     
@@ -129,8 +128,7 @@ ipaddr = <span class="hljs-built_in">require</span> <span class="hljs-string">'i
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -143,9 +141,7 @@ ipaddr = <span class="hljs-built_in">require</span> <span class="hljs-string">'i
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -182,8 +178,7 @@ Configuration
     <span class="hljs-string">'10.0.0.0/8'</span> <span class="hljs-comment"># RFC1918</span>
     <span class="hljs-string">'172.16.0.0/12'</span> <span class="hljs-comment"># RFC1918</span>
     <span class="hljs-string">'192.168.0.0/16'</span> <span class="hljs-comment"># RFC1918</span>
-  ]
-</pre>
+  ]</pre>
         </td>
       </tr>
     
@@ -212,9 +207,7 @@ Configuration
   <span class="hljs-attribute">teredo</span>: [ <span class="hljs-string">'2001::/32'</span> ] <span class="hljs-comment"># RFC6052, RFC6146</span>
 all = []
 all.concat list <span class="hljs-keyword">for</span> name, list <span class="hljs-keyword">of</span> specialRanges
-specialRanges.special = all
-
-</pre>
+specialRanges.special = all</pre>
         </td>
       </tr>
     
@@ -255,8 +248,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -275,8 +267,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
     <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value
-</pre>
+  value = work.value</pre>
         </td>
       </tr>
     
@@ -298,8 +289,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-attribute">schema</span>:
       <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-</pre>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
     
@@ -316,8 +306,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{value}</span>' is no valid IPv6
         or IPv4 address"</span>), cb
     ip = ipaddr.parse value
-    debug <span class="hljs-string">"analyzed <span class="hljs-subst">#{ip.kind()}</span>"</span>, ip
-</pre>
+    debug <span class="hljs-string">"analyzed <span class="hljs-subst">#{ip.kind()}</span>"</span>, ip</pre>
         </td>
       </tr>
     
@@ -349,8 +338,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-keyword">if</span> ip.kind() <span class="hljs-keyword">is</span> <span class="hljs-string">'ipv6'</span>
       value = <span class="hljs-keyword">if</span> work.pos.format <span class="hljs-keyword">is</span> <span class="hljs-string">'long'</span> <span class="hljs-keyword">then</span> ip.toNormalizedString() <span class="hljs-keyword">else</span> ip.toString()
     <span class="hljs-keyword">else</span>
-      value = ip.toString()
-</pre>
+      value = ip.toString()</pre>
         </td>
       </tr>
     
@@ -375,8 +363,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           [addr, bits] = entry.split <span class="hljs-regexp">/\//</span>
           <span class="hljs-keyword">if</span> ip.match ipaddr.parse(addr), bits
             debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
-</pre>
+            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value</pre>
         </td>
       </tr>
     
@@ -404,8 +391,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           [addr, bits] = entry.split <span class="hljs-regexp">/\//</span>
           <span class="hljs-keyword">if</span> ip.match ipaddr.parse(addr), bits
             <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given ip address '<span class="hljs-subst">#{value}</span>' is
-              denied because in range <span class="hljs-subst">#{entry}</span>"</span>), cb
-</pre>
+              denied because in range <span class="hljs-subst">#{entry}</span>"</span>), cb</pre>
         </td>
       </tr>
     
@@ -460,8 +446,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">              |(
-</pre>
+          <pre class="coffeescript">              |(</pre>
         </td>
       </tr>
     
@@ -474,8 +459,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">7</span>,<span class="hljs-number">7</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">7</span>,<span class="hljs-number">7</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
         </td>
       </tr>
     
@@ -488,8 +472,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}:
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}:</pre>
         </td>
       </tr>
     
@@ -502,8 +485,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>}:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>}:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
         </td>
       </tr>
     
@@ -516,8 +498,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}</pre>
         </td>
       </tr>
     
@@ -530,8 +511,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}</pre>
         </td>
       </tr>
     
@@ -544,8 +524,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
         </td>
       </tr>
     
@@ -558,8 +537,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}</pre>
         </td>
       </tr>
     
@@ -572,8 +550,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:((:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>})
-</pre>
+          <pre class="coffeescript">                |[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:((:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>})</pre>
         </td>
       </tr>
     
@@ -586,8 +563,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |:((:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}|:)
-</pre>
+          <pre class="coffeescript">                |:((:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}|:)</pre>
         </td>
       </tr>
     
@@ -600,8 +576,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |<span class="hljs-attribute">fe80</span>:(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}%[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-zA-Z]{<span class="hljs-number">1</span>,}
-</pre>
+          <pre class="coffeescript">                |<span class="hljs-attribute">fe80</span>:(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}%[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-zA-Z]{<span class="hljs-number">1</span>,}</pre>
         </td>
       </tr>
     
@@ -617,8 +592,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
         <td class="code highlight">
           <pre class="coffeescript">                |::(ffff(:<span class="hljs-number">0</span>{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}:){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}
                   ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])
-</pre>
+                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])</pre>
         </td>
       </tr>
     
@@ -633,8 +607,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
         <td class="code highlight">
           <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:
                   ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])
-</pre>
+                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])</pre>
         </td>
       </tr>
     
@@ -647,8 +620,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">              )\/(<span class="hljs-number">12</span>[<span class="hljs-number">0</span>-<span class="hljs-number">8</span>]|(<span class="hljs-number">1</span>[<span class="hljs-number">01</span>][<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])
-</pre>
+          <pre class="coffeescript">              )\/(<span class="hljs-number">12</span>[<span class="hljs-number">0</span>-<span class="hljs-number">8</span>]|(<span class="hljs-number">1</span>[<span class="hljs-number">01</span>][<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])</pre>
         </td>
       </tr>
     
@@ -675,8 +647,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
             match: ///</span>
               ^
               unspecified|broadcast|multicast|linklocal|loopback|private
-              |reserved|uniquelocal|ipv4mapped|rfc(<span class="hljs-number">6145</span>|<span class="hljs-number">6052</span>)|<span class="hljs-number">6</span>to4|teredo|special
-</pre>
+              |reserved|uniquelocal|ipv4mapped|rfc(<span class="hljs-number">6145</span>|<span class="hljs-number">6052</span>)|<span class="hljs-number">6</span>to4|teredo|special</pre>
         </td>
       </tr>
     
@@ -689,8 +660,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">              |(
-</pre>
+          <pre class="coffeescript">              |(</pre>
         </td>
       </tr>
     
@@ -703,8 +673,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">7</span>,<span class="hljs-number">7</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">7</span>,<span class="hljs-number">7</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
         </td>
       </tr>
     
@@ -717,8 +686,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}:
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}:</pre>
         </td>
       </tr>
     
@@ -731,8 +699,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>}:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>}:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
         </td>
       </tr>
     
@@ -745,8 +712,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}</pre>
         </td>
       </tr>
     
@@ -759,8 +725,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}</pre>
         </td>
       </tr>
     
@@ -773,8 +738,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
         </td>
       </tr>
     
@@ -787,8 +751,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}
-</pre>
+          <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}</pre>
         </td>
       </tr>
     
@@ -801,8 +764,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:((:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>})
-</pre>
+          <pre class="coffeescript">                |[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:((:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>})</pre>
         </td>
       </tr>
     
@@ -815,8 +777,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |:((:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}|:)
-</pre>
+          <pre class="coffeescript">                |:((:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}|:)</pre>
         </td>
       </tr>
     
@@ -829,8 +790,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">                |<span class="hljs-attribute">fe80</span>:(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}%[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-zA-Z]{<span class="hljs-number">1</span>,}
-</pre>
+          <pre class="coffeescript">                |<span class="hljs-attribute">fe80</span>:(:[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}%[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-zA-Z]{<span class="hljs-number">1</span>,}</pre>
         </td>
       </tr>
     
@@ -846,8 +806,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
         <td class="code highlight">
           <pre class="coffeescript">                |::(ffff(:<span class="hljs-number">0</span>{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}:){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}
                   ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])
-</pre>
+                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])</pre>
         </td>
       </tr>
     
@@ -862,8 +821,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
         <td class="code highlight">
           <pre class="coffeescript">                |([<span class="hljs-number">0</span>-<span class="hljs-number">9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:
                   ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])
-</pre>
+                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span>-<span class="hljs-number">5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span>-<span class="hljs-number">4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])</pre>
         </td>
       </tr>
     
@@ -876,8 +834,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">              )\/(<span class="hljs-number">12</span>[<span class="hljs-number">0</span>-<span class="hljs-number">8</span>]|(<span class="hljs-number">1</span>[<span class="hljs-number">01</span>][<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])
-</pre>
+          <pre class="coffeescript">              )\/(<span class="hljs-number">12</span>[<span class="hljs-number">0</span>-<span class="hljs-number">8</span>]|(<span class="hljs-number">1</span>[<span class="hljs-number">01</span>][<span class="hljs-number">0</span>-<span class="hljs-number">9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span>-<span class="hljs-number">9</span>])</pre>
         </td>
       </tr>
     

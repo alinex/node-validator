@@ -121,8 +121,7 @@ Node modules
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:integer'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mathjs'</span>
-</pre>
+math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mathjs'</span></pre>
         </td>
       </tr>
     
@@ -135,8 +134,7 @@ math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mat
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -149,9 +147,7 @@ math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mat
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -171,9 +167,7 @@ integer type names
   <span class="hljs-attribute">short</span>: <span class="hljs-number">16</span>
   <span class="hljs-attribute">long</span>: <span class="hljs-number">32</span>
   <span class="hljs-attribute">safe</span>: <span class="hljs-number">53</span>
-  <span class="hljs-attribute">quad</span>: <span class="hljs-number">64</span>
-
-</pre>
+  <span class="hljs-attribute">quad</span>: <span class="hljs-number">64</span></pre>
         </td>
       </tr>
     
@@ -188,8 +182,7 @@ Type implementation
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -206,8 +199,7 @@ Type implementation
   text += check.optional.describe work
   text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
   <span class="hljs-keyword">if</span> work.pos.sanitize
-    text += <span class="hljs-string">"Invalid characters will be removed from text. "</span>
-</pre>
+    text += <span class="hljs-string">"Invalid characters will be removed from text. "</span></pre>
         </td>
       </tr>
     
@@ -225,8 +217,7 @@ Type implementation
       <span class="hljs-keyword">when</span> <span class="hljs-string">'ceil'</span> <span class="hljs-keyword">then</span> <span class="hljs-string">'to ceil'</span>
       <span class="hljs-keyword">when</span> <span class="hljs-string">'floor'</span> <span class="hljs-keyword">then</span> <span class="hljs-string">'to floor'</span>
       <span class="hljs-keyword">else</span> <span class="hljs-string">'arithḿetic'</span>
-    text += <span class="hljs-string">"The value will be rounded <span class="hljs-subst">#{type}</span> to an integer. "</span>
-</pre>
+    text += <span class="hljs-string">"The value will be rounded <span class="hljs-subst">#{type}</span> to an integer. "</span></pre>
         </td>
       </tr>
     
@@ -247,8 +238,7 @@ Type implementation
       are allowed. "</span>
     unsigned = <span class="hljs-keyword">if</span> work.pos.unsigned <span class="hljs-keyword">then</span> <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">0</span>
     max = (Math.pow <span class="hljs-number">2</span>, type-<span class="hljs-number">1</span>+unsigned)-<span class="hljs-number">1</span>
-    min = (unsigned-<span class="hljs-number">1</span>) * max - <span class="hljs-number">1</span> + unsigned
-</pre>
+    min = (unsigned-<span class="hljs-number">1</span>) * max - <span class="hljs-number">1</span> + unsigned</pre>
         </td>
       </tr>
     
@@ -273,8 +263,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -293,8 +282,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
     <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value
-</pre>
+  value = work.value</pre>
         </td>
       </tr>
     
@@ -311,8 +299,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'number'</span> <span class="hljs-keyword">or</span> (<span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">and</span> value.match <span class="hljs-regexp">/\d$/</span>)
       value = <span class="hljs-string">""</span> + value + work.pos.unit
     value = math.unit value
-    value = value.toNumber work.pos.unit
-</pre>
+    value = value.toNumber work.pos.unit</pre>
         </td>
       </tr>
     
@@ -332,8 +319,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">else</span>
         value = value.replace <span class="hljs-regexp">/^.*?([-+]?\d+).*?$/</span>, <span class="hljs-string">'$1'</span>
     <span class="hljs-keyword">if</span> value.length
-      value = Number value
-</pre>
+      value = Number value</pre>
         </td>
       </tr>
     
@@ -350,8 +336,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     value = <span class="hljs-keyword">switch</span> work.pos.round
       <span class="hljs-keyword">when</span> <span class="hljs-string">'ceil'</span> <span class="hljs-keyword">then</span> Math.ceil value
       <span class="hljs-keyword">when</span> <span class="hljs-string">'floor'</span> <span class="hljs-keyword">then</span> Math.floor value
-      <span class="hljs-keyword">else</span> Math.round value
-</pre>
+      <span class="hljs-keyword">else</span> Math.round value</pre>
         </td>
       </tr>
     
@@ -366,8 +351,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">unless</span> value <span class="hljs-keyword">is</span> (value | <span class="hljs-number">0</span>)
     <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{work.value}</span>' is no integer
-      as needed"</span>), cb
-</pre>
+      as needed"</span>), cb</pre>
         </td>
       </tr>
     
@@ -418,8 +402,7 @@ min/max</p>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.max? <span class="hljs-keyword">and</span> value &gt; work.pos.max
     <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value is to high, it has to be'<span class="hljs-subst">#{work.pos.max}</span>'
-      or lower"</span>), cb
-</pre>
+      or lower"</span>), cb</pre>
         </td>
       </tr>
     
@@ -478,9 +461,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

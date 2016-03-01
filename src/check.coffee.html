@@ -143,8 +143,7 @@ Node modules
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
 async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
-{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
-</pre>
+{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
         </td>
       </tr>
     
@@ -157,9 +156,7 @@ async = <span class="hljs-built_in">require</span> <span class="hljs-string">'al
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">reference = <span class="hljs-built_in">require</span> <span class="hljs-string">'./reference'</span>
-
-</pre>
+          <pre class="coffeescript">reference = <span class="hljs-built_in">require</span> <span class="hljs-string">'./reference'</span></pre>
         </td>
       </tr>
     
@@ -197,9 +194,7 @@ complete check run.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Work</span></span>
-
-</pre>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Work</span></span></pre>
         </td>
       </tr>
     
@@ -221,9 +216,7 @@ Create a new work instance
     <span class="hljs-property">@pos</span> ?= <span class="hljs-property">@spec</span>.schema  <span class="hljs-comment"># reference to schema at path (root)</span>
     <span class="hljs-property">@vpath</span> ?= []          <span class="hljs-comment"># current path in value structure</span>
     <span class="hljs-property">@value</span> = <span class="hljs-property">@spec</span>.value  <span class="hljs-comment"># reference to value at path (root)</span>
-    <span class="hljs-property">@debug</span> = chalk.grey <span class="hljs-string">"<span class="hljs-subst">#{<span class="hljs-property">@spec</span>.name ? <span class="hljs-string">'value'</span>}</span>/<span class="hljs-subst">#{<span class="hljs-property">@path</span>.join <span class="hljs-string">'/'</span>}</span>"</span>
-
-</pre>
+    <span class="hljs-property">@debug</span> = chalk.grey <span class="hljs-string">"<span class="hljs-subst">#{<span class="hljs-property">@spec</span>.name ? <span class="hljs-string">'value'</span>}</span>/<span class="hljs-subst">#{<span class="hljs-property">@path</span>.join <span class="hljs-string">'/'</span>}</span>"</span></pre>
         </td>
       </tr>
     
@@ -242,8 +235,7 @@ position.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-attribute">report</span>: <span class="hljs-function"><span class="hljs-params">(err, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript">  <span class="hljs-attribute">report</span>: <span class="hljs-function"><span class="hljs-params">(err, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -258,8 +250,7 @@ position.</p>
         <td class="code highlight">
           <pre class="coffeescript">    message = <span class="hljs-string">"<span class="hljs-subst">#{err.message}</span> in <span class="hljs-subst">#{<span class="hljs-property">@spec</span>.name ? <span class="hljs-string">'value'</span>}</span>:/<span class="hljs-subst">#{<span class="hljs-property">@vpath</span>.join <span class="hljs-string">'/'</span>}</span>"</span>
     message += <span class="hljs-string">" '<span class="hljs-subst">#{<span class="hljs-property">@pos</span>.title}</span>'"</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@pos</span>.title?
-    message += <span class="hljs-string">" (described in schema:/<span class="hljs-subst">#{<span class="hljs-property">@path</span>.join <span class="hljs-string">'/'</span>}</span>). "</span>
-</pre>
+    message += <span class="hljs-string">" (described in schema:/<span class="hljs-subst">#{<span class="hljs-property">@path</span>.join <span class="hljs-string">'/'</span>}</span>). "</span></pre>
         </td>
       </tr>
     
@@ -276,8 +267,7 @@ position.</p>
     <span class="hljs-keyword">if</span> <span class="hljs-property">@pos</span>.description?
       desc = <span class="hljs-property">@pos</span>.description[<span class="hljs-number">0</span>].toLowerCase() + <span class="hljs-property">@pos</span>.description[<span class="hljs-number">1.</span>.]
       desc = desc.replace <span class="hljs-regexp">/\.\s*$/</span>, <span class="hljs-string">''</span>
-      detail = <span class="hljs-string">"It should contain <span class="hljs-subst">#{desc}</span>. \n"</span>
-</pre>
+      detail = <span class="hljs-string">"It should contain <span class="hljs-subst">#{desc}</span>. \n"</span></pre>
         </td>
       </tr>
     
@@ -292,8 +282,7 @@ position.</p>
         <td class="code highlight">
           <pre class="coffeescript">    exports.describe <span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-params">(err, text)</span> =&gt;</span>
       detail += text
-      debug <span class="hljs-property">@debug</span> + chalk.magenta <span class="hljs-string">" Error: <span class="hljs-subst">#{message}</span>"</span>
-</pre>
+      debug <span class="hljs-property">@debug</span> + chalk.magenta <span class="hljs-string">" Error: <span class="hljs-subst">#{message}</span>"</span></pre>
         </td>
       </tr>
     
@@ -308,8 +297,7 @@ position.</p>
         <td class="code highlight">
           <pre class="coffeescript">      err = <span class="hljs-keyword">new</span> Error message
       err.description = detail <span class="hljs-keyword">if</span> detail
-      err.path = <span class="hljs-property">@vpath</span>.join <span class="hljs-string">'/'</span>
-</pre>
+      err.path = <span class="hljs-property">@vpath</span>.join <span class="hljs-string">'/'</span></pre>
         </td>
       </tr>
     
@@ -322,9 +310,7 @@ position.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">      cb err
-
-</pre>
+          <pre class="coffeescript">      cb err</pre>
         </td>
       </tr>
     
@@ -343,8 +329,7 @@ concatenated with the given paths.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-attribute">goInto</span>: <span class="hljs-function"><span class="hljs-params">(schema = [], value = [])</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript">  <span class="hljs-attribute">goInto</span>: <span class="hljs-function"><span class="hljs-params">(schema = [], value = [])</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -358,8 +343,7 @@ concatenated with the given paths.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">    sub = <span class="hljs-keyword">new</span> Work <span class="hljs-property">@spec</span>
-    <span class="hljs-keyword">if</span> schema.length
-</pre>
+    <span class="hljs-keyword">if</span> schema.length</pre>
         </td>
       </tr>
     
@@ -376,8 +360,7 @@ concatenated with the given paths.</p>
       sub.path = <span class="hljs-property">@path</span>.concat name
       sub.pos = <span class="hljs-keyword">if</span> <span class="hljs-property">@pos</span>[name]? <span class="hljs-keyword">then</span>  <span class="hljs-property">@pos</span>[name] <span class="hljs-keyword">else</span> <span class="hljs-property">@pos</span>
       sub.debug = chalk.grey <span class="hljs-string">"<span class="hljs-subst">#{sub.spec.name ? <span class="hljs-string">'value'</span>}</span>/<span class="hljs-subst">#{sub.path.join <span class="hljs-string">'/'</span>}</span>"</span>
-    <span class="hljs-keyword">else</span>
-</pre>
+    <span class="hljs-keyword">else</span></pre>
         </td>
       </tr>
     
@@ -393,8 +376,7 @@ concatenated with the given paths.</p>
           <pre class="coffeescript">      sub.path = <span class="hljs-property">@path</span>[<span class="hljs-number">0.</span>.]
       sub.pos = <span class="hljs-property">@pos</span>
       sub.debug = <span class="hljs-property">@debug</span>
-    <span class="hljs-keyword">if</span> value.length
-</pre>
+    <span class="hljs-keyword">if</span> value.length</pre>
         </td>
       </tr>
     
@@ -410,8 +392,7 @@ concatenated with the given paths.</p>
           <pre class="coffeescript">      v = value.shift()
       sub.vpath = <span class="hljs-property">@vpath</span>.concat v
       sub.value = <span class="hljs-keyword">if</span> <span class="hljs-property">@value</span>[v]? <span class="hljs-keyword">then</span>  <span class="hljs-property">@value</span>[v] <span class="hljs-keyword">else</span> <span class="hljs-literal">undefined</span>
-    <span class="hljs-keyword">else</span>
-</pre>
+    <span class="hljs-keyword">else</span></pre>
         </td>
       </tr>
     
@@ -425,8 +406,7 @@ concatenated with the given paths.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">      sub.vpath = <span class="hljs-property">@vpath</span>[<span class="hljs-number">0.</span>.]
-      sub.value = object.clone <span class="hljs-property">@value</span>
-</pre>
+      sub.value = object.clone <span class="hljs-property">@value</span></pre>
         </td>
       </tr>
     
@@ -439,8 +419,7 @@ concatenated with the given paths.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">return</span> sub <span class="hljs-keyword">unless</span> schema.length <span class="hljs-keyword">or</span> value.length
-</pre>
+          <pre class="coffeescript">    <span class="hljs-keyword">return</span> sub <span class="hljs-keyword">unless</span> schema.length <span class="hljs-keyword">or</span> value.length</pre>
         </td>
       </tr>
     
@@ -453,10 +432,7 @@ concatenated with the given paths.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">    sub.goInto schema, value
-
-
-</pre>
+          <pre class="coffeescript">    sub.goInto schema, value</pre>
         </td>
       </tr>
     
@@ -487,8 +463,7 @@ Get type library
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">getTypeLib</span> = <span class="hljs-params">(type)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">getTypeLib</span> = <span class="hljs-params">(type)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -503,8 +478,7 @@ Get type library
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> type?.type  <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"No type given to load"</span>
-  type = type.type <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> type <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-</pre>
+  type = type.type <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> type <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span></pre>
         </td>
       </tr>
     
@@ -517,9 +491,7 @@ Get type library
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-built_in">require</span> <span class="hljs-string">"./type/<span class="hljs-subst">#{type}</span>"</span>
-
-</pre>
+          <pre class="coffeescript">  <span class="hljs-built_in">require</span> <span class="hljs-string">"./type/<span class="hljs-subst">#{type}</span>"</span></pre>
         </td>
       </tr>
     
@@ -535,8 +507,7 @@ Is value empty?
         </td>
         <td class="code highlight">
           <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">isEmpty</span> = <span class="hljs-params">(value)</span> -&gt;</span>
-  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">unless</span> value?
-</pre>
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">unless</span> value?</pre>
         </td>
       </tr>
     
@@ -555,9 +526,7 @@ return true</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-literal">false</span>
-
-</pre>
+          <pre class="coffeescript">  <span class="hljs-literal">false</span></pre>
         </td>
       </tr>
     
@@ -589,8 +558,7 @@ Get description of schema
         </td>
         <td class="code highlight">
           <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  work = <span class="hljs-keyword">new</span> Work work <span class="hljs-keyword">unless</span> work <span class="hljs-keyword">instanceof</span> Work
-</pre>
+  work = <span class="hljs-keyword">new</span> Work work <span class="hljs-keyword">unless</span> work <span class="hljs-keyword">instanceof</span> Work</pre>
         </td>
       </tr>
     
@@ -609,8 +577,7 @@ Get description of schema
       <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{work.pos.type}</span>' has no describe() method"</span>
   <span class="hljs-keyword">catch</span> error
     debug chalk.red <span class="hljs-string">"Failed to load '<span class="hljs-subst">#{work.pos.type}</span>' lib because of: <span class="hljs-subst">#{error}</span>"</span>
-    <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{work.pos.type}</span>' not supported"</span>
-</pre>
+    <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{work.pos.type}</span>' not supported"</span></pre>
         </td>
       </tr>
     
@@ -623,9 +590,7 @@ Get description of schema
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  lib.describe work, cb
-
-</pre>
+          <pre class="coffeescript">  lib.describe work, cb</pre>
         </td>
       </tr>
     
@@ -642,8 +607,7 @@ Run check
         </td>
         <td class="code highlight">
           <pre class="coffeescript">exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  work = <span class="hljs-keyword">new</span> Work work <span class="hljs-keyword">unless</span> work <span class="hljs-keyword">instanceof</span> Work
-</pre>
+  work = <span class="hljs-keyword">new</span> Work work <span class="hljs-keyword">unless</span> work <span class="hljs-keyword">instanceof</span> Work</pre>
         </td>
       </tr>
     
@@ -664,8 +628,7 @@ Run check
     , cb
   , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> work.report err, cb <span class="hljs-keyword">if</span> err
-    work.pos = result
-</pre>
+    work.pos = result</pre>
         </td>
       </tr>
     
@@ -682,8 +645,7 @@ Run check
       <span class="hljs-attribute">spec</span>: work.spec
       <span class="hljs-attribute">path</span>: work.path[<span class="hljs-number">0.</span>.]    <span class="hljs-comment"># clone because it may change</span>
     , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-      <span class="hljs-keyword">return</span> work.report err, cb <span class="hljs-keyword">if</span> err
-</pre>
+      <span class="hljs-keyword">return</span> work.report err, cb <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
     
@@ -699,8 +661,7 @@ Run check
           <pre class="coffeescript">      obj = work.spec.value
       <span class="hljs-keyword">for</span> n <span class="hljs-keyword">in</span> work.vpath
         obj = obj?[n]
-      obj = value <span class="hljs-keyword">if</span> obj?
-</pre>
+      obj = value <span class="hljs-keyword">if</span> obj?</pre>
         </td>
       </tr>
     
@@ -714,8 +675,7 @@ Run check
         </td>
         <td class="code highlight">
           <pre class="coffeescript">      work.spec.done.push work.vpath.join <span class="hljs-string">'/'</span>
-      work.value = value
-</pre>
+      work.value = value</pre>
         </td>
       </tr>
     
@@ -734,8 +694,7 @@ Run check
           <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{work.pos.type}</span>' has no run() method"</span>
       <span class="hljs-keyword">catch</span> err
         debug chalk.red <span class="hljs-string">"Failed to load '<span class="hljs-subst">#{work.pos.type}</span>' lib because of: <span class="hljs-subst">#{err}</span>"</span>
-        <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{work.pos.type}</span>' not supported"</span>
-</pre>
+        <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{work.pos.type}</span>' not supported"</span></pre>
         </td>
       </tr>
     
@@ -748,9 +707,7 @@ Run check
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">      lib.run work, cb
-
-</pre>
+          <pre class="coffeescript">      lib.run work, cb</pre>
         </td>
       </tr>
     
@@ -767,8 +724,7 @@ Selfcheck of schema
         </td>
         <td class="code highlight">
           <pre class="coffeescript">exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
-  debug <span class="hljs-string">"check schema <span class="hljs-subst">#{util.inspect schema}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"check schema <span class="hljs-subst">#{util.inspect schema}</span>"</span></pre>
         </td>
       </tr>
     
@@ -786,8 +742,7 @@ Selfcheck of schema
     <span class="hljs-keyword">unless</span> lib.selfcheck?
       <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{schema.type}</span>' has no selfcheck() method"</span>
   <span class="hljs-keyword">catch</span>
-    <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{schema.type}</span>' not supported"</span>
-</pre>
+    <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Type '<span class="hljs-subst">#{schema.type}</span>' not supported"</span></pre>
         </td>
       </tr>
     
@@ -800,9 +755,7 @@ Selfcheck of schema
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  lib.selfcheck schema, cb
-
-</pre>
+          <pre class="coffeescript">  lib.selfcheck schema, cb</pre>
         </td>
       </tr>
     
@@ -845,8 +798,7 @@ Optional and default checks
       if not specified. "</span>
     <span class="hljs-keyword">else</span>
       <span class="hljs-keyword">return</span> <span class="hljs-string">"It's optional."</span>
-  <span class="hljs-attribute">run</span>: <span class="hljs-function"><span class="hljs-params">(work)</span> -&gt;</span>
-</pre>
+  <span class="hljs-attribute">run</span>: <span class="hljs-function"><span class="hljs-params">(work)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -864,9 +816,7 @@ Optional and default checks
       work.value = work.pos.default
       <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
     <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> work.pos.optional <span class="hljs-comment"># end this test without value</span>
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"A value is needed"</span>
-
-</pre>
+    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"A value is needed"</span></pre>
         </td>
       </tr>
     
@@ -895,9 +845,7 @@ selfcheck schema for base options
     <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
   <span class="hljs-attribute">optional</span>:
     <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-    <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-
-</pre>
+    <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span></pre>
         </td>
       </tr>
     

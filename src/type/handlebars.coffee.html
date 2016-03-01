@@ -123,8 +123,7 @@ Node modules
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
 handlebars = <span class="hljs-built_in">require</span> <span class="hljs-string">'handlebars'</span>
-moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment'</span>
-</pre>
+moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment'</span></pre>
         </td>
       </tr>
     
@@ -137,8 +136,7 @@ moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'m
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -151,9 +149,7 @@ moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'m
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -170,9 +166,7 @@ Handlebars Helper
         </td>
         <td class="code highlight">
           <pre class="coffeescript">
-helper =
-
-</pre>
+helper =</pre>
         </td>
       </tr>
     
@@ -204,9 +198,7 @@ https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers</p>
       format = args[<span class="hljs-number">0</span>]
     <span class="hljs-keyword">else</span>
       [date, format] = args[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>]
-    moment(<span class="hljs-keyword">new</span> Date date).format format ? <span class="hljs-string">'MMM Do, YYYY'</span>
-
-</pre>
+    moment(<span class="hljs-keyword">new</span> Date date).format format ? <span class="hljs-string">'MMM Do, YYYY'</span></pre>
         </td>
       </tr>
     
@@ -234,9 +226,7 @@ dateAdd
     <span class="hljs-keyword">else</span>
       [date, count, interval] = args[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>]
     m = moment(<span class="hljs-keyword">new</span> Date date).add count, interval
-    m.toDate()
-
-</pre>
+    m.toDate()</pre>
         </td>
       </tr>
     
@@ -262,9 +252,7 @@ using a separator if specified.</p>
           <pre class="coffeescript">  <span class="hljs-attribute">join</span>: <span class="hljs-function">-&gt;</span>
     args = [].slice.call(arguments)
     [array, separator] = args[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>]
-    array.join separator ? <span class="hljs-string">' '</span>
-
-</pre>
+    array.join separator ? <span class="hljs-string">' '</span></pre>
         </td>
       </tr>
     
@@ -278,10 +266,7 @@ using a separator if specified.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript"><span class="hljs-keyword">for</span> key, fn <span class="hljs-keyword">of</span> helper
-  handlebars.registerHelper key, fn
-
-
-</pre>
+  handlebars.registerHelper key, fn</pre>
         </td>
       </tr>
     
@@ -304,8 +289,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -324,8 +308,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
     <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value
-</pre>
+  value = work.value</pre>
         </td>
       </tr>
     
@@ -338,8 +321,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'function'</span>
-</pre>
+          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'function'</span></pre>
         </td>
       </tr>
     
@@ -353,8 +335,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{value}</span>' is no integer as needed"</span>), cb
-</pre>
+    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{value}</span>' is no integer as needed"</span>), cb</pre>
         </td>
       </tr>
     
@@ -389,9 +370,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

@@ -89,8 +89,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:and'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-</pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
     
@@ -104,8 +103,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
         </td>
         <td class="code highlight">
           <pre class="coffeescript">async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
-object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -118,9 +116,7 @@ object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'a
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -139,8 +135,7 @@ Type implementation
 exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   text = <span class="hljs-string">"All of the following checks have to succeed:"</span>
   max = work.pos.<span class="hljs-keyword">and</span>.length - <span class="hljs-number">1</span>
-  async.map [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span>
-</pre>
+  async.map [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -164,8 +159,7 @@ exports.describe = <span class="hljs-function"><span class="hljs-params">(work, 
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -183,8 +177,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
-    <span class="hljs-keyword">return</span> work.report error, cb
-</pre>
+    <span class="hljs-keyword">return</span> work.report error, cb</pre>
         </td>
       </tr>
     
@@ -199,8 +192,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         <td class="code highlight">
           <pre class="coffeescript">  max = work.pos.<span class="hljs-keyword">and</span>.length - <span class="hljs-number">1</span>
   async.eachSeries [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span>
-    sub = work.goInto([<span class="hljs-string">'and'</span>, num])
-</pre>
+    sub = work.goInto([<span class="hljs-string">'and'</span>, num])</pre>
         </td>
       </tr>
     
@@ -235,9 +227,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">entries</span>:
             <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

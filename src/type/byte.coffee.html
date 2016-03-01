@@ -122,8 +122,7 @@ Node modules
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:byte'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mathjs'</span>
-</pre>
+math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mathjs'</span></pre>
         </td>
       </tr>
     
@@ -136,8 +135,7 @@ math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mat
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
-</pre>
+          <pre class="coffeescript">{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
         </td>
       </tr>
     
@@ -152,9 +150,7 @@ math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mat
         <td class="code highlight">
           <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
 
-pattern = <span class="hljs-regexp">/^[0-9]+(\.?[0-9]*) *(k|Ki|[MGTPEZY]i?)?([Bb]|bps)?$/</span>
-
-</pre>
+pattern = <span class="hljs-regexp">/^[0-9]+(\.?[0-9]*) *(k|Ki|[MGTPEZY]i?)?([Bb]|bps)?$/</span></pre>
         </td>
       </tr>
     
@@ -176,9 +172,7 @@ Unit.UNITS.bps =
   <span class="hljs-attribute">base</span>: Unit.BASE_UNITS.BIT
   <span class="hljs-attribute">dimensions</span>: Unit.BASE_UNITS.BIT.dimensions
   <span class="hljs-attribute">prefixes</span>: Unit.PREFIXES.BINARY_SHORT
-  <span class="hljs-attribute">value</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">offset</span>: <span class="hljs-number">0</span>
-
-</pre>
+  <span class="hljs-attribute">value</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">offset</span>: <span class="hljs-number">0</span></pre>
         </td>
       </tr>
     
@@ -200,9 +194,7 @@ Optimize options setting
     schema.decimals = <span class="hljs-number">2</span>
   <span class="hljs-keyword">unless</span> schema.min
     schema.min = <span class="hljs-number">0</span>
-  schema
-
-</pre>
+  schema</pre>
         </td>
       </tr>
     
@@ -218,8 +210,7 @@ Type implementation
         </td>
         <td class="code highlight">
           <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  work.pos = optimize work.pos
-</pre>
+  work.pos = optimize work.pos</pre>
         </td>
       </tr>
     
@@ -236,8 +227,7 @@ Type implementation
   text += check.optional.describe work
   text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
   text += <span class="hljs-string">"If defined as a text you may use a prefix like: k, M, G, P, T, E, Z, Y
-  also with the unit B like '12MB' or '3.7 GiB'. "</span>
-</pre>
+  also with the unit B like '12MB' or '3.7 GiB'. "</span></pre>
         </td>
       </tr>
     
@@ -261,8 +251,7 @@ Type implementation
       <span class="hljs-attribute">decimals</span>: work.pos.decimals
       <span class="hljs-attribute">min</span>: work.pos.min
       <span class="hljs-attribute">max</span>: work.pos.max
-  , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span>
-</pre>
+  , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -280,8 +269,7 @@ Type implementation
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   work.pos = optimize work.pos
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -300,8 +288,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
     <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value
-</pre>
+  value = work.value</pre>
         </td>
       </tr>
     
@@ -316,8 +303,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
     <span class="hljs-keyword">unless</span> value.trim().match pattern
-      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"A byte value with optional prefixes is needed"</span>), cb
-</pre>
+      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"A byte value with optional prefixes is needed"</span>), cb</pre>
         </td>
       </tr>
     
@@ -339,8 +325,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
   <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">isnt</span> <span class="hljs-string">'number'</span>
     <span class="hljs-keyword">unless</span> value <span class="hljs-keyword">is</span> (value | <span class="hljs-number">0</span>)
       <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{value}</span>' is no byte or
-        float number as needed"</span>), cb
-</pre>
+        float number as needed"</span>), cb</pre>
         </td>
       </tr>
     
@@ -404,9 +389,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
           <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

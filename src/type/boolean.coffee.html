@@ -94,8 +94,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:boolean'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-</pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
     
@@ -108,8 +107,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -122,9 +120,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -140,9 +136,7 @@ Configuration
         </td>
         <td class="code highlight">
           <pre class="coffeescript">valuesTrue = [<span class="hljs-string">'true'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'on'</span>, <span class="hljs-string">'yes'</span>, <span class="hljs-string">'+'</span>, <span class="hljs-number">1</span>, <span class="hljs-literal">true</span>]
-valuesFalse = [<span class="hljs-string">'false'</span>, <span class="hljs-string">'0'</span>, <span class="hljs-string">'off'</span>, <span class="hljs-string">'no'</span>, <span class="hljs-string">'-'</span>, <span class="hljs-number">0</span>, <span class="hljs-literal">false</span>]
-
-</pre>
+valuesFalse = [<span class="hljs-string">'false'</span>, <span class="hljs-string">'0'</span>, <span class="hljs-string">'off'</span>, <span class="hljs-string">'no'</span>, <span class="hljs-string">'-'</span>, <span class="hljs-number">0</span>, <span class="hljs-literal">false</span>]</pre>
         </td>
       </tr>
     
@@ -157,8 +151,7 @@ Type implementation
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -172,8 +165,7 @@ Type implementation
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  vTrue = valuesTrue.map(util.inspect).join <span class="hljs-string">', '</span>
-  vFalse = valuesFalse.map(util.inspect).join <span class="hljs-string">', '</span>
-</pre>
+  vFalse = valuesFalse.map(util.inspect).join <span class="hljs-string">', '</span></pre>
         </td>
       </tr>
     
@@ -193,8 +185,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -213,8 +204,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
     <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value
-</pre>
+  value = work.value</pre>
         </td>
       </tr>
     
@@ -227,8 +217,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  value = value.trim().toLowerCase() <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-</pre>
+          <pre class="coffeescript">  value = value.trim().toLowerCase() <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span></pre>
         </td>
       </tr>
     
@@ -246,8 +235,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>
   <span class="hljs-keyword">if</span> value <span class="hljs-keyword">in</span> valuesFalse
     debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect <span class="hljs-literal">false</span>}</span>"</span>
-    <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span>
-</pre>
+    <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span></pre>
         </td>
       </tr>
     
@@ -272,9 +260,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

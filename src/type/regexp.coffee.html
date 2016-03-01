@@ -105,8 +105,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:regexp'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-</pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
     
@@ -119,8 +118,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -143,9 +141,7 @@ subcheck =
   ,
     <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
     <span class="hljs-attribute">match</span>: <span class="hljs-regexp">/^\/.*?\/[gim]*$/</span>
-  ]
-
-</pre>
+  ]</pre>
         </td>
       </tr>
     
@@ -163,8 +159,7 @@ Type implementation
           <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   text = <span class="hljs-string">'A valid regular expression. '</span>
   text += check.optional.describe work
-  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
-</pre>
+  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span></pre>
         </td>
       </tr>
     
@@ -183,8 +178,7 @@ Type implementation
   check.describe
     <span class="hljs-attribute">name</span>: name
     <span class="hljs-attribute">schema</span>: subcheck
-  , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span>
-</pre>
+  , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -201,8 +195,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -221,8 +214,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
     <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value
-</pre>
+  value = work.value</pre>
         </td>
       </tr>
     
@@ -243,8 +235,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-attribute">value</span>: work.value
     <span class="hljs-attribute">schema</span>: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-</pre>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
     
@@ -259,8 +250,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         <td class="code highlight">
           <pre class="coffeescript">    <span class="hljs-keyword">if</span> value <span class="hljs-keyword">instanceof</span> RegExp
       debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
-</pre>
+      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value</pre>
         </td>
       </tr>
     
@@ -277,8 +267,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-keyword">try</span>
       value = <span class="hljs-keyword">new</span> RegExp parts[<span class="hljs-number">1</span>], parts[<span class="hljs-number">2</span>]
     <span class="hljs-keyword">catch</span> error
-      <span class="hljs-keyword">return</span> work.report error, cb
-</pre>
+      <span class="hljs-keyword">return</span> work.report error, cb</pre>
         </td>
       </tr>
     
@@ -304,9 +293,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'regexp'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

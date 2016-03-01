@@ -136,8 +136,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:email'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-</pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
     
@@ -151,8 +150,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
         </td>
         <td class="code highlight">
           <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
-</pre>
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
         </td>
       </tr>
     
@@ -165,9 +163,7 @@ async = <span class="hljs-built_in">require</span> <span class="hljs-string">'al
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -184,9 +180,7 @@ Subchecks
         <td class="code highlight">
           <pre class="coffeescript">subcheck =
   <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-  <span class="hljs-attribute">minLength</span>: <span class="hljs-number">5</span>
-
-</pre>
+  <span class="hljs-attribute">minLength</span>: <span class="hljs-number">5</span></pre>
         </td>
       </tr>
     
@@ -208,9 +202,7 @@ Host specific normalization
         [local.replace(<span class="hljs-regexp">/\.|\+.*$/g</span>, <span class="hljs-string">''</span>), <span class="hljs-string">'gmail.com'</span>]
     <span class="hljs-keyword">else</span>
       (local, host) -&gt;
-        [local.replace(<span class="hljs-regexp">/\+.*$/g</span>, <span class="hljs-string">''</span>), host.replace(<span class="hljs-regexp">/.*?(\w+\.\w+)$/</span>, <span class="hljs-string">'$1'</span>)]
-
-</pre>
+        [local.replace(<span class="hljs-regexp">/\+.*$/g</span>, <span class="hljs-string">''</span>), host.replace(<span class="hljs-regexp">/.*?(\w+\.\w+)$/</span>, <span class="hljs-string">'$1'</span>)]</pre>
         </td>
       </tr>
     
@@ -228,8 +220,7 @@ Type implementation
           <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   text = <span class="hljs-string">'A reasonable working email address. '</span>
   text += check.optional.describe work
-  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
-</pre>
+  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span></pre>
         </td>
       </tr>
     
@@ -245,8 +236,7 @@ Type implementation
           <pre class="coffeescript">  name = work.spec.name ? <span class="hljs-string">'value'</span>
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
-  subcheck.lowerCase = work.pos.lowerCase
-</pre>
+  subcheck.lowerCase = work.pos.lowerCase</pre>
         </td>
       </tr>
     
@@ -268,8 +258,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -287,8 +276,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
-    <span class="hljs-keyword">return</span> work.report error, cb
-</pre>
+    <span class="hljs-keyword">return</span> work.report error, cb</pre>
         </td>
       </tr>
     
@@ -310,8 +298,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-attribute">value</span>: work.value
     <span class="hljs-attribute">schema</span>: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-</pre>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
     
@@ -329,8 +316,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The address is not a valid format, too few or
       much @-signs."</span>), cb
     <span class="hljs-keyword">if</span> local.length &gt; <span class="hljs-number">64</span>
-      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The local mailbox name is too long (64 chars max)."</span>), cb
-</pre>
+      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The local mailbox name is too long (64 chars max)."</span>), cb</pre>
         </td>
       </tr>
     
@@ -349,8 +335,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-attribute">schema</span>:
         <span class="hljs-attribute">type</span>: <span class="hljs-string">'hostname'</span>
     , <span class="hljs-function"><span class="hljs-params">(err, host)</span> -&gt;</span>
-      <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-</pre>
+      <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
     
@@ -363,8 +348,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">      [local, host] = normalize(host) local, host
-</pre>
+          <pre class="coffeescript">      [local, host] = normalize(host) local, host</pre>
         </td>
       </tr>
     
@@ -379,8 +363,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         <td class="code highlight">
           <pre class="coffeescript">      value = <span class="hljs-string">"<span class="hljs-subst">#{local}</span>@<span class="hljs-subst">#{host}</span>"</span>
       <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">unless</span> work.pos.checkServer
-      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> host <span class="hljs-keyword">is</span> <span class="hljs-string">'localhost'</span>
-</pre>
+      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> host <span class="hljs-keyword">is</span> <span class="hljs-string">'localhost'</span></pre>
         </td>
       </tr>
     
@@ -396,8 +379,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">      getMyIP (err, ip) -&gt;
         <span class="hljs-keyword">if</span> err
           debug chalk.magenta <span class="hljs-string">"could not detect own ip address"</span>
-          <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
-</pre>
+          <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value</pre>
         </td>
       </tr>
     
@@ -413,8 +395,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">        dns = <span class="hljs-built_in">require</span> <span class="hljs-string">'dns'</span>
         dns.resolveMx host, <span class="hljs-function"><span class="hljs-params">(err, addresses)</span> -&gt;</span>
           checkMailServer addresses, ip, <span class="hljs-function"><span class="hljs-params">(ok)</span> -&gt;</span>
-            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> ok
-</pre>
+            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> ok</pre>
         </td>
       </tr>
     
@@ -431,9 +412,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
               checkMailServer addresses, ip, <span class="hljs-function"><span class="hljs-params">(ok)</span> -&gt;</span>
                 <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> ok
                 <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"No correct responding mail server
-                could be detected for this domain."</span>), cb
-
-</pre>
+                could be detected for this domain."</span>), cb</pre>
         </td>
       </tr>
     
@@ -465,10 +444,7 @@ Schema check
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     
@@ -499,9 +475,7 @@ get own IP
     <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> err <span class="hljs-keyword">and</span> response.statusCode <span class="hljs-keyword">is</span> <span class="hljs-number">200</span>
       cb <span class="hljs-literal">null</span>, body.trim()
     <span class="hljs-keyword">else</span>
-      cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">'could not get IP address'</span>
-
-</pre>
+      cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">'could not get IP address'</span></pre>
         </td>
       </tr>
     
@@ -518,8 +492,7 @@ contact the server
         <td class="code highlight">
           <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">checkMailServer</span> = <span class="hljs-params">(list, ip, cb)</span> -&gt;</span>
   <span class="hljs-keyword">return</span> cb <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> list?.length
-  net = <span class="hljs-built_in">require</span> <span class="hljs-string">'net'</span>
-</pre>
+  net = <span class="hljs-built_in">require</span> <span class="hljs-string">'net'</span></pre>
         </td>
       </tr>
     
@@ -550,9 +523,7 @@ contact the server
     client.<span class="hljs-literal">on</span> <span class="hljs-string">'end'</span>, <span class="hljs-function">-&gt;</span>
       debug chalk.grey l <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> res.split <span class="hljs-regexp">/\n/</span>
       cb res?.length &gt; <span class="hljs-number">0</span>
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

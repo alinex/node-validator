@@ -116,8 +116,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:object'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-</pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
     
@@ -131,8 +130,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
         </td>
         <td class="code highlight">
           <pre class="coffeescript">{array, object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
-</pre>
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
         </td>
       </tr>
     
@@ -145,9 +143,7 @@ async = <span class="hljs-built_in">require</span> <span class="hljs-string">'al
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -165,8 +161,7 @@ Type implementation
           <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   text = <span class="hljs-string">'An object. '</span>
   text += check.optional.describe work
-  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
-</pre>
+  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span></pre>
         </td>
       </tr>
     
@@ -180,8 +175,7 @@ Type implementation
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.flatten
-    text += <span class="hljs-string">"Hierarchical paths will be flattened together. "</span>
-</pre>
+    text += <span class="hljs-string">"Hierarchical paths will be flattened together. "</span></pre>
         </td>
       </tr>
     
@@ -196,8 +190,7 @@ Type implementation
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.instanceOf?
     text += <span class="hljs-string">"The object has to be an instance of class <span class="hljs-subst">#{work.pos.instanceOf.name}</span>. "</span>
-  text = text.replace <span class="hljs-regexp">/object\. The object/</span>, <span class="hljs-string">'object which'</span>
-</pre>
+  text = text.replace <span class="hljs-regexp">/object\. The object/</span>, <span class="hljs-string">'object which'</span></pre>
         </td>
       </tr>
     
@@ -211,8 +204,7 @@ Type implementation
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  mandatoryKeys = work.pos.mandatoryKeys ? []
-  <span class="hljs-keyword">if</span> mandatoryKeys <span class="hljs-keyword">and</span> <span class="hljs-keyword">typeof</span> mandatoryKeys <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span>
-</pre>
+  <span class="hljs-keyword">if</span> mandatoryKeys <span class="hljs-keyword">and</span> <span class="hljs-keyword">typeof</span> mandatoryKeys <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span></pre>
         </td>
       </tr>
     
@@ -232,8 +224,7 @@ Type implementation
       <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> work.pos.entries
         mandatoryKeys.push entry.key <span class="hljs-keyword">if</span> entry.key?
   <span class="hljs-keyword">if</span> mandatoryKeys.length
-    text += <span class="hljs-string">"The following keys have to be present: <span class="hljs-subst">#{mandatoryKeys.join <span class="hljs-string">', '</span>}</span>. "</span>
-</pre>
+    text += <span class="hljs-string">"The following keys have to be present: <span class="hljs-subst">#{mandatoryKeys.join <span class="hljs-string">', '</span>}</span>. "</span></pre>
         </td>
       </tr>
     
@@ -247,8 +238,7 @@ Type implementation
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  allowedKeys = work.pos.allowedKeys ? []
-  <span class="hljs-keyword">if</span> allowedKeys <span class="hljs-keyword">and</span> <span class="hljs-keyword">typeof</span> allowedKeys <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span>
-</pre>
+  <span class="hljs-keyword">if</span> allowedKeys <span class="hljs-keyword">and</span> <span class="hljs-keyword">typeof</span> allowedKeys <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span></pre>
         </td>
       </tr>
     
@@ -267,8 +257,7 @@ Type implementation
     <span class="hljs-keyword">if</span> work.pos.entries?
       <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> work.pos.entries
         allowedKeys.push entry.key <span class="hljs-keyword">if</span> entry.key
-  <span class="hljs-keyword">if</span> allowedKeys.length
-</pre>
+  <span class="hljs-keyword">if</span> allowedKeys.length</pre>
         </td>
       </tr>
     
@@ -283,8 +272,7 @@ Type implementation
         <td class="code highlight">
           <pre class="coffeescript">    list = allowedKeys.filter (e) -&gt; <span class="hljs-keyword">not</span> (e <span class="hljs-keyword">in</span> mandatoryKeys)
     <span class="hljs-keyword">if</span> list.length
-      text += <span class="hljs-string">"And the following keys are allowed: <span class="hljs-subst">#{list.join <span class="hljs-string">', '</span>}</span>. "</span>
-</pre>
+      text += <span class="hljs-string">"And the following keys are allowed: <span class="hljs-subst">#{list.join <span class="hljs-string">', '</span>}</span>. "</span></pre>
         </td>
       </tr>
     
@@ -301,8 +289,7 @@ Type implementation
     (cb) -&gt;
       <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> work.pos.keys?
       subtext = <span class="hljs-string">"The following entries have a specific format: "</span>
-      async.map Object.keys(work.pos.keys), <span class="hljs-function"><span class="hljs-params">(key, cb)</span> -&gt;</span>
-</pre>
+      async.map Object.keys(work.pos.keys), <span class="hljs-function"><span class="hljs-params">(key, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -330,8 +317,7 @@ Type implementation
         <span class="hljs-keyword">if</span> rule.key?
           ruletext = <span class="hljs-string">"\n- matching <span class="hljs-subst">#{rule.key}</span>: "</span>
         <span class="hljs-keyword">else</span>
-          ruletext = <span class="hljs-string">"\n- other keys: "</span>
-</pre>
+          ruletext = <span class="hljs-string">"\n- other keys: "</span></pre>
         </td>
       </tr>
     
@@ -356,8 +342,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -376,8 +361,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
     <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value
-</pre>
+  value = work.value</pre>
         </td>
       </tr>
     
@@ -391,8 +375,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.flatten
-    value = flatten work.value
-</pre>
+    value = flatten work.value</pre>
         </td>
       </tr>
     
@@ -408,8 +391,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.instanceOf?
     <span class="hljs-keyword">unless</span> value <span class="hljs-keyword">instanceof</span> work.pos.instanceOf
       <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"An object of <span class="hljs-subst">#{work.pos.instanceOf.name}</span> is
-        needed as value"</span>), cb
-</pre>
+        needed as value"</span>), cb</pre>
         </td>
       </tr>
     
@@ -423,8 +405,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">isnt</span> <span class="hljs-string">'object'</span> <span class="hljs-keyword">or</span> Array.isArray value
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value has to be an object"</span>), cb
-</pre>
+    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value has to be an object"</span>), cb</pre>
         </td>
       </tr>
     
@@ -439,8 +420,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         <td class="code highlight">
           <pre class="coffeescript">  usedKeys = Object.keys value
   mandatoryKeys = work.pos.mandatoryKeys ? []
-  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> mandatoryKeys <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span>
-</pre>
+  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> mandatoryKeys <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span></pre>
         </td>
       </tr>
     
@@ -460,8 +440,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> work.pos.entries
         mandatoryKeys.push entry.key <span class="hljs-keyword">if</span> entry.key?
   allowedKeys = work.pos.allowedKeys ? []
-  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> allowedKeys <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span>
-</pre>
+  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> allowedKeys <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span></pre>
         </td>
       </tr>
     
@@ -481,8 +460,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> work.pos.entries
         allowedKeys.push entry.key <span class="hljs-keyword">if</span> entry.key
   keys = array.unique usedKeys.concat mandatoryKeys, allowedKeys
-  work.value = value
-</pre>
+  work.value = value</pre>
         </td>
       </tr>
     
@@ -496,8 +474,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  async.each keys, <span class="hljs-function"><span class="hljs-params">(key, cb)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">if</span> key <span class="hljs-keyword">instanceof</span> RegExp <span class="hljs-comment"># skip expressions here</span>
-</pre>
+    <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">if</span> key <span class="hljs-keyword">instanceof</span> RegExp <span class="hljs-comment"># skip expressions here</span></pre>
         </td>
       </tr>
     
@@ -519,8 +496,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <span class="hljs-keyword">break</span>
         <span class="hljs-keyword">else</span>
           sub = work.goInto [<span class="hljs-string">'entries'</span>, i], [key]
-    <span class="hljs-keyword">else</span>
-</pre>
+    <span class="hljs-keyword">else</span></pre>
         </td>
       </tr>
     
@@ -554,8 +530,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         <span class="hljs-keyword">delete</span> value[key]
       cb()
   , <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-</pre>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
     
@@ -579,8 +554,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The mandatory key '<span class="hljs-subst">#{key}</span>' is missing"</span>), cb
       <span class="hljs-keyword">else</span>
         <span class="hljs-keyword">unless</span> value[mandatory]? <span class="hljs-keyword">or</span> work.pos.keys?[mandatory]?.optional
-          <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The mandatory key '<span class="hljs-subst">#{mandatory}</span>' is missing"</span>), cb
-</pre>
+          <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The mandatory key '<span class="hljs-subst">#{mandatory}</span>' is missing"</span>), cb</pre>
         </td>
       </tr>
     
@@ -607,8 +581,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
               <span class="hljs-keyword">break</span>
         <span class="hljs-keyword">unless</span> isAllowed
           <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The key '<span class="hljs-subst">#{key}</span>' is not allowed"</span>), cb
-      <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-</pre>
+      <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
     
@@ -676,10 +649,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     
@@ -702,9 +672,7 @@ Helper
       <span class="hljs-keyword">return</span> obj <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> w <span class="hljs-keyword">is</span> <span class="hljs-string">'object'</span>
     v = flatten v
     n[<span class="hljs-string">"<span class="hljs-subst">#{k}</span>-<span class="hljs-subst">#{j}</span>"</span>] = w <span class="hljs-keyword">for</span> j, w <span class="hljs-keyword">of</span> v
-  n
-
-</pre>
+  n</pre>
         </td>
       </tr>
     

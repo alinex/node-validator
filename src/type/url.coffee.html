@@ -111,8 +111,7 @@ Node modules
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:url'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-url = <span class="hljs-built_in">require</span> <span class="hljs-string">'url'</span>
-</pre>
+url = <span class="hljs-built_in">require</span> <span class="hljs-string">'url'</span></pre>
         </td>
       </tr>
     
@@ -125,8 +124,7 @@ url = <span class="hljs-built_in">require</span> <span class="hljs-string">'url'
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -139,10 +137,7 @@ url = <span class="hljs-built_in">require</span> <span class="hljs-string">'url'
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -177,8 +172,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -196,8 +190,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
-    <span class="hljs-keyword">return</span> work.report error, cb
-</pre>
+    <span class="hljs-keyword">return</span> work.report error, cb</pre>
         </td>
       </tr>
     
@@ -218,8 +211,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
   parts = url.parse value
   <span class="hljs-keyword">if</span> work.pos.removeQuery
     <span class="hljs-keyword">delete</span> parts.search
-    <span class="hljs-keyword">delete</span> parts.hash
-</pre>
+    <span class="hljs-keyword">delete</span> parts.hash</pre>
         </td>
       </tr>
     
@@ -255,8 +247,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           success = success <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> ~parts.hostname.indexOf match
       <span class="hljs-keyword">unless</span> success
         <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The hostname '<span class="hljs-subst">#{parts.hostname}</span>' should not match
-        against '<span class="hljs-subst">#{work.pos.hostsDenied}</span>'"</span>), cb
-</pre>
+        against '<span class="hljs-subst">#{work.pos.hostsDenied}</span>'"</span>), cb</pre>
         </td>
       </tr>
     
@@ -318,9 +309,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

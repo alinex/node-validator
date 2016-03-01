@@ -217,8 +217,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:reference'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-</pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
     
@@ -232,8 +231,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
         </td>
         <td class="code highlight">
           <pre class="coffeescript">async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
-{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
-</pre>
+{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
         </td>
       </tr>
     
@@ -246,9 +244,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'./check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'./check'</span></pre>
         </td>
       </tr>
     
@@ -265,9 +261,7 @@ Configuration
         </td>
         <td class="code highlight">
           <pre class="coffeescript">MAXRETRY = <span class="hljs-number">10000</span> <span class="hljs-comment"># waiting for 10 seconds at max</span>
-TIMEOUT = <span class="hljs-number">10</span> <span class="hljs-comment"># checking every 10ms</span>
-
-</pre>
+TIMEOUT = <span class="hljs-number">10</span> <span class="hljs-comment"># checking every 10ms</span></pre>
         </td>
       </tr>
     
@@ -282,9 +276,7 @@ TIMEOUT = <span class="hljs-number">10</span> <span class="hljs-comment"># check
         <td class="code highlight">
           <pre class="coffeescript">protocolMap =
   <span class="hljs-attribute">http</span>: <span class="hljs-string">'web'</span>
-  <span class="hljs-attribute">https</span>: <span class="hljs-string">'web'</span>
-
-</pre>
+  <span class="hljs-attribute">https</span>: <span class="hljs-string">'web'</span></pre>
         </td>
       </tr>
     
@@ -303,9 +295,7 @@ TIMEOUT = <span class="hljs-number">10</span> <span class="hljs-comment"># check
   <span class="hljs-attribute">context</span>: <span class="hljs-number">3</span>
   <span class="hljs-attribute">file</span>: <span class="hljs-number">2</span>
   <span class="hljs-attribute">cmd</span>: <span class="hljs-number">2</span>
-  <span class="hljs-attribute">web</span>: <span class="hljs-number">1</span>
-
-</pre>
+  <span class="hljs-attribute">web</span>: <span class="hljs-number">1</span></pre>
         </td>
       </tr>
     
@@ -323,9 +313,7 @@ Have references
         <td class="code highlight">
           <pre class="coffeescript">exists = exports.exists = <span class="hljs-function"><span class="hljs-params">(value)</span> -&gt;</span>
   <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-  Boolean value.match <span class="hljs-regexp">/&lt;&lt;&lt;[^]*&gt;&gt;&gt;/</span>
-
-</pre>
+  Boolean value.match <span class="hljs-regexp">/&lt;&lt;&lt;[^]*&gt;&gt;&gt;/</span></pre>
         </td>
       </tr>
     
@@ -342,8 +330,7 @@ the real check. If there are no references it will return immediately.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">exports.replace = <span class="hljs-function"><span class="hljs-params">(value, work={}, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript">exports.replace = <span class="hljs-function"><span class="hljs-params">(value, work={}, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -361,8 +348,7 @@ the real check. If there are no references it will return immediately.</p>
     work = {}
   <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">unless</span> exists value
   work.data ?= work.spec?.value
-  debug <span class="hljs-string">"replace <span class="hljs-subst">#{util.inspect value}</span>..."</span>
-</pre>
+  debug <span class="hljs-string">"replace <span class="hljs-subst">#{util.inspect value}</span>..."</span></pre>
         </td>
       </tr>
     
@@ -376,8 +362,7 @@ the real check. If there are no references it will return immediately.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  refs = value.split <span class="hljs-regexp">/(&lt;&lt;&lt;[^]*?&gt;&gt;&gt;)/</span>
-  refs = [refs[<span class="hljs-number">1</span>]] <span class="hljs-keyword">if</span> refs.length <span class="hljs-keyword">is</span> <span class="hljs-number">3</span> <span class="hljs-keyword">and</span> refs[<span class="hljs-number">0</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">''</span> <span class="hljs-keyword">and</span> refs[<span class="hljs-number">2</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">''</span>
-</pre>
+  refs = [refs[<span class="hljs-number">1</span>]] <span class="hljs-keyword">if</span> refs.length <span class="hljs-keyword">is</span> <span class="hljs-number">3</span> <span class="hljs-keyword">and</span> refs[<span class="hljs-number">0</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">''</span> <span class="hljs-keyword">and</span> refs[<span class="hljs-number">2</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">''</span></pre>
         </td>
       </tr>
     
@@ -394,8 +379,7 @@ the real check. If there are no references it will return immediately.</p>
     findAlternative v, work, cb
   , <span class="hljs-function"><span class="hljs-params">(err, results)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">if</span> err
-    <span class="hljs-keyword">if</span> results.length <span class="hljs-keyword">is</span> <span class="hljs-number">1</span>
-</pre>
+    <span class="hljs-keyword">if</span> results.length <span class="hljs-keyword">is</span> <span class="hljs-number">1</span></pre>
         </td>
       </tr>
     
@@ -409,8 +393,7 @@ the real check. If there are no references it will return immediately.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">      debug <span class="hljs-string">"<span class="hljs-subst">#{util.inspect value}</span> is replaced by <span class="hljs-subst">#{util.inspect results[<span class="hljs-number">0</span>]}</span>"</span>
-      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, results[<span class="hljs-number">0</span>]
-</pre>
+      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, results[<span class="hljs-number">0</span>]</pre>
         </td>
       </tr>
     
@@ -425,9 +408,7 @@ the real check. If there are no references it will return immediately.</p>
         <td class="code highlight">
           <pre class="coffeescript">    result = results.join <span class="hljs-string">''</span>
     debug <span class="hljs-string">"<span class="hljs-subst">#{util.inspect value}</span> is replaced by <span class="hljs-subst">#{util.inspect result}</span>"</span>
-    cb <span class="hljs-literal">null</span>, result
-
-</pre>
+    cb <span class="hljs-literal">null</span>, result</pre>
         </td>
       </tr>
     
@@ -460,8 +441,7 @@ should be used.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">findAlternative</span> = <span class="hljs-params">(value, work={}, cb)</span> -&gt;</span>
-  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">unless</span> ~value.indexOf <span class="hljs-string">'&lt;&lt;&lt;'</span>
-</pre>
+  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">unless</span> ~value.indexOf <span class="hljs-string">'&lt;&lt;&lt;'</span></pre>
         </td>
       </tr>
     
@@ -475,8 +455,7 @@ should be used.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  first = <span class="hljs-literal">true</span>
-  async.map value[<span class="hljs-number">3.</span>.-<span class="hljs-number">4</span>].split(<span class="hljs-regexp">/\s+\|\s+/</span>), <span class="hljs-function"><span class="hljs-params">(alt, cb)</span> -&gt;</span>
-</pre>
+  async.map value[<span class="hljs-number">3.</span>.-<span class="hljs-number">4</span>].split(<span class="hljs-regexp">/\s+\|\s+/</span>), <span class="hljs-function"><span class="hljs-params">(alt, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -491,8 +470,7 @@ should be used.</p>
         <td class="code highlight">
           <pre class="coffeescript">    <span class="hljs-keyword">if</span> first <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> ~alt.indexOf <span class="hljs-string">'://'</span>
       alt = <span class="hljs-string">"struct://<span class="hljs-subst">#{alt}</span>"</span>
-    first = <span class="hljs-literal">false</span>
-</pre>
+    first = <span class="hljs-literal">false</span></pre>
         </td>
       </tr>
     
@@ -506,8 +484,7 @@ should be used.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">    alt = alt[<span class="hljs-number">0.</span>.alt.length-<span class="hljs-number">2</span>] <span class="hljs-keyword">while</span> alt[alt.length-<span class="hljs-number">1</span>] <span class="hljs-keyword">is</span> <span class="hljs-string">'#'</span>
-    uriPart = alt.split <span class="hljs-regexp">/#/</span>
-</pre>
+    uriPart = alt.split <span class="hljs-regexp">/#/</span></pre>
         </td>
       </tr>
     
@@ -522,8 +499,7 @@ should be used.</p>
         <td class="code highlight">
           <pre class="coffeescript">    <span class="hljs-keyword">if</span> uriPart.length <span class="hljs-keyword">is</span> <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> ~alt.indexOf <span class="hljs-string">'://'</span>
       debug chalk.grey <span class="hljs-string">"<span class="hljs-subst">#{util.inspect alt}</span> -&gt; default value: <span class="hljs-subst">#{util.inspect alt}</span>"</span>
-      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, alt
-</pre>
+      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, alt</pre>
         </td>
       </tr>
     
@@ -542,8 +518,7 @@ should be used.</p>
         <span class="hljs-keyword">return</span> cb err
       debug chalk.grey <span class="hljs-string">"<span class="hljs-subst">#{util.inspect alt}</span> -&gt; result: <span class="hljs-subst">#{util.inspect result}</span>"</span>
       cb <span class="hljs-literal">null</span>, result
-  , <span class="hljs-function"><span class="hljs-params">(err, results)</span> -&gt;</span>
-</pre>
+  , <span class="hljs-function"><span class="hljs-params">(err, results)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -558,9 +533,7 @@ should be used.</p>
         <td class="code highlight">
           <pre class="coffeescript">    <span class="hljs-keyword">for</span> result <span class="hljs-keyword">in</span> results
       <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, result <span class="hljs-keyword">if</span> result?
-    cb()
-
-</pre>
+    cb()</pre>
         </td>
       </tr>
     
@@ -578,8 +551,7 @@ on. The result will be from the last uri path.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">find</span> = <span class="hljs-params">(list, work={}, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">find</span> = <span class="hljs-params">(list, work={}, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -593,8 +565,7 @@ on. The result will be from the last uri path.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  def = list.shift()
-  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, work.data <span class="hljs-keyword">unless</span> def <span class="hljs-comment"># empty anchor</span>
-</pre>
+  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, work.data <span class="hljs-keyword">unless</span> def <span class="hljs-comment"># empty anchor</span></pre>
         </td>
       </tr>
     
@@ -619,8 +590,7 @@ on. The result will be from the last uri path.</p>
       <span class="hljs-keyword">else</span> <span class="hljs-keyword">unless</span> ~def.indexOf <span class="hljs-string">'://'</span>  <span class="hljs-keyword">then</span> <span class="hljs-string">'object'</span>
       <span class="hljs-keyword">else</span> proto
   <span class="hljs-keyword">if</span> proto <span class="hljs-keyword">is</span> <span class="hljs-string">'parse'</span> <span class="hljs-keyword">and</span> ~path.indexOf <span class="hljs-string">'$join'</span>
-    proto = <span class="hljs-string">'join'</span>
-</pre>
+    proto = <span class="hljs-string">'join'</span></pre>
         </td>
       </tr>
     
@@ -633,8 +603,7 @@ on. The result will be from the last uri path.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">if</span> def[<span class="hljs-number">0.</span>.proto.length-<span class="hljs-number">1</span>] <span class="hljs-keyword">isnt</span> proto <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> work.data?
-</pre>
+          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">if</span> def[<span class="hljs-number">0.</span>.proto.length-<span class="hljs-number">1</span>] <span class="hljs-keyword">isnt</span> proto <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> work.data?</pre>
         </td>
       </tr>
     
@@ -663,8 +632,7 @@ on. The result will be from the last uri path.</p>
         <span class="hljs-keyword">when</span> <span class="hljs-string">'object'</span>, <span class="hljs-string">'split'</span>, <span class="hljs-string">'match'</span>
           list.unshift def
           proto = <span class="hljs-string">'join'</span>
-          path = <span class="hljs-string">'$join'</span>
-</pre>
+          path = <span class="hljs-string">'$join'</span></pre>
         </td>
       </tr>
     
@@ -683,8 +651,7 @@ on. The result will be from the last uri path.</p>
     (<span class="hljs-keyword">typeof</span> work.data <span class="hljs-keyword">isnt</span> <span class="hljs-string">'object'</span> <span class="hljs-keyword">and</span> proto <span class="hljs-keyword">is</span> <span class="hljs-string">'object'</span>)
     )
       debug chalk.grey <span class="hljs-string">"stop at part <span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span> because wrong result type"</span>
-      <span class="hljs-keyword">return</span> cb()
-</pre>
+      <span class="hljs-keyword">return</span> cb()</pre>
         </td>
       </tr>
     
@@ -699,8 +666,7 @@ on. The result will be from the last uri path.</p>
         <td class="code highlight">
           <pre class="coffeescript">  proto = proto.toLowerCase()
   type = protocolMap[proto] ? proto
-  debug chalk.grey <span class="hljs-string">"check part "</span> + util.inspect <span class="hljs-string">"<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>"</span>
-</pre>
+  debug chalk.grey <span class="hljs-string">"check part "</span> + util.inspect <span class="hljs-string">"<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>"</span></pre>
         </td>
       </tr>
     
@@ -714,8 +680,7 @@ on. The result will be from the last uri path.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">unless</span> findType[type]?
-    <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"No handler for protocol <span class="hljs-subst">#{proto}</span> for references defined"</span>
-</pre>
+    <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"No handler for protocol <span class="hljs-subst">#{proto}</span> for references defined"</span></pre>
         </td>
       </tr>
     
@@ -730,8 +695,7 @@ on. The result will be from the last uri path.</p>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.lastType? <span class="hljs-keyword">and</span> typePrecedence[type] &gt; typePrecedence[work.lastType?]
     <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"<span class="hljs-subst">#{type}</span>-reference can not be called from <span class="hljs-subst">#{proto}</span>-reference
-    for security reasons"</span>
-</pre>
+    for security reasons"</span></pre>
         </td>
       </tr>
     
@@ -752,8 +716,7 @@ on. The result will be from the last uri path.</p>
         debug chalk.grey util.inspect(<span class="hljs-string">"<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>"</span>) + <span class="hljs-string">" -&gt; result: ---"</span>
       <span class="hljs-keyword">return</span> cb()
     <span class="hljs-keyword">if</span> list.length
-      debug chalk.grey util.inspect(<span class="hljs-string">"<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>"</span>) + <span class="hljs-string">" -&gt; result: <span class="hljs-subst">#{util.inspect result}</span>"</span>
-</pre>
+      debug chalk.grey util.inspect(<span class="hljs-string">"<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>"</span>) + <span class="hljs-string">" -&gt; result: <span class="hljs-subst">#{util.inspect result}</span>"</span></pre>
         </td>
       </tr>
     
@@ -770,8 +733,7 @@ on. The result will be from the last uri path.</p>
       <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, result <span class="hljs-keyword">unless</span> list.length <span class="hljs-comment"># stop if last entry of uri path</span>
       work = object.extend {}, work
       work.data = result
-      <span class="hljs-keyword">return</span> find list, work, cb
-</pre>
+      <span class="hljs-keyword">return</span> find list, work, cb</pre>
         </td>
       </tr>
     
@@ -807,9 +769,7 @@ retry the same call again</p>
       <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> work.spec.failed <span class="hljs-comment"># processing already stopped</span>
       work.retry++
       find list, work, cb
-    , TIMEOUT
-
-</pre>
+    , TIMEOUT</pre>
         </td>
       </tr>
     
@@ -825,8 +785,7 @@ Find value of specific type
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">findType =
-</pre>
+          <pre class="coffeescript">findType =</pre>
         </td>
       </tr>
     
@@ -841,8 +800,7 @@ Value checks
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-attribute">check</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript">  <span class="hljs-attribute">check</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -856,8 +814,7 @@ Value checks
         </td>
         <td class="code highlight">
           <pre class="coffeescript">    vm = <span class="hljs-built_in">require</span> <span class="hljs-string">'vm'</span>
-    schema = vm.runInNewContext <span class="hljs-string">"x=<span class="hljs-subst">#{path}</span>"</span>
-</pre>
+    schema = vm.runInNewContext <span class="hljs-string">"x=<span class="hljs-subst">#{path}</span>"</span></pre>
         </td>
       </tr>
     
@@ -879,8 +836,7 @@ Value checks
       <span class="hljs-keyword">if</span> err
         debug chalk.grey <span class="hljs-string">"'<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>' -&gt; check failed: <span class="hljs-subst">#{err.message}</span>"</span>
         <span class="hljs-keyword">return</span> cb()
-      cb <span class="hljs-literal">null</span>, value
-</pre>
+      cb <span class="hljs-literal">null</span>, value</pre>
         </td>
       </tr>
     
@@ -904,8 +860,7 @@ Splitting of strings
       col.unshift t
       col
     result.unshift <span class="hljs-literal">null</span>
-    cb <span class="hljs-literal">null</span>, result
-</pre>
+    cb <span class="hljs-literal">null</span>, result</pre>
         </td>
       </tr>
     
@@ -923,8 +878,7 @@ Matching strings
           <pre class="coffeescript">  <span class="hljs-attribute">match</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
     re = path.match <span class="hljs-regexp">/\/([^]*)\/(i?)/</span>
     re = <span class="hljs-keyword">new</span> RegExp re[<span class="hljs-number">1</span>], <span class="hljs-string">"<span class="hljs-subst">#{re[<span class="hljs-number">2</span>]}</span>g"</span>
-    cb <span class="hljs-literal">null</span>, work.data.match re
-</pre>
+    cb <span class="hljs-literal">null</span>, work.data.match re</pre>
         </td>
       </tr>
     
@@ -975,8 +929,7 @@ Special parsing of string
         , <span class="hljs-function">-&gt;</span>
           cb <span class="hljs-literal">null</span>, result
       <span class="hljs-keyword">else</span>
-        cb()
-</pre>
+        cb()</pre>
         </td>
       </tr>
     
@@ -991,8 +944,7 @@ Range selection in array
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-attribute">range</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript">  <span class="hljs-attribute">range</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -1010,8 +962,7 @@ Range selection in array
       (?:-\d+)? <span class="hljs-comment"># end of row range</span>
       (?:\[[^\]]+\])? <span class="hljs-comment"># column specification</span>
       ///</span>g <span class="hljs-comment">#path.split ','</span>
-    result = []
-</pre>
+    result = []</pre>
         </td>
       </tr>
     
@@ -1033,8 +984,7 @@ Range selection in array
       row.from = parseInt row[<span class="hljs-number">1</span>]
       row.to = <span class="hljs-keyword">if</span> row[<span class="hljs-number">2</span>]? <span class="hljs-keyword">then</span> parseInt row[<span class="hljs-number">2</span>] <span class="hljs-keyword">else</span> row.from
       cols = row[<span class="hljs-number">3</span>]?.split <span class="hljs-string">','</span>
-      <span class="hljs-keyword">if</span> cols? <span class="hljs-keyword">and</span> Array.isArray work.data[<span class="hljs-number">1</span>]
-</pre>
+      <span class="hljs-keyword">if</span> cols? <span class="hljs-keyword">and</span> Array.isArray work.data[<span class="hljs-number">1</span>]</pre>
         </td>
       </tr>
     
@@ -1058,8 +1008,7 @@ Range selection in array
             col.to = <span class="hljs-keyword">if</span> col[<span class="hljs-number">2</span>]? <span class="hljs-keyword">then</span> parseInt col[<span class="hljs-number">2</span>] <span class="hljs-keyword">else</span> col.from
             data = data.concat drow[col.from..col.to]
           result.push data
-      <span class="hljs-keyword">else</span>
-</pre>
+      <span class="hljs-keyword">else</span></pre>
         </td>
       </tr>
     
@@ -1077,8 +1026,7 @@ Range selection in array
     <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> result.length
     result = result[<span class="hljs-number">0</span>] <span class="hljs-keyword">if</span> result.length <span class="hljs-keyword">is</span> <span class="hljs-number">1</span>
     result = result[<span class="hljs-number">0</span>] <span class="hljs-keyword">if</span> result.length <span class="hljs-keyword">is</span> <span class="hljs-number">1</span>
-    cb <span class="hljs-literal">null</span>, result
-</pre>
+    cb <span class="hljs-literal">null</span>, result</pre>
         </td>
       </tr>
     
@@ -1094,8 +1042,7 @@ Path selection in object
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-attribute">object</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-    cb <span class="hljs-literal">null</span>, object.pathSearch work.data, path
-</pre>
+    cb <span class="hljs-literal">null</span>, object.pathSearch work.data, path</pre>
         </td>
       </tr>
     
@@ -1113,8 +1060,7 @@ Join array together
           <pre class="coffeescript">  <span class="hljs-attribute">join</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
     path = path[<span class="hljs-number">6.</span>.]
     splitter = <span class="hljs-keyword">if</span> path <span class="hljs-keyword">then</span> path.split <span class="hljs-string">'//'</span> <span class="hljs-keyword">else</span> [<span class="hljs-string">', '</span>]
-    cb <span class="hljs-literal">null</span>, arrayJoin work.data, splitter
-</pre>
+    cb <span class="hljs-literal">null</span>, arrayJoin work.data, splitter</pre>
         </td>
       </tr>
     
@@ -1130,8 +1076,7 @@ Accessing environment variable
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-attribute">env</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-    cb <span class="hljs-literal">null</span>, process.env[path]
-</pre>
+    cb <span class="hljs-literal">null</span>, process.env[path]</pre>
         </td>
       </tr>
     
@@ -1147,8 +1092,7 @@ Read from value structure
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-attribute">struct</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-    findData path, work, cb
-</pre>
+    findData path, work, cb</pre>
         </td>
       </tr>
     
@@ -1164,8 +1108,7 @@ Read from additional context
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-attribute">context</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-    cb <span class="hljs-literal">null</span>, object.pathSearch work.spec?.context, path
-</pre>
+    cb <span class="hljs-literal">null</span>, object.pathSearch work.spec?.context, path</pre>
         </td>
       </tr>
     
@@ -1186,8 +1129,7 @@ Read from file
     path = fspath.resolve work.spec.dir, path <span class="hljs-keyword">if</span> work.spec?.dir?
     fs.realpath path, <span class="hljs-function"><span class="hljs-params">(err, path)</span> -&gt;</span>
       <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-      fs.readFile path, <span class="hljs-string">'utf-8'</span>, cb
-</pre>
+      fs.readFile path, <span class="hljs-string">'utf-8'</span>, cb</pre>
         </td>
       </tr>
     
@@ -1207,8 +1149,7 @@ Read from web resource
     request
       <span class="hljs-attribute">uri</span>: <span class="hljs-string">"<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>"</span>
       <span class="hljs-attribute">followAllRedirects</span>: <span class="hljs-literal">true</span>
-    , <span class="hljs-function"><span class="hljs-params">(err, response, body)</span> -&gt;</span>
-</pre>
+    , <span class="hljs-function"><span class="hljs-params">(err, response, body)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -1225,8 +1166,7 @@ Read from web resource
       <span class="hljs-keyword">if</span> response.statusCode <span class="hljs-keyword">isnt</span> <span class="hljs-number">200</span>
         <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Server send wrong return code: <span class="hljs-subst">#{response.statusCode}</span>"</span>
       <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> body?
-      cb <span class="hljs-literal">null</span>, body
-</pre>
+      cb <span class="hljs-literal">null</span>, body</pre>
         </td>
       </tr>
     
@@ -1247,9 +1187,7 @@ Read from command output
     opt.cwd = work.spec.dir <span class="hljs-keyword">if</span> work.spec?.dir?
     exec path, opt, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
       <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-      cb <span class="hljs-literal">null</span>, result.trim()
-
-</pre>
+      cb <span class="hljs-literal">null</span>, result.trim()</pre>
         </td>
       </tr>
     
@@ -1264,8 +1202,7 @@ Read from value structure
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">findData</span> = <span class="hljs-params">(path, work, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">findData</span> = <span class="hljs-params">(path, work, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -1279,8 +1216,7 @@ Read from value structure
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  path = path.replace(<span class="hljs-string">'/\/+$/'</span>, <span class="hljs-string">''</span>).split <span class="hljs-regexp">/\/+/</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> path <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-  work.path ?= []
-</pre>
+  work.path ?= []</pre>
         </td>
       </tr>
     
@@ -1293,8 +1229,7 @@ Read from value structure
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  first = path[<span class="hljs-number">0</span>]
-</pre>
+          <pre class="coffeescript">  first = path[<span class="hljs-number">0</span>]</pre>
         </td>
       </tr>
     
@@ -1307,8 +1242,7 @@ Read from value structure
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, object.pathSearch work.data, path[<span class="hljs-number">1.</span>.] <span class="hljs-keyword">if</span> first <span class="hljs-keyword">is</span> <span class="hljs-string">''</span>
-</pre>
+          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, object.pathSearch work.data, path[<span class="hljs-number">1.</span>.] <span class="hljs-keyword">if</span> first <span class="hljs-keyword">is</span> <span class="hljs-string">''</span></pre>
         </td>
       </tr>
     
@@ -1326,8 +1260,7 @@ Read from value structure
   result = object.pathSearch work.data, work.path[<span class="hljs-number">0.</span>.work.path.length-skip-<span class="hljs-number">1</span>].concat path[skip..]
   <span class="hljs-keyword">if</span> result <span class="hljs-keyword">and</span> work.spec?.done?
     checkpath = work.path[<span class="hljs-number">0.</span>.work.path.length-skip-<span class="hljs-number">1</span>].concat(path[skip..]).join <span class="hljs-string">'/'</span>
-    <span class="hljs-keyword">unless</span> checkpath <span class="hljs-keyword">in</span> work.spec.done
-</pre>
+    <span class="hljs-keyword">unless</span> checkpath <span class="hljs-keyword">in</span> work.spec.done</pre>
         </td>
       </tr>
     
@@ -1346,8 +1279,7 @@ Read from value structure
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">throw</span> Error <span class="hljs-string">"Stopped because of uncheckable <span class="hljs-subst">#{work.spec.name}</span>/<span class="hljs-subst">#{checkpath}</span>"</span>
       <span class="hljs-keyword">return</span> setTimeout -&gt;
         <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> work.spec.failed <span class="hljs-comment"># processing already stopped</span>
-        work.retry++
-</pre>
+        work.retry++</pre>
         </td>
       </tr>
     
@@ -1363,8 +1295,7 @@ Read from value structure
           <pre class="coffeescript">        work.data = work.spec.value
         findData path, work, cb
       , TIMEOUT
-  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, result <span class="hljs-keyword">if</span> result
-</pre>
+  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, result <span class="hljs-keyword">if</span> result</pre>
         </td>
       </tr>
     
@@ -1377,8 +1308,7 @@ Read from value structure
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> work.path.length
-</pre>
+          <pre class="coffeescript">  <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> work.path.length</pre>
         </td>
       </tr>
     
@@ -1394,9 +1324,7 @@ Read from value structure
           <pre class="coffeescript">  sub = object.clone work
   sub.spec = work.spec
   sub.path.pop()
-  findData path, sub, cb
-
-</pre>
+  findData path, sub, cb</pre>
         </td>
       </tr>
     
@@ -1418,9 +1346,7 @@ Recursively join array of arrays together
     v = arrayJoin v, splitter <span class="hljs-keyword">if</span> Array.isArray v
     result += glue <span class="hljs-keyword">if</span> result
     result += v
-  result
-
-</pre>
+  result</pre>
         </td>
       </tr>
     

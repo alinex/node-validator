@@ -127,8 +127,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:string'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-</pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
     
@@ -141,8 +140,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -155,9 +153,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -177,8 +173,7 @@ Type implementation
   text += check.optional.describe work
   text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
   <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> work.pos.toString <span class="hljs-keyword">is</span> <span class="hljs-string">'boolean'</span> <span class="hljs-keyword">and</span> work.pos.toString
-    text += <span class="hljs-string">"Objects will be converted to their string representation. "</span>
-</pre>
+    text += <span class="hljs-string">"Objects will be converted to their string representation. "</span></pre>
         </td>
       </tr>
     
@@ -194,8 +189,7 @@ Type implementation
           <pre class="coffeescript">  remove = []
   remove.push <span class="hljs-string">"Control characters"</span> <span class="hljs-keyword">unless</span> work.pos.allowControls
   remove.push <span class="hljs-string">"HTML Tags"</span> <span class="hljs-keyword">if</span> work.pos.stripTags
-  text += <span class="hljs-string">"<span class="hljs-subst">#{remove.join <span class="hljs-string">', '</span>}</span> will be removed. "</span> <span class="hljs-keyword">if</span> remove.length
-</pre>
+  text += <span class="hljs-string">"<span class="hljs-subst">#{remove.join <span class="hljs-string">', '</span>}</span> will be removed. "</span> <span class="hljs-keyword">if</span> remove.length</pre>
         </td>
       </tr>
     
@@ -215,8 +209,7 @@ Type implementation
   <span class="hljs-keyword">if</span> work.pos.lowerCase? <span class="hljs-keyword">and</span> work.pos.lowerCase <span class="hljs-keyword">is</span> <span class="hljs-string">'first'</span>
     text += <span class="hljs-string">"The first letter will get lower case. "</span>
   <span class="hljs-keyword">if</span> work.pos.upperCase? <span class="hljs-keyword">and</span> work.pos.upperCase <span class="hljs-keyword">is</span> <span class="hljs-string">'first'</span>
-    text += <span class="hljs-string">"The first letter will get upper case. "</span>
-</pre>
+    text += <span class="hljs-string">"The first letter will get upper case. "</span></pre>
         </td>
       </tr>
     
@@ -237,8 +230,7 @@ Type implementation
       text = text.replace <span class="hljs-regexp">/, $/</span>, <span class="hljs-string">'. '</span>
     <span class="hljs-keyword">else</span>
       [pattern, replace] = work.pos.replace
-      text += <span class="hljs-string">"<span class="hljs-subst">#{pattern}</span> =&gt; '<span class="hljs-subst">#{replace}</span>'. "</span>
-</pre>
+      text += <span class="hljs-string">"<span class="hljs-subst">#{pattern}</span> =&gt; '<span class="hljs-subst">#{replace}</span>'. "</span></pre>
         </td>
       </tr>
     
@@ -254,8 +246,7 @@ Type implementation
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.trim
     text += <span class="hljs-string">"Whitespace will be removed at start and end of the text. "</span>
   <span class="hljs-keyword">if</span> work.pos.crop?
-    text += <span class="hljs-string">"The text will be cropped after <span class="hljs-subst">#{work.pos.crop}</span> characters. "</span>
-</pre>
+    text += <span class="hljs-string">"The text will be cropped after <span class="hljs-subst">#{work.pos.crop}</span> characters. "</span></pre>
         </td>
       </tr>
     
@@ -274,8 +265,7 @@ Type implementation
   <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.minLength?
     text += <span class="hljs-string">"It has to be at least <span class="hljs-subst">#{work.pos.minLength}</span> characters long. "</span>
   <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.maxLength?
-    text += <span class="hljs-string">"It has to be not more than <span class="hljs-subst">#{work.pos.maxLength}</span> characters long. "</span>
-</pre>
+    text += <span class="hljs-string">"It has to be not more than <span class="hljs-subst">#{work.pos.maxLength}</span> characters long. "</span></pre>
         </td>
       </tr>
     
@@ -293,8 +283,7 @@ Type implementation
       list = list.split <span class="hljs-regexp">/,\s*/</span>
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> list <span class="hljs-keyword">is</span> <span class="hljs-string">'object'</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> Array.isArray list
       list = Object.keys list
-    text += <span class="hljs-string">"Only the values: <span class="hljs-subst">#{list}</span> are allowed. "</span>
-</pre>
+    text += <span class="hljs-string">"Only the values: <span class="hljs-subst">#{list}</span> are allowed. "</span></pre>
         </td>
       </tr>
     
@@ -331,8 +320,7 @@ Type implementation
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -351,8 +339,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
     <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value
-</pre>
+  value = work.value</pre>
         </td>
       </tr>
     
@@ -368,8 +355,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.toString <span class="hljs-keyword">and</span> <span class="hljs-keyword">typeof</span> work.pos.toString <span class="hljs-keyword">isnt</span> <span class="hljs-string">'function'</span>
     value = value.toString()
   <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"A string is needed but got <span class="hljs-subst">#{<span class="hljs-keyword">typeof</span> value}</span> instead"</span>), cb
-</pre>
+    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"A string is needed but got <span class="hljs-subst">#{<span class="hljs-keyword">typeof</span> value}</span> instead"</span>), cb</pre>
         </td>
       </tr>
     
@@ -385,8 +371,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">  <span class="hljs-keyword">unless</span> work.pos.allowControls
     value = value.replace <span class="hljs-regexp">/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g</span>, <span class="hljs-string">''</span>
   <span class="hljs-keyword">if</span> work.pos.stripTags
-    value = value.replace <span class="hljs-regexp">/&lt;\/?[^&gt;]+(&gt;|$)/g</span>, <span class="hljs-string">''</span>
-</pre>
+    value = value.replace <span class="hljs-regexp">/&lt;\/?[^&gt;]+(&gt;|$)/g</span>, <span class="hljs-string">''</span></pre>
         </td>
       </tr>
     
@@ -406,8 +391,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
   <span class="hljs-keyword">if</span> work.pos.lowerCase? <span class="hljs-keyword">and</span> work.pos.lowerCase <span class="hljs-keyword">is</span> <span class="hljs-string">'first'</span>
     value = value.charAt(<span class="hljs-number">0</span>).toLowerCase() + value[<span class="hljs-number">1.</span>.]
   <span class="hljs-keyword">if</span> work.pos.upperCase? <span class="hljs-keyword">and</span> work.pos.upperCase <span class="hljs-keyword">is</span> <span class="hljs-string">'first'</span>
-    value = value.charAt(<span class="hljs-number">0</span>).toUpperCase() + value[<span class="hljs-number">1.</span>.]
-</pre>
+    value = value.charAt(<span class="hljs-number">0</span>).toUpperCase() + value[<span class="hljs-number">1.</span>.]</pre>
         </td>
       </tr>
     
@@ -426,8 +410,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         value = value.replace pattern, replace
     <span class="hljs-keyword">else</span>
       [pattern, replace] = work.pos.replace
-      value = value.replace pattern, replace
-</pre>
+      value = value.replace pattern, replace</pre>
         </td>
       </tr>
     
@@ -443,8 +426,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.trim
     value = value.trim()
   <span class="hljs-keyword">if</span> work.pos.crop?
-    value = value.substring <span class="hljs-number">0</span>, work.pos.crop
-</pre>
+    value = value.substring <span class="hljs-number">0</span>, work.pos.crop</pre>
         </td>
       </tr>
     
@@ -474,8 +456,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.maxLength? <span class="hljs-keyword">and</span> value.length &gt; work.pos.maxLength
     <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given string '<span class="hljs-subst">#{value}</span>' is too long for
-      at least <span class="hljs-subst">#{work.pos.maxLength}</span> characters are allowed"</span>), cb
-</pre>
+      at least <span class="hljs-subst">#{work.pos.maxLength}</span> characters are allowed"</span>), cb</pre>
         </td>
       </tr>
     
@@ -501,8 +482,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     '<span class="hljs-subst">#{work.pos.startsWith}</span>'"</span>), cb
   <span class="hljs-keyword">if</span> work.pos.endsWith? <span class="hljs-keyword">and</span> value[value.length - work.pos.endsWith.length..] <span class="hljs-keyword">isnt</span> work.pos.endsWith
     <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given string '<span class="hljs-subst">#{value}</span>' should end with
-    '<span class="hljs-subst">#{work.pos.endsWith}</span>'"</span>), cb
-</pre>
+    '<span class="hljs-subst">#{work.pos.endsWith}</span>'"</span>), cb</pre>
         </td>
       </tr>
     
@@ -546,8 +526,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         against '<span class="hljs-subst">#{work.pos.matchNot}</span>'"</span>), cb
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ~value.indexOf work.pos.matchNot
       <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given string '<span class="hljs-subst">#{value}</span>' shouldn't contain
-      '<span class="hljs-subst">#{work.pos.matchNot}</span>'"</span>), cb
-</pre>
+      '<span class="hljs-subst">#{work.pos.matchNot}</span>'"</span>), cb</pre>
         </td>
       </tr>
     
@@ -672,9 +651,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
             <span class="hljs-attribute">instanceOf</span>: RegExp
           ]
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

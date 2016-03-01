@@ -117,8 +117,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:percent'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-</pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
     
@@ -131,8 +130,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
-</pre>
+          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
         </td>
       </tr>
     
@@ -145,9 +143,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
         </td>
       </tr>
     
@@ -182,9 +178,7 @@ subcheck =
       \s*%?     <span class="hljs-comment"># percent sign with spaces</span>
       \s*$      <span class="hljs-comment"># end of text with spaces</span>
       ///</span>
-  ]
-
-</pre>
+  ]</pre>
         </td>
       </tr>
     
@@ -200,8 +194,7 @@ Type implementation
         </td>
         <td class="code highlight">
           <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  work.pos = optimize work.pos
-</pre>
+  work.pos = optimize work.pos</pre>
         </td>
       </tr>
     
@@ -217,8 +210,7 @@ Type implementation
           <pre class="coffeescript">  text = <span class="hljs-string">'A percentage value as decimal like 0.3 but it may be given
   as percent value text like 30%, too. '</span>
   text += check.optional.describe work
-  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
-</pre>
+  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span></pre>
         </td>
       </tr>
     
@@ -242,8 +234,7 @@ Type implementation
       <span class="hljs-attribute">decimals</span>: work.pos.decimals
       <span class="hljs-attribute">min</span>: work.pos.min
       <span class="hljs-attribute">max</span>: work.pos.max
-  , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span>
-</pre>
+  , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -261,8 +252,7 @@ Type implementation
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
   work.pos = optimize work.pos
   debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span>
-</pre>
+  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
         </td>
       </tr>
     
@@ -280,8 +270,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
       <span class="hljs-keyword">return</span> cb()
   <span class="hljs-keyword">catch</span> error
-    <span class="hljs-keyword">return</span> work.report error, cb
-</pre>
+    <span class="hljs-keyword">return</span> work.report error, cb</pre>
         </td>
       </tr>
     
@@ -302,8 +291,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-attribute">value</span>: work.value
     <span class="hljs-attribute">schema</span>: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-</pre>
+    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
     
@@ -319,8 +307,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">    <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">and</span> value.trim().slice(-<span class="hljs-number">1</span>) <span class="hljs-keyword">is</span> <span class="hljs-string">'%'</span>
       value = value[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>] / <span class="hljs-number">100</span>
     <span class="hljs-keyword">else</span>
-      value = parseFloat value
-</pre>
+      value = parseFloat value</pre>
         </td>
       </tr>
     
@@ -377,9 +364,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
           <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
     <span class="hljs-attribute">value</span>: schema
-  , cb
-
-</pre>
+  , cb</pre>
         </td>
       </tr>
     

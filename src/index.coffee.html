@@ -101,8 +101,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator'</span>)
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-</pre>
+util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span></pre>
         </td>
       </tr>
     
@@ -115,9 +114,7 @@ util = <span class="hljs-built_in">require</span> <span class="hljs-string">'uti
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'./check'</span>
-
-</pre>
+          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'./check'</span></pre>
         </td>
       </tr>
     
@@ -156,9 +153,7 @@ Create human readable description
         </td>
         <td class="code highlight">
           <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(spec, cb)</span> -&gt;</span>
-  check.describe spec, cb
-
-</pre>
+  check.describe spec, cb</pre>
         </td>
       </tr>
     
@@ -175,8 +170,7 @@ Error to the callback.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">exports.check = <span class="hljs-function"><span class="hljs-params">(spec, cb)</span> -&gt;</span>
-</pre>
+          <pre class="coffeescript">exports.check = <span class="hljs-function"><span class="hljs-params">(spec, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -190,8 +184,7 @@ Error to the callback.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"No callback method given"</span> <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> cb <span class="hljs-keyword">is</span> <span class="hljs-string">'function'</span>
-  <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"No schema definition given"</span> <span class="hljs-keyword">unless</span> spec.schema
-</pre>
+  <span class="hljs-keyword">return</span> cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">"No schema definition given"</span> <span class="hljs-keyword">unless</span> spec.schema</pre>
         </td>
       </tr>
     
@@ -204,8 +197,7 @@ Error to the callback.</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  spec.debug = chalk.grey spec.name ? <span class="hljs-string">'value'</span>
-</pre>
+          <pre class="coffeescript">  spec.debug = chalk.grey spec.name ? <span class="hljs-string">'value'</span></pre>
         </td>
       </tr>
     
@@ -224,9 +216,7 @@ Error to the callback.</p>
       debug <span class="hljs-string">"<span class="hljs-subst">#{spec.debug}</span> failed with: <span class="hljs-subst">#{err.message}</span>"</span>
     <span class="hljs-keyword">else</span>
       debug <span class="hljs-string">"<span class="hljs-subst">#{spec.debug}</span> succeeded with: <span class="hljs-subst">#{util.inspect result}</span>"</span>
-    cb err, result
-
-</pre>
+    cb err, result</pre>
         </td>
       </tr>
     
@@ -243,9 +233,7 @@ Check validation rules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
-  check.selfcheck schema, cb
-
-</pre>
+  check.selfcheck schema, cb</pre>
         </td>
       </tr>
     
