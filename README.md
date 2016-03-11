@@ -25,7 +25,7 @@ And you'll get the benefit of automatically optimized values like for `handlebar
 type you get a ready to use handlebar function back.
 
 > It is one of the modules of the [Alinex Universe](http://alinex.github.io/code.html)
-> following the code standards defined in the [General Docs](http://alinex.github.io/node-alinex).
+> following the code standards defined in the [General Docs](http://alinex.github.io/develop).
 
 
 Install
