@@ -83,9 +83,9 @@ exports.run = (work, cb) ->
   value = work.value
   # string to array
   if typeof value is 'string' and work.pos.delimiter?
-    value = value.split work.pos.delimiter
+    work.value = value = value.split work.pos.delimiter
   if work.pos.toArray and not Array.isArray value
-    value = [value]
+    work.value = value = [value]
   # is array
   unless Array.isArray value
     return work.report (new Error "The value has to be an array"), cb
@@ -107,7 +107,7 @@ exports.run = (work, cb) ->
     debug "#{work.debug} result #{util.inspect value ? null}"
     return cb null, value
   max = value.length - 1
-  async.each [0..max], (num, cb) ->
+  async.map [0..max], (num, cb) ->
     # find sub-check
     if work.pos.list?[num]?
       sub = work.goInto ['list', num], [num]
@@ -130,7 +130,7 @@ exports.run = (work, cb) ->
       sub.path = []
       sub.pos = sub.spec.schema
     check.run sub, cb
-  , (err) ->
+  , (err, value) ->
     return cb err if err
     # done return resulting value
     debug "#{work.debug} result #{util.inspect value ? null}"
