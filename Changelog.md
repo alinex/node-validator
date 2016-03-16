@@ -4,6 +4,13 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.3.2 (2016-03-16)
+-------------------------------------------------
+- Upgraded mathjs and node-util.
+- Fixed bug in array validation: not using new value from subchecks.
+- Fixed general link in README.
+- Fix typo in documentation.
+
 Version 1.3.1 (2016-02-25)
 -------------------------------------------------
 - Upgraded chrono and yaml parser.
