@@ -256,9 +256,9 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">and</span> work.pos.delimiter?
-    value = value.split work.pos.delimiter
+    work.value = value = value.split work.pos.delimiter
   <span class="hljs-keyword">if</span> work.pos.toArray <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> Array.isArray value
-    value = [value]</pre>
+    work.value = value = [value]</pre>
         </td>
       </tr>
     
@@ -335,7 +335,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
     <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
   max = value.length - <span class="hljs-number">1</span>
-  async.each [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span></pre>
+  async.map [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span></pre>
         </td>
       </tr>
     
@@ -369,7 +369,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       sub.path = []
       sub.pos = sub.spec.schema
     check.run sub, cb
-  , <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
+  , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
       </tr>
