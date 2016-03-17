@@ -1162,8 +1162,8 @@ __Check options:__
 
 ### handlebars
 
-You may also add a text which may contain [handlebars](http://handlebarsjs.com/)
-syntax. This will be compiled into a function which if called with the context
+You may also add a text which may contain [handlebars syntax](http://alinex.github.io/develop/lang/handlebars.html)
+This will be compiled into a function which if called with the context
 object will return the resulting text.
 
 ``` coffee
