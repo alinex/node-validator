@@ -120,10 +120,10 @@ exports.run = (work, cb) ->
       #{work.pos.inttype}#{type}-integer"), cb
   # min/max
   if work.pos.min? and value < work.pos.min
-    return work.report (new Error "The value is to low, it has to be at least
+    return work.report (new Error "The value is too low, it has to be at least
       #{work.pos.min}"), cb
   if work.pos.max? and value > work.pos.max
-    return work.report (new Error "The value is to high, it has to be'#{work.pos.max}'
+    return work.report (new Error "The value is too high, it has to be'#{work.pos.max}'
       or lower"), cb
   # done return resulting value
   debug "#{work.debug} result #{util.inspect value ? null}"
