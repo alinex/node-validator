@@ -1382,6 +1382,15 @@ other locale before executing the handlebars template.</p>
 <li>precision - numeric value 1..</li>
 </ul>
 <p>Examples:</p>
+<pre><code>x = '1234567mm'
+{{unitFormat x}}            # 1.23 km
+
+x = 1234567
+{{unitFormat x &quot;mm&quot;}}       # 1.23 km
+{{unitFormat x &quot;mm&quot; &quot;km&quot;}}  # 1.23 km
+{{unitFormat x &quot;mm&quot; &quot;m&quot;}}   # 1230 m
+{{unitFormat x &quot;mm&quot; &quot;m&quot; 4}} # 1235 m
+</code></pre>
 <div class="pilwrap" id="hostname">
   <h3>
     <a href="#hostname" name="hostname" class="pilcrow"></a>
