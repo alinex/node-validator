@@ -14,6 +14,7 @@ chalk = require 'chalk'
 handlebars = require 'handlebars'
 swag = require 'swag'
 moment = require 'moment'
+math = require 'mathjs'
 # alinex modules
 object = require('alinex-util').object
 # include classes and helper
@@ -73,7 +74,6 @@ helper =
   # ### dateFormat
   #
   # format an ISO date using Moment.js - http://momentjs.com/
-  # https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers
   #
   #     date = new Date()
   #     {{dateFormat date "MMMM YYYY"}}
@@ -107,8 +107,21 @@ helper =
     else
       [date, count, interval] = args
     # calculate date
-    m = moment(new Date date).add count, interval
-    m.toDate()
+    moment new Date date
+    .add count, interval
+    .toDate()
+
+  unitFormat: ->
+    {args} = argParse arguments
+    num = args.shift()
+    from = args.shift() if args.length and typeof num is 'number'
+    to = args.shift() if args.length and typeof args[0] is 'string'
+    precision = args.shift() if args.length
+    # format value
+    num = "#{num}#{from}" if from
+    value = math.unit num
+    value = value.to to if to
+    value.format precision ? 3
 
 # register helper
 for key, fn of helper

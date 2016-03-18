@@ -103,6 +103,15 @@ describe "Handlebars", ->
         ['{{#dateFormat "LL"}}{{#dateAdd 1 "month"}}1974-01-23{{/dateAdd}}{{/dateFormat}}', context, 'February 23, 1974']
       ], cb
 
+    it "should allow unit format", (cb) ->
+      test.function schema, [
+        ['{{unitFormat x}}', {x: '1234567mm'}, '1.23 km']
+        ['{{unitFormat x "mm"}}', {x: 1234567}, '1.23 km']
+        ['{{unitFormat x "mm" "km"}}', {x: 1234567}, '1.23 km']
+        ['{{unitFormat x "mm" "m"}}', {x: 1234567}, '1230 m']
+        ['{{unitFormat x "mm" "m" 4}}', {x: 1234567}, '1235 m']
+      ], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->

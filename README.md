@@ -1242,6 +1242,19 @@ Examples:
     {{#dateFormat "LL"}}{{dateAdd date 1 "month"}}{{/dateFormat}}
     # February 23, 1974
 
+**unitFormat**
+
+Formats a value with unit.
+
+Parameter:
+
+- number - as numeric value or string with unit
+- unit - the numeric value is given
+- toUnit - unit to use
+- precision - numeric value 1..
+
+Examples:
+
 
 ### hostname
 
