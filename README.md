@@ -1179,7 +1179,11 @@ validator.check
   # this will output 'hello alex'
 ```
 
-You can also use the some of the additional helpers:
+Within the handlebars templates you may use:
+
+- [builtin helpers](http://alinex.github.io/develop/lang/handlebars.html#built-in-helpers)
+- [swag helpers](http://elving.github.io/swag/)
+- or the following special ones
 
 **is**
 
@@ -1237,24 +1241,6 @@ Examples:
 
     {{#dateFormat "LL"}}{{dateAdd date 1 "month"}}{{/dateFormat}}
     # February 23, 1974
-
-**join**
-
-Joins all elements of a collection into a string using a separator if specified.
-
-Parameter:
-
-- array - list to join
-- separator - phrase to use as separator
-
-Examples:
-
-    array = [1, 2, 3]
-    {{join array}}
-    # '1 2 3'
-    {{join array ", "}}
-    # '1, 2, 3'
-
 
 
 ### hostname

@@ -39,7 +39,7 @@ describe "Handlebars", ->
     it "should fail on other objects", (cb) ->
       test.fail schema, [null, [], (new Error '????'), {}], cb
 
-  describe.only "helper", ->
+  describe "helper", ->
 
     it "should allow is blocks", (cb) ->
       test.function schema, [
@@ -102,27 +102,6 @@ describe "Handlebars", ->
         ['{{#dateFormat "LL"}}{{dateAdd date -1 "month"}}{{/dateFormat}}', context, 'December 23, 1973']
         ['{{#dateFormat "LL"}}{{#dateAdd 1 "month"}}1974-01-23{{/dateAdd}}{{/dateFormat}}', context, 'February 23, 1974']
       ], cb
-
-    it "should join arrays", (cb) ->
-      context =
-        list: [1, 2, 3]
-      test.function schema, [
-        ['{{join list}}', context, '1 2 3']
-        ['{{join list ", "}}', context, '1, 2, 3']
-      ], cb
-
-    it.skip "should slice arrays", (cb) ->
-      context =
-        list: [1, 2, 3, 4, 5, 6]
-      test.function schema, [
-        ['{{#slice list 1 5 offset="3"}}{{this}}{{/slice}}', context, '2 3 4 5 6 ']
-      ], cb
-  #     # items 1 thru 6
-  #     {{#slice list offset="1" limit="5"}}{{this}}{{/slice}}#
-  #     # items 0 thru 9
-  #     {{#slice items limit="10"}}{{name}}{{/slice}}
-  #     # items 3 thru context.length
-  #     {{#slice items offset="3"}}{{name}}{{/slice}}
 
   describe "description", ->
 

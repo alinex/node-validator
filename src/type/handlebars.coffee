@@ -12,11 +12,19 @@ debug = require('debug')('validator:handlebars')
 util = require 'util'
 chalk = require 'chalk'
 handlebars = require 'handlebars'
+swag = require 'swag'
 moment = require 'moment'
 # alinex modules
 object = require('alinex-util').object
 # include classes and helper
 check = require '../check'
+
+
+# General initialization
+# -------------------------------------------------
+
+swag.registerHelpers handlebars
+
 
 # Handlebars Helper
 # -------------------------------------------------
@@ -38,7 +46,6 @@ argParse = (args) ->
 
 helper =
 
-  # ### is
   is: ->
     {args, fn, inverse, data} = argParse arguments
     if args.length is 2
@@ -102,53 +109,6 @@ helper =
     # calculate date
     m = moment(new Date date).add count, interval
     m.toDate()
-
-  # ### join
-  #
-  # Joins all elements of a collection into a string
-  # using a separator if specified.
-  #
-  #     array = [1, 2, 3]
-  #     {{join array}}
-  #     # '1 2 3'
-  #     {{join array ", "}}
-  #     # '1, 2, 3'
-  join: ->
-    {args} = argParse arguments
-    [array, separator] = args
-    # run the join
-    array.join separator ? ' '
-
-  # ### slice
-  #
-  # Iterate over a specific portion of a list.
-  #
-  #     # items 1 thru 6
-  #     {{#slice item offset="1" limit="5"}}{{name}}{{/slice}}#
-  #     # items 0 thru 9
-  #     {{#slice items limit="10"}}{{name}}{{/slice}}
-  #     # items 3 thru context.length
-  #     {{#slice items offset="3"}}{{name}}{{/slice}}
-  slice: ->
-    {args, hash, data, fn} = argParse arguments
-    [obj, offset, limit] = args
-    return obj unless typeof obj is 'object'
-    offset ?= hash.offset ? 0
-    limit ?= hash.limit ? obj.length - offset
-    obj = obj[offset..limit]
-    data = handlebars.createFrame obj if data
-    fn data
-#    # work on each
-#    data = handlebars.createFrame data if data
-#    ret = ''
-#    it = (value, index, last) ->
-#    if Array.isArray obj
-#      it v, i, i is obj.length - 1 for v, i in obj
-#    else
-#      keys = Object.keys obj
-#      it obj[k], k, i is keys.length - 1 for k, i in keys
-##      blockParams: [context[field], field]
-#    #array[options.offset..options.limit]
 
 # register helper
 for key, fn of helper
