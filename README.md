@@ -1255,6 +1255,14 @@ Parameter:
 
 Examples:
 
+    x = '1234567mm'
+    {{unitFormat x}}            # 1.23 km
+
+    x = 1234567
+    {{unitFormat x "mm"}}       # 1.23 km
+    {{unitFormat x "mm" "km"}}  # 1.23 km
+    {{unitFormat x "mm" "m"}}   # 1230 m
+    {{unitFormat x "mm" "m" 4}} # 1235 m
 
 ### hostname
 
