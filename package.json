@@ -34,22 +34,22 @@
   "dependencies": {
     "alinex-async": "^1.0.0",
     "alinex-fs": "^2.0.0",
-    "alinex-util": "^1.0.0",
+    "alinex-util": "^1.1.0",
     "chalk": "^1.1.1",
-    "chrono-node": "^1.1.3",
+    "chrono-node": "^1.1.5",
     "debug": "^2.2.0",
     "handlebars": "^4.0.5",
     "ipaddr.js": "1.x",
-    "js-yaml": "^3.5.3",
+    "js-yaml": "^3.5.5",
     "mathjs": "^3.0.0",
-    "moment": "^2.11.2",
+    "moment": "^2.12.0",
     "request": "^2.69.0",
     "swag": "^0.7.0",
     "xml2js": "^0.4.16"
   },
   "optionalDependencies": {},
   "devDependencies": {
-    "alinex-builder": "^1.1.16",
+    "alinex-builder": "^1.2.4",
     "chai": "3.x",
     "chai-datetime": "^1.4.1"
   },
