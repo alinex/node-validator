@@ -39,7 +39,41 @@ describe "Handlebars", ->
     it "should fail on other objects", (cb) ->
       test.fail schema, [null, [], (new Error '????'), {}], cb
 
-  describe "helper", ->
+  describe.only "helper", ->
+
+    it "should allow is blocks", (cb) ->
+      test.function schema, [
+        # is
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: true}, ' 1 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: 'd'}, ' 1 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: 1}, ' 1 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: false}, ' 2 ']
+        ['{{#is y}} 1 {{else}} 2 {{/is}}', {x: true}, ' 2 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: ''}, ' 2 ']
+        # equal
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 1}, ' 1 ']
+        ['{{#is x "==" y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 1}, ' 1 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 2}, ' 2 ']
+        ['{{#is x "==" y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 2}, ' 2 ']
+        ['{{#is x "not" y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 1}, ' 2 ']
+        ['{{#is x "!=" y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 1}, ' 2 ']
+        ['{{#is x "not" y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 2}, ' 1 ']
+        ['{{#is x "!=" y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 2}, ' 1 ']
+        # numbers
+        ['{{#is x ">" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: 1}, ' 1 ']
+        ['{{#is x ">=" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: 2}, ' 1 ']
+        ['{{#is x "<" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: 3}, ' 1 ']
+        ['{{#is x "<=" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: 2}, ' 1 ']
+        ['{{#is x ">" y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 2}, ' 2 ']
+        ['{{#is x ">=" y}} 1 {{else}} 2 {{/is}}', {x: 1, y: 2}, ' 2 ']
+        ['{{#is x "<" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: 2}, ' 2 ']
+        ['{{#is x "<=" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: 1}, ' 2 ']
+        # in
+        ['{{#is x "in" y}} 1 {{else}} 2 {{/is}}', {x: '2', y: '1,2,3,4'}, ' 1 ']
+        ['{{#is x "in" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: [1, 2, 3, 4]}, ' 1 ']
+        ['{{#is x "in" y}} 1 {{else}} 2 {{/is}}', {x: '6', y: '1,2,3,4'}, ' 2 ']
+        ['{{#is x "in" y}} 1 {{else}} 2 {{/is}}', {x: 6, y: [1, 2, 3, 4]}, ' 2 ']
+      ], cb
 
     it "should format dates", (cb) ->
       context =
@@ -76,6 +110,19 @@ describe "Handlebars", ->
         ['{{join list}}', context, '1 2 3']
         ['{{join list ", "}}', context, '1, 2, 3']
       ], cb
+
+    it.skip "should slice arrays", (cb) ->
+      context =
+        list: [1, 2, 3, 4, 5, 6]
+      test.function schema, [
+        ['{{#slice list 1 5 offset="3"}}{{this}}{{/slice}}', context, '2 3 4 5 6 ']
+      ], cb
+  #     # items 1 thru 6
+  #     {{#slice list offset="1" limit="5"}}{{this}}{{/slice}}#
+  #     # items 0 thru 9
+  #     {{#slice items limit="10"}}{{name}}{{/slice}}
+  #     # items 3 thru context.length
+  #     {{#slice items offset="3"}}{{name}}{{/slice}}
 
   describe "description", ->
 

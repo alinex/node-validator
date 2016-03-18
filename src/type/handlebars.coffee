@@ -22,7 +22,46 @@ check = require '../check'
 # -------------------------------------------------
 # Find more at https://github.com/assemble/handlebars-helpers/tree/master/lib/helpers
 
+# ### Get arguments
+# - name - name of the function
+# - args - the normal parameters
+# - hash - named parameters
+# - fn - content function in block helpers
+# - inverse - else part of block helpers
+# - data - current context
+
+argParse = (args) ->
+  args = [].slice.call(args)
+  options = args[args.length-1]
+  options.args = args[0..-2]
+  options
+
 helper =
+
+  # ### is
+  is: ->
+    {args, fn, inverse, data} = argParse arguments
+    if args.length is 2
+      [left, right] = args
+      operator = '=='
+    else
+      [left, operator, right] = args
+    # call comparison
+    result = switch operator
+      when '>' then left > right
+      when '<' then left < right
+      when '>=' then left >= right
+      when '<=' then left <= right
+      when '==' then left is right
+      when 'not' then left isnt right
+      when '!=' then left isnt right
+      when 'in'
+        right = right.split /\s*,\s*/ unless Array.isArray right
+        ~right.indexOf left
+      else left
+    # execute content or else part
+    if result then fn data else inverse data
+
 
   # ### dateFormat
   #
@@ -37,12 +76,13 @@ helper =
   #     {{#dateFormat "LL"}}2016-01-18{{/dateFormat}}
   #     # January 18, 2016
   dateFormat: ->
-    args = [].slice.call(arguments)
-    if args[args.length-1].fn
-      date = args[args.length-1].fn this
-      format = args[0]
+    {args, fn} = argParse arguments
+    if fn
+      date = fn this
+      [format] = args
     else
-      [date, format] = args[0..-2]
+      [date, format] = args
+    # format date
     moment(new Date date).format format ? 'MMM Do, YYYY'
 
   # ### dateAdd
@@ -53,12 +93,13 @@ helper =
   #     {{dateAdd date 1 "month"}}
   #     {{#dateAdd 1 "month"}}2016-01-18{{/dateAdd}}
   dateAdd: ->
-    args = [].slice.call(arguments)
-    if args[args.length-1].fn
-      date = args[args.length-1].fn this
-      [count, interval] = args[0..-2]
+    {args, fn} = argParse arguments
+    if fn
+      date = fn this
+      [count, interval] = args
     else
-      [date, count, interval] = args[0..-2]
+      [date, count, interval] = args
+    # calculate date
     m = moment(new Date date).add count, interval
     m.toDate()
 
@@ -73,14 +114,45 @@ helper =
   #     {{join array ", "}}
   #     # '1, 2, 3'
   join: ->
-    args = [].slice.call(arguments)
-    [array, separator] = args[0..-2]
+    {args} = argParse arguments
+    [array, separator] = args
+    # run the join
     array.join separator ? ' '
+
+  # ### slice
+  #
+  # Iterate over a specific portion of a list.
+  #
+  #     # items 1 thru 6
+  #     {{#slice item offset="1" limit="5"}}{{name}}{{/slice}}#
+  #     # items 0 thru 9
+  #     {{#slice items limit="10"}}{{name}}{{/slice}}
+  #     # items 3 thru context.length
+  #     {{#slice items offset="3"}}{{name}}{{/slice}}
+  slice: ->
+    {args, hash, data, fn} = argParse arguments
+    [obj, offset, limit] = args
+    return obj unless typeof obj is 'object'
+    offset ?= hash.offset ? 0
+    limit ?= hash.limit ? obj.length - offset
+    obj = obj[offset..limit]
+    data = handlebars.createFrame obj if data
+    fn data
+#    # work on each
+#    data = handlebars.createFrame data if data
+#    ret = ''
+#    it = (value, index, last) ->
+#    if Array.isArray obj
+#      it v, i, i is obj.length - 1 for v, i in obj
+#    else
+#      keys = Object.keys obj
+#      it obj[k], k, i is keys.length - 1 for k, i in keys
+##      blockParams: [context[field], field]
+#    #array[options.offset..options.limit]
 
 # register helper
 for key, fn of helper
   handlebars.registerHelper key, fn
-
 
 # Type implementation
 # -------------------------------------------------

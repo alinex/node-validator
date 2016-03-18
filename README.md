@@ -1181,6 +1181,28 @@ validator.check
 
 You can also use the some of the additional helpers:
 
+**is**
+
+Given one argument, is acts exactly like `if`:
+
+    {{#is x}} ... {{else}} ... {{/is}}
+
+Given two arguments, `is` compares the two are equal:
+
+    {{#is x y}} ... {{else}} ... {{/is}}
+
+Given three arguments, the second argument becomes the comparator:
+
+    {{#is x "not" y}} ... {{else}} ... {{/is}}
+    {{#is 5 ">=" 2}} ... {{else}} ... {{/is}}
+
+The following comparators are supported:
+
+- `==` or (no comparator) - equality checking
+- `!=` or `not` - not equal
+- `>`, `>=`, `<`, `<=` - greater/less number operators
+- `in` - check a value exists in either a comma-separated string or an array
+
 **dateFormat**
 
 Parameter:
