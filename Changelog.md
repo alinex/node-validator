@@ -4,6 +4,15 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.4.0 (2016-03-18)
+-------------------------------------------------
+- Upgrade yaml, chrono, moment, mathjs and builder.
+- Added unitFormat handlebars helper.
+- Added swag handlebars helpers.
+- Restructure handlebars helper and add is block.
+- Fixed typo error.
+- Update link to handlebars syntax page.
+
 Version 1.3.2 (2016-03-16)
 -------------------------------------------------
 - Upgraded mathjs and node-util.
