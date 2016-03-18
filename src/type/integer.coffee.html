@@ -386,7 +386,7 @@ min/max</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.min? <span class="hljs-keyword">and</span> value &lt; work.pos.min
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value is to low, it has to be at least
+    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value is too low, it has to be at least
 </span></pre>
         </td>
       </tr>
@@ -401,7 +401,7 @@ min/max</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.max? <span class="hljs-keyword">and</span> value &gt; work.pos.max
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value is to high, it has to be'<span class="hljs-subst">#{work.pos.max}</span>'
+    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value is too high, it has to be'<span class="hljs-subst">#{work.pos.max}</span>'
       or lower"</span>), cb</pre>
         </td>
       </tr>

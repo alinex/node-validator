@@ -1305,8 +1305,8 @@ p, pipe, fifo, s, socket</li>
 handlebars
   </h3>
 </div>
-<p>You may also add a text which may contain <a href="http://handlebarsjs.com/">handlebars</a>
-syntax. This will be compiled into a function which if called with the context
+<p>You may also add a text which may contain <a href="http://alinex.github.io/develop/lang/handlebars.html">handlebars syntax</a>
+This will be compiled into a function which if called with the context
 object will return the resulting text.</p>
 <pre><code class="coffee">validator.check
   <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
@@ -1319,7 +1319,30 @@ object will return the resulting text.</p>
     <span class="hljs-attribute">name</span>: <span class="hljs-string">'alex'</span>
   <span class="hljs-comment"># this will output 'hello alex'</span>
 </code></pre>
-<p>You can also use the some of the additional helpers:</p>
+<p>Within the handlebars templates you may use:</p>
+<ul>
+<li><a href="http://alinex.github.io/develop/lang/handlebars.html#built-in-helpers">builtin helpers</a></li>
+<li><a href="http://elving.github.io/swag/">swag helpers</a></li>
+<li>or the following special ones</li>
+</ul>
+<p><strong>is</strong></p>
+<p>Given one argument, is acts exactly like <code>if</code>:</p>
+<pre><code>{{#is x}} ... {{else}} ... {{/is}}
+</code></pre>
+<p>Given two arguments, <code>is</code> compares the two are equal:</p>
+<pre><code>{{#is x y}} ... {{else}} ... {{/is}}
+</code></pre>
+<p>Given three arguments, the second argument becomes the comparator:</p>
+<pre><code>{{#is x &quot;not&quot; y}} ... {{else}} ... {{/is}}
+{{#is 5 &quot;&gt;=&quot; 2}} ... {{else}} ... {{/is}}
+</code></pre>
+<p>The following comparators are supported:</p>
+<ul>
+<li><code>==</code> or (no comparator) - equality checking</li>
+<li><code>!=</code> or <code>not</code> - not equal</li>
+<li><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code> - greater/less number operators</li>
+<li><code>in</code> - check a value exists in either a comma-separated string or an array</li>
+</ul>
 <p><strong>dateFormat</strong></p>
 <p>Parameter:</p>
 <ul>
@@ -1349,20 +1372,16 @@ other locale before executing the handlebars template.</p>
 <pre><code>{{#dateFormat &quot;LL&quot;}}{{dateAdd date 1 &quot;month&quot;}}{{/dateFormat}}
 # February 23, 1974
 </code></pre>
-<p><strong>join</strong></p>
-<p>Joins all elements of a collection into a string using a separator if specified.</p>
+<p><strong>unitFormat</strong></p>
+<p>Formats a value with unit.</p>
 <p>Parameter:</p>
 <ul>
-<li>array - list to join</li>
-<li>separator - phrase to use as separator</li>
+<li>number - as numeric value or string with unit</li>
+<li>unit - the numeric value is given</li>
+<li>toUnit - unit to use</li>
+<li>precision - numeric value 1..</li>
 </ul>
 <p>Examples:</p>
-<pre><code>array = [1, 2, 3]
-{{join array}}
-# '1 2 3'
-{{join array &quot;, &quot;}}
-# '1, 2, 3'
-</code></pre>
 <div class="pilwrap" id="hostname">
   <h3>
     <a href="#hostname" name="hostname" class="pilcrow"></a>
