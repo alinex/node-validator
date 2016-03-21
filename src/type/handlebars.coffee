@@ -55,8 +55,9 @@ helper =
     else
       [left, operator, right] = args
     # use count of entries for array
-    left = Object.keys left if typeof left is 'object'
-    left = left.length if left?.length?
+    if typeof left is 'object'
+      left = Object.keys left
+      left = left.length if typeof left is 'object'
     # call comparison
     result = switch operator
       when '>' then left > right

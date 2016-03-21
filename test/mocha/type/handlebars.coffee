@@ -39,7 +39,7 @@ describe "Handlebars", ->
     it "should fail on other objects", (cb) ->
       test.fail schema, [null, [], (new Error '????'), {}], cb
 
-  describe "helper", ->
+  describe.only "helper", ->
 
     it "should allow is blocks", (cb) ->
       test.function schema, [
