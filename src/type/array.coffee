@@ -23,7 +23,7 @@ debug = require('debug')('validator:array')
 util = require 'util'
 chalk = require 'chalk'
 # alinex modules
-object = require('alinex-util').object
+{object, string} = require 'alinex-util'
 async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
@@ -83,7 +83,7 @@ exports.run = (work, cb) ->
   value = work.value
   # string to array
   if typeof value is 'string' and work.pos.delimiter?
-    work.value = value = value.split work.pos.delimiter
+    work.value = value = value.split string.toRegExp work.pos.delimiter
   if work.pos.toArray and not Array.isArray value
     work.value = value = [value]
   # is array
