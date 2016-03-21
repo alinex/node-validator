@@ -4,6 +4,15 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.4.1 (2016-03-21)
+-------------------------------------------------
+- Reenable all tests.
+- Fixed handlebars is differentiaating between object and not object.
+- Fixed bug in handlebars helper on not objects.
+- Upgraded chrono and mathjs.
+- Make handlebars is operatoor work on array/object size.
+- Add examples.
+
 Version 1.4.0 (2016-03-18)
 -------------------------------------------------
 - Upgrade yaml, chrono, moment, mathjs and builder.
