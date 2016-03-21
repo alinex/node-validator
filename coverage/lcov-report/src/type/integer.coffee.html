@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/type/integer.coffee</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">src/type/</a> integer.coffee
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>134/134</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>54/54</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/3</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>81/81</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">21×</span>
+<span class="cline-any cline-yes">61×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">220×</span>
+<span class="cline-any cline-yes">220×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">220×</span>
+<span class="cline-any cline-yes">220×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-yes">18×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">197×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">197×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">197×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">197×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">12×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">197×</span>
+<span class="cline-any cline-yes">33×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">164×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">160×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">153×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">148×</span>
+<span class="cline-any cline-yes">148×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"># Integer validator
+# =================================================
+&nbsp;
+# Sanitize options allowed:
+#
+# - `sanitize` - (bool) remove invalid characters
+# - `unit` - (string) unit to convert to if no number is given
+# - `round` - (bool) rounding of float can be set to true for arithmetic rounding
+#   or use `floor` or `ceil` for the corresponding methods
+#
+# Check options:
+#
+# - `min` - (integer) the smalles allowed number
+# - `max` - (integer) the biggest allowed number
+# - `inttype` - (integer|string) the integer is of given type
+#   (4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')
+# - `unsigned` - (bool) the integer has to be positive
+&nbsp;
+# Node modules
+# -------------------------------------------------
+debug = require('debug')('validator:integer')
+util = require 'util'
+chalk = require 'chalk'
+math = require 'mathjs'
+# alinex modules
+object = require('alinex-util').object
+# include classes and helper
+check = require '../check'
+&nbsp;
+# integer type names
+# -------------------------------------------------
+integerTypes =
+  byte: 8
+  short: 16
+  long: 32
+  safe: 53
+  quad: 64
+&nbsp;
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) -&gt;
+  # combine into message
+  text = "An integer value. "
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  if work.pos.sanitize
+    text += "Invalid characters will be removed from text. "
+  # round
+  if work.pos.round
+    type = switch work.pos.round
+      when 'ceil' then 'to ceil'
+      when 'floor' then 'to floor'
+      else 'arithḿetic'
+    text += "The value will be rounded #{type} to an integer. "
+  # integer type
+  max = min = null
+  if work.pos.inttype?
+    type = integerTypes[work.pos.inttype] ? work.pos.inttype
+    unsigned = if work.pos.unsigned then 'an unsigned' else 'a signed'
+    text += "Only values in the range of #{unsigned} #{work.pos.inttype}#{type}-integer
+      are allowed. "
+    unsigned = if work.pos.unsigned then 1 else 0
+    max = (Math.pow 2, type-1+unsigned)-1
+    min = (unsigned-1) * max - 1 + unsigned
+  # minmax
+  min = work.pos.min if work.pos.min? and (not min? or work.pos.min&gt;min)
+  max = work.pos.max if work.pos.max? and (not max? or work.pos.max&lt;max)
+  if min? and max?
+    text += "The value should be between #{min} and #{max}. "
+  else if min?
+    text += "The value should be greater than #{min}. "
+  else if max?
+    text += "The value should be lower than #{max}. "
+  cb null, text
+&nbsp;
+exports.run = (work, cb) -&gt;
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    if check.optional.run work
+      debug "#{work.debug} result #{util.inspect value ? null}"
+      return cb()
+  catch error
+    return work.report error, cb
+  value = work.value
+  # convert units
+  if work.pos.unit?
+    if typeof value is 'number' or (typeof value is 'string' and value.match /\d$/)
+      value = "" + value + work.pos.unit
+    value = math.unit value
+    value = value.toNumber work.pos.unit
+  # sanitize string
+  if typeof value is 'string'
+    if work.pos.sanitize
+      if work.pos.round?
+        value = value.replace /^.*?([-+]?\d+\.?\d*).*?$/, '$1'
+      else
+        value = value.replace /^.*?([-+]?\d+).*?$/, '$1'
+    if value.length
+      value = Number value
+  # round
+  if work.pos.round
+    value = switch work.pos.round
+      when 'ceil' then Math.ceil value
+      when 'floor' then Math.floor value
+      else Math.round value
+  # check integer
+  unless value is (value | 0)
+    return work.report (new Error "The given value '#{work.value}' is no integer
+      as needed"), cb
+  # integer type
+  if work.pos.inttype
+    type = integerTypes[work.pos.inttype] ? work.pos.inttype
+    unsigned = if work.pos.unsigned then 1 else 0
+    max = (Math.pow 2, type-1+unsigned)-1
+    min = (unsigned-1) * max - 1 + unsigned
+    if value &lt; min or value &gt; max
+      return work.report (new Error "The value is out of range for
+      #{work.pos.inttype}#{type}-integer"), cb
+  # min/max
+  if work.pos.min? and value &lt; work.pos.min
+    return work.report (new Error "The value is too low, it has to be at least
+      #{work.pos.min}"), cb
+  if work.pos.max? and value &gt; work.pos.max
+    return work.report (new Error "The value is too high, it has to be'#{work.pos.max}'
+      or lower"), cb
+  # done return resulting value
+  debug "#{work.debug} result #{util.inspect value ? null}"
+  cb null, value
+&nbsp;
+exports.selfcheck = (schema, cb) -&gt;
+  check.run
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: object.extend {}, check.base,
+        default:
+          type: 'integer'
+          optional: true
+        sanitize:
+          type: 'boolean'
+          optional: true
+        unit:
+          type: 'string'
+          optional: true
+          minLength: 1
+        round:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['floor', 'ceil']
+          ]
+        min:
+          type: 'integer'
+        max:
+          type: 'integer'
+          min: '&lt;&lt;&lt;min&gt;&gt;&gt;'
+        inttype:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'integer'
+          ,
+            type: 'string'
+            values: ['byte', 'short', 'long', 'quad', 'safe']
+          ]
+        unsigned:
+          type: 'boolean'
+          optional: true
+    value: schema
+  , cb
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Mar 21 2016 08:56:37 GMT+0100 (CET)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

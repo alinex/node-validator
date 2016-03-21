@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/type/string.coffee</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">src/type/</a> string.coffee
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">98.76% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>239/242</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">96.61% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>114/118</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/3</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">98.09% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>154/157</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">234×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">228×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">38×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">38×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">38×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">160×</span>
+<span class="cline-any cline-yes">160×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">157×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">235×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">534×</span>
+<span class="cline-any cline-yes">534×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">534×</span>
+<span class="cline-any cline-yes">534×</span>
+<span class="cline-any cline-yes">63×</span>
+<span class="cline-any cline-yes">63×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">468×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">468×</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-yes">468×</span>
+<span class="cline-any cline-yes">135×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">332×</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">26×</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">10×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-yes">17×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">333×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">331×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">330×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">24×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">327×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">325×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">323×</span>
+<span class="cline-any cline-yes">89×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">85×</span>
+<span class="cline-any cline-yes">83×</span>
+<span class="cline-any cline-yes">31×</span>
+<span class="cline-any cline-yes">31×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">288×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">285×</span>
+<span class="cline-any cline-yes">285×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"># String value validation
+# =================================================
+&nbsp;
+# Sanitize options allowed:
+#
+# - `tostring` - convert objects to string, first
+# - `allowControls` - keep control characters in string instead of
+#   stripping them (but keep \\r\\n)
+# - `stripTags` - remove all html tags
+# - `lowerCase` - set to `true` or `first`
+# - `upperCase` - set to `true` or `first`
+# - `replace` - replacements (list): string (only single replacement) or
+#   regular expressions and replacements as inner array
+# - `trim` - strip whitespace from the beginning and end
+# - `crop` - crop text after number of characters
+#
+# Check options:
+#
+# - `optional` - the value must not be present (will return null)
+# - `minLength` - minimum text length in characters
+# - `maxLength` - maximum text length in characters
+# - `values` - array of possible values (complete text)
+# - `startsWith` - start of text
+# - `endsWith` - end of text
+# - `match` - string or regular expression which have to be matched
+#   (or list of expressions)
+# - `matchNot` - string or regular expression which is not allowed to
+#   match (or list of expressions)
+&nbsp;
+# Node modules
+# -------------------------------------------------
+debug = require('debug')('validator:string')
+util = require 'util'
+chalk = require 'chalk'
+# alinex modules
+object = require('alinex-util').object
+# include classes and helper
+check = require '../check'
+&nbsp;
+# Type implementation
+# -------------------------------------------------
+exports.describe = (work, cb) -&gt;
+  text = 'A text entry. '
+  text += check.optional.describe work
+  text = text.replace /\. It's/, ' which is'
+  if typeof work.pos.toString is 'boolean' and work.pos.toString
+    text += "Objects will be converted to their string representation. "
+  # remove characters
+  remove = []
+  remove.push "Control characters" unless work.pos.allowControls
+  remove.push "HTML Tags" if work.pos.stripTags
+  <span class="missing-if-branch" title="else path not taken" >E</span>text += "#{remove.join ', '} will be removed. " if remove.length
+  # upper/lowercase
+  if work.pos.lowerCase? and work.pos.lowerCase is true
+    text += "The text will get lower case. "
+  if work.pos.upperCase? and work.pos.upperCase is true
+    text += "The text will get upper case. "
+  if work.pos.lowerCase? and work.pos.lowerCase is 'first'
+    text += "The first letter will get lower case. "
+  if work.pos.upperCase? and work.pos.upperCase is 'first'
+    text += "The first letter will get upper case. "
+  # replacements
+  if work.pos.replace?
+    text += "The following replacements will take place: "
+    if Array.isArray work.pos.replace[0]
+      for [pattern, replace] in work.pos.replace
+        text += "#{pattern} =&gt; '#{replace}', "
+      text = text.replace /, $/, '. '
+    else
+      [pattern, replace] = work.pos.replace
+      text += "#{pattern} =&gt; '#{replace}'. "
+  # trim and crop
+  if work.pos.trim
+    text += "Whitespace will be removed at start and end of the text. "
+  if work.pos.crop?
+    text += "The text will be cropped after #{work.pos.crop} characters. "
+  # string length
+  if work.pos.minLength? and work.pos.maxLength?
+    text += "It has to be between #{work.pos.minLength} and #{work.pos.maxLength}
+    characters long. "
+  else if work.pos.minLength?
+    text += "It has to be at least #{work.pos.minLength} characters long. "
+  else if work.pos.maxLength?
+    text += "It has to be not more than #{work.pos.maxLength} characters long. "
+  # specific values
+  if list = work.pos.values
+    <span class="missing-if-branch" title="if path not taken" >I</span>if typeof list is 'string'
+<span class="cstat-no" title="statement not covered" >      list = list.split /,\s*/</span>
+    else <span class="missing-if-branch" title="if path not taken" >I</span>if typeof list is 'object' and not Array.isArray list
+<span class="cstat-no" title="statement not covered" >      list = Object.keys list</span>
+    text += "Only the values: #{list} are allowed. "
+  # matching
+  if work.pos.startsWith?
+    text += "It has to start with #{work.pos.startsWith}... "
+  if work.pos.endsWith?
+    text += "It has to end with ...#{work.pos.endsWith}. "
+  if work.pos.match?
+    text += "The text should match: "
+    if Array.isArray work.pos.match
+      for entry in work.pos.match
+        text += "#{entry}, "
+      text = text.replace /, $/, '. '
+    else
+      text += "#{work.pos.match}. "
+  if work.pos.matchNot?
+    text += "The text shouldn't match: "
+    if Array.isArray work.pos.matchNot
+      for entry in work.pos.matchNot
+        text += "#{entry}, "
+      text = text.replace /, $/, '. '
+    else
+      text += "#{work.pos.matchNot}. "
+  cb null, text
+&nbsp;
+exports.run = (work, cb) -&gt;
+  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
+  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+  # base checks
+  try
+    if check.optional.run work
+      debug "#{work.debug} result #{util.inspect value ? null}"
+      return cb()
+  catch error
+    return work.report error, cb
+  value = work.value
+  # first check input type
+  if work.pos.toString and typeof work.pos.toString isnt 'function'
+    value = value.toString()
+  unless typeof value is 'string'
+    return work.report (new Error "A string is needed but got #{typeof value} instead"), cb
+  # sanitize
+  unless work.pos.allowControls
+    value = value.replace /[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/g, ''
+  if work.pos.stripTags
+    value = value.replace /&lt;\/?[^&gt;]+(&gt;|$)/g, ''
+  # upper/lowercase
+  if work.pos.lowerCase? and work.pos.lowerCase is true
+    value = value.toLowerCase()
+  if work.pos.upperCase? and work.pos.upperCase is true
+    value = value.toUpperCase()
+  if work.pos.lowerCase? and work.pos.lowerCase is 'first'
+    value = value.charAt(0).toLowerCase() + value[1..]
+  if work.pos.upperCase? and work.pos.upperCase is 'first'
+    value = value.charAt(0).toUpperCase() + value[1..]
+  # replacements
+  if work.pos.replace?
+    if Array.isArray work.pos.replace[0]
+      for [pattern, replace] in work.pos.replace
+        value = value.replace pattern, replace
+    else
+      [pattern, replace] = work.pos.replace
+      value = value.replace pattern, replace
+  # trim and crop
+  if work.pos.trim
+    value = value.trim()
+  if work.pos.crop?
+    value = value.substring 0, work.pos.crop
+  # string length
+  if work.pos.minLength? and value.length &lt; work.pos.minLength
+    return work.report (new Error "The given string '#{value}' is too short at least
+    #{work.pos.minLength} characters are needed"), cb
+  if work.pos.maxLength? and value.length &gt; work.pos.maxLength
+    return work.report (new Error "The given string '#{value}' is too long for
+      at least #{work.pos.maxLength} characters are allowed"), cb
+  # specific values
+  if list = work.pos.values
+    <span class="missing-if-branch" title="if path not taken" >I</span>if typeof list is 'string'
+<span class="cstat-no" title="statement not covered" >      list = list.split /,\s*/</span>
+    else if typeof list is 'object' and not Array.isArray list
+      list = Object.keys list
+    unless Array.isArray(list) and value in list
+      return work.report (new Error "The given string '#{value}' is not in the list of
+        allowed phrases (#{list})"), cb
+  if work.pos.startsWith? and value[..work.pos.startsWith.length-1] isnt work.pos.startsWith
+    return work.report (new Error "The given string '#{value}' should start with
+    '#{work.pos.startsWith}'"), cb
+  if work.pos.endsWith? and value[value.length - work.pos.endsWith.length..] isnt work.pos.endsWith
+    return work.report (new Error "The given string '#{value}' should end with
+    '#{work.pos.endsWith}'"), cb
+  # matching
+  if work.pos.match?
+    if Array.isArray work.pos.match
+      success = true
+      for match in work.pos.match
+        match = new RegExp match unless match instanceof RegExp
+        success = success and value.match match
+      unless success
+        return work.report (new Error "The given string '#{value}' should match
+        against '#{work.pos.match}'"), cb
+    else if work.pos.match instanceof RegExp
+      unless value.match work.pos.match
+        return work.report (new Error "The given string '#{value}' should match
+        against '#{work.pos.match}'"), cb
+    else if not ~value.indexOf work.pos.match
+      return work.report (new Error "The given string '#{value}' should contain
+      '#{work.pos.match}'"), cb
+  if work.pos.matchNot?
+    if Array.isArray work.pos.matchNot
+      success = true
+      for match in work.pos.matchNot
+        match = new RegExp match unless match instanceof RegExp
+        success = success and not value.match match
+      unless success
+        return work.report (new Error "The given string '#{value}' shouldn't match
+        against '#{work.pos.match}'"), cb
+    else if work.pos.matchNot instanceof RegExp
+      if value.match work.pos.matchNot
+        return work.report (new Error "The given string '#{value}' shouldn't match
+        against '#{work.pos.matchNot}'"), cb
+    else if ~value.indexOf work.pos.matchNot
+      return work.report (new Error "The given string '#{value}' shouldn't contain
+      '#{work.pos.matchNot}'"), cb
+  # done return resulting value
+  debug "#{work.debug} result #{util.inspect value ? null}"
+  cb null, value
+&nbsp;
+exports.selfcheck = (schema, cb) -&gt;
+  check.run
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: object.extend {}, check.base,
+        default:
+          type: 'string'
+          optional: true
+        toString:
+          type: 'boolean'
+          optional: true
+        allowControls:
+          type: 'boolean'
+          optional: true
+        stripTags:
+          type: 'boolean'
+          optional: true
+        lowerCase:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['first']
+          ]
+        upperCase:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'boolean'
+          ,
+            type: 'string'
+            values: ['first']
+          ]
+        replace:
+          type: 'or'
+          or: [
+            type: 'array'
+            list:
+              0:
+                type: 'object'
+                instanceOf: RegExp
+              1:
+                type: 'string'
+          ,
+            type: 'array'
+            entries:
+              type: 'array'
+              list:
+                0:
+                  type: 'object'
+                  instanceOf: RegExp
+                1:
+                  type: 'string'
+          ]
+        trim:
+          type: 'boolean'
+          optional: true
+        crop:
+          type: 'integer'
+          optional: true
+          min: 1
+        minLength:
+          type: 'integer'
+          optional: true
+          min: 0
+        maxLength:
+          type: 'integer'
+          optional: true
+          min: '&lt;&lt;&lt;min&gt;&gt;&gt;'
+        values:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'array'
+            entries:
+              type: 'string'
+          ,
+            type: 'object'
+          ,
+            type: 'string'
+          ]
+        startsWith:
+          type: 'string'
+          optional: true
+        endsWith:
+          type: 'string'
+          optional: true
+        match:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'string'
+          ,
+            type: 'object'
+            instanceOf: RegExp
+          ]
+        matchNot:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'string'
+          ,
+            type: 'object'
+            instanceOf: RegExp
+          ]
+    value: schema
+  , cb
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Mar 21 2016 08:56:37 GMT+0100 (CET)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
