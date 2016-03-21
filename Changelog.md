@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.4.2 (2016-03-21)
+-------------------------------------------------
+- Upgrade utils.
+
 Version 1.4.1 (2016-03-21)
 -------------------------------------------------
 - Reenable all tests.
