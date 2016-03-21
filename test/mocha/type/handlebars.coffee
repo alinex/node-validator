@@ -75,6 +75,31 @@ describe "Handlebars", ->
         ['{{#is x "in" y}} 1 {{else}} 2 {{/is}}', {x: 6, y: [1, 2, 3, 4]}, ' 2 ']
       ], cb
 
+    it "should allow is blocks (on array/object)", (cb) ->
+      test.function schema, [
+        # array is
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: [1]}, ' 1 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: [9]}, ' 1 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: [9, 2]}, ' 1 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: []}, ' 2 ']
+        # array equal
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: [1], y: 1}, ' 1 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: [9], y: 1}, ' 1 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: [9, 2], y: 2}, ' 1 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: [], y: 1}, ' 2 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: [9, 2], y: 1}, ' 2 ']
+        # object is
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: {a: 1}}, ' 1 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: {a: 1, b: 2}}, ' 1 ']
+        ['{{#is x}} 1 {{else}} 2 {{/is}}', {x: {}}, ' 2 ']
+        # object equal
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: {a: 1}, y: 1}, ' 1 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: {a: 2}, y: 1}, ' 1 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: {a: 1, b: 2}, y: 2}, ' 1 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: {}, y: 1}, ' 2 ']
+        ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: {a: 1, b: 2}, y: 1}, ' 2 ']
+      ], cb
+
     it "should format dates", (cb) ->
       context =
         date: new Date('1974-01-23')
@@ -98,9 +123,12 @@ describe "Handlebars", ->
       context =
         date: new Date('1974-01-23')
       test.function schema, [
-        ['{{#dateFormat "LL"}}{{dateAdd date 1 "month"}}{{/dateFormat}}', context, 'February 23, 1974']
-        ['{{#dateFormat "LL"}}{{dateAdd date -1 "month"}}{{/dateFormat}}', context, 'December 23, 1973']
-        ['{{#dateFormat "LL"}}{{#dateAdd 1 "month"}}1974-01-23{{/dateAdd}}{{/dateFormat}}', context, 'February 23, 1974']
+        ['{{#dateFormat "LL"}}{{dateAdd date 1 "month"}}{{/dateFormat}}',
+        context, 'February 23, 1974']
+        ['{{#dateFormat "LL"}}{{dateAdd date -1 "month"}}{{/dateFormat}}',
+        context, 'December 23, 1973']
+        ['{{#dateFormat "LL"}}{{#dateAdd 1 "month"}}1974-01-23{{/dateAdd}}{{/dateFormat}}',
+        context, 'February 23, 1974']
       ], cb
 
     it "should allow unit format", (cb) ->

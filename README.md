@@ -1207,6 +1207,9 @@ The following comparators are supported:
 - `>`, `>=`, `<`, `<=` - greater/less number operators
 - `in` - check a value exists in either a comma-separated string or an array
 
+If you use this helper with an object or array as it's first parameter it will
+base the calculation on the number of entries.
+
 **dateFormat**
 
 Parameter:
