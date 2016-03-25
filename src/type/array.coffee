@@ -23,7 +23,7 @@ debug = require('debug')('validator:array')
 util = require 'util'
 chalk = require 'chalk'
 # alinex modules
-{object, string} = require 'alinex-util'
+{object, string, array} = require 'alinex-util'
 async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
@@ -39,6 +39,8 @@ exports.describe = (work, cb) ->
   if work.pos.delimiter?
     text += "You may also give a text or RegExp using '#{work.pos.delimiter}'
       as separator for the individual entries. "
+  if work.pos.unique?
+    text += "All values have to be unique. "
   if work.pos.minLength? and work.pos.maxLength?
     text += "The number of entries have to be between #{work.pos.minLength}
       and #{work.pos.maxLength}. "
@@ -89,6 +91,8 @@ exports.run = (work, cb) ->
   # is array
   unless Array.isArray value
     return work.report (new Error "The value has to be an array"), cb
+  if work.pos.unique
+    value = array.unique value
   # not empty
   if work.pos.notEmpty and value.length is 0
     return work.report (new Error "An empty array/list is not allowed"), cb
@@ -157,6 +161,9 @@ exports.selfcheck = (schema, cb) ->
         toArray:
           type: 'boolean'
           optional: true
+        unique:
+          type: 'boolean'
+          optional: true          
         notEmpty:
           type: 'boolean'
           optional: true

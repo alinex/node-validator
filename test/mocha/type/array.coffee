@@ -60,6 +60,15 @@ describe "Array", ->
         [[1, 2, 3], [1, 2, 3]]
       ], cb
 
+    it "should support unique option", (cb) ->
+      schema.unique = true
+      test.equal schema, [
+        [['123'], ['123']]
+        [[1, 5], [1, 5]]
+        [['123', '123'], ['123']]
+        [[1, 5, 1, 5], [1, 5]]
+      ], cb
+
     it "should support notEmpty option", (cb) ->
       schema.notEmpty = true
       test.same schema, [[1, 2, 3], ['one', 'two']], ->

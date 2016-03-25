@@ -769,6 +769,7 @@ __Sanitize options:__
 
 __Check options:__
 
+- `unique` - set to true to have only unique values
 - `notEmpty` - set to true if an empty array is not valid
 - `minLength` - minimum number of entries
 - `maxLength` - maximum number of entries
