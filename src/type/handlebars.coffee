@@ -43,6 +43,7 @@ argParse = (args) ->
   args = [].slice.call(args)
   options = args[args.length-1]
   options.args = args[0..-2]
+  options.data = options.data.root
   options
 
 helper =
