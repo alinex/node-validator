@@ -4,6 +4,12 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.4.3 (2016-03-31)
+-------------------------------------------------
+- Fixed bug in argument parsing for handlebar helpers.
+- Upgraded mathjs and util packages.
+- Added unique option for array.
+
 Version 1.4.2 (2016-03-21)
 -------------------------------------------------
 - Upgrade utils.
