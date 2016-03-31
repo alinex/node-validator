@@ -215,6 +215,7 @@ Get arguments
   args = [].slice.call(args)
   options = args[args.length-<span class="hljs-number">1</span>]
   options.args = args[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>]
+  options.data = options.data.root
   options
 
 helper =
