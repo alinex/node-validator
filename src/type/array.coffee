@@ -163,7 +163,7 @@ exports.selfcheck = (schema, cb) ->
           optional: true
         unique:
           type: 'boolean'
-          optional: true          
+          optional: true
         notEmpty:
           type: 'boolean'
           optional: true
