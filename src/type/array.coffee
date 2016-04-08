@@ -85,8 +85,9 @@ exports.run = (work, cb) ->
   value = work.value
   # string to array
   if typeof value is 'string' and work.pos.delimiter?
-    console.log 'delimiter', util.format string.toRegExp work.pos.delimiter
-    work.value = value = value.split string.toRegExp work.pos.delimiter
+    del = string.toRegExp work.pos.delimiter
+    debug "#{work.debug} use delimiter #{typeof del} #{util.inspect del}"
+    work.value = value = value.split del
   if work.pos.toArray and not Array.isArray value
     work.value = value = [value]
   # is array
