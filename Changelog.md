@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.4.4 (2016-04-08)
+-------------------------------------------------
+- Upgraded util, mathjs and request packages.
+- Remove unneccessary whitespace.
+
 Version 1.4.3 (2016-03-31)
 -------------------------------------------------
 - Fixed bug in argument parsing for handlebar helpers.
