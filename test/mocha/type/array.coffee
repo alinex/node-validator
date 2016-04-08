@@ -51,6 +51,20 @@ describe "Array", ->
         ['123', ['123']]
       ], cb
 
+    it "should support regexp delimiter option", (cb) ->
+      schema.delimiter = /\s*[, \t]\s*/
+      test.equal schema, [
+        ['1,2,3', ['1', '2', '3']]
+        ['123', ['123']]
+      ], cb
+
+    it "should support regexp as string delimiter option", (cb) ->
+      schema.delimiter = '/\\s*[, \t]\\s*/'
+      test.equal schema, [
+        ['1,2,3', ['1', '2', '3']]
+        ['123', ['123']]
+      ], cb
+
     it "should support toArray option", (cb) ->
       schema.toArray = ','
       test.equal schema, [
