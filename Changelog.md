@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.4.6 (2016-04-11)
+-------------------------------------------------
+- Updated documentation for datetime.
+- Fixed bug in date part with format.
+
 Version 1.4.5 (2016-04-08)
 -------------------------------------------------
 - Make delimiter output debug level.
