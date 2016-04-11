@@ -1115,14 +1115,15 @@ __Format options:__
 - `part` - 'date', 'time' or 'datetime'
 - `format` - how the output should be formatted
 
-__ Output formats__
+__Output formats__
 
 If not specified it is a Date object.
 
-If `format = 'unix'` it will be an unix timestamp (seconds since January 1,
-1970.
+If `format = 'unix'` it will be an unix timestamp (seconds since January 1, 1970).
 
-For all other format settings a corresponding output string will be generated.
+For all other format settings a corresponding output string will be generated. Use
+the aliases like ISO8601, RFC1123, RFC2822, RFC822, RFC1036 are supported and any
+[moment.js](http://momentjs.com/docs/#/displaying/) format.
 
 Also see the interval validator for time ranges without context.
 
