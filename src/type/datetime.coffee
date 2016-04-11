@@ -41,7 +41,8 @@ alias =
     RFC1036: 'ddd, D MMM YY HH:mm:ss ZZ'
 #    RFC850:  'dddd, D-MMM-ZZ HH:mm:ss Europe/Paris'
 #    COOKIE:  'Friday, 13-Feb-09 14:53:27 Europe/Paris'
-
+  date:
+    ISO8601: 'YYYY-MM-DD'
 
 
 # Optimize options setting
@@ -132,7 +133,7 @@ exports.run = (work, cb) ->
     # format value
     if work.pos.range?
       if work.pos.format?
-        if alias[work.pos.part][work.pos.format]?
+        if alias[work.pos.part]?[work.pos.format]?
           work.pos.format = alias[work.pos.part][work.pos.format]
         for p in [0, 1]
           m = moment value[p]
@@ -143,7 +144,7 @@ exports.run = (work, cb) ->
             else m.format work.pos.format
     else
       if work.pos.format?
-        if alias[work.pos.part][work.pos.format]?
+        if alias[work.pos.part]?[work.pos.format]?
           work.pos.format = alias[work.pos.part][work.pos.format]
         if work.pos.locale?
           m.locale work.pos.locale
