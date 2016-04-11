@@ -202,7 +202,8 @@ COOKIE:  'Friday, 13-Feb-09 14:53:27 Europe/Paris'</p>
 
         </td>
         <td class="code highlight">
-          
+          <pre class="coffeescript">  <span class="hljs-attribute">date</span>:
+    <span class="hljs-attribute">ISO8601</span>: <span class="hljs-string">'YYYY-MM-DD'</span></pre>
         </td>
       </tr>
     
@@ -439,7 +440,7 @@ console.log '??? ', work.value</p>
         <td class="code highlight">
           <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.range?
       <span class="hljs-keyword">if</span> work.pos.format?
-        <span class="hljs-keyword">if</span> alias[work.pos.part][work.pos.format]?
+        <span class="hljs-keyword">if</span> alias[work.pos.part]?[work.pos.format]?
           work.pos.format = alias[work.pos.part][work.pos.format]
         <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
           m = moment value[p]
@@ -450,7 +451,7 @@ console.log '??? ', work.value</p>
             <span class="hljs-keyword">else</span> m.format work.pos.format
     <span class="hljs-keyword">else</span>
       <span class="hljs-keyword">if</span> work.pos.format?
-        <span class="hljs-keyword">if</span> alias[work.pos.part][work.pos.format]?
+        <span class="hljs-keyword">if</span> alias[work.pos.part]?[work.pos.format]?
           work.pos.format = alias[work.pos.part][work.pos.format]
         <span class="hljs-keyword">if</span> work.pos.locale?
           m.locale work.pos.locale

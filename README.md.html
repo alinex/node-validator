@@ -1252,13 +1252,12 @@ all common formats:</p>
 <li><code>part</code> - 'date', 'time' or 'datetime'</li>
 <li><code>format</code> - how the output should be formatted</li>
 </ul>
-<p>__ Output formats__</p>
+<p><strong>Output formats</strong></p>
 <p>If not specified it is a Date object.</p>
-<p>If <code>format = 'unix'</code> it will be an unix timestamp (seconds since January 1,</p>
-<ol start="1970">
-<li></li>
-</ol>
-<p>For all other format settings a corresponding output string will be generated.</p>
+<p>If <code>format = 'unix'</code> it will be an unix timestamp (seconds since January 1, 1970).</p>
+<p>For all other format settings a corresponding output string will be generated. Use
+the aliases like ISO8601, RFC1123, RFC2822, RFC822, RFC1036 are supported and any
+<a href="http://momentjs.com/docs/#/displaying/">moment.js</a> format.</p>
 <p>Also see the interval validator for time ranges without context.</p>
 <div class="pilwrap" id="emails">
   <h3>
