@@ -179,5 +179,12 @@ exports.selfcheck = (schema, cb) ->
           part: '<<<part>>>'
           optional: true
           min: '<<<min>>>'
+        format:
+          type: 'string'
+          optional: true
+        locale:
+          type: 'string'
+          match: /^[a-z]{2}(-[A-Z]{2})?$/
+          optional: true
     value: schema
   , cb
