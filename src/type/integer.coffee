@@ -71,11 +71,10 @@ exports.describe = (work, cb) ->
     text += "The value should be greater than #{min}. "
   else if max?
     text += "The value should be lower than #{max}. "
+  if work.pos.toUnit
+    text += "The number will be formated in #{work.pos.toUnit}. "
   if work.pos.format
     text += "The number will be formatted like #{work.pos.format}. "
-  else if work.pos.toUnit
-    precision = work.pos.toPrecision ? 3
-    text += "The number will be formated in #{work.pos.toUnit} (precision #{precision}). "
   cb null, text
 
 exports.run = (work, cb) ->

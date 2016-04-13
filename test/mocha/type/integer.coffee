@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe.only "Integer", ->
+describe "Integer", ->
 
   schema = null
   beforeEach ->
@@ -141,7 +141,6 @@ describe.only "Integer", ->
       schema.toUnit = 'm'
       schema.locale = 'de'
       test.equal schema, [[123456, '123,5 km']], cb
-
 
   describe "description", ->
 

@@ -777,6 +777,12 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
+__Format options:__
+
+- `toUnit` - (string) unit used for output, my be combined with format and locale
+- `format` - (string) pattern how to format numbers (see [numeral.js](http://numeraljs.com))
+- `locale` - (string) locale to use in format like 'de'
+
 ### array
 
 __Sanitize options:__

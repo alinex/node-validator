@@ -84,6 +84,11 @@ describe "Float", ->
         schema.max = -2
         test.fail schema, [100, -1], cb
 
+    it "should support local format option", (cb) ->
+      schema.format = '0,0'
+      schema.locale = 'de'
+      test.equal schema, [[123456, '123 456']], cb
+
   describe "unit checks", ->
 
     it "should parse meters", (cb) ->
@@ -96,6 +101,21 @@ describe "Float", ->
         ['106cm', 1.06]
         ['10600mm', 10.6]
       ], cb
+
+    it "should support output unit option", (cb) ->
+      schema.toUnit = 'm'
+      test.equal schema, [[123456, '123.456 km']], cb
+
+    it "should support format option", (cb) ->
+      schema.format = '0.0'
+      schema.toUnit = 'm'
+      test.equal schema, [[123456, '123.5 km']], cb
+
+    it "should support local format option", (cb) ->
+      schema.format = '0.0'
+      schema.toUnit = 'm'
+      schema.locale = 'de'
+      test.equal schema, [[123456, '123,5 km']], cb
 
   describe "description", ->
 
@@ -114,6 +134,9 @@ describe "Float", ->
         decimals: 2
         min: 2
         max: 20
+        toUnit: 'm'
+        format: '0.0'
+        locale: 'de'
       , cb
 
   describe "selfcheck", ->
@@ -133,4 +156,7 @@ describe "Float", ->
         decimals: 2
         min: 2
         max: 20
+        toUnit: 'm'
+        format: '0.0'
+        locale: 'de'
       , cb
