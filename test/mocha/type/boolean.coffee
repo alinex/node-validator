@@ -79,6 +79,27 @@ describe "Boolean", ->
         expect(err, 'error').to.exist
         cb()
 
+  describe "options", ->
+
+    it "should support format option", (cb) ->
+      schema.format = [6, 9]
+      test.equal schema, [
+        ['true', 9]
+        ['1', 9]
+        ['on', 9]
+        ['yes', 9]
+        ['+', 9]
+        [1, 9]
+        [true, 9]
+        ['false', 6]
+        ['0', 6]
+        ['off', 6]
+        ['no', 6]
+        ['-', 6]
+        [0, 6]
+        [false, 6]
+      ], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
@@ -91,6 +112,7 @@ describe "Boolean", ->
         type: 'boolean'
         optional: true
         default: true
+        format: [6, 9]
       , cb
 
   describe "selfcheck", ->
@@ -105,4 +127,5 @@ describe "Boolean", ->
         type: 'boolean'
         optional: true
         default: true
+        format: [6, 9]
       , cb

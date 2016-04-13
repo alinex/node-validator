@@ -14,7 +14,6 @@ check = require '../check'
 
 # Type implementation
 # -------------------------------------------------
-console.log 1
 exports.describe = (work, cb) ->
   text = "All of the following checks have to succeed:"
   max = work.pos.and.length - 1

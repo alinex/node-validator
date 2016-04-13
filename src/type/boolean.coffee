@@ -27,6 +27,8 @@ exports.describe = (work, cb) ->
   text = "A boolean value, which will be true for #{vTrue} and
   will be considered as false for #{vFalse}. "
   text += check.optional.describe work
+  if work.pos.format
+    text += "The values #{work.pos.format.join ', '} will be used for output. "
   cb null, text
 
 exports.run = (work, cb) ->
@@ -44,11 +46,13 @@ exports.run = (work, cb) ->
   value = value.trim().toLowerCase() if typeof value is 'string'
   # boolean values check
   if value in valuesTrue
-    debug "#{work.debug} result #{util.inspect true}"
-    return cb null, true
+    value = work.pos.format?[1] ? true
+    debug "#{work.debug} result #{value}"
+    return cb null, value
   if value in valuesFalse
-    debug "#{work.debug} result #{util.inspect false}"
-    return cb null, false
+    value = work.pos.format?[0] ? false
+    debug "#{work.debug} result #{value}"
+    return cb null, value
   # failed
   work.report (new Error "No boolean value given"), cb
 
@@ -60,6 +64,11 @@ exports.selfcheck = (schema, cb) ->
       keys: object.extend {}, check.base,
         default:
           type: 'boolean'
+          optional: true
+        format:
+          type: 'array'
+          minLength: 2
+          maxLength: 2
           optional: true
     value: schema
   , cb

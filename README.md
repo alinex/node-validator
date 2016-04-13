@@ -647,6 +647,10 @@ __Validate options:__
 
 - `class` - (boolean) only a class or only a normal function is valid
 
+__Format options:__
+
+- `format` - (list) with the values for false and true
+
 __Example:__
 
 ``` coffee
