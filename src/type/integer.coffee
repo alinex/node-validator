@@ -71,6 +71,11 @@ exports.describe = (work, cb) ->
     text += "The value should be greater than #{min}. "
   else if max?
     text += "The value should be lower than #{max}. "
+  if work.pos.format
+    text += "The number will be formatted like #{work.pos.format}. "
+  else if work.pos.toUnit
+    precision = work.pos.toPrecision ? 3
+    text += "The number will be formated in #{work.pos.toUnit} (precision #{precision}). "
   cb null, text
 
 exports.run = (work, cb) ->
@@ -125,6 +130,33 @@ exports.run = (work, cb) ->
   if work.pos.max? and value > work.pos.max
     return work.report (new Error "The value is too high, it has to be'#{work.pos.max}'
       or lower"), cb
+  # output format
+  if work.pos.toUnit
+    value = math.unit value, work.pos.unit ? work.pos.toUnit
+    value = value.to 'min' if value.units[0].unit.name is 's' and value.toNumber('s') > 120
+    value = value.to 'h' if value.units[0].unit.name is 'min' and value.toNumber('min') > 120
+    value = value.to 'day' if value.units[0].unit.name is 'h' and value.toNumber('h') > 48
+    if work.pos.format
+      numeral = require 'numeral'
+      if work.pos.locale
+        try
+          numeral.language work.pos.locale, require "numeral/languages/#{work.pos.locale}"
+          numeral.language work.pos.locale
+      [v, p] = value.format().split /[ ]/
+      value = numeral(v).format(work.pos.format) + ' ' + p
+      if work.pos.locale
+        numeral.language 'en'
+    else
+      value = value.format()
+  else if work.pos.format
+    numeral = require 'numeral'
+    if work.pos.locale
+      try
+        numeral.language work.pos.locale, require "numeral/languages/#{work.pos.locale}"
+        numeral.language work.pos.locale
+    value = numeral(value).format work.pos.format
+    if work.pos.locale
+      numeral.language 'en'
   # done return resulting value
   debug "#{work.debug} result #{util.inspect value ? null}"
   cb null, value
@@ -170,6 +202,16 @@ exports.selfcheck = (schema, cb) ->
           ]
         unsigned:
           type: 'boolean'
+          optional: true
+        toUnit:
+          type: 'string'
+          optional: true
+        format:
+          type: 'string'
+          optional: true
+        locale:
+          type: 'string'
+          match: /^[a-z]{2}(-[A-Z]{2})?$/
           optional: true
     value: schema
   , cb

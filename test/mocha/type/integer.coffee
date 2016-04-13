@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe "Integer", ->
+describe.only "Integer", ->
 
   schema = null
   beforeEach ->
@@ -104,6 +104,15 @@ describe "Integer", ->
       test.same schema, [0, 254], ->
         test.fail schema, [256, -1], cb
 
+    it "should support format option", (cb) ->
+      schema.format = '0,0'
+      test.equal schema, [[123456, '123,456']], cb
+
+    it "should support local format option", (cb) ->
+      schema.format = '0,0'
+      schema.locale = 'de'
+      test.equal schema, [[123456, '123 456']], cb
+
   describe "unit checks", ->
 
     it "should parse meters", (cb) ->
@@ -117,6 +126,22 @@ describe "Integer", ->
         ['100cm', 1]
         ['10000mm', 10]
       ], cb
+
+    it "should support output unit option", (cb) ->
+      schema.toUnit = 'm'
+      test.equal schema, [[123456, '123.456 km']], cb
+
+    it "should support format option", (cb) ->
+      schema.format = '0.0'
+      schema.toUnit = 'm'
+      test.equal schema, [[123456, '123.5 km']], cb
+
+    it "should support local format option", (cb) ->
+      schema.format = '0.0'
+      schema.toUnit = 'm'
+      schema.locale = 'de'
+      test.equal schema, [[123456, '123,5 km']], cb
+
 
   describe "description", ->
 
@@ -136,6 +161,9 @@ describe "Integer", ->
         unsigned: true
         min: -6
         max: 20
+        toUnit: 'm'
+        format: '0.0'
+        locale: 'de'
       , cb
 
     it "should work with floor round", (cb) ->
@@ -168,4 +196,7 @@ describe "Integer", ->
         unsigned: true
         min: 2
         max: 20
+        toUnit: 'm'
+        format: '0.0'
+        locale: 'de'
       , cb

@@ -13,6 +13,7 @@ external information.
 - in detail checks for different data types
 - can give a human readable description
 - also supports dependency checks within the structure
+- usable for value formating, too
 
 The validation rules are really simple, but they will get more complex as your
 data structure gains complexity. But if you know the basic rules it's all
@@ -108,6 +109,7 @@ loose some information:
 jsonSchema = validator.toJson schema
 ```
 
+
 Schema Definition
 -------------------------------------------------
 
@@ -155,6 +157,12 @@ address =
     email:
       type: 'string'
 ```
+
+This attributes will be differentiated into the groups:
+
+- sanitize options - try to make the value parseable
+- validate options - check if the value is valid
+- format options - change the value to a specific output format
 
 ### Compositing
 
@@ -745,6 +753,12 @@ __Validate options:__
 - `inttype` - (integer|string) the integer is of given type
   (4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')
 - `unsigned` - (bool) the integer has to be positive
+
+__Format options:__
+
+- `toUnit` - (string) unit used for output, my be combined with format and locale
+- `format` - (string) pattern how to format numbers (see [numeral.js](http://numeraljs.com))
+- `locale` - (string) locale to use in format like 'de'
 
 ### float
 
