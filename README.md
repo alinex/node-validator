@@ -1114,6 +1114,7 @@ __Format options:__
 
 - `part` - 'date', 'time' or 'datetime'
 - `format` - how the output should be formatted
+- `locale` - country specific format to use (ISO language code)
 
 __Output formats__
 
