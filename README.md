@@ -1128,6 +1128,7 @@ all common formats:
 __Parse options:__
 
 - `range` - (boolean) parsing ranges contains two dates (start/end)
+- `timezone` - (string) specify timezone if none given
 
 __Check options:__
 
@@ -1139,6 +1140,7 @@ __Format options:__
 - `part` - 'date', 'time' or 'datetime'
 - `format` - how the output should be formatted
 - `locale` - country specific format to use (ISO language code)
+- `toTimezone` - (string) show in given timezone
 
 __Output formats__
 
@@ -1151,6 +1153,8 @@ the aliases like ISO8601, RFC1123, RFC2822, RFC822, RFC1036 are supported and an
 [moment.js](http://momentjs.com/docs/#/displaying/) format.
 
 Also see the interval validator for time ranges without context.
+
+The timezones may be 'America/Toronto'
 
 ### emails
 

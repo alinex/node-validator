@@ -17,7 +17,7 @@
 debug = require('debug')('validator:datetime')
 util = require 'util'
 chalk = require 'chalk'
-moment = require 'moment'
+moment = require 'moment-timezone'
 chrono = require 'chrono-node'
 # include alinex packages
 {object} = require 'alinex-util'
@@ -31,6 +31,22 @@ moment.createFromInputFallback = (config) ->
   config._d = switch config._i.toLowerCase()
     when 'now' then new Date()
     else chrono.parseDate config._i
+
+zones =
+  EST: 'Eastern Standard Time'
+  EDT: 'Eastern Daylight Time'
+  CST: 'Central Standard Time'
+  CDT: 'Central Daylight Time'
+  MST: 'Mountain Standard Time'
+  MDT: 'Mountain Daylight Time'
+  PST: 'Pacific Standard Time'
+  PDT: 'Pacific Daylight Time'
+  CET: 'Central European Time'
+  CEST: 'Central European Summer Time'
+
+moment.fn.zoneName = ->
+  abbr = this.zoneAbbr()
+  return zones[abbr] ? abbr
 
 alias =
   datetime:
@@ -72,6 +88,8 @@ exports.describe = (work, cb) ->
     text = "A #{work.pos.part} is needed given as calendar #{work.pos.part}
     or in natural language."
     text += check.optional.describe work
+    if work.pos.timezone
+      text += "If no timezone given the time is considert as #{work.pos.timezone} time. "
     if work.pos.min? and work.pos.max?
       text += "The #{work.pos.part} should be between #{work.pos.min} and
       #{work.pos.max}. "
@@ -80,8 +98,11 @@ exports.describe = (work, cb) ->
     else if work.pos.max?
       text += "The #{work.pos.part} should be after #{work.pos.max}. "
     if work.pos.format?
+      add = []
+      add.push work.pos.locale if work.pos.locale
+      add.push work.pos.toTimezone if work.pos.toTimezone
       text += "The #{work.pos.part} will be converted to #{work.pos.format}
-      #{if work.pos.locale? then '('+work.pos.locale+') ' else ''}format. "
+      #{if add.length then '(' + add.join(' ') + ') ' else ''}format. "
     cb null, text
 
 
@@ -108,7 +129,10 @@ exports.run = (work, cb) ->
       else
         return work.report (new Error "The #{work.pos.part} has to be a range."), cb
     else
-      m = moment work.value
+      m = if work.pos.timezone
+        moment.tz work.value, work.pos.timezone
+      else
+        moment work.value
       unless m.isValid()
         return work.report (new Error "The given text '#{work.value}' is not parse able
           as date/time."), cb
@@ -137,6 +161,7 @@ exports.run = (work, cb) ->
           work.pos.format = alias[work.pos.part][work.pos.format]
         for p in [0, 1]
           m = moment value[p]
+          m = m.tz work.pos.timezone if work.pos.toTimezone
           if work.pos.locale?
             m.locale work.pos.locale
           value[p] = switch work.pos.format
@@ -146,8 +171,10 @@ exports.run = (work, cb) ->
       if work.pos.format?
         if alias[work.pos.part]?[work.pos.format]?
           work.pos.format = alias[work.pos.part][work.pos.format]
+        m = moment value
         if work.pos.locale?
           m.locale work.pos.locale
+        m = m.tz work.pos.timezone if work.pos.toTimezone
         value = switch work.pos.format
           when 'unix' then  m.unix()
           else m.format work.pos.format
