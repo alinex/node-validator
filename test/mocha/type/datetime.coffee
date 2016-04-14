@@ -1,6 +1,7 @@
 async = require 'alinex-async'
 moment = require 'moment'
 chai = require 'chai'
+debug = require('debug') 'test'
 expect = chai.expect
 ### eslint-env node, mocha ###
 
@@ -164,6 +165,50 @@ describe "Datetime", ->
         ['ISO8601', moment(date).format 'YYYY-MM-DDTHH:mm:ssZ']
       ], cb
 
+  describe "timezone check", ->
+
+    it "should parse datetime", (cb) ->
+      date = new Date('2015-01-17 09:00')
+      testFormat schema, date, [
+        ['ISO8601', moment(date).format 'YYYY-MM-DDTHH:mm:ssZ']
+      ], cb
+
+    it "should parse datetime with zone", (cb) ->
+      schema.timezone = 'America/Toronto'
+      testFormat schema, '2015-01-17 09:00', [
+        ['ISO8601', '2015-01-17T15:00:00+01:00']
+      ], cb
+
+    it "should parse datetime with zone (short)", (cb) ->
+      schema.timezone = 'EST'
+      testFormat schema, '2015-01-17 09:00', [
+        ['ISO8601', '2015-01-17T15:00:00+01:00']
+      ], cb
+
+    it "should parse datetime with zone (long)", (cb) ->
+      schema.timezone = 'Eastern Standard Time'
+      testFormat schema, '2015-01-17 09:00', [
+        ['ISO8601', '2015-01-17T15:00:00+01:00']
+      ], cb
+
+    it "should format datetime with zone", (cb) ->
+      schema.toTimezone = 'America/Toronto'
+      testFormat schema, '2015-01-17 09:00', [
+        ['ISO8601', '2015-01-17T03:00:00-05:00']
+      ], cb
+
+    it "should format datetime with zone (short)", (cb) ->
+      schema.toTimezone = 'EST'
+      testFormat schema, '2015-01-17 09:00', [
+        ['ISO8601', '2015-01-17T03:00:00-05:00']
+      ], cb
+
+    it "should format datetime with zone (long)", (cb) ->
+      schema.toTimezone = 'Eastern Standard Time'
+      testFormat schema, '2015-01-17 09:00', [
+        ['ISO8601', '2015-01-17T03:00:00-05:00']
+      ], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
@@ -177,6 +222,9 @@ describe "Datetime", ->
         default: 'now'
         min: 'now'
         max: '2020-01-01'
+        format: 'LLLL'
+        toTimezone: 'Europe/Berlin'
+        locale: 'de'
       , cb
 
   describe "selfcheck", ->
@@ -190,8 +238,13 @@ describe "Datetime", ->
         description: 'Some test rules'
         type: 'datetime'
         default: 'now'
+        range: true
+        timezone: 'Europe/Berlin'
         min: 'now'
         max: '2020-01-01'
+        format: 'LLLL'
+        toTimezone: 'Europe/Berlin'
+        locale: 'de'
       , cb
 
 
@@ -205,6 +258,7 @@ testFormat = (schema, value, formats, cb) ->
       schema: schema
       value: value
     , (err, result) ->
+      debug "#{value} as #{format} => #{result} (should be #{goal})"
       expect(err, 'error').to.not.exist
       expect(result, 'result').to.deep.equal goal
       cb()

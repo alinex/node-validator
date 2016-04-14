@@ -33,20 +33,16 @@ moment.createFromInputFallback = (config) ->
     else chrono.parseDate config._i
 
 zones =
-  EST: 'Eastern Standard Time'
-  EDT: 'Eastern Daylight Time'
-  CST: 'Central Standard Time'
-  CDT: 'Central Daylight Time'
-  MST: 'Mountain Standard Time'
-  MDT: 'Mountain Daylight Time'
-  PST: 'Pacific Standard Time'
-  PDT: 'Pacific Daylight Time'
-  CET: 'Central European Time'
-  CEST: 'Central European Summer Time'
-
-moment.fn.zoneName = ->
-  abbr = this.zoneAbbr()
-  return zones[abbr] ? abbr
+  'Eastern Standard Time': 'EST'
+  'Eastern Daylight Time': 'EDT'
+  'Central Standard Time': 'CST'
+  'Central Daylight Time': 'CDT'
+  'Mountain Standard Time': 'MST'
+  'Mountain Daylight Time': 'MDT'
+  'Pacific Standard Time': 'PST'
+  'Pacific Daylight Time': 'PDT'
+  'Central European Time': 'CET'
+  'Central European Summer Time': 'CEST'
 
 alias =
   datetime:
@@ -86,8 +82,10 @@ exports.describe = (work, cb) ->
     work.pos = result
     # combine into message
     text = "A #{work.pos.part} is needed given as calendar #{work.pos.part}
-    or in natural language."
+    or in natural language. "
     text += check.optional.describe work
+    if work.pos.range
+      text += "A range with start and end date is needed. "
     if work.pos.timezone
       text += "If no timezone given the time is considert as #{work.pos.timezone} time. "
     if work.pos.min? and work.pos.max?
@@ -120,7 +118,8 @@ exports.run = (work, cb) ->
       return work.report error, cb
 
     # parse date
-#    console.log '??? ', work.value
+    if work.pos.timezone
+      work.pos.timezone = zones[work.pos.timezone] ? work.pos.timezone
     if work.pos.range?
       console.log work.value
       results = chrono.parse work.value
@@ -155,6 +154,8 @@ exports.run = (work, cb) ->
           #{work.pos.max}"), cb
 
     # format value
+    if work.pos.toTimezone
+      work.pos.toTimezone = zones[work.pos.toTimezone] ? work.pos.toTimezone
     if work.pos.range?
       if work.pos.format?
         if alias[work.pos.part]?[work.pos.format]?
@@ -174,7 +175,7 @@ exports.run = (work, cb) ->
         m = moment value
         if work.pos.locale?
           m.locale work.pos.locale
-        m = m.tz work.pos.timezone if work.pos.toTimezone
+        m = m.tz work.pos.toTimezone if work.pos.toTimezone
         value = switch work.pos.format
           when 'unix' then  m.unix()
           else m.format work.pos.format
@@ -192,6 +193,12 @@ exports.selfcheck = (schema, cb) ->
         default:
           type: 'datetime'
           optional: true
+        range:
+          type: 'boolean'
+          optional: true
+        timezone:
+          type: 'string'
+          optional: true
         part:
           type: 'string'
           optional: true
@@ -207,6 +214,9 @@ exports.selfcheck = (schema, cb) ->
           optional: true
           min: '<<<min>>>'
         format:
+          type: 'string'
+          optional: true
+        toTimezone:
           type: 'string'
           optional: true
         locale:
