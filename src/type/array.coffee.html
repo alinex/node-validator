@@ -221,6 +221,8 @@ Type implementation
         cb <span class="hljs-literal">null</span>, subtext + (text.replace <span class="hljs-regexp">/\n/g</span>, <span class="hljs-string">'\n  '</span>) + <span class="hljs-string">'\n'</span>
   ], <span class="hljs-function"><span class="hljs-params">(err, results)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
+    <span class="hljs-keyword">if</span> work.pos.format?
+      text += <span class="hljs-string">"The value will be formatted as <span class="hljs-subst">#{work.pos.format}</span> list. "</span>
     cb <span class="hljs-literal">null</span>, (text + results.join <span class="hljs-string">''</span>).trim() + <span class="hljs-string">' '</span>
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
@@ -385,6 +387,26 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <div class="pilwrap">
   <a class="pilcrow" href="#section-17" id="section-17"></a>
 </div>
+<p>format value</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.format
+      <span class="hljs-keyword">switch</span> work.pos.format
+        <span class="hljs-keyword">when</span> <span class="hljs-string">'simple'</span>
+          value = value.join <span class="hljs-string">', '</span>
+        <span class="hljs-keyword">when</span> <span class="hljs-string">'pretty'</span>
+          value = value.map(<span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> util.inspect e).join <span class="hljs-string">', '</span>
+        <span class="hljs-keyword">when</span> <span class="hljs-string">'json'</span>
+          value = JSON.stringify value</pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-18" id="section-18"></a>
+</div>
 <p>done return resulting value</p>
 
         </td>
@@ -438,7 +460,9 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
         <span class="hljs-attribute">entries</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'any'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-
+        <span class="hljs-attribute">format</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">values</span>: [<span class="hljs-string">'simple'</span>, <span class="hljs-string">'pretty'</span>, <span class="hljs-string">'json'</span>]
     <span class="hljs-attribute">value</span>: schema
   , cb</pre>
         </td>

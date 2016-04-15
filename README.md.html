@@ -148,6 +148,18 @@
         <a href="#array">array</a>
       </div>
 
+      <div class="heading h1">
+        <a href="#simple-greater-1-2-3-a-object-object-c9">simple -&amp;gt; &amp;quot;1, 2, 3, a, [object Object], c,9&amp;quot;</a>
+      </div>
+
+      <div class="heading h1">
+        <a href="#pretty-greater-1-2-3-a-b-1-c-9">pretty -&amp;gt; &amp;quot;1, 2, 3, &#39;a&#39;, { b: 1 }, [ &#39;c&#39;, 9 ]&amp;quot;</a>
+      </div>
+
+      <div class="heading h1">
+        <a href="#json-greater-123ab-1c9">json -&amp;gt; &#39;[1,2,3,&amp;quot;a&amp;quot;,{&amp;quot;b&amp;quot;:1},[&amp;quot;c&amp;quot;,9]]&#39;</a>
+      </div>
+
       <div class="heading h3">
         <a href="#object">object</a>
       </div>
@@ -245,6 +257,7 @@ external information.</p>
 <li>in detail checks for different data types</li>
 <li>can give a human readable description</li>
 <li>also supports dependency checks within the structure</li>
+<li>usable for value formating, too</li>
 </ul>
 <p>The validation rules are really simple, but they will get more complex as your
 data structure gains complexity. But if you know the basic rules it's all
@@ -359,6 +372,12 @@ specify how it works.</p>
     <span class="hljs-attribute">email</span>:
       <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
 </code></pre>
+<p>This attributes will be differentiated into the groups:</p>
+<ul>
+<li>sanitize options - try to make the value parseable</li>
+<li>validate options - check if the value is valid</li>
+<li>format options - change the value to a specific output format</li>
+</ul>
 <div class="pilwrap" id="compositing">
   <h3>
     <a href="#compositing" name="compositing" class="pilcrow"></a>
@@ -783,6 +802,10 @@ Other values are not allowed.</p>
 <ul>
 <li><code>class</code> - (boolean) only a class or only a normal function is valid</li>
 </ul>
+<p><strong>Format options:</strong></p>
+<ul>
+<li><code>format</code> - (list) with the values for false and true</li>
+</ul>
 <p><strong>Example:</strong></p>
 <pre><code class="coffee">validator.check
   <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
@@ -877,6 +900,12 @@ rounding or use <code>floor</code> or <code>ceil</code> for the corresponding me
 (4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')</li>
 <li><code>unsigned</code> - (bool) the integer has to be positive</li>
 </ul>
+<p><strong>Format options:</strong></p>
+<ul>
+<li><code>toUnit</code> - (string) unit used for output, my be combined with format and locale</li>
+<li><code>format</code> - (string) pattern how to format numbers (see <a href="http://numeraljs.com">numeral.js</a>)</li>
+<li><code>locale</code> - (string) locale to use in format like 'de'</li>
+</ul>
 <div class="pilwrap" id="float">
   <h3>
     <a href="#float" name="float" class="pilcrow"></a>
@@ -896,6 +925,12 @@ rounding or use <code>floor</code> or <code>ceil</code> for the corresponding me
 <ul>
 <li><code>min</code> - (numeric) the smalles allowed number</li>
 <li><code>max</code> - (numeric) the biggest allowed number</li>
+</ul>
+<p><strong>Format options:</strong></p>
+<ul>
+<li><code>toUnit</code> - (string) unit used for output, my be combined with format and locale</li>
+<li><code>format</code> - (string) pattern how to format numbers (see <a href="http://numeraljs.com">numeral.js</a>)</li>
+<li><code>locale</code> - (string) locale to use in format like 'de'</li>
 </ul>
 <div class="pilwrap" id="array">
   <h3>
@@ -920,6 +955,31 @@ array
 <ul>
 <li><code>entries</code> - default specification for all entries</li>
 <li><code>list</code> - specification for entries per each key number</li>
+</ul>
+<p><strong>Format options:</strong></p>
+<ul>
+<li>
+<p><code>format</code> - transform to string using one of the formats 'simple', 'pretty' or 'json'</p>
+<p>data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]</p>
+<div class="pilwrap" id="simple-greater-1-2-3-a-object-object-c9">
+  <h1>
+    <a href="#simple-greater-1-2-3-a-object-object-c9" name="simple-greater-1-2-3-a-object-object-c9" class="pilcrow"></a>
+simple -&gt; &quot;1, 2, 3, a, [object Object], c,9&quot;
+  </h1>
+</div>
+<div class="pilwrap" id="pretty-greater-1-2-3-a-b-1-c-9">
+  <h1>
+    <a href="#pretty-greater-1-2-3-a-b-1-c-9" name="pretty-greater-1-2-3-a-b-1-c-9" class="pilcrow"></a>
+pretty -&gt; &quot;1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]&quot;
+  </h1>
+</div>
+<div class="pilwrap" id="json-greater-123ab-1c9">
+  <h1>
+    <a href="#json-greater-123ab-1c9" name="json-greater-123ab-1c9" class="pilcrow"></a>
+json -&gt; '[1,2,3,&quot;a&quot;,{&quot;b&quot;:1},[&quot;c&quot;,9]]'
+  </h1>
+</div>
+</li>
 </ul>
 <div class="pilwrap" id="object">
   <h3>
@@ -1241,6 +1301,7 @@ all common formats:</p>
 <p><strong>Parse options:</strong></p>
 <ul>
 <li><code>range</code> - (boolean) parsing ranges contains two dates (start/end)</li>
+<li><code>timezone</code> - (string) specify timezone if none given</li>
 </ul>
 <p><strong>Check options:</strong></p>
 <ul>
@@ -1251,6 +1312,8 @@ all common formats:</p>
 <ul>
 <li><code>part</code> - 'date', 'time' or 'datetime'</li>
 <li><code>format</code> - how the output should be formatted</li>
+<li><code>locale</code> - country specific format to use (ISO language code)</li>
+<li><code>toTimezone</code> - (string) show in given timezone</li>
 </ul>
 <p><strong>Output formats</strong></p>
 <p>If not specified it is a Date object.</p>
@@ -1259,6 +1322,7 @@ all common formats:</p>
 the aliases like ISO8601, RFC1123, RFC2822, RFC822, RFC1036 are supported and any
 <a href="http://momentjs.com/docs/#/displaying/">moment.js</a> format.</p>
 <p>Also see the interval validator for time ranges without context.</p>
+<p>The timezones may be 'America/Toronto', 'EST' or 'Eastern Standard Time' for example.</p>
 <div class="pilwrap" id="emails">
   <h3>
     <a href="#emails" name="emails" class="pilcrow"></a>

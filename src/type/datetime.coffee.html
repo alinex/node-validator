@@ -134,7 +134,7 @@ Node modules
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:datetime'</span>)
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment'</span>
+moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment-timezone'</span>
 chrono = <span class="hljs-built_in">require</span> <span class="hljs-string">'chrono-node'</span></pre>
         </td>
       </tr>
@@ -181,6 +181,21 @@ Setup parsing
   config._d = <span class="hljs-keyword">switch</span> config._i.toLowerCase()
     <span class="hljs-keyword">when</span> <span class="hljs-string">'now'</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">new</span> Date()
     <span class="hljs-keyword">else</span> chrono.parseDate config._i
+
+zones =
+  <span class="hljs-string">'Eastern Standard Time'</span>: <span class="hljs-string">'EST'</span>
+  <span class="hljs-string">'Eastern Daylight Time'</span>: <span class="hljs-string">'EDT'</span>
+  <span class="hljs-string">'Central Standard Time'</span>: <span class="hljs-string">'CST'</span>
+  <span class="hljs-string">'Central Daylight Time'</span>: <span class="hljs-string">'CDT'</span>
+  <span class="hljs-string">'Mountain Standard Time'</span>: <span class="hljs-string">'MST'</span>
+  <span class="hljs-string">'Mountain Daylight Time'</span>: <span class="hljs-string">'MDT'</span>
+  <span class="hljs-string">'Pacific Standard Time'</span>: <span class="hljs-string">'PST'</span>
+  <span class="hljs-string">'Pacific Daylight Time'</span>: <span class="hljs-string">'PDT'</span>
+  <span class="hljs-string">'Central European Time'</span>: <span class="hljs-string">'CET'</span>
+  <span class="hljs-string">'Central European Summer Time'</span>: <span class="hljs-string">'CEST'</span>
+  <span class="hljs-attribute">MESZ</span>: <span class="hljs-string">'CEST'</span>
+  <span class="hljs-attribute">MEZ</span>: <span class="hljs-string">'CET'</span>
+
 
 alias =
   <span class="hljs-attribute">datetime</span>:
@@ -263,8 +278,12 @@ Type implementation
         </td>
         <td class="code highlight">
           <pre class="coffeescript">    text = <span class="hljs-string">"A <span class="hljs-subst">#{work.pos.part}</span> is needed given as calendar <span class="hljs-subst">#{work.pos.part}</span>
-    or in natural language."</span>
+    or in natural language. "</span>
     text += check.optional.describe work
+    <span class="hljs-keyword">if</span> work.pos.range
+      text += <span class="hljs-string">"A range with start and end date is needed. "</span>
+    <span class="hljs-keyword">if</span> work.pos.timezone
+      text += <span class="hljs-string">"If no timezone given the time is considert as <span class="hljs-subst">#{work.pos.timezone}</span> time. "</span>
     <span class="hljs-keyword">if</span> work.pos.min? <span class="hljs-keyword">and</span> work.pos.max?
       text += <span class="hljs-string">"The <span class="hljs-subst">#{work.pos.part}</span> should be between <span class="hljs-subst">#{work.pos.min}</span> and
 </span></pre>
@@ -285,6 +304,9 @@ Type implementation
     <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.max?
       text += <span class="hljs-string">"The <span class="hljs-subst">#{work.pos.part}</span> should be after <span class="hljs-subst">#{work.pos.max}</span>. "</span>
     <span class="hljs-keyword">if</span> work.pos.format?
+      add = []
+      add.push work.pos.locale <span class="hljs-keyword">if</span> work.pos.locale
+      add.push work.pos.toTimezone <span class="hljs-keyword">if</span> work.pos.toTimezone
       text += <span class="hljs-string">"The <span class="hljs-subst">#{work.pos.part}</span> will be converted to <span class="hljs-subst">#{work.pos.format}</span>
 </span></pre>
         </td>
@@ -295,7 +317,7 @@ Type implementation
           <div class="pilwrap">
   <a class="pilcrow" href="#section-13" id="section-13"></a>
 </div>
-<p>{if work.pos.locale? then '('+work.pos.locale+') ' else ''}format. &quot;</p>
+<p>{if add.length then '(' + add.join(' ') + ') ' else ''}format. &quot;</p>
 
         </td>
         <td class="code highlight">
@@ -333,12 +355,13 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <div class="pilwrap">
   <a class="pilcrow" href="#section-15" id="section-15"></a>
 </div>
-<p>parse date
-console.log '??? ', work.value</p>
+<p>parse date</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.range?
+          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.timezone
+      work.pos.timezone = zones[work.pos.timezone] ? work.pos.timezone
+    <span class="hljs-keyword">if</span> work.pos.range?
       <span class="hljs-built_in">console</span>.log work.value
       results = chrono.parse work.value
       <span class="hljs-keyword">if</span> results[<span class="hljs-number">0</span>].start? <span class="hljs-keyword">and</span> results[<span class="hljs-number">0</span>].end?
@@ -346,7 +369,10 @@ console.log '??? ', work.value</p>
       <span class="hljs-keyword">else</span>
         <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The <span class="hljs-subst">#{work.pos.part}</span> has to be a range."</span>), cb
     <span class="hljs-keyword">else</span>
-      m = moment work.value
+      m = <span class="hljs-keyword">if</span> work.pos.timezone
+        moment.tz work.value, work.pos.timezone
+      <span class="hljs-keyword">else</span>
+        moment work.value
       <span class="hljs-keyword">unless</span> m.isValid()
         <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given text '<span class="hljs-subst">#{work.value}</span>' is not parse able
           as date/time."</span>), cb
@@ -438,12 +464,15 @@ console.log '??? ', work.value</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.range?
+          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.toTimezone
+      work.pos.toTimezone = zones[work.pos.toTimezone] ? work.pos.toTimezone
+    <span class="hljs-keyword">if</span> work.pos.range?
       <span class="hljs-keyword">if</span> work.pos.format?
         <span class="hljs-keyword">if</span> alias[work.pos.part]?[work.pos.format]?
           work.pos.format = alias[work.pos.part][work.pos.format]
         <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
           m = moment value[p]
+          m = m.tz work.pos.timezone <span class="hljs-keyword">if</span> work.pos.toTimezone
           <span class="hljs-keyword">if</span> work.pos.locale?
             m.locale work.pos.locale
           value[p] = <span class="hljs-keyword">switch</span> work.pos.format
@@ -453,8 +482,10 @@ console.log '??? ', work.value</p>
       <span class="hljs-keyword">if</span> work.pos.format?
         <span class="hljs-keyword">if</span> alias[work.pos.part]?[work.pos.format]?
           work.pos.format = alias[work.pos.part][work.pos.format]
+        m = moment value
         <span class="hljs-keyword">if</span> work.pos.locale?
           m.locale work.pos.locale
+        m = m.tz work.pos.toTimezone <span class="hljs-keyword">if</span> work.pos.toTimezone
         value = <span class="hljs-keyword">switch</span> work.pos.format
           <span class="hljs-keyword">when</span> <span class="hljs-string">'unix'</span> <span class="hljs-keyword">then</span>  m.unix()
           <span class="hljs-keyword">else</span> m.format work.pos.format</pre>
@@ -482,6 +513,12 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
         <span class="hljs-attribute">default</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'datetime'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">range</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">timezone</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
         <span class="hljs-attribute">part</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
@@ -496,6 +533,16 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">part</span>: <span class="hljs-string">'&lt;&lt;&lt;part&gt;&gt;&gt;'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
           <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
+        <span class="hljs-attribute">format</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">toTimezone</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">locale</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">match</span>: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
   , cb</pre>
         </td>

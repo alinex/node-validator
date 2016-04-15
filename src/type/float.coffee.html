@@ -257,6 +257,10 @@ Type implementation
     text += <span class="hljs-string">"The value should be greater than <span class="hljs-subst">#{work.pos.min}</span>. "</span>
   <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.max?
     text += <span class="hljs-string">"The value should be lower than <span class="hljs-subst">#{work.pos.max}</span>. "</span>
+  <span class="hljs-keyword">if</span> work.pos.toUnit
+    text += <span class="hljs-string">"The number will be formated in <span class="hljs-subst">#{work.pos.toUnit}</span>. "</span>
+  <span class="hljs-keyword">if</span> work.pos.format
+    text += <span class="hljs-string">"The number will be formatted like <span class="hljs-subst">#{work.pos.format}</span>. "</span>
   cb <span class="hljs-literal">null</span>, text
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
@@ -389,6 +393,44 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <div class="pilwrap">
   <a class="pilcrow" href="#section-19" id="section-19"></a>
 </div>
+<p>output format</p>
+
+        </td>
+        <td class="code highlight">
+          <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.toUnit
+    value = math.unit value, work.pos.unit ? work.pos.toUnit
+    value = value.to <span class="hljs-string">'min'</span> <span class="hljs-keyword">if</span> value.units[<span class="hljs-number">0</span>].unit.name <span class="hljs-keyword">is</span> <span class="hljs-string">'s'</span> <span class="hljs-keyword">and</span> value.toNumber(<span class="hljs-string">'s'</span>) &gt; <span class="hljs-number">120</span>
+    value = value.to <span class="hljs-string">'h'</span> <span class="hljs-keyword">if</span> value.units[<span class="hljs-number">0</span>].unit.name <span class="hljs-keyword">is</span> <span class="hljs-string">'min'</span> <span class="hljs-keyword">and</span> value.toNumber(<span class="hljs-string">'min'</span>) &gt; <span class="hljs-number">120</span>
+    value = value.to <span class="hljs-string">'day'</span> <span class="hljs-keyword">if</span> value.units[<span class="hljs-number">0</span>].unit.name <span class="hljs-keyword">is</span> <span class="hljs-string">'h'</span> <span class="hljs-keyword">and</span> value.toNumber(<span class="hljs-string">'h'</span>) &gt; <span class="hljs-number">48</span>
+    <span class="hljs-keyword">if</span> work.pos.format
+      numeral = <span class="hljs-built_in">require</span> <span class="hljs-string">'numeral'</span>
+      <span class="hljs-keyword">if</span> work.pos.locale
+        <span class="hljs-keyword">try</span>
+          numeral.language work.pos.locale, <span class="hljs-built_in">require</span> <span class="hljs-string">"numeral/languages/<span class="hljs-subst">#{work.pos.locale}</span>"</span>
+          numeral.language work.pos.locale
+      [v, p] = value.format().split <span class="hljs-regexp">/[ ]/</span>
+      value = numeral(v).format(work.pos.format) + <span class="hljs-string">' '</span> + p
+      <span class="hljs-keyword">if</span> work.pos.locale
+        numeral.language <span class="hljs-string">'en'</span>
+    <span class="hljs-keyword">else</span>
+      value = value.format()
+  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.format
+    numeral = <span class="hljs-built_in">require</span> <span class="hljs-string">'numeral'</span>
+    <span class="hljs-keyword">if</span> work.pos.locale
+      <span class="hljs-keyword">try</span>
+        numeral.language work.pos.locale, <span class="hljs-built_in">require</span> <span class="hljs-string">"numeral/languages/<span class="hljs-subst">#{work.pos.locale}</span>"</span>
+        numeral.language work.pos.locale
+    value = numeral(value).format work.pos.format
+    <span class="hljs-keyword">if</span> work.pos.locale
+      numeral.language <span class="hljs-string">'en'</span></pre>
+        </td>
+      </tr>
+    
+      <tr>
+        <td class="docs">
+          <div class="pilwrap">
+  <a class="pilcrow" href="#section-20" id="section-20"></a>
+</div>
 <p>done return resulting value</p>
 
         </td>
@@ -432,6 +474,16 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
           <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
+        <span class="hljs-attribute">toUnit</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">format</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">locale</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+          <span class="hljs-attribute">match</span>: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
   , cb</pre>
         </td>

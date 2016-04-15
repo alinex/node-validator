@@ -181,6 +181,8 @@ Type implementation
           <pre class="coffeescript">  text = <span class="hljs-string">"A boolean value, which will be true for <span class="hljs-subst">#{vTrue}</span> and
   will be considered as false for <span class="hljs-subst">#{vFalse}</span>. "</span>
   text += check.optional.describe work
+  <span class="hljs-keyword">if</span> work.pos.format
+    text += <span class="hljs-string">"The values <span class="hljs-subst">#{work.pos.format.join <span class="hljs-string">', '</span>}</span> will be used for output. "</span>
   cb <span class="hljs-literal">null</span>, text
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
@@ -231,11 +233,13 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> value <span class="hljs-keyword">in</span> valuesTrue
-    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect <span class="hljs-literal">true</span>}</span>"</span>
-    <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>
+    value = work.pos.format?[<span class="hljs-number">1</span>] ? <span class="hljs-literal">true</span>
+    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{value}</span>"</span>
+    <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
   <span class="hljs-keyword">if</span> value <span class="hljs-keyword">in</span> valuesFalse
-    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect <span class="hljs-literal">false</span>}</span>"</span>
-    <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, <span class="hljs-literal">false</span></pre>
+    value = work.pos.format?[<span class="hljs-number">0</span>] ? <span class="hljs-literal">false</span>
+    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{value}</span>"</span>
+    <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value</pre>
         </td>
       </tr>
     
@@ -258,6 +262,11 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
       <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
         <span class="hljs-attribute">default</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        <span class="hljs-attribute">format</span>:
+          <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
+          <span class="hljs-attribute">minLength</span>: <span class="hljs-number">2</span>
+          <span class="hljs-attribute">maxLength</span>: <span class="hljs-number">2</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
     <span class="hljs-attribute">value</span>: schema
   , cb</pre>
