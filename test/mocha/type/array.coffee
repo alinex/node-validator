@@ -104,6 +104,21 @@ describe "Array", ->
       test.same schema, [[1, 2], ['one', 'two']], ->
         test.fail schema, [[1, 2, 3], [1], []], cb
 
+    it "should support format option", (cb) ->
+      data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
+      schema.format = 'simple'
+      test.equal schema, [
+        [data, "1, 2, 3, a, [object Object], c,9"]
+      ], ->
+        schema.format = 'pretty'
+        test.equal schema, [
+          [data, "1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]"]
+        ], ->
+          schema.format = 'json'
+          test.equal schema, [
+            [data, '[1,2,3,"a",{"b":1},["c",9]]']
+          ], cb
+
     it "should support default subchecks", (cb) ->
       schema.entries =
         type: 'integer'
@@ -138,11 +153,18 @@ describe "Array", ->
         title: 'test'
         description: 'Some test rules'
         type: 'array'
+        delimiter: /,/
+        toArray: true
+        unique: true
+        notEmpty: true
+        minLength: 1
+        maxLength: 5
         list: [
           type: 'integer'
         ,
           type: 'string'
         ]
+        format: 'pretty'
       , cb
 
   describe "selfcheck", ->
@@ -164,9 +186,16 @@ describe "Array", ->
         title: 'test'
         description: 'Some test rules'
         type: 'array'
+        delimiter: /,/
+        toArray: true
+        unique: true
+        notEmpty: true
+        minLength: 1
+        maxLength: 5
         list: [
           type: 'integer'
         ,
           type: 'string'
         ]
+        format: 'pretty'
       , cb

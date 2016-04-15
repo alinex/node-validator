@@ -70,6 +70,8 @@ exports.describe = (work, cb) ->
         cb null, subtext + (text.replace /\n/g, '\n  ') + '\n'
   ], (err, results) ->
     return cb err if err
+    if work.pos.format?
+      text += "The value will be formatted as #{work.pos.format} list. "
     cb null, (text + results.join '').trim() + ' '
 
 exports.run = (work, cb) ->
@@ -138,6 +140,15 @@ exports.run = (work, cb) ->
     check.run sub, cb
   , (err, value) ->
     return cb err if err
+    # format value
+    if work.pos.format
+      switch work.pos.format
+        when 'simple'
+          value = value.join ', '
+        when 'pretty'
+          value = value.map((e) -> util.inspect e).join ', '
+        when 'json'
+          value = JSON.stringify value
     # done return resulting value
     debug "#{work.debug} result #{util.inspect value ? null}"
     cb null, value
@@ -188,6 +199,8 @@ exports.selfcheck = (schema, cb) ->
         entries:
           type: 'any'
           optional: true
-
+        format:
+          type: 'string'
+          values: ['simple', 'pretty', 'json']
     value: schema
   , cb

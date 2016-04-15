@@ -43,6 +43,9 @@ zones =
   'Pacific Daylight Time': 'PDT'
   'Central European Time': 'CET'
   'Central European Summer Time': 'CEST'
+  MESZ: 'CEST'
+  MEZ: 'CET'
+
 
 alias =
   datetime:

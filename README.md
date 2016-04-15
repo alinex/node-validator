@@ -803,6 +803,15 @@ __Validating children:__
 - `entries` - default specification for all entries
 - `list` - specification for entries per each key number
 
+__Format options:__
+
+- `format` - transform to string using one of the formats 'simple', 'pretty' or 'json'
+
+    data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
+    # simple -> "1, 2, 3, a, [object Object], c,9"
+    # pretty -> "1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]"
+    # json -> '[1,2,3,"a",{"b":1},["c",9]]'
+
 ### object
 
 For all complex data structures you use the object type which checks for named
@@ -1154,7 +1163,7 @@ the aliases like ISO8601, RFC1123, RFC2822, RFC822, RFC1036 are supported and an
 
 Also see the interval validator for time ranges without context.
 
-The timezones may be 'America/Toronto'
+The timezones may be 'America/Toronto', 'EST' or 'Eastern Standard Time' for example.
 
 ### emails
 
