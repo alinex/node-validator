@@ -4,6 +4,18 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.5.0 (2016-04-15)
+-------------------------------------------------
+- Upgraded request package.
+- Added format option to array.
+- Added tests and fixed timezones in datetime.
+- Add timezones support (untested).
+- Added format options to float type.
+- Added format options for integer.
+- Added format option to boolean.
+- Extended selfcheck.
+- Document locale setting for datetime.
+
 Version 1.4.6 (2016-04-11)
 -------------------------------------------------
 - Updated documentation for datetime.
