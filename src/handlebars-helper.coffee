@@ -10,7 +10,8 @@
 # -------------------------------------------------
 moment = require 'moment'
 math = require 'mathjs'
-
+# alinex modules
+util = require 'alinex-util'
 
 # Handlebars Helper
 # -------------------------------------------------
@@ -31,6 +32,8 @@ argParse = (args) ->
 
 helper =
 
+  # ### Comparison
+
   is: ->
     {args, fn, inverse, data} = argParse arguments
     if args.length is 2
@@ -49,14 +52,39 @@ helper =
       when '>=' then left >= right
       when '<=' then left <= right
       when '==' then left is right
-      when 'not' then left isnt right
-      when '!=' then left isnt right
+      when 'not', '!=' then left isnt right
       when 'in'
         right = right.split /\s*,\s*/ unless Array.isArray right
         ~right.indexOf left
+      when '!in'
+        right = right.split /\s*,\s*/ unless Array.isArray right
+        not ~right.indexOf left
       else left
     # execute content or else part
     if result then fn data else inverse data
+
+  # ### String
+
+  lowercase: ->
+    {args} = argParse arguments
+    args[0].toLowerCase()
+
+  uppercase: ->
+    {args} = argParse arguments
+    args[0].toUpperCase()
+
+  capitalizeFirst: ->
+    {args} = argParse arguments
+    args[0].charAt(0).toUpperCase() + args[0].slice(1)
+
+  capitalizeEach: ->
+    {args} = argParse arguments
+    args[0].replace /\w\S*/g, (txt) -> txt.charAt(0).toUpperCase() + txt.substr(1)
+
+  shorten: ->
+    {args} = argParse arguments
+    [text, len] = args
+    util.string.shorten text, len
 
 
   # ### dateFormat

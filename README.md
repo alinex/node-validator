@@ -1225,6 +1225,9 @@ Within the handlebars templates you may use:
 - [swag helpers](http://elving.github.io/swag/)
 - or the following special ones
 
+
+#### Comparison
+
 **is**
 
 Given one argument, is acts exactly like `if`:
@@ -1245,10 +1248,86 @@ The following comparators are supported:
 - `==` or (no comparator) - equality checking
 - `!=` or `not` - not equal
 - `>`, `>=`, `<`, `<=` - greater/less number operators
-- `in` - check a value exists in either a comma-separated string or an array
+- `in`, `!in` - check a value exists in either a comma-separated string or an array
 
 If you use this helper with an object or array as it's first parameter it will
 base the calculation on the number of entries.
+
+#### Collections
+
+**index**
+**withIndex**
+**join**
+**length**
+**withSorted**
+**eachIndex**
+
+**property**
+**withProperty**
+**eachProperty**
+
+#### String helpers
+
+**lowercase**
+
+Turns a string to lowercase.
+
+Usage:
+
+    {{lowercase "THIS SHOULD BE LOWERCASE"}}
+
+Result:
+
+    this should be lowercase
+
+**uppercase**
+
+Turns a string to uppercase.
+
+Usage:
+
+    {{uppercase "this should be lowercase"}}
+
+Result:
+
+    THIS SHOULD BE LOWERCASE
+
+**capitalizeFirst**
+
+Capitalizes the first word in a string.
+
+Usage:
+
+    {{lowercase "this should be lowercase"}}
+
+Result:
+
+    This should be lowercase
+
+**capitalizeEach**
+
+Capitalizes each word in a string.
+
+Usage:
+
+    {{lowercase "this should be lowercase"}}
+
+Result:
+
+    This Should Be Lowercase
+
+**shorten**
+
+This will shorten the given text and add ellipsis if it is too long. This is done
+word aware.
+
+    {{truncate "this should be lowercase" 18}}
+
+The parameters are the text to shorten and the maximum length to use.
+
+    this should be...
+
+#### Date helpers
 
 **dateFormat**
 
@@ -1284,6 +1363,8 @@ Examples:
 
     {{#dateFormat "LL"}}{{dateAdd date 1 "month"}}{{/dateFormat}}
     # February 23, 1974
+
+#### Number helpers
 
 **unitFormat**
 

@@ -3,7 +3,7 @@ test = require '../../test'
 
 moment = require 'moment'
 
-describe "Handlebars", ->
+describe.only "Handlebars", ->
 
   schema = null
   beforeEach ->
@@ -39,7 +39,7 @@ describe "Handlebars", ->
     it "should fail on other objects", (cb) ->
       test.fail schema, [null, [], (new Error '????'), {}], cb
 
-  describe "helper", ->
+  describe "comparison helper", ->
 
     it "should allow is blocks", (cb) ->
       test.function schema, [
@@ -73,6 +73,10 @@ describe "Handlebars", ->
         ['{{#is x "in" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: [1, 2, 3, 4]}, ' 1 ']
         ['{{#is x "in" y}} 1 {{else}} 2 {{/is}}', {x: '6', y: '1,2,3,4'}, ' 2 ']
         ['{{#is x "in" y}} 1 {{else}} 2 {{/is}}', {x: 6, y: [1, 2, 3, 4]}, ' 2 ']
+        ['{{#is x "!in" y}} 1 {{else}} 2 {{/is}}', {x: '2', y: '1,2,3,4'}, ' 2 ']
+        ['{{#is x "!in" y}} 1 {{else}} 2 {{/is}}', {x: 2, y: [1, 2, 3, 4]}, ' 2 ']
+        ['{{#is x "!in" y}} 1 {{else}} 2 {{/is}}', {x: '6', y: '1,2,3,4'}, ' 1 ']
+        ['{{#is x "!in" y}} 1 {{else}} 2 {{/is}}', {x: 6, y: [1, 2, 3, 4]}, ' 1 ']
       ], cb
 
     it "should allow is blocks (on array/object)", (cb) ->
@@ -99,6 +103,35 @@ describe "Handlebars", ->
         ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: {}, y: 1}, ' 2 ']
         ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: {a: 1, b: 2}, y: 1}, ' 2 ']
       ], cb
+
+  describe "string helper", ->
+
+    it "should lowercase", (cb) ->
+      test.function schema, [
+        ['{{lowercase "THIS SHOULD BE LOWERCASE"}}', null, 'this should be lowercase']
+      ], cb
+
+    it "should uppercase", (cb) ->
+      test.function schema, [
+        ['{{uppercase "this should be lowercase"}}', null, 'THIS SHOULD BE LOWERCASE']
+      ], cb
+
+    it "should capitalize first", (cb) ->
+      test.function schema, [
+        ['{{capitalizeFirst "this should be lowercase"}}', null, 'This should be lowercase']
+      ], cb
+
+    it "should capitallize each", (cb) ->
+      test.function schema, [
+        ['{{capitalizeEach "this should be lowercase"}}', null, 'This Should Be Lowercase']
+      ], cb
+
+    it "should shorten text", (cb) ->
+      test.function schema, [
+        ['{{shorten "this should be lowercase" 18}}', null, 'this should be...']
+      ], cb
+
+  describe "date helper", ->
 
     it "should format dates", (cb) ->
       context =
