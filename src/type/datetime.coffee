@@ -15,12 +15,11 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:datetime')
-util = require 'util'
 chalk = require 'chalk'
 moment = require 'moment-timezone'
 chrono = require 'chrono-node'
 # include alinex packages
-{object} = require 'alinex-util'
+util = require 'alinex-util'
 async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
@@ -124,7 +123,6 @@ exports.run = (work, cb) ->
     if work.pos.timezone
       work.pos.timezone = zones[work.pos.timezone] ? work.pos.timezone
     if work.pos.range?
-      console.log work.value
       results = chrono.parse work.value
       if results[0].start? and results[0].end?
         value = [results[0].start.date(), results[0].end.date()]
@@ -192,7 +190,7 @@ exports.selfcheck = (schema, cb) ->
     schema:
       type: 'object'
       allowedKeys: true
-      keys: object.extend {}, check.base,
+      keys: util.extend util.clone(check.base),
         default:
           type: 'datetime'
           optional: true

@@ -20,10 +20,10 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:array')
-util = require 'util'
 chalk = require 'chalk'
 # alinex modules
-{object, string, array} = require 'alinex-util'
+util = require 'alinex-util'
+{string, array} = util
 async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
@@ -158,7 +158,7 @@ exports.selfcheck = (schema, cb) ->
     schema:
       type: 'object'
       allowedKeys: true
-      keys: object.extend {}, check.base,
+      keys: util.extend util.clone(check.base),
         default:
           type: 'array'
           optional: true

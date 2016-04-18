@@ -22,11 +22,11 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:reference')
-util = require 'util'
 chalk = require 'chalk'
 # alinex modules
+util = require 'alinex-util'
+object = util.object
 async = require 'alinex-async'
-{object} = require 'alinex-util'
 # include classes and helper
 check = require './check'
 
@@ -195,7 +195,7 @@ find = (list, work={}, cb) ->
     # no reference in result
     unless exists result
       return cb null, result unless list.length # stop if last entry of uri path
-      work = object.extend {}, work
+      work = util.clone work
       work.data = result
       return find list, work, cb
     # check for retry
@@ -404,7 +404,7 @@ findData = (path, work, cb) ->
   # check if not at the end
   return cb() unless work.path.length
   # search neighbors by sub call on parent
-  sub = object.clone work
+  sub = util.clone work
   sub.spec = work.spec
   sub.path.pop()
   findData path, sub, cb

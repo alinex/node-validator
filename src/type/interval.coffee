@@ -16,11 +16,9 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:interval')
-util = require 'util'
 chalk = require 'chalk'
 # include alinex packages
-# alinex modules
-{object, number} = require 'alinex-util'
+util = require 'alinex-util'
 # include classes and helper
 check = require '../check'
 
@@ -106,7 +104,7 @@ exports.run = (work, cb) ->
         parts = value.split ':'
         value = "#{parts[0]}h #{parts[1]}m"
         value += " #{parts[2]}s" if parts.length is 3
-      parsed = number.parseMSeconds value
+      parsed = util.number.parseMSeconds value
       unit = work.pos.unit ? 'ms'
       unless unit is 'ms'
         parsed /= switch unit
@@ -139,7 +137,7 @@ exports.selfcheck = (schema, cb) ->
     schema:
       type: 'object'
       allowedKeys: true
-      keys: object.extend {}, check.base,
+      keys: util.extend util.clone(check.base),
         default:
           type: 'float'
           optional: true

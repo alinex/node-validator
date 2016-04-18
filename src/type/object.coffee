@@ -15,10 +15,9 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:object')
-util = require 'util'
 chalk = require 'chalk'
 # alinex modules
-{array, object} = require 'alinex-util'
+util = require 'alinex-util'
 async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
@@ -139,7 +138,7 @@ exports.run = (work, cb) ->
     if work.pos.entries?
       for entry in work.pos.entries
         allowedKeys.push entry.key if entry.key
-  keys = array.unique usedKeys.concat mandatoryKeys, allowedKeys
+  keys = util.array.unique usedKeys.concat mandatoryKeys, allowedKeys
   work.value = value
   # values
   async.each keys, (key, cb) ->
@@ -216,7 +215,7 @@ exports.selfcheck = (schema, cb) ->
     schema:
       type: 'object'
       allowedKeys: true
-      keys: object.extend {}, check.base,
+      keys: util.extend util.clone(check.base),
         default:
           type: 'object'
           optional: true

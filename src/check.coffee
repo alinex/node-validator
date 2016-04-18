@@ -4,10 +4,9 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:check')
-util = require 'util'
+util = require 'alinex-util'
 chalk = require 'chalk'
 async = require 'alinex-async'
-{object} = require 'alinex-util'
 # internal classes and helper
 reference = require './reference'
 
@@ -99,7 +98,7 @@ class Work
     else
       # keep value position but clone path
       sub.vpath = @vpath[0..]
-      sub.value = object.clone @value
+      sub.value = util.clone @value
     # end call if no more steps to go into
     return sub unless schema.length or value.length
     # recursively go one step further
