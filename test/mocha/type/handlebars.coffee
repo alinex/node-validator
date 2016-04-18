@@ -104,6 +104,10 @@ describe.only "Handlebars", ->
         ['{{#is x y}} 1 {{else}} 2 {{/is}}', {x: {a: 1, b: 2}, y: 1}, ' 2 ']
       ], cb
 
+  describe "array helper", ->
+
+  describe "object helper", ->
+
   describe "string helper", ->
 
     it "should lowercase", (cb) ->

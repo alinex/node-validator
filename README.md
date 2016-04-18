@@ -1253,14 +1253,15 @@ The following comparators are supported:
 If you use this helper with an object or array as it's first parameter it will
 base the calculation on the number of entries.
 
-#### Collections
+#### Array helpers
 
 **index**
 **withIndex**
-**join**
+**eachIndex** start, stop
+**join** delimiter
 **length**
-**withSorted**
-**eachIndex**
+
+#### Object helpers
 
 **property**
 **withProperty**

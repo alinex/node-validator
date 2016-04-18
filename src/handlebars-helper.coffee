@@ -43,8 +43,7 @@ helper =
       [left, operator, right] = args
     # use count of entries for array
     if typeof left is 'object'
-      left = Object.keys left
-      left = left.length if typeof left is 'object'
+      left = Object.keys(left).length
     # call comparison
     result = switch operator
       when '>' then left > right
@@ -62,6 +61,51 @@ helper =
       else left
     # execute content or else part
     if result then fn data else inverse data
+
+  # ### Array
+
+  index: ->
+    {args} = argParse arguments
+    [list, i, j] = args
+    i = if i is -1 then list.length -1 else i ? 0
+    j ?= i
+    list[i..j]
+
+  withIndex: ->
+    {args, fn, data} = argParse arguments
+    [list, i, j] = args
+    i = if i is -1 then list.length -1 else i ? 0
+    j ?= i
+    list[i..j].map (e) -> fn e
+    .join ''
+
+Swag.addHelper 'join', (array, separator) ->
+    array.join if Utils.isUndefined(separator) then ' ' else separator
+, 'array'
+
+Swag.addHelper 'length', (array) ->
+    array.length
+, 'array'
+
+Swag.addHelper 'eachIndex', (array, options) ->
+    result = ''
+
+    for value, index in array
+        result += options.fn item: value, index: index
+
+    result
+, 'array'
+
+  # ### Object
+
+Swag.addHelper 'eachProperty', (obj, options) ->
+    result = ''
+
+    for key, value of obj
+        result += options.fn key: key, value: value
+
+    result
+, 'object'
 
   # ### String
 
