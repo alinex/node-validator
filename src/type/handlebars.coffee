@@ -11,19 +11,13 @@
 debug = require('debug')('validator:handlebars')
 chalk = require 'chalk'
 handlebars = require 'handlebars'
-swag = require 'swag'
+require('swag').registerHelpers handlebars
 # alinex modules
 util = require 'alinex-util'
+require('alinex-handlebars').register handlebars
 # include classes and helper
 check = require '../check'
-helper = require '../handlebars-helper'
 
-
-# General initialization
-# -------------------------------------------------
-
-swag.registerHelpers handlebars
-helper.registerHelpers handlebars
 
 # Type implementation
 # -------------------------------------------------
