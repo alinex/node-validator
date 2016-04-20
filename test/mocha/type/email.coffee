@@ -22,6 +22,15 @@ describe "Email", ->
         [undefined, schema.default]
       ], cb
 
+  describe "problems", ->
+
+    it "should fail invalid email adresses", (cb) ->
+      test.fail schema, [
+        'info alinex.de'
+        'info@alinex@de'
+        'this.is.a.very.long.local.part.which.should.be.to.long.to.be.valid.as.an.email.address@email.de'
+      ], cb
+
   describe "simple check", ->
 
     it "should match normal email adresses", (cb) ->

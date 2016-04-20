@@ -126,6 +126,35 @@ describe "Datetime", ->
         ]]
       ], cb
 
+    it "should format ranges", (cb) ->
+      schema.range = true
+      schema.format = 'ISO8601'
+      schema.part = 'date'
+      test.equal schema, [
+        ['17 August 2013 - 19 August 2013', ['2013-08-17', '2013-08-19']]
+      ], cb
+
+    it "should format ranges as timestamp", (cb) ->
+      schema.range = true
+      schema.format = 'unix'
+      schema.part = 'date'
+      test.equal schema, [
+        ['17 August 2013 - 19 August 2013', [1376733600, 1376906400]]
+      ], cb
+
+    it "should format ranges with locale", (cb) ->
+      schema.range = true
+      schema.format = 'LL'
+      schema.locale = 'de'
+      schema.part = 'date'
+      test.equal schema, [
+        ['17 August 2013 - 19 August 2013', ['17. August 2013', '19. August 2013']]
+      ], cb
+
+    it "should format ranges as timestamp", (cb) ->
+      schema.range = true
+      test.fail schema, ['17 August 2013'], cb
+
   describe "range check", ->
 
     it "should support min option", (cb) ->
@@ -137,6 +166,23 @@ describe "Datetime", ->
       schema.max = 'now'
       test.success schema, ['yesterday'], ->
         test.fail schema, ['tomorrow'], cb
+
+    it.only "should support min option on range", (cb) ->
+      schema.min = 'now'
+      schema.range = true
+      test.success schema, ['now', '17. August 2013', '19. August 2013'], ->
+        test.fail schema, [
+          'last Friday from 13:00 - 16.00'
+        ], cb
+
+    it "should support max option on range", (cb) ->
+      schema.max = 'now'
+      schema.range = true
+      test.success schema, ['now', 'last monday - yesterday'], ->
+        test.fail schema, [
+          'last monday - tomorrow'
+          'tomorrow - next monday'
+        ], cb
 
   describe "format check", ->
 
@@ -214,12 +260,20 @@ describe "Datetime", ->
     it "should give simple description", (cb) ->
       test.describe schema, cb
 
+    it "should give only some description", (cb) ->
+      test.describe
+        type: 'datetime'
+        format: 'LLLL'
+      , cb
+
     it "should give complete description", (cb) ->
       test.describe
         title: 'test'
         description: 'Some test rules'
         type: 'datetime'
         default: 'now'
+        range: true
+        timezone: 'Europe/Berlin'
         min: 'now'
         max: '2020-01-01'
         format: 'LLLL'

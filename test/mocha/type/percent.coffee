@@ -88,6 +88,15 @@ describe "Percent", ->
         schema.max = -2
         test.fail schema, [100, -1], cb
 
+    it "should support format option", (cb) ->
+      schema.format = '0.0%'
+      test.equal schema, [[0.2349, '23.5%']], cb
+
+    it "should support local format option", (cb) ->
+      schema.format = '0.0'
+      schema.locale = 'de'
+      test.equal schema, [[0.2349, '0,2']], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
@@ -104,6 +113,8 @@ describe "Percent", ->
         decimals: 2
         min: 0.2
         max: 2
+        format: '0.0'
+        locale: 'de'
       , cb
 
   describe "selfcheck", ->
@@ -122,4 +133,6 @@ describe "Percent", ->
         decimals: 2
         min: 0.2
         max: 2
+        format: '0.0'
+        locale: 'de'
       , cb

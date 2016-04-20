@@ -66,7 +66,7 @@ optimize = (schema, cb) ->
   async.each ['default', 'min', 'max'], (i, cb) ->
     return cb() unless schema[i]?
     check.run
-      name: "option-#{}{i}-datetime"
+      name: "option-#{i}-datetime"
       schema:
         type: 'datetime'
       value: schema[i]
@@ -123,7 +123,9 @@ exports.run = (work, cb) ->
     if work.pos.timezone
       work.pos.timezone = zones[work.pos.timezone] ? work.pos.timezone
     if work.pos.range?
+      console.log '++++', work.value
       results = chrono.parse work.value
+      console.log '====', results[0]
       if results[0].start? and results[0].end?
         value = [results[0].start.date(), results[0].end.date()]
       else
@@ -137,13 +139,13 @@ exports.run = (work, cb) ->
         return work.report (new Error "The given text '#{work.value}' is not parse able
           as date/time."), cb
       value = m.toDate()
-
     # min/max
+    console.log '----------', value
     if work.pos.range?
-      if work.pos.min? and value[0] < work.pos.min or value[1] < work.pos.min
+      if work.pos.min? and (value[0] < work.pos.min) or value[1] < work.pos.min
         return work.report (new Error "The #{work.pos.part} has to be at or after
           #{work.pos.min}"), cb
-      if work.pos.max? and value[0] > work.pos.max or value[1] > work.pos.max
+      if work.pos.max? and (value[0] > work.pos.max) or value[1] > work.pos.max
         return work.report (new Error "The #{work.pos.part} has to be at or before
           #{work.pos.max}"), cb
     else

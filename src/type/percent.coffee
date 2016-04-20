@@ -17,6 +17,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator:percent')
 chalk = require 'chalk'
+numeral = null # load on demand
 # alinex modules
 util = require 'alinex-util'
 # include classes and helper
@@ -68,6 +69,8 @@ exports.describe = (work, cb) ->
       min: work.pos.min
       max: work.pos.max
   , (err, subtext) ->
+    if work.pos.format
+      text += "The number will be formatted like #{work.pos.format}. "
     # the float check will never throw an error, so go on
     cb null, text + subtext
 
@@ -109,6 +112,16 @@ exports.run = (work, cb) ->
         max: work.pos.max
     , (err, value) ->
       return cb err if err
+      if work.pos.format
+        numeral ?= require 'numeral'
+        if work.pos.locale
+          try
+            numeral.language work.pos.locale, require "numeral/languages/#{work.pos.locale}"
+            numeral.language work.pos.locale
+        value = numeral(value).format work.pos.format
+        if work.pos.locale
+          numeral.language 'en'
+      # done return resulting value
       debug "#{work.debug} result #{util.inspect value ? null}"
       cb null, value
 
@@ -141,5 +154,12 @@ exports.selfcheck = (schema, cb) ->
           type: 'float'
           optional: true
           min: '<<<min>>>'
+        format:
+          type: 'string'
+          optional: true
+        locale:
+          type: 'string'
+          match: /^[a-z]{2}(-[A-Z]{2})?$/
+          optional: true
     value: schema
   , cb

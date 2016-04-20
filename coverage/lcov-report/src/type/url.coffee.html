@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/type/url.coffee</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">src/type/</a> url.coffee
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/104</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/46</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/3</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/72</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"># URL validation
+# =================================================
+&nbsp;
+# Check options:
+#
+# - `toAbsoluteBase` - convert to absolute with given base
+# - `removeQuery` - (boolean) remove query and hash from url
+# - `hostsAllowed` - list of allowed hosts by string or regexp
+# - `hostsDenied` - list of denied hosts by string or regexp
+# - `allowProtocols` - lust of allowed protocols
+# - `allowRelative` - (boolean) to allow also relative urls
+&nbsp;
+&nbsp;
+# Node modules
+# -------------------------------------------------
+<span class="cstat-no" title="statement not covered" >debug = require('debug')('validator:url')</span>
+<span class="cstat-no" title="statement not covered" >chalk = require 'chalk'</span>
+<span class="cstat-no" title="statement not covered" >url = require 'url'</span>
+# alinex modules
+<span class="cstat-no" title="statement not covered" >util = require 'alinex-util'</span>
+# include classes and helper
+<span class="cstat-no" title="statement not covered" >check = require '../check'</span>
+&nbsp;
+&nbsp;
+# Type implementation
+# -------------------------------------------------
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >exports.describe = (work, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  text = 'A valid url (unified resource locator). '</span>
+<span class="cstat-no" title="statement not covered" >  text += check.optional.describe work</span>
+<span class="cstat-no" title="statement not covered" >  text = text.replace /\. It's/, ' which is'</span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.toAbsoluteBase</span>
+<span class="cstat-no" title="statement not covered" >    text += <span class="cstat-no" title="statement not covered" >"It will be made absolute from '#{<span class="cstat-no" title="statement not covered" >work</span>.pos.toAbsoluteBase}'. "</span></span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.removeQuery</span>
+<span class="cstat-no" title="statement not covered" >    text += "Existing query parameters are removed. "</span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.hostsAllowed</span>
+<span class="cstat-no" title="statement not covered" >    text += <span class="cstat-no" title="statement not covered" >"Only the hosts matching #{<span class="cstat-no" title="statement not covered" >work</span>.pos.hostsAllowed} are allowed. "</span></span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.hostsDenied</span>
+<span class="cstat-no" title="statement not covered" >    text += <span class="cstat-no" title="statement not covered" >"But hosts matching #{<span class="cstat-no" title="statement not covered" >work</span>.pos.hostsAllowed} are not allowed. "</span></span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.allowProtocols</span>
+<span class="cstat-no" title="statement not covered" >    text += <span class="cstat-no" title="statement not covered" >"The protocol have to be: #{<span class="cstat-no" title="statement not covered" >work</span>.pos.allowProtocols}. "</span></span>
+<span class="cstat-no" title="statement not covered" >  unless work.pos.allowRelative</span>
+<span class="cstat-no" title="statement not covered" >    text += "Relative URLs are also allowed. "</span>
+<span class="cstat-no" title="statement not covered" >  cb null, text</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >exports.run = (work, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} with #{<span class="cstat-no" title="statement not covered" >util.inspect work.value</span>} as #{<span class="cstat-no" title="statement not covered" >work</span>.pos.type}</span>"</span>
+<span class="cstat-no" title="statement not covered" >  debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} #{<span class="cstat-no" title="statement not covered" >chalk.grey util.inspect work.pos</span>}</span>"</span>
+  # base checks
+<span class="cstat-no" title="statement not covered" >  try</span>
+<span class="cstat-no" title="statement not covered" >    if check.optional.run work</span>
+<span class="cstat-no" title="statement not covered" >      debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} result #{<span class="cstat-no" title="statement not covered" >util.inspect work.value ? null</span>}</span>"</span>
+<span class="cstat-no" title="statement not covered" >      return cb()</span>
+  catch error
+<span class="cstat-no" title="statement not covered" >    return work.report error, cb</span>
+  # split into parts
+<span class="cstat-no" title="statement not covered" >  value = work.value</span>
+<span class="cstat-no" title="statement not covered" >  unless typeof work.value is 'string'</span>
+<span class="cstat-no" title="statement not covered" >    return work.report (new <span class="cstat-no" title="statement not covered" >Error "The url has to be a string object."</span>), cb</span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.toAbsoluteBase</span>
+<span class="cstat-no" title="statement not covered" >    value = url.resolve work.pos.toAbsoluteBase, value</span>
+<span class="cstat-no" title="statement not covered" >  parts = url.parse value</span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.removeQuery</span>
+<span class="cstat-no" title="statement not covered" >    delete parts.search</span>
+<span class="cstat-no" title="statement not covered" >    delete parts.hash</span>
+  # check the hostname
+<span class="cstat-no" title="statement not covered" >  if parts.host</span>
+<span class="cstat-no" title="statement not covered" >    delete parts.host</span>
+<span class="cstat-no" title="statement not covered" >    if work.pos.hostsAllowed</span>
+<span class="cstat-no" title="statement not covered" >      success = true</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >      work.pos.hostsAllowed = [work.pos.hostsAllowed]</span> unless Array.isArray work.pos.hostsAllowed</span>
+<span class="cstat-no" title="statement not covered" >      for match in work.pos.hostsAllowed</span>
+<span class="cstat-no" title="statement not covered" >        if match instanceof RegExp</span>
+<span class="cstat-no" title="statement not covered" >          success = success and parts.hostname.match match</span>
+        else
+<span class="cstat-no" title="statement not covered" >          success = success and ~parts.hostname.indexOf match</span>
+<span class="cstat-no" title="statement not covered" >      unless success</span>
+<span class="cstat-no" title="statement not covered" >        return work.report (new <span class="cstat-no" title="statement not covered" >Error <span class="cstat-no" title="statement not covered" >"The hostname '#{<span class="cstat-no" title="statement not covered" >parts</span>.hostname}' should match</span></span></span>
+        against '#{<span class="cstat-no" title="statement not covered" >work</span>.pos.hostsAllowed}'"), cb
+<span class="cstat-no" title="statement not covered" >    if work.pos.hostsDenied</span>
+<span class="cstat-no" title="statement not covered" >      success = true</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >      work.pos.hostsDenied = [work.pos.hostsDenied]</span> unless Array.isArray work.pos.hostsDenied</span>
+<span class="cstat-no" title="statement not covered" >      for match in work.pos.hostsDenied</span>
+<span class="cstat-no" title="statement not covered" >        if match instanceof RegExp</span>
+<span class="cstat-no" title="statement not covered" >          success = success and not parts.hostname.match match</span>
+        else
+<span class="cstat-no" title="statement not covered" >          success = success and not ~parts.hostname.indexOf match</span>
+<span class="cstat-no" title="statement not covered" >      unless success</span>
+<span class="cstat-no" title="statement not covered" >        return work.report (new <span class="cstat-no" title="statement not covered" >Error <span class="cstat-no" title="statement not covered" >"The hostname '#{<span class="cstat-no" title="statement not covered" >parts</span>.hostname}' should not match</span></span></span>
+        against '#{<span class="cstat-no" title="statement not covered" >work</span>.pos.hostsDenied}'"), cb
+  # check allowed protocols
+<span class="cstat-no" title="statement not covered" >  if work.pos.allowProtocols</span>
+<span class="cstat-no" title="statement not covered" >    unless parts.protocol</span>
+<span class="cstat-no" title="statement not covered" >      return work.report (new <span class="cstat-no" title="statement not covered" >Error "The protocol is missing."</span>), cb</span>
+<span class="cstat-no" title="statement not covered" >    unless parts.protocol.replace(/:/, '') in work.pos.allowProtocols</span>
+<span class="cstat-no" title="statement not covered" >      return work.report (new <span class="cstat-no" title="statement not covered" >Error <span class="cstat-no" title="statement not covered" >"The protocol #{<span class="cstat-no" title="statement not covered" >parts</span>.protocol} is not allowed."</span></span>), cb</span>
+<span class="cstat-no" title="statement not covered" >  unless work.pos.allowRelative or parts.hostname</span>
+<span class="cstat-no" title="statement not covered" >    return work.report (new <span class="cstat-no" title="statement not covered" >Error "Relative URLs are not allowed."</span>), cb</span>
+<span class="cstat-no" title="statement not covered" >  value = url.format parts</span>
+<span class="cstat-no" title="statement not covered" >  return cb null, value</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >exports.selfcheck = (schema, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  check.run</span>
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: util.extend util.clone(check.base),
+        default:
+          type: 'url'
+          optional: true
+        toAbsoluteBase:
+          type: 'url'
+          optional: true
+        removeQuery:
+          type: 'boolean'
+          optional: true
+        hostsAllowed:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'string'
+          ,
+            type: 'regexp'
+          ]
+        hostsDenied:
+          type: 'or'
+          optional: true
+          or: [
+            type: 'string'
+          ,
+            type: 'regexp'
+          ]
+        allowProtocols:
+          type: 'array'
+          toArray: true
+          optional: true
+        allowRelative:
+          type: 'boolean'
+          optional: true
+    value: schema
+  , cb
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Apr 20 2016 22:00:03 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

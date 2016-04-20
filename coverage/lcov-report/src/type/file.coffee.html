@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/type/file.coffee</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">src/type/</a> file.coffee
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/150</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/57</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/83</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"># Domain name validation
+# =================================================
+&nbsp;
+# Check the value as valid file or directory entry.
+#
+# __Sanitize options:__
+#
+# - `basedir` - (string) relative paths are calculated from this directory
+# - `resolve` - (bool) should the given value be resolved to a full path
+#
+# __Check options:__
+#
+# - `exists` - (bool) true to check for already existing entry
+# - `find` - (array or function) list of directories in which to search for the file
+# - `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
+&nbsp;
+&nbsp;
+# Node modules
+# -------------------------------------------------
+<span class="cstat-no" title="statement not covered" >debug = require('debug')('validator:file')</span>
+<span class="cstat-no" title="statement not covered" >chalk = require 'chalk'</span>
+<span class="cstat-no" title="statement not covered" >fspath = require 'path'</span>
+# alinex modules
+<span class="cstat-no" title="statement not covered" >fs = require 'alinex-fs'</span>
+<span class="cstat-no" title="statement not covered" >async = require 'alinex-async'</span>
+<span class="cstat-no" title="statement not covered" >util = require 'alinex-util'</span>
+# include classes and helper
+<span class="cstat-no" title="statement not covered" >check = require '../check'</span>
+&nbsp;
+# Type implementation
+# -------------------------------------------------
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >exports.describe = (work, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  text = 'A valid filesystem entry. '</span>
+<span class="cstat-no" title="statement not covered" >  text += check.optional.describe work</span>
+<span class="cstat-no" title="statement not covered" >  text = text.replace /\. It's/, ' which is'</span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.exists</span>
+<span class="cstat-no" title="statement not covered" >    text += "The file has to exist. "</span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.basedir</span>
+<span class="cstat-no" title="statement not covered" >    text += <span class="cstat-no" title="statement not covered" >"Relative paths are calculated from #{<span class="cstat-no" title="statement not covered" >work</span>.pos.basedir}. "</span></span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.resolve</span>
+<span class="cstat-no" title="statement not covered" >    text += "The path will be resolved to it's absolute path. "</span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.find</span>
+<span class="cstat-no" title="statement not covered" >    text += "A search for the file will be done. "</span>
+<span class="cstat-no" title="statement not covered" >  if work.pos.filetype</span>
+<span class="cstat-no" title="statement not covered" >    text += <span class="cstat-no" title="statement not covered" >"The file have to be of type '#{<span class="cstat-no" title="statement not covered" >work</span>.pos.filetype}'. "</span></span>
+<span class="cstat-no" title="statement not covered" >  cb null, text</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >exports.run = (work, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} with #{<span class="cstat-no" title="statement not covered" >util.inspect work.value</span>} as #{<span class="cstat-no" title="statement not covered" >work</span>.pos.type}</span>"</span>
+<span class="cstat-no" title="statement not covered" >  debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} #{<span class="cstat-no" title="statement not covered" >chalk.grey util.inspect work.pos</span>}</span>"</span>
+  # base checks
+<span class="cstat-no" title="statement not covered" >  try</span>
+<span class="cstat-no" title="statement not covered" >    if check.optional.run work</span>
+<span class="cstat-no" title="statement not covered" >      debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} result #{<span class="cstat-no" title="statement not covered" >util.inspect value ? null</span>}</span>"</span>
+<span class="cstat-no" title="statement not covered" >      return cb()</span>
+  catch error
+<span class="cstat-no" title="statement not covered" >    return work.report error, cb</span>
+<span class="cstat-no" title="statement not covered" >  value = work.value</span>
+  # sanitize
+<span class="cstat-no" title="statement not covered" >  if typeof value isnt 'string'</span>
+<span class="cstat-no" title="statement not covered" >    return work.report (new <span class="cstat-no" title="statement not covered" >Error <span class="cstat-no" title="statement not covered" >"Could not find the file #{<span class="cstat-no" title="statement not covered" >value</span>}</span>"</span>), cb</span>
+<span class="cstat-no" title="statement not covered" >  value = fspath.normalize value</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >  value = value[..-2]</span> if value[-1..] is '/'</span>
+  # get basedir
+<span class="cstat-no" title="statement not covered" >  basedir = fspath.resolve work.pos.basedir ? '.'</span>
+  # validate
+<span class="cstat-no" title="statement not covered" >  find work, value, <span class="fstat-no" title="function not covered" >(err, found) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >    return cb err</span> if err</span>
+<span class="cstat-no" title="statement not covered" >    unless found</span>
+<span class="cstat-no" title="statement not covered" >      return work.report (new <span class="cstat-no" title="statement not covered" >Error <span class="cstat-no" title="statement not covered" >"Could not find the file #{<span class="cstat-no" title="statement not covered" >value</span>}</span>"</span>), cb</span>
+    # resolve
+<span class="cstat-no" title="statement not covered" >    filepath = fspath.resolve basedir, found</span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >    found = filepath</span> if work.pos.resolve</span>
+<span class="cstat-no" title="statement not covered" >    exists work, filepath, <span class="fstat-no" title="function not covered" >(err) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >      return cb err</span> if err</span>
+<span class="cstat-no" title="statement not covered" >      filetype work, found, <span class="fstat-no" title="function not covered" >(err) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >        return cb err</span> if err</span>
+<span class="cstat-no" title="statement not covered" >        debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} result #{<span class="cstat-no" title="statement not covered" >util.inspect value ? null</span>}</span>"</span>
+<span class="cstat-no" title="statement not covered" >        cb null, found</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >find = (work, value, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >  return cb null, value</span> unless work.pos.find</span>
+<span class="cstat-no" title="statement not covered" >  search =  if typeof work.pos.find is 'function' then <span class="cstat-no" title="statement not covered" >work.pos.find()</span> else <span class="cstat-no" title="statement not covered" >work</span>.pos.find</span>
+<span class="cstat-no" title="statement not covered" >  unless search?.length</span>
+<span class="cstat-no" title="statement not covered" >    return work.report (new <span class="cstat-no" title="statement not covered" >Error "Wrong find option, array is needed for file validation."</span>), cb</span>
+  # search in list
+<span class="cstat-no" title="statement not covered" >  async.map search, <span class="fstat-no" title="function not covered" >(dir, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >    debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} search in #{<span class="cstat-no" title="statement not covered" >dir</span>}..."</span></span>
+<span class="cstat-no" title="statement not covered" >    fs.find dir,</span>
+      include: value
+    , <span class="fstat-no" title="function not covered" >(err, list) -&gt;</span>
+<span class="cstat-no" title="statement not covered" >      cb null, list</span>
+  , <span class="fstat-no" title="function not covered" >(err, lists) -&gt;</span>
+<span class="cstat-no" title="statement not covered" >    for list in lists</span>
+      # retrieve first found
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >      return cb null, list[0]</span> if list?.length</span>
+    # return null if nothing found
+<span class="cstat-no" title="statement not covered" >    cb()</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >exists = (work, value, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >  return cb()</span> unless work.pos.exists or work.pos.filetype</span>
+<span class="cstat-no" title="statement not covered" >  fs.exists value, <span class="fstat-no" title="function not covered" >(exists) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >    return cb()</span> if exists</span>
+<span class="cstat-no" title="statement not covered" >    work.report (new <span class="cstat-no" title="statement not covered" >Error <span class="cstat-no" title="statement not covered" >"The given file '#{<span class="cstat-no" title="statement not covered" >value</span>}' has to exist."</span></span>), cb</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >filetype = (work, value, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >  return cb()</span> unless work.pos.filetype</span>
+<span class="cstat-no" title="statement not covered" >  fs.lstat value, <span class="fstat-no" title="function not covered" >(err, stats) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >    return cb err</span> if err</span>
+<span class="cstat-no" title="statement not covered" >    switch work.pos.filetype</span>
+      when 'file', 'f'
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >        return cb()</span> if stats.isFile()</span>
+<span class="cstat-no" title="statement not covered" >        debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} skip #{<span class="cstat-no" title="statement not covered" >value</span>} because not a file entry"</span></span>
+      when 'directory', 'dir', 'd'
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >        return cb()</span> if stats.isDirectory()</span>
+<span class="cstat-no" title="statement not covered" >        debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} skip #{<span class="cstat-no" title="statement not covered" >value</span>} because not a directory entry"</span></span>
+      when 'link', 'l'
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >        return cb()</span> if stats.isSymbolicLink()</span>
+<span class="cstat-no" title="statement not covered" >        debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} skip #{<span class="cstat-no" title="statement not covered" >value</span>} because not a link entry"</span></span>
+      when 'fifo', 'pipe', 'p'
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >        return cb()</span> if stats.isFIFO()</span>
+<span class="cstat-no" title="statement not covered" >        debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} skip #{<span class="cstat-no" title="statement not covered" >value</span>} because not a FIFO entry"</span></span>
+      when 'socket', 's'
+<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >        return cb()</span> if stats.isSocket()</span>
+<span class="cstat-no" title="statement not covered" >        debug "#<span class="cstat-no" title="statement not covered" >{<span class="cstat-no" title="statement not covered" >work</span>.debug} skip #{<span class="cstat-no" title="statement not covered" >value</span>} because not a socket entry"</span></span>
+<span class="cstat-no" title="statement not covered" >    work.report (new <span class="cstat-no" title="statement not covered" >Error <span class="cstat-no" title="statement not covered" >"The given file '#{<span class="cstat-no" title="statement not covered" >value</span>}' is not a #{<span class="cstat-no" title="statement not covered" >work</span>.pos.filetype} entry."</span></span>), cb</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >exports.selfcheck = (schema, cb) -&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  check.run</span>
+    schema:
+      type: 'object'
+      allowedKeys: true
+      keys: util.extend util.clone(check.base),
+        default:
+          type: 'string'
+          optional: true
+        basedir:
+          type: 'string'
+          default: '.'
+        resolve:
+          type: 'boolean'
+          default: false
+        exists:
+          type: 'boolean'
+          default: false
+        find:
+          type: 'array'
+          optional: true
+          entries:
+            type: 'string'
+        filetype:
+          type: 'string'
+          lowerCase: true
+          values: [
+            'f', 'file'
+            'd', 'dir', 'directory'
+            'l', 'link'
+            'fifo', 'pipe', 'p'
+            'socket', 's'
+          ]
+          optional: true
+    value: schema
+  , cb
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Apr 20 2016 22:00:03 GMT+0200 (CEST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

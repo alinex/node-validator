@@ -1299,6 +1299,11 @@ __Check options:__
 - `min` - (numeric) the smalles allowed number
 - `max` - (numeric) the biggest allowed number
 
+__Format options:__
+
+- `format` - (string) pattern how to format percent value (see [numeral.js](http://numeraljs.com))
+- `locale` - (string) locale to use in format like 'de'
+
 ### port
 
 The value has to be a TCP/UDP port number.
