@@ -23,10 +23,17 @@
 # -------------------------------------------------
 debug = require('debug')('validator:reference')
 chalk = require 'chalk'
+vm = null # load on demand
+yaml = null # load on demand
+xml2js = null # load on demand
+fspath = null # load on demand
+request = null # load on demand
+exec = null # load on demand
 # alinex modules
 util = require 'alinex-util'
 object = util.object
 async = require 'alinex-async'
+fs = null # load on demand
 # include classes and helper
 check = require './check'
 
@@ -218,7 +225,7 @@ findType =
   # #### Value checks
   check: (proto, path, work, cb) ->
     # get the check schema reading as js
-    vm = require 'vm'
+    vm ?= require 'vm'
     schema = vm.runInNewContext "x=#{path}"
     # run the subcheck
     name = work.spec?.name ? 'value'
@@ -251,7 +258,7 @@ findType =
   parse: (proto, path, work, cb) ->
     switch path
       when '$js'
-        vm = require 'vm'
+        vm ?= require 'vm'
         cb null, vm.runInNewContext "x=#{work.data}"
       when '$json'
         try
@@ -261,7 +268,7 @@ findType =
           return cb()
         cb null, result
       when '$yaml'
-        yaml = require 'js-yaml'
+        yaml ?= require 'js-yaml'
         try
           result = yaml.safeLoad work.data
         catch error
@@ -269,7 +276,7 @@ findType =
           return cb()
         cb null, result
       when '$xml'
-        xml2js = require 'xml2js'
+        xml2js ?= require 'xml2js'
         xml2js.parseString work.data, (err, result) ->
           if err
             debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
@@ -344,15 +351,15 @@ findType =
     cb null, object.pathSearch work.spec?.context, path
   # #### Read from file
   file: (proto, path, work, cb) ->
-    fs = require 'alinex-fs'
-    fspath = require 'path'
+    fs ?= require 'alinex-fs'
+    fspath ?= require 'path'
     path = fspath.resolve work.spec.dir, path if work.spec?.dir?
     fs.realpath path, (err, path) ->
       return cb err if err
       fs.readFile path, 'utf-8', cb
   # #### Read from web resource
   web: (proto, path, work, cb) ->
-    request = require 'request'
+    request ?= require 'request'
     request
       uri: "#{proto}://#{path}"
       followAllRedirects: true
@@ -365,7 +372,7 @@ findType =
       cb null, body
   # #### Read from command output
   cmd: (proto, path, work, cb) ->
-    exec = require('child_process').exec
+    exec ?= require('child_process').exec
     opt = {}
     opt.cwd = work.spec.dir if work.spec?.dir?
     exec path, opt, (err, result) ->

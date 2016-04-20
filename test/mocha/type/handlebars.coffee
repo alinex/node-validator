@@ -1,9 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-moment = require 'moment'
-
-describe.only "Handlebars", ->
+describe "Handlebars", ->
 
   schema = null
   beforeEach ->

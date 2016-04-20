@@ -20,7 +20,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator:integer')
 chalk = require 'chalk'
-math = require 'mathjs'
+math = null # loaded on demand
 # alinex modules
 util = require 'alinex-util'
 # include classes and helper
@@ -91,6 +91,7 @@ exports.run = (work, cb) ->
   if work.pos.unit?
     if typeof value is 'number' or (typeof value is 'string' and value.match /\d$/)
       value = "" + value + work.pos.unit
+    math ?= require 'mathjs'
     value = math.unit value
     value = value.toNumber work.pos.unit
   # sanitize string
@@ -130,6 +131,7 @@ exports.run = (work, cb) ->
       or lower"), cb
   # output format
   if work.pos.toUnit
+    math ?= require 'mathjs'
     value = math.unit value, work.pos.unit ? work.pos.toUnit
     value = value.to 'min' if value.units[0].unit.name is 's' and value.toNumber('s') > 120
     value = value.to 'h' if value.units[0].unit.name is 'min' and value.toNumber('min') > 120
