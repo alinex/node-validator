@@ -4,6 +4,21 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.6.0 (2016-04-21)
+-------------------------------------------------
+- BACKWARD INCOMPATIBLE CHANGES in handlebars helper.
+- Upgraded handlebars to new version with i18n support.
+- Fixed and extended test cases.
+- Added format option to percent.
+- Load packages on demand as possible.
+- Added alinex-handlebars helper.
+- Remove handlebars helper into own package.
+- Start new collection helpers for handlebars.
+- Add some string helpers for handlebars.
+- Move handlebar helpers into extra module.
+- Replace deprecated extend and clone calls.
+- Upgraded util, yaml, mathjs, moment and request package.
+
 Version 1.5.0 (2016-04-15)
 -------------------------------------------------
 - Upgraded request package.
