@@ -88,7 +88,6 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:or'</span>)
-util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
@@ -102,7 +101,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object
+          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
 async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
         </td>
       </tr>
@@ -223,7 +222,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
     <span class="hljs-attribute">schema</span>:
       <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
       <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
         <span class="hljs-attribute">default</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'any'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>

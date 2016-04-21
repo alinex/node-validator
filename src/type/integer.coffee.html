@@ -119,9 +119,8 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:integer'</span>)
-util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mathjs'</span></pre>
+math = <span class="hljs-literal">null</span> <span class="hljs-comment"># loaded on demand</span></pre>
         </td>
       </tr>
     
@@ -134,7 +133,7 @@ math = <span class="hljs-built_in">require</span> <span class="hljs-string">'mat
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">object = <span class="hljs-built_in">require</span>(<span class="hljs-string">'alinex-util'</span>).object</pre>
+          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
         </td>
       </tr>
     
@@ -302,6 +301,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.unit?
     <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'number'</span> <span class="hljs-keyword">or</span> (<span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">and</span> value.match <span class="hljs-regexp">/\d$/</span>)
       value = <span class="hljs-string">""</span> + value + work.pos.unit
+    math ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'mathjs'</span>
     value = math.unit value
     value = value.toNumber work.pos.unit</pre>
         </td>
@@ -420,6 +420,7 @@ min/max</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.toUnit
+    math ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'mathjs'</span>
     value = math.unit value, work.pos.unit ? work.pos.toUnit
     value = value.to <span class="hljs-string">'min'</span> <span class="hljs-keyword">if</span> value.units[<span class="hljs-number">0</span>].unit.name <span class="hljs-keyword">is</span> <span class="hljs-string">'s'</span> <span class="hljs-keyword">and</span> value.toNumber(<span class="hljs-string">'s'</span>) &gt; <span class="hljs-number">120</span>
     value = value.to <span class="hljs-string">'h'</span> <span class="hljs-keyword">if</span> value.units[<span class="hljs-number">0</span>].unit.name <span class="hljs-keyword">is</span> <span class="hljs-string">'min'</span> <span class="hljs-keyword">and</span> value.toNumber(<span class="hljs-string">'min'</span>) &gt; <span class="hljs-number">120</span>
@@ -465,7 +466,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
     <span class="hljs-attribute">schema</span>:
       <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
       <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
         <span class="hljs-attribute">default</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>

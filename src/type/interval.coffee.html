@@ -116,7 +116,6 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:interval'</span>)
-util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
@@ -126,12 +125,11 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
           <div class="pilwrap">
   <a class="pilcrow" href="#section-4" id="section-4"></a>
 </div>
-<p>include alinex packages
-alinex modules</p>
+<p>include alinex packages</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">{object, number} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
+          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
         </td>
       </tr>
     
@@ -316,7 +314,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         parts = value.split <span class="hljs-string">':'</span>
         value = <span class="hljs-string">"<span class="hljs-subst">#{parts[<span class="hljs-number">0</span>]}</span>h <span class="hljs-subst">#{parts[<span class="hljs-number">1</span>]}</span>m"</span>
         value += <span class="hljs-string">" <span class="hljs-subst">#{parts[<span class="hljs-number">2</span>]}</span>s"</span> <span class="hljs-keyword">if</span> parts.length <span class="hljs-keyword">is</span> <span class="hljs-number">3</span>
-      parsed = number.parseMSeconds value
+      parsed = util.number.parseMSeconds value
       unit = work.pos.unit ? <span class="hljs-string">'ms'</span>
       <span class="hljs-keyword">unless</span> unit <span class="hljs-keyword">is</span> <span class="hljs-string">'ms'</span>
         parsed /= <span class="hljs-keyword">switch</span> unit
@@ -360,7 +358,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
     <span class="hljs-attribute">schema</span>:
       <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
       <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
         <span class="hljs-attribute">default</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>

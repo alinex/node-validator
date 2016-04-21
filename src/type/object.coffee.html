@@ -115,7 +115,6 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:object'</span>)
-util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
         </td>
       </tr>
@@ -129,7 +128,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">{array, object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
+          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
 async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
         </td>
       </tr>
@@ -459,7 +458,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     <span class="hljs-keyword">if</span> work.pos.entries?
       <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> work.pos.entries
         allowedKeys.push entry.key <span class="hljs-keyword">if</span> entry.key
-  keys = array.unique usedKeys.concat mandatoryKeys, allowedKeys
+  keys = util.array.unique usedKeys.concat mandatoryKeys, allowedKeys
   work.value = value</pre>
         </td>
       </tr>
@@ -602,7 +601,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
     <span class="hljs-attribute">schema</span>:
       <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
       <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
         <span class="hljs-attribute">default</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>

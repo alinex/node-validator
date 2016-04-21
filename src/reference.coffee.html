@@ -216,8 +216,13 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:reference'</span>)
-util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+vm = <span class="hljs-literal">null</span> <span class="hljs-comment"># load on demand</span>
+yaml = <span class="hljs-literal">null</span> <span class="hljs-comment"># load on demand</span>
+xml2js = <span class="hljs-literal">null</span> <span class="hljs-comment"># load on demand</span>
+fspath = <span class="hljs-literal">null</span> <span class="hljs-comment"># load on demand</span>
+request = <span class="hljs-literal">null</span> <span class="hljs-comment"># load on demand</span>
+exec = <span class="hljs-literal">null</span> <span class="hljs-comment"># load on demand</span></pre>
         </td>
       </tr>
     
@@ -230,8 +235,10 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
-{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
+          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
+object = util.object
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
+fs = <span class="hljs-literal">null</span> <span class="hljs-comment"># load on demand</span></pre>
         </td>
       </tr>
     
@@ -731,7 +738,7 @@ on. The result will be from the last uri path.</p>
         <td class="code highlight">
           <pre class="coffeescript">    <span class="hljs-keyword">unless</span> exists result
       <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, result <span class="hljs-keyword">unless</span> list.length <span class="hljs-comment"># stop if last entry of uri path</span>
-      work = object.extend {}, work
+      work = util.clone work
       work.data = result
       <span class="hljs-keyword">return</span> find list, work, cb</pre>
         </td>
@@ -813,7 +820,7 @@ Value checks
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">    vm = <span class="hljs-built_in">require</span> <span class="hljs-string">'vm'</span>
+          <pre class="coffeescript">    vm ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'vm'</span>
     schema = vm.runInNewContext <span class="hljs-string">"x=<span class="hljs-subst">#{path}</span>"</span></pre>
         </td>
       </tr>
@@ -896,7 +903,7 @@ Special parsing of string
           <pre class="coffeescript">  <span class="hljs-attribute">parse</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
     <span class="hljs-keyword">switch</span> path
       <span class="hljs-keyword">when</span> <span class="hljs-string">'$js'</span>
-        vm = <span class="hljs-built_in">require</span> <span class="hljs-string">'vm'</span>
+        vm ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'vm'</span>
         cb <span class="hljs-literal">null</span>, vm.runInNewContext <span class="hljs-string">"x=<span class="hljs-subst">#{work.data}</span>"</span>
       <span class="hljs-keyword">when</span> <span class="hljs-string">'$json'</span>
         <span class="hljs-keyword">try</span>
@@ -906,7 +913,7 @@ Special parsing of string
           <span class="hljs-keyword">return</span> cb()
         cb <span class="hljs-literal">null</span>, result
       <span class="hljs-keyword">when</span> <span class="hljs-string">'$yaml'</span>
-        yaml = <span class="hljs-built_in">require</span> <span class="hljs-string">'js-yaml'</span>
+        yaml ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'js-yaml'</span>
         <span class="hljs-keyword">try</span>
           result = yaml.safeLoad work.data
         <span class="hljs-keyword">catch</span> error
@@ -914,7 +921,7 @@ Special parsing of string
           <span class="hljs-keyword">return</span> cb()
         cb <span class="hljs-literal">null</span>, result
       <span class="hljs-keyword">when</span> <span class="hljs-string">'$xml'</span>
-        xml2js = <span class="hljs-built_in">require</span> <span class="hljs-string">'xml2js'</span>
+        xml2js ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'xml2js'</span>
         xml2js.parseString work.data, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
           <span class="hljs-keyword">if</span> err
             debug chalk.grey <span class="hljs-string">"'<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>' -&gt; check failed: <span class="hljs-subst">#{err.message}</span>"</span>
@@ -1124,8 +1131,8 @@ Read from file
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-attribute">file</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-    fs = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-fs'</span>
-    fspath = <span class="hljs-built_in">require</span> <span class="hljs-string">'path'</span>
+    fs ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-fs'</span>
+    fspath ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'path'</span>
     path = fspath.resolve work.spec.dir, path <span class="hljs-keyword">if</span> work.spec?.dir?
     fs.realpath path, <span class="hljs-function"><span class="hljs-params">(err, path)</span> -&gt;</span>
       <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
@@ -1145,7 +1152,7 @@ Read from web resource
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-attribute">web</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-    request = <span class="hljs-built_in">require</span> <span class="hljs-string">'request'</span>
+    request ?= <span class="hljs-built_in">require</span> <span class="hljs-string">'request'</span>
     request
       <span class="hljs-attribute">uri</span>: <span class="hljs-string">"<span class="hljs-subst">#{proto}</span>://<span class="hljs-subst">#{path}</span>"</span>
       <span class="hljs-attribute">followAllRedirects</span>: <span class="hljs-literal">true</span>
@@ -1182,7 +1189,7 @@ Read from command output
         </td>
         <td class="code highlight">
           <pre class="coffeescript">  <span class="hljs-attribute">cmd</span>: <span class="hljs-function"><span class="hljs-params">(proto, path, work, cb)</span> -&gt;</span>
-    exec = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>).exec
+    exec ?= <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>).exec
     opt = {}
     opt.cwd = work.spec.dir <span class="hljs-keyword">if</span> work.spec?.dir?
     exec path, opt, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
@@ -1321,7 +1328,7 @@ Read from value structure
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  sub = object.clone work
+          <pre class="coffeescript">  sub = util.clone work
   sub.spec = work.spec
   sub.path.pop()
   findData path, sub, cb</pre>

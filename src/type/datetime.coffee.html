@@ -132,7 +132,6 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:datetime'</span>)
-util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
 moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment-timezone'</span>
 chrono = <span class="hljs-built_in">require</span> <span class="hljs-string">'chrono-node'</span></pre>
@@ -148,7 +147,7 @@ chrono = <span class="hljs-built_in">require</span> <span class="hljs-string">'c
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
+          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
 async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
         </td>
       </tr>
@@ -238,7 +237,7 @@ Optimize options setting
   async.each [<span class="hljs-string">'default'</span>, <span class="hljs-string">'min'</span>, <span class="hljs-string">'max'</span>], <span class="hljs-function"><span class="hljs-params">(i, cb)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> schema[i]?
     check.run
-      <span class="hljs-attribute">name</span>: <span class="hljs-string">"option-<span class="hljs-subst">#{}</span>{i}-datetime"</span>
+      <span class="hljs-attribute">name</span>: <span class="hljs-string">"option-<span class="hljs-subst">#{i}</span>-datetime"</span>
       <span class="hljs-attribute">schema</span>:
         <span class="hljs-attribute">type</span>: <span class="hljs-string">'datetime'</span>
       <span class="hljs-attribute">value</span>: schema[i]
@@ -362,7 +361,6 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.timezone
       work.pos.timezone = zones[work.pos.timezone] ? work.pos.timezone
     <span class="hljs-keyword">if</span> work.pos.range?
-      <span class="hljs-built_in">console</span>.log work.value
       results = chrono.parse work.value
       <span class="hljs-keyword">if</span> results[<span class="hljs-number">0</span>].start? <span class="hljs-keyword">and</span> results[<span class="hljs-number">0</span>].end?
         value = [results[<span class="hljs-number">0</span>].start.date(), results[<span class="hljs-number">0</span>].end.date()]
@@ -390,7 +388,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.range?
-      <span class="hljs-keyword">if</span> work.pos.min? <span class="hljs-keyword">and</span> value[<span class="hljs-number">0</span>] &lt; work.pos.min <span class="hljs-keyword">or</span> value[<span class="hljs-number">1</span>] &lt; work.pos.min
+      <span class="hljs-keyword">if</span> work.pos.min? <span class="hljs-keyword">and</span> (value[<span class="hljs-number">0</span>] &lt; work.pos.min) <span class="hljs-keyword">or</span> value[<span class="hljs-number">1</span>] &lt; work.pos.min
         <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The <span class="hljs-subst">#{work.pos.part}</span> has to be at or after
 </span></pre>
         </td>
@@ -405,7 +403,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">      <span class="hljs-keyword">if</span> work.pos.max? <span class="hljs-keyword">and</span> value[<span class="hljs-number">0</span>] &gt; work.pos.max <span class="hljs-keyword">or</span> value[<span class="hljs-number">1</span>] &gt; work.pos.max
+          <pre class="coffeescript">      <span class="hljs-keyword">if</span> work.pos.max? <span class="hljs-keyword">and</span> (value[<span class="hljs-number">0</span>] &gt; work.pos.max) <span class="hljs-keyword">or</span> value[<span class="hljs-number">1</span>] &gt; work.pos.max
         <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The <span class="hljs-subst">#{work.pos.part}</span> has to be at or before
 </span></pre>
         </td>
@@ -497,8 +495,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <div class="pilwrap">
   <a class="pilcrow" href="#section-22" id="section-22"></a>
 </div>
-<p>try moment parsing
-console.log '---&gt;', value</p>
+<p>return result</p>
 
         </td>
         <td class="code highlight">
@@ -509,7 +506,7 @@ exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schem
     <span class="hljs-attribute">schema</span>:
       <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
       <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: object.extend {}, check.base,
+      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
         <span class="hljs-attribute">default</span>:
           <span class="hljs-attribute">type</span>: <span class="hljs-string">'datetime'</span>
           <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>

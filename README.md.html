@@ -1386,77 +1386,8 @@ object will return the resulting text.</p>
 <p>Within the handlebars templates you may use:</p>
 <ul>
 <li><a href="http://alinex.github.io/develop/lang/handlebars.html#built-in-helpers">builtin helpers</a></li>
-<li><a href="http://elving.github.io/swag/">swag helpers</a></li>
-<li>or the following special ones</li>
+<li>additional <a href="http://alinex.github.io/node-handlebars">handlebars</a> helpers</li>
 </ul>
-<p><strong>is</strong></p>
-<p>Given one argument, is acts exactly like <code>if</code>:</p>
-<pre><code>{{#is x}} ... {{else}} ... {{/is}}
-</code></pre>
-<p>Given two arguments, <code>is</code> compares the two are equal:</p>
-<pre><code>{{#is x y}} ... {{else}} ... {{/is}}
-</code></pre>
-<p>Given three arguments, the second argument becomes the comparator:</p>
-<pre><code>{{#is x &quot;not&quot; y}} ... {{else}} ... {{/is}}
-{{#is 5 &quot;&gt;=&quot; 2}} ... {{else}} ... {{/is}}
-</code></pre>
-<p>The following comparators are supported:</p>
-<ul>
-<li><code>==</code> or (no comparator) - equality checking</li>
-<li><code>!=</code> or <code>not</code> - not equal</li>
-<li><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code> - greater/less number operators</li>
-<li><code>in</code> - check a value exists in either a comma-separated string or an array</li>
-</ul>
-<p>If you use this helper with an object or array as it's first parameter it will
-base the calculation on the number of entries.</p>
-<p><strong>dateFormat</strong></p>
-<p>Parameter:</p>
-<ul>
-<li>date - to be printed (alternatively given as content)</li>
-<li>format - defining the display format</li>
-</ul>
-<p>Examples:</p>
-<pre><code>{{dateFormat date &quot;MMMM YYYY&quot;}}
-# January 2016
-{{dateFormat date &quot;LL&quot;}}
-# January 18, 2016
-{{#dateFormat &quot;LL&quot;}}2016-01-20{{/dateFormat}}
-# January 18, 2016
-</code></pre>
-<p>See the description of <a href="http://momentjs.com/docs/#/displaying/">moment.js</a> for
-the possible format strings.</p>
-<p>The language for the date format can be set by using <code>moment.locale 'de'</code> or any
-other locale before executing the handlebars template.</p>
-<p><strong>dateAdd</strong></p>
-<p>Parameter:</p>
-<ul>
-<li>date - to be changed (alternatively given as content)</li>
-<li>count - number of interval units (negative to go back)</li>
-<li>interval - type of interval steps like 'seconds', 'minutes', 'hours', 'days'...</li>
-</ul>
-<p>Examples:</p>
-<pre><code>{{#dateFormat &quot;LL&quot;}}{{dateAdd date 1 &quot;month&quot;}}{{/dateFormat}}
-# February 23, 1974
-</code></pre>
-<p><strong>unitFormat</strong></p>
-<p>Formats a value with unit.</p>
-<p>Parameter:</p>
-<ul>
-<li>number - as numeric value or string with unit</li>
-<li>unit - the numeric value is given</li>
-<li>toUnit - unit to use</li>
-<li>precision - numeric value 1..</li>
-</ul>
-<p>Examples:</p>
-<pre><code>x = '1234567mm'
-{{unitFormat x}}            # 1.23 km
-
-x = 1234567
-{{unitFormat x &quot;mm&quot;}}       # 1.23 km
-{{unitFormat x &quot;mm&quot; &quot;km&quot;}}  # 1.23 km
-{{unitFormat x &quot;mm&quot; &quot;m&quot;}}   # 1230 m
-{{unitFormat x &quot;mm&quot; &quot;m&quot; 4}} # 1235 m
-</code></pre>
 <div class="pilwrap" id="hostname">
   <h3>
     <a href="#hostname" name="hostname" class="pilcrow"></a>
@@ -1580,6 +1511,11 @@ rounding or use <code>floor</code> or <code>ceil</code> for the corresponding me
 <ul>
 <li><code>min</code> - (numeric) the smalles allowed number</li>
 <li><code>max</code> - (numeric) the biggest allowed number</li>
+</ul>
+<p><strong>Format options:</strong></p>
+<ul>
+<li><code>format</code> - (string) pattern how to format percent value (see <a href="http://numeraljs.com">numeral.js</a>)</li>
+<li><code>locale</code> - (string) locale to use in format like 'de'</li>
 </ul>
 <div class="pilwrap" id="port">
   <h3>

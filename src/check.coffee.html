@@ -140,10 +140,9 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:check'</span>)
-util = <span class="hljs-built_in">require</span> <span class="hljs-string">'util'</span>
+util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
-{object} = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
         </td>
       </tr>
     
@@ -406,7 +405,7 @@ concatenated with the given paths.</p>
         </td>
         <td class="code highlight">
           <pre class="coffeescript">      sub.vpath = <span class="hljs-property">@vpath</span>[<span class="hljs-number">0.</span>.]
-      sub.value = object.clone <span class="hljs-property">@value</span></pre>
+      sub.value = util.clone <span class="hljs-property">@value</span></pre>
         </td>
       </tr>
     
