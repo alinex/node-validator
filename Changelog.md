@@ -43,7 +43,7 @@ Version 1.4.2 (2016-03-21)
 Version 1.4.1 (2016-03-21)
 -------------------------------------------------
 - Reenable all tests.
-- Fixed handlebars is differentiaating between object and not object.
+- Fixed handlebars is differentiating between object and not object.
 - Fixed bug in handlebars helper on not objects.
 - Upgraded chrono and mathjs.
 - Make handlebars is operatoor work on array/object size.
