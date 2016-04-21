@@ -123,9 +123,7 @@ exports.run = (work, cb) ->
     if work.pos.timezone
       work.pos.timezone = zones[work.pos.timezone] ? work.pos.timezone
     if work.pos.range?
-      console.log '++++', work.value
       results = chrono.parse work.value
-      console.log '====', results[0]
       if results[0].start? and results[0].end?
         value = [results[0].start.date(), results[0].end.date()]
       else
@@ -140,7 +138,6 @@ exports.run = (work, cb) ->
           as date/time."), cb
       value = m.toDate()
     # min/max
-    console.log '----------', value
     if work.pos.range?
       if work.pos.min? and (value[0] < work.pos.min) or value[1] < work.pos.min
         return work.report (new Error "The #{work.pos.part} has to be at or after
@@ -182,9 +179,7 @@ exports.run = (work, cb) ->
         value = switch work.pos.format
           when 'unix' then  m.unix()
           else m.format work.pos.format
-
-    # try moment parsing
-#    console.log '--->', value
+    # return result
     cb null, value
 
 exports.selfcheck = (schema, cb) ->

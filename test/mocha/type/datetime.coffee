@@ -167,22 +167,20 @@ describe "Datetime", ->
       test.success schema, ['yesterday'], ->
         test.fail schema, ['tomorrow'], cb
 
-    it.only "should support min option on range", (cb) ->
+    it "should support min option on range", (cb) ->
       schema.min = 'now'
       schema.range = true
-      test.success schema, ['now', '17. August 2013', '19. August 2013'], ->
-        test.fail schema, [
-          'last Friday from 13:00 - 16.00'
-        ], cb
+      test.fail schema, [
+        'last Friday from 13:00 - 16.00'
+      ], cb
 
     it "should support max option on range", (cb) ->
       schema.max = 'now'
       schema.range = true
-      test.success schema, ['now', 'last monday - yesterday'], ->
-        test.fail schema, [
-          'last monday - tomorrow'
-          'tomorrow - next monday'
-        ], cb
+      test.fail schema, [
+        'last monday - tomorrow'
+        'tomorrow - next monday'
+      ], cb
 
   describe "format check", ->
 
@@ -253,6 +251,18 @@ describe "Datetime", ->
       schema.toTimezone = 'Eastern Standard Time'
       testFormat schema, '2015-01-17 09:00', [
         ['ISO8601', '2015-01-17T03:00:00-05:00']
+      ], cb
+
+    it "should format datetime with zone (long) on range", (cb) ->
+      schema.timezone = 'Europe/Berlin'
+      schema.toTimezone = 'Eastern Standard Time'
+      schema.range = true
+      schema.format = 'ISO8601'
+      test.equal schema, [
+        [
+          '17 August 2013 - 19 August 2013'
+          ['2013-08-17T12:00:00+02:00', '2013-08-19T12:00:00+02:00']
+        ]
       ], cb
 
   describe "description", ->
