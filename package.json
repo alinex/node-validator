@@ -34,7 +34,7 @@
   "dependencies": {
     "alinex-async": "^1.0.0",
     "alinex-fs": "^2.0.0",
-    "alinex-handlebars": "^1.0.0",
+    "alinex-handlebars": "^1.1.0",
     "alinex-util": "^2.0.3",
     "chalk": "^1.1.1",
     "chrono-node": "^1.1.6",
@@ -47,7 +47,6 @@
     "moment-timezone": "^0.5.3",
     "numeral": "^1.5.3",
     "request": "^2.72.0",
-    "swag": "^0.7.0",
     "xml2js": "^0.4.16"
   },
   "optionalDependencies": {},
