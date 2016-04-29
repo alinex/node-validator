@@ -1,4 +1,4 @@
-async = require 'alinex-async'
+async = require 'async'
 moment = require 'moment'
 chai = require 'chai'
 debug = require('debug') 'test'

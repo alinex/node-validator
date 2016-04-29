@@ -1,7 +1,7 @@
 chai = require 'chai'
 chai.use require 'chai-datetime'
 expect = chai.expect
-async = require 'alinex-async'
+async = require 'async'
 chalk = require 'chalk'
 
 validator = require '../src/index'
