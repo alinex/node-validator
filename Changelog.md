@@ -4,6 +4,12 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.6.1 (2016-04-29)
+-------------------------------------------------
+- Changes async to 2.ß syntax in tests.
+- Replace async calls with v 2.0 syntax.
+- Upgraded builder, mathjs, handlebars, util packages.
+
 Version 1.6.0 (2016-04-21)
 -------------------------------------------------
 - BACKWARD INCOMPATIBLE CHANGES in handlebars helper.
