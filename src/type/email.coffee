@@ -17,9 +17,9 @@
 # -------------------------------------------------
 debug = require('debug')('validator:email')
 chalk = require 'chalk'
+async = require 'async'
 # alinex modules
 util = require 'alinex-util'
-async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
 
@@ -177,5 +177,5 @@ checkMailServer = (list, ip, cb) ->
       debug chalk.magenta err
     client.on 'end', ->
       debug chalk.grey l for l in res.split /\n/
-      cb res?.length > 0
-  , cb
+      cb null, res?.length > 0
+  , (err, res) -> cb res

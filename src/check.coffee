@@ -4,9 +4,10 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:check')
-util = require 'alinex-util'
 chalk = require 'chalk'
-async = require 'alinex-async'
+async = require 'async'
+# alinex packages
+util = require 'alinex-util'
 # internal classes and helper
 reference = require './reference'
 
@@ -153,7 +154,7 @@ exports.describe = (work, cb) ->
 exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
   # check for references in schema
-  async.mapOf work.pos, (v, k, cb) ->
+  async.map work.pos, (v, cb) ->
     reference.replace v,
       spec: work.spec
       path: work.path[0..]    # clone because it may change

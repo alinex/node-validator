@@ -23,6 +23,7 @@
 # -------------------------------------------------
 debug = require('debug')('validator:reference')
 chalk = require 'chalk'
+async = require 'async'
 vm = null # load on demand
 yaml = null # load on demand
 xml2js = null # load on demand
@@ -32,7 +33,6 @@ exec = null # load on demand
 # alinex modules
 util = require 'alinex-util'
 object = util.object
-async = require 'alinex-async'
 fs = null # load on demand
 # include classes and helper
 check = require './check'

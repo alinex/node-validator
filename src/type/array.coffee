@@ -21,10 +21,10 @@
 # -------------------------------------------------
 debug = require('debug')('validator:array')
 chalk = require 'chalk'
+async = require 'async'
 # alinex modules
 util = require 'alinex-util'
 {string, array} = util
-async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
 

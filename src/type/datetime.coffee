@@ -16,11 +16,11 @@
 # -------------------------------------------------
 debug = require('debug')('validator:datetime')
 chalk = require 'chalk'
+async = require 'async'
 moment = require 'moment-timezone'
 chrono = require 'chrono-node'
 # include alinex packages
 util = require 'alinex-util'
-async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
 

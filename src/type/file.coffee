@@ -19,10 +19,10 @@
 # -------------------------------------------------
 debug = require('debug')('validator:file')
 chalk = require 'chalk'
+async = require 'async'
 fspath = require 'path'
 # alinex modules
 fs = require 'alinex-fs'
-async = require 'alinex-async'
 util = require 'alinex-util'
 # include classes and helper
 check = require '../check'

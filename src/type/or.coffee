@@ -5,9 +5,9 @@
 # -------------------------------------------------
 debug = require('debug')('validator:or')
 chalk = require 'chalk'
+async = require 'async'
 # alinex modules
 util = require 'alinex-util'
-async = require 'alinex-async'
 # include classes and helper
 check = require '../check'
 
