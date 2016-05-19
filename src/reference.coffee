@@ -25,8 +25,6 @@ debug = require('debug')('validator:reference')
 chalk = require 'chalk'
 async = require 'async'
 vm = null # load on demand
-yaml = null # load on demand
-xml2js = null # load on demand
 fspath = null # load on demand
 request = null # load on demand
 exec = null # load on demand
@@ -34,6 +32,7 @@ exec = null # load on demand
 util = require 'alinex-util'
 object = util.object
 fs = null # load on demand
+formatter = null # load on demand
 # include classes and helper
 check = require './check'
 
@@ -256,42 +255,11 @@ findType =
     cb null, work.data.match re
   # #### Special parsing of string
   parse: (proto, path, work, cb) ->
-    switch path
-      when '$js'
-        vm ?= require 'vm'
-        cb null, vm.runInNewContext "x=#{work.data}"
-      when '$json'
-        try
-          result = JSON.parse work.data
-        catch error
-          debug chalk.grey "'#{proto}://#{path}' -> check failed: #{error.message}"
-          return cb()
-        cb null, result
-      when '$yaml'
-        yaml ?= require 'js-yaml'
-        try
-          result = yaml.safeLoad work.data
-        catch error
-          debug chalk.grey "'#{proto}://#{path}' -> check failed: #{error.message}"
-          return cb()
-        cb null, result
-      when '$xml'
-        xml2js ?= require 'xml2js'
-        xml2js.parseString work.data, (err, result) ->
-          if err
-            debug chalk.grey "'#{proto}://#{path}' -> check failed: #{err.message}"
-            return cb()
-          cb null, result
-      when '$auto'
-        result = null
-        async.detectSeries ['$yaml', '$xml', '$json', '$js'], (path, cb) ->
-          find [path], work, (err, val) ->
-            result = val
-            cb()
-        , ->
-          cb null, result
-      else
-        cb()
+    formatter ?= require 'alinex-formatter'
+    format = path[1..]
+    format = null if format is 'auto'
+    formatter.parse work.data, format, (err, result) ->
+      cb null, result
   # #### Range selection in array
   range: (proto, path, work, cb) ->
     # split multiple specifiers

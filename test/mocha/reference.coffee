@@ -404,8 +404,8 @@ describe "References", ->
       , (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
-        expect(result.data.one, 'one').to.deep.equal ['1']
-        expect(result.data.two, 'two').to.deep.equal ['2']
+        expect(result.one, 'one').to.deep.equal '1'
+        expect(result.two, 'two').to.deep.equal '2'
         cb()
 
   describe "ranges", ->

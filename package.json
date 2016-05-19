@@ -32,6 +32,7 @@
     "lib": "./lib"
   },
   "dependencies": {
+    "alinex-formatter": "^1.0.1",
     "alinex-fs": "^2.0.1",
     "alinex-handlebars": "^1.1.2",
     "alinex-util": "^2.2.0",
@@ -41,13 +42,11 @@
     "debug": "^2.2.0",
     "handlebars": "^4.0.5",
     "ipaddr.js": "1.x",
-    "js-yaml": "^3.6.1",
     "mathjs": "^3.2.1",
     "moment": "^2.13.0",
     "moment-timezone": "^0.5.4",
     "numeral": "^1.5.3",
-    "request": "^2.72.0",
-    "xml2js": "^0.4.16"
+    "request": "^2.72.0"
   },
   "optionalDependencies": {},
   "devDependencies": {

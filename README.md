@@ -527,8 +527,12 @@ $js - parse javascript to object
 $json - JSON to object
 $yaml - YAML to object
 $xml - XML to object
+...and more
 $auto - try to autodetect correct parser
 ```
+
+See [formatter](http://alinex.github.io/node-formatter) for all possible formats
+and examples of them.
 
 __Range Selection__
 
