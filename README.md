@@ -811,10 +811,12 @@ __Format options:__
 
 - `format` - transform to string using one of the formats 'simple', 'pretty' or 'json'
 
-    data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
-    # simple -> "1, 2, 3, a, [object Object], c,9"
-    # pretty -> "1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]"
-    # json -> '[1,2,3,"a",{"b":1},["c",9]]'
+``` text
+data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
+# simple -> "1, 2, 3, a, [object Object], c,9"
+# pretty -> "1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]"
+# json -> '[1,2,3,"a",{"b":1},["c",9]]'
+```
 
 ### object
 
