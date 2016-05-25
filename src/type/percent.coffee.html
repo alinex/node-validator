@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/percent.coffee";
+    var thisFile = "src/type/percent.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -166,12 +166,12 @@ Optimize options setting
   schema
 
 subcheck =
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-  <span class="hljs-attribute">or</span>: [
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
+  type: <span class="hljs-string">'or'</span>
+  or: [
+    type: <span class="hljs-string">'float'</span>
   ,
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">match</span>: <span class="hljs-regexp">///
+    type: <span class="hljs-string">'string'</span>
+    match: <span class="hljs-regexp">///
       ^\s*      <span class="hljs-comment"># start with possible spaces</span>
       [+-]?     <span class="hljs-comment"># sign possible</span>
       \s*\d+(\.\d*)? <span class="hljs-comment"># float number</span>
@@ -227,13 +227,13 @@ Type implementation
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.describe
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-      <span class="hljs-attribute">round</span>: work.pos.round
-      <span class="hljs-attribute">decimals</span>: work.pos.decimals
-      <span class="hljs-attribute">min</span>: work.pos.min
-      <span class="hljs-attribute">max</span>: work.pos.max
+    name: name
+    schema:
+      type: <span class="hljs-string">'float'</span>
+      round: work.pos.round
+      decimals: work.pos.decimals
+      min: work.pos.min
+      max: work.pos.max
   , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span>
     <span class="hljs-keyword">if</span> work.pos.format
       text += <span class="hljs-string">"The number will be formatted like <span class="hljs-subst">#{work.pos.format}</span>. "</span></pre>
@@ -289,9 +289,9 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.run
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">value</span>: work.value
-    <span class="hljs-attribute">schema</span>: subcheck
+    name: name
+    value: work.value
+    schema: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
@@ -306,8 +306,8 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">and</span> value.trim().slice(-<span class="hljs-number">1</span>) <span class="hljs-keyword">is</span> <span class="hljs-string">'%'</span>
-      value = value[<span class="hljs-number">0.</span>.-<span class="hljs-number">2</span>] / <span class="hljs-number">100</span>
+          <pre class="coffeescript">    <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">and</span> value.trim().slice(<span class="hljs-number">-1</span>) <span class="hljs-keyword">is</span> <span class="hljs-string">'%'</span>
+      value = value[<span class="hljs-number">0.</span>.<span class="hljs-number">-2</span>] / <span class="hljs-number">100</span>
     <span class="hljs-keyword">else</span>
       value = parseFloat value</pre>
         </td>
@@ -323,14 +323,14 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">    check.run
-      <span class="hljs-attribute">name</span>: name
-      <span class="hljs-attribute">value</span>: value
-      <span class="hljs-attribute">schema</span>:
-        <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-        <span class="hljs-attribute">round</span>: work.pos.round
-        <span class="hljs-attribute">decimals</span>: work.pos.decimals
-        <span class="hljs-attribute">min</span>: work.pos.min
-        <span class="hljs-attribute">max</span>: work.pos.max
+      name: name
+      value: value
+      schema:
+        type: <span class="hljs-string">'float'</span>
+        round: work.pos.round
+        decimals: work.pos.decimals
+        min: work.pos.min
+        max: work.pos.max
     , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
       <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
       <span class="hljs-keyword">if</span> work.pos.format
@@ -359,41 +359,41 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">round</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">or</span>: [
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+        round:
+          type: <span class="hljs-string">'or'</span>
+          optional: <span class="hljs-literal">true</span>
+          or: [
+            type: <span class="hljs-string">'boolean'</span>
           ,
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-            <span class="hljs-attribute">values</span>: [<span class="hljs-string">'floor'</span>, <span class="hljs-string">'ceil'</span>]
+            type: <span class="hljs-string">'string'</span>
+            values: [<span class="hljs-string">'floor'</span>, <span class="hljs-string">'ceil'</span>]
           ]
-        <span class="hljs-attribute">decimals</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-number">0</span>
-        <span class="hljs-attribute">min</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">max</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
-        <span class="hljs-attribute">format</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">locale</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">match</span>: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">value</span>: schema
+        decimals:
+          type: <span class="hljs-string">'integer'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-number">0</span>
+        min:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+        max:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
+        format:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        locale:
+          type: <span class="hljs-string">'string'</span>
+          match: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
+          optional: <span class="hljs-literal">true</span>
+    value: schema
   , cb</pre>
         </td>
       </tr>

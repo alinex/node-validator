@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/any.coffee";
+    var thisFile = "src/type/any.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -150,11 +150,11 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: check.base
-    <span class="hljs-attribute">value</span>: schema
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: check.base
+    value: schema
   , cb</pre>
         </td>
       </tr>

@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/regexp.coffee";
+    var thisFile = "src/type/regexp.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -133,13 +133,13 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
           <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
 
 subcheck =
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-  <span class="hljs-attribute">or</span>: [
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-    <span class="hljs-attribute">instanceOf</span>: RegExp
+  type: <span class="hljs-string">'or'</span>
+  or: [
+    type: <span class="hljs-string">'object'</span>
+    instanceOf: RegExp
   ,
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">match</span>: <span class="hljs-regexp">/^\/.*?\/[gim]*$/</span>
+    type: <span class="hljs-string">'string'</span>
+    match: <span class="hljs-regexp">/^\/.*?\/[gim]*$/</span>
   ]</pre>
         </td>
       </tr>
@@ -175,8 +175,8 @@ Type implementation
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.describe
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">schema</span>: subcheck
+    name: name
+    schema: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span></pre>
         </td>
       </tr>
@@ -230,9 +230,9 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.run
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">value</span>: work.value
-    <span class="hljs-attribute">schema</span>: subcheck
+    name: name
+    value: work.value
+    schema: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
@@ -284,14 +284,14 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'regexp'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">value</span>: schema
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'regexp'</span>
+          optional: <span class="hljs-literal">true</span>
+    value: schema
   , cb</pre>
         </td>
       </tr>

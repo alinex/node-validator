@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/email.coffee";
+    var thisFile = "src/type/email.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -135,7 +135,8 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:email'</span>)
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'async'</span></pre>
         </td>
       </tr>
     
@@ -148,8 +149,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
+          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
         </td>
       </tr>
     
@@ -178,8 +178,8 @@ Subchecks
         </td>
         <td class="code highlight">
           <pre class="coffeescript">subcheck =
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-  <span class="hljs-attribute">minLength</span>: <span class="hljs-number">5</span></pre>
+  type: <span class="hljs-string">'string'</span>
+  minLength: <span class="hljs-number">5</span></pre>
         </td>
       </tr>
     
@@ -293,9 +293,9 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   subcheck.lowerCase = work.pos.lowerCase
   check.run
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">value</span>: work.value
-    <span class="hljs-attribute">schema</span>: subcheck
+    name: name
+    value: work.value
+    schema: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
@@ -329,10 +329,10 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
         </td>
         <td class="code highlight">
           <pre class="coffeescript">    check.run
-      <span class="hljs-attribute">name</span>: name + <span class="hljs-string">':host'</span>
-      <span class="hljs-attribute">value</span>: host
-      <span class="hljs-attribute">schema</span>:
-        <span class="hljs-attribute">type</span>: <span class="hljs-string">'hostname'</span>
+      name: name + <span class="hljs-string">':host'</span>
+      value: host
+      schema:
+        type: <span class="hljs-string">'hostname'</span>
     , <span class="hljs-function"><span class="hljs-params">(err, host)</span> -&gt;</span>
       <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
@@ -428,21 +428,21 @@ Schema check
         <td class="code highlight">
           <pre class="coffeescript">exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>: subcheck
-        <span class="hljs-attribute">lowerCase</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">normalize</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">checkServer</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">value</span>: schema
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default: subcheck
+        lowerCase:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        normalize:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        checkServer:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+    value: schema
   , cb</pre>
         </td>
       </tr>
@@ -510,8 +510,8 @@ contact the server
     debug chalk.grey <span class="hljs-string">"check mail server under <span class="hljs-subst">#{domain}</span>"</span>
     res = <span class="hljs-string">''</span>
     client = net.connect
-      <span class="hljs-attribute">port</span>: <span class="hljs-number">25</span>
-      <span class="hljs-attribute">host</span>: domain
+      port: <span class="hljs-number">25</span>
+      host: domain
     , <span class="hljs-function">-&gt;</span>
       client.write <span class="hljs-string">"HELO <span class="hljs-subst">#{ip}</span>\r\n"</span>
       client.end()
@@ -521,8 +521,8 @@ contact the server
       debug chalk.magenta err
     client.<span class="hljs-literal">on</span> <span class="hljs-string">'end'</span>, <span class="hljs-function">-&gt;</span>
       debug chalk.grey l <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> res.split <span class="hljs-regexp">/\n/</span>
-      cb res?.length &gt; <span class="hljs-number">0</span>
-  , cb</pre>
+      cb <span class="hljs-literal">null</span>, res?.length &gt; <span class="hljs-number">0</span>
+  , <span class="hljs-function"><span class="hljs-params">(err, res)</span> -&gt;</span> cb res</pre>
         </td>
       </tr>
     

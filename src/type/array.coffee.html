@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/array.coffee";
+    var thisFile = "src/type/array.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -116,7 +116,8 @@ Node modules
         </td>
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:array'</span>)
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
+chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'async'</span></pre>
         </td>
       </tr>
     
@@ -130,8 +131,7 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
         </td>
         <td class="code highlight">
           <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
-{string, array} = util
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
+{string, array} = util</pre>
         </td>
       </tr>
     
@@ -366,14 +366,14 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
       name += <span class="hljs-string">"/<span class="hljs-subst">#{path.join <span class="hljs-string">'/'</span>}</span>"</span>
       sub = work.goInto <span class="hljs-literal">null</span>, [num]
       sub.spec.schema =
-        <span class="hljs-attribute">type</span>: <span class="hljs-keyword">switch</span>
+        type: <span class="hljs-keyword">switch</span>
           <span class="hljs-keyword">when</span> Array.isArray value[num]
             <span class="hljs-string">'array'</span>
           <span class="hljs-keyword">when</span> <span class="hljs-keyword">typeof</span> value[num] <span class="hljs-keyword">is</span> <span class="hljs-string">'object'</span>
             <span class="hljs-string">'object'</span>
           <span class="hljs-keyword">else</span>
             <span class="hljs-string">'any'</span>
-        <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+        optional: <span class="hljs-literal">true</span>
       sub.path = []
       sub.pos = sub.spec.schema
     check.run sub, cb
@@ -416,54 +416,54 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">delimiter</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">or</span>: [
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'array'</span>
+          optional: <span class="hljs-literal">true</span>
+        delimiter:
+          type: <span class="hljs-string">'or'</span>
+          optional: <span class="hljs-literal">true</span>
+          or: [
+            type: <span class="hljs-string">'string'</span>
           ,
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-            <span class="hljs-attribute">instanceOf</span>: RegExp
+            type: <span class="hljs-string">'object'</span>
+            instanceOf: RegExp
           ]
-        <span class="hljs-attribute">toArray</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">unique</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">notEmpty</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">minLength</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-number">0</span>
-        <span class="hljs-attribute">maxLength</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;minLength&gt;&gt;&gt;'</span>
-        <span class="hljs-attribute">list</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">or</span>: [
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
+        toArray:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        unique:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        notEmpty:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        minLength:
+          type: <span class="hljs-string">'integer'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-number">0</span>
+        maxLength:
+          type: <span class="hljs-string">'integer'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-string">'&lt;&lt;&lt;minLength&gt;&gt;&gt;'</span>
+        list:
+          type: <span class="hljs-string">'or'</span>
+          optional: <span class="hljs-literal">true</span>
+          or: [
+            type: <span class="hljs-string">'object'</span>
           ,
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
+            type: <span class="hljs-string">'array'</span>
           ]
-        <span class="hljs-attribute">entries</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'any'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">format</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">values</span>: [<span class="hljs-string">'simple'</span>, <span class="hljs-string">'pretty'</span>, <span class="hljs-string">'json'</span>]
-    <span class="hljs-attribute">value</span>: schema
+        entries:
+          type: <span class="hljs-string">'any'</span>
+          optional: <span class="hljs-literal">true</span>
+        format:
+          type: <span class="hljs-string">'string'</span>
+          values: [<span class="hljs-string">'simple'</span>, <span class="hljs-string">'pretty'</span>, <span class="hljs-string">'json'</span>]
+    value: schema
   , cb</pre>
         </td>
       </tr>

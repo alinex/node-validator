@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/datetime.coffee";
+    var thisFile = "src/type/datetime.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -133,6 +133,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:datetime'</span>)
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'async'</span>
 moment = <span class="hljs-built_in">require</span> <span class="hljs-string">'moment-timezone'</span>
 chrono = <span class="hljs-built_in">require</span> <span class="hljs-string">'chrono-node'</span></pre>
         </td>
@@ -147,8 +148,7 @@ chrono = <span class="hljs-built_in">require</span> <span class="hljs-string">'c
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span></pre>
+          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
         </td>
       </tr>
     
@@ -192,17 +192,17 @@ zones =
   <span class="hljs-string">'Pacific Daylight Time'</span>: <span class="hljs-string">'PDT'</span>
   <span class="hljs-string">'Central European Time'</span>: <span class="hljs-string">'CET'</span>
   <span class="hljs-string">'Central European Summer Time'</span>: <span class="hljs-string">'CEST'</span>
-  <span class="hljs-attribute">MESZ</span>: <span class="hljs-string">'CEST'</span>
-  <span class="hljs-attribute">MEZ</span>: <span class="hljs-string">'CET'</span>
+  MESZ: <span class="hljs-string">'CEST'</span>
+  MEZ: <span class="hljs-string">'CET'</span>
 
 
 alias =
-  <span class="hljs-attribute">datetime</span>:
-    <span class="hljs-attribute">ISO8601</span>: <span class="hljs-string">'YYYY-MM-DDTHH:mm:ssZ'</span>
-    <span class="hljs-attribute">RFC1123</span>: <span class="hljs-string">'ddd, DD MMM YYYY HH:mm:ss z'</span>
-    <span class="hljs-attribute">RFC2822</span>: <span class="hljs-string">'ddd, DD MMM YYYY HH:mm:ss ZZ'</span>
-    <span class="hljs-attribute">RFC822</span>: <span class="hljs-string">'ddd, DD MMM YY HH:mm:ss ZZ'</span>
-    <span class="hljs-attribute">RFC1036</span>: <span class="hljs-string">'ddd, D MMM YY HH:mm:ss ZZ'</span></pre>
+  datetime:
+    ISO8601: <span class="hljs-string">'YYYY-MM-DDTHH:mm:ssZ'</span>
+    RFC1123: <span class="hljs-string">'ddd, DD MMM YYYY HH:mm:ss z'</span>
+    RFC2822: <span class="hljs-string">'ddd, DD MMM YYYY HH:mm:ss ZZ'</span>
+    RFC822: <span class="hljs-string">'ddd, DD MMM YY HH:mm:ss ZZ'</span>
+    RFC1036: <span class="hljs-string">'ddd, D MMM YY HH:mm:ss ZZ'</span></pre>
         </td>
       </tr>
     
@@ -216,8 +216,8 @@ COOKIE:  'Friday, 13-Feb-09 14:53:27 Europe/Paris'</p>
 
         </td>
         <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-attribute">date</span>:
-    <span class="hljs-attribute">ISO8601</span>: <span class="hljs-string">'YYYY-MM-DD'</span></pre>
+          <pre class="coffeescript">  date:
+    ISO8601: <span class="hljs-string">'YYYY-MM-DD'</span></pre>
         </td>
       </tr>
     
@@ -237,10 +237,10 @@ Optimize options setting
   async.each [<span class="hljs-string">'default'</span>, <span class="hljs-string">'min'</span>, <span class="hljs-string">'max'</span>], <span class="hljs-function"><span class="hljs-params">(i, cb)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> schema[i]?
     check.run
-      <span class="hljs-attribute">name</span>: <span class="hljs-string">"option-<span class="hljs-subst">#{i}</span>-datetime"</span>
-      <span class="hljs-attribute">schema</span>:
-        <span class="hljs-attribute">type</span>: <span class="hljs-string">'datetime'</span>
-      <span class="hljs-attribute">value</span>: schema[i]
+      name: <span class="hljs-string">"option-<span class="hljs-subst">#{i}</span>-datetime"</span>
+      schema:
+        type: <span class="hljs-string">'datetime'</span>
+      value: schema[i]
     , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
       <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
       schema[i] = result
@@ -503,44 +503,44 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'datetime'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">range</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">timezone</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">part</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">values</span>: [<span class="hljs-string">'date'</span>, <span class="hljs-string">'time'</span>, <span class="hljs-string">'datetime'</span>]
-          <span class="hljs-attribute">default</span>: <span class="hljs-string">'datetime'</span>
-        <span class="hljs-attribute">min</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'datetime'</span>
-          <span class="hljs-attribute">part</span>: <span class="hljs-string">'&lt;&lt;&lt;part&gt;&gt;&gt;'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">max</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'datetime'</span>
-          <span class="hljs-attribute">part</span>: <span class="hljs-string">'&lt;&lt;&lt;part&gt;&gt;&gt;'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
-        <span class="hljs-attribute">format</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">toTimezone</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">locale</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">match</span>: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">value</span>: schema
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'datetime'</span>
+          optional: <span class="hljs-literal">true</span>
+        range:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        timezone:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        part:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+          values: [<span class="hljs-string">'date'</span>, <span class="hljs-string">'time'</span>, <span class="hljs-string">'datetime'</span>]
+          default: <span class="hljs-string">'datetime'</span>
+        min:
+          type: <span class="hljs-string">'datetime'</span>
+          part: <span class="hljs-string">'&lt;&lt;&lt;part&gt;&gt;&gt;'</span>
+          optional: <span class="hljs-literal">true</span>
+        max:
+          type: <span class="hljs-string">'datetime'</span>
+          part: <span class="hljs-string">'&lt;&lt;&lt;part&gt;&gt;&gt;'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
+        format:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        toTimezone:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        locale:
+          type: <span class="hljs-string">'string'</span>
+          match: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
+          optional: <span class="hljs-literal">true</span>
+    value: schema
   , cb</pre>
         </td>
       </tr>

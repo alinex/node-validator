@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/file.coffee";
+    var thisFile = "src/type/file.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -113,6 +113,7 @@ Node modules
         <td class="code highlight">
           <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:file'</span>)
 chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
+async = <span class="hljs-built_in">require</span> <span class="hljs-string">'async'</span>
 fspath = <span class="hljs-built_in">require</span> <span class="hljs-string">'path'</span></pre>
         </td>
       </tr>
@@ -127,7 +128,6 @@ fspath = <span class="hljs-built_in">require</span> <span class="hljs-string">'p
         </td>
         <td class="code highlight">
           <pre class="coffeescript">fs = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-fs'</span>
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-async'</span>
 util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
         </td>
       </tr>
@@ -209,7 +209,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">isnt</span> <span class="hljs-string">'string'</span>
     <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"Could not find the file <span class="hljs-subst">#{value}</span>"</span>), cb
   value = fspath.normalize value
-  value = value[..-<span class="hljs-number">2</span>] <span class="hljs-keyword">if</span> value[-<span class="hljs-number">1.</span>.] <span class="hljs-keyword">is</span> <span class="hljs-string">'/'</span></pre>
+  value = value[..<span class="hljs-number">-2</span>] <span class="hljs-keyword">if</span> value[<span class="hljs-number">-1.</span>.] <span class="hljs-keyword">is</span> <span class="hljs-string">'/'</span></pre>
         </td>
       </tr>
     
@@ -280,7 +280,7 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">  async.map search, <span class="hljs-function"><span class="hljs-params">(dir, cb)</span> -&gt;</span>
     debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> search in <span class="hljs-subst">#{dir}</span>..."</span>
     fs.find dir,
-      <span class="hljs-attribute">include</span>: value
+      include: value
     , <span class="hljs-function"><span class="hljs-params">(err, list)</span> -&gt;</span>
       cb <span class="hljs-literal">null</span>, list
   , <span class="hljs-function"><span class="hljs-params">(err, lists)</span> -&gt;</span>
@@ -342,39 +342,39 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">basedir</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">default</span>: <span class="hljs-string">'.'</span>
-        <span class="hljs-attribute">resolve</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">default</span>: <span class="hljs-literal">false</span>
-        <span class="hljs-attribute">exists</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">default</span>: <span class="hljs-literal">false</span>
-        <span class="hljs-attribute">find</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">entries</span>:
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-        <span class="hljs-attribute">filetype</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">lowerCase</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">values</span>: [
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        basedir:
+          type: <span class="hljs-string">'string'</span>
+          default: <span class="hljs-string">'.'</span>
+        resolve:
+          type: <span class="hljs-string">'boolean'</span>
+          default: <span class="hljs-literal">false</span>
+        exists:
+          type: <span class="hljs-string">'boolean'</span>
+          default: <span class="hljs-literal">false</span>
+        find:
+          type: <span class="hljs-string">'array'</span>
+          optional: <span class="hljs-literal">true</span>
+          entries:
+            type: <span class="hljs-string">'string'</span>
+        filetype:
+          type: <span class="hljs-string">'string'</span>
+          lowerCase: <span class="hljs-literal">true</span>
+          values: [
             <span class="hljs-string">'f'</span>, <span class="hljs-string">'file'</span>
             <span class="hljs-string">'d'</span>, <span class="hljs-string">'dir'</span>, <span class="hljs-string">'directory'</span>
             <span class="hljs-string">'l'</span>, <span class="hljs-string">'link'</span>
             <span class="hljs-string">'fifo'</span>, <span class="hljs-string">'pipe'</span>, <span class="hljs-string">'p'</span>
             <span class="hljs-string">'socket'</span>, <span class="hljs-string">'s'</span>
           ]
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">value</span>: schema
+          optional: <span class="hljs-literal">true</span>
+    value: schema
   , cb</pre>
         </td>
       </tr>

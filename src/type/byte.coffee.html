@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/byte.coffee";
+    var thisFile = "src/type/byte.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -167,11 +167,11 @@ Extend Math.js
         <td class="code highlight">
           <pre class="coffeescript">Unit = math.type.Unit
 Unit.UNITS.bps =
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'bps'</span>
-  <span class="hljs-attribute">base</span>: Unit.BASE_UNITS.BIT
-  <span class="hljs-attribute">dimensions</span>: Unit.BASE_UNITS.BIT.dimensions
-  <span class="hljs-attribute">prefixes</span>: Unit.PREFIXES.BINARY_SHORT
-  <span class="hljs-attribute">value</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">offset</span>: <span class="hljs-number">0</span></pre>
+  name: <span class="hljs-string">'bps'</span>
+  base: Unit.BASE_UNITS.BIT
+  dimensions: Unit.BASE_UNITS.BIT.dimensions
+  prefixes: Unit.PREFIXES.BINARY_SHORT
+  value: <span class="hljs-number">1</span>, offset: <span class="hljs-number">0</span></pre>
         </td>
       </tr>
     
@@ -243,13 +243,13 @@ Type implementation
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.describe
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-      <span class="hljs-attribute">round</span>: work.pos.round
-      <span class="hljs-attribute">decimals</span>: work.pos.decimals
-      <span class="hljs-attribute">min</span>: work.pos.min
-      <span class="hljs-attribute">max</span>: work.pos.max
+    name: name
+    schema:
+      type: <span class="hljs-string">'float'</span>
+      round: work.pos.round
+      decimals: work.pos.decimals
+      min: work.pos.min
+      max: work.pos.max
   , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span></pre>
         </td>
       </tr>
@@ -341,14 +341,14 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.run
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">value</span>: value
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-keyword">if</span> work.pos.unit?.match <span class="hljs-regexp">/^[kMGTPEZY]([bB]|bps)$/</span> <span class="hljs-keyword">then</span> <span class="hljs-string">'float'</span> <span class="hljs-keyword">else</span> <span class="hljs-string">'integer'</span>
-      <span class="hljs-attribute">round</span>: work.pos.round
-      <span class="hljs-attribute">decimals</span>: work.pos.decimals
-      <span class="hljs-attribute">min</span>: work.pos.min
-      <span class="hljs-attribute">max</span>: work.pos.max
+    name: name
+    value: value
+    schema:
+      type: <span class="hljs-keyword">if</span> work.pos.unit?.match <span class="hljs-regexp">/^[kMGTPEZY]([bB]|bps)$/</span> <span class="hljs-keyword">then</span> <span class="hljs-string">'float'</span> <span class="hljs-keyword">else</span> <span class="hljs-string">'integer'</span>
+      round: work.pos.round
+      decimals: work.pos.decimals
+      min: work.pos.min
+      max: work.pos.max
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
     debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
@@ -356,38 +356,38 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">unit</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">default</span>: <span class="hljs-string">'B'</span>
-          <span class="hljs-attribute">matches</span>: <span class="hljs-regexp">/^[kMGTPEZY]?([bB]|bps)$/</span>
-        <span class="hljs-attribute">round</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">or</span>: [
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+        unit:
+          type: <span class="hljs-string">'string'</span>
+          default: <span class="hljs-string">'B'</span>
+          matches: <span class="hljs-regexp">/^[kMGTPEZY]?([bB]|bps)$/</span>
+        round:
+          type: <span class="hljs-string">'or'</span>
+          optional: <span class="hljs-literal">true</span>
+          or: [
+            type: <span class="hljs-string">'boolean'</span>
           ,
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-            <span class="hljs-attribute">values</span>: [<span class="hljs-string">'floor'</span>, <span class="hljs-string">'ceil'</span>]
+            type: <span class="hljs-string">'string'</span>
+            values: [<span class="hljs-string">'floor'</span>, <span class="hljs-string">'ceil'</span>]
           ]
-        <span class="hljs-attribute">decimals</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-number">0</span>
-        <span class="hljs-attribute">min</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">max</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
-    <span class="hljs-attribute">value</span>: schema
+        decimals:
+          type: <span class="hljs-string">'integer'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-number">0</span>
+        min:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+        max:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
+    value: schema
   , cb</pre>
         </td>
       </tr>

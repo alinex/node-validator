@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/port.coffee";
+    var thisFile = "src/type/port.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -552,14 +552,14 @@ Type implementation
   cb <span class="hljs-literal">null</span>, text
 
 subcheck =
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-  <span class="hljs-attribute">or</span>: [
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-    <span class="hljs-attribute">min</span>: <span class="hljs-number">0</span>
-    <span class="hljs-attribute">max</span>: <span class="hljs-number">65535</span>
+  type: <span class="hljs-string">'or'</span>
+  or: [
+    type: <span class="hljs-string">'integer'</span>
+    min: <span class="hljs-number">0</span>
+    max: <span class="hljs-number">65535</span>
   ,
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">values</span>: Object.keys ports
+    type: <span class="hljs-string">'string'</span>
+    values: Object.keys ports
   ]
 
 exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
@@ -599,9 +599,9 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.run
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">value</span>: work.value
-    <span class="hljs-attribute">schema</span>: subcheck
+    name: name
+    value: work.value
+    schema: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
     <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
         </td>
@@ -683,42 +683,42 @@ done return resulting value</p>
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">allow</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">entries</span>:
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-            <span class="hljs-attribute">or</span>: [
-              <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+        allow:
+          type: <span class="hljs-string">'array'</span>
+          optional: <span class="hljs-literal">true</span>
+          entries:
+            type: <span class="hljs-string">'or'</span>
+            or: [
+              type: <span class="hljs-string">'integer'</span>
             ,
-              <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-              <span class="hljs-attribute">values</span>: [<span class="hljs-string">'system'</span>, <span class="hljs-string">'registered'</span>, <span class="hljs-string">'dynamic'</span>]
+              type: <span class="hljs-string">'string'</span>
+              values: [<span class="hljs-string">'system'</span>, <span class="hljs-string">'registered'</span>, <span class="hljs-string">'dynamic'</span>]
             ,
-              <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-              <span class="hljs-attribute">values</span>: Object.keys ports
+              type: <span class="hljs-string">'string'</span>
+              values: Object.keys ports
             ]
-        <span class="hljs-attribute">deny</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">entries</span>:
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-            <span class="hljs-attribute">or</span>: [
-              <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+        deny:
+          type: <span class="hljs-string">'array'</span>
+          optional: <span class="hljs-literal">true</span>
+          entries:
+            type: <span class="hljs-string">'or'</span>
+            or: [
+              type: <span class="hljs-string">'integer'</span>
             ,
-              <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-              <span class="hljs-attribute">values</span>: [<span class="hljs-string">'system'</span>, <span class="hljs-string">'registered'</span>, <span class="hljs-string">'dynamic'</span>]
+              type: <span class="hljs-string">'string'</span>
+              values: [<span class="hljs-string">'system'</span>, <span class="hljs-string">'registered'</span>, <span class="hljs-string">'dynamic'</span>]
             ,
-              <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-              <span class="hljs-attribute">values</span>: Object.keys ports
+              type: <span class="hljs-string">'string'</span>
+              values: Object.keys ports
             ]
-    <span class="hljs-attribute">value</span>: schema
+    value: schema
   , cb</pre>
         </td>
       </tr>

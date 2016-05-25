@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/float.coffee";
+    var thisFile = "src/type/float.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -166,10 +166,10 @@ Extend Math.js
         <td class="code highlight">
           <pre class="coffeescript">math.type.Unit.BASE_UNITS.FREQUENCY = {}
 math.type.Unit.UNITS.hz =
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'Hz'</span>,
-  <span class="hljs-attribute">base</span>: math.type.Unit.BASE_UNITS.FREQUENCY,
-  <span class="hljs-attribute">prefixes</span>: math.type.Unit.PREFIXES.SHORT
-  <span class="hljs-attribute">value</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">offset</span>: <span class="hljs-number">0</span></pre>
+  name: <span class="hljs-string">'Hz'</span>,
+  base: math.type.Unit.BASE_UNITS.FREQUENCY,
+  prefixes: math.type.Unit.PREFIXES.SHORT
+  value: <span class="hljs-number">1</span>, offset: <span class="hljs-number">0</span></pre>
         </td>
       </tr>
     
@@ -439,51 +439,51 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">sanitize</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">unit</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">minLength</span>: <span class="hljs-number">1</span>
-        <span class="hljs-attribute">round</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">or</span>: [
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+        sanitize:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        unit:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+          minLength: <span class="hljs-number">1</span>
+        round:
+          type: <span class="hljs-string">'or'</span>
+          optional: <span class="hljs-literal">true</span>
+          or: [
+            type: <span class="hljs-string">'boolean'</span>
           ,
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-            <span class="hljs-attribute">values</span>: [<span class="hljs-string">'floor'</span>, <span class="hljs-string">'ceil'</span>]
+            type: <span class="hljs-string">'string'</span>
+            values: [<span class="hljs-string">'floor'</span>, <span class="hljs-string">'ceil'</span>]
           ]
-        <span class="hljs-attribute">decimals</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-number">0</span>
-        <span class="hljs-attribute">min</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">max</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
-        <span class="hljs-attribute">toUnit</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">format</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">locale</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">match</span>: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">value</span>: schema
+        decimals:
+          type: <span class="hljs-string">'integer'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-number">0</span>
+        min:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+        max:
+          type: <span class="hljs-string">'float'</span>
+          optional: <span class="hljs-literal">true</span>
+          min: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
+        toUnit:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        format:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        locale:
+          type: <span class="hljs-string">'string'</span>
+          match: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
+          optional: <span class="hljs-literal">true</span>
+    value: schema
   , cb</pre>
         </td>
       </tr>

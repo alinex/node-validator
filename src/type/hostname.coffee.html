@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/hostname.coffee";
+    var thisFile = "src/type/hostname.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -133,9 +133,9 @@ chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'ch
           <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span>
 
 subcheck =
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-  <span class="hljs-attribute">lowerCase</span>: <span class="hljs-literal">true</span>
-  <span class="hljs-attribute">match</span>: <span class="hljs-regexp">///
+  type: <span class="hljs-string">'string'</span>
+  lowerCase: <span class="hljs-literal">true</span>
+  match: <span class="hljs-regexp">///
     ^
     [a-zA-Z0-9]
     |[a-zA-Z0-9][a-zA-Z0-9\-_]{0,61}[a-zA-Z0-9]
@@ -175,8 +175,8 @@ Type implementation
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.describe
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">schema</span>: subcheck
+    name: name
+    schema: subcheck
   , <span class="hljs-function"><span class="hljs-params">(err, subtext)</span> -&gt;</span></pre>
         </td>
       </tr>
@@ -229,19 +229,19 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
   <span class="hljs-keyword">if</span> work.path.length
     name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
   check.run
-    <span class="hljs-attribute">name</span>: name
-    <span class="hljs-attribute">value</span>: work.value
-    <span class="hljs-attribute">schema</span>: subcheck
+    name: name
+    value: work.value
+    schema: subcheck
   , cb
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>: subcheck
-    <span class="hljs-attribute">value</span>: schema
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default: subcheck
+    value: schema
   , cb</pre>
         </td>
       </tr>

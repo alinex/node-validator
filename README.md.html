@@ -7,7 +7,7 @@
   <script src="doc-filelist.js"></script>
   <script>
     var relativeDir = "";
-    var thisFile = "home/alex/github/node-validator/README.md";
+    var thisFile = "README.md";
     var defaultSidebar = true;
   </script>
   <script src="doc-script.js"></script>
@@ -148,18 +148,6 @@
         <a href="#array">array</a>
       </div>
 
-      <div class="heading h1">
-        <a href="#simple-greater-1-2-3-a-object-object-c9">simple -&amp;gt; &amp;quot;1, 2, 3, a, [object Object], c,9&amp;quot;</a>
-      </div>
-
-      <div class="heading h1">
-        <a href="#pretty-greater-1-2-3-a-b-1-c-9">pretty -&amp;gt; &amp;quot;1, 2, 3, &#39;a&#39;, { b: 1 }, [ &#39;c&#39;, 9 ]&amp;quot;</a>
-      </div>
-
-      <div class="heading h1">
-        <a href="#json-greater-123ab-1c9">json -&amp;gt; &#39;[1,2,3,&amp;quot;a&amp;quot;,{&amp;quot;b&amp;quot;:1},[&amp;quot;c&amp;quot;,9]]&#39;</a>
-      </div>
-
       <div class="heading h3">
         <a href="#object">object</a>
       </div>
@@ -287,7 +275,7 @@ Install
 <p>And update it to the latest version later:</p>
 <pre><code class="sh">npm update alinex-validator --save
 </code></pre>
-<p>Always have a look at the latest <a href="Changelog.md.html.html">changes</a>.</p>
+<p>Always have a look at the latest <a href="Changelog.md.html">changes</a>.</p>
 <div class="pilwrap" id="usage">
   <h2>
     <a href="#usage" name="usage" class="pilcrow"></a>
@@ -301,28 +289,28 @@ and references within the structure.</p>
 </code></pre>
 <p>The main method will validate and sanitize the value or value structure:</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>: schema      <span class="hljs-comment"># definition of checks</span>
-  <span class="hljs-attribute">context</span>: <span class="hljs-literal">null</span>       <span class="hljs-comment"># additional data (optional)</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema: schema      <span class="hljs-comment"># definition of checks</span>
+  context: <span class="hljs-literal">null</span>       <span class="hljs-comment"># additional data (optional)</span>
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
 <p>The checks are completely asynchronous because they may contain some IO checks.</p>
 <p>To get a human readable description call:</p>
 <pre><code class="coffee">message = validator.describe
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">schema</span>: schema      <span class="hljs-comment"># definition of checks</span>
-  <span class="hljs-attribute">pos</span>: <span class="hljs-string">''</span>             <span class="hljs-comment"># position which to describe (optional)</span>
-  <span class="hljs-attribute">depth</span>: <span class="hljs-number">2</span>            <span class="hljs-comment"># level of depth to describe (optional)</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  schema: schema      <span class="hljs-comment"># definition of checks</span>
+  pos: <span class="hljs-string">''</span>             <span class="hljs-comment"># position which to describe (optional)</span>
+  depth: <span class="hljs-number">2</span>            <span class="hljs-comment"># level of depth to describe (optional)</span>
 , <span class="hljs-function"><span class="hljs-params">(err, text)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
 <p>This will get the description un markdown format.</p>
 <p>Within your tests you may check your schema configurations:</p>
 <pre><code class="coffee">validator.selfcheck
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors</span>
-  <span class="hljs-attribute">schema</span>: schema      <span class="hljs-comment"># definition to check</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors</span>
+  schema: schema      <span class="hljs-comment"># definition to check</span>
 , <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
@@ -347,30 +335,30 @@ the rule is specified.</li>
 </ul>
 <p>In it's easiest way the schema definition includes only a type:</p>
 <pre><code class="coffee">schema =
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+  type: <span class="hljs-string">'integer'</span>
 </code></pre>
 <p>Or with the above descriptive fields:</p>
 <pre><code class="coffee">schema =
-  <span class="hljs-attribute">title</span>: <span class="hljs-string">"Max runs"</span>
-  <span class="hljs-attribute">description</span>: <span class="hljs-string">'The number of runs which may occur.'</span>
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+  title: <span class="hljs-string">"Max runs"</span>
+  description: <span class="hljs-string">'The number of runs which may occur.'</span>
+  type: <span class="hljs-string">'integer'</span>
 </code></pre>
 <p>Further each type has it's own additional attributes which may be set to
 specify how it works.</p>
 <pre><code class="coffee">address =
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-  <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-  <span class="hljs-attribute">entries</span>:
-    <span class="hljs-attribute">name</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">street</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">city</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">country</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">email</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+  type: <span class="hljs-string">'object'</span>
+  allowedKeys: <span class="hljs-literal">true</span>
+  entries:
+    name:
+      type: <span class="hljs-string">'string'</span>
+    street:
+      type: <span class="hljs-string">'string'</span>
+    city:
+      type: <span class="hljs-string">'string'</span>
+    country:
+      type: <span class="hljs-string">'string'</span>
+    email:
+      type: <span class="hljs-string">'string'</span>
 </code></pre>
 <p>This attributes will be differentiated into the groups:</p>
 <ul>
@@ -388,32 +376,32 @@ Compositing
 if you divide by setting some parts to variables first before compositing all
 together:</p>
 <pre><code class="coffee">address =
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-  <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-  <span class="hljs-attribute">entries</span>:
-    <span class="hljs-attribute">name</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">street</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">city</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">country</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">email</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+  type: <span class="hljs-string">'object'</span>
+  allowedKeys: <span class="hljs-literal">true</span>
+  entries:
+    name:
+      type: <span class="hljs-string">'string'</span>
+    street:
+      type: <span class="hljs-string">'string'</span>
+    city:
+      type: <span class="hljs-string">'string'</span>
+    country:
+      type: <span class="hljs-string">'string'</span>
+    email:
+      type: <span class="hljs-string">'string'</span>
 
 <span class="hljs-built_in">console</span>.log validator.<span class="hljs-keyword">is</span> <span class="hljs-string">'audiocd'</span>, value,
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-  <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-  <span class="hljs-attribute">entries</span>:
-    <span class="hljs-attribute">title</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">publisher</span>: address
-    <span class="hljs-attribute">artists</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'array'</span>
-      <span class="hljs-attribute">notEmpty</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">entries</span>: address
-    <span class="hljs-attribute">composer</span>: address
+  type: <span class="hljs-string">'object'</span>
+  allowedKeys: <span class="hljs-literal">true</span>
+  entries:
+    title:
+      type: <span class="hljs-string">'string'</span>
+    publisher: address
+    artists:
+      type: <span class="hljs-string">'array'</span>
+      notEmpty: <span class="hljs-literal">true</span>
+      entries: address
+    composer: address
 </code></pre>
 <p>The above example shows how to composite a complex structure out of parts and
 how to reuse the same elements.</p>
@@ -694,8 +682,11 @@ object structures to do object selections later.</p>
 $json - JSON to object
 $yaml - YAML to object
 $xml - XML to object
+...and more
 $auto - try to autodetect correct parser
 </code></pre>
+<p>See <a href="http://alinex.github.io/node-formatter">formatter</a> for all possible formats
+and examples of them.</p>
 <p><strong>Range Selection</strong></p>
 <p>If the given value is a text it will be splitted into lines and characters.</p>
 <p>Within a text element you may use the following ranges:</p>
@@ -746,10 +737,10 @@ Descriptive reporting
 for the given field in the configuration. This will be used in error reporting
 and <code>describe()</code> calls.</p>
 <pre><code class="coffee">validator.check <span class="hljs-string">'test'</span>, value,
-  <span class="hljs-attribute">title</span>: <span class="hljs-string">'Overall Timeout'</span>
-  <span class="hljs-attribute">description</span>: <span class="hljs-string">'Time in milliseconds the whole test may take.'</span>
-  <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
-  <span class="hljs-attribute">min</span>: <span class="hljs-number">500</span>
+  title: <span class="hljs-string">'Overall Timeout'</span>
+  description: <span class="hljs-string">'Time in milliseconds the whole test may take.'</span>
+  type: <span class="hljs-string">'float'</span>
+  min: <span class="hljs-number">500</span>
 , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
   <span class="hljs-keyword">if</span> err
     <span class="hljs-comment"># there will be the error</span>
@@ -774,8 +765,8 @@ To do this you have to add it in your tests:</p>
 <pre><code class="coffee"><span class="hljs-comment"># ...</span>
 it <span class="hljs-string">"should has correct validator rules"</span>, <span class="hljs-function"><span class="hljs-params">(cb)</span> -&gt;</span>
   validator.selfcheck
-    <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors</span>
-    <span class="hljs-attribute">schema</span>: schema      <span class="hljs-comment"># definition of checks</span>
+    name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors</span>
+    schema: schema      <span class="hljs-comment"># definition of checks</span>
   , <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
     expect(err).to.<span class="hljs-keyword">not</span>.exist
 <span class="hljs-comment"># ...</span>
@@ -808,10 +799,10 @@ Other values are not allowed.</p>
 </ul>
 <p><strong>Example:</strong></p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'boolean'</span>
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
@@ -826,10 +817,10 @@ Other values are not allowed.</p>
 <p><strong>Options:</strong> none</p>
 <p><strong>Example:</strong></p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'function'</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'function'</span>
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
@@ -868,13 +859,13 @@ match (or list of expressions)</li>
 </ul>
 <p><strong>Example:</strong></p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-    <span class="hljs-attribute">lowerCase</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">upperCase</span>: <span class="hljs-string">'first'</span>
-    <span class="hljs-attribute">values</span>: [<span class="hljs-string">'One'</span>, <span class="hljs-string">'Two'</span>, <span class="hljs-string">'Three'</span>]
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'string'</span>
+    lowerCase: <span class="hljs-literal">true</span>
+    upperCase: <span class="hljs-string">'first'</span>
+    values: [<span class="hljs-string">'One'</span>, <span class="hljs-string">'Two'</span>, <span class="hljs-string">'Three'</span>]
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
@@ -958,29 +949,13 @@ array
 </ul>
 <p><strong>Format options:</strong></p>
 <ul>
-<li>
-<p><code>format</code> - transform to string using one of the formats 'simple', 'pretty' or 'json'</p>
-<p>data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]</p>
-<div class="pilwrap" id="simple-greater-1-2-3-a-object-object-c9">
-  <h1>
-    <a href="#simple-greater-1-2-3-a-object-object-c9" name="simple-greater-1-2-3-a-object-object-c9" class="pilcrow"></a>
-simple -&gt; &quot;1, 2, 3, a, [object Object], c,9&quot;
-  </h1>
-</div>
-<div class="pilwrap" id="pretty-greater-1-2-3-a-b-1-c-9">
-  <h1>
-    <a href="#pretty-greater-1-2-3-a-b-1-c-9" name="pretty-greater-1-2-3-a-b-1-c-9" class="pilcrow"></a>
-pretty -&gt; &quot;1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]&quot;
-  </h1>
-</div>
-<div class="pilwrap" id="json-greater-123ab-1c9">
-  <h1>
-    <a href="#json-greater-123ab-1c9" name="json-greater-123ab-1c9" class="pilcrow"></a>
-json -&gt; '[1,2,3,&quot;a&quot;,{&quot;b&quot;:1},[&quot;c&quot;,9]]'
-  </h1>
-</div>
-</li>
+<li><code>format</code> - transform to string using one of the formats 'simple', 'pretty' or 'json'</li>
 </ul>
+<pre><code class="text">data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
+# simple -&gt; &quot;1, 2, 3, a, [object Object], c,9&quot;
+# pretty -&gt; &quot;1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]&quot;
+# json -&gt; '[1,2,3,&quot;a&quot;,{&quot;b&quot;:1},[&quot;c&quot;,9]]'
+</code></pre>
 <div class="pilwrap" id="object">
   <h3>
     <a href="#object" name="object" class="pilcrow"></a>
@@ -1018,40 +993,40 @@ first will be used.</p>
 <p><strong>Examples:</strong></p>
 <p>The follwoing will check for an instance:</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-    <span class="hljs-attribute">instanceOf</span>: RegeExp
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'object'</span>
+    instanceOf: RegeExp
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
 <p>Or you may specify the data object structure:</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-    <span class="hljs-attribute">mandatoryKeys</span>: [<span class="hljs-string">'name'</span>]
-    <span class="hljs-attribute">allowedKeys</span>: [<span class="hljs-string">'mail'</span>, <span class="hljs-string">'phone'</span>]
-    <span class="hljs-attribute">entries</span>: [
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'object'</span>
+    mandatoryKeys: [<span class="hljs-string">'name'</span>]
+    allowedKeys: [<span class="hljs-string">'mail'</span>, <span class="hljs-string">'phone'</span>]
+    entries: [
+      type: <span class="hljs-string">'string'</span>
     ]
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
 <p>Here all object values have to be strings.</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-    <span class="hljs-attribute">mandatoryKeys</span>: [<span class="hljs-string">'name'</span>]
-    <span class="hljs-attribute">entries</span>: [
-      <span class="hljs-attribute">key</span>: <span class="hljs-regexp">/^num-\d+/</span>
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'object'</span>
+    mandatoryKeys: [<span class="hljs-string">'name'</span>]
+    entries: [
+      key: <span class="hljs-regexp">/^num-\d+/</span>
+      type: <span class="hljs-string">'integer'</span>
     ,
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
+      type: <span class="hljs-string">'string'</span>
     ]
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
@@ -1062,20 +1037,20 @@ integers and all other strings.</p>
 <p>And the most complex situation is a deep checking structure with checking each
 key for its specifics:</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-    <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">keys</span>:
-      <span class="hljs-attribute">name</span>:
-        <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-      <span class="hljs-attribute">mail</span>:
-        <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-        <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">phone</span>:
-        <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-        <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'object'</span>
+    allowedKeys: <span class="hljs-literal">true</span>
+    keys:
+      name:
+        type: <span class="hljs-string">'string'</span>
+      mail:
+        type: <span class="hljs-string">'string'</span>
+        optional: <span class="hljs-literal">true</span>
+      phone:
+        type: <span class="hljs-string">'string'</span>
+        optional: <span class="hljs-literal">true</span>
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
@@ -1088,26 +1063,26 @@ for all keys which has no own specification.</p>
 <p>Another option is to flatten the structure before checking it:</p>
 <pre><code class="coffee"><span class="hljs-comment"># value to check</span>
 input =
-  <span class="hljs-attribute">first</span>:
-    <span class="hljs-attribute">num</span>: { <span class="hljs-attribute">one</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">two</span>: <span class="hljs-number">2</span> }
-  <span class="hljs-attribute">second</span>:
-    <span class="hljs-attribute">num</span>: { <span class="hljs-attribute">one</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">two</span>: <span class="hljs-number">2</span> }
-    <span class="hljs-attribute">name</span>: { <span class="hljs-attribute">anna</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">berta</span>: <span class="hljs-number">2</span> }
+  first:
+    num: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }
+  second:
+    num: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }
+    name: { anna: <span class="hljs-number">1</span>, berta: <span class="hljs-number">2</span> }
 <span class="hljs-comment"># run the validation</span>
 validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-    <span class="hljs-attribute">flatten</span>: <span class="hljs-literal">true</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'object'</span>
+    flatten: <span class="hljs-literal">true</span>
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
 </code></pre>
 <p>This will give you the following result:</p>
 <pre><code class="coffee">result =
-  <span class="hljs-string">'first-num'</span>: { <span class="hljs-attribute">one</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">two</span>: <span class="hljs-number">2</span> }
-  <span class="hljs-string">'second-num'</span>: { <span class="hljs-attribute">one</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">two</span>: <span class="hljs-number">2</span> }
-  <span class="hljs-string">'second-name'</span>: { <span class="hljs-attribute">anna</span>: <span class="hljs-number">1</span>, <span class="hljs-attribute">berta</span>: <span class="hljs-number">2</span> }
+  <span class="hljs-string">'first-num'</span>: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }
+  <span class="hljs-string">'second-num'</span>: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }
+  <span class="hljs-string">'second-name'</span>: { anna: <span class="hljs-number">1</span>, berta: <span class="hljs-number">2</span> }
 </code></pre>
 <div class="pilwrap" id="alternative-multiple-checks">
   <h2>
@@ -1130,15 +1105,15 @@ succeed. The first one succeeding will work.</p>
 <p><strong>Example:</strong></p>
 <p>You may allow numeric and special format input:</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-    <span class="hljs-attribute">or</span>: [
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'or'</span>
+    or: [
+      type: <span class="hljs-string">'float'</span>
     ,
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-      <span class="hljs-attribute">match</span>: <span class="hljs-regexp">///
+      type: <span class="hljs-string">'string'</span>
+      match: <span class="hljs-regexp">///
         ^\s*      <span class="hljs-comment"># start with possible spaces</span>
         [+-]?     <span class="hljs-comment"># sign possible</span>
         \s*\d+(\.\d*)? <span class="hljs-comment"># float number</span>
@@ -1151,33 +1126,33 @@ succeed. The first one succeeding will work.</p>
 </code></pre>
 <p>With this type you can also use different option alternatives:</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-    <span class="hljs-attribute">or</span>: [
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>:
-        <span class="hljs-attribute">type</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">lowerCase</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">values</span>: [<span class="hljs-string">'mysql'</span>]
-        <span class="hljs-attribute">port</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">default</span>: <span class="hljs-number">3306</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'or'</span>
+    or: [
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys:
+        type:
+          type: <span class="hljs-string">'string'</span>
+          lowerCase: <span class="hljs-literal">true</span>
+          values: [<span class="hljs-string">'mysql'</span>]
+        port:
+          type: <span class="hljs-string">'integer'</span>
+          default: <span class="hljs-number">3306</span>
         <span class="hljs-comment"># ...</span>
     ,
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>:
-        <span class="hljs-attribute">type</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">lowerCase</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">values</span>: [<span class="hljs-string">'postgres'</span>]
-        <span class="hljs-attribute">port</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">default</span>: <span class="hljs-number">5432</span>
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys:
+        type:
+          type: <span class="hljs-string">'string'</span>
+          lowerCase: <span class="hljs-literal">true</span>
+          values: [<span class="hljs-string">'postgres'</span>]
+        port:
+          type: <span class="hljs-string">'integer'</span>
+          default: <span class="hljs-number">5432</span>
         <span class="hljs-comment"># ...</span>
     ]
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
@@ -1200,16 +1175,16 @@ all have to succeed.</p>
 <p>With this it is possible to use a string-check to sanitize and then use an
 other test to finalize the value like:</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: input        <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'and'</span>
-    <span class="hljs-attribute">and</span>: [
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-      <span class="hljs-attribute">toString</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">replace</span>: [<span class="hljs-regexp">/,/g</span>, <span class="hljs-string">'.'</span>]
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: input        <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'and'</span>
+    and: [
+      type: <span class="hljs-string">'string'</span>
+      toString: <span class="hljs-literal">true</span>
+      replace: [<span class="hljs-regexp">/,/g</span>, <span class="hljs-string">'.'</span>]
     ,
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'float'</span>
+      type: <span class="hljs-string">'float'</span>
     ]
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># do something</span>
@@ -1373,14 +1348,14 @@ handlebars
 This will be compiled into a function which if called with the context
 object will return the resulting text.</p>
 <pre><code class="coffee">validator.check
-  <span class="hljs-attribute">name</span>: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  <span class="hljs-attribute">value</span>: <span class="hljs-string">'hello {{name}}'</span> <span class="hljs-comment"># value to check</span>
-  <span class="hljs-attribute">schema</span>:             <span class="hljs-comment"># definition of checks</span>
-    <span class="hljs-attribute">type</span>: <span class="hljs-string">'handlebars'</span>
+  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
+  value: <span class="hljs-string">'hello {{name}}'</span> <span class="hljs-comment"># value to check</span>
+  schema:             <span class="hljs-comment"># definition of checks</span>
+    type: <span class="hljs-string">'handlebars'</span>
 , <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
   <span class="hljs-comment"># then use it</span>
   <span class="hljs-built_in">console</span>.log result
-    <span class="hljs-attribute">name</span>: <span class="hljs-string">'alex'</span>
+    name: <span class="hljs-string">'alex'</span>
   <span class="hljs-comment"># this will output 'hello alex'</span>
 </code></pre>
 <p>Within the handlebars templates you may use:</p>

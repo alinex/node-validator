@@ -7,7 +7,7 @@
   <script src="../../doc-filelist.js"></script>
   <script>
     var relativeDir = "../../";
-    var thisFile = "home/alex/github/node-validator/src/type/integer.coffee";
+    var thisFile = "src/type/integer.coffee";
     var defaultSidebar = true;
   </script>
   <script src="../../doc-script.js"></script>
@@ -162,11 +162,11 @@ integer type names
         </td>
         <td class="code highlight">
           <pre class="coffeescript">integerTypes =
-  <span class="hljs-attribute">byte</span>: <span class="hljs-number">8</span>
-  <span class="hljs-attribute">short</span>: <span class="hljs-number">16</span>
-  <span class="hljs-attribute">long</span>: <span class="hljs-number">32</span>
-  <span class="hljs-attribute">safe</span>: <span class="hljs-number">53</span>
-  <span class="hljs-attribute">quad</span>: <span class="hljs-number">64</span></pre>
+  byte: <span class="hljs-number">8</span>
+  short: <span class="hljs-number">16</span>
+  long: <span class="hljs-number">32</span>
+  safe: <span class="hljs-number">53</span>
+  quad: <span class="hljs-number">64</span></pre>
         </td>
       </tr>
     
@@ -236,8 +236,8 @@ Type implementation
     text += <span class="hljs-string">"Only values in the range of <span class="hljs-subst">#{unsigned}</span> <span class="hljs-subst">#{work.pos.inttype}</span><span class="hljs-subst">#{type}</span>-integer
       are allowed. "</span>
     unsigned = <span class="hljs-keyword">if</span> work.pos.unsigned <span class="hljs-keyword">then</span> <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">0</span>
-    max = (Math.pow <span class="hljs-number">2</span>, type-<span class="hljs-number">1</span>+unsigned)-<span class="hljs-number">1</span>
-    min = (unsigned-<span class="hljs-number">1</span>) * max - <span class="hljs-number">1</span> + unsigned</pre>
+    max = (Math.pow <span class="hljs-number">2</span>, type<span class="hljs-number">-1</span>+unsigned)<span class="hljs-number">-1</span>
+    min = (unsigned<span class="hljs-number">-1</span>) * max - <span class="hljs-number">1</span> + unsigned</pre>
         </td>
       </tr>
     
@@ -371,8 +371,8 @@ exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</
           <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.inttype
     type = integerTypes[work.pos.inttype] ? work.pos.inttype
     unsigned = <span class="hljs-keyword">if</span> work.pos.unsigned <span class="hljs-keyword">then</span> <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">0</span>
-    max = (Math.pow <span class="hljs-number">2</span>, type-<span class="hljs-number">1</span>+unsigned)-<span class="hljs-number">1</span>
-    min = (unsigned-<span class="hljs-number">1</span>) * max - <span class="hljs-number">1</span> + unsigned
+    max = (Math.pow <span class="hljs-number">2</span>, type<span class="hljs-number">-1</span>+unsigned)<span class="hljs-number">-1</span>
+    min = (unsigned<span class="hljs-number">-1</span>) * max - <span class="hljs-number">1</span> + unsigned
     <span class="hljs-keyword">if</span> value &lt; min <span class="hljs-keyword">or</span> value &gt; max
       <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value is out of range for
 </span></pre>
@@ -463,57 +463,57 @@ min/max</p>
 
 exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
   check.run
-    <span class="hljs-attribute">schema</span>:
-      <span class="hljs-attribute">type</span>: <span class="hljs-string">'object'</span>
-      <span class="hljs-attribute">allowedKeys</span>: <span class="hljs-literal">true</span>
-      <span class="hljs-attribute">keys</span>: util.extend util.clone(check.base),
-        <span class="hljs-attribute">default</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">sanitize</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">unit</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">minLength</span>: <span class="hljs-number">1</span>
-        <span class="hljs-attribute">round</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">or</span>: [
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
+    schema:
+      type: <span class="hljs-string">'object'</span>
+      allowedKeys: <span class="hljs-literal">true</span>
+      keys: util.extend util.clone(check.base),
+        default:
+          type: <span class="hljs-string">'integer'</span>
+          optional: <span class="hljs-literal">true</span>
+        sanitize:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        unit:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+          minLength: <span class="hljs-number">1</span>
+        round:
+          type: <span class="hljs-string">'or'</span>
+          optional: <span class="hljs-literal">true</span>
+          or: [
+            type: <span class="hljs-string">'boolean'</span>
           ,
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-            <span class="hljs-attribute">values</span>: [<span class="hljs-string">'floor'</span>, <span class="hljs-string">'ceil'</span>]
+            type: <span class="hljs-string">'string'</span>
+            values: [<span class="hljs-string">'floor'</span>, <span class="hljs-string">'ceil'</span>]
           ]
-        <span class="hljs-attribute">min</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-        <span class="hljs-attribute">max</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
-          <span class="hljs-attribute">min</span>: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
-        <span class="hljs-attribute">inttype</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'or'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-          <span class="hljs-attribute">or</span>: [
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'integer'</span>
+        min:
+          type: <span class="hljs-string">'integer'</span>
+        max:
+          type: <span class="hljs-string">'integer'</span>
+          min: <span class="hljs-string">'&lt;&lt;&lt;min&gt;&gt;&gt;'</span>
+        inttype:
+          type: <span class="hljs-string">'or'</span>
+          optional: <span class="hljs-literal">true</span>
+          or: [
+            type: <span class="hljs-string">'integer'</span>
           ,
-            <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-            <span class="hljs-attribute">values</span>: [<span class="hljs-string">'byte'</span>, <span class="hljs-string">'short'</span>, <span class="hljs-string">'long'</span>, <span class="hljs-string">'quad'</span>, <span class="hljs-string">'safe'</span>]
+            type: <span class="hljs-string">'string'</span>
+            values: [<span class="hljs-string">'byte'</span>, <span class="hljs-string">'short'</span>, <span class="hljs-string">'long'</span>, <span class="hljs-string">'quad'</span>, <span class="hljs-string">'safe'</span>]
           ]
-        <span class="hljs-attribute">unsigned</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'boolean'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">toUnit</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">format</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-        <span class="hljs-attribute">locale</span>:
-          <span class="hljs-attribute">type</span>: <span class="hljs-string">'string'</span>
-          <span class="hljs-attribute">match</span>: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
-          <span class="hljs-attribute">optional</span>: <span class="hljs-literal">true</span>
-    <span class="hljs-attribute">value</span>: schema
+        unsigned:
+          type: <span class="hljs-string">'boolean'</span>
+          optional: <span class="hljs-literal">true</span>
+        toUnit:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        format:
+          type: <span class="hljs-string">'string'</span>
+          optional: <span class="hljs-literal">true</span>
+        locale:
+          type: <span class="hljs-string">'string'</span>
+          match: <span class="hljs-regexp">/^[a-z]{2}(-[A-Z]{2})?$/</span>
+          optional: <span class="hljs-literal">true</span>
+    value: schema
   , cb</pre>
         </td>
       </tr>
