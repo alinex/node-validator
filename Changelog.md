@@ -4,6 +4,13 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.6.3 (2016-05-31)
+-------------------------------------------------
+- Upgraded async package.
+- Fixed document style.
+- Use alinex-formatter for string parsing.
+- Updated fs, util, chrono, timezone and builder packages.
+
 Version 1.6.2 (2016-05-02)
 -------------------------------------------------
 - Upgraded handlebars and builder.
