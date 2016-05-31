@@ -36,7 +36,7 @@
     "alinex-fs": "^2.0.1",
     "alinex-handlebars": "^1.1.2",
     "alinex-util": "^2.2.0",
-    "async": "^2.0.0-rc.3",
+    "async": "^2.0.0-rc.5",
     "chalk": "^1.1.1",
     "chrono-node": "^1.2.3",
     "debug": "^2.2.0",
