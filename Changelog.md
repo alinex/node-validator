@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.6.4 (2016-05-31)
+-------------------------------------------------
+- Fix max stack trace problem by using setImmediate on object and array keys.
+
 Version 1.6.3 (2016-05-31)
 -------------------------------------------------
 - Upgraded async package.
