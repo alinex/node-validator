@@ -137,7 +137,8 @@ exports.run = (work, cb) ->
         optional: true
       sub.path = []
       sub.pos = sub.spec.schema
-    check.run sub, cb
+    async.setImmediate ->
+      check.run sub, cb
   , (err, value) ->
     return cb err if err
     # format value

@@ -168,13 +168,14 @@ exports.run = (work, cb) ->
           else
             'any'
         optional: true
-    check.run sub, (err, result) ->
-      return cb err if err and (sub.value and not sub.pos.optional)
-      if result
-        value[key] = result
-      else
-        delete value[key]
-      cb()
+    async.setImmediate ->
+      check.run sub, (err, result) ->
+        return cb err if err and (sub.value and not sub.pos.optional)
+        if result
+          value[key] = result
+        else
+          delete value[key]
+        cb()
   , (err) ->
     return cb err if err
     # check mandatoryKeys
