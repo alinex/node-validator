@@ -50,7 +50,7 @@
   },
   "optionalDependencies": {},
   "devDependencies": {
-    "alinex-builder": "^2.1.4",
+    "alinex-builder": "^2.1.5",
     "chai": "3.x",
     "chai-datetime": "^1.4.1"
   },
