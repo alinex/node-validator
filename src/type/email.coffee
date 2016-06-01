@@ -103,22 +103,17 @@ exports.run = (work, cb) ->
       return cb null, value if host is 'localhost'
       # check server
       getMyIP (err, ip) ->
-        console.log err, ip
         if err
           debug chalk.magenta "could not detect own ip address"
           return cb null, value
         # find mx records
         dns = require 'dns'
         dns.resolveMx host, (err, addresses) ->
-          console.log err, addresses
           checkMailServer addresses, ip, (ok) ->
-            console.log '---------------', ok
             return cb null, value if ok
             # find a-record
             dns.resolve host, (err, addresses) ->
-              console.log err, addresses
               checkMailServer addresses, ip, (ok) ->
-                console.log '--------------2', ok
                 return cb null, value if ok
                 return work.report (new Error "No correct responding mail server
                 could be detected for this domain."), cb
@@ -169,23 +164,18 @@ checkMailServer = (list, ip, cb) ->
   .map (e) -> e.exchange
   async.detect list, (domain, cb) ->
     debug chalk.grey "check mail server under #{domain}"
-    console.log 'check', domain
     res = ''
     client = net.connect
       port: 25
       host: domain
     , ->
-      console.log 'HELO'
       client.write "HELO #{ip}\r\n"
       client.end()
     client.on 'data', (data) ->
-      console.log 'data', data.toString()
       res += data.toString()
     client.on 'error', (err) ->
-      console.log 'error', err
       debug chalk.magenta err
     client.on 'end', ->
-      console.log 'done', res
       debug chalk.grey l for l in res.split /\n/
       cb null, res?.length > 0
   , (err, res) -> cb res

@@ -64,10 +64,11 @@ describe "Email", ->
         ['alexander.schilling+test@googlemail.com', 'alexanderschilling@gmail.com']
       ], cb
 
-    it.only "should check server", (cb) ->
-      @timeout 5000
-      schema.checkServer = true
-      test.same schema, ['alexander.schilling@divibib.com'], cb
+    unless process.env.TRAVIS
+      it "should check server", (cb) ->
+        @timeout 5000
+        schema.checkServer = true
+        test.same schema, ['alexander.schilling@divibib.com'], cb
 
     it "should fail to check server", (cb) ->
       @timeout 5000
