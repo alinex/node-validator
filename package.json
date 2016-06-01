@@ -32,7 +32,7 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "alinex-formatter": "^1.0.1",
+    "alinex-formatter": "^1.1.0",
     "alinex-fs": "^2.0.1",
     "alinex-handlebars": "^1.1.2",
     "alinex-util": "^2.2.0",
@@ -41,7 +41,7 @@
     "chrono-node": "^1.2.3",
     "debug": "^2.2.0",
     "handlebars": "^4.0.5",
-    "ipaddr.js": "1.x",
+    "ipaddr.js": "^1.1.1",
     "mathjs": "^3.2.1",
     "moment": "^2.13.0",
     "moment-timezone": "^0.5.4",
@@ -50,7 +50,7 @@
   },
   "optionalDependencies": {},
   "devDependencies": {
-    "alinex-builder": "^2.1.0",
+    "alinex-builder": "^2.1.4",
     "chai": "3.x",
     "chai-datetime": "^1.4.1"
   },
