@@ -103,17 +103,22 @@ exports.run = (work, cb) ->
       return cb null, value if host is 'localhost'
       # check server
       getMyIP (err, ip) ->
+        console.log err, ip
         if err
           debug chalk.magenta "could not detect own ip address"
           return cb null, value
         # find mx records
         dns = require 'dns'
         dns.resolveMx host, (err, addresses) ->
+          console.log err, addresses
           checkMailServer addresses, ip, (ok) ->
+            console.log '---------------', ok
             return cb null, value if ok
             # find a-record
             dns.resolve host, (err, addresses) ->
+              console.log err, addresses
               checkMailServer addresses, ip, (ok) ->
+                console.log '--------------2', ok
                 return cb null, value if ok
                 return work.report (new Error "No correct responding mail server
                 could be detected for this domain."), cb

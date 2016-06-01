@@ -64,13 +64,13 @@ describe "Email", ->
         ['alexander.schilling+test@googlemail.com', 'alexanderschilling@gmail.com']
       ], cb
 
-    it "should check server", (cb) ->
-      @timeout 20000
+    it.only "should check server", (cb) ->
+      @timeout 5000
       schema.checkServer = true
-      test.same schema, ['alexander.schilling@divibib.com', 'info@alinex.de'], cb
+      test.same schema, ['alexander.schilling@divibib.com'], cb
 
     it "should fail to check server", (cb) ->
-      @timeout 20000
+      @timeout 5000
       schema.checkServer = true
       test.fail schema, ['alexander.schilling@nqqnnddajc.de'], cb
 
