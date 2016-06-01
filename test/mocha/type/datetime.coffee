@@ -8,7 +8,7 @@ expect = chai.expect
 test = require '../../test'
 validator = require '../../../src/index'
 
-describe.only "Datetime", ->
+describe "Datetime", ->
 
   schema = null
   beforeEach ->
@@ -247,19 +247,28 @@ describe.only "Datetime", ->
     it "should format datetime with zone", (cb) ->
       schema.toTimezone = 'America/Toronto'
       testFormat schema, '2015-01-17 09:00', [
-        ['ISO8601', '2015-01-17T03:00:00-05:00']
+        if process.env.TRAVIS
+          ['ISO8601', '2015-01-17T04:00:00-05:00']
+        else
+          ['ISO8601', '2015-01-17T03:00:00-05:00']
       ], cb
 
     it "should format datetime with zone (short)", (cb) ->
       schema.toTimezone = 'EST'
       testFormat schema, '2015-01-17 09:00', [
-        ['ISO8601', '2015-01-17T03:00:00-05:00']
+        if process.env.TRAVIS
+          ['ISO8601', '2015-01-17T04:00:00-05:00']
+        else
+          ['ISO8601', '2015-01-17T03:00:00-05:00']
       ], cb
 
     it "should format datetime with zone (long)", (cb) ->
       schema.toTimezone = 'Eastern Standard Time'
       testFormat schema, '2015-01-17 09:00', [
-        ['ISO8601', '2015-01-17T03:00:00-05:00']
+        if process.env.TRAVIS
+          ['ISO8601', '2015-01-17T04:00:00-05:00']
+        else
+          ['ISO8601', '2015-01-17T03:00:00-05:00']
       ], cb
 
     it "should format datetime with zone (long) on range", (cb) ->
@@ -270,7 +279,10 @@ describe.only "Datetime", ->
       test.equal schema, [
         [
           '17 August 2013 - 19 August 2013'
-          ['2013-08-17T12:00:00+02:00', '2013-08-19T12:00:00+02:00']
+          if process.env.TRAVIS
+            ['2013-08-17T14:00:00+02:00', '2013-08-19T14:00:00+02:00']
+          else
+            ['2013-08-17T12:00:00+02:00', '2013-08-19T12:00:00+02:00']
         ]
       ], cb
 

@@ -65,12 +65,12 @@ describe "Email", ->
       ], cb
 
     it "should check server", (cb) ->
-      @timeout 5000
+      @timeout 20000
       schema.checkServer = true
       test.same schema, ['alexander.schilling@divibib.com', 'info@alinex.de'], cb
 
     it "should fail to check server", (cb) ->
-      @timeout 5000
+      @timeout 20000
       schema.checkServer = true
       test.fail schema, ['alexander.schilling@nqqnnddajc.de'], cb
 
