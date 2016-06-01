@@ -210,7 +210,6 @@ describe.only "Datetime", ->
       ], cb
 
   describe "timezone check", ->
-    @skip() if process.env.TRAVIS
 
     it "should parse datetime", (cb) ->
       date = new Date('2015-01-17 09:00')
@@ -221,19 +220,28 @@ describe.only "Datetime", ->
     it "should parse datetime with zone", (cb) ->
       schema.timezone = 'America/Toronto'
       testFormat schema, '2015-01-17 09:00', [
-        ['ISO8601', '215-01-17T15:00:00+01:00']
+        if process.env.TRAVIS
+          ['ISO8601', '2015-01-17T14:00:00+00:00']
+        else
+          ['ISO8601', '2015-01-17T15:00:00+01:00']
       ], cb
 
     it "should parse datetime with zone (short)", (cb) ->
       schema.timezone = 'EST'
       testFormat schema, '2015-01-17 09:00', [
-        ['ISO8601', '2015-01-17T15:00:00+01:00']
+        if process.env.TRAVIS
+          ['ISO8601', '2015-01-17T14:00:00+00:00']
+        else
+          ['ISO8601', '2015-01-17T15:00:00+01:00']
       ], cb
 
     it "should parse datetime with zone (long)", (cb) ->
       schema.timezone = 'Eastern Standard Time'
       testFormat schema, '2015-01-17 09:00', [
-        ['ISO8601', '2015-01-17T15:00:00+01:00']
+        if process.env.TRAVIS
+          ['ISO8601', '2015-01-17T14:00:00+00:00']
+        else
+          ['ISO8601', '2015-01-17T15:00:00+01:00']
       ], cb
 
     it "should format datetime with zone", (cb) ->
