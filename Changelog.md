@@ -4,6 +4,20 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.6.5 (2016-06-02)
+-------------------------------------------------
+- Upgraded builder and handlebars-helper package.
+- Upgrade builder package.
+- coveralls test
+- Skip server check on travis.
+- Next test.
+- Make test verbose.
+- Test email check on travis.
+- Fix some other tests for travis.
+- Fix test to use other timezone on travis.
+- Try to optimize tests for travis.
+- Upgraded formatter, ipaddr and builder packages.
+
 Version 1.6.4 (2016-05-31)
 -------------------------------------------------
 - Fix max stack trace problem by using setImmediate on object and array keys.
