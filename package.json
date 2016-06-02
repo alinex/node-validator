@@ -34,7 +34,7 @@
   "dependencies": {
     "alinex-formatter": "^1.1.0",
     "alinex-fs": "^2.0.1",
-    "alinex-handlebars": "^1.1.2",
+    "alinex-handlebars": "^1.2.0",
     "alinex-util": "^2.2.0",
     "async": "^2.0.0-rc.5",
     "chalk": "^1.1.1",
@@ -50,7 +50,7 @@
   },
   "optionalDependencies": {},
   "devDependencies": {
-    "alinex-builder": "^2.1.5",
+    "alinex-builder": "^2.1.6",
     "chai": "3.x",
     "chai-datetime": "^1.4.1"
   },
