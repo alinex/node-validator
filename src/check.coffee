@@ -181,10 +181,10 @@ exports.run = (work, cb) ->
       try
         lib = getTypeLib work.pos
         unless lib.run?
-          return cb new Error "Type '#{work.pos.type}' has no run() method"
+          return work.report new Error("Type '#{work.pos.type}' has no run() method"), cb
       catch err
         debug chalk.red "Failed to load '#{work.pos.type}' lib because of: #{err}"
-        return cb new Error "Type '#{work.pos.type}' not supported"
+        return work.report new Error("Type '#{work.pos.type}' not supported"), cb
       # and call library to run the real check
       lib.run work, cb
 
@@ -198,7 +198,7 @@ exports.selfcheck = (schema, cb) ->
     unless lib.selfcheck?
       return cb new Error "Type '#{schema.type}' has no selfcheck() method"
   catch
-    return cb new Error "Type '#{schema.type}' not supported"
+    return cb new Error "Type '#{schema.type}' not supported in validator #{schema}"
   # run the selfcheck
   lib.selfcheck schema, cb
 
