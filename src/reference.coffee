@@ -32,7 +32,7 @@ exec = null # load on demand
 util = require 'alinex-util'
 object = util.object
 fs = null # load on demand
-formatter = null # load on demand
+format = null # load on demand
 # include classes and helper
 check = require './check'
 
@@ -255,10 +255,10 @@ findType =
     cb null, work.data.match re
   # #### Special parsing of string
   parse: (proto, path, work, cb) ->
-    formatter ?= require 'alinex-formatter'
+    format ?= require 'alinex-format'
     format = path[1..]
     format = null if format is 'auto'
-    formatter.parse work.data, format, (err, result) ->
+    format.parse work.data, format, (err, result) ->
       cb null, result
   # #### Range selection in array
   range: (proto, path, work, cb) ->
