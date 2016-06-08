@@ -154,24 +154,15 @@ exports.describe = (work, cb) ->
 exports.run = (work, cb) ->
   work = new Work work unless work instanceof Work
   # check for references in schema
-#  async.map work.pos, (v, cb) ->
-#    reference.replace v,
-#      spec: work.spec
-#      path: work.path[0..]    # clone because it may change
-#      context: work.value
-#    , cb
-#  , (err, result) ->
-  keys = Object.keys work.pos
-  async.map keys, (key, cb) ->
-    reference.replace work.pos[key],
+  async.mapValues work.pos, (val, key, cb) ->
+    reference.replace val,
       spec: work.spec
       path: work.path[0..]    # clone because it may change
       context: work.value
     , cb
-  , (err, results) ->
+  , (err, result) ->
     return work.report err, cb if err
-    for num in [0..keys.length-1]
-      work.pos[keys[num]] = results[num]
+    work.pos = result
     # check for references in values
     reference.replace work.value,
       spec: work.spec
