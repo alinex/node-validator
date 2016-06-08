@@ -256,9 +256,9 @@ findType =
   # #### Special parsing of string
   parse: (proto, path, work, cb) ->
     format ?= require 'alinex-format'
-    format = path[1..]
-    format = null if format is 'auto'
-    format.parse work.data, format, (err, result) ->
+    formatType = path[1..]
+    formatType = null if formatType is 'auto'
+    format.parse work.data, formatType, (err, result) ->
       cb null, result
   # #### Range selection in array
   range: (proto, path, work, cb) ->
