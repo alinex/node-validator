@@ -4,6 +4,15 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 1.6.6 (2016-06-08)
+-------------------------------------------------
+Hot fix for changed behaviour in async causing "Type undefined error".
+
+- Fix duplicate use of variables.
+- Upgrade formatter->format, builder.
+- Hot fix for new async rc.6
+- Optimized errors for unsupported type.
+
 Version 1.6.5 (2016-06-02)
 -------------------------------------------------
 - Upgraded builder and handlebars-helper package.
