@@ -37,6 +37,13 @@ describe "Handlebars", ->
     it "should fail on other objects", (cb) ->
       test.fail schema, [null, [], (new Error '????'), {}], cb
 
+  describe "specific check", ->
+
+    it "should compile handlebars", (cb) ->
+      test.function schema, [
+        ['hello {{#if name}}{{name}}{{/if}}', {name: 'alex'}, 'hello alex']
+      ], cb
+
   describe "description", ->
 
     it "should give simple description", (cb) ->
