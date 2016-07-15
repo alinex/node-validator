@@ -25,7 +25,7 @@ you can trust and use the values as they are without further checks.
 And you'll get the benefit of automatically optimized values like for `handlebars`
 type you get a ready to use handlebar function back.
 
-> It is one of the modules of the [Alinex Universe](http://alinex.github.io/code.html)
+> It is one of the modules of the [Alinex Namespace](http://alinex.github.io/code.html)
 > following the code standards defined in the [General Docs](http://alinex.github.io/develop).
 
 
