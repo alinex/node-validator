@@ -1,9 +1,36 @@
-Package: alinex-validator
+Alinex Validator: Readme
 =================================================
 
-[![Build Status](https://travis-ci.org/alinex/node-validator.svg?branch=master)](https://travis-ci.org/alinex/node-validator)
-[![Coverage Status](https://coveralls.io/repos/alinex/node-validator/badge.svg?branch=master)](https://coveralls.io/r/alinex/node-validator?branch=master)
-[![Dependency Status](https://gemnasium.com/alinex/node-validator.png)](https://gemnasium.com/alinex/node-validator)
+[![GitHub watchers](
+  https://img.shields.io/github/watchers/alinex/node-validator.svg?style=social&label=Watch&maxAge=2592000)](
+  https://github.com/alinex/node-validator/subscription)<!-- {.hidden-small} -->
+[![GitHub stars](
+  https://img.shields.io/github/stars/alinex/node-validator.svg?style=social&label=Star&maxAge=2592000)](
+  https://github.com/alinex/node-validator)
+[![GitHub forks](
+  https://img.shields.io/github/forks/alinex/node-validator.svg?style=social&label=Fork&maxAge=2592000)](
+  https://github.com/alinex/node-validator)<!-- {.hidden-small} -->
+<!-- {p:.right} -->
+
+[![npm package](
+  https://img.shields.io/npm/v/alinex-validator.svg?maxAge=2592000&label=latest%20version)](
+  https://www.npmjs.com/package/alinex-validator)
+[![latest version](
+  https://img.shields.io/npm/l/alinex-validator.svg?maxAge=2592000)](
+  #license)<!-- {.hidden-small} -->
+[![Travis status](
+  https://img.shields.io/travis/alinex/node-validator.svg?maxAge=2592000&label=develop)](
+  https://travis-ci.org/alinex/node-validator)
+[![Coveralls status](
+  https://img.shields.io/coveralls/alinex/node-validator.svg?maxAge=2592000)](
+  https://coveralls.io/r/alinex/node-validator?branch=master)
+[![Gemnasium status](
+  https://img.shields.io/gemnasium/alinex/node-validator.svg?maxAge=2592000)](
+  https://gemnasium.com/alinex/node-validator)
+[![GitHub issues](
+  https://img.shields.io/github/issues/alinex/node-validator.svg?maxAge=2592000)](
+  https://github.com/alinex/node-validator/issues)<!-- {.hidden-small} -->
+
 
 This module will help validating complex structures. And should be used on all
 external information.
@@ -25,8 +52,12 @@ you can trust and use the values as they are without further checks.
 And you'll get the benefit of automatically optimized values like for `handlebars`
 type you get a ready to use handlebar function back.
 
-> It is one of the modules of the [Alinex Namespace](http://alinex.github.io/code.html)
-> following the code standards defined in the [General Docs](http://alinex.github.io/develop).
+> It is one of the modules of the [Alinex Namespace](https://alinex.github.io/code.html)
+> following the code standards defined in the [General Docs](https://alinex.github.io/develop).
+
+__Read the complete documentation under
+[https://alinex.github.io/node-codedoc](https://alinex.github.io/node-codedoc).__
+<!-- {p: .hidden} -->
 
 
 Install
@@ -49,7 +80,7 @@ And update it to the latest version later:
 npm update alinex-validator --save
 ```
 
-Always have a look at the latest [changes](Changelog.md).
+Always have a look at the latest changes in the {@link Changelog.md}
 
 
 Usage
