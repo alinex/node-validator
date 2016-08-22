@@ -6,7 +6,7 @@ async = require 'async'
 path = require 'path'
 
 test = require '../test'
-reference = require '../../src/reference'
+reference = require '../../src/helper/reference'
 
 describe "References", ->
 

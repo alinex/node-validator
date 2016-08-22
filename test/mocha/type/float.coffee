@@ -8,7 +8,7 @@ describe "Float", ->
     schema =
       type: 'float'
 
-  describe "base check", ->
+  describe.only "base check", ->
 
     it "should support optional option", (cb) ->
       schema.optional = true

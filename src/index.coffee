@@ -12,10 +12,11 @@ uses more cpu performance.
 # -------------------------------------------------
 debug = require('debug')('validator')
 chalk = require 'chalk'
-util = require 'util'
 deasync = require 'deasync'
+# alinex packages
+util = require 'alinex-util'
 # internal classes and helper
-check = require './check'
+Worker = require './helper/worker'
 
 
 # External Methods
@@ -29,12 +30,15 @@ This will directly return the description of how the value has to be.
 - `schema` - `Object` structure to check
 - `context` - `Object` additional data structure
 - `dir` - `String` set to base directory for file relative file paths
-- `value` - original value (not changed)
 @param {function(Error, String)} cb callback with descriptive text or an error if
 something went wrong
 ###
 exports.describe = (spec, cb) ->
-  check.describe spec, cb
+  name = spec.name ? 'value'
+  schema = spec.
+  value = util.clone spec.value
+  worker = new Worker name, schema, spec.context, spec.dir
+  worker.describe cb
 
 ###
 This will directly return the description of how the value has to be.
@@ -45,7 +49,6 @@ This will directly return the description of how the value has to be.
 - `schema` - `Object` structure to check
 - `context` - `Object` additional data structure
 - `dir` - `String` set to base directory for file relative file paths
-- `value` - original value (not changed)
 @return {String} descriptive text
 @throw {Error} if something went wrong
 ###
@@ -69,15 +72,20 @@ exports.check = (spec, cb) ->
   throw new Error "No callback method given" unless typeof cb is 'function'
   return cb new Error "No schema definition given" unless spec.schema
   # optimize data
-  spec.debug = chalk.grey spec.name ? 'value'
+  name = spec.name ? 'value'
+  schema = util.clone spec.schema
+  schema.title ?= 'reference'
+  debug "#{name} initialize to check as #{schema.title}"
+  value = util.clone spec.value
+  # instantiate new object
+  worker = new Worker name, schema, spec.context, spec.dir, value
   # run the check
-  debug "#{spec.debug} check as #{spec.schema.title ? spec.schema.type}"
-  check.run spec, (err, result) ->
-    if err
-      debug "#{spec.debug} failed with: #{err.message}"
+  worker.check (err) ->
+    debug if err
+      "#{name}: failed with: #{err.message}"
     else
-      debug "#{spec.debug} succeeded with: #{util.inspect result}"
-    cb err, result
+      "#{name}: succeeded"
+    cb err, worker.value
 
 ###
 This will check the given value, sanitize it and return the new value or an

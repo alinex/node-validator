@@ -18,14 +18,15 @@
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:float')
-chalk = require 'chalk'
 math = require 'mathjs'
 # alinex modules
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
+check = require '../helper/check'
 
-# Extend Math.js
+
+# Setup Math.js
 # -------------------------------------------------
 # Additional derived units are added:
 math.type.Unit.BASE_UNITS.FREQUENCY = {}
@@ -35,118 +36,120 @@ math.type.Unit.UNITS.hz =
   prefixes: math.type.Unit.PREFIXES.SHORT
   value: 1, offset: 0
 
-# Helper methods
+
+# Exported Methods
 # -------------------------------------------------
-optimize = (work) ->
-  work.pos.round = true if work.pos.decimals and not work.pos.round?
-  work.pos.decimals = 0 if work.pos.round and not work.pos.decimals?
+
+# Type specific debug method.
+exports.debug = debug
+
+# Initialize schema.
+exports.init = ->
+  @schema.round = true if @schema.decimals and not @schema.round?
+  @schema.decimals = 0 if @schema.round and not @schema.decimals?
+
 
 # Type implementation
 # -------------------------------------------------
 exports.describe = (work, cb) ->
-  optimize work
   # combine into message
   text = "A numeric floating point number. "
   text += check.optional.describe work
   text = text.replace /\. It's/, ' which is'
-  if work.pos.sanitize
+  if @schema.sanitize
     text += "Invalid characters will be removed from text. "
   # round
-  if work.pos.round
-    type = switch work.pos.round
+  if @schema.round
+    type = switch @schema.round
       when 'ceil' then 'to ceil'
       when 'floor' then 'to floor'
       else 'arithḿeticaly'
-    text += "The value will be rounded #{type} to #{work.pos.decimals} decimals. "
+    text += "The value will be rounded #{type} to #{@schema.decimals} decimals. "
   # minmax
-  if work.pos.min? and work.pos.max?
-    text += "The value should be between #{work.pos.min} and #{work.pos.max}. "
-  else if work.pos.min?
-    text += "The value should be greater than #{work.pos.min}. "
-  else if work.pos.max?
-    text += "The value should be lower than #{work.pos.max}. "
-  if work.pos.toUnit
-    text += "The number will be formated in #{work.pos.toUnit}. "
-  if work.pos.format
-    text += "The number will be formatted like #{work.pos.format}. "
+  if @schema.min? and @schema.max?
+    text += "The value should be between #{@schema.min} and #{@schema.max}. "
+  else if @schema.min?
+    text += "The value should be greater than #{@schema.min}. "
+  else if @schema.max?
+    text += "The value should be lower than #{@schema.max}. "
+  if @schema.toUnit
+    text += "The number will be formated in #{@schema.toUnit}. "
+  if @schema.format
+    text += "The number will be formatted like #{@schema.format}. "
   cb null, text
 
-exports.run = (work, cb) ->
-  optimize work
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+
+
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
-  value = work.value
-  # convert units
-  if work.pos.unit?
-    if typeof value is 'number' or (typeof value is 'string' and value.match /\d$/)
-      value = "" + value + work.pos.unit
-    value = math.unit value
-    value = value.toNumber work.pos.unit
-  # sanitize string
-  if typeof value is 'string'
-    if work.pos.sanitize
-      value = value.replace /^.*?([-+]?\d+\.?\d*).*?$/, '$1'
-    if value.length
-      value = Number value
-  # round
-  if work.pos.round
-    exp = Math.pow 10, work.pos.decimals
-    value = value * exp
-    value = switch work.pos.round
-      when 'ceil' then Math.ceil value
-      when 'floor' then Math.floor value
-      else Math.round value
-    value = value / exp
-  # is number
-  unless not isNaN(parseFloat value) and isFinite value
-    return work.report (new Error "The given value #{util.inspect value} is no
-      number as needed"), cb
-  # minmax
-  if work.pos.min? and value < work.pos.min
-    return work.report (new Error "The value is to low, it has to be at least
-      #{work.pos.min}"), cb
-  if work.pos.max? and value > work.pos.max
-    return work.report (new Error "The value is to high, it has to be'#{work.pos.max}'
-      or lower"), cb
-  # output format
-  if work.pos.toUnit
-    value = math.unit value, work.pos.unit ? work.pos.toUnit
-    value = value.to 'min' if value.units[0].unit.name is 's' and value.toNumber('s') > 120
-    value = value.to 'h' if value.units[0].unit.name is 'min' and value.toNumber('min') > 120
-    value = value.to 'day' if value.units[0].unit.name is 'h' and value.toNumber('h') > 48
-    if work.pos.format
+  rules.optional.check.call this, (err, skip) =>
+    return cb err if err
+    return cb() if skip
+    # convert units
+    if @schema.unit?
+      if typeof @value is 'number' or (typeof @value is 'string' and @value.match /\d$/)
+        @value = "" + @value + @schema.unit
+        @value = math.unit @value
+        @value = @value.toNumber @schema.unit
+    # sanitize string
+    if @schema.sanitize and typeof @value is 'string'
+      @value = @value.replace /^.*?([-+]?\d+\.?\d*).*?$/, '$1'
+      @value = Number @value if @value.length
+    # round
+    if @schema.round
+      exp = Math.pow 10, @schema.decimals
+      @value = @value * exp
+      @value = switch @schema.round
+        when 'ceil' then Math.ceil @value
+        when 'floor' then Math.floor @value
+        else Math.round @value
+      @value = @value / exp
+    # is number
+    unless not isNaN(parseFloat @value) and isFinite @value
+      return @sendError "The given value is no number as needed", cb
+    # minmax
+    if @schema.min? and @value < @schema.min
+      return @sendError "The value is to low, it has to be at least #{@schema.min}", cb
+    if @schema.max? and @value > @schema.max
+      return @sendError "The value is to high, it has to be at #{@schema.max} or lower", cb
+    # output format
+    if @schema.toUnit
+      @value = math.unit @value, @schema.unit ? @schema.toUnit
+      @value = @value.to 'min' if @value.units[0].unit.name is 's' and @value.toNumber('s') > 120
+      @value = @value.to 'h' if @value.units[0].unit.name is 'min' and @value.toNumber('min') > 120
+      @value = @value.to 'day' if @value.units[0].unit.name is 'h' and @value.toNumber('h') > 48
+      if @schema.format
+        numeral = require 'numeral'
+        if @schema.locale
+          try
+            numeral.language @schema.locale, require "numeral/languages/#{@schema.locale}"
+            numeral.language @schema.locale
+        [v, p] = @value.format().split /[ ]/
+        @value = numeral(v).format(@schema.format) + ' ' + p
+        if @schema.locale
+          numeral.language 'en'
+      else
+        @value = @value.format()
+    else if @schema.format
       numeral = require 'numeral'
-      if work.pos.locale
+      if @schema.locale
         try
-          numeral.language work.pos.locale, require "numeral/languages/#{work.pos.locale}"
-          numeral.language work.pos.locale
-      [v, p] = value.format().split /[ ]/
-      value = numeral(v).format(work.pos.format) + ' ' + p
-      if work.pos.locale
+          numeral.language @schema.locale, require "numeral/languages/#{@schema.locale}"
+          numeral.language @schema.locale
+      @value = numeral(@value).format @schema.format
+      if @schema.locale
         numeral.language 'en'
-    else
-      value = value.format()
-  else if work.pos.format
-    numeral = require 'numeral'
-    if work.pos.locale
-      try
-        numeral.language work.pos.locale, require "numeral/languages/#{work.pos.locale}"
-        numeral.language work.pos.locale
-    value = numeral(value).format work.pos.format
-    if work.pos.locale
-      numeral.language 'en'
-  # done return resulting value
-  debug "#{work.debug} result #{util.inspect value ? null}"
-  cb null, value
+    # done checking and sanuitizing
+    @sendSuccess cb
+
+
+
 
 exports.selfcheck = (schema, cb) ->
+  console.log 'ssssssssssssss'
   check.run
     schema:
       type: 'object'

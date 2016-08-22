@@ -219,6 +219,18 @@ exports.optional =
       if not specified. "
     else
       return "It's optional."
+  check: (cb) ->
+    # check for value
+    return cb null, false unless isEmpty @value # go on if value given
+    if @schema.default? # use default and go on
+      @value = @schema.default
+      debug chalk.grey "#{@name}: use default #{@inspectValue()}"
+      return cb null, false
+    if @schema.optional # end this test without value
+      debug chalk.grey "#{@name}: result #{@inspectValue()}"
+      return cb null, true
+    cb new Error "A value is needed"
+
   run: (work) ->
     # check for value
     return false unless isEmpty work.value # go on if value given
