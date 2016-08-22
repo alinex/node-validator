@@ -92,11 +92,12 @@ exports.check = (cb) ->
     if @schema.unit?
       if typeof @value is 'number' or (typeof @value is 'string' and @value.match /\d$/)
         @value = "" + @value + @schema.unit
-        @value = math.unit @value
-        @value = @value.toNumber @schema.unit
+      @value = math.unit @value
+      @value = @value.toNumber @schema.unit
     # sanitize string
     if @schema.sanitize and typeof @value is 'string'
       @value = @value.replace /^.*?([-+]?\d+\.?\d*).*?$/, '$1'
+    if typeof @value is 'string' and @value.length
       @value = Number @value if @value.length
     # round
     if @schema.round

@@ -1,14 +1,14 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe "Float", ->
+describe.only "Float", ->
 
   schema = null
   beforeEach ->
     schema =
       type: 'float'
 
-  describe.only "base check", ->
+  describe "base check", ->
 
     it "should support optional option", (cb) ->
       schema.optional = true

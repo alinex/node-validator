@@ -56,9 +56,8 @@ exports.fail = (schema, values, cb) ->
       name: "fail-#{++num}"
       schema: schema
       value: value
-    , (err, result) ->
+    , (err) ->
       expect(err, 'error').to.exist
-      expect(result, 'result').to.not.exist
       cb()
   , cb
 

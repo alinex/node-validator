@@ -65,7 +65,7 @@ Error to the callback.
 - `dir` - `String` set to base directory for file relative file paths
 - `value` - original value (not changed)
 @param {function(Error, Mixed)} cb callback with optimized value or an error if
-something is wrong
+something is wrong with the value as far as possible to sanitize
 ###
 exports.check = (spec, cb) ->
   # check the given data
