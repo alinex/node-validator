@@ -11,7 +11,6 @@ uses more cpu performance.
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator')
-chalk = require 'chalk'
 deasync = require 'deasync'
 # alinex packages
 util = require 'alinex-util'
@@ -34,11 +33,20 @@ This will directly return the description of how the value has to be.
 something went wrong
 ###
 exports.describe = (spec, cb) ->
+  # check the given data
+  throw new Error "No callback method given" unless typeof cb is 'function'
+  return cb new Error "No schema definition given" unless spec.schema
+  # optimize data
   name = spec.name ? 'value'
-  schema = spec.
-  value = util.clone spec.value
+  schema = util.clone spec.schema
+  schema.title ?= "'unnamed schema'"
+  debug "#{name} initialize to describe #{schema.title}"
+  # instantiate new object
   worker = new Worker name, schema, spec.context, spec.dir
-  worker.describe cb
+  # run the check
+  worker.describe (err, text) ->
+    debug "#{name}: failed with: #{err.message}" if err
+    cb err, text
 
 ###
 This will directly return the description of how the value has to be.
@@ -74,7 +82,7 @@ exports.check = (spec, cb) ->
   # optimize data
   name = spec.name ? 'value'
   schema = util.clone spec.schema
-  schema.title ?= 'reference'
+  schema.title ?= "'unnamed schema'"
   debug "#{name} initialize to check as #{schema.title}"
   value = util.clone spec.value
   # instantiate new object
@@ -111,7 +119,11 @@ This may be used in tests to check the validator check options if they are valid
 something is wrong
 ###
 exports.selfcheck = (schema, cb) ->
-  check.selfcheck schema, cb
+  exports.check
+    name: 'selfcheck'
+    schema: Worker.lib[schema.type].selfcheck
+    value: schema
+  , cb
 
 ###
 This may be used in tests to check the validator check options if they are valid.

@@ -10,7 +10,6 @@ async = require 'async'
 # alinex packages
 util = require 'alinex-util'
 # internal classes and helper
-reference = require './reference'
 
 
 # ### Is value empty?
@@ -31,44 +30,41 @@ isEmpty = (value) ->
 
 # ### Optional and default checks
 exports.optional =
-  describe: (work) ->
-    unless work.pos.optional or work.pos.default?
+
+  # Describe the optional setting human readable.
+  #
+  # @return {String} the result text
+  describe: ->
+    unless @schema.optional or @schema.default?
       return ''
-    if work.pos.default
-      value = if work.pos.default instanceof Function
+    if @schema.default
+      value = if @schema.default instanceof Function
         '[function]'
       else
-        util.inspect work.pos.default
-      return "It's optional and will be set to #{value}
-      if not specified. "
+        util.inspect @schema.default
+      return "It's optional and will be set to #{value} if not specified. "
     else
       return "It's optional."
 
   # Check if value is optional or use default.
   #
-  # @param {function(Error, Boolean)} give error if value is not correct or `true`
-  # as result if further check may be skipped (cause of allowed empty value)
-  check: (cb) ->
+  # @return [Boolean] `true` if further check may be skipped (cause of allowed empty value)
+  # @throw {Error} if value is not correct
+  check: ->
     # check for value
-    return cb null, false unless isEmpty @value # go on if value given
+    return false unless isEmpty @value # go on if value given
     if @schema.default? # use default and go on
       @value = @schema.default
       debug chalk.grey "#{@name}: use default #{@inspectValue()}"
-      return cb null, false
+      return false
     if @schema.optional # end this test without value
       delete @value
       debug chalk.grey "#{@name}: result #{@inspectValue()}"
-      return cb null, true
-    cb new Error "A value is needed"
+      return true
+    new Error "A value is needed"
 
-  run: (work) ->
-    # check for value
-    return false unless isEmpty work.value # go on if value given
-    if work.pos.default? # use default and go on
-      work.value = work.pos.default
-      return false
-    return true if work.pos.optional # end this test without value
-    throw new Error "A value is needed"
+
+
 
 # ### selfcheck schema for base options
 exports.base =
