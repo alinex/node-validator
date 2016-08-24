@@ -6,7 +6,6 @@
 # -------------------------------------------------
 debug = require('debug')('validator:rules')
 chalk = require 'chalk'
-async = require 'async'
 # alinex packages
 util = require 'alinex-util'
 # internal classes and helper
@@ -63,22 +62,30 @@ exports.optional =
       return true
     new Error "A value is needed"
 
-
-
-
 # ### selfcheck schema for base options
-exports.base =
+# These are common for all types.
+exports.baseSchema =
   title:
+    title: "Title"
+    description: "the title used to describe the element"
     type: 'string'
     optional: true
   description:
+    title: "Description"
+    description: "the free description of the element"
     type: 'string'
     optional: true
   key:
+    title: "Binding to Keyname"
+    description: "the mapping to which key names in an object this element belongs"
     type: 'regexp'
     optional: true
   type:
+    title: "Type"
+    description: "the type of element"
     type: 'string'
   optional:
+    title: "Optional"
+    description: "a flag defining if this element is optional"
     type: 'boolean'
     optional: true

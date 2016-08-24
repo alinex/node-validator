@@ -1,18 +1,29 @@
-# Float validator
-# =================================================
+###
+Float validator
+=================================================
+This will check a floating point number against a precise definition in which
+range it may be.
 
-# Sanitize options allowed:
-#
-# - `sanitize` - (bool) remove invalid characters
-# - `unit` - (string) unit to convert to if no number is given
-# - `round` - (bool) rounding of float can be set to true for arithmetic rounding
-#   or use `floor` or `ceil` for the corresponding methods
-# - `decimals` - (int) number of decimal digits to round to
-#
-# Check options:
-#
-# - `min` - (numeric) the smallest allowed number
-# - `max` - (numeric) the biggest allowed number
+Sanitize options allowed:
+- `sanitize` - (bool) remove invalid characters
+- `unit` - (string) unit to convert to if no number is given
+- `round` - (bool) rounding of float can be set to true for arithmetic rounding
+ or use `floor` or `ceil` for the corresponding methods
+- `decimals` - (int) number of decimal digits to round to
+
+Check options:
+- `min` - (numeric) the smallest allowed number
+- `max` - (numeric) the biggest allowed number
+
+#3 Additional Possibilities
+
+Use the {@link or.coffee} type to allow multiple ranges.
+
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
 
 
 # Node modules
@@ -23,7 +34,6 @@ math = require 'mathjs'
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
-check = require '../helper/check'
 
 
 # Setup Math.js
@@ -149,46 +159,73 @@ exports.check = (cb) ->
 #
 # Schema for selfchecking of this type
 exports.selfcheck =
+  title: "Float"
+  description: "a float schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend util.clone(check.base),
+  keys: util.extend rules.baseSchema,
     default:
+      title: "Default Value"
+      description: "the default value use if nothing given"
       type: 'float'
       optional: true
     sanitize:
+      title: "Sanitize"
+      description: "a flag which allows removing of non numeric characters before evaluating"
       type: 'boolean'
       optional: true
     unit:
+      title: "Source Unit"
+      description: "the unit in which an only numeric value is given, will transform to base unit"
       type: 'string'
       optional: true
       minLength: 1
     round:
+      title: "Rounding"
+      description: "the value can be rounded in different ways"
       type: 'or'
       optional: true
       or: [
+        title: "Arithmetic Rounding"
+        description: "a flag which allows arithmetic rounding (till 4 down, from 5 up)
+        if set to `true`"
         type: 'boolean'
       ,
+        title: "Alternative Rounding"
+        description: "the alternative rounding method to be used"
         type: 'string'
         values: ['floor', 'ceil']
       ]
     decimals:
+      title: "Decimals"
+      description: "the number of decimal digits to round to"
       type: 'integer'
       optional: true
       min: 0
     min:
+      title: "Min Value"
+      description: "the minimal value to be set"
       type: 'float'
       optional: true
     max:
+      title: "Max Value"
+      description: "the maximal value to be set"
       type: 'float'
       optional: true
       min: '<<<min>>>'
     toUnit:
+      title: "Result Unit"
+      description: "the unit to which to transform the value"
       type: 'string'
       optional: true
     format:
+      title: "Format"
+      description: "the numerical output format to use"
       type: 'string'
       optional: true
     locale:
+      title: "Locale"
+      description: "the language to be used for locale specific number format"
       type: 'string'
-      match: /^[a-z]{2}(-[A-Z]{2})?$/
+      match: /^[a-z]{2}(?:-[A-Z]{2})?$/
       optional: true
