@@ -1,19 +1,27 @@
 ###
-Float validator
+Float
 =================================================
 This will check a floating point number against a precise definition in which
 range it may be.
 
 Sanitize options allowed:
-- `sanitize` - (bool) remove invalid characters
-- `unit` - (string) unit to convert to if no number is given
-- `round` - (bool) rounding of float can be set to true for arithmetic rounding
+- `sanitize` - `Boolean` remove invalid characters
+- `unit` - `String` unit to convert to if no number is given
+- `round` - `Boolean|String` rounding of float can be set to true for arithmetic rounding
  or use `floor` or `ceil` for the corresponding methods
-- `decimals` - (int) number of decimal digits to round to
+- `decimals` - `Integer` number of decimal digits to round to
 
 Check options:
-- `min` - (numeric) the smallest allowed number
-- `max` - (numeric) the biggest allowed number
+- `min` - `Numeric` the smallest allowed number
+- `max` - `Numeric` the biggest allowed number
+
+Format options:
+- `toUnit` - `String` unit to convert value to
+- `format` - `String` format number as string
+- 'locale' - `String` locale format to use for string output
+
+The result will be a `Number` or `String` representation of a number depending on
+the above parameters.
 
 #3 Additional Possibilities
 
@@ -29,22 +37,27 @@ Schema Specification
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:float')
-math = require 'mathjs'
+math = null # loaded on demand
 # alinex modules
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
 
 
-# Setup Math.js
+# Setup
 # -------------------------------------------------
-# Additional derived units are added:
-math.type.Unit.BASE_UNITS.FREQUENCY = {}
-math.type.Unit.UNITS.hz =
-  name: 'Hz',
-  base: math.type.Unit.BASE_UNITS.FREQUENCY,
-  prefixes: math.type.Unit.PREFIXES.SHORT
-  value: 1, offset: 0
+
+# The math library will be loaded and additional derived units are added to
+# it like: 'hz' as frequency type
+initMath = ->
+  return if math
+  math = require 'mathjs'
+  math.type.Unit.BASE_UNITS.FREQUENCY = {}
+  math.type.Unit.UNITS.hz =
+    name: 'Hz',
+    base: math.type.Unit.BASE_UNITS.FREQUENCY,
+    prefixes: math.type.Unit.PREFIXES.SHORT
+    value: 1, offset: 0
 
 
 # Exported Methods
@@ -69,7 +82,7 @@ exports.describe = (cb) ->
   text = text.replace /\. It's/, ' which is'
   if @schema.sanitize
     text += "Invalid characters will be removed from text. "
-    # round
+  # round
   if @schema.round
     type = switch @schema.round
       when 'ceil' then 'to ceil'
@@ -83,6 +96,7 @@ exports.describe = (cb) ->
     text += "The value should be greater than #{@schema.min}. "
   else if @schema.max?
     text += "The value should be lower than #{@schema.max}. "
+  # output format
   if @schema.toUnit
     text += "The number will be formatted in unit '#{@schema.toUnit}'. "
   if @schema.format
@@ -99,6 +113,7 @@ exports.check = (cb) ->
   return cb() if skip
   # convert units
   if @schema.unit?
+    initMath()
     if typeof @value is 'number' or (typeof @value is 'string' and @value.match /\d$/)
       @value = "" + @value + @schema.unit
     @value = math.unit @value
@@ -127,6 +142,7 @@ exports.check = (cb) ->
     return @sendError "The value is to high, it has to be at #{@schema.max} or lower", cb
   # output format
   if @schema.toUnit
+    initMath()
     @value = math.unit @value, @schema.unit ? @schema.toUnit
     @value = @value.to 'min' if @value.units[0].unit.name is 's' and @value.toNumber('s') > 120
     @value = @value.to 'h' if @value.units[0].unit.name is 'min' and @value.toNumber('min') > 120

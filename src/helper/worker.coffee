@@ -80,7 +80,7 @@ class Worker
       fn = Worker.lib[@type].debug ? debug
       fn.apply this, arguments
     # initialize this element
-    Worker.lib[@type].init.call this
+    fn.call this if fn = Worker.lib[@type].init
 
 
   # Main Instance Methods
