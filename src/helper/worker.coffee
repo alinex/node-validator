@@ -5,7 +5,6 @@
 # -------------------------------------------------
 debug = require('debug')('validator:worker')
 chalk = require 'chalk'
-async = require 'async'
 # alinex packages
 util = require 'alinex-util'
 # internal classes and helper
@@ -91,8 +90,9 @@ class Worker
   # @param {function(Error)} cb callback to be called after checking with possible
   # error
   describe: (cb) ->
-    @debug "#{@name}: #{@schema.title}" if @schema.title
-    @debug chalk.grey "#{@name}: describe schema #{@inspectSchema()}"
+    if @debug.enabled
+      @debug "#{@name}: #{@schema.title}" if @schema.title
+      @debug chalk.grey "#{@name}: describe schema #{@inspectSchema()}"
     Worker.lib[@type].describe.call this, cb
 
   # Check the given value against schema.
@@ -100,8 +100,9 @@ class Worker
   # @param {function(Error)} cb callback to be called after checking with possible
   # error
   check: (cb) ->
-    @debug "#{@name}: #{@schema.title}" if @schema.title
-    @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be #{@inspectSchema()}"
+    if @debug.enabled
+      @debug "#{@name}: #{@schema.title}" if @schema.title
+      @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be #{@inspectSchema()}"
     Worker.lib[@type].check.call this, cb
 
 
@@ -137,7 +138,8 @@ class Worker
   #
   # @param {function()} cb callback
   sendSuccess: (cb) =>
-    @debug chalk.grey "#{@name}: succeeded with #{@inspectValue()}"
+    if @debug.enabled
+      @debug chalk.grey "#{@name}: succeeded with #{@inspectValue()}"
     cb()
 
 

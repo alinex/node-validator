@@ -29,6 +29,18 @@ the above parameters.
 #3 Additional Possibilities
 
 Use the {@link or.coffee} type to allow multiple ranges.
+
+#3 Alternative Number Checks
+
+You may also use:
+- {@link float.coffee}
+- {@link percent.coffee}
+- {@link byte.coffee}
+
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
 ###
 
 
@@ -207,7 +219,7 @@ exports.selfcheck = (schema, cb) ->
   keys: util.extend rules.baseSchema,
     default:
       title: "Default Value"
-      description: "the default value use if nothing given"
+      description: "the default value to use if nothing given"
       type: 'integer'
       optional: true
     sanitize:
