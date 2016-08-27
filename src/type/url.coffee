@@ -1,140 +1,178 @@
-# URL validation
-# =================================================
+###
+URL
+=================================================
+Checking text for a valid URL.
 
-# Check options:
-#
-# - `toAbsoluteBase` - convert to absolute with given base
-# - `removeQuery` - (boolean) remove query and hash from url
-# - `hostsAllowed` - list of allowed hosts by string or regexp
-# - `hostsDenied` - list of denied hosts by string or regexp
-# - `allowProtocols` - lust of allowed protocols
-# - `allowRelative` - (boolean) to allow also relative urls
+Check options:
+- `toAbsoluteBase` - `String` convert to absolute with given base
+- `removeQuery` - `Boolean` remove query and hash from url
+- `hostsAllowed` - `String|RegExp` list of allowed hosts by string or regexp
+- `hostsDenied` - `String|RegExp` list of denied hosts by string or regexp
+- `allowProtocols` - `Array` lust of allowed protocols
+- `allowRelative` - `Boolean` to allow also relative urls
+
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
 
 
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:url')
-chalk = require 'chalk'
 url = require 'url'
 # alinex modules
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
 
 
-# Type implementation
+# Exported Methods
 # -------------------------------------------------
-exports.describe = (work, cb) ->
+
+# Type specific debug method.
+exports.debug = debug
+
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
   text = 'A valid url (unified resource locator). '
-  text += check.optional.describe work
+  text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
-  if work.pos.toAbsoluteBase
-    text += "It will be made absolute from '#{work.pos.toAbsoluteBase}'. "
-  if work.pos.removeQuery
+  if @schema.toAbsoluteBase
+    text += "It will be made absolute from '#{@schema.toAbsoluteBase}'. "
+  if @schema.removeQuery
     text += "Existing query parameters are removed. "
-  if work.pos.hostsAllowed
-    text += "Only the hosts matching #{work.pos.hostsAllowed} are allowed. "
-  if work.pos.hostsDenied
-    text += "But hosts matching #{work.pos.hostsAllowed} are not allowed. "
-  if work.pos.allowProtocols
-    text += "The protocol have to be: #{work.pos.allowProtocols}. "
-  unless work.pos.allowRelative
+  if @schema.hostsAllowed
+    text += "Only the hosts matching #{@schema.hostsAllowed} are allowed. "
+  if @schema.hostsDenied
+    text += "But hosts matching #{@schema.hostsAllowed} are not allowed. "
+  if @schema.allowProtocols
+    text += "The protocol have to be: #{@schema.allowProtocols}. "
+  unless @schema.allowRelative
     text += "Relative URLs are also allowed. "
   cb null, text
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect work.value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
-  # split into parts
-  value = work.value
-  unless typeof work.value is 'string'
-    return work.report (new Error "The url has to be a string object."), cb
-  if work.pos.toAbsoluteBase
-    value = url.resolve work.pos.toAbsoluteBase, value
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
+  # first check input type
+  unless typeof @value is 'string'
+    return @sendError "The url has to be a string object but got #{typeof @value} instead", cb
+  # transform
+  if @schema.toAbsoluteBase
+    value = url.resolve @schema.toAbsoluteBase, value
   parts = url.parse value
-  if work.pos.removeQuery
+  if @schema.removeQuery
     delete parts.search
     delete parts.hash
   # check the hostname
   if parts.host
     delete parts.host
-    if work.pos.hostsAllowed
+    if @schema.hostsAllowed
       success = true
-      work.pos.hostsAllowed = [work.pos.hostsAllowed] unless Array.isArray work.pos.hostsAllowed
-      for match in work.pos.hostsAllowed
+      @schema.hostsAllowed = [@schema.hostsAllowed] unless Array.isArray @schema.hostsAllowed
+      for match in @schema.hostsAllowed
         if match instanceof RegExp
           success = success and parts.hostname.match match
         else
           success = success and ~parts.hostname.indexOf match
       unless success
-        return work.report (new Error "The hostname '#{parts.hostname}' should match
-        against '#{work.pos.hostsAllowed}'"), cb
-    if work.pos.hostsDenied
+        return @sendError "The hostname '#{parts.hostname}' should match against
+        '#{@schema.hostsAllowed}'", cb
+    if @schema.hostsDenied
       success = true
-      work.pos.hostsDenied = [work.pos.hostsDenied] unless Array.isArray work.pos.hostsDenied
-      for match in work.pos.hostsDenied
+      @schema.hostsDenied = [@schema.hostsDenied] unless Array.isArray @schema.hostsDenied
+      for match in @schema.hostsDenied
         if match instanceof RegExp
           success = success and not parts.hostname.match match
         else
           success = success and not ~parts.hostname.indexOf match
       unless success
-        return work.report (new Error "The hostname '#{parts.hostname}' should not match
-        against '#{work.pos.hostsDenied}'"), cb
+        return @sendError "The hostname '#{parts.hostname}' should not match
+        against '#{@schema.hostsDenied}'", cb
   # check allowed protocols
-  if work.pos.allowProtocols
+  if @schema.allowProtocols
     unless parts.protocol
-      return work.report (new Error "The protocol is missing."), cb
-    unless parts.protocol.replace(/:/, '') in work.pos.allowProtocols
-      return work.report (new Error "The protocol #{parts.protocol} is not allowed."), cb
-  unless work.pos.allowRelative or parts.hostname
-    return work.report (new Error "Relative URLs are not allowed."), cb
-  value = url.format parts
-  return cb null, value
+      return @sendError "The protocol is missing", cb
+    unless parts.protocol.replace(/:/, '') in @schema.allowProtocols
+      return @sendError "The protocol #{parts.protocol} is not allowed, only #{@schema.allowProtocols}", cb
+  unless @schema.allowRelative or parts.hostname
+    return @sendError "Relative URLs are not allowed", cb
+  @value = url.format parts
+  # done checking and sanuitizing
+  @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'url'
-          optional: true
-        toAbsoluteBase:
-          type: 'url'
-          optional: true
-        removeQuery:
-          type: 'boolean'
-          optional: true
-        hostsAllowed:
-          type: 'or'
-          optional: true
-          or: [
-            type: 'string'
-          ,
-            type: 'regexp'
-          ]
-        hostsDenied:
-          type: 'or'
-          optional: true
-          or: [
-            type: 'string'
-          ,
-            type: 'regexp'
-          ]
-        allowProtocols:
-          type: 'array'
-          toArray: true
-          optional: true
-        allowRelative:
-          type: 'boolean'
-          optional: true
-    value: schema
-  , cb
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "URL"
+  description: "a string schema definition"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'url'
+      optional: true
+    toAbsoluteBase:
+      title: "Absolute"
+      description: "the base URL to make it absolute"
+      type: 'url'
+      optional: true
+    removeQuery:
+      title: "Remove Query"
+      description: "a flag if set to `true` will remove the query string part"
+      type: 'boolean'
+      optional: true
+    hostsAllowed:
+      title: "Allowed Hosts"
+      description: "the hosts allowed in the URL (white list)"
+      type: 'or'
+      optional: true
+      or: [
+        title: "Allowed Hosts List"
+        description: "a list of all allowed hosts"
+        type: 'string'
+        minLength: 1
+      ,
+        title: "Valid Hosts Match"
+        description: "a regular expression for valid hosts"
+        type: 'regexp'
+      ]
+    hostsDenied:
+      title: "Disallowed Hosts"
+      description: "the hosts disallowed in the URL (black list)"
+      type: 'or'
+      optional: true
+      or: [
+        title: "Disallowed Hosts List"
+        description: "a list of all disallowed hosts"
+        type: 'string'
+      ,
+        title: "Invalid Hosts Match"
+        description: "a regular expression for invalid hosts"
+        type: 'regexp'
+      ]
+    allowProtocols:
+      title: "Allowed Protocols"
+      description: "a list of allowed protocols"
+      type: 'array'
+      toArray: true
+      minLength: 1
+      optional: true
+    allowRelative:
+      title: "Allow Relative URL"
+      description: "a flag if set to `true` will also allow relative URLs"
+      type: 'boolean'
+      optional: true

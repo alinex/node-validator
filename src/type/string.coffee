@@ -4,27 +4,27 @@ String
 Checking text entries against multiple rules.
 
 Sanitize options allowed:
-- `tostring` - convert objects to string, first
-- `allowControls` - keep control characters in string instead of
+- `toString` - `Boolean` convert objects to string, first
+- `allowControls` - `Boolean` keep control characters in string instead of
   stripping them (but keep \\r\\n)
-- `stripTags` - remove all html tags
-- `lowerCase` - set to `true` or `first`
-- `upperCase` - set to `true` or `first`
-- `replace` - replacements (list): string (only single replacement) or
+- `stripTags` - `Boolean` remove all html tags
+- `lowerCase` - `Boolean|String` set to `true` or `first`
+- `upperCase` - `Boolean|String` set to `true` or `first`
+- `replace` - `Array` replacements: string (only single replacement) or
   regular expressions and replacements as inner array
-- `trim` - strip whitespace from the beginning and end
-- `crop` - crop text after number of characters
+- `trim` - `Boolean` strip whitespace from the beginning and end
+- `crop` - `Integer` crop text after number of characters
 
 Check options:
-- `optional` - the value must not be present (will return null)
-- `minLength` - minimum text length in characters
-- `maxLength` - maximum text length in characters
-- `values` - array of possible values (complete text)
-- `startsWith` - start of text
-- `endsWith` - end of text
-- `match` - string or regular expression which have to be matched
+- `optional` - `Boolean` the value must not be present (will return null)
+- `minLength` - `Integer` minimum text length in characters
+- `maxLength` - `Integer` maximum text length in characters
+- `values` - `Array|Object|String` array of possible values (complete text)
+- `startsWith` - `String` start of text
+- `endsWith` - `String` end of text
+- `match` - `String|RegExp` string or regular expression which have to be matched
   (or list of expressions)
-- `matchNot` - string or regular expression which is not allowed to
+- `matchNot` - `String|RegExp` string or regular expression which is not allowed to
   match (or list of expressions)
 
 #3 Character Case
@@ -43,7 +43,6 @@ Schema Specification
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:string')
-chalk = require 'chalk'
 # alinex modules
 util = require 'alinex-util'
 # include classes and helper
@@ -350,6 +349,7 @@ exports.selfcheck =
         title: "List of Values"
         description: "the list of all possible values"
         type: 'array'
+        minLength: 1
         entries:
           title: "Possible Value"
           description: "a possible value"
@@ -358,6 +358,7 @@ exports.selfcheck =
         title: "Object of Values"
         description: "an object from which one of the keys have to be set as value"
         type: 'object'
+        minLength: 1
       ,
         title: "Comma List of Values"
         description: "a comma separated list of possible values"
