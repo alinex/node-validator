@@ -116,7 +116,7 @@ exports.check = (cb) ->
 # Schema for selfchecking of this type
 exports.selfcheck =
   title: "URL"
-  description: "a string schema definition"
+  description: "an url schema definition"
   type: 'object'
   allowedKeys: true
   keys: util.extend rules.baseSchema,
@@ -169,7 +169,7 @@ exports.selfcheck =
       description: "a list of allowed protocols"
       type: 'array'
       toArray: true
-      minLength: 1
+      minLength: 3
       optional: true
     allowRelative:
       title: "Allow Relative URL"

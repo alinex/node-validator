@@ -1,25 +1,36 @@
-# TCP/UDP Ports
-# =================================================
+###
+TCP/UDP Ports
+=================================================
+Checking text entries against multiple rules.
 
-# Check options:
-#
-# - `allow` - (list) list of allowed ports or ranges 'system', 'registered', 'dynamic'
-# - `deny` - (list) list of denied ports or ranges 'system', 'registered', 'dynamic'
+Check options:
+- `allow` - `Array` list of allowed ports or ranges 'system', 'registered', 'dynamic'
+- `deny` - `Array` list of denied ports or ranges 'system', 'registered', 'dynamic'
+
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
 
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator:port')
-chalk = require 'chalk'
 # alinex modules
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
 
 
-# Named ports
+# Setup
 # -------------------------------------------------
-# cat /etc/services | sed 's/\/.*//' | sed 's/[ \t][ \t]*/: /'
-# | sed "s/\([0-9a-z-]*\)/'\1'/" | sort -u
+
+# ### Named ports
+#
+# The list of possible ports are created by:
+#     cat /etc/services | sed 's/\/.*//' | sed 's/[ \t][ \t]*/: /' \
+#     | sed "s/\([0-9a-z-]*\)/'\1'/" | sort -u
 ports =
   'rtmp': 1935
   # from /etc/services
@@ -371,21 +382,13 @@ ports =
   'zope-ftp': 8021
   'zserv': 346
 
-# Type implementation
-# -------------------------------------------------
-exports.describe = (work, cb) ->
-  # combine into message
-  text = "A TCP/UDP port number or name. "
-  text += check.optional.describe work
-  text = text.replace /\. It's/, ' which is'
-  if work.pos.deny
-    text += "The port should not be: '#{work.pos.deny.join '\', \''}'. "
-    if work.pos.allow
-      text += "But the following ports are allowed: '#{work.pos.allow.join '\', \''}' are allowed. "
-  else if work.pos.allow
-    text += "The port have to be: '#{work.pos.allow.join '\', \''}'. "
-  cb null, text
+# named port ranges to use in allow/deny
+ranges =
+  system: [0, 1023]
+  registered: [1024, 49151]
+  dynamic: [49152, 65535]
 
+# check with other type
 subcheck =
   type: 'or'
   or: [
@@ -397,95 +400,138 @@ subcheck =
     values: Object.keys ports
   ]
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+
+# Exported Methods
+# -------------------------------------------------
+
+# Type specific debug method.
+exports.debug = debug
+
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
+  text = "A TCP/UDP port number or name. "
+  text += rules.optional.describe.call this
+  text = text.replace /\. It's/, ' which is'
+  # subchecks with new sub worker
+  worker = new Worker "#{@name}:subtype", subcheck, @context, @dir, @value
+  worker.describe (err, subtext) ->
+    return cb err if err
+    text += subtext
+    # check allowed
+    if @schema.deny
+      text += "The port should not be: '#{@schema.deny.join '\', \''}'. "
+      if @schema.allow
+        text += "But the following ports are allowed: '#{@schema.allow.join '\', \''}' are allowed. "
+    else if @schema.allow
+      text += "The port have to be: '#{@schema.allow.join '\', \''}'. "
+    cb null, text
+
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect work.value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
-  # first check input type
-  name = work.spec.name ? 'value'
-  if work.path.length
-    name += "/#{work.path.join '/'}"
-  check.run
-    name: name
-    value: work.value
-    schema: subcheck
-  , (err, value) ->
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
+  # subchecks with new sub worker
+  worker = new Worker "#{@name}:subtype", subcheck, @context, @dir, @value
+  worker.check (err) ->
     return cb err if err
     # transform string to int
-    value = ports[value] if typeof value is 'string'
+    @value = ports[@value] if typeof @value is 'string'
     # check allow / deny
-    if work.pos.allow
-      for entry in (work.pos.allow.map (e) -> ports[e] ? e)
+    if @schema.deny
+      for entry in @schema.deny
+        entry = ports[entry] if ports[entry]
         if typeof entry is 'string'
-          if (entry is 'system' and value < 1024) or
-          (entry is 'registered' and 1024 <= value <= 49151) or
-          (entry is 'dynamic' and 49152 <= value <= 65535)
-            debug "#{work.debug} result #{util.inspect value ? null}"
-            return cb null, value
-        else if value is entry
-          debug "#{work.debug} result #{util.inspect value ? null}"
-          return cb null, value
+          [min, max] = ranges[entry]
+          return @sendError "The given tcp/udp port is not allowed because it is in
+          an denied range (#{entry}: #{min} to #{max})", cb if min <= @value <= max#
+        else if @value is entry
+          return @sendError "The given tcp/udp port is not allowed because it is excluded
+          in deny list", cb
+    if @schema.allow
+      for entry in @schema.allow
+        entry = ports[entry] if ports[entry]
+        if typeof entry is 'string'
+          [min, max] = ranges[entry]
+          return @sendSuccess cb if min <= @value <= max#
+        else if @value is entry
+          return @sendSuccess cb
       # ip not in the allowed range
-      unless work.pos.deny
-        return work.report (new Error "The given tcp/udp port '#{value}' is not in
-          the allowed ranges"), cb
-    if work.pos.deny
-      for entry in (work.pos.deny.map (e) -> ports[e] ? e)
-        if typeof entry is 'string'
-          if (entry is 'system' and value < 1024) or
-          (entry is 'registered' and 1024 <= value <= 49151) or
-          (entry is 'dynamic' and 49152 <= value <= 65535)
-            return work.report (new Error "The given tcp/udp port '#{value}' is
-              denied because in range #{entry}"), cb
-        else if value is entry
-          return work.report (new Error "The given tcp/udp port '#{value}' is denied."), cb
-    # ip also not in the denied range so allowed again
-    # done return resulting value
-    debug "#{work.debug} result #{util.inspect value ? null}"
-    cb null, value
+      return @sendError "The given tcp/udp port is not in the allowed ranges", cb
+  # done checking and sanuitizing
+  @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'float'
-          optional: true
-        allow:
-          type: 'array'
-          optional: true
-          entries:
-            type: 'or'
-            or: [
-              type: 'integer'
-            ,
-              type: 'string'
-              values: ['system', 'registered', 'dynamic']
-            ,
-              type: 'string'
-              values: Object.keys ports
-            ]
-        deny:
-          type: 'array'
-          optional: true
-          entries:
-            type: 'or'
-            or: [
-              type: 'integer'
-            ,
-              type: 'string'
-              values: ['system', 'registered', 'dynamic']
-            ,
-              type: 'string'
-              values: Object.keys ports
-            ]
-    value: schema
-  , cb
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "Port"
+  description: "a port schema definition"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'integer'
+      min: 0
+      max: 65535
+      optional: true
+    allow:
+      title: "List of Allowed"
+      description: "the list of allowed port numbers, names and ranges"
+      type: 'array'
+      optional: true
+      entries:
+        title: "Allow"
+        description: "a port number, name or range which is allowed"
+        type: 'or'
+        or: [
+          title: "Allow Port Number"
+          description: "a port number which is allowed"
+          type: 'integer'
+          min: 0
+          max: 65535
+        ,
+          title: "Allow Port Name"
+          description: "a port name which is allowed"
+          type: 'string'
+          values: Object.keys.ranges
+        ,
+          title: "Allow Range"
+          description: "a range which is allowed"
+          type: 'string'
+          values: Object.keys ports
+        ]
+    deny:
+      title: "List of Denied"
+      description: "the list of denied port numbers, names and ranges"
+      type: 'array'
+      optional: true
+      entries:
+        title: "Deny"
+        description: "a port number, name or range which is denied"
+        type: 'or'
+        or: [
+          title: "Deny Port Number"
+          description: "a port number which is denied"
+          type: 'integer'
+          min: 0
+          max: 65535
+        ,
+          title: "Deny Port Name"
+          description: "a port name which is denied"
+          type: 'string'
+          values: Object.keys.ranges
+        ,
+          title: "Deny Range"
+          description: "a range which is denied"
+          type: 'string'
+          values: Object.keys ports
+        ]

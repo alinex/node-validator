@@ -40,7 +40,7 @@ Schema Specification
 ###
 
 
-# Node modules
+# Node Modules
 # -------------------------------------------------
 debug = require('debug')('validator:string')
 # alinex modules

@@ -24,6 +24,8 @@ rules = require '../helper/rules'
 
 # Setup
 # -------------------------------------------------
+
+# check with other type
 subcheck =
   type: 'or'
   or: [
@@ -49,9 +51,8 @@ exports.describe = (cb) ->
   text = 'A valid regular expression. '
   text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
-  # instantiate new sub worker
-  worker = new Worker @name, subcheck, @context, @dir, @value
-  # run the check
+  # subchecks with new sub worker
+  worker = new Worker "#{@name}:subtype", subcheck, @context, @dir, @value
   worker.describe (err, subtext) ->
     return cb err if err
     cb null, text + subtext
@@ -64,12 +65,10 @@ exports.check = (cb) ->
   skip = rules.optional.check.call this
   return cb skip if skip instanceof Error
   return cb() if skip
-  # instantiate new sub worker
-  worker = new Worker @name, subcheck, @context, @dir, @value
-  # run the check
+  # subchecks with new sub worker
+  worker = new Worker "#{@name}:subtype", subcheck, @context, @dir, @value
   worker.check (err) ->
     return cb err if err
-    @value = worker.value
     # if it already is an regexp return it
     return @sendSuccess cb if @value instanceof RegExp
     # transform into regexp
@@ -86,7 +85,7 @@ exports.check = (cb) ->
 # Schema for selfchecking of this type
 exports.selfcheck =
   title: "RegExp"
-  description: "a string schema definition"
+  description: "a regexp schema definition"
   type: 'object'
   allowedKeys: true
   keys: util.extend rules.baseSchema,
