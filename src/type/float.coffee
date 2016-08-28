@@ -43,9 +43,7 @@ Schema Specification
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:float')
 math = null # loaded on demand
-# alinex modules
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
@@ -69,9 +67,6 @@ initMath = ->
 
 # Exported Methods
 # -------------------------------------------------
-
-# Type specific debug method.
-exports.debug = debug
 
 # Initialize schema.
 exports.init = ->

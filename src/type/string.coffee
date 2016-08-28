@@ -42,8 +42,6 @@ Schema Specification
 
 # Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:string')
-# alinex modules
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
@@ -51,9 +49,6 @@ rules = require '../helper/rules'
 
 # Exported Methods
 # -------------------------------------------------
-
-# Type specific debug method.
-exports.debug = debug
 
 # Describe schema definition, human readable.
 #

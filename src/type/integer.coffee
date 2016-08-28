@@ -46,9 +46,7 @@ Schema Specification
 
 # Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:integer')
 math = null # loaded on demand
-# alinex modules
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
@@ -81,9 +79,6 @@ integerTypes =
 
 # Exported Methods
 # -------------------------------------------------
-
-# Type specific debug method.
-exports.debug = debug
 
 # Describe schema definition, human readable.
 #

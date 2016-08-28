@@ -16,8 +16,6 @@ Schema Specification
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:port')
-# alinex modules
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
@@ -404,9 +402,6 @@ subcheck =
 # Exported Methods
 # -------------------------------------------------
 
-# Type specific debug method.
-exports.debug = debug
-
 # Describe schema definition, human readable.
 #
 # @param {function(Error, String)} cb callback to be called if done with possible error
@@ -424,7 +419,8 @@ exports.describe = (cb) ->
     if @schema.deny
       text += "The port should not be: '#{@schema.deny.join '\', \''}'. "
       if @schema.allow
-        text += "But the following ports are allowed: '#{@schema.allow.join '\', \''}' are allowed. "
+        text += "But the following ports are allowed: '#{@schema.allow.join '\', \''}'
+        are allowed. "
     else if @schema.allow
       text += "The port have to be: '#{@schema.allow.join '\', \''}'. "
     cb null, text

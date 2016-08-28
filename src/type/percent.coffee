@@ -1,22 +1,26 @@
-# Percent check
-# =================================================
+###
+Percent
+=================================================
 
-# Sanitize options allowed:
-#
-# - `unit` - (string) type of unit to convert if not integer given
-# - `round` - (bool) rounding can be set to true for arithmetic rounding
-#   or use `floor` or `ceil` for the corresponding methods
-# - `decimals` - (int) number of decimal digits to round to (defaults to 2)
-#
-# Check options:
-#
-# - `min` - (integer) the smalles allowed number
-# - `max` - (integer) the biggest allowed number
+Sanitize options allowed:
+- `unit` - `String` unit to convert to if no number is given
+- `round` - `Boolean|String` rounding of float can be set to true for arithmetic rounding
+ or use `floor` or `ceil` for the corresponding methods
+- `decimals` - `Integer` number of decimal digits to round to
+
+Check options:
+- `min` - `Numeric` the smallest allowed number
+- `max` - `Numeric` the biggest allowed number
+
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:percent')
-chalk = require 'chalk'
 numeral = null # load on demand
 # alinex modules
 util = require 'alinex-util'

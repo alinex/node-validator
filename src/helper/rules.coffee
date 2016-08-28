@@ -4,7 +4,6 @@
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:rules')
 chalk = require 'chalk'
 # alinex packages
 util = require 'alinex-util'
@@ -54,11 +53,11 @@ exports.optional =
     return false unless isEmpty @value # go on if value given
     if @schema.default? # use default and go on
       @value = @schema.default
-      debug chalk.grey "#{@name}: use default #{@inspectValue()}"
+      @debug chalk.grey "#{@name}: use default #{@inspectValue()}"
       return false
     if @schema.optional # end this test without value
       delete @value
-      debug chalk.grey "#{@name}: result #{@inspectValue()}"
+      @debug chalk.grey "#{@name}: result #{@inspectValue()}"
       return true
     new Error "A value is needed"
 

@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe "URL", ->
+describe.only "URL", ->
 
   schema = null
   beforeEach ->

@@ -3,7 +3,8 @@
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:worker')
+Debug = require 'debug'
+debug = Debug 'validator:worker'
 chalk = require 'chalk'
 # alinex packages
 util = require 'alinex-util'
@@ -19,7 +20,6 @@ class Worker
 
   # on demand loaded type libraries
   # `Object` list of loaded type libraries with the following methods:
-  # - `debug` - @{link debug} instance for type
   # - `init` - called for first initialization (optional)
   # - `describe` - get human readable description
   # - `check` - run the check for these element
@@ -75,9 +75,7 @@ class Worker
       catch error
         throw new Error "Could not load library for '#{@type}': #{error.message}"
     # add lib into this element
-    @debug = =>
-      fn = Worker.lib[@type].debug ? debug
-      fn.apply this, arguments
+    @debug = Debug "validator:#{@type}"
     # initialize this element
     fn.call this if fn = Worker.lib[@type].init
 
@@ -102,7 +100,8 @@ class Worker
   check: (cb) ->
     if @debug.enabled
       @debug "#{@name}: #{@schema.title}" if @schema.title
-      @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be #{@inspectSchema()}"
+      @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be
+      #{@inspectSchema()}"
     Worker.lib[@type].check.call this, cb
 
 

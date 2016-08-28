@@ -20,9 +20,7 @@ Schema Specification
 
 # Node modules
 # -------------------------------------------------
-debug = require('debug')('validator:url')
 url = require 'url'
-# alinex modules
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
@@ -30,9 +28,6 @@ rules = require '../helper/rules'
 
 # Exported Methods
 # -------------------------------------------------
-
-# Type specific debug method.
-exports.debug = debug
 
 # Describe schema definition, human readable.
 #
@@ -104,7 +99,8 @@ exports.check = (cb) ->
     unless parts.protocol
       return @sendError "The protocol is missing", cb
     unless parts.protocol.replace(/:/, '') in @schema.allowProtocols
-      return @sendError "The protocol #{parts.protocol} is not allowed, only #{@schema.allowProtocols}", cb
+      return @sendError "The protocol #{parts.protocol} is not allowed, only
+      #{@schema.allowProtocols}", cb
   unless @schema.allowRelative or parts.hostname
     return @sendError "Relative URLs are not allowed", cb
   @value = url.format parts
