@@ -84,6 +84,9 @@ exports.describe = (cb) ->
   text = text.replace /\. It's/, ' which is'
   if @schema.sanitize
     text += "Invalid characters will be removed from text. "
+  # unit
+  if @schema.unit
+    text += "If no other unit given the number will be interpreted as #{@schema.unit}. "
   # round
   if @schema.round
     type = switch @schema.round

@@ -4,7 +4,7 @@ test = require '../../test'
 #process.setMaxListeners 0
 
 
-describe "Percent", ->
+describe.only "Percent", ->
 
   schema = null
   beforeEach ->
@@ -46,9 +46,9 @@ describe "Percent", ->
     it "should support round option", (cb) ->
       schema.round = true
       test.equal schema, [
-        [13.005, 13.01]
-        [-9.489, -9.49]
-        ['+18.6', 18.6]
+        [13.5, 14]
+        [-48.9, -49]
+        ['+18', 18]
       ], cb
 
     it "should support decimal option", (cb) ->

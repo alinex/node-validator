@@ -50,7 +50,6 @@ class Worker
   # - `value` - original value (not changed)
   #
   # And the possible methods are:
-  # - `debug` - type specific debug output
   # - `check` - run the type specific check
   # - `inspectValue` - get value for debugging output
   # - `inspectSchema` - get schema for debugging output
@@ -71,11 +70,12 @@ class Worker
     unless Worker.lib[@type]
       try
         Worker.lib[@type] = require "../type/#{@type}"
+        Worker.lib[@type].debug = Debug "validator:#{@type}"
         debug "loaded #{@type} check library"
       catch error
         throw new Error "Could not load library for '#{@type}': #{error.message}"
     # add lib into this element
-    @debug = Debug "validator:#{@type}"
+    @debug = Worker.lib[@type].debug
     # initialize this element
     fn.call this if fn = Worker.lib[@type].init
 
@@ -130,7 +130,7 @@ class Worker
   sendError: (msg, cb) =>
     err = new Error msg
     err.worker = this
-    debug chalk.magenta err
+    @debug chalk.magenta err
     cb err
 
   # End check with success.

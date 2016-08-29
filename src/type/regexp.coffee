@@ -18,6 +18,7 @@ Schema Specification
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
+Worker = require '../helper/worker'
 
 
 # Setup
