@@ -4,7 +4,7 @@ test = require '../../test'
 #process.setMaxListeners 0
 
 
-describe.only "Percent", ->
+describe "Percent", ->
 
   schema = null
   beforeEach ->

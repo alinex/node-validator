@@ -38,7 +38,7 @@ Schema Specification
 ###
 
 
-# Node modules
+# Node Modules
 # -------------------------------------------------
 util = require 'alinex-util'
 # include classes and helper
@@ -70,7 +70,7 @@ exports.describe = (cb) ->
   if @schema.toUnit
     text += "The value will be returned as #{@schema.toUnit}. "
   # subchecks with new sub worker
-  worker = new Worker "#{@name}:subtype",
+  worker = new Worker "#{@name}#",
     type: 'float'
     round: @schema.round
     decimals: @schema.decimals
@@ -78,7 +78,7 @@ exports.describe = (cb) ->
     max: @schema.max
     format: @schema.format
     locale: @schema.locale
-  , @context, @dir, @value
+  , @context, @dir
   worker.describe (err, subtext) ->
     return cb err if err
     cb null, text + subtext
@@ -129,7 +129,7 @@ exports.check = (cb) ->
       when 'ppt' then @value *= 1000000000000
       when 'ppq' then @value *= 1000000000000000
   # subchecks with new sub worker
-  worker = new Worker "#{@name}:subtype",
+  worker = new Worker "#{@name}#",
     type: 'float'
     round: @schema.round
     decimals: @schema.decimals
