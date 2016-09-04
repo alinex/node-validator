@@ -1,61 +1,76 @@
-# Object validator
-# =================================================
+###
+Object
+=================================================
+An complex object.
 
-# Check options:
-#
-# - `instanceOf` - only objects of given class type are allowed
-# - `mandatoryKeys` - the list of elements which are mandatory
-# - `allowedKeys` - gives a list of elements which are also allowed
-#   or true to use the list from entries definition
-#
-# Validating children:
-#
-# - `entries` - specification for entries
+Sanitize options:
+- `flatten` - flatten hierarchical values
 
-# Node modules
+Check options:
+- `instanceOf` - only objects of given class type are allowed
+- `mandatoryKeys` - the list of elements which are mandatory
+- `allowedKeys` - gives a list of elements which are also allowed
+  or true to use the list from entries definition
+
+Validating children:
+- `entries` - specification for entries
+
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
+
+# Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:object')
-chalk = require 'chalk'
 async = require 'async'
-# alinex modules
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
+Worker = require '../helper/worker'
 
-# Type implementation
+
+# Exported Methods
 # -------------------------------------------------
-exports.describe = (work, cb) ->
+
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
+  # combine into message
   text = 'An object. '
-  text += check.optional.describe work
+  text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
   # flat
-  if work.pos.flatten
+  if @schema.flatten
     text += "Hierarchical paths will be flattened together. "
   # instanceof
-  if work.pos.instanceOf?
-    text += "The object has to be an instance of class #{work.pos.instanceOf.name}. "
+  if @schema.instanceOf?
+    text += "The object has to be an instance of class #{@schema.instanceOf.name}. "
   text = text.replace /object\. The object/, 'object which'
   # mandatoryKeys
-  mandatoryKeys = work.pos.mandatoryKeys ? []
+  mandatoryKeys = @schema.mandatoryKeys ? []
   if mandatoryKeys and typeof mandatoryKeys is 'boolean'
     # use from entries and keys
     mandatoryKeys = []
-    if work.pos.keys?
-      mandatoryKeys = mandatoryKeys.concat Object.keys work.pos.keys
-    if work.pos.entries?
-      for entry in work.pos.entries
+    if @schema.keys?
+      mandatoryKeys = mandatoryKeys.concat Object.keys @schema.keys
+    if @schema.entries?
+      for entry in @schema.entries
         mandatoryKeys.push entry.key if entry.key?
   if mandatoryKeys.length
     text += "The following keys have to be present: #{mandatoryKeys.join ', '}. "
   # allowedKeys
-  allowedKeys = work.pos.allowedKeys ? []
+  allowedKeys = @schema.allowedKeys ? []
   if allowedKeys and typeof allowedKeys is 'boolean'
     # use from entries and keys
     allowedKeys = []
-    if work.pos.keys?
-      allowedKeys = allowedKeys.concat Object.keys work.pos.keys
-    if work.pos.entries?
-      for entry in work.pos.entries
+    if @schema.keys?
+      allowedKeys = allowedKeys.concat Object.keys @schema.keys
+    if @schema.entries?
+      for entry in @schema.entries
         allowedKeys.push entry.key if entry.key
   if allowedKeys.length
     # remove the already mandatory ones
@@ -65,135 +80,131 @@ exports.describe = (work, cb) ->
   # subchecks
   async.parallel [
     (cb) ->
-      return cb() unless work.pos.keys?
-      subtext = "The following entries have a specific format: "
-      async.map Object.keys(work.pos.keys), (key, cb) ->
-        # run subcheck
-        check.describe work.goInto(['keys', key]), (err, text) ->
+      # help for specific key names
+      return cb() unless @schema.keys?
+      detail = "The following entries have a specific format: "
+      async.map Object.keys(@schema.keys), (key, cb) ->
+        # subchecks with new sub worker
+        worker = new Worker "#{@name}.#{key}", @schema.keys[key], @context, @dir
+        worker.describe (err, subtext) ->
           return cb err if err
-          cb null, "\n- #{key}: #{text.replace /\n/g, '\n  '}"
+          cb null, "\n- #{key}: #{subtext.replace /\n/g, '\n  '}"
       , (err, results) ->
         return cb err if err
-        cb null, subtext + results.join('') + '\n'
+        cb null, detail + results.join('') + '\n'
     (cb) ->
-      return cb() unless work.pos.entries?
-      subtext = "And all other keys which are: "
-      max = work.pos.entries.length - 1
-      async.map [0..max], (num, cb) ->
-        rule = work.pos.entries[num]
+      # help for pattern matched key names
+      return cb() unless @schema.entries?
+      detail = "And all other keys which are: "
+      async.map [0..@schema.entries.length-1], (num, cb) ->
+        rule = @schema.entries[num]
         if rule.key?
           ruletext = "\n- matching #{rule.key}: "
         else
           ruletext = "\n- other keys: "
-        # run subcheck
-        check.describe work.goInto(['entries', num]), (err, text) ->
+        # subchecks with new sub worker
+        worker = new Worker "#{@name}##{num}", @schema.entries[num], @context, @dir
+        worker.describe (err, subtext) ->
           return cb err if err
-          cb null, ruletext + text.replace /\n/g, '\n  '
+          cb null, ruletext + subtext.replace /\n/g, '\n  '
       , (err, results) ->
         return cb err if err
-        cb null, subtext + results.join('') + '\n'
+        cb null, detail + results.join('') + '\n'
   ], (err, results) ->
     return cb err if err
     cb null, (text + results.join '').trim() + ' '
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
-  value = work.value
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
   # flatten
-  if work.pos.flatten
-    value = flatten work.value
+  if @schema.flatten
+    value = flatten @value
   # instanceof
-  if work.pos.instanceOf?
-    unless value instanceof work.pos.instanceOf
-      return work.report (new Error "An object of #{work.pos.instanceOf.name} is
-        needed as value"), cb
+  if @schema.instanceOf?
+    unless @value instanceof @schema.instanceOf
+      return @sendError "An object of #{@schema.instanceOf.name} is needed as value", cb
   # is object
-  if typeof value isnt 'object' or Array.isArray value
-    return work.report (new Error "The value has to be an object"), cb
+  if typeof @value isnt 'object' or Array.isArray @value
+    return @sendError "The value has to be an object", cb
   # check object keys
-  usedKeys = Object.keys value
-  mandatoryKeys = work.pos.mandatoryKeys ? []
+  usedKeys = Object.keys @value
+  mandatoryKeys = @schema.mandatoryKeys ? []
   if typeof mandatoryKeys is 'boolean'
     # use from entries and keys
     mandatoryKeys = []
-    if work.pos.keys?
-      mandatoryKeys = mandatoryKeys.concat Object.keys work.pos.keys
-    if work.pos.entries?
-      for entry in work.pos.entries
+    if @schema.keys?
+      mandatoryKeys = mandatoryKeys.concat Object.keys @schema.keys
+    if @schema.entries?
+      for entry in @schema.entries
         mandatoryKeys.push entry.key if entry.key?
-  allowedKeys = work.pos.allowedKeys ? []
+  allowedKeys = @schema.allowedKeys ? []
   if typeof allowedKeys is 'boolean'
     # use from entries and keys
     allowedKeys = []
-    if work.pos.keys?
-      allowedKeys = allowedKeys.concat Object.keys work.pos.keys
-    if work.pos.entries?
-      for entry in work.pos.entries
+    if @schema.keys?
+      allowedKeys = allowedKeys.concat Object.keys @schema.keys
+    if @schema.entries?
+      for entry in @schema.entries
         allowedKeys.push entry.key if entry.key
   keys = util.array.unique usedKeys.concat mandatoryKeys, allowedKeys
-  work.value = value
   # values
   async.each keys, (key, cb) ->
     return cb() if key instanceof RegExp # skip expressions here
-    # find sub-check
-    if work.pos.keys?[key]?
-      sub = work.goInto ['keys', key], [key]
-    else if work.pos.entries?
-      for rule, i in work.pos.entries
-        if rule.key? and key.match rule.key
-          sub = work.goInto ['entries', i], [key]
+    # get subcheck with new sub worker
+    if @schema.keys?[key]?
+      # defined directly with key
+      worker = new Worker "#{@name}.#{key}", @schema.keys[key], @context, @dir, @value[key]
+    else if @schema.entries?
+      for rule, i in @schema.entries
+        if rule.key?
+          # defined with wntries match
+          continue unless key.match rule.key
+          worker = new Worker "#{@name}##{i}.#{key}", @schema.entries[i], @context, @dir, @value[key]
           break
         else
-          sub = work.goInto ['entries', i], [key]
-    else
-      # keys that have no specification
-      name = work.spec.name ? 'value'
-      path = work.path.concat key
-      name += "/#{path.join '/'}"
-      sub = work.goInto [key], [key]
-      sub.pos =
+          # defined with general rule
+          worker = new Worker "#{@name}##{i}.#{key}", @schema.entries[i], @context, @dir, @value[key]
+    # undefined
+    unless worker
+      worker = new Worker "#{@name}#.#{key}",
         type: switch
-          when Array.isArray sub.value
+          when Array.isArray @value[key]
             'array'
-          when typeof sub.value is 'object'
+          when typeof @value[key] is 'object'
             'object'
           else
             'any'
         optional: true
-    async.setImmediate ->
-      check.run sub, (err, result) ->
-        return cb err if err and (sub.value and not sub.pos.optional)
-        if result
-          value[key] = result
-        else
-          delete value[key]
-        cb()
+      , @context, @dir, @value[key]
+    # run the check on the named entry
+    worker.check (err) ->
+      return cb err if err
+      @value[key] = worker.value#
+      cb()
   , (err) ->
     return cb err if err
     # check mandatoryKeys
     for mandatory in mandatoryKeys
       if mandatory instanceof RegExp
         fail = true
-        for key of value
+        for key of @value
           if key.match mandatory
             fail = false
             break
         if fail
-          return work.report (new Error "The mandatory key '#{key}' is missing"), cb
+          return @sendError "The mandatory key '#{key}' is missing", cb
       else
-        unless value[mandatory]? or work.pos.keys?[mandatory]?.optional
-          return work.report (new Error "The mandatory key '#{mandatory}' is missing"), cb
+        unless @value[mandatory]? or @schema.keys?[mandatory]?.optional
+          return @sendError "The mandatory key '#{mandatory}' is missing", cb
     # check allowedKeys
     if allowedKeys.length
-      for key of value
+      for key of @value
         isAllowed = false
         for allow in allowedKeys
           if key is allow or (allow instanceof RegExp and key.match allow)
@@ -205,69 +216,108 @@ exports.run = (work, cb) ->
               isAllowed = true
               break
         unless isAllowed
-          return work.report (new Error "The key '#{key}' is not allowed"), cb
-      return cb err if err
+          return @sendError "The key '#{key}' is not allowed", cb
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value ? null}"
-    cb null, value
+    @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "Object"
+  description: "the object schema definitions"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
       type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'object'
-          optional: true
-        flatten:
-          type: 'boolean'
-          optional: true
-        instanceOf:
-          type: 'function'
-          optional: true
-        mandatoryKeys:
-          type: 'or'
-          optional: true
-          or: [
-            type: 'boolean'
-          ,
-            type: 'array'
-            entries:
-              type: 'or'
-              or: [
-                type: 'string'
-              ,
-                type: 'regexp'
-              ]
-          ]
-        allowedKeys:
-          type: 'or'
-          optional: true
-          or: [
-            type: 'boolean'
-          ,
-            type: 'array'
-            entries:
-              type: 'or'
-              or: [
-                type: 'string'
-              ,
-                type: 'regexp'
-              ]
-          ]
+      optional: true
+    flatten:
+      title: "Flatten"
+      description: "a flag to flatten the object structure"
+      type: 'boolean'
+      optional: true
+    instanceOf:
+      title: "Class Check"
+      description: "the class, the object have to be instantiated from"
+      type: 'function'
+      optional: true
+    mandatoryKeys:
+      title: "Mandatory Keys"
+      description: "the definition of mandatory keys"
+      type: 'or'
+      optional: true
+      or: [
+        title: "All Mandatory"
+        description: "the value `true` marks all schema defined keys mandatory"
+        type: 'boolean'
+      ,
+        title: "Mandatory List"
+        description: "the list of mandatory keys"
+        type: 'array'
         entries:
-          type: 'array'
-          optional: true
-        keys:
-          type: 'object'
-          optional: true
-    value: schema
-  , cb
+          title: "Mandatory Key"
+          description: "the key which have to be present"
+          type: 'or'
+          or: [
+            title: "Key Name"
+            description: "the name of the mandatory key"
+            type: 'string'
+          ,
+            title: "Key Map"
+            description: "a RegExp to detect mandatory keys to which at least one should match"
+            type: 'regexp'
+          ]
+      ]
+    allowedKeys:
+      title: "Allowed Keys"
+      description: "the definition of allowed keys"
+      type: 'or'
+      optional: true
+      or: [
+        title: "No more Allowed"
+        description: "the value `true` marks only the schema defined keys as allowed"
+        type: 'boolean'
+      ,
+        title: "Allowed List"
+        description: "the list of allowed keys"
+        type: 'array'
+        entries:
+          title: "Allowed Key"
+          description: "the key which may be present"
+          type: 'or'
+          or: [
+            title: "Key Name"
+            description: "the name of the allowed key"
+            type: 'string'
+          ,
+            title: "Key Map"
+            description: "a RegExp to detect allowed keys to which should match"
+            type: 'regexp'
+          ]
+      ]
+    entries:
+      title: "Entries"
+      description: "an alternative definition of key's types without the name"
+      type: 'array'
+      mandatoryKeys: ['type']
+      optional: true
+    keys:
+      title: "Keys"
+      description: "the definition of each key's types"
+      type: 'object'
+      mandatoryKeys: ['type']
+      optional: true
 
 
 # Helper
 # -------------------------------------------------
+
+# Flatten object structure into single depth.
+#
+# @param {Object} obj instance to be flattened
 flatten = (obj) ->
   n = {}
   for k, v of obj
