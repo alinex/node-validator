@@ -18,7 +18,7 @@ Schema Specification
 ###
 
 
-# Node modules
+# Node Modules
 # -------------------------------------------------
 url = require 'url'
 util = require 'alinex-util'

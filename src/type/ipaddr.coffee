@@ -1,26 +1,31 @@
-# IP Address validation
-# =================================================
+###
+IP Address
+=================================================
 
-# Check options:
-#
-# - `optional` - the value must not be present (will return null)
-# - `default` - the value to use if none given
-# - `version` - one of 'ipv4' or 'ipv6' and the value will be converted, if possible
-# - `format` - compression method to use: 'short', 'long'
-# - `allow` - (list) the allowed ip ranges
-# - `deny` - (list) the denied ip ranges
+Check options:
+- `optional` - `Boolean` the value must not be present (will return null)
+- `default` - `String` the value to use if none given
+- `version` - `String` one of 'ipv4' or 'ipv6' and the value will be converted, if possible
+- `format` - `String` compression method to use: 'short', 'long'
+- `allow` - `Array` the allowed ip ranges
+- `deny` - `Array` the denied ip ranges
 
-# Node modules
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
+
+# Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:ipaddr')
-chalk = require 'chalk'
 ipaddr = require 'ipaddr.js'
-# alinex modules
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
 
-# Configuration
+
+# Setup
 # -------------------------------------------------
 specialRanges =
   unspecified: [
@@ -64,12 +69,19 @@ all = []
 all.concat list for name, list of specialRanges
 specialRanges.special = all
 
-# Type implementation
+
+# Exported Methods
 # -------------------------------------------------
-exports.describe = (work, cb) ->
+
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
   text = 'A valid IP address as string. '
-  text += check.optional.describe work
+  text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
+
   if work.pos.version
     if work.pos.version is 'ipv4'
       text += "Only IPv4 addresses are valid. "

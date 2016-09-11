@@ -41,7 +41,7 @@ Schema Specification
 ###
 
 
-# Node modules
+# Node Modules
 # -------------------------------------------------
 math = null # loaded on demand
 util = require 'alinex-util'
