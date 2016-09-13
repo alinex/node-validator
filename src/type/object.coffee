@@ -165,11 +165,13 @@ exports.check = (cb) ->
         if rule.key?
           # defined with wntries match
           continue unless key.match rule.key
-          worker = new Worker "#{@name}##{i}.#{key}", @schema.entries[i], @context, @dir, @value[key]
+          worker = new Worker "#{@name}##{i}.#{key}", @schema.entries[i],
+          @context, @dir, @value[key]
           break
         else
           # defined with general rule
-          worker = new Worker "#{@name}##{i}.#{key}", @schema.entries[i], @context, @dir, @value[key]
+          worker = new Worker "#{@name}##{i}.#{key}", @schema.entries[i],
+          @context, @dir, @value[key]
     # undefined
     unless worker
       worker = new Worker "#{@name}#.#{key}",

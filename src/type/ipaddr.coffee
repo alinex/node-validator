@@ -81,229 +81,269 @@ exports.describe = (cb) ->
   text = 'A valid IP address as string. '
   text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
-
-  if work.pos.version
-    if work.pos.version is 'ipv4'
+  if @schema.version
+    if @schema.version is 'ipv4'
       text += "Only IPv4 addresses are valid. "
     else
       text += "Only IPv6 addresses are valid. "
-    if work.pos.ipv4Mapping
+    if @schema.ipv4Mapping
       text += "IPv4 addresses may be automatically converted. "
-  if work.pos.deny
-    text += "The IP address should not be in the ranges: '#{work.pos.deny.join '\', \''}'. "
-    if work.pos.allow
-      text += "But IP address in the ranges: '#{work.pos.allow.join '\', \''}' are allowed. "
-  else if work.pos.allow
-    text += "The IP address have to be in the ranges: '#{work.pos.allow.join '\', \''}'. "
-  switch work.pos.format
+  if @schema.deny
+    text += "The IP address should not be in the ranges: '#{@schema.deny.join '\', \''}'. "
+    if @schema.allow
+      text += "But IP address in the ranges: '#{@schema.allow.join '\', \''}' are allowed. "
+  else if @schema.allow
+    text += "The IP address have to be in the ranges: '#{@schema.allow.join '\', \''}'. "
+  switch @schema.format
     when 'short'
       text += 'An IPv6 address will be compressed as possible. '
     when 'long'
       text += 'An IPv6 address will be normalized with all octets visible. '
   cb null, text
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
+  # validate
   try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value ? null}"
-      return cb()
+    ip = ipaddr.parse @value
   catch error
-    return work.report error, cb
-  value = work.value
-  # first check input type
-  name = work.spec.name ? 'value'
-  if work.path.length
-    name += "/#{work.path.join '/'}"
-  check.run
-    name: name
-    value: work.value
-    schema:
-      type: 'string'
-  , (err, value) ->
-    return cb err if err
-    # validate
-    unless ipaddr.isValid value
-      return work.report (new Error "The given value '#{value}' is no valid IPv6
-        or IPv4 address"), cb
-    ip = ipaddr.parse value
-    debug "analyzed #{ip.kind()}", ip
-    # format value
-    if work.pos.version
-      if work.pos.version is 'ipv4'
+    return @sendError "The given value is no valid IP address", cb if error
+    # check type of ip
+    if @schema.version
+      if @schema.version is 'ipv4'
         if ip.kind() is 'ipv6'
-          if ip.isIPv4MappedAddress() and work.pos.ipv4Mapping
-            debug 'convert to ipv4'
+          if ip.isIPv4MappedAddress() and @schema.ipv4Mapping
+            @debug "#{@name}: convert to ipv4"
             ip = ip.toIPv4Address()
           else
-            return work.report (new Error "The given value '#{value}' is no valid
-              IPv#{work.pos.version} address"), cb
+            return @sendError "The given value is no valid IPv#{@schema.version} address", cb
       else
         if ip.kind() is 'ipv4'
-          unless work.pos.ipv4Mapping
-            return work.report (new Error "The given value '#{value}' is no valid
-              IPv#{work.pos.version} address"), cb
-          debug 'convert to ipv4mapped'
+          unless @schema.ipv4Mapping
+            return @sendError "The given value is no valid IPv#{@schema.version} address", cb
+          @debug "#{@name}: convert to ipv4mapped"
           ip = ip.toIPv4MappedAddress()
-    if ip.kind() is 'ipv6'
-      value = if work.pos.format is 'long' then ip.toNormalizedString() else ip.toString()
+    @value = if ip.kind() is 'ipv6'
+      if @schema.format is 'long'
+        ip.toNormalizedString()
+      else
+        ip.toString()
     else
-      value = ip.toString()
+      ip.toString()
     # check ranges
-    if work.pos.allow
-      for entry in work.pos.allow
+    if @schema.allow
+      for entry in @schema.allow
         if specialRanges[entry]?
           for subentry in specialRanges[entry]
             [addr, bits] = subentry.split /\//
             if ip.match ipaddr.parse(addr), bits
-              debug "#{work.debug} result #{util.inspect value ? null}"
-              return cb null, value
+              return @sendSuccess cb
         else
           [addr, bits] = entry.split /\//
           if ip.match ipaddr.parse(addr), bits
-            debug "#{work.debug} result #{util.inspect value ? null}"
-            return cb null, value
+            return @sendSuccess cb
       # ip not in the allowed range
-      unless work.pos.deny
-        return work.report (new Error "The given ip address '#{value}' is not in
-          the allowed ranges"), cb
-    if work.pos.deny
-      for entry in work.pos.deny
+      unless @schema.deny
+        return @sendError "The given ip address is not in the allowed ranges", cb
+    if @schema.deny
+      for entry in @schema.deny
         if specialRanges[entry]?
           for subentry in specialRanges[entry]
             [addr, bits] = subentry.split /\//
             if ip.match ipaddr.parse(addr), bits
-              return work.report (new Error "The given ip address '#{value}' is
-                denied because in range #{entry}"), cb
+              return @sendError "The given ip address is
+                denied because in range #{entry}", cb
         else
           [addr, bits] = entry.split /\//
           if ip.match ipaddr.parse(addr), bits
-            return work.report (new Error "The given ip address '#{value}' is
-              denied because in range #{entry}"), cb
+            return @sendError "The given ip address is
+              denied because in range #{entry}", cb
     # ip also not in the denied range so allowed again
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value ? null}"
-    cb null, value
+    @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'string'
-          optional: true
-        version:
-          type: 'string'
-          values: ['ipv4', 'ipv6']
-          optional: true
-        ipv4Mapping:
-          type: 'boolean'
-          optional: true
-        deny:
-          type: 'array'
-          optional: true
-          entries:
-            type: 'string'
-            match: ///
-              ^
-              unspecified|broadcast|multicast|linklocal|loopback|private
-              |reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special
-              # ipv6 mask
-              |(
-                # 1:2:3:4:5:6:7:8
-                |([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}
-                # 1::                              1:2:3:4:5:6:7::
-                |([0-9a-fA-F]{1,4}:){1,7}:
-                # 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
-                |([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}
-                # 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
-                |([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}
-                # 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
-                |([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}
-                # 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
-                |([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}
-                # 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
-                |([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}
-                # 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
-                |[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})
-                # ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::
-                |:((:[0-9a-fA-F]{1,4}){1,7}|:)
-                # fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)
-                |fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}
-                # ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
-                # (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-                |::(ffff(:0{1,4}){0,1}:){0,1}
-                  ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                  (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-                # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
-                |([0-9a-fA-F]{1,4}:){1,4}:
-                  ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                  (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-              # /128
-              )\/(12[0-8]|(1[01][0-9]){0,1}[0-9])
-              # ipv4 mask 255.255.255.255/32
-              |(
-                ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-              )\/(3[0-2]|[12]{0,1}[0-9])
-              $
-            ///
-        allow:
-          type: 'array'
-          optional: true
-          entries:
-            type: 'string'
-            match: ///
-              ^
-              unspecified|broadcast|multicast|linklocal|loopback|private
-              |reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special
-              # ipv6 mask
-              |(
-                # 1:2:3:4:5:6:7:8
-                |([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}
-                # 1::                              1:2:3:4:5:6:7::
-                |([0-9a-fA-F]{1,4}:){1,7}:
-                # 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
-                |([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}
-                # 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
-                |([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}
-                # 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
-                |([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}
-                # 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
-                |([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}
-                # 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
-                |([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}
-                # 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
-                |[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})
-                # ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::
-                |:((:[0-9a-fA-F]{1,4}){1,7}|:)
-                # fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)
-                |fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}
-                # ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
-                # (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
-                |::(ffff(:0{1,4}){0,1}:){0,1}
-                  ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                  (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-                # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
-                |([0-9a-fA-F]{1,4}:){1,4}:
-                  ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                  (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-              # /128
-              )\/(12[0-8]|(1[01][0-9]){0,1}[0-9])
-              # ipv4 mask 255.255.255.255/32
-              |(
-                ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
-                (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-              )\/(3[0-2]|[12]{0,1}[0-9])
-              $
-            ///
-        format:
-          type: 'string'
-          default: 'short'
-          values: ['short', 'long']
-    value: schema
-  , cb
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "Percent"
+  description: "a percent schema definition"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'string'
+      match: ///
+        ^
+        # ipv6 mask
+        (
+          # 1:2:3:4:5:6:7:8
+          |([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}
+          # 1::                              1:2:3:4:5:6:7::
+          |([0-9a-fA-F]{1,4}:){1,7}:
+          # 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
+          |([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}
+          # 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
+          |([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}
+          # 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
+          |([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}
+          # 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
+          |([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}
+          # 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
+          |([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}
+          # 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
+          |[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})
+          # ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::
+          |:((:[0-9a-fA-F]{1,4}){1,7}|:)
+          # fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)
+          |fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}
+          # ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
+          # (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
+          |::(ffff(:0{1,4}){0,1}:){0,1}
+            ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+            (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+          # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
+          |([0-9a-fA-F]{1,4}:){1,4}:
+            ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+            (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+        # /128
+        )\/(12[0-8]|(1[01][0-9]){0,1}[0-9])
+        # ipv4 mask 255.255.255.255/32
+        |(
+          ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+          (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+        )\/(3[0-2]|[12]{0,1}[0-9])
+        $
+      ///
+      optional: true
+    version:
+      title: "IP Type"
+      description: "the ip address version to use. "
+      type: 'string'
+      values: ['ipv4', 'ipv6']
+      optional: true
+    ipv4Mapping:
+      title: "Map IPv4 to IPv6"
+      description: "the default value to use if nothing given"
+      type: 'boolean'
+      optional: true
+    deny:
+      title: "Deny Addresses"
+      description: "a list of addresses or ranges to deny"
+      type: 'array'
+      optional: true
+      entries:
+        title: "Deny Address"
+        description: "the address or range to deny"
+        type: 'string'
+        match: ///
+          ^
+          unspecified|broadcast|multicast|linklocal|loopback|private
+          |reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special
+          # ipv6 mask
+          |(
+            # 1:2:3:4:5:6:7:8
+            |([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}
+            # 1::                              1:2:3:4:5:6:7::
+            |([0-9a-fA-F]{1,4}:){1,7}:
+            # 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
+            |([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}
+            # 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
+            |([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}
+            # 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
+            |([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}
+            # 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
+            |([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}
+            # 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
+            |([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}
+            # 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
+            |[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})
+            # ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::
+            |:((:[0-9a-fA-F]{1,4}){1,7}|:)
+            # fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)
+            |fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}
+            # ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
+            # (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
+            |::(ffff(:0{1,4}){0,1}:){0,1}
+              ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+              (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+            # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
+            |([0-9a-fA-F]{1,4}:){1,4}:
+              ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+              (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+          # /128
+          )\/(12[0-8]|(1[01][0-9]){0,1}[0-9])
+          # ipv4 mask 255.255.255.255/32
+          |(
+            ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+            (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+          )\/(3[0-2]|[12]{0,1}[0-9])
+          $
+        ///
+    allow:
+      title: "Allow Addresses"
+      description: "a list of addresses or ranges to allow"
+      type: 'array'
+      optional: true
+      entries:
+        title: "Allow Address"
+        description: "the address or range to allow"
+        type: 'string'
+        match: ///
+          ^
+          unspecified|broadcast|multicast|linklocal|loopback|private
+          |reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special
+          # ipv6 mask
+          |(
+            # 1:2:3:4:5:6:7:8
+            |([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}
+            # 1::                              1:2:3:4:5:6:7::
+            |([0-9a-fA-F]{1,4}:){1,7}:
+            # 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
+            |([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}
+            # 1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8
+            |([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}
+            # 1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8
+            |([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}
+            # 1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8
+            |([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}
+            # 1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8
+            |([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}
+            # 1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8
+            |[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})
+            # ::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::
+            |:((:[0-9a-fA-F]{1,4}){1,7}|:)
+            # fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)
+            |fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}
+            # ::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
+            # (IPv4-mapped IPv6 addresses and IPv4-translated addresses)
+            |::(ffff(:0{1,4}){0,1}:){0,1}
+              ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+              (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+            # 2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)
+            |([0-9a-fA-F]{1,4}:){1,4}:
+              ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+              (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+          # /128
+          )\/(12[0-8]|(1[01][0-9]){0,1}[0-9])
+          # ipv4 mask 255.255.255.255/32
+          |(
+            ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
+            (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
+          )\/(3[0-2]|[12]{0,1}[0-9])
+          $
+        ///
+    format:
+      title: "Format"
+      description: "the display format tu use"
+      type: 'string'
+      default: 'short'
+      values: ['short', 'long']
