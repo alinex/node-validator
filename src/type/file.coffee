@@ -1,91 +1,155 @@
-# Domain name validation
-# =================================================
+###
+URL
+=================================================
 
-# Check the value as valid file or directory entry.
-#
-# __Sanitize options:__
-#
-# - `basedir` - (string) relative paths are calculated from this directory
-# - `resolve` - (bool) should the given value be resolved to a full path
-#
-# __Check options:__
-#
-# - `exists` - (bool) true to check for already existing entry
-# - `find` - (array or function) list of directories in which to search for the file
-# - `filetype` - (string) check against inode type: f, file, d, dir, directory, l, link
+__Sanitize options:__
+- `basedir` - `String` relative paths are calculated from this directory
+- `resolve` - `Boolean` should the given value be resolved to a full path
+
+__Check options:__
+- `exists` - `Boolean` true to check for already existing entry
+- `find` - `Array|Function` list of directories in which to search for the file
+- `filetype` - `String` check against inode type: f, file, d, dir, directory, l, link
 
 
-# Node modules
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
+
+# Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:file')
-chalk = require 'chalk'
 async = require 'async'
 fspath = require 'path'
 # alinex modules
 fs = require 'alinex-fs'
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
 
-# Type implementation
+
+# Exported Methods
 # -------------------------------------------------
-exports.describe = (work, cb) ->
-  text = 'A valid filesystem entry. '
-  text += check.optional.describe work
+
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
+  text = 'A valid url (unified resource locator). '
+  text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
-  if work.pos.exists
+  if @schema.exists
     text += "The file has to exist. "
-  if work.pos.basedir
-    text += "Relative paths are calculated from #{work.pos.basedir}. "
-  if work.pos.resolve
+  if @schema.basedir
+    text += "Relative paths are calculated from #{@schema.basedir}. "
+  if @schema.resolve
     text += "The path will be resolved to it's absolute path. "
-  if work.pos.find
+  if @schema.find
     text += "A search for the file will be done. "
-  if work.pos.filetype
-    text += "The file have to be of type '#{work.pos.filetype}'. "
+  if @schema.filetype
+    text += "The file have to be of type '#{@schema.filetype}'. "
   cb null, text
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
-  value = work.value
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
   # sanitize
   if typeof value isnt 'string'
-    return work.report (new Error "Could not find the file #{value}"), cb
-  value = fspath.normalize value
-  value = value[..-2] if value[-1..] is '/'
+    return @sendError "Could not find the file #{@value}", cb
+  @value = fspath.normalize @value
+  @value = @value[..-2] if @value[-1..] is '/'
   # get basedir
-  basedir = fspath.resolve work.pos.basedir ? '.'
+  basedir = fspath.resolve @schema.basedir ? '.'
   # validate
-  find work, value, (err, found) ->
+  find.call this, @value, (err, found) ->
     return cb err if err
     unless found
-      return work.report (new Error "Could not find the file #{value}"), cb
+      return @sendError "Could not find the file #{@value}", cb
     # resolve
     filepath = fspath.resolve basedir, found
-    found = filepath if work.pos.resolve
-    exists work, filepath, (err) ->
+    found = filepath if @schema.resolve
+    exists.call this, filepath, (err) ->
       return cb err if err
-      filetype work, found, (err) ->
+      filetype.call this, found, (err) ->
         return cb err if err
-        debug "#{work.debug} result #{util.inspect value ? null}"
-        cb null, found
+        # done checking and sanuitizing
+        @sendSuccess cb
 
-find = (work, value, cb) ->
-  return cb null, value unless work.pos.find
-  search =  if typeof work.pos.find is 'function' then work.pos.find() else work.pos.find
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "URL"
+  description: "an url schema definition"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'string'
+      optional: true
+    basedir:
+      title: "Base Directory"
+      description: "the directory to use for relative link resolving"
+      type: 'string'
+      default: '.'
+    resolve:
+      title: "Resolve"
+      description: "a flag to resolve relative links to absolute ones"
+      type: 'boolean'
+      default: false
+    exists:
+      title: "Exists"
+      description: "a flag if the file have to exist"
+      type: 'boolean'
+      default: false
+    find:
+      title: "Find"
+      description: "the directories in which to search for the file"
+      type: 'array'
+      toArray: true
+      optional: true
+      entries:
+        title: "Find Directory"
+        description: "the directory in which to search for the file"
+        type: 'string'
+    filetype:
+      title: "File Type"
+      description: "the type, the file should have"
+      type: 'string'
+      lowerCase: true
+      values: [
+        'f', 'file'
+        'd', 'dir', 'directory'
+        'l', 'link'
+        'fifo', 'pipe', 'p'
+        'socket', 's'
+      ]
+      optional: true
+
+
+# Helper
+# --------------------------------------------------------------------
+
+# @param {Array|Function} value list of directories to search in
+# @param {Function(Error, String)} cb callback which is invoked with the
+# resulting file path
+find = (value, cb) ->
+  return cb null, value unless @schema.find
+  search =  if typeof @schema.find is 'function' then @schema.find() else @schema.find
   unless search?.length
-    return work.report (new Error "Wrong find option, array is needed for file validation."), cb
+    return @sendError "Wrong find option, array is needed for file validation", cb
   # search in list
-  async.map search, (dir, cb) ->
-    debug "#{work.debug} search in #{dir}..."
+  async.map search, (dir, cb) =>
+    @debug "#{@name}: search in #{dir}..."
     fs.find dir,
       include: value
     , (err, list) ->
@@ -97,67 +161,34 @@ find = (work, value, cb) ->
     # return null if nothing found
     cb()
 
-exists = (work, value, cb) ->
-  return cb() unless work.pos.exists or work.pos.filetype
-  fs.exists value, (exists) ->
+# @param {String} value file to check for existence
+# @param {Function(Error)} cb callback with Error if file didn't exist
+exists = (value, cb) ->
+  return cb() unless @schema.exists or @schema.filetype
+  fs.exists value, (exists) =>
     return cb() if exists
-    work.report (new Error "The given file '#{value}' has to exist."), cb
+    @sendError "The given file has to exist", cb
 
-filetype = (work, value, cb) ->
-  return cb() unless work.pos.filetype
-  fs.lstat value, (err, stats) ->
+# @param {String} value file to check
+# @param {Function(Error)} cb callback with Error if file is of wrong type
+filetype = (value, cb) ->
+  return cb() unless @schema.filetype
+  fs.lstat value, (err, stats) =>
     return cb err if err
-    switch work.pos.filetype
+    switch @schema.filetype
       when 'file', 'f'
         return cb() if stats.isFile()
-        debug "#{work.debug} skip #{value} because not a file entry"
+        @debug "#{name}: skip #{value} because not a file entry"
       when 'directory', 'dir', 'd'
         return cb() if stats.isDirectory()
-        debug "#{work.debug} skip #{value} because not a directory entry"
+        @debug "#{name}: skip #{value} because not a directory entry"
       when 'link', 'l'
         return cb() if stats.isSymbolicLink()
-        debug "#{work.debug} skip #{value} because not a link entry"
+        @debug "#{name}: skip #{value} because not a link entry"
       when 'fifo', 'pipe', 'p'
         return cb() if stats.isFIFO()
-        debug "#{work.debug} skip #{value} because not a FIFO entry"
+        @debug "#{name}: skip #{value} because not a FIFO entry"
       when 'socket', 's'
         return cb() if stats.isSocket()
-        debug "#{work.debug} skip #{value} because not a socket entry"
-    work.report (new Error "The given file '#{value}' is not a #{work.pos.filetype} entry."), cb
-
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'string'
-          optional: true
-        basedir:
-          type: 'string'
-          default: '.'
-        resolve:
-          type: 'boolean'
-          default: false
-        exists:
-          type: 'boolean'
-          default: false
-        find:
-          type: 'array'
-          optional: true
-          entries:
-            type: 'string'
-        filetype:
-          type: 'string'
-          lowerCase: true
-          values: [
-            'f', 'file'
-            'd', 'dir', 'directory'
-            'l', 'link'
-            'fifo', 'pipe', 'p'
-            'socket', 's'
-          ]
-          optional: true
-    value: schema
-  , cb
+        @debug "#{name}: skip #{value} because not a socket entry"
+    @sendError "The given file is not a #{@schema.filetype} entry", cb
