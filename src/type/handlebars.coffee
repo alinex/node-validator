@@ -1,68 +1,91 @@
-# Domain name validation
-# =================================================
+###
+Handlebars
+=================================================
+Validate a possible handlebar template and return the function to directly use it.
 
-# Check options:
-#
-# - `optional` - the value must not be present (will return null)
+A template function or template source or normal text are all valid and result in
+returning a function which may be called with a context will return the template's
+resulting text.
 
 
-# Node modules
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
+
+# Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:handlebars')
-chalk = require 'chalk'
 handlebars = require 'handlebars'
-# alinex modules
 util = require 'alinex-util'
-require('alinex-handlebars').register handlebars
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
 
 
-# Type implementation
+# Setup
 # -------------------------------------------------
-exports.describe = (work, cb) ->
+require('alinex-handlebars').register handlebars
+
+
+# Exported Methods
+# -------------------------------------------------
+
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
   text = 'A valid text which may contain handlebar syntax and variables. '
-  text += check.optional.describe work
+  text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
   cb null, text
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
-  value = work.value
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
   # check for already converted values
-  return cb null, value if typeof value is 'function'
+  return @sendSuccess cb if typeof @value is 'function'
   # sanitize
   unless typeof value is 'string'
-    return work.report (new Error "The given value '#{value}' is no integer as needed"), cb
+    return @sendError "The given value is no integer as needed", cb
   # compile if handlebars syntax found
-  if value.match /\{\{.*?\}\}/
-    debug "#{work.debug} compile handlebars"
-    template = handlebars.compile value
-    fn = (context) ->
-      debug "#{work.debug} execute #{util.inspect value}" +
-        chalk.grey " with #{util.inspect context}"
+  if @value.match /\{\{.*?\}\}/
+    @debug "#{@name}: compile handlebars"
+    template = handlebars.compile @value
+    fn = (context) =>
+      @debug "#{@name}: execute template with #{util.inspect context}"
       return template context
   else
-    fn = -> value
-  debug "#{work.debug} result #{util.inspect value ? null}"
-  cb null, fn
+    fn = -> @value
+  @value = fn
+  # done checking and sanuitizing
+  @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'string'
-          optional: true
-    value: schema
-  , cb
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "URL"
+  description: "an url schema definition"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'or'
+      optional: true
+      or: [
+        title: "Template"
+        description: "the default template text to use"
+        type: 'string'
+      ,
+        title: "Function"
+        description: "the default function to use"
+        type: 'function'
+      ]
