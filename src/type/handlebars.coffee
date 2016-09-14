@@ -61,7 +61,7 @@ exports.check = (cb) ->
       @debug "#{@name}: execute template with #{util.inspect context}"
       return template context
   else
-    fn = -> @value
+    fn = => @value
   @value = fn
   # done checking and sanuitizing
   @sendSuccess cb

@@ -68,16 +68,16 @@ exports.check = (cb) ->
   # get basedir
   basedir = fspath.resolve @schema.basedir ? '.'
   # validate
-  find.call this, @value, (err, found) ->
+  find.call this, @value, (err, found) =>
     return cb err if err
     unless found
       return @sendError "Could not find the file #{@value}", cb
     # resolve
     filepath = fspath.resolve basedir, found
     found = filepath if @schema.resolve
-    exists.call this, filepath, (err) ->
+    exists.call this, filepath, (err) =>
       return cb err if err
-      filetype.call this, found, (err) ->
+      filetype.call this, found, (err) =>
         return cb err if err
         # done checking and sanuitizing
         @sendSuccess cb
