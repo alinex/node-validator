@@ -70,8 +70,8 @@ exports.check = (cb) ->
 #
 # Schema for selfchecking of this type
 exports.selfcheck =
-  title: "URL"
-  description: "an url schema definition"
+  title: "Handlebars"
+  description: "a handlebars schema definition"
   type: 'object'
   allowedKeys: true
   keys: util.extend rules.baseSchema,

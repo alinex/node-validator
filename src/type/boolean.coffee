@@ -1,73 +1,84 @@
-# Boolean value validation
-# =================================================
-# No options allowed.
+###
+Boolean
+=================================================
 
-# Node modules
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
+
+# Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:boolean')
-chalk = require 'chalk'
-# alinex modules
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
 
-# Configuration
+
+# Setup
 # -------------------------------------------------
 valuesTrue = ['true', '1', 'on', 'yes', '+', 1, true]
 valuesFalse = ['false', '0', 'off', 'no', '-', 0, false]
 
-# Type implementation
+
+# Exported Methods
 # -------------------------------------------------
-exports.describe = (work, cb) ->
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
   # get possible values
   vTrue = valuesTrue.map(util.inspect).join ', '
   vFalse = valuesFalse.map(util.inspect).join ', '
   # combine into message
   text = "A boolean value, which will be true for #{vTrue} and
   will be considered as false for #{vFalse}. "
-  text += check.optional.describe work
-  if work.pos.format
-    text += "The values #{work.pos.format.join ', '} will be used for output. "
+  text += rules.optional.describe.call this
+  text = text.replace /\. It's/, ' which is'
+  if @schema.format
+    text += "The values #{@schema.format.join ', '} will be used for output. "
   cb null, text
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
-  value = work.value
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
   # sanitize
-  value = value.trim().toLowerCase() if typeof value is 'string'
+  @value = @value.trim().toLowerCase() if typeof @value is 'string'
   # boolean values check
-  if value in valuesTrue
-    value = work.pos.format?[1] ? true
-    debug "#{work.debug} result #{value}"
-    return cb null, value
-  if value in valuesFalse
-    value = work.pos.format?[0] ? false
-    debug "#{work.debug} result #{value}"
-    return cb null, value
+  if @value in valuesTrue
+    @value = @schema.format?[1] ? true
+    return @sendSuccess cb
+  if @value in valuesFalse
+    @value = @schema.format?[0] ? false
+    return @sendSuccess cb
   # failed
-  work.report (new Error "No boolean value given"), cb
+  @sendError "No boolean value given", cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'boolean'
-          optional: true
-        format:
-          type: 'array'
-          minLength: 2
-          maxLength: 2
-          optional: true
-    value: schema
-  , cb
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "Boolean"
+  description: "a boolean schema definition"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'boolean'
+      optional: true
+    format:
+      title: "Format"
+      description: "the display values for `false` and `true`"
+      type: 'array'
+      minLength: 2
+      maxLength: 2
+      optional: true

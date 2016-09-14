@@ -1,28 +1,33 @@
-# Date check
-# =================================================
+###
+Datetime
+=================================================
 
-# Check options:
-#
-# - `part` - 'date', 'time' or 'datetime'
-# - `min` - (integer) the date should be after
-# - `max` - (integer) the date should be before
-# - `format` - how to format result as string
+Check options:
+- `part` - `String` with: 'date', 'time' or 'datetime'
+- `min` - `Integer` the date should be after
+- `max` - `Integer` the date should be before
+- `format` - `String` how to format result as string
+- `range` - `Boolean` the value has to be a range consisting of two dates
+- 'locale' - `String` used for formatting
+- `toTimezone` - `String` transform date/time to the given timezone
 
-# - `range` - boolean
-# - 'locale' - used for formatting
-# - language array
 
-# Node modules
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
+
+# Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:datetime')
-chalk = require 'chalk'
 async = require 'async'
 moment = require 'moment-timezone'
 chrono = require 'chrono-node'
 # include alinex packages
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
+
 
 # Setup parsing
 # -------------------------------------------------
@@ -45,7 +50,6 @@ zones =
   MESZ: 'CEST'
   MEZ: 'CET'
 
-
 alias =
   datetime:
     ISO8601: 'YYYY-MM-DDTHH:mm:ssZ'
@@ -59,167 +63,166 @@ alias =
     ISO8601: 'YYYY-MM-DD'
 
 
-# Optimize options setting
+# Exported Methods
 # -------------------------------------------------
-optimize = (schema, cb) ->
-  schema.part ?= 'datetime'
-  async.each ['default', 'min', 'max'], (i, cb) ->
-    return cb() unless schema[i]?
-    check.run
-      name: "option-#{i}-datetime"
-      schema:
-        type: 'datetime'
-      value: schema[i]
-    , (err, result) ->
-      return cb err if err
-      schema[i] = result
-      cb()
-  , ->
-    cb schema
 
-# Type implementation
-# -------------------------------------------------
-exports.describe = (work, cb) ->
-  optimize work.pos, (result) ->
-    work.pos = result
-    # combine into message
-    text = "A #{work.pos.part} is needed given as calendar #{work.pos.part}
-    or in natural language. "
-    text += check.optional.describe work
-    if work.pos.range
-      text += "A range with start and end date is needed. "
-    if work.pos.timezone
-      text += "If no timezone given the time is considert as #{work.pos.timezone} time. "
-    if work.pos.min? and work.pos.max?
-      text += "The #{work.pos.part} should be between #{work.pos.min} and
-      #{work.pos.max}. "
-    else if work.pos.min?
-      text += "The #{work.pos.part} should be before #{work.pos.min}. "
-    else if work.pos.max?
-      text += "The #{work.pos.part} should be after #{work.pos.max}. "
-    if work.pos.format?
-      add = []
-      add.push work.pos.locale if work.pos.locale
-      add.push work.pos.toTimezone if work.pos.toTimezone
-      text += "The #{work.pos.part} will be converted to #{work.pos.format}
-      #{if add.length then '(' + add.join(' ') + ') ' else ''}format. "
-    cb null, text
+# Initialize schema.
+exports.init = ->
+  @schema.part ?= 'datetime'
 
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
+  text = 'A valid url (unified resource locator). '
+  text += rules.optional.describe.call this
+  text = text.replace /\. It's/, ' which is'
+  # combine into message
+  text = "A #{@schema.part} is needed given as calendar #{@schema.part}
+  or in natural language. "
+  if @schema.range
+    text += "A range with start and end date is needed. "
+  if @schema.timezone
+    text += "If no timezone given the time is considert as #{@schema.timezone} time. "
+  if @schema.min? and @schema.max?
+    text += "The #{@schema.part} should be between #{@schema.min} and
+    #{@schema.max}. "
+  else if @schema.min?
+    text += "The #{@schema.part} should be before #{@schema.min}. "
+  else if @schema.max?
+    text += "The #{@schema.part} should be after #{@schema.max}. "
+  if @schema.format?
+    add = []
+    add.push @schema.locale if @schema.locale
+    add.push @schema.toTimezone if @schema.toTimezone
+    text += "The #{@schema.part} will be converted to #{@schema.format}
+    #{if add.length then '(' + add.join(' ') + ') ' else ''}format. "
+  cb null, text
 
-exports.run = (work, cb) ->
-  optimize work.pos, (result) ->
-    work.pos = result
-    debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.part}"
-    debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
-    # base checks
-    try
-      if check.optional.run work
-        debug "#{work.debug} result #{util.inspect value ? null}"
-        return cb()
-    catch error
-      return work.report error, cb
-
-    # parse date
-    if work.pos.timezone
-      work.pos.timezone = zones[work.pos.timezone] ? work.pos.timezone
-    if work.pos.range?
-      results = chrono.parse work.value
-      if results[0].start? and results[0].end?
-        value = [results[0].start.date(), results[0].end.date()]
-      else
-        return work.report (new Error "The #{work.pos.part} has to be a range."), cb
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
+  # base checks
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
+  # parse date
+  if @schema.timezone
+    @schema.timezone = zones[@schema.timezone] ? @schema.timezone
+  if @schema.range?
+    results = chrono.parse @value
+    if results[0].start? and results[0].end?
+      @value = [results[0].start.date(), results[0].end.date()]
     else
-      m = if work.pos.timezone
-        moment.tz work.value, work.pos.timezone
-      else
-        moment work.value
-      unless m.isValid()
-        return work.report (new Error "The given text '#{work.value}' is not parse able
-          as date/time."), cb
-      value = m.toDate()
-    # min/max
-    if work.pos.range?
-      if work.pos.min? and (value[0] < work.pos.min) or value[1] < work.pos.min
-        return work.report (new Error "The #{work.pos.part} has to be at or after
-          #{work.pos.min}"), cb
-      if work.pos.max? and (value[0] > work.pos.max) or value[1] > work.pos.max
-        return work.report (new Error "The #{work.pos.part} has to be at or before
-          #{work.pos.max}"), cb
+      return @sendError "The #{@schema.part} has to be a range", cb
+  else
+    m = if @schema.timezone
+      moment.tz @value, @schema.timezone
     else
-      if work.pos.min? and value < work.pos.min
-        return work.report (new Error "The #{work.pos.part} has to be at or after
-          #{work.pos.min}"), cb
-      if work.pos.max? and value > work.pos.max
-        return work.report (new Error "The #{work.pos.part} has to be at or before
-          #{work.pos.max}"), cb
+      moment @value
+    unless m.isValid()
+      return @sendError "The given text is not parse able as date/time", cb
+    @value = m.toDate()
+  # min/max
+  if @schema.range?
+    if @schema.min? and (@value[0] < @schema.min) or @value[1] < @schema.min
+      return @sendError "The #{@schema.part} has to be at or after #{@schema.min}", cb
+    if @schema.max? and (@value[0] > @schema.max) or @value[1] > @schema.max
+      return @sendError "The #{@schema.part} has to be at or before #{@schema.max}", cb
+  else
+    if @schema.min? and @value < @schema.min
+      return @sendError "The #{@schema.part} has to be at or after #{@schema.min}", cb
+    if @schema.max? and @value > @schema.max
+      return @sendError "The #{@schema.part} has to be at or before #{@schema.max}", cb
 
-    # format value
-    if work.pos.toTimezone
-      work.pos.toTimezone = zones[work.pos.toTimezone] ? work.pos.toTimezone
-    if work.pos.range?
-      if work.pos.format?
-        if alias[work.pos.part]?[work.pos.format]?
-          work.pos.format = alias[work.pos.part][work.pos.format]
-        for p in [0, 1]
-          m = moment value[p]
-          m = m.tz work.pos.timezone if work.pos.toTimezone
-          if work.pos.locale?
-            m.locale work.pos.locale
-          value[p] = switch work.pos.format
-            when 'unix' then  m.unix()
-            else m.format work.pos.format
-    else
-      if work.pos.format?
-        if alias[work.pos.part]?[work.pos.format]?
-          work.pos.format = alias[work.pos.part][work.pos.format]
-        m = moment value
-        if work.pos.locale?
-          m.locale work.pos.locale
-        m = m.tz work.pos.toTimezone if work.pos.toTimezone
-        value = switch work.pos.format
+  # format value
+  if @schema.toTimezone
+    @schema.toTimezone = zones[@schema.toTimezone] ? @schema.toTimezone
+  if @schema.range?
+    if @schema.format?
+      if alias[@schema.part]?[@schema.format]?
+        @schema.format = alias[@schema.part][@schema.format]
+      for p in [0, 1]
+        m = moment @value[p]
+        m = m.tz @schema.timezone if @schema.toTimezone
+        if @schema.locale?
+          m.locale @schema.locale
+        @value[p] = switch @schema.format
           when 'unix' then  m.unix()
-          else m.format work.pos.format
-    # return result
-    cb null, value
+          else m.format @schema.format
+  else
+    if @schema.format?
+      if alias[@schema.part]?[@schema.format]?
+        @schema.format = alias[@schema.part][@schema.format]
+      m = moment @value
+      if @schema.locale?
+        m.locale @schema.locale
+      m = m.tz @schema.toTimezone if @schema.toTimezone
+      @value = switch @schema.format
+        when 'unix' then  m.unix()
+        else m.format @schema.format
+  # done checking and sanuitizing
+  @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'datetime'
-          optional: true
-        range:
-          type: 'boolean'
-          optional: true
-        timezone:
-          type: 'string'
-          optional: true
-        part:
-          type: 'string'
-          optional: true
-          values: ['date', 'time', 'datetime']
-          default: 'datetime'
-        min:
-          type: 'datetime'
-          part: '<<<part>>>'
-          optional: true
-        max:
-          type: 'datetime'
-          part: '<<<part>>>'
-          optional: true
-          min: '<<<min>>>'
-        format:
-          type: 'string'
-          optional: true
-        toTimezone:
-          type: 'string'
-          optional: true
-        locale:
-          type: 'string'
-          match: /^[a-z]{2}(-[A-Z]{2})?$/
-          optional: true
-    value: schema
-  , cb
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "Datetime"
+  description: "a schema definition for date values"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'datetime'
+      optional: true
+    range:
+      title: "Date Range"
+      description: "a flag set to `true` to require a range of start and end date"
+      type: 'boolean'
+      optional: true
+    timezone:
+      title: "Timezone"
+      description: "the timezone to use if nothing given"
+      type: 'string'
+      optional: true
+    part:
+      title: "Part"
+      description: "the part of the full date to extract"
+      type: 'string'
+      optional: true
+      values: ['date', 'time', 'datetime']
+      default: 'datetime'
+    min:
+      title: "Minimum Date"
+      description: "the oldest allowed date"
+      type: 'datetime'
+      part: '<<<part>>>'
+      optional: true
+    max:
+      title: "Maximum Date"
+      description: "the newest allowed date"
+      type: 'datetime'
+      part: '<<<part>>>'
+      optional: true
+      min: '<<<min>>>'
+    format:
+      title: "Format"
+      description: "the moment() format string to use"
+      type: 'string'
+      optional: true
+    toTimezone:
+      title: "To Timezone"
+      description: "the timezone to which to transform given dates"
+      type: 'string'
+      optional: true
+    locale:
+      title: "Locale"
+      description: "the locale country code to use for formatting"
+      type: 'string'
+      match: /^[a-z]{2}(-[A-Z]{2})?$/
+      optional: true

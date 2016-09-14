@@ -14,6 +14,7 @@ Schema Specification
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
+Worker = require '../helper/worker'
 
 
 # Exported Methods
@@ -68,8 +69,8 @@ exports.check = (cb) ->
 #
 # Schema for selfchecking of this type
 exports.selfcheck =
-  title: "URL"
-  description: "an url schema definition"
+  title: "Hostname"
+  description: "a hostname schema definition"
   type: 'object'
   allowedKeys: true
   keys: util.extend rules.baseSchema,

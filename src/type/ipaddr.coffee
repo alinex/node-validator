@@ -172,8 +172,8 @@ exports.check = (cb) ->
 #
 # Schema for selfchecking of this type
 exports.selfcheck =
-  title: "Percent"
-  description: "a percent schema definition"
+  title: "IP Address"
+  description: "an ip address schema definition"
   type: 'object'
   allowedKeys: true
   keys: util.extend rules.baseSchema,

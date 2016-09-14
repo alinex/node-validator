@@ -25,6 +25,7 @@ Schema Specification
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
+Worker = require '../helper/worker'
 
 
 # Exported Methods
@@ -34,7 +35,6 @@ rules = require '../helper/rules'
 exports.init = ->
   @schema.round = true if @schema.decimals and not @schema.round?
   @schema.decimals = 0 if @schema.round and not @schema.decimals?
-
 
 # Describe schema definition, human readable.
 #
@@ -128,8 +128,8 @@ exports.check = (cb) ->
 #
 # Schema for selfchecking of this type
 exports.selfcheck =
-  title: "Percent"
-  description: "a percent schema definition"
+  title: "Interval"
+  description: "an interval schema definition"
   type: 'object'
   allowedKeys: true
   keys: util.extend rules.baseSchema,
