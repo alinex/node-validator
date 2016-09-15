@@ -165,12 +165,12 @@ exports.check = (cb) ->
         if rule.key?
           # defined with wntries match
           continue unless key.match rule.key
-          worker = new Worker "#{@name}##{i}.#{key}", @schema.entries[i],
+          worker = new Worker "#{@name}#entries-#{i}.#{key}", @schema.entries[i],
           @context, @dir, @value[key]
           break
         else
           # defined with general rule
-          worker = new Worker "#{@name}##{i}.#{key}", @schema.entries[i],
+          worker = new Worker "#{@name}#entries-#{i}.#{key}", @schema.entries[i],
           @context, @dir, @value[key]
     # undefined
     unless worker
@@ -185,11 +185,12 @@ exports.check = (cb) ->
         optional: true
       , @context, @dir, @value[key]
     # run the check on the named entry
-    worker.check (err) ->
-      return cb err if err
-      @value[key] = worker.value#
-      cb()
-  , (err) ->
+    async.setImmediate =>
+      worker.check (err) =>
+        return cb err if err
+        @value[key] = worker.value
+        cb()
+  , (err) =>
     return cb err if err
     # check mandatoryKeys
     for mandatory in mandatoryKeys

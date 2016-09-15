@@ -1,67 +1,85 @@
-# Validator to match multiple definitions
-# =================================================
+###
+And
+=================================================
+Collection of types combined with logical and.
 
-# Node modules
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
+
+# Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:and')
-chalk = require 'chalk'
 async = require 'async'
 # alinex modules
 util = require 'alinex-util'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
+Worker = require '../helper/worker'
 
-# Type implementation
+
+# Exported Methods
 # -------------------------------------------------
-exports.describe = (work, cb) ->
+
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
+  # combine into message
   text = "All of the following checks have to succeed:"
-  max = work.pos.and.length - 1
-  async.map [0..max], (num, cb) ->
-    # run subcheck
-    check.describe work.goInto(['and', num]), (err, text) ->
+  text += rules.optional.describe.call this
+  text = text.replace /\. It's/, ' which is'
+  # check all possibilities
+  async.map [0..@schema.and.length-1], (num, cb) =>
+    # subchecks with new sub worker
+    worker = new Worker "#{@name}##{num}", @schema.and[num], @context, @dir
+    worker.describe (err, subtext) ->
       return cb err if err
-      cb null, "\n- #{text.replace /\n/g, '\n  '}"
+      cb null, "\n- #{subtext.replace /\n/g, '\n  '}"
   , (err, results) ->
     return cb err if err
     text += results.join('') + '\n'
-    text += check.optional.describe work
     cb null, text
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect work.value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
   # run async checks
-  max = work.pos.and.length - 1
-  async.eachSeries [0..max], (num, cb) ->
-    sub = work.goInto(['and', num])
-#    sub.value = work.value
-    check.run sub, (err, result) ->
+  async.eachSeries [0..@schema.and.length-1], (num, cb) =>
+    # subchecks with new sub worker
+    worker = new Worker "#{@name}##{num}", @schema.and[num], @context, @dir, @value
+    worker.check (err) ->
       return cb err if err
-      work.value = result
+      @value = worker.value
       cb()
-  , (err) ->
+  , (err) =>
     return cb err if err
-    cb null, work.value
+    @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'any'
-          optional: true
-        and:
-          type: 'array'
-          entries:
-            type: 'object'
-    value: schema
-  , cb
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "And"
+  description: "multiple schema definitions"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'any'
+      optional: true
+    and:
+      type: 'array'
+      entries:
+        type: 'object'
+        mandatoryKeys: ['type']

@@ -63,7 +63,9 @@ exports.check = (cb) ->
       cb null, worker.value
   , (err, results) =>
     for result in results
-      return @sendSuccess result, cb if result?
+      continue unless result?
+      @value = result
+      return @sendSuccess cb
     # check response
     @sendError "None of the alternatives are matched
     (#{error.map((e) -> e.message).join('/ ').trim()})", cb
@@ -90,3 +92,4 @@ exports.selfcheck =
         title: "Alternative"
         description: "an alternative for the value"
         type: 'object'
+        mandatoryKeys: ['type']

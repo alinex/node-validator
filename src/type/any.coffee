@@ -1,41 +1,60 @@
-# Boolean value validation
-# =================================================
-# No options allowed.
+###
+Any
+=================================================
 
-# Node modules
+
+Schema Specification
+---------------------------------------------------
+{@schema #selfcheck}
+###
+
+
+# Node Modules
 # -------------------------------------------------
-debug = require('debug')('validator:any')
 util = require 'util'
 chalk = require 'chalk'
 # include classes and helper
-check = require '../check'
+rules = require '../helper/rules'
+Worker = require '../helper/worker'
 
-# Type implementation
+
+# Exported Methods
 # -------------------------------------------------
-exports.describe = (work, cb) ->
+
+# Describe schema definition, human readable.
+#
+# @param {function(Error, String)} cb callback to be called if done with possible error
+# and the resulting text
+exports.describe = (cb) ->
+  # combine into message
   text = "Any value is valid. "
-  text += check.optional.describe work
+  text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
   cb null, text
 
-exports.run = (work, cb) ->
-  debug "#{work.debug} with #{util.inspect work.value} as #{work.pos.type}"
-  debug "#{work.debug} #{chalk.grey util.inspect work.pos}"
+# Check value against schema.
+#
+# @param {function(Error)} cb callback to be called if done with possible error
+exports.check = (cb) ->
   # base checks
-  try
-    if check.optional.run work
-      debug "#{work.debug} result #{util.inspect work.value ? null}"
-      return cb()
-  catch error
-    return work.report error, cb
-  debug "#{work.debug} result #{util.inspect work.value}"
-  cb null, work.value
+  skip = rules.optional.check.call this
+  return cb skip if skip instanceof Error
+  return cb() if skip
+  # done checking
+  @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
-      type: 'object'
-      allowedKeys: true
-      keys: check.base
-    value: schema
-  , cb
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "Any"
+  description: "any schema definition"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'any'
+      optional: true
+      

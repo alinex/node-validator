@@ -71,7 +71,7 @@ exports.describe = (cb) ->
       max = @schema.list.length - 1
       async.map [0..max], (num, cb) ->
         # subchecks with new sub worker
-        worker = new Worker "#{@name}#{num}", @schema.list[num], @context, @dir
+        worker = new Worker "#{@name}.#{num}", @schema.list[num], @context, @dir
         worker.describe (err, subtext) ->
           return cb err if err
           cb null, "\n- #{num}: #{subtext.replace /\n/g, '\n  '}"
@@ -101,126 +101,145 @@ exports.check = (cb) ->
   skip = rules.optional.check.call this
   return cb skip if skip instanceof Error
   return cb() if skip
-
-
-
   # string to array
-  if typeof value is 'string' and @schema.delimiter?
+  if typeof @value is 'string' and @schema.delimiter?
     del = string.toRegExp @schema.delimiter
-    debug "#{work.debug} use delimiter #{typeof del} #{util.inspect del}"
-    work.value = value = value.split del
-  if @schema.toArray and not Array.isArray value
-    work.value = value = [value]
+    @debug "#{@name}: use delimiter #{typeof del} #{util.inspect del}"
+    @value = @value.split del
+  if @schema.toArray and not Array.isArray @value
+    @value = [@value]
   # is array
-  unless Array.isArray value
-    return work.report (new Error "The value has to be an array"), cb
+  unless Array.isArray @value
+    return @sendError "The value has to be an array", cb
   if @schema.unique
-    value = array.unique value
+    @value = array.unique @value
   # not empty
-  if @schema.notEmpty and value.length is 0
-    return work.report (new Error "An empty array/list is not allowed"), cb
+  if @schema.notEmpty and @value.length is 0
+    return @sendError "An empty array/list is not allowed", cb
   # min/macLength
   if @schema.minLength? and @schema.minLength is @schema.maxLength and (
-    value.length isnt @schema.minLength)
-    return work.report (new Error "Exactly #{@schema.minLength} entries are required"), cb
-  else if @schema.minLength? and @schema.minLength > value.length
-    return work.report (new Error "At least #{@schema.minLength} entries are required as list"), cb
-  else if @schema.maxLength? and @schema.maxLength < value.length
-    return work.report (new Error "Not more than #{@schema.maxLength} entries
-    are allowed as list"), cb
+    @value.length isnt @schema.minLength)
+    return @sendError "Exactly #{@schema.minLength} entries are required", cb
+  else if @schema.minLength? and @schema.minLength > @value.length
+    return @sendError "At least #{@schema.minLength} entries are required as list", cb
+  else if @schema.maxLength? and @schema.maxLength < @value.length
+    return @sendError "Not more than #{@schema.maxLength} entries
+    are allowed as list", cb
   # values
-  unless value.length
+  unless @value.length
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value ? null}"
-    return cb null, value
-  max = value.length - 1
-  async.map [0..max], (num, cb) ->
+    return @sendSuccess cb
+  async.map [0..@value.length-1], (num, cb) ->
     # find sub-check
     if @schema.list?[num]?
-      sub = work.goInto ['list', num], [num]
+      worker = new Worker "#{@name}.#{num}", @schema.list[num], @context, @dir, @value[num]
     else if @schema.entries?
-      sub = work.goInto ['entries'], [num]
+      worker = new Worker "#{@name}#entries.#{num}", @schema.entries, @context, @dir, @value[num]
     else
-      name = work.spec.name ? 'value'
-      path = work.path.concat num
-      name += "/#{path.join '/'}"
-      sub = work.goInto null, [num]
-      sub.spec.schema =
+      worker = new Worker "#{@name}#.#{num}",
         type: switch
-          when Array.isArray value[num]
+          when Array.isArray @value[num]
             'array'
-          when typeof value[num] is 'object'
+          when typeof @value[num] is 'object'
             'object'
           else
             'any'
         optional: true
-      sub.path = []
-      sub.pos = sub.spec.schema
-    async.setImmediate ->
-      check.run sub, cb
-  , (err, value) ->
+      , @context, @dir, @value[num]
+    # run the check on the named entry
+    async.setImmediate =>
+      worker.check (err) =>
+        return cb err if err
+        @value[num] = worker.value
+        cb()
+  , (err) =>
     return cb err if err
     # format value
     if @schema.format
       switch @schema.format
         when 'simple'
-          value = value.join ', '
+          @value = @value.join ', '
         when 'pretty'
-          value = value.map((e) -> util.inspect e).join ', '
+          @value = @value.map((e) -> util.inspect e).join ', '
         when 'json'
-          value = JSON.stringify value
+          @value = JSON.stringify @value
     # done return resulting value
-    debug "#{work.debug} result #{util.inspect value ? null}"
-    cb null, value
+    @sendSuccess cb
 
-exports.selfcheck = (schema, cb) ->
-  check.run
-    schema:
+# ### Selfcheck Schema
+#
+# Schema for selfchecking of this type
+exports.selfcheck =
+  title: "Array"
+  description: "the array schema definitions"
+  type: 'object'
+  allowedKeys: true
+  keys: util.extend rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'array'
+      optional: true
+    delimiter:
+      title: "Delimiter"
+      description: "the delimiter to split given string into list"
+      type: 'or'
+      optional: true
+      or: [
+        title: "Characters"
+        description: "the characters to be used as explicit delimiter"
+        type: 'string'
+      ,
+        title: "RegExp"
+        description: "the expression to split into list"
+        type: 'object'
+        instanceOf: RegExp
+      ]
+    toArray:
+      title: "To Array"
+      description: "a flag to automatically pack other data into an array"
+      type: 'boolean'
+      optional: true
+    unique:
+      title: "Unique"
+      description: "a flag to remove duplicate entries in list"
+      type: 'boolean'
+      optional: true
+    notEmpty:
+      title: "Not Empty"
+      description: "a flag to not allow an empty list"
+      type: 'boolean'
+      optional: true
+    minLength:
+      title: "Minimum"
+      description: "the minimum number of elements in list"
+      type: 'integer'
+      optional: true
+      min: 0
+    maxLength:
+      title: "Maximum"
+      description: "the maximum number of elements in list"
+      type: 'integer'
+      optional: true
+      min: '<<<minLength>>>'
+    list:
+      title: "Specific Formats"
+      description: "the schema for each element"
+      type: 'array'
+      entries:
+        title: "Element Format"
+        description: "the schema definition for a specific element"
+        type: 'object'
+        mandatoryKeys: ['type']
+    entries:
+      title: "Element Format"
+      description: "the general schema definition for the entries"
       type: 'object'
-      allowedKeys: true
-      keys: util.extend util.clone(check.base),
-        default:
-          type: 'array'
-          optional: true
-        delimiter:
-          type: 'or'
-          optional: true
-          or: [
-            type: 'string'
-          ,
-            type: 'object'
-            instanceOf: RegExp
-          ]
-        toArray:
-          type: 'boolean'
-          optional: true
-        unique:
-          type: 'boolean'
-          optional: true
-        notEmpty:
-          type: 'boolean'
-          optional: true
-        minLength:
-          type: 'integer'
-          optional: true
-          min: 0
-        maxLength:
-          type: 'integer'
-          optional: true
-          min: '<<<minLength>>>'
-        list:
-          type: 'or'
-          optional: true
-          or: [
-            type: 'object'
-          ,
-            type: 'array'
-          ]
-        entries:
-          type: 'any'
-          optional: true
-        format:
-          type: 'string'
-          values: ['simple', 'pretty', 'json']
-    value: schema
-  , cb
+      mandatoryKeys: ['type']
+      optional: true
+    format:
+      title: "Format"
+      description: "the type of output format to use"
+      type: 'string'
+      values: ['simple', 'pretty', 'json']
+      optional: true
