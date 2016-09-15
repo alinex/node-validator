@@ -57,4 +57,3 @@ exports.selfcheck =
       description: "the default value to use if nothing given"
       type: 'any'
       optional: true
-      

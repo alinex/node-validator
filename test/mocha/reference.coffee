@@ -10,7 +10,7 @@ reference = require '../../src/helper/reference'
 
 describe "References", ->
 
-  describe "detect", ->
+  describe "exists", ->
 
     it "should know that there are no references", ->
       values = [
@@ -36,7 +36,7 @@ describe "References", ->
         result = reference.exists value
         expect(result, value).to.be.true
 
-  describe "simple", ->
+  describe.only "simple", ->
 
     it "should keep values without references", (cb) ->
       values = [
