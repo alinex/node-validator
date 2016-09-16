@@ -31,6 +31,8 @@ describe "References", ->
         '<<<name>>>'
         'My name is <<<name>>>'
         '<<<firstname>>> <<<lastname>>>'
+        [1, '<<<name>>>', 3]
+        {one: 1, two: '<<<zwei>>>'}
       ]
       for value in values
         result = reference.exists value
@@ -49,7 +51,7 @@ describe "References", ->
         null
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, (err, result) ->
+        reference.replace value, null, null, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal value
           cb()
@@ -61,7 +63,7 @@ describe "References", ->
         'My name is <<<notthere | alex>>>': 'My name is alex' # reference in string
         '<<<notthere | firstname>>> <<<notthere | lastname>>>': 'firstname lastname' #concatenate
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, (err, result) ->
+        reference.replace value, null, null, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -75,7 +77,7 @@ describe "References", ->
         '<<<env://NOTEXISTING | env://TESTVALIDATOR | 456>>>': process.env.TESTVALIDATOR
         '<<<env://TESTVALIDATOR | env://NOTEXISTING | 456>>>': process.env.TESTVALIDATOR
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, (err, result) ->
+        reference.replace value, null, null, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -83,7 +85,7 @@ describe "References", ->
 
     it "should fail for empty reference", (cb) ->
       value = '<<<>>>'
-      reference.replace value, (err, result) ->
+      reference.replace value, null, null, null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, value).to.not.exist
         cb()
