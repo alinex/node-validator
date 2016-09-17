@@ -8,7 +8,7 @@ path = require 'path'
 test = require '../test'
 reference = require '../../src/helper/reference'
 
-describe.only "References", ->
+describe "References", ->
 
   describe "exists", ->
 

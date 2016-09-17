@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe "String", ->
+describe.only "String", ->
 
   schema = null
   beforeEach ->
@@ -32,8 +32,8 @@ describe "String", ->
 
   describe "options check", ->
 
-    it "should support toString option", (cb) ->
-      schema.toString = true
+    it "should support makeString option", (cb) ->
+      schema.makeString = true
       test.equal schema, [
         [4, '4']
         [(new Error 'test'), 'Error: test']
@@ -185,7 +185,7 @@ describe "String", ->
         type: 'string'
         optional: true
         default: 'nix'
-        toString: true
+        makeString: true
         allowControls: true
         stripTags: true
         lowerCase: true

@@ -154,7 +154,7 @@ exports.check = (cb) ->
         allowedKeys.push entry.key if entry.key
   keys = util.array.unique usedKeys.concat mandatoryKeys, allowedKeys
   # values
-  async.each keys, (key, cb) ->
+  async.each keys, (key, cb) =>
     return cb() if key instanceof RegExp # skip expressions here
     # get subcheck with new sub worker
     if @schema.keys?[key]?

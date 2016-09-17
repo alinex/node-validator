@@ -4,7 +4,7 @@ String
 Checking text entries against multiple rules.
 
 Sanitize options allowed:
-- `toString` - `Boolean` convert objects to string, first
+- `makeString` - `Boolean` convert objects to string, first
 - `allowControls` - `Boolean` keep control characters in string instead of
   stripping them (but keep \\r\\n)
 - `stripTags` - `Boolean` remove all html tags
@@ -58,7 +58,7 @@ exports.describe = (cb) ->
   text = 'A text entry. '
   text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
-  if typeof @schema.toString is 'boolean' and @schema.toString
+  if @schema.makeString? and @schema.makeString is true
     text += "Objects will be converted to their string representation. "
   # remove characters
   remove = []
@@ -136,7 +136,7 @@ exports.check = (cb) ->
   return cb skip if skip instanceof Error
   return cb() if skip
   # first check input type
-  if @schema.toString and typeof @schema.toString isnt 'function'
+  if @schema.makeString
     @value = @value.toString()
   unless typeof @value is 'string'
     return @sendError "A string is needed but got #{typeof @value} instead", cb
@@ -230,8 +230,8 @@ exports.selfcheck =
       description: "the default value to use if nothing given"
       type: 'string'
       optional: true
-    toString:
-      title: "To String"
+    makeString:
+      title: "Make String"
       description: "a switch to transform objects into string using the `toString()` method"
       type: 'boolean'
       optional: true
