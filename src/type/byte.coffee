@@ -71,7 +71,7 @@ exports.describe = (cb) ->
     decimals: @schema.decimals
     min: @schema.min
     max: @schema.max
-  , @context, @dir
+  , @context
   worker.describe (err, subtext) ->
     return cb err if err
     cb null, text + subtext
@@ -106,7 +106,7 @@ exports.check = (cb) ->
     decimals: @schema.decimals
     min: @schema.min
     max: @schema.max
-  , @context, @dir, @value
+  , @context, @value
   worker.check (err) =>
     return cb err if err
     @value = worker.value

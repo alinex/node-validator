@@ -71,7 +71,7 @@ exports.describe = (cb) ->
       max = @schema.list.length - 1
       async.map [0..max], (num, cb) ->
         # subchecks with new sub worker
-        worker = new Worker "#{@name}.#{num}", @schema.list[num], @context, @dir
+        worker = new Worker "#{@name}.#{num}", @schema.list[num], @context
         worker.describe (err, subtext) ->
           return cb err if err
           cb null, "\n- #{num}: #{subtext.replace /\n/g, '\n  '}"
@@ -82,7 +82,7 @@ exports.describe = (cb) ->
       return cb() unless @schema.entries?
       detail = "And all other entries have to be:\n- "
       # subchecks with new sub worker
-      worker = new Worker "#{@name}#entries", @schema.entries, @context, @dir
+      worker = new Worker "#{@name}#entries", @schema.entries, @context
       worker.describe (err, subtext) ->
         return cb err if err
         cb null, detail + "\nEntries should be: " + subtext
@@ -132,9 +132,9 @@ exports.check = (cb) ->
   async.map [0..@value.length-1], (num, cb) ->
     # find sub-check
     if @schema.list?[num]?
-      worker = new Worker "#{@name}.#{num}", @schema.list[num], @context, @dir, @value[num]
+      worker = new Worker "#{@name}.#{num}", @schema.list[num], @context, @value[num]
     else if @schema.entries?
-      worker = new Worker "#{@name}#entries.#{num}", @schema.entries, @context, @dir, @value[num]
+      worker = new Worker "#{@name}#entries.#{num}", @schema.entries, @context, @value[num]
     else
       worker = new Worker "#{@name}#.#{num}",
         type: switch
@@ -145,7 +145,7 @@ exports.check = (cb) ->
           else
             'any'
         optional: true
-      , @context, @dir, @value[num]
+      , @context, @value[num]
     # run the check on the named entry
     async.setImmediate =>
       worker.check (err) =>

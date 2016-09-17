@@ -35,7 +35,7 @@ exports.describe = (cb) ->
   # check all possibilities
   async.map [0..@schema.and.length-1], (num, cb) =>
     # subchecks with new sub worker
-    worker = new Worker "#{@name}##{num}", @schema.and[num], @context, @dir
+    worker = new Worker "#{@name}##{num}", @schema.and[num], @context
     worker.describe (err, subtext) ->
       return cb err if err
       cb null, "\n- #{subtext.replace /\n/g, '\n  '}"
@@ -55,7 +55,7 @@ exports.check = (cb) ->
   # run async checks
   async.eachSeries [0..@schema.and.length-1], (num, cb) =>
     # subchecks with new sub worker
-    worker = new Worker "#{@name}##{num}", @schema.and[num], @context, @dir, @value
+    worker = new Worker "#{@name}##{num}", @schema.and[num], @context, @value
     worker.check (err) ->
       return cb err if err
       @value = worker.value

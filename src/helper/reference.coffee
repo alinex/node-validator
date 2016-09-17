@@ -13,8 +13,15 @@ debug = require('debug')('validator:reference')
 chalk = require 'chalk'
 async = require 'async'
 fspath = require 'path'
+request = null # load on demand
+exec = null # load on demand
+vm = null # load on demand
 # alinex modules
 util = require 'alinex-util'
+fs = null # load on demand
+format = null # load on demand
+# local helper
+Worker = require '../helper/worker'
 
 
 # Setup
@@ -101,17 +108,21 @@ exports.replace = (value, path = '', struct, context, cb, clone = false) ->
 # @param {Function(Error, value)} cb callback which is called with resulting value
 multiple = (value, path, struct, context, cb) ->
   debug "#{path}: replace #{util.inspect value}..."
+  list = value.split /(<<<[^]*?>>>)/
+  list = [list[1]] if list.length is 3 and list[0] is '' and list[2] is ''
   # step over multiple references
-  async.map value.split(/(<<<[^]*?>>>)/), (v, cb) ->
+  async.map list, (v, cb) ->
     return cb null, v unless ~v.indexOf '<<<' # no reference
-    v = v[3..-4].trim() # replace <<< and >>>
+    v = v[3..-4] # replace <<< and >>>
     alternatives v, path, struct, context, cb
   , (err, results) ->
     return cb err if err
+    # reference only value
+    if results.length is 1
+      debug "#{path}: #{util.inspect value} is replaced by #{util.inspect results[0]}"
+      return cb null, results[0]
     # combine reference together
     result = results.join ''
-    if result is '' and results.length is 3 and not results[1]?
-      return cb() # return undefined
     debug "#{path}: #{util.inspect value} is replaced by #{util.inspect result}"
     cb null, result
 
@@ -135,12 +146,12 @@ alternatives = (value, path, struct, context, cb) ->
     .split /#/
     # return default value
     if list.length is 1 and not ~alt.indexOf '://'
-      debug chalk.grey "#{path}: #{util.inspect alt} -> use as default value"
+      debug chalk.grey "#{path}: #{alt} -> use as default value".replace /\n/, '\\n'
       return cb null, alt
     # read value from given uri parts
     read list, path, struct, context, (err, result) ->
       return cb err if err
-      debug chalk.grey "#{path}: #{util.inspect alt} -> result: #{util.inspect result}"
+      debug chalk.grey "#{path}: #{alt} -> #{util.inspect result}".replace /\n/, '\\n'
       cb null, result
   , (err, results) ->
     return cb err if err
@@ -205,7 +216,8 @@ read = (list, path, struct, context, cb, last, data) ->
     (typeof data isnt 'string' and proto in ['split', 'match', 'parse']) or
     (typeof data isnt 'object' and proto is 'object')
     )
-      debug chalk.magenta "#{path}: stop at part #{proto}://#{path} because wrong result type"
+      debug chalk.magenta "#{path}: stop at part #{proto}://#{loc} because wrong
+      result type".replace /\n/, '\\n'
       return cb()
   proto = proto.toLowerCase()
   # find type handler
@@ -217,16 +229,18 @@ read = (list, path, struct, context, cb, last, data) ->
   if last? and typePrecedence[type] > typePrecedence[last?]
     return cb new Error "#{type}-reference can not be called from #{last}-reference
     for security reasons"
-  debug chalk.grey "#{path}: #{type} call with #{proto}://#{loc}"
+  debug chalk.grey "#{path}: evaluating #{proto}://#{loc}".replace /\n/, '\\n'
   # run type handler and return if nothing found
   handler[type] proto, loc, data, path, struct, context, (err, result) ->
-    return cb err if err
+    if err
+      debug chalk.magenta "#{path}: #{proto}://#{loc} -> failed: #{err.message}".replace /\n/, '\\n'
+      return cb()
     unless result # no result so stop this uri
       if list.length # more to do
-        debug chalk.grey util.inspect("#{proto}://#{path}") + " -> result: ---"
+        debug chalk.grey "#{path}: #{proto}://#{loc} -> undefined".replace /\n/, '\\n'
       return cb()
     if list.length # more to do
-      debug chalk.grey util.inspect("#{proto}://#{path}") + " -> result: #{util.inspect result}"
+      debug chalk.grey "#{path}: #{proto}://#{loc} -> #{util.inspect result}".replace /\n/, '\\n'
     # no reference in result
     return cb null, result unless list.length # stop if last entry of uri path
     # process next list entry
@@ -258,27 +272,174 @@ pathSearch = (loc, path = '', data, cb) ->
     debug chalk.grey "#{path}: failed data read at #{q}"
     # search neighbors by sub call on parent
     if ~path.indexOf '/'
-      return pathSearch loc, fspath.dirname("/#{path}"), data, cb
+      return pathSearch loc, fspath.dirname(path), data, cb
+    else if path
+      return pathSearch loc, null, data, cb
     # neither found
     cb()
+
+# ### Recursively join array of arrays together
+arrayJoin = (data, splitter) ->
+  glue = if splitter.length is 1 then splitter[0] else splitter.shift()
+  result = ''
+  for v in data
+    v = arrayJoin v, splitter if Array.isArray v
+    result += glue if result
+    result += v
+  result
 
 
 # Protocoll Handlers
 # -------------------------------------------------
-
+# All handler are called with the same api. This contains all data which may be used
+# in any handler.
+#
+# @param {String} proto protokoll name to use (type of handler)
+# @param {String} loc location to extract
+# @param {Object} data allready read data from previous read
+# @param {String} base base location where to search references
+# @param {Object} struct structure from which the original value comes from
+# @param {Object} context additional data structure for protokoll context
+# @param {Function(Error, result)} cb callback which is called with the resulting object
 handler =
 
   # Read from value structure.
   #
-  struct: (proto, loc, data, path, struct, context, cb) ->
-    pathSearch loc, path, struct, cb
+  struct: (proto, loc, data, base, struct, context, cb) ->
+    pathSearch loc, base, struct, cb
 
   # Read from additional context.
   #
-  context: (proto, loc, data, path, struct, context, cb) ->
+  context: (proto, loc, data, base, struct, context, cb) ->
     pathSearch loc, null, context, cb
 
   # Accessing environment variables.
   #
-  env: (proto, loc, data, path, struct, context, cb) ->
+  env: (proto, loc, data, base, struct, context, cb) ->
     cb null, process.env[loc]
+
+  # Reading from locale or mounted file system.
+  #
+  # To specify a specific directory as current directory it can be set as context
+  # variable: `currentDir`
+  file: (proto, loc, data, base, struct, context, cb) ->
+    fs ?= require 'alinex-fs'
+    loc = fspath.resolve context.currentDir, loc if context?.currentDir?
+    fs.realpath loc, (err, path) ->
+      return cb err if err
+      fs.readFile path, 'utf-8', cb
+
+  # Reading from web ressources using http and https.
+  #
+  web: (proto, loc, data, base, struct, context, cb) ->
+    request ?= require 'request'
+    request
+      uri: "#{proto}://#{loc}"
+      followAllRedirects: true
+    , (err, response, body) ->
+      # error checking
+      return cb err if err
+      if response.statusCode isnt 200
+        return cb new Error "Server send wrong return code: #{response.statusCode}"
+      return cb() unless body?
+      cb null, body
+
+  # Reading from web ressources using http and https.
+  #
+  cmd: (proto, loc, data, base, struct, context, cb) ->
+    exec ?= require('child_process').exec
+    opt = {}
+    opt.cwd = context.currentDir if context?.currentDir?
+    exec loc, opt, (err, result) ->
+      return cb err if err
+      cb null, result.trim()
+
+  # Value checks.
+  #
+  check: (proto, loc, data, base, struct, context, cb) ->
+    # get the check schema reading as js
+    vm ?= require 'vm'
+    schema = vm.runInNewContext "x=#{loc}"
+    # instantiate new object
+    worker = new Worker "reference-#{loc}", schema, null, data
+    # run the check
+    worker.check (err) ->
+      return cb err if err
+      cb null, worker.value
+
+  # Splitting of strings.
+  #
+  split: (proto, loc, data, base, struct, context, cb) ->
+    splitter = loc[1..].split('//').map (s) -> new RegExp s
+    splitter.push '' if splitter.length is 1
+    result = data.split(splitter[0]).map (t) ->
+      col = t.split splitter[1]
+      col.unshift t
+      col
+    result.unshift null
+    cb null, result
+
+  # #### Matching strings
+  match: (proto, loc, data, base, struct, context, cb) ->
+    re = loc.match /\/([^]*)\/(i?)/
+    re = new RegExp re[1], "#{re[2]}g"
+    cb null, data.match re
+
+  # #### Special parsing of string
+  parse: (proto, loc, data, base, struct, context, cb) ->
+    format ?= require 'alinex-format'
+    formatType = loc[1..]
+    formatType = null if formatType is 'auto'
+    format.parse data, formatType, (err, result) ->
+      cb null, result
+
+  # #### Range selection in array
+  range: (proto, loc, data, base, struct, context, cb) ->
+    # split multiple specifiers
+    rows = loc.match ///
+      \d+ # first row
+      (?:-\d+)? # end of row range
+      (?:\[[^\]]+\])? # column specification
+      ///g #path.split ','
+    result = []
+    # go over rows
+    for row in rows
+      row = row.match ///
+        (\d+) # first row
+        (?:-(\d+))? # end of row range
+        (?:\[([^\]]+)\])? # column specification
+        /// #path.split ','
+      row.from = parseInt row[1]
+      row.to = if row[2]? then parseInt row[2] else row.from
+      cols = row[3]?.split ','
+      if cols? and Array.isArray data[1]
+        # get columns
+        for drow in data[row.from..row.to]
+          rrows = []
+          for col in cols
+            col = col.match ///
+              (\d+) # first column
+              (?:-(\d+))? # end of column range
+              /// #path.split ','
+            col.from = parseInt col[1]
+            col.to = if col[2]? then parseInt col[2] else col.from
+            rrows = rrows.concat drow[col.from..col.to]
+          result.push rrows
+      else
+        # get single row
+        for drow in data[row.from..row.to]
+          result.push drow[0]
+    return cb() unless result.length
+    result = result[0] if result.length is 1
+    result = result[0] if result.length is 1
+    cb null, result
+
+  # #### Path selection in object
+  object: (proto, loc, data, base, struct, context, cb) ->
+    cb null, util.object.pathSearch data, loc
+
+  # #### Join array together
+  join: (proto, loc, data, base, struct, context, cb) ->
+    loc = loc[6..]
+    splitter = if loc then loc.split '//' else [', ']
+    cb null, arrayJoin data, splitter

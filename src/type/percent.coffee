@@ -78,7 +78,7 @@ exports.describe = (cb) ->
     max: @schema.max
     format: @schema.format
     locale: @schema.locale
-  , @context, @dir
+  , @context
   worker.describe (err, subtext) ->
     return cb err if err
     cb null, text + subtext
@@ -137,7 +137,7 @@ exports.check = (cb) ->
     max: @schema.max
     format: @schema.format
     locale: @schema.locale
-  , @context, @dir, @value
+  , @context, @value
   worker.check (err) =>
     return cb err if err
     @value = worker.value

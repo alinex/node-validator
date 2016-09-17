@@ -58,7 +58,7 @@ exports.check = (cb) ->
       )
       $
       ///
-  , @context, @dir, @value
+  , @context, @value
   worker.check (err) =>
     return cb err if err
     @value = worker.value

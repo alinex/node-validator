@@ -12,10 +12,8 @@ Schema Specification
 # Node Modules
 # -------------------------------------------------
 util = require 'util'
-chalk = require 'chalk'
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Exported Methods

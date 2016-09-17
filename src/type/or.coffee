@@ -34,7 +34,7 @@ exports.describe = (cb) ->
   # check all possibilities
   async.map [0..@schema.or.length-1], (num, cb) =>
     # subchecks with new sub worker
-    worker = new Worker "#{@name}##{num}", @schema.or[num], @context, @dir
+    worker = new Worker "#{@name}##{num}", @schema.or[num], @context
     worker.describe (err, subtext) ->
       return cb err if err
       cb null, "\n- #{subtext.replace /\n/g, '\n  '}"
@@ -55,7 +55,7 @@ exports.check = (cb) ->
   error = []
   async.map [0..@schema.or.length-1], (num, cb) =>
     # subchecks with new sub worker
-    worker = new Worker "#{@name}##{num}", @schema.or[num], @context, @dir, @value
+    worker = new Worker "#{@name}##{num}", @schema.or[num], @context, @value
     worker.check (err) ->
       if err
         error[num] = err

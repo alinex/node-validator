@@ -78,7 +78,7 @@ exports.check = (cb) ->
   # check hostname
   worker = new Worker "#{@name}#hostname",
     type: 'hostname'
-  , @context, @dir, @value
+  , @context, @value
   worker.check (err) =>
     return cb err if err
     # done everything ok

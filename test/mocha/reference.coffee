@@ -8,7 +8,7 @@ path = require 'path'
 test = require '../test'
 reference = require '../../src/helper/reference'
 
-describe "References", ->
+describe.only "References", ->
 
   describe "exists", ->
 
@@ -38,7 +38,7 @@ describe "References", ->
         result = reference.exists value
         expect(result, value).to.be.true
 
-  describe.only "simple", ->
+  describe "simple", ->
 
     it "should keep values without references", (cb) ->
       values = [
@@ -95,14 +95,14 @@ describe "References", ->
     it "should find environment value", (cb) ->
       process.env.TESTVALIDATOR = 123
       value = '<<<env://TESTVALIDATOR>>>'
-      reference.replace value, (err, result) ->
+      reference.replace value, null, null, null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, value).to.equal process.env.TESTVALIDATOR
         cb()
 
     it "should fail for environment", (cb) ->
       value = '<<<env://TESTNOTEXISTING>>>'
-      reference.replace value, (err, result) ->
+      reference.replace value, null, null, null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, value).to.not.exist
         cb()
@@ -124,9 +124,7 @@ describe "References", ->
       data =
         absolute: 123
       value = '<<<struct:///absolute>>>'
-      reference.replace value,
-        data: data
-      , (err, result) ->
+      reference.replace value, null, data, null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, value).to.equal data.absolute
         cb()
@@ -139,9 +137,7 @@ describe "References", ->
         '<<<struct:///notfound/value>>>'
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value,
-          data: struct
-        , (err, result) ->
+        reference.replace value, null, struct, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
@@ -155,10 +151,7 @@ describe "References", ->
         '<<<struct://spain/madrid>>>': soccer.europe.spain.madrid
         '<<<struct://southamerica/brazil/saopaulo>>>': soccer.southamerica.brazil.saopaulo
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value,
-          data: soccer
-          path: ['europe', 'germany']
-        , (err, result) ->
+        reference.replace value, 'europe/germany', soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
@@ -171,10 +164,7 @@ describe "References", ->
         '<<<struct:///southamerica/chile>>>'
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value,
-          data: soccer
-          path: ['europe', 'germany']
-        , (err, result) ->
+        reference.replace value, 'europe/germany', soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
@@ -184,10 +174,7 @@ describe "References", ->
       values =
         '<<<struct://../germany/stuttgart>>>': soccer.europe.germany.stuttgart
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value,
-          data: soccer
-          path: ['europe', 'germany']
-        , (err, result) ->
+        reference.replace value, 'europe/germany', soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
@@ -198,10 +185,7 @@ describe "References", ->
         '<<<struct:///../stuttgart>>>'
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value,
-          data: soccer
-          path: ['europe', 'germany']
-        , (err, result) ->
+        reference.replace value, 'europe/germany', soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
@@ -215,10 +199,7 @@ describe "References", ->
         '<<<context://absolute>>>'
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value,
-          spec:
-            context: struct
-        , (err, result) ->
+        reference.replace value, null, null, struct, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal struct.absolute
           cb()
@@ -233,7 +214,7 @@ describe "References", ->
         "<<<file://test/data/textfile>>>"
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, (err, result) ->
+        reference.replace value, null, null, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal '123'
           cb()
@@ -245,7 +226,7 @@ describe "References", ->
         "<<<file://textfile>>>"
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, (err, result) ->
+        reference.replace value, null, null, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
@@ -258,7 +239,7 @@ describe "References", ->
       values =
         '<<<https://raw.githubusercontent.com/alinex/node-validator/master/test/data/textfile>>>': '123'
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, (err, result) ->
+        reference.replace value, null, null, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -270,7 +251,7 @@ describe "References", ->
         "<<<http://www.heise.de/page-did-not-exist-here>>>"
       ]
       async.each values, (value, cb) ->
-        reference.replace value, (err, result) ->
+        reference.replace value, null, null, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
@@ -284,7 +265,7 @@ describe "References", ->
         '<<<cmd://cat test/data/textfile>>>': '123'
         '<<<cmd://cat test/data/poem| head -1>>>': 'William B Yeats (1865-1939)'
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, (err, result) ->
+        reference.replace value, null, null, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -300,8 +281,7 @@ describe "References", ->
         '<<<struct:///number#{type:"integer"}>>>': 123
         '<<<struct:///number#{type:"integer"}>>>': 123
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value,
-          data: struct
+        reference.replace value, null, struct, null
         , (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
@@ -313,10 +293,9 @@ describe "References", ->
     it "should split into lines and characters", (cb) ->
       text = ''
       text += "#{i*10123456789}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%\n#>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#%\n#>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.length, 'rows').to.equal 11
@@ -327,10 +306,9 @@ describe "References", ->
     it "should split into lines and columns tab separated", (cb) ->
       text = ''
       text += "#{i*1}\t#{i*2}\t#{i*3}\t#{i*4}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%\n//\t#>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#%\n//\t#>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.length, 'rows').to.equal 11
@@ -341,10 +319,9 @@ describe "References", ->
     it "should split csv", (cb) ->
       text = ''
       text += "#{i*1}; #{i*2}; #{i*3}; #{i*4}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%\n//;\\s*>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#%\n//;\\s*>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.length, 'rows').to.equal 11
@@ -355,10 +332,9 @@ describe "References", ->
   describe "match", ->
 
     it "should find words", (cb) ->
-      reference.replace "<<<struct:///text#/\\w+/>>>",
-        data:
-          text: 'This is a normal text with 8 words.'
-      , (err, result) ->
+      reference.replace "<<<struct:///text#/\\w+/>>>", null,
+        text: 'This is a normal text with 8 words.'
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.length, 'words').to.equal 8
@@ -367,10 +343,9 @@ describe "References", ->
   describe "parser", ->
 
     it "should analyze js", (cb) ->
-      reference.replace "<<<struct:///text#$js>>>",
-        data:
-          text: '{one: 1, two: 2}'
-      , (err, result) ->
+      reference.replace "<<<struct:///text#$js>>>", null,
+        text: '{one: 1, two: 2}'
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.one, 'one').to.equal 1
@@ -378,10 +353,9 @@ describe "References", ->
         cb()
 
     it "should analyze json", (cb) ->
-      reference.replace "<<<struct:///text#$json>>>",
-        data:
-          text: '{"one": 1, "two": 2}'
-      , (err, result) ->
+      reference.replace "<<<struct:///text#$json>>>", null,
+        text: '{"one": 1, "two": 2}'
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.one, 'one').to.equal 1
@@ -389,10 +363,9 @@ describe "References", ->
         cb()
 
     it "should analyze yaml", (cb) ->
-      reference.replace "<<<struct:///text#$yaml>>>",
-        data:
-          text: 'one: 1\ntwo: 2'
-      , (err, result) ->
+      reference.replace "<<<struct:///text#$yaml>>>", null,
+        text: 'one: 1\ntwo: 2'
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.one, 'one').to.equal 1
@@ -400,10 +373,9 @@ describe "References", ->
         cb()
 
     it "should analyze xml", (cb) ->
-      reference.replace "<<<struct:///text#$xml>>>",
-        data:
-          text: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<data><one>1</one><two>2</two></data>'
-      , (err, result) ->
+      reference.replace "<<<struct:///text#$xml>>>", null,
+        text: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<data><one>1</one><two>2</two></data>'
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.one, 'one').to.deep.equal '1'
@@ -416,37 +388,33 @@ describe "References", ->
     text += "#{i*10123456789}\n" for i in [1..9]
 
     it "should get specific line", (cb) ->
-      reference.replace "<<<struct:///text#3>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '30370370367'
         cb()
 
     it "should get line range", (cb) ->
-      reference.replace "<<<struct:///text#3-5>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3-5>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal ['30370370367', '40493827156', '50617283945']
         cb()
 
     it "should get line list", (cb) ->
-      reference.replace "<<<struct:///text#3,5>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3,5>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal ['30370370367', '50617283945']
         cb()
 
     it "should get line range + list", (cb) ->
-      reference.replace "<<<struct:///text#3-5,8>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3-5,8>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal [
           '30370370367', '40493827156', '50617283945'
@@ -454,37 +422,33 @@ describe "References", ->
         cb()
 
     it "should get specific column", (cb) ->
-      reference.replace "<<<struct:///text#3[3]>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3[3]>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '3'
         cb()
 
     it "should get specific column range", (cb) ->
-      reference.replace "<<<struct:///text#3[3-5]>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3[3-5]>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal ['3', '7', '0']
         cb()
 
     it "should get specific column list", (cb) ->
-      reference.replace "<<<struct:///text#3[3,5]>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3[3,5]>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal ['3', '0']
         cb()
 
     it "should allow alltogether", (cb) ->
-      reference.replace "<<<struct:///text#3-5[3],8[5-6,9]>>>",
-        data:
-          text: text
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3-5[3],8[5-6,9]>>>", null,
+        text: text
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal [
           [ '3' ], [ '4' ], [ '6' ]
@@ -493,10 +457,9 @@ describe "References", ->
         cb()
 
     it "should fail for wrong data type", (cb) ->
-      reference.replace "<<<struct:///text#3>>>",
-        data:
-          text: {one: 1}
-      , (err, result) ->
+      reference.replace "<<<struct:///text#3>>>", null,
+        text: {one: 1}
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.not.exist
         cb()
@@ -522,9 +485,7 @@ describe "References", ->
         '<<<struct://clubs#europe/germany/stuttgart>>>': 'VFB Stuttgart'
         '<<<struct://clubs#southamerica/brazil>>>': {saopaulo: 'FC Sao Paulo'}
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value,
-          data: soccer
-        , (err, result) ->
+        reference.replace value, null, soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
@@ -537,9 +498,7 @@ describe "References", ->
         '<<<struct://clubs#asia/china/peking>>>'
       ]
       async.each values, (value, cb) ->
-        reference.replace value,
-          data: soccer
-        , (err, result) ->
+        reference.replace value, null, soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, 'result').to.not.exist
           cb()
@@ -551,9 +510,7 @@ describe "References", ->
         '<<<struct://clubs#**/stuttgart>>>': 'VFB Stuttgart'
         '<<<struct://clubs#*/brazil>>>': {saopaulo: 'FC Sao Paulo'}
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value,
-          data: soccer
-        , (err, result) ->
+        reference.replace value, null, soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
@@ -561,11 +518,9 @@ describe "References", ->
 
     it "should find multi value using asterisk", (cb) ->
       values =
-        '<<<struct://clubs#europe/germany/*>>>': [ 'VFB Stuttgart', 'FC Bayern', 'Hamburger SV' ]
+        '<<<struct://clubs#europe/germany/.*>>>': [ 'VFB Stuttgart', 'FC Bayern', 'Hamburger SV' ]
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value,
-          data: soccer
-        , (err, result) ->
+        reference.replace value, null, soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
@@ -576,19 +531,16 @@ describe "References", ->
         '<<<struct://clubs#europe/germany/\\w*m\\w*>>>': ['FC Bayern', 'Hamburger SV']
         '<<<struct://clubs#europe/germany/.*[ic].*>>>': 'FC Bayern'
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value,
-          data: soccer
-        , (err, result) ->
+        reference.replace value, null, soccer, null, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
       , cb
 
     it "should auto parse and access element", (cb) ->
-      reference.replace "<<<struct:///text#one>>>",
-        data:
+      reference.replace "<<<struct:///text#one>>>", null,
           text: '{one: 1, two: 2}'
-      , (err, result) ->
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal 1
         cb()
@@ -596,43 +548,39 @@ describe "References", ->
   describe "join", ->
 
     it "should join array together", (cb) ->
-      reference.replace "<<<struct:///text#$join>>>",
-        data:
-          text: [1, 2, 3, 4]
-      , (err, result) ->
+      reference.replace "<<<struct:///text#$join>>>", null,
+        text: [1, 2, 3, 4]
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '1, 2, 3, 4'
         cb()
 
     it "should join multilevel array together", (cb) ->
-      reference.replace "<<<struct:///text#$join  and //, #{}>>>",
-        data:
-          text: [
-            [1, 2, 3, 4]
-            [8, 9]
-          ]
-      , (err, result) ->
+      reference.replace "<<<struct:///text#$join  and //, #{}>>>", null,
+        text: [
+          [1, 2, 3, 4]
+          [8, 9]
+        ]
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '1, 2, 3, 4 and 8, 9'
         cb()
 
     it "should join multilevel with same phrase together", (cb) ->
-      reference.replace "<<<struct:///text#$join , #{}>>>",
-        data:
-          text: [
-            [1, 2, 3, 4]
-            [8, 9]
-          ]
-      , (err, result) ->
+      reference.replace "<<<struct:///text#$join , #{}>>>", null,
+        text: [
+          [1, 2, 3, 4]
+          [8, 9]
+        ]
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '1, 2, 3, 4, 8, 9'
         cb()
 
     it "should auto join array together", (cb) ->
-      reference.replace "<<<struct:///text#%, #>>>",
-        data:
-          text: [1, 2, 3, 4]
-      , (err, result) ->
+      reference.replace "<<<struct:///text#%, #>>>", null,
+        text: [1, 2, 3, 4]
+      , null, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal [ null, [ '1', '1' ], [ '2', '2' ], [ '3', '3' ], [ '4', '4' ] ]
         cb()

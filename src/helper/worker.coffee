@@ -61,10 +61,9 @@ class Worker
   # @param {String} name descriptive name of the data origin
   # @param {Object} schema structure to check
   # @param {Object} [context] additional data structure
-  # @param {String} dir set to base directory for file relative file paths
   # @param value original value (not changed)
   # @return {Worker} instance
-  constructor: (@name, @schema, @context, @dir, @value) ->
+  constructor: (@name, @schema, @context, @value) ->
     @type = @schema.type
     # load library if not done
     unless Worker.lib[@type]
