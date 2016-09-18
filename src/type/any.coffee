@@ -11,7 +11,7 @@ Schema Specification
 
 # Node Modules
 # -------------------------------------------------
-util = require 'util'
+util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
 

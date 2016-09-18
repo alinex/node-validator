@@ -279,6 +279,7 @@ exports.selfcheck =
       title: "Replacement"
       description: "a part to be replaced"
       type: 'or'
+      optional: true
       or: [
         title: "One Replacement"
         description: "the replacement to be done"

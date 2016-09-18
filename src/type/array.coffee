@@ -129,7 +129,7 @@ exports.check = (cb) ->
   unless @value.length
     # done return resulting value
     return @sendSuccess cb
-  async.map [0..@value.length-1], (num, cb) ->
+  async.map [0..@value.length-1], (num, cb) =>
     # find sub-check
     if @schema.list?[num]?
       worker = new Worker "#{@name}.#{num}", @schema.list[num], @context, @value[num]

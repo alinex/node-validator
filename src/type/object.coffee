@@ -157,7 +157,7 @@ exports.check = (cb) ->
   async.each keys, (key, cb) =>
     return cb() if key instanceof RegExp # skip expressions here
     # get subcheck with new sub worker
-    if @schema.keys?[key]?
+    if @schema.keys?[key]? and typeof @schema.keys[key] is 'object'
       # defined directly with key
       worker = new Worker "#{@name}.#{key}", @schema.keys[key], @context, @value[key]
     else if @schema.entries?
@@ -188,7 +188,10 @@ exports.check = (cb) ->
     async.setImmediate =>
       worker.check (err) =>
         return cb err if err
-        @value[key] = worker.value
+        if worker.value
+          @value[key] = worker.value
+        else
+          delete @value[key]
         cb()
   , (err) =>
     return cb err if err
