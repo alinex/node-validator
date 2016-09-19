@@ -314,7 +314,6 @@ exports.selfcheck =
       title: "Keys"
       description: "the definition of each key's types"
       type: 'object'
-      mandatoryKeys: ['type']
       optional: true
   , rules.baseSchema
 
