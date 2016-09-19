@@ -63,7 +63,7 @@ exports.check = (cb) ->
   return cb() if skip
   # subchecks with new sub worker
   worker = new Worker "#{@name}#", subcheck, @context, @value
-  worker.check (err) ->
+  worker.check (err) =>
     return cb err if err
     # if it already is an regexp return it
     return @sendSuccess cb if @value instanceof RegExp

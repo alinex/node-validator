@@ -44,12 +44,6 @@ describe "Email", ->
     it "should allow local mailboxes", (cb) ->
       test.same schema, ['alexander@localhost'], cb
 
-    it "should make host lowercase", (cb) ->
-      test.equal schema, [
-        ['Alexander@LOCALHOST', 'Alexander@localhost']
-        ['Info@Alinex.DE', 'Info@alinex.de']
-      ], cb
-
     it "should allow lowercase", (cb) ->
       schema.lowerCase = true
       test.equal schema, [

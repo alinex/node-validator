@@ -95,7 +95,7 @@ exports.check = (cb) ->
     unless @value.match /([bB]|bps)$/
       @value += unit
     @value = math.unit @value
-    @value = @value.toNumber @schema.unit
+    @value = @value.toNumber unit
   else if typeof @value isnt 'number'
     unless @value is (@value | 0)
       return @sendError "The given value is no byte or float number as needed", cb

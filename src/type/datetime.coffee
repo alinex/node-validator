@@ -136,7 +136,6 @@ exports.check = (cb) ->
       return @sendError "The #{@schema.part} has to be at or after #{@schema.min}", cb
     if @schema.max? and @value > @schema.max
       return @sendError "The #{@schema.part} has to be at or before #{@schema.max}", cb
-
   # format value
   if @schema.toTimezone
     @schema.toTimezone = zones[@schema.toTimezone] ? @schema.toTimezone

@@ -222,7 +222,7 @@ describe "String", ->
         type: 'string'
         optional: true
         default: 'nix'
-        toString: true
+        makeString: true
         allowControls: true
         stripTags: true
         lowerCase: true

@@ -64,8 +64,8 @@ exports.check = (cb) ->
     return @sendError "The url has to be a string object but got #{typeof @value} instead", cb
   # transform
   if @schema.toAbsoluteBase
-    value = url.resolve @schema.toAbsoluteBase, value
-  parts = url.parse value
+    @value = url.resolve @schema.toAbsoluteBase, @value
+  parts = url.parse @value
   if @schema.removeQuery
     delete parts.search
     delete parts.hash
@@ -120,6 +120,7 @@ exports.selfcheck =
       title: "Default Value"
       description: "the default value to use if nothing given"
       type: 'url'
+      allowRelative: true
       optional: true
     toAbsoluteBase:
       title: "Absolute"
@@ -139,8 +140,13 @@ exports.selfcheck =
       or: [
         title: "Allowed Hosts List"
         description: "a list of all allowed hosts"
-        type: 'string'
+        type: 'array'
+        toArray: true
         minLength: 1
+        entries:
+          title: "Allowed Host"
+          description: "an allowed host name"
+          type: 'hostname'
       ,
         title: "Valid Hosts Match"
         description: "a regular expression for valid hosts"
@@ -154,7 +160,13 @@ exports.selfcheck =
       or: [
         title: "Disallowed Hosts List"
         description: "a list of all disallowed hosts"
-        type: 'string'
+        type: 'array'
+        toArray: true
+        minLength: 1
+        entries:
+          title: "Disallowed Host"
+          description: "a disallowed host name"
+          type: 'hostname'
       ,
         title: "Invalid Hosts Match"
         description: "a regular expression for invalid hosts"
@@ -165,7 +177,7 @@ exports.selfcheck =
       description: "a list of allowed protocols"
       type: 'array'
       toArray: true
-      minLength: 3
+      minLength: 1
       optional: true
     allowRelative:
       title: "Allow Relative URL"

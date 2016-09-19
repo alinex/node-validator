@@ -119,8 +119,8 @@ something is wrong
 ###
 exports.selfcheck = (schema, cb) ->
   exports.check
-    name: 'selfcheck'
-    schema: Worker.lib[schema.type].selfcheck
+    name: 'schema'
+    schema: Worker.load(schema.type).selfcheck
     value: schema
   , cb
 

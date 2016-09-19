@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe "And", ->
+describe.skip "And", ->
 
   schema = null
   beforeEach ->
@@ -9,7 +9,7 @@ describe "And", ->
       type: 'and'
       and: [
         type: 'string'
-        toString: true
+        makeString: true
         replace: [/,/g, '.']
       ,
         type: 'float'

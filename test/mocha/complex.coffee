@@ -4,7 +4,7 @@ test = require '../test'
 #process.setMaxListeners 0
 
 
-describe "Complex", ->
+describe.skip "Complex", ->
 
   describe "structures", ->
 

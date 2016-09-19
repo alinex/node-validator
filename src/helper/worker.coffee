@@ -36,6 +36,23 @@ class Worker
       breakLength: Infinity
     .replace /\s*\n\s*/g, ' '
 
+  # Load type specific library
+  #
+  # @param {String} type of the library to load
+  # @name {String} name of value origin for error messages
+  # @return {Object<Function>} library for given type
+  @load: (type, name) ->
+    # load library if not done
+    unless Worker.lib[type]
+      try
+        Worker.lib[type] = require "../type/#{type}"
+        Worker.lib[type].debug = Debug "validator:#{type}"
+        debug "loaded #{type} check library"
+      catch error
+        debug chalk.magenta error.message
+        throw new Error "Could not load library for '#{type}' type at #{name}"
+    Worker.lib[type]
+
 
   # Worker instance
   # ------------------------------------------------------------
@@ -65,18 +82,10 @@ class Worker
   # @return {Worker} instance
   constructor: (@name, @schema, @context, @value) ->
     @type = @schema.type
-    # load library if not done
-    unless Worker.lib[@type]
-      try
-        Worker.lib[@type] = require "../type/#{@type}"
-        Worker.lib[@type].debug = Debug "validator:#{@type}"
-        debug "loaded #{@type} check library"
-      catch error
-        throw new Error "Could not load library for '#{@type}': #{error.message}"
-    # add lib into this element
-    @debug = Worker.lib[@type].debug
+    @lib = Worker.load @type, @name
+    @debug = @lib.debug
     # initialize this element
-    fn.call this if fn = Worker.lib[@type].init
+    fn.call this if fn = @lib.init
 
 
   # Main Instance Methods
@@ -90,7 +99,7 @@ class Worker
     if @debug.enabled
       @debug "#{@name}: #{@schema.title}" if @schema.title
       @debug chalk.grey "#{@name}: describe schema #{@inspectSchema()}"
-    Worker.lib[@type].describe.call this, cb
+    @lib.describe.call this, cb
 
   # Check the given value against schema.
   #
@@ -101,7 +110,7 @@ class Worker
       @debug "#{@name}: #{@schema.title}" if @schema.title
       @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be
       #{@inspectSchema()}"
-    Worker.lib[@type].check.call this, cb
+    @lib.check.call this, cb
 
 
   # Type Helper Methods

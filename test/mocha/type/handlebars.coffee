@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe "Handlebars", ->
+describe.skip "Handlebars", ->
 
   schema = null
   beforeEach ->

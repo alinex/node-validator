@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe "Integer", ->
+describe.skip "Integer", ->
 
   schema = null
   beforeEach ->

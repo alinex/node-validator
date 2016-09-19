@@ -101,7 +101,7 @@ describe "URL", ->
         toAbsoluteBase: 'http://alinex.de'
         removeQuery: true
         hostsAllowed: ['alinex.de']
-        hostsDenied: [/google/]
+        hostsDenied: /google/
         allowProtocols: ['http']
         allowRelative: true
       , cb
@@ -121,7 +121,7 @@ describe "URL", ->
         toAbsoluteBase: 'http://alinex.de'
         removeQuery: true
         hostsAllowed: ['alinex.de']
-        hostsDenied: [/google/]
+        hostsDenied: /google/
         allowProtocols: ['http']
         allowRelative: true
       , cb

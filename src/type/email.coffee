@@ -66,6 +66,8 @@ exports.check = (cb) ->
   if @value.length < 5
     return @sendError "The given string '#{@value}' is too short at least
     5 characters are needed", cb
+  if @schema.lowerCase
+    @value = @value.toLowerCase()
   # validate parts
   [local, host] = parts = @value.split /@/
   if parts.length isnt 2
@@ -78,11 +80,11 @@ exports.check = (cb) ->
   # check hostname
   worker = new Worker "#{@name}#hostname",
     type: 'hostname'
-  , @context, @value
+  , @context, host
   worker.check (err) =>
     return cb err if err
-    # done everything ok
     @value = "#{local}@#{host}"
+    # done everything ok
     return @sendSuccess cb unless @schema.checkServer
     return @sendSuccess cb if host is 'localhost'
     # check server
@@ -116,6 +118,7 @@ exports.selfcheck =
       description: "the default value to use if nothing given"
       type: 'string'
       minLength: 5
+      optional: true
     lowerCase:
       title: "Lower Case"
       description: "a flag to transform to lower case letters"
@@ -161,7 +164,7 @@ checkMailServer = (list, ip, cb) ->
   list = list.sort (a, b) -> a.priority - b.priority
   .map (e) -> e.exchange
   async.detect list, (domain, cb) =>
-    @debug chalk.grey "#{name}: check mail server under #{domain}"
+    @debug chalk.grey "#{@name}: check mail server under #{domain}"
     res = ''
     client = net.connect
       port: 25
@@ -187,4 +190,5 @@ normalize = (host) ->
         [local.replace(/\.|\+.*$/g, ''), 'gmail.com']
     else
       (local, host) ->
-        [local.replace(/\+.*$/g, ''), host.replace(/.*?(\w+\.\w+)$/, '$1')]
+        [local.replace(/\+.*$/g, ''), host.toLowerCase()]
+        #.replace(/.*?(\w+\.\w+)$/, '$1')]

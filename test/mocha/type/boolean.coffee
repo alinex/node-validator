@@ -68,17 +68,6 @@ describe "Boolean", ->
     it "should fail on missing callback", (cb) ->
       test.fail undefined, 'true', cb
 
-    it "should fail on missing type", (cb) ->
-      test.fail {}, 'true', cb
-
-    it "should fail on missing type in description", (cb) ->
-      test.describeFail {}, cb
-
-    it "should fail on missing type in selfcheck", (cb) ->
-      test.selfcheck {}, (err) ->
-        expect(err, 'error').to.exist
-        cb()
-
   describe "options", ->
 
     it "should support format option", (cb) ->

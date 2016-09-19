@@ -65,11 +65,11 @@ exports.describe = (cb) ->
     text += "Not more than #{@schema.maxLength} elements are allowed. "
   # subchecks
   async.parallel [
-    (cb) ->
+    (cb) =>
       return cb() unless @schema.list?
       detail = "The following entries have a specific format:"
       max = @schema.list.length - 1
-      async.map [0..max], (num, cb) ->
+      async.map [0..max], (num, cb) =>
         # subchecks with new sub worker
         worker = new Worker "#{@name}.#{num}", @schema.list[num], @context
         worker.describe (err, subtext) ->
@@ -78,7 +78,7 @@ exports.describe = (cb) ->
       , (err, results) ->
         return cb err if err
         cb null, detail + results.join('') + '\n'
-    (cb) ->
+    (cb) =>
       return cb() unless @schema.entries?
       detail = "And all other entries have to be:\n- "
       # subchecks with new sub worker
@@ -86,7 +86,7 @@ exports.describe = (cb) ->
       worker.describe (err, subtext) ->
         return cb err if err
         cb null, detail + "\nEntries should be: " + subtext
-  ], (err, results) ->
+  ], (err, results) =>
     return cb err if err
     text = (text + results.join '').trim() + ' '
     if @schema.format?
@@ -226,6 +226,7 @@ exports.selfcheck =
       title: "Specific Formats"
       description: "the schema for each element"
       type: 'array'
+      optional: true
       entries:
         title: "Element Format"
         description: "the schema definition for a specific element"

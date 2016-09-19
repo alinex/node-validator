@@ -80,11 +80,6 @@ describe "Byte", ->
         [+18.6, 19]
       ], cb
 
-    it "should support round option on higher values", (cb) ->
-      schema.round = true
-      schema.unit = 'kbps'
-      test.same schema, [13.5, 9.49, 9, +18.6], cb
-
     it "should support decimal option", (cb) ->
       schema.unit = 'kbps'
       schema.decimals = 1

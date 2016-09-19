@@ -159,28 +159,36 @@ describe "Datetime", ->
 
     it "should support min option", (cb) ->
       schema.min = 'now'
-      test.success schema, ['now', 'tomorrow'], ->
-        test.fail schema, ['yesterday'], cb
+      validator.selfcheck schema, (err, schema) ->
+        return cb err if err
+        test.success schema, ['now', 'tomorrow'], ->
+          test.fail schema, ['yesterday'], cb
 
     it "should support max option", (cb) ->
       schema.max = 'now'
-      test.success schema, ['yesterday'], ->
-        test.fail schema, ['tomorrow'], cb
+      validator.selfcheck schema, (err, schema) ->
+        return cb err if err
+        test.success schema, ['yesterday'], ->
+          test.fail schema, ['tomorrow'], cb
 
     it "should support min option on range", (cb) ->
       schema.min = 'now'
       schema.range = true
-      test.fail schema, [
-        'last Friday from 13:00 - 16.00'
-      ], cb
+      validator.selfcheck schema, (err, schema) ->
+        return cb err if err
+        test.fail schema, [
+          'last Friday from 13:00 - 16.00'
+        ], cb
 
     it "should support max option on range", (cb) ->
       schema.max = 'now'
       schema.range = true
-      test.fail schema, [
-        'last monday - tomorrow'
-        'tomorrow - next monday'
-      ], cb
+      validator.selfcheck schema, (err, schema) ->
+        return cb err if err
+        test.fail schema, [
+          'last monday - tomorrow'
+          'tomorrow - next monday'
+        ], cb
 
   describe "format check", ->
 

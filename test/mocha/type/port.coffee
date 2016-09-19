@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe "TCP/UDP Port", ->
+describe.skip "TCP/UDP Port", ->
 
   schema = null
   beforeEach ->
