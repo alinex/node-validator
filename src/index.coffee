@@ -24,12 +24,21 @@ Worker = require './helper/worker'
 ###
 This will directly return the description of how the value has to be.
 
+``` coffee
+validator.describe
+  schema: schema
+, (err, text) ->
+  return cb err if err
+  console.log "Configuration:\n" + text
+```
+
 @param {Object} spec specification for validation
 - `name` - `String` descriptive name of the data
 - `schema` - `Object` structure to check
 - `context` - `Object` additional data structure
 @param {function(Error, String)} cb callback with descriptive text or an error if
 something went wrong
+@see {@link describeSync}
 ###
 exports.describe = (spec, cb) ->
   # check the given data
@@ -58,6 +67,7 @@ This will directly return the description of how the value has to be.
 - `dir` - `String` set to base directory for file relative file paths
 @return {String} descriptive text
 @throw {Error} if something went wrong
+@see {@link describe}
 ###
 exports.describeSync = deasync exports.describe
 
@@ -111,7 +121,9 @@ Error to the callback.
 exports.checkSync = deasync exports.check
 
 ###
-This may be used in tests to check the validator check options if they are valid.
+The method will check and optimize the schema definition.
+This is neccessary to evaluate higher class definitions. But it may
+also be used in tests to check the validator check options if they are valid.
 
 @param {Object} schema structure to check
 @param {function(Error, Mixed)} cb callback with the checked schema or an error if
