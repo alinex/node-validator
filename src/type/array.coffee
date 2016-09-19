@@ -174,7 +174,7 @@ exports.selfcheck =
   description: "the array schema definitions"
   type: 'object'
   allowedKeys: true
-  keys: util.extend rules.baseSchema,
+  keys: util.extend
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
@@ -243,3 +243,4 @@ exports.selfcheck =
       type: 'string'
       values: ['simple', 'pretty', 'json']
       optional: true
+  , rules.baseSchema

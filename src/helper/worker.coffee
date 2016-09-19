@@ -127,9 +127,12 @@ class Worker
   # @param {String} msg error message
   # @param {function(Error)} cb callback
   sendError: (msg, cb) =>
-    err = new Error msg
+    err = new Error "#{msg} at validation of #{@name}"
     err.worker = this
-    @debug chalk.magenta err
+    @debug chalk.magenta msg
+    @debug chalk.grey "  validation of #{@name}"
+    @debug chalk.grey "  value: #{@inspectValue.call this}"
+    @debug chalk.grey "  schema: #{@inspectSchema.call this}"
     cb err
 
   # End check with success.

@@ -84,9 +84,10 @@ exports.selfcheck =
   description: "a regexp schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend rules.baseSchema,
+  keys: util.extend
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
       type: 'regexp'
       optional: true
+  , rules.baseSchema

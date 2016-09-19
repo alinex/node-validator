@@ -72,7 +72,7 @@ exports.selfcheck =
   description: "multiple schema definitions"
   type: 'object'
   allowedKeys: true
-  keys: util.extend rules.baseSchema,
+  keys: util.extend
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
@@ -83,3 +83,4 @@ exports.selfcheck =
       entries:
         type: 'object'
         mandatoryKeys: ['type']
+  , rules.baseSchema

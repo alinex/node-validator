@@ -49,9 +49,10 @@ exports.selfcheck =
   description: "any schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend rules.baseSchema,
+  keys: util.extend
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
       type: 'any'
       optional: true
+  , rules.baseSchema

@@ -121,10 +121,18 @@ describe.only "Object", ->
           {one: 1, two: null}
           {one: 1}
         ]
-        [
-          {one: null, two: 2}
-          {two: 2}
-        ]
+      ], cb
+
+    it "should fail on optional option", (cb) ->
+      schema.allowedKeys = true
+      schema.keys =
+        one:
+          type: 'integer'
+        two:
+          type: 'integer'
+          optional: true
+      test.fail schema, [
+        {one: null, two: 2}
       ], cb
 
     it "should support default option", (cb) ->

@@ -184,7 +184,7 @@ exports.selfcheck =
   description: "a float schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend rules.baseSchema,
+  keys: util.extend
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
@@ -250,3 +250,4 @@ exports.selfcheck =
       type: 'string'
       match: /^[a-z]{2}(?:-[A-Z]{2})?$/
       optional: true
+  , rules.baseSchema

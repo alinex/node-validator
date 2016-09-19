@@ -79,11 +79,11 @@ exports.describe = (cb) ->
       text += "And the following keys are allowed: #{list.join ', '}. "
   # subchecks
   async.parallel [
-    (cb) ->
+    (cb) =>
       # help for specific key names
       return cb() unless @schema.keys?
       detail = "The following entries have a specific format: "
-      async.map Object.keys(@schema.keys), (key, cb) ->
+      async.map Object.keys(@schema.keys), (key, cb) =>
         # subchecks with new sub worker
         worker = new Worker "#{@name}.#{key}", @schema.keys[key], @context
         worker.describe (err, subtext) ->
@@ -92,11 +92,11 @@ exports.describe = (cb) ->
       , (err, results) ->
         return cb err if err
         cb null, detail + results.join('') + '\n'
-    (cb) ->
+    (cb) =>
       # help for pattern matched key names
       return cb() unless @schema.entries?
       detail = "And all other keys which are: "
-      async.map [0..@schema.entries.length-1], (num, cb) ->
+      async.map [0..@schema.entries.length-1], (num, cb) =>
         rule = @schema.entries[num]
         if rule.key?
           ruletext = "\n- matching #{rule.key}: "
@@ -124,7 +124,7 @@ exports.check = (cb) ->
   return cb() if skip
   # flatten
   if @schema.flatten
-    value = flatten @value
+    @value = flatten @value
   # instanceof
   if @schema.instanceOf?
     unless @value instanceof @schema.instanceOf
@@ -234,7 +234,7 @@ exports.selfcheck =
   description: "the object schema definitions"
   type: 'object'
   allowedKeys: true
-  keys: util.extend rules.baseSchema,
+  keys: util.extend
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
@@ -316,6 +316,7 @@ exports.selfcheck =
       type: 'object'
       mandatoryKeys: ['type']
       optional: true
+  , rules.baseSchema
 
 
 # Helper

@@ -59,7 +59,8 @@ exports.optional =
       delete @value
       @debug chalk.grey "#{@name}: result #{@inspectValue()}"
       return true
-    new Error "A value is needed"
+    @sendError "A value is needed", (err) ->
+      err
 
 # ### selfcheck schema for base options
 # These are common for all types.

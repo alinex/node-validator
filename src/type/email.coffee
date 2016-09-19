@@ -110,7 +110,7 @@ exports.selfcheck =
   description: "an email schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend rules.baseSchema,
+  keys: util.extend
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
@@ -131,6 +131,7 @@ exports.selfcheck =
       description: "a flag to also check the MX record of the destination host if possible"
       type: 'boolean'
       optional: true
+  , rules.baseSchema
 
 
 # Helper

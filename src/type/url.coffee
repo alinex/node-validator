@@ -115,7 +115,7 @@ exports.selfcheck =
   description: "an url schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend rules.baseSchema,
+  keys: util.extend
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
@@ -172,3 +172,4 @@ exports.selfcheck =
       description: "a flag if set to `true` will also allow relative URLs"
       type: 'boolean'
       optional: true
+  , rules.baseSchema
