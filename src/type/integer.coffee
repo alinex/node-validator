@@ -209,7 +209,7 @@ exports.check = (cb) ->
 # ### Selfcheck Schema
 #
 # Schema for selfchecking of this type
-exports.selfcheck = (schema, cb) ->
+exports.selfcheck =
   title: "Float"
   description: "a float schema definition"
   type: 'object'

@@ -3,6 +3,9 @@ And
 =================================================
 Collection of types combined with logical and.
 
+This checks will be done in series to allow each one to possibly change the value
+and give it on.
+
 
 Schema Specification
 ---------------------------------------------------
@@ -56,7 +59,7 @@ exports.check = (cb) ->
   async.eachSeries [0..@schema.and.length-1], (num, cb) =>
     # subchecks with new sub worker
     worker = new Worker "#{@name}##{num}", @schema.and[num], @context, @value
-    worker.check (err) ->
+    worker.check (err) =>
       return cb err if err
       @value = worker.value
       cb()

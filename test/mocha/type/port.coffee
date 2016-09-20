@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe.skip "TCP/UDP Port", ->
+describe "TCP/UDP Port", ->
 
   schema = null
   beforeEach ->
@@ -58,10 +58,10 @@ describe.skip "TCP/UDP Port", ->
         test.fail schema, [8081, 12121], cb
 
     it "should support deny with allow range", (cb) ->
-      schema.deny = ['system']
-      schema.allow = [80]
-      test.same schema, [80, 1024], ->
-        test.fail schema, [88, 443], cb
+      schema.allow = ['system']
+      schema.deny = [80]
+      test.same schema, [88, 443], ->
+        test.fail schema, [80, 1024], cb
 
   describe "description", ->
 

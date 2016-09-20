@@ -7,6 +7,8 @@ Check options:
 - `allow` - `Array` list of allowed ports or ranges 'system', 'registered', 'dynamic'
 - `deny` - `Array` list of denied ports or ranges 'system', 'registered', 'dynamic'
 
+If `allow` and `deny` is both used the `deny` settings has precedence.
+
 
 Schema Specification
 ---------------------------------------------------
@@ -413,7 +415,7 @@ exports.describe = (cb) ->
   text = text.replace /\. It's/, ' which is'
   # subchecks with new sub worker
   worker = new Worker "#{@name}#", subcheck, @context, @value
-  worker.describe (err, subtext) ->
+  worker.describe (err, subtext) =>
     return cb err if err
     text += subtext
     # check allowed
@@ -436,7 +438,7 @@ exports.check = (cb) ->
   return cb() if skip
   # subchecks with new sub worker
   worker = new Worker "#{@name}#", subcheck, @context, @value
-  worker.check (err) ->
+  worker.check (err) =>
     return cb err if err
     # transform string to int
     @value = ports[@value] if typeof @value is 'string'
@@ -461,8 +463,8 @@ exports.check = (cb) ->
           return @sendSuccess cb
       # ip not in the allowed range
       return @sendError "The given tcp/udp port is not in the allowed ranges", cb
-  # done checking and sanuitizing
-  @sendSuccess cb
+    # done checking and sanuitizing
+    @sendSuccess cb
 
 # ### Selfcheck Schema
 #

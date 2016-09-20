@@ -61,8 +61,8 @@ exports.check = (cb) ->
   return cb skip if skip instanceof Error
   return cb() if skip
   # sanitize
-  if typeof value isnt 'string'
-    return @sendError "Could not find the file #{@value}", cb
+  if typeof @value isnt 'string'
+    return @sendError "A string is needed as filename", cb
   @value = fspath.normalize @value
   @value = @value[..-2] if @value[-1..] is '/'
   # get basedir
@@ -79,6 +79,7 @@ exports.check = (cb) ->
       return cb err if err
       filetype.call this, found, (err) =>
         return cb err if err
+        @value = found
         # done checking and sanuitizing
         @sendSuccess cb
 
@@ -179,17 +180,17 @@ filetype = (value, cb) ->
     switch @schema.filetype
       when 'file', 'f'
         return cb() if stats.isFile()
-        @debug "#{name}: skip #{value} because not a file entry"
+        @debug "#{@name}: skip #{value} because not a file entry"
       when 'directory', 'dir', 'd'
         return cb() if stats.isDirectory()
-        @debug "#{name}: skip #{value} because not a directory entry"
+        @debug "#{@name}: skip #{value} because not a directory entry"
       when 'link', 'l'
         return cb() if stats.isSymbolicLink()
-        @debug "#{name}: skip #{value} because not a link entry"
+        @debug "#{@name}: skip #{value} because not a link entry"
       when 'fifo', 'pipe', 'p'
         return cb() if stats.isFIFO()
-        @debug "#{name}: skip #{value} because not a FIFO entry"
+        @debug "#{@name}: skip #{value} because not a FIFO entry"
       when 'socket', 's'
         return cb() if stats.isSocket()
-        @debug "#{name}: skip #{value} because not a socket entry"
+        @debug "#{@name}: skip #{value} because not a socket entry"
     @sendError "The given file is not a #{@schema.filetype} entry", cb

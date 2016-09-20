@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe.skip "IP Address", ->
+describe "IP Address", ->
 
   schema = null
   beforeEach ->

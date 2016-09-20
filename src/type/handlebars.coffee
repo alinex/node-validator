@@ -51,7 +51,7 @@ exports.check = (cb) ->
   # check for already converted values
   return @sendSuccess cb if typeof @value is 'function'
   # sanitize
-  unless typeof value is 'string'
+  unless typeof @value is 'string'
     return @sendError "The given value is no integer as needed", cb
   # compile if handlebars syntax found
   if @value.match /\{\{.*?\}\}/
@@ -61,7 +61,8 @@ exports.check = (cb) ->
       @debug "#{@name}: execute template with #{util.inspect context}"
       return template context
   else
-    fn = => @value
+    v = @value
+    fn = -> v
   @value = fn
   # done checking and sanuitizing
   @sendSuccess cb

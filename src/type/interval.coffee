@@ -118,9 +118,10 @@ exports.check = (cb) ->
       decimals: @schema.decimals
       min: @schema.min
       max: @schema.max
-    , @context, @dir, @value
+    , @context, @value
     worker.check (err) =>
       return cb err if err
+      @value = worker.value
       # done checking and sanuitizing
       @sendSuccess cb
 

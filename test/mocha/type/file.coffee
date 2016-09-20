@@ -3,7 +3,7 @@ path = require 'path'
 {exec} = require 'child_process'
 ### eslint-env node, mocha ###
 
-describe.skip "File", ->
+describe "File", ->
 
   schema = null
   beforeEach ->

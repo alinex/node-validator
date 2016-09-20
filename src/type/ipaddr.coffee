@@ -114,59 +114,59 @@ exports.check = (cb) ->
     ip = ipaddr.parse @value
   catch error
     return @sendError "The given value is no valid IP address", cb if error
-    # check type of ip
-    if @schema.version
-      if @schema.version is 'ipv4'
-        if ip.kind() is 'ipv6'
-          if ip.isIPv4MappedAddress() and @schema.ipv4Mapping
-            @debug "#{@name}: convert to ipv4"
-            ip = ip.toIPv4Address()
-          else
-            return @sendError "The given value is no valid IPv#{@schema.version} address", cb
-      else
-        if ip.kind() is 'ipv4'
-          unless @schema.ipv4Mapping
-            return @sendError "The given value is no valid IPv#{@schema.version} address", cb
-          @debug "#{@name}: convert to ipv4mapped"
-          ip = ip.toIPv4MappedAddress()
-    @value = if ip.kind() is 'ipv6'
-      if @schema.format is 'long'
-        ip.toNormalizedString()
-      else
-        ip.toString()
+  # check type of ip
+  if @schema.version
+    if @schema.version is 'ipv4'
+      if ip.kind() is 'ipv6'
+        if ip.isIPv4MappedAddress() and @schema.ipv4Mapping
+          @debug "#{@name}: convert to ipv4"
+          ip = ip.toIPv4Address()
+        else
+          return @sendError "The given value is no valid IPv#{@schema.version} address", cb
+    else
+      if ip.kind() is 'ipv4'
+        unless @schema.ipv4Mapping
+          return @sendError "The given value is no valid IPv#{@schema.version} address", cb
+        @debug "#{@name}: convert to ipv4mapped"
+        ip = ip.toIPv4MappedAddress()
+  @value = if ip.kind() is 'ipv6'
+    if @schema.format is 'long'
+      ip.toNormalizedString()
     else
       ip.toString()
-    # check ranges
-    if @schema.allow
-      for entry in @schema.allow
-        if specialRanges[entry]?
-          for subentry in specialRanges[entry]
-            [addr, bits] = subentry.split /\//
-            if ip.match ipaddr.parse(addr), bits
-              return @sendSuccess cb
-        else
-          [addr, bits] = entry.split /\//
+  else
+    ip.toString()
+  # check ranges
+  if @schema.allow
+    for entry in @schema.allow
+      if specialRanges[entry]?
+        for subentry in specialRanges[entry]
+          [addr, bits] = subentry.split /\//
           if ip.match ipaddr.parse(addr), bits
             return @sendSuccess cb
-      # ip not in the allowed range
-      unless @schema.deny
-        return @sendError "The given ip address is not in the allowed ranges", cb
-    if @schema.deny
-      for entry in @schema.deny
-        if specialRanges[entry]?
-          for subentry in specialRanges[entry]
-            [addr, bits] = subentry.split /\//
-            if ip.match ipaddr.parse(addr), bits
-              return @sendError "The given ip address is
-                denied because in range #{entry}", cb
-        else
-          [addr, bits] = entry.split /\//
+      else
+        [addr, bits] = entry.split /\//
+        if ip.match ipaddr.parse(addr), bits
+          return @sendSuccess cb
+    # ip not in the allowed range
+    unless @schema.deny
+      return @sendError "The given ip address is not in the allowed ranges", cb
+  if @schema.deny
+    for entry in @schema.deny
+      if specialRanges[entry]?
+        for subentry in specialRanges[entry]
+          [addr, bits] = subentry.split /\//
           if ip.match ipaddr.parse(addr), bits
             return @sendError "The given ip address is
               denied because in range #{entry}", cb
-    # ip also not in the denied range so allowed again
-    # done return resulting value
-    @sendSuccess cb
+      else
+        [addr, bits] = entry.split /\//
+        if ip.match ipaddr.parse(addr), bits
+          return @sendError "The given ip address is
+            denied because in range #{entry}", cb
+  # ip also not in the denied range so allowed again
+  # done return resulting value
+  @sendSuccess cb
 
 # ### Selfcheck Schema
 #
@@ -186,7 +186,7 @@ exports.selfcheck =
         # ipv6 mask
         (
           # 1:2:3:4:5:6:7:8
-          |([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}
+          ([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}
           # 1::                              1:2:3:4:5:6:7::
           |([0-9a-fA-F]{1,4}:){1,7}:
           # 1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8
@@ -214,13 +214,12 @@ exports.selfcheck =
           |([0-9a-fA-F]{1,4}:){1,4}:
             ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
             (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-        # /128
-        )\/(12[0-8]|(1[01][0-9]){0,1}[0-9])
-        # ipv4 mask 255.255.255.255/32
+        )
+        # ipv4 address
         |(
           ((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}
           (25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])
-        )\/(3[0-2]|[12]{0,1}[0-9])
+        )
         $
       ///
       optional: true
