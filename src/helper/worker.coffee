@@ -6,10 +6,11 @@
 Debug = require 'debug'
 debug = Debug 'validator:worker'
 chalk = require 'chalk'
+async = require 'async'
 # alinex packages
 util = require 'alinex-util'
 # internal classes and helper
-#reference = require './reference'
+reference = require './reference'
 
 
 # Worker Class
@@ -63,8 +64,8 @@ class Worker
   # - `name` - `String` descriptive name of the data origin
   # - `schema` - `Object` structure to check
   # - `context` - `Object` additional data structure
-  # - `dir` - `String` set to base directory for file relative file paths
   # - `value` - original value (not changed)
+  # - `root` - the root worker of this check
   #
   # And the possible methods are:
   # - `check` - run the type specific check
@@ -80,7 +81,7 @@ class Worker
   # @param {Object} [context] additional data structure
   # @param value original value (not changed)
   # @return {Worker} instance
-  constructor: (@name, @schema, @context, @value) ->
+  constructor: (@name, @schema, @context, @value, @root = this) ->
     @type = @schema.type
     @lib = Worker.load @type, @name
     @debug = @lib.debug
@@ -110,7 +111,34 @@ class Worker
       @debug "#{@name}: #{@schema.title}" if @schema.title
       @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be
       #{@inspectSchema()}"
-    @lib.check.call this, cb
+    path = @name.replace /#[^.]*/g, ''
+    async.parallel [
+      # dereference value
+      (cb) =>
+        return cb()
+        reference.replace @value, path, @root.value, @context, (err, value) =>
+          return cb err if err
+          @value = value
+          cb()
+      # dereference schema
+      (cb) =>
+        return cb()
+        reference.replace @schema, path, @root.value, @context, (err, value) =>
+          return cb err if err
+          @value = value
+          cb()
+    ] , (err) =>
+      return cb err if err
+      @lib.check.call this, cb
+
+  # Create a sub worker instance.
+  #
+  # @param {String} name descriptive name of the data origin
+  # @param {Object} schema structure to check
+  # @param value original value
+  # @return {Worker} instance
+  sub: (name, schema, value) ->
+    new Worker name, schema, @context, value, this
 
 
   # Type Helper Methods

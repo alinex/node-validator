@@ -34,7 +34,6 @@ util = require 'alinex-util'
 {string, array} = util
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Exported Methods
@@ -71,7 +70,7 @@ exports.describe = (cb) ->
       max = @schema.list.length - 1
       async.map [0..max], (num, cb) =>
         # subchecks with new sub worker
-        worker = new Worker "#{@name}.#{num}", @schema.list[num], @context
+        worker = @sub "#{@name}.#{num}", @schema.list[num]
         worker.describe (err, subtext) ->
           return cb err if err
           cb null, "\n- #{num}: #{subtext.replace /\n/g, '\n  '}"
@@ -82,7 +81,7 @@ exports.describe = (cb) ->
       return cb() unless @schema.entries?
       detail = "And all other entries have to be:\n- "
       # subchecks with new sub worker
-      worker = new Worker "#{@name}#entries", @schema.entries, @context
+      worker = @sub "#{@name}#entries", @schema.entries
       worker.describe (err, subtext) ->
         return cb err if err
         cb null, detail + "\nEntries should be: " + subtext
@@ -132,11 +131,11 @@ exports.check = (cb) ->
   async.map [0..@value.length-1], (num, cb) =>
     # find sub-check
     if @schema.list?[num]?
-      worker = new Worker "#{@name}.#{num}", @schema.list[num], @context, @value[num]
+      worker = @sub "#{@name}.#{num}", @schema.list[num], @value[num]
     else if @schema.entries?
-      worker = new Worker "#{@name}#entries.#{num}", @schema.entries, @context, @value[num]
+      worker = @sub "#{@name}#entries.#{num}", @schema.entries, @value[num]
     else
-      worker = new Worker "#{@name}#.#{num}",
+      worker = @sub "#{@name}#.#{num}",
         type: switch
           when Array.isArray @value[num]
             'array'
@@ -145,7 +144,7 @@ exports.check = (cb) ->
           else
             'any'
         optional: true
-      , @context, @value[num]
+      , @value[num]
     # run the check on the named entry
     async.setImmediate =>
       worker.check (err) =>

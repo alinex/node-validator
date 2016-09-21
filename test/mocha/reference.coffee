@@ -8,7 +8,7 @@ path = require 'path'
 test = require '../test'
 reference = require '../../src/helper/reference'
 
-describe.skip "References", ->
+describe "References", ->
 
   describe "exists", ->
 
@@ -585,7 +585,7 @@ describe.skip "References", ->
         expect(result, 'result').to.deep.equal [ null, [ '1', '1' ], [ '2', '2' ], [ '3', '3' ], [ '4', '4' ] ]
         cb()
 
-  describe "integration", ->
+  describe.skip "integration", ->
 
     it "should call references in values", (cb) ->
       test.equal
@@ -650,7 +650,7 @@ describe.skip "References", ->
           max: 4
         ], cb
 
-  describe "multiref", ->
+  describe.skip "multiref", ->
 
     it "should call struct -> env", (cb) ->
       process.env.MIN = 5

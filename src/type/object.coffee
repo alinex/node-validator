@@ -28,7 +28,6 @@ async = require 'async'
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Exported Methods
@@ -85,7 +84,7 @@ exports.describe = (cb) ->
       detail = "The following entries have a specific format: "
       async.map Object.keys(@schema.keys), (key, cb) =>
         # subchecks with new sub worker
-        worker = new Worker "#{@name}.#{key}", @schema.keys[key], @context
+        worker = @sub "#{@name}.#{key}", @schema.keys[key]
         worker.describe (err, subtext) ->
           return cb err if err
           cb null, "\n- #{key}: #{subtext.replace /\n/g, '\n  '}"
@@ -103,7 +102,7 @@ exports.describe = (cb) ->
         else
           ruletext = "\n- other keys: "
         # subchecks with new sub worker
-        worker = new Worker "#{@name}##{num}", @schema.entries[num], @context
+        worker = @sub "#{@name}##{num}", @schema.entries[num]
         worker.describe (err, subtext) ->
           return cb err if err
           cb null, ruletext + subtext.replace /\n/g, '\n  '
@@ -159,22 +158,20 @@ exports.check = (cb) ->
     # get subcheck with new sub worker
     if @schema.keys?[key]? and typeof @schema.keys[key] is 'object'
       # defined directly with key
-      worker = new Worker "#{@name}.#{key}", @schema.keys[key], @context, @value[key]
+      worker = @sub "#{@name}.#{key}", @schema.keys[key], @value[key]
     else if @schema.entries?
       for rule, i in @schema.entries
         if rule.key?
           # defined with wntries match
           continue unless key.match rule.key
-          worker = new Worker "#{@name}#entries-#{i}.#{key}", @schema.entries[i],
-          @context, @value[key]
+          worker = @sub "#{@name}#entries-#{i}.#{key}", @schema.entries[i], @value[key]
           break
         else
           # defined with general rule
-          worker = new Worker "#{@name}#entries-#{i}.#{key}", @schema.entries[i],
-          @context, @value[key]
+          worker = @sub "#{@name}#entries-#{i}.#{key}", @schema.entries[i], @value[key]
     # undefined
     unless worker
-      worker = new Worker "#{@name}#.#{key}",
+      worker = @sub "#{@name}#.#{key}",
         type: switch
           when Array.isArray @value[key]
             'array'
@@ -183,7 +180,7 @@ exports.check = (cb) ->
           else
             'any'
         optional: true
-      , @context, @value[key]
+      , @value[key]
     # run the check on the named entry
     async.setImmediate =>
       worker.check (err) =>

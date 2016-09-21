@@ -16,7 +16,6 @@ async = require 'async'
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Exported Methods
@@ -34,7 +33,7 @@ exports.describe = (cb) ->
   # check all possibilities
   async.map [0..@schema.or.length-1], (num, cb) =>
     # subchecks with new sub worker
-    worker = new Worker "#{@name}##{num}", @schema.or[num], @context
+    worker = @sub "#{@name}##{num}", @schema.or[num]
     worker.describe (err, subtext) ->
       return cb err if err
       cb null, "\n- #{subtext.replace /\n/g, '\n  '}"
@@ -55,7 +54,7 @@ exports.check = (cb) ->
   error = []
   async.map [0..@schema.or.length-1], (num, cb) =>
     # subchecks with new sub worker
-    worker = new Worker "#{@name}##{num}", @schema.or[num], @context, @value
+    worker = @sub "#{@name}##{num}", @schema.or[num], @value
     worker.check (err) ->
       if err
         error[num] = err

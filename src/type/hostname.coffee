@@ -14,7 +14,6 @@ Schema Specification
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Exported Methods
@@ -40,7 +39,7 @@ exports.check = (cb) ->
   return cb skip if skip instanceof Error
   return cb() if skip
   # subchecks with new sub worker
-  worker = new Worker "#{@name}#",
+  worker = @sub "#{@name}#",
     type: 'string'
     lowerCase: true
     maxLength: 255
@@ -58,7 +57,7 @@ exports.check = (cb) ->
       )
       $
       ///
-  , @context, @value
+  , @value
   worker.check (err) =>
     return cb err if err
     @value = worker.value

@@ -25,7 +25,6 @@ Schema Specification
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Exported Methods
@@ -49,13 +48,12 @@ exports.describe = (cb) ->
   if @schema.unit
     text += "The result will be given as the number of #{@schema.unit}. "
   # subchecks with new sub worker
-  worker = new Worker "#{@name}#",
+  worker = @sub "#{@name}#",
     type: 'float'
     round: @schema.round
     decimals: @schema.decimals
     min: @schema.min
     max: @schema.max
-  , @context
   worker.describe (err, subtext) ->
     return cb err if err
     cb null, text + subtext
@@ -69,7 +67,7 @@ exports.check = (cb) ->
   return cb skip if skip instanceof Error
   return cb() if skip
   # subchecks with new sub worker
-  worker = new Worker "#{@name}#",
+  worker = @sub "#{@name}#",
     type: 'or'
     or: [
       type: 'float'
@@ -88,7 +86,7 @@ exports.check = (cb) ->
         $
       ///
     ]
-  , @context, @value
+  , @value
   worker.check (err) =>
     return cb err if err
     @value = worker.value
@@ -112,13 +110,13 @@ exports.check = (cb) ->
             1000 * 60 * 60 * 24
       @value = parsed
     # run float check
-    worker = new Worker "#{@name}#",
+    worker = @sub "#{@name}#",
       type: 'float'
       round: @schema.round
       decimals: @schema.decimals
       min: @schema.min
       max: @schema.max
-    , @context, @value
+    , @value
     worker.check (err) =>
       return cb err if err
       @value = worker.value

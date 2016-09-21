@@ -29,7 +29,6 @@ request = null # load on demand
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Exported Methods
@@ -78,9 +77,9 @@ exports.check = (cb) ->
   if @schema.normalize
     [local, host] = normalize(host) local, host
   # check hostname
-  worker = new Worker "#{@name}#hostname",
+  worker = @sub "#{@name}#hostname",
     type: 'hostname'
-  , @context, host
+  , host
   worker.check (err) =>
     return cb err if err
     @value = "#{local}@#{host}"

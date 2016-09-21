@@ -21,7 +21,6 @@ Schema Specification
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Setup
@@ -414,7 +413,7 @@ exports.describe = (cb) ->
   text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
   # subchecks with new sub worker
-  worker = new Worker "#{@name}#", subcheck, @context, @value
+  worker = @sub "#{@name}#", subcheck, @value
   worker.describe (err, subtext) =>
     return cb err if err
     text += subtext
@@ -437,7 +436,7 @@ exports.check = (cb) ->
   return cb skip if skip instanceof Error
   return cb() if skip
   # subchecks with new sub worker
-  worker = new Worker "#{@name}#", subcheck, @context, @value
+  worker = @sub "#{@name}#", subcheck, @value
   worker.check (err) =>
     return cb err if err
     # transform string to int

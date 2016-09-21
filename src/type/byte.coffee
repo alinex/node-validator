@@ -27,7 +27,6 @@ math = require 'mathjs'
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
-Worker = require '../helper/worker'
 
 
 # Setup
@@ -65,13 +64,12 @@ exports.describe = (cb) ->
   text += "If defined as a text you may use a prefix like: k, M, G, P, T, E, Z, Y
   also with the unit B like '12MB' or '3.7 GiB'. "
   # subchecks with new sub worker
-  worker = new Worker "#{@name}#",
+  worker = @sub "#{@name}#",
     type: 'float'
     round: @schema.round
     decimals: @schema.decimals
     min: @schema.min
     max: @schema.max
-  , @context
   worker.describe (err, subtext) ->
     return cb err if err
     cb null, text + subtext
@@ -100,13 +98,13 @@ exports.check = (cb) ->
     unless @value is (@value | 0)
       return @sendError "The given value is no byte or float number as needed", cb
   # subchecks with new sub worker
-  worker = new Worker "#{@name}#",
+  worker = @sub "#{@name}#",
     type: if @schema.unit?.match /^[kMGTPEZY]([bB]|bps)$/ then 'float' else 'integer'
     round: @schema.round
     decimals: @schema.decimals
     min: @schema.min
     max: @schema.max
-  , @context, @value
+  , @value
   worker.check (err) =>
     return cb err if err
     @value = worker.value
