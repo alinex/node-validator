@@ -271,7 +271,7 @@ describe "References", ->
           cb()
       , cb
 
-  describe.only "checks", ->
+  describe "checks", ->
 
     it "should check against integer", (cb) ->
       struct =
@@ -585,7 +585,7 @@ describe "References", ->
         expect(result, 'result').to.deep.equal [ null, [ '1', '1' ], [ '2', '2' ], [ '3', '3' ], [ '4', '4' ] ]
         cb()
 
-  describe.skip "integration", ->
+  describe "integration", ->
 
     it "should call references in values", (cb) ->
       test.equal
@@ -650,7 +650,7 @@ describe "References", ->
           max: 4
         ], cb
 
-  describe.skip "multiref", ->
+  describe.only "multiref", ->
 
     it "should call struct -> env", (cb) ->
       process.env.MIN = 5
@@ -662,9 +662,14 @@ describe "References", ->
           max:
             type: 'integer'
             min: '<<<minmax>>>'
-      test.same struc, [
-        minmax: '<<<env://MIN>>>'
-        max: 7
+      test.equal struc, [
+        [
+          minmax: '<<<env://MIN>>>'
+          max: 7
+        ,
+          minmax: "5"
+          max: 7
+        ]
       ], ->
         test.fail struc, [
           minmax: '<<<env://MIN>>>'
@@ -703,21 +708,13 @@ describe "References", ->
 
     it "should fail on circular reference", (cb) ->
       @timeout 20000
-      domain = require('domain').create()
-      domain.on 'error', -> cb()
-      domain.enter()
-      try
-        test.fail
-          type: 'object'
-        , [
-            three: '<<<two>>>'
-            two: '<<<one>>>'
-            one: '<<<three>>>'
-        ], cb
-      catch error
-        expect(error).to.exist
-        cb()
-      domain.exit()
+      test.fail
+        type: 'object'
+      , [
+          three: '<<<two>>>'
+          two: '<<<one>>>'
+          one: '<<<three>>>'
+      ], cb
 
     it "should use reference after value is checked", (cb) ->
       test.equal

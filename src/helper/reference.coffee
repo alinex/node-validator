@@ -26,8 +26,8 @@ Worker = null # load later because of circular references
 # Setup
 # -------------------------------------------------
 # MAXRETRY defines the time to wait till the references should be solved
-TIMEOUT = 10 # checking every 10ms
-MAXRETRY = 10000 # waiting for 10 seconds at max
+TIMEOUT = 100 # checking every 10ms
+MAXRETRY = 10 # waiting for 1 second at max
 
 # defines specific type handler for some protocols
 protocolMap =
@@ -106,7 +106,8 @@ exports.replace = (value, path = '', struct, context, cb, clone = false) ->
 # @param {Object} context additional object
 # @param {Function(Error, value)} cb callback which is called with resulting value
 multiple = (value, path, struct, context, cb) ->
-  debug "#{path}: replace #{util.inspect value}..."
+  path = path[1..] if path[0] is '/'
+  debug "/#{path} replace #{util.inspect value}..."
   list = value.split /(<<<[^]*?>>>)/
   list = [list[1]] if list.length is 3 and list[0] is '' and list[2] is ''
   # step over multiple references
@@ -118,11 +119,11 @@ multiple = (value, path, struct, context, cb) ->
     return cb err if err
     # reference only value
     if results.length is 1
-      debug "#{path}: #{util.inspect value} is replaced by #{util.inspect results[0]}"
+      debug "/#{path} #{util.inspect value} is replaced by #{util.inspect results[0]}"
       return cb null, results[0]
     # combine reference together
     result = results.join ''
-    debug "#{path}: #{util.inspect value} is replaced by #{util.inspect result}"
+    debug "/#{path} #{util.inspect value} is replaced by #{util.inspect result}"
     cb null, result
 
 # Resolve alternative sources which are separated by ` | ` and the first possible
@@ -134,7 +135,7 @@ multiple = (value, path, struct, context, cb) ->
 # @param {Object} context additional object
 # @param {Function(Error, value)} cb callback which is called with resulting value
 alternatives = (value, path, struct, context, cb) ->
-  debug chalk.grey "#{path}: resolve #{util.inspect value}..."
+  debug chalk.grey "/#{path} resolve #{util.inspect value}..."
   first = true
   async.map value.split(/\s+\|\s+/), (alt, cb) ->
     # automatically set first element to `struct` if no other protocol set
@@ -145,12 +146,12 @@ alternatives = (value, path, struct, context, cb) ->
     .split /#/
     # return default value
     if list.length is 1 and not ~alt.indexOf '://'
-      debug chalk.grey "#{path}: #{alt} -> use as default value".replace /\n/, '\\n'
+      debug chalk.grey "/#{path} #{alt} -> use as default value".replace /\n/, '\\n'
       return cb null, alt
     # read value from given uri parts
     read list, path, struct, context, (err, result) ->
       return cb err if err
-      debug chalk.grey "#{path}: #{alt} -> #{util.inspect result}".replace /\n/, '\\n'
+      debug chalk.grey "/#{path} #{alt} -> #{util.inspect result}".replace /\n/, '\\n'
       cb null, result
   , (err, results) ->
     return cb err if err
@@ -215,7 +216,7 @@ read = (list, path, struct, context, cb, last, data) ->
     (typeof data isnt 'string' and proto in ['split', 'match', 'parse']) or
     (typeof data isnt 'object' and proto is 'object')
     )
-      debug chalk.magenta "#{path}: stop at part #{proto}://#{loc} because wrong
+      debug chalk.magenta "/#{path} stop at part #{proto}://#{loc} because wrong
       result type".replace /\n/, '\\n'
       return cb()
   proto = proto.toLowerCase()
@@ -228,18 +229,18 @@ read = (list, path, struct, context, cb, last, data) ->
   if last? and typePrecedence[type] > typePrecedence[last?]
     return cb new Error "#{type}-reference can not be called from #{last}-reference
     for security reasons"
-  debug chalk.grey "#{path}: evaluating #{proto}://#{loc}".replace /\n/, '\\n'
+  debug chalk.grey "/#{path} evaluating #{proto}://#{loc}".replace /\n/, '\\n'
   # run type handler and return if nothing found
   handler[type] proto, loc, data, path, struct, context, (err, result) ->
     if err
-      debug chalk.magenta "#{path}: #{proto}://#{loc} -> failed: #{err.message}".replace /\n/, '\\n'
-      return cb()
+      debug chalk.magenta "/#{path} #{proto}://#{loc} -> failed: #{err.message}".replace /\n/, '\\n'
+      return cb err
     unless result # no result so stop this uri
       if list.length # more to do
-        debug chalk.grey "#{path}: #{proto}://#{loc} -> undefined".replace /\n/, '\\n'
+        debug chalk.grey "/#{path} #{proto}://#{loc} -> undefined".replace /\n/, '\\n'
       return cb()
     if list.length # more to do
-      debug chalk.grey "#{path}: #{proto}://#{loc} -> #{util.inspect result}".replace /\n/, '\\n'
+      debug chalk.grey "/#{path} #{proto}://#{loc} -> #{util.inspect result}".replace /\n/, '\\n'
     # no reference in result
     return cb null, result unless list.length # stop if last entry of uri path
     # process next list entry
@@ -261,14 +262,16 @@ pathSearch = (loc, path = '', data, cb) ->
   , (cb) ->
     result = util.object.pathSearch data, q
     if exists result
-      return cb new Error "Reference pointing to other reference which can not be resolved"
+      return cb new Error "Reference pointing to #{q} which can not be resolved"
     cb null, result
   , (err, result) ->
-    return cb err if err
+    if err
+      debug chalk.magenta "/#{path} has a circular reference at #{q}"
+      return cb err
     if result
-      debug chalk.grey "#{path}: succeeded data read at #{q}"
+      debug chalk.grey "/#{path} succeeded data read at #{q}"
       return cb null, result
-    debug chalk.grey "#{path}: failed data read at #{q}"
+    debug chalk.grey "/#{path} failed data read at #{q}"
     # search neighbors by sub call on parent
     if ~path.indexOf '/'
       return pathSearch loc, fspath.dirname(path), data, cb

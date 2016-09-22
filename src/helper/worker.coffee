@@ -112,20 +112,19 @@ class Worker
       @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be
       #{@inspectSchema()}"
     path = @name.replace /#[^.]*/g, ''
+    .split(/\./)[1..].join '/'
     async.parallel [
       # dereference value
       (cb) =>
-        return cb()
         reference.replace @value, path, @root.value, @context, (err, value) =>
           return cb err if err
           @value = value
           cb()
       # dereference schema
       (cb) =>
-        return cb()
         reference.replace @schema, path, @root.value, @context, (err, value) =>
           return cb err if err
-          @value = value
+          @schema = value
           cb()
     ] , (err) =>
       return cb err if err
