@@ -271,7 +271,7 @@ describe "References", ->
           cb()
       , cb
 
-  describe "checks", ->
+  describe.only "checks", ->
 
     it "should check against integer", (cb) ->
       struct =

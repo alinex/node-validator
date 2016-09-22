@@ -31,7 +31,7 @@ class Worker
   # @param obj to be inspected
   # @param {Integer} depth the number of times to recurse into object
   # @return {String} one line of inspection
-  @inspectObject: (obj, depth=1) ->
+  @inspect: (obj, depth=1) ->
     util.inspect obj,
       depth: depth
       breakLength: Infinity
@@ -148,7 +148,7 @@ class Worker
   #
   # @return {String} one line of description
   inspectValue: =>
-    Worker.inspectObject @value
+    Worker.inspect @value
 
   # Inspect the element schema with predefined settings.
   #
@@ -157,7 +157,7 @@ class Worker
     keys = Object.keys(@schema).filter (e) -> e not in ['title', 'description']
     out = {}
     out[k] = @schema[k] for k in keys
-    Worker.inspectObject out
+    Worker.inspect out
 
   # End check with error.
   #

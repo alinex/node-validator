@@ -21,8 +21,7 @@ util = require 'alinex-util'
 fs = null # load on demand
 format = null # load on demand
 # local helper
-Worker = require '../helper/worker'
-
+Worker = null # load later because of circular references
 
 # Setup
 # -------------------------------------------------
@@ -361,6 +360,7 @@ handler =
     vm ?= require 'vm'
     schema = vm.runInNewContext "x=#{loc}"
     # instantiate new object
+    Worker ?= require './worker'
     worker = new Worker "reference-#{loc}", schema, null, data
     # run the check
     worker.check (err) ->
