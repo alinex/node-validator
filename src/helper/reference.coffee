@@ -1,10 +1,40 @@
 ###
-Reference Resolving
+References
 =================================================
-###
+References point to values which are used on their place. You can use references
+within the structure data which is checked and also within the check conditions.
+Not everything is possible, but a lot - see below.
 
-# This methods will be called to support references in schema definition and
-# values from the Worker instance.
+
+Syntax
+--------------------------------------------------
+The syntax looks easy but has a lot of variations and possibilities.
+
+    <<<source://path>>>
+    <<<source://path | source://path | default>>>
+    <<<source://path#{type:"integer"} | source://path | default>>>
+
+Within the curly braces the source from which to retrieve the value is given.
+The source is given in form of an URI.
+Like you see in line two you may use multiple fallback URIs and also a default
+value at last.
+And at last in the third line you see how to add a special check condition
+after an URI. If this fails the next URI is checked.
+
+The path may also have different possibilities based on the `source` protocol
+type.
+
+
+Combine
+--------------------------------------------------
+You may also combine the resulting value(s) of the reference(s) into one
+string:
+
+    <<<host>>>:<<<port>>>
+
+This will result in `localhost:8080` as example.
+
+###
 
 
 # Node Modules
@@ -46,6 +76,8 @@ typePrecedence =
 
 # External Methods
 # -------------------------------------------------
+# This methods will be called to support references in schema definition and
+# values from the Worker instance.
 
 # Check if there are references in the value or object's direct properties.
 #
@@ -340,20 +372,144 @@ arrayJoin = (data, splitter) ->
 # @param {Function(Error, result)} cb callback which is called with the resulting object
 handler =
 
+  ###
+  Data Sources
+  -------------------------------------------------------------
+  The following examples shows the different possible data sources with their URI
+  syntax and usage.
+
+  #3 Value Structure
+
+  The `struct` protocol is used to search for the value in the current data structure.
+
+  If you don't use a protocol on the first alternative it is assumed as structure
+  call so you may use the shortcut:
+
+      <<<name>>>            # shortcut
+      <<<struct://name>>>   # same result
+
+  But this is really only possible in the first alternative because in each other
+  it will be assumed as default value.
+
+  __Absolute path__
+
+      <<<struct:///absolute/field>>>
+      <<<struct:///absolute/field.0>>>
+
+  Like in the first line you give the path to the value which will be used. In the
+  second line `field` is an array and the first value of it will be used.
+
+  __Relative path__
+
+      <<<struct://relative/field>>>
+      <<<struct://../relative/field>>>
+
+  This will search for the `relative` node in the current path backwards and
+  then for the `field` subentry  which value is used. It will look for the
+  neighbor elements, the parent and it'S neighborts and so on back to root.
+
+  In relative paths you can also make backreferences like in the filesystem. So
+  line 2 makes no difference but line 3 of the examples goes one level up.
+
+  __Matching__
+
+  See below in the path locator description for the more complex search patterns.
+
+  __Subchecks__
+
+  Here you may also go into a file which is referenced:
+
+      <<<struct://file#address.info#1>>>
+
+  Searches for a field named 'file', if it is defined as type 'file' it is already
+  red. Then the above call will go to the element 'address.info' and extracts the
+  first line of it.
+  ###
+
   # Read from value structure.
   #
   struct: (proto, loc, data, base, worker, cb) ->
     pathSearch loc, base, worker.value, worker, cb
+
+  ###
+  #3 Context
+
+  Additional to the validating structure which have to be completely checked an
+  additional context structure may be given. The values therein are not validated
+  but can be used in the references.
+
+  This allows you to reference to already validated or system internal information.
+
+      <<<context:///absolute/*/min>>>
+
+  The syntax is nearly the same as for the value structure but relative paths makes
+  no sense because you don't have a base position in the structure.
+
+  This is also used if you want to reference some part of the value from the schema
+  definition. You can check for a valid name which is defined elsewhere in the value
+  structure like follows:
+
+  Schema:
+
+      templates:
+        type: 'object'
+        entries: [
+          type: 'handlebars'
+        ]
+      default:
+        type: 'string'
+        list: '<<<context:///templates>>>'
+
+  context:
+
+      templates:
+        first: "Wellcome {{name}}"
+        ongoing: "Hello {{name}}"
+      default: 'ongoing'
+
+  The context may also contain other information like the 'currentDir' to be used
+  in the 'file' and 'command' protocols.
+  ###
 
   # Read from additional context.
   #
   context: (proto, loc, data, base, worker, cb) ->
     pathSearch loc, null, worker.context, null, cb
 
+  ###
+  #3 Environment
+
+  The following syntax allows to read from an environment variable which may be
+  set on start of the program or before.
+
+      <<<env://MY_HOME>>>
+
+  This uses the content of the `MY_HOME` environment variable.
+  ###
+
   # Accessing environment variables.
   #
   env: (proto, loc, data, base, worker, cb) ->
     cb null, process.env[loc]
+
+  ###
+  #3 File Paths
+
+  File paths should be given absolute because relative paths are calculated from
+  the current working directory. But you can set the used base directory as context
+  setting 'currentDir', too.
+
+      <<<file:///etc/myvalue>>>
+      <<<file:///etc/myvalue#14>>>
+      <<<file:///etc/myvalue#14/5-8>>>
+      <<<file:///etc/myvalue#name/min>>>
+
+  This will load the content of a text file (line 1) or use only line number 14
+  of the file. separated by a colon you can also specify which column (character)
+  range to use.
+  And in the last example line the file has to contain some type of
+  structured information from which the given element path will be used.
+  ###
 
   # Reading from locale or mounted file system.
   #
@@ -367,6 +523,25 @@ handler =
         return cb() if err.code is 'ENOENT'
         return cb err
       fs.readFile path, 'utf-8', cb
+
+  ###
+  #3 Web Ressources
+
+  Only use a valid URL therefore:
+
+      <<<http://any.server.com/service>>>
+
+  It is not allowed to use a # anchor in the URL.
+  But you may use the `#` anchor to access a specific line or structured element.
+
+  Possible protocols are:
+
+  - http like `http://domain:port/...`
+  - https like `https://domain:port/...`
+
+  And you may connect to UNIX Sockets like `http://unix:/absolute/unix.socket:/request/path`
+  but the paths have to be absoulte.
+  ###
 
   # Reading from web ressources using http and https.
   #
@@ -386,6 +561,24 @@ handler =
       return cb() unless body?
       cb null, body
 
+  ###
+  #3 Command
+
+  The complete path will be execute as if it is typed into the command line on
+  the current directory or the one given in `work.dir`.
+
+      <<<cmd://date>>>
+      <<<cmd:///user/local/bin/date>>>
+      <<<cmd://df -h>>>
+
+  It will use the value returned on STDOUT.
+
+  Note: If you use pipes remove the space before or behind, because if you have
+  both it is recognized as alternative reference.
+
+      <<<cmd://cat test/data/poem| head -1>>>
+  ###
+
   # Reading from web ressources using http and https.
   #
   cmd: (proto, loc, data, base, worker, cb) ->
@@ -395,6 +588,63 @@ handler =
     exec loc, opt, (err, result) ->
       return cb err if err
       cb null, result.trim()
+
+  ###
+  Path Locator
+  -----------------------------------------------------------
+  They may be used directly as the path in `struc` references or as anchor to
+  get a subvalue (region).
+
+  #3 Subsearch
+
+  Multiple anchors are possible to specify a next subsearch like:
+
+    <<<struct:///absolute.field#1>>>
+    <<<file:///data/book.yml#publishing.notice#2-4>>>
+
+  That means then either a # character comes up the search will use this value
+  and uses the rest of the path on this.
+
+  It is also possible to inject references through the referenced field like:
+
+    <<<struct://file#address.info#1>>>
+    file = <<<file:///myconfig.yml>>>
+
+  This means that the `file` element of the structure will be used and as this
+  is also a reference the value of this will first be retrieved by the reference to
+  the `myconfig.yml` file. Then the result comes back the main path will be followed
+  and the specific element is used.
+
+  But to keep the system secure not any context can be used in another one. The
+  Following list shows the precedence and can only be used top to bottom.
+
+  1. environment
+  2. struct
+  3. context
+  4. file, command
+  5. web
+  6. value structure or range in value are always possible
+
+  Within the same level references between both are possible.
+
+  This keeps the security, so that a user can not compromise the system by injecting
+  references to extract internal data.
+
+  To use the resulting value as datasource and only use some part of it you may
+  first convert it if it is a text entry. If nothing of the following is specified
+  but a range or object selection comes it will be automatically converted
+  using defaults.
+  ###
+
+  ###
+  #3 Checks
+
+  It is possible to validate a value within the path using the validator itself.
+
+      {type: 'integer'}
+
+  Therefore this part of the path have to be a javascript object.
+  ###
 
   # Value checks.
   #
@@ -410,6 +660,29 @@ handler =
       return cb err if err
       cb null, worker.value
 
+  ###
+  #3 Split
+
+  A split generates a two-dimensional array (rows and columns) out of a simple text.
+  It is used for range selections.
+
+      %\n - split in lines and characters
+      %\n//\t - split by newline and tab
+      %\n//\t - split by newline and tab
+      %\n//;\\s* - csv like reader with optional spaces
+
+  The separator may be a simple string or an regular expression (as string).
+  The resulting array has:
+
+      [0] = null
+      [1][0] = row 1 as text
+      [1][1] = text of row 1, column 1
+      ...
+
+  If no other path follows better always add a `#` at the end to prevent problems
+  if last separsator is a whitespace.
+  ###
+
   # Splitting of strings.
   #
   split: (proto, loc, data, base, worker, cb) ->
@@ -422,11 +695,39 @@ handler =
     result.unshift null
     cb null, result
 
+  ###
+  #3 Match
+
+  Alternatively to splits you may use an regular expression on your text. You can
+  use range selections also, but without column specifier.
+
+      /.../ - give an regular expression `/g` is used automatically
+
+  The resulting array has the found results in elements 1..n.
+  ###
+
   # #### Matching strings
   match: (proto, loc, data, base, worker, cb) ->
     re = loc.match /\/([^]*)\/(i?)/
     re = new RegExp re[1], "#{re[2]}g"
     cb null, data.match re
+
+  ###
+  #3 Parse
+
+  Additional to the two methods above this can do complex transformations into
+  object structures to do object selections later.
+
+      $js - parse javascript to object
+      $json - JSON to object
+      $yaml - YAML to object
+      $xml - XML to object
+      ...and more
+      $auto - try to autodetect correct parser
+
+  See [formatter](http://alinex.github.io/node-formatter) for all possible formats
+  and examples of them.
+  ###
 
   # #### Special parsing of string
   parse: (proto, loc, data, base, worker, cb) ->
@@ -435,6 +736,26 @@ handler =
     formatType = null if formatType is 'auto'
     format.parse data, formatType, (err, result) ->
       cb null, result
+
+  ###
+  #3 Range Selection
+
+  If the given value is a text it will be splitted into lines and characters.
+
+  Within a text element you may use the following ranges:
+
+      3 - specific row as string
+      3-5 - specific row range as array
+      3,5 - specific row and column as array
+      3,5-8 - specific column range in row as array
+      1-2,5-8 - specific row and column range as array
+      3[2] - specific element (2nd element of third line) as string
+      3[2-4] - specific elements (2nd to 4th element of third line) as array
+      3[2-4,8],4[2] - and all combined ;-)
+
+  The result may be a single value, an array or an array of arrays depending on the
+  selected result.
+  ###
 
   # #### Range selection in array
   range: (proto, loc, data, base, worker, cb) ->
@@ -477,9 +798,47 @@ handler =
     result = result[0] if result.length is 1
     cb null, result
 
+  ###
+  #3 Object Selection
+
+  If it is a structured information you may specify the path by name:
+
+      name - get first element with this name
+      group/sub/name - get element with path
+
+  You can search by using asterisk as directory placeholder or a double asterisk to
+  go multiple level depth:
+
+      name/*/min - within any subelement
+      name/*/*/min - within any subelement (two level depth)
+      name/**/min - within any subelement in any depth
+
+  You may also use regexp notation to find the correct element:
+
+      name/test[AB]/min - pattern match with one missing character
+      name/test\d+/min - pattern match with multiple missing characters
+
+  See the [Mozilla Developer Network](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+  for the possible syntax but without modifier.
+  ###
+
   # #### Path selection in object
   object: (proto, loc, data, base, worker, cb) ->
     cb null, util.object.pathSearch data, loc
+
+  ###
+  #3 Join
+
+  As opposite to split and match the results maybe joined together into a single
+  string using some separators.
+
+      $join , - using , as separator
+      $join \n//, - using newline for first level and , as separator below
+      name/test\d+/min - pattern match with multiple missing characters
+
+  If no other path follows better always add a `#` at the end to prevent problems
+  if last separsator is a whitespace.
+  ###
 
   # #### Join array together
   join: (proto, loc, data, base, worker, cb) ->

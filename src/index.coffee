@@ -26,11 +26,15 @@ This will directly return the description of how the value has to be.
 
 ``` coffee
 validator.describe
-  schema: schema
+  name: 'test'        # name to be displayed in errors (optional)
+  schema:             # definition of checks
+    type: 'integer'
 , (err, text) ->
   return cb err if err
   console.log "Configuration:\n" + text
 ```
+
+See the possibilities in [schema definition](helper/index.md).
 
 @param {Object} spec specification for validation
 - `name` - `String` descriptive name of the data
@@ -59,6 +63,14 @@ exports.describe = (spec, cb) ->
 ###
 This will directly return the description of how the value has to be.
 
+``` coffee
+schema = validator.describeSync
+  name: 'test'        # name to be displayed in errors (optional)
+  schema:             # definition of checks
+    type: 'integer'
+```
+
+See the possibilities in [schema definition](helper/index.md).
 @name describeSync()
 @param {Object} spec specification for validation
 - `name` - `String` descriptive name of the data
@@ -73,6 +85,19 @@ exports.describeSync = deasync exports.describe
 ###
 This will check the given value, sanitize it and return the new value or an
 Error to the callback.
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'integer'
+  context: null       # additional data (optional)
+, (err, result) ->
+  # do something
+```
+
+See the possibilities in [schema definition](helper/index.md).
 
 @param {Object} spec specification for validation
 - `name` - `String` descriptive name of the data
@@ -106,6 +131,17 @@ exports.check = (spec, cb) ->
 This will check the given value, sanitize it and return the new value or an
 Error to the callback.
 
+``` coffee
+input = validator.checkSync
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'integer'
+  context: null       # additional data (optional)
+```
+
+See the possibilities in [schema definition](helper/index.md).
+
 @name checkSync()
 @param {Object} spec specification for validation
 - `name` - `String` descriptive name of the data
@@ -122,6 +158,15 @@ The method will check and optimize the schema definition.
 This is neccessary to evaluate higher class definitions. But it may
 also be used in tests to check the validator check options if they are valid.
 
+``` coffee
+validator.selfcheck
+  type: 'integer'     # definition of checks
+, (err, schema) ->
+  # do something with optimized schema
+```
+
+See the possibilities in [schema definition](helper/index.md).
+
 @param {Object} schema structure to check
 @param {function(Error, Mixed)} cb callback with the checked schema or an error if
 something is wrong
@@ -135,6 +180,16 @@ exports.selfcheck = (schema, cb) ->
 
 ###
 This may be used in tests to check the validator check options if they are valid.
+
+``` coffee
+try
+  schema = validator.selfcheckSync
+    type: 'integer'     # definition of checks
+catch error
+  # something in schema is not allowed
+```
+
+See the possibilities in [schema definition](helper/index.md).
 
 @name selfcheckSync()
 @param {Object} schema structure to check
