@@ -66,6 +66,10 @@ class Worker
   # - `context` - `Object` additional data structure
   # - `value` - original value (not changed)
   # - `root` - the root worker of this check
+  # - `path` - the current path in value structure
+  #
+  # And only in the root worker:
+  # - `checked` - list of already checked elements (used for references)
   #
   # And the possible methods are:
   # - `check` - run the type specific check
@@ -85,6 +89,9 @@ class Worker
     @type = @schema.type
     @lib = Worker.load @type, @name
     @debug = @lib.debug
+    @path = @name.replace /#[^.]*/g, ''
+    .split(/\./)[1..].join '/'
+    @root.checked ?= []
     # initialize this element
     fn.call this if fn = @lib.init
 
@@ -111,24 +118,28 @@ class Worker
       @debug "#{@name}: #{@schema.title}" if @schema.title
       @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be
       #{@inspectSchema()}"
-    path = @name.replace /#[^.]*/g, ''
-    .split(/\./)[1..].join '/'
     async.parallel [
       # dereference value
       (cb) =>
-        reference.replace @value, path, @root.value, @context, (err, value) =>
+        reference.replace @value,  this, (err, value) =>
           return cb err if err
           @value = value
           cb()
       # dereference schema
       (cb) =>
-        reference.replace @schema, path, @root.value, @context, (err, value) =>
+        reference.replace @schema, this, (err, value) =>
           return cb err if err
           @schema = value
           cb()
-    ] , (err) =>
-      return cb err if err
-      @lib.check.call this, cb
+      # validate values
+      (cb) =>
+        reference.existsWait this, (err) =>
+          return cb err if err
+          @lib.check.call this, (err) =>
+            return cb err if err
+            @root.checked.push @path
+            cb()
+    ], cb
 
   # Create a sub worker instance.
   #

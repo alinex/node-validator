@@ -49,9 +49,18 @@ typePrecedence =
 
 # Check if there are references in the value or object's direct properties.
 #
-# @param {String|Array|Object} value to check for references
+# @param {String} value to check for references
 # @return {Boolean} `true` if a reference exists
 exists = exports.exists = (value) ->
+  # normal checking in string
+  return false unless typeof value is 'string'
+  Boolean value.match /<<<[^]*>>>/
+
+# Check if there are references in the value or object's direct properties.
+#
+# @param {Array|Object} value to check for references
+# @return {Boolean} `true` if a reference exists
+existsObject = exports.existsObject = (value) ->
   # checking in arrays
   if Array.isArray value
     for e in value
@@ -66,16 +75,30 @@ exists = exports.exists = (value) ->
   return false unless typeof value is 'string'
   Boolean value.match /<<<[^]*>>>/
 
+# Wait till reference is resolved.
+#
+# @param {Worker} worker to check value for references
+# @param {Function(Error)} cb callback if reference is resolved or error if neither
+exports.existsWait = (worker, cb) ->
+  async.retry
+    times: MAXRETRY
+    interval: TIMEOUT
+  , (cb) ->
+    return cb() unless exists worker.value
+    cb new Error "Reference #{worker.value} can not be resolved"
+  , cb
+
 # Replace references with there referenced values.
 #
 # @param {String|Array|Object} value to replaces references within
-# @param {String} path position in structure where value comes from
-# @param {Object} struct complete value object
-# @param {Object} context additional object
+# @param {Worker} worker the current worker with
+# - `path` position in structure where value comes from
+# - `root.value` complete value object
+# - `context` context additional object
 # @param {Function(Error, value)} cb callback which is called with resulting value
 # @param {Boolean} clone should the object be cloned instead of changed
-exports.replace = (value, path = '', struct, context, cb, clone = false) ->
-  return cb null, value unless exists value
+exports.replace = (value, worker, cb, clone = false) ->
+  return cb null, value unless existsObject value
   # for arrays and objects
   if typeof value is 'object'
     copy = if clone
@@ -83,8 +106,8 @@ exports.replace = (value, path = '', struct, context, cb, clone = false) ->
     else value
     async.eachOf value, (e, k, cb) ->
       copy[k] ?= e # reference element if cloned
-      return cb() unless exists e
-      multiple e, "#{path}/#{k}", struct, context, (err, result) ->
+      return cb() unless existsObject e
+      multiple e, "#{worker.path}/#{k}", worker.root, (err, result) ->
         return cb err if err
         copy[k] = result
         cb()
@@ -92,7 +115,7 @@ exports.replace = (value, path = '', struct, context, cb, clone = false) ->
       return cb err if err
       cb null, copy
   # for strings
-  else multiple value, path, struct, context, cb
+  else multiple value, worker.path, worker.root, cb
 
 
 # Helper Methods
@@ -102,10 +125,12 @@ exports.replace = (value, path = '', struct, context, cb, clone = false) ->
 #
 # @param {String} value to replace references
 # @param {String} path position in structure where value comes from
-# @param {Object} struct complete value object
-# @param {Object} context additional object
+# @param {Worker} worker the root worker with
+# - `value` complete value object
+# - `context` context additional object
+# - `checked` the list of validated entries
 # @param {Function(Error, value)} cb callback which is called with resulting value
-multiple = (value, path, struct, context, cb) ->
+multiple = (value, path, worker, cb) ->
   path = path[1..] if path[0] is '/'
   debug "/#{path} replace #{util.inspect value}..."
   list = value.split /(<<<[^]*?>>>)/
@@ -114,7 +139,7 @@ multiple = (value, path, struct, context, cb) ->
   async.map list, (v, cb) ->
     return cb null, v unless ~v.indexOf '<<<' # no reference
     v = v[3..-4] # replace <<< and >>>
-    alternatives v, path, struct, context, cb
+    alternatives v, path, worker, cb
   , (err, results) ->
     return cb err if err
     # reference only value
@@ -131,10 +156,12 @@ multiple = (value, path, struct, context, cb) ->
 #
 # @param {String} value to replace references
 # @param {String} path position in structure where value comes from
-# @param {Object} struct complete value object
-# @param {Object} context additional object
+# @param {Worker} worker the root worker with
+# - `value` complete value object
+# - `context` context additional object
+# - `checked` the list of validated entries
 # @param {Function(Error, value)} cb callback which is called with resulting value
-alternatives = (value, path, struct, context, cb) ->
+alternatives = (value, path, worker, cb) ->
   debug chalk.grey "/#{path} resolve #{util.inspect value}..."
   first = true
   async.map value.split(/\s+\|\s+/), (alt, cb) ->
@@ -149,7 +176,7 @@ alternatives = (value, path, struct, context, cb) ->
       debug chalk.grey "/#{path} #{alt} -> use as default value".replace /\n/, '\\n'
       return cb null, alt
     # read value from given uri parts
-    read list, path, struct, context, (err, result) ->
+    read list, path, worker, (err, result) ->
       return cb err if err
       debug chalk.grey "/#{path} #{alt} -> #{util.inspect result}".replace /\n/, '\\n'
       cb null, result
@@ -166,15 +193,17 @@ alternatives = (value, path, struct, context, cb) ->
 #
 # @param {Array} list to replace references
 # @param {String} path position in structure where value comes from
-# @param {Object} struct complete value object
-# @param {Object} context additional object
+# @param {Worker} worker the root worker with
+# - `value` complete value object
+# - `context` context additional object
+# - `checked` the list of validated entries
 # @param {Function(Error, value)} cb callback which is called with resulting value
 # @param {String} last type of handler used to get data element
 # @param {Object} data resolved data from previous read
-read = (list, path, struct, context, cb, last, data) ->
+read = (list, path, worker, cb, last, data) ->
   # get type of uri part
   src = list.shift()
-  return cb null, struct unless src # empty anchor return complete structure
+  return cb null, worker.value unless src # empty anchor return complete structure
   # detect protocol
   [proto, loc] = src.split /:\/\//
   loc ?= proto
@@ -231,7 +260,7 @@ read = (list, path, struct, context, cb, last, data) ->
     for security reasons"
   debug chalk.grey "/#{path} evaluating #{proto}://#{loc}".replace /\n/, '\\n'
   # run type handler and return if nothing found
-  handler[type] proto, loc, data, path, struct, context, (err, result) ->
+  handler[type] proto, loc, data, path, worker, (err, result) ->
     if err
       debug chalk.magenta "/#{path} #{proto}://#{loc} -> failed: #{err.message}".replace /\n/, '\\n'
       return cb err
@@ -244,15 +273,17 @@ read = (list, path, struct, context, cb, last, data) ->
     # no reference in result
     return cb null, result unless list.length # stop if last entry of uri path
     # process next list entry
-    read list, path, struct, context, cb, type, result
+    read list, path, worker, cb, type, result
 
 # Search for data using relative or absolute path specification.
 #
 # @param {String} loc path to search
 # @param {String} current path position in structure
 # @param {Object} data complete value object
+# @param {Worker} worker the root worker with
+# - `checked` the list of validated entries
 # @param {Function(Error, value)} cb callback which is called with resulting value
-pathSearch = (loc, path = '', data, cb) ->
+pathSearch = (loc, path = '', data, worker, cb) ->
   # direct search
   q = fspath.resolve "/#{path}", loc
   # retry read till there is no reference found or timeout
@@ -262,7 +293,9 @@ pathSearch = (loc, path = '', data, cb) ->
   , (cb) ->
     result = util.object.pathSearch data, q
     if exists result
-      return cb new Error "Reference pointing to #{q} which can not be resolved"
+      return cb new Error "Reference pointing to #{q} can not be resolved"
+    if result and worker? and not (q[1..] in worker.checked)
+      return cb new Error "Referenced value at #{q} is not validated"
     cb null, result
   , (err, result) ->
     if err
@@ -274,9 +307,9 @@ pathSearch = (loc, path = '', data, cb) ->
     debug chalk.grey "/#{path} failed data read at #{q}"
     # search neighbors by sub call on parent
     if ~path.indexOf '/'
-      return pathSearch loc, fspath.dirname(path), data, cb
+      return pathSearch loc, fspath.dirname(path), data, worker, cb
     else if path
-      return pathSearch loc, null, data, cb
+      return pathSearch loc, null, data, worker, cb
     # neither found
     cb()
 
@@ -300,65 +333,72 @@ arrayJoin = (data, splitter) ->
 # @param {String} loc location to extract
 # @param {Object} data allready read data from previous read
 # @param {String} base base location where to search references
-# @param {Object} struct structure from which the original value comes from
-# @param {Object} context additional data structure for protokoll context
+# @param {Worker} worker the root worker with
+# - `value` complete value object
+# - `context` context additional object
+# - `checked` the list of validated entries
 # @param {Function(Error, result)} cb callback which is called with the resulting object
 handler =
 
   # Read from value structure.
   #
-  struct: (proto, loc, data, base, struct, context, cb) ->
-    pathSearch loc, base, struct, cb
+  struct: (proto, loc, data, base, worker, cb) ->
+    pathSearch loc, base, worker.value, worker, cb
 
   # Read from additional context.
   #
-  context: (proto, loc, data, base, struct, context, cb) ->
-    pathSearch loc, null, context, cb
+  context: (proto, loc, data, base, worker, cb) ->
+    pathSearch loc, null, worker.context, null, cb
 
   # Accessing environment variables.
   #
-  env: (proto, loc, data, base, struct, context, cb) ->
+  env: (proto, loc, data, base, worker, cb) ->
     cb null, process.env[loc]
 
   # Reading from locale or mounted file system.
   #
   # To specify a specific directory as current directory it can be set as context
   # variable: `currentDir`
-  file: (proto, loc, data, base, struct, context, cb) ->
+  file: (proto, loc, data, base, worker, cb) ->
     fs ?= require 'alinex-fs'
-    loc = fspath.resolve context.currentDir, loc if context?.currentDir?
+    loc = fspath.resolve worker.context.currentDir, loc if worker.context?.currentDir?
     fs.realpath loc, (err, path) ->
-      return cb err if err
+      if err
+        return cb() if err.code is 'ENOENT'
+        return cb err
       fs.readFile path, 'utf-8', cb
 
   # Reading from web ressources using http and https.
   #
-  web: (proto, loc, data, base, struct, context, cb) ->
+  web: (proto, loc, data, base, worker, cb) ->
     request ?= require 'request'
     request
       uri: "#{proto}://#{loc}"
       followAllRedirects: true
     , (err, response, body) ->
       # error checking
-      return cb err if err
+      if err
+        return cb() if err.message.match /\bENOTFOUND\b/
+        return cb err
       if response.statusCode isnt 200
+        return cb() if response.statusCode is 404
         return cb new Error "Server send wrong return code: #{response.statusCode}"
       return cb() unless body?
       cb null, body
 
   # Reading from web ressources using http and https.
   #
-  cmd: (proto, loc, data, base, struct, context, cb) ->
+  cmd: (proto, loc, data, base, worker, cb) ->
     exec ?= require('child_process').exec
     opt = {}
-    opt.cwd = context.currentDir if context?.currentDir?
+    opt.cwd = worker.context.currentDir if worker.context?.currentDir?
     exec loc, opt, (err, result) ->
       return cb err if err
       cb null, result.trim()
 
   # Value checks.
   #
-  check: (proto, loc, data, base, struct, context, cb) ->
+  check: (proto, loc, data, base, worker, cb) ->
     # get the check schema reading as js
     vm ?= require 'vm'
     schema = vm.runInNewContext "x=#{loc}"
@@ -372,7 +412,7 @@ handler =
 
   # Splitting of strings.
   #
-  split: (proto, loc, data, base, struct, context, cb) ->
+  split: (proto, loc, data, base, worker, cb) ->
     splitter = loc[1..].split('//').map (s) -> new RegExp s
     splitter.push '' if splitter.length is 1
     result = data.split(splitter[0]).map (t) ->
@@ -383,13 +423,13 @@ handler =
     cb null, result
 
   # #### Matching strings
-  match: (proto, loc, data, base, struct, context, cb) ->
+  match: (proto, loc, data, base, worker, cb) ->
     re = loc.match /\/([^]*)\/(i?)/
     re = new RegExp re[1], "#{re[2]}g"
     cb null, data.match re
 
   # #### Special parsing of string
-  parse: (proto, loc, data, base, struct, context, cb) ->
+  parse: (proto, loc, data, base, worker, cb) ->
     format ?= require 'alinex-format'
     formatType = loc[1..]
     formatType = null if formatType is 'auto'
@@ -397,7 +437,7 @@ handler =
       cb null, result
 
   # #### Range selection in array
-  range: (proto, loc, data, base, struct, context, cb) ->
+  range: (proto, loc, data, base, worker, cb) ->
     # split multiple specifiers
     rows = loc.match ///
       \d+ # first row
@@ -438,11 +478,11 @@ handler =
     cb null, result
 
   # #### Path selection in object
-  object: (proto, loc, data, base, struct, context, cb) ->
+  object: (proto, loc, data, base, worker, cb) ->
     cb null, util.object.pathSearch data, loc
 
   # #### Join array together
-  join: (proto, loc, data, base, struct, context, cb) ->
+  join: (proto, loc, data, base, worker, cb) ->
     loc = loc[6..]
     splitter = if loc then loc.split '//' else [', ']
     cb null, arrayJoin data, splitter

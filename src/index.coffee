@@ -64,7 +64,6 @@ This will directly return the description of how the value has to be.
 - `name` - `String` descriptive name of the data
 - `schema` - `Object` structure to check
 - `context` - `Object` additional data structure
-- `dir` - `String` set to base directory for file relative file paths
 @return {String} descriptive text
 @throw {Error} if something went wrong
 @see {@link describe}
@@ -79,7 +78,6 @@ Error to the callback.
 - `name` - `String` descriptive name of the data
 - `schema` - `Object` structure to check
 - `context` - `Object` additional data structure
-- `dir` - `String` set to base directory for file relative file paths
 - `value` - original value (not changed)
 @param {function(Error, Mixed)} cb callback with optimized value or an error if
 something is wrong with the value as far as possible to sanitize
@@ -113,7 +111,6 @@ Error to the callback.
 - `name` - `String` descriptive name of the data
 - `schema` - `Object` structure to check
 - `context` - `Object` additional data structure
-- `dir` - `String` set to base directory for file relative file paths
 - `value` - original value (not changed)
 @return {String} optimized value
 @throw {Error} if something went wrong

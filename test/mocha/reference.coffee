@@ -4,11 +4,18 @@ expect = chai.expect
 
 async = require 'async'
 path = require 'path'
+util = require 'alinex-util'
 
 test = require '../test'
 reference = require '../../src/helper/reference'
 
 describe "References", ->
+
+  emptyWorker =
+    path: '/'
+    root:
+      path: '/'
+      checked: []
 
   describe "exists", ->
 
@@ -31,11 +38,18 @@ describe "References", ->
         '<<<name>>>'
         'My name is <<<name>>>'
         '<<<firstname>>> <<<lastname>>>'
+      ]
+      for value in values
+        result = reference.exists value
+        expect(result, value).to.be.true
+
+    it "should find object references", ->
+      values = [
         [1, '<<<name>>>', 3]
         {one: 1, two: '<<<zwei>>>'}
       ]
       for value in values
-        result = reference.exists value
+        result = reference.existsObject value
         expect(result, value).to.be.true
 
   describe "simple", ->
@@ -51,7 +65,7 @@ describe "References", ->
         null
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, null, null, null, (err, result) ->
+        reference.replace value, emptyWorker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal value
           cb()
@@ -63,7 +77,7 @@ describe "References", ->
         'My name is <<<notthere | alex>>>': 'My name is alex' # reference in string
         '<<<notthere | firstname>>> <<<notthere | lastname>>>': 'firstname lastname' #concatenate
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, null, null, (err, result) ->
+        reference.replace value, emptyWorker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -77,7 +91,7 @@ describe "References", ->
         '<<<env://NOTEXISTING | env://TESTVALIDATOR | 456>>>': process.env.TESTVALIDATOR
         '<<<env://TESTVALIDATOR | env://NOTEXISTING | 456>>>': process.env.TESTVALIDATOR
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, null, null, (err, result) ->
+        reference.replace value, emptyWorker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -85,7 +99,7 @@ describe "References", ->
 
     it "should fail for empty reference", (cb) ->
       value = '<<<>>>'
-      reference.replace value, null, null, null, (err, result) ->
+      reference.replace value, emptyWorker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, value).to.not.exist
         cb()
@@ -95,113 +109,142 @@ describe "References", ->
     it "should find environment value", (cb) ->
       process.env.TESTVALIDATOR = 123
       value = '<<<env://TESTVALIDATOR>>>'
-      reference.replace value, null, null, null, (err, result) ->
+      reference.replace value, emptyWorker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, value).to.equal process.env.TESTVALIDATOR
         cb()
 
     it "should fail for environment", (cb) ->
       value = '<<<env://TESTNOTEXISTING>>>'
-      reference.replace value, null, null, null, (err, result) ->
+      reference.replace value, emptyWorker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, value).to.not.exist
         cb()
 
   describe "structure", ->
 
-    soccer =
-      europe:
-        germany:
-          stuttgart: 'VFB Stuttgart'
-          munich: 'FC Bayern'
-        spain:
-          madrid: 'Real Madrid'
-      southamerica:
-        brazil:
-          saopaulo: 'FC Sao Paulo'
+    soccer = util.extend util.clone(emptyWorker),
+      root:
+        value:
+          europe:
+            germany:
+              stuttgart: 'VFB Stuttgart'
+              munich: 'FC Bayern'
+            spain:
+              madrid: 'Real Madrid'
+          southamerica:
+            brazil:
+              saopaulo: 'FC Sao Paulo'
+        checked: [
+          'europe'
+          'europe/germany'
+          'europe/germany/stuttgart'
+          'europe/germany/munich'
+          'europe/spain'
+          'europe/spain/madrid'
+          'southamerica'
+          'southamerica/brazil'
+          'southamerica/brazil/saopaulo'
+        ]
 
     it "should find absolute path", (cb) ->
-      data =
-        absolute: 123
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            absolute: 123
+          checked: ['absolute']
       value = '<<<struct:///absolute>>>'
-      reference.replace value, null, data, null, (err, result) ->
+      reference.replace value, worker, (err, result) ->
         expect(err, 'error').to.not.exist
-        expect(result, value).to.equal data.absolute
+        expect(result, value).to.equal worker.root.value.absolute
         cb()
 
     it "should fail with absolute path", (cb) ->
-      struct =
-        absolute: 123
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            absolute: 123
+          checked: ['absolute']
       values = [
         '<<<struct:///notfound>>>'
         '<<<struct:///notfound/value>>>'
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, null, struct, null, (err, result) ->
+        reference.replace value, worker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
       , cb
 
     it "should find relative path", (cb) ->
+      worker = util.extend util.clone(soccer),
+        path: '/europe/germany'
       values =
-        '<<<struct://stuttgart>>>': soccer.europe.germany.stuttgart
-        '<<<struct://munich>>>': soccer.europe.germany.munich
-        '<<<struct://spain>>>': soccer.europe.spain
-        '<<<struct://spain/madrid>>>': soccer.europe.spain.madrid
-        '<<<struct://southamerica/brazil/saopaulo>>>': soccer.southamerica.brazil.saopaulo
+        '<<<struct://stuttgart>>>': soccer.root.value.europe.germany.stuttgart
+        '<<<struct://munich>>>': soccer.root.value.europe.germany.munich
+        '<<<struct://spain>>>': soccer.root.value.europe.spain
+        '<<<struct://spain/madrid>>>': soccer.root.value.europe.spain.madrid
+        '<<<struct://southamerica/brazil/saopaulo>>>': soccer.root.value.southamerica.brazil.saopaulo
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, 'europe/germany', soccer, null, (err, result) ->
+        reference.replace value, worker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
       , cb
 
     it "should fail with relative path", (cb) ->
+      worker = util.extend util.clone(soccer),
+        path: '/europe/germany'
       values = [
         '<<<struct:///berlin>>>'
         '<<<struct:///america/newyork>>>'
         '<<<struct:///southamerica/chile>>>'
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, 'europe/germany', soccer, null, (err, result) ->
+        reference.replace value, worker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
       , cb
 
     it "should find backreferenced path", (cb) ->
+      worker = util.extend util.clone(soccer),
+        path: '/europe/germany'
       values =
-        '<<<struct://../germany/stuttgart>>>': soccer.europe.germany.stuttgart
+        '<<<struct://../germany/stuttgart>>>': soccer.root.value.europe.germany.stuttgart
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, 'europe/germany', soccer, null, (err, result) ->
+        reference.replace value, worker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
       , cb
 
     it "should fail with backreferenced path", (cb) ->
+      worker = util.extend util.clone(soccer),
+        path: '/europe/germany'
       values = [
         '<<<struct:///../stuttgart>>>'
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, 'europe/germany', soccer, null, (err, result) ->
+        reference.replace value, worker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
       , cb
 
     it "should find context path", (cb) ->
-      struct =
-        absolute: 123
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          context:
+            absolute: 123
       values = [
         '<<<context:///absolute>>>'
         '<<<context://absolute>>>'
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, null, null, struct, (err, result) ->
+        reference.replace value, worker, (err, result) ->
           expect(err, 'error').to.not.exist
-          expect(result, value).to.equal struct.absolute
+          expect(result, value).to.equal worker.root.context.absolute
           cb()
       , cb
 
@@ -214,19 +257,19 @@ describe "References", ->
         "<<<file://test/data/textfile>>>"
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, null, null, null, (err, result) ->
+        reference.replace value, emptyWorker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal '123'
           cb()
       , cb
 
-    it "should fail on file", (cb) ->
+    it "should get undefined on not existing file", (cb) ->
       values = [
         "<<<file://#{path.dirname __dirname}/data/notfound>>>"
         "<<<file://textfile>>>"
       ]
       async.eachSeries values, (value, cb) ->
-        reference.replace value, null, null, null, (err, result) ->
+        reference.replace value, emptyWorker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
@@ -239,7 +282,7 @@ describe "References", ->
       values =
         '<<<https://raw.githubusercontent.com/alinex/node-validator/master/test/data/textfile>>>': '123'
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, null, null, (err, result) ->
+        reference.replace value, emptyWorker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -251,7 +294,7 @@ describe "References", ->
         "<<<http://www.heise.de/page-did-not-exist-here>>>"
       ]
       async.each values, (value, cb) ->
-        reference.replace value, null, null, null, (err, result) ->
+        reference.replace value, emptyWorker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.not.exist
           cb()
@@ -265,7 +308,7 @@ describe "References", ->
         '<<<cmd://cat test/data/textfile>>>': '123'
         '<<<cmd://cat test/data/poem| head -1>>>': 'William B Yeats (1865-1939)'
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, null, null, (err, result) ->
+        reference.replace value, emptyWorker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -274,15 +317,20 @@ describe "References", ->
   describe "checks", ->
 
     it "should check against integer", (cb) ->
-      struct =
-        number: 123
-        string: '123'
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            number: 123
+            string: '123'
+          checked: [
+            'number'
+            'string'
+          ]
       values =
         '<<<struct:///number#{type:"integer"}>>>': 123
         '<<<struct:///number#{type:"integer"}>>>': 123
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, struct, null
-        , (err, result) ->
+        reference.replace value, worker, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.equal check
           cb()
@@ -293,9 +341,14 @@ describe "References", ->
     it "should split into lines and characters", (cb) ->
       text = ''
       text += "#{i*10123456789}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%\n#>>>", null,
-        text: text
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: text
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#%\n#>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.length, 'rows').to.equal 11
@@ -306,9 +359,14 @@ describe "References", ->
     it "should split into lines and columns tab separated", (cb) ->
       text = ''
       text += "#{i*1}\t#{i*2}\t#{i*3}\t#{i*4}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%\n//\t#>>>", null,
-        text: text
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: text
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#%\n//\t#>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.length, 'rows').to.equal 11
@@ -319,9 +377,14 @@ describe "References", ->
     it "should split csv", (cb) ->
       text = ''
       text += "#{i*1}; #{i*2}; #{i*3}; #{i*4}\n" for i in [1..9]
-      reference.replace "<<<struct:///text#%\n//;\\s*>>>", null,
-        text: text
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: text
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#%\n//;\\s*>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.length, 'rows').to.equal 11
@@ -332,9 +395,14 @@ describe "References", ->
   describe "match", ->
 
     it "should find words", (cb) ->
-      reference.replace "<<<struct:///text#/\\w+/>>>", null,
-        text: 'This is a normal text with 8 words.'
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: 'This is a normal text with 8 words.'
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#/\\w+/>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.length, 'words').to.equal 8
@@ -343,9 +411,14 @@ describe "References", ->
   describe "parser", ->
 
     it "should analyze js", (cb) ->
-      reference.replace "<<<struct:///text#$js>>>", null,
-        text: '{one: 1, two: 2}'
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: '{one: 1, two: 2}'
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#$js>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.one, 'one').to.equal 1
@@ -353,9 +426,14 @@ describe "References", ->
         cb()
 
     it "should analyze json", (cb) ->
-      reference.replace "<<<struct:///text#$json>>>", null,
-        text: '{"one": 1, "two": 2}'
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: '{"one": 1, "two": 2}'
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#$json>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.one, 'one').to.equal 1
@@ -363,9 +441,14 @@ describe "References", ->
         cb()
 
     it "should analyze yaml", (cb) ->
-      reference.replace "<<<struct:///text#$yaml>>>", null,
-        text: 'one: 1\ntwo: 2'
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: 'one: 1\ntwo: 2'
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#$yaml>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.one, 'one').to.equal 1
@@ -373,9 +456,14 @@ describe "References", ->
         cb()
 
     it "should analyze xml", (cb) ->
-      reference.replace "<<<struct:///text#$xml>>>", null,
-        text: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<data><one>1</one><two>2</two></data>'
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<data><one>1</one><two>2</two></data>'
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#$xml>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.exist
         expect(result.one, 'one').to.deep.equal '1'
@@ -386,35 +474,34 @@ describe "References", ->
 
     text = ''
     text += "#{i*10123456789}\n" for i in [1..9]
+    worker = util.extend util.clone(emptyWorker),
+      root:
+        value:
+          text: text
+        checked: [
+          'text'
+        ]
 
     it "should get specific line", (cb) ->
-      reference.replace "<<<struct:///text#3>>>", null,
-        text: text
-      , null, (err, result) ->
+      reference.replace "<<<struct:///text#3>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '30370370367'
         cb()
 
     it "should get line range", (cb) ->
-      reference.replace "<<<struct:///text#3-5>>>", null,
-        text: text
-      , null, (err, result) ->
+      reference.replace "<<<struct:///text#3-5>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal ['30370370367', '40493827156', '50617283945']
         cb()
 
     it "should get line list", (cb) ->
-      reference.replace "<<<struct:///text#3,5>>>", null,
-        text: text
-      , null, (err, result) ->
+      reference.replace "<<<struct:///text#3,5>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal ['30370370367', '50617283945']
         cb()
 
     it "should get line range + list", (cb) ->
-      reference.replace "<<<struct:///text#3-5,8>>>", null,
-        text: text
-      , null, (err, result) ->
+      reference.replace "<<<struct:///text#3-5,8>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal [
           '30370370367', '40493827156', '50617283945'
@@ -422,33 +509,25 @@ describe "References", ->
         cb()
 
     it "should get specific column", (cb) ->
-      reference.replace "<<<struct:///text#3[3]>>>", null,
-        text: text
-      , null, (err, result) ->
+      reference.replace "<<<struct:///text#3[3]>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '3'
         cb()
 
     it "should get specific column range", (cb) ->
-      reference.replace "<<<struct:///text#3[3-5]>>>", null,
-        text: text
-      , null, (err, result) ->
+      reference.replace "<<<struct:///text#3[3-5]>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal ['3', '7', '0']
         cb()
 
     it "should get specific column list", (cb) ->
-      reference.replace "<<<struct:///text#3[3,5]>>>", null,
-        text: text
-      , null, (err, result) ->
+      reference.replace "<<<struct:///text#3[3,5]>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal ['3', '0']
         cb()
 
     it "should allow alltogether", (cb) ->
-      reference.replace "<<<struct:///text#3-5[3],8[5-6,9]>>>", null,
-        text: text
-      , null, (err, result) ->
+      reference.replace "<<<struct:///text#3-5[3],8[5-6,9]>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal [
           [ '3' ], [ '4' ], [ '6' ]
@@ -457,35 +536,57 @@ describe "References", ->
         cb()
 
     it "should fail for wrong data type", (cb) ->
-      reference.replace "<<<struct:///text#3>>>", null,
-        text: {one: 1}
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text:
+              one: 1
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#3>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.not.exist
         cb()
 
   describe "objects", ->
 
-    soccer =
-      clubs:
-        europe:
-          germany:
-            stuttgart: 'VFB Stuttgart'
-            munich: 'FC Bayern'
-            hamburg: 'Hamburger SV'
-          spain:
-            madrid: 'Real Madrid'
-            barcelona: 'FC Barcelona'
-        southamerica:
-          brazil:
-            saopaulo: 'FC Sao Paulo'
+    soccer = util.extend util.clone(emptyWorker),
+      root:
+        value:
+          clubs:
+            europe:
+              germany:
+                stuttgart: 'VFB Stuttgart'
+                munich: 'FC Bayern'
+                hamburg: 'Hamburger SV'
+              spain:
+                madrid: 'Real Madrid'
+                barcelona: 'FC Barcelona'
+            southamerica:
+              brazil:
+                saopaulo: 'FC Sao Paulo'
+        checked: [
+          'clubs'
+          'clubs/europe'
+          'clubs/europe/germany'
+          'clubs/europe/germany/stuttgart'
+          'clubs/europe/germany/munich'
+          'clubs/europe/germany/hamburg'
+          'clubs/europe/spain'
+          'clubs/europe/spain/madrid'
+          'clubs/europe/spain/barcelona'
+          'clubs/southamerica'
+          'clubs/southamerica/brazil'
+          'clubs/southamerica/brazil/saopaulo'
+        ]
 
     it "should access element per path", (cb) ->
       values =
         '<<<struct://clubs#europe/germany/stuttgart>>>': 'VFB Stuttgart'
         '<<<struct://clubs#southamerica/brazil>>>': {saopaulo: 'FC Sao Paulo'}
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, soccer, null, (err, result) ->
+        reference.replace value, soccer, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
@@ -498,7 +599,7 @@ describe "References", ->
         '<<<struct://clubs#asia/china/peking>>>'
       ]
       async.each values, (value, cb) ->
-        reference.replace value, null, soccer, null, (err, result) ->
+        reference.replace value, soccer, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, 'result').to.not.exist
           cb()
@@ -510,7 +611,7 @@ describe "References", ->
         '<<<struct://clubs#**/stuttgart>>>': 'VFB Stuttgart'
         '<<<struct://clubs#*/brazil>>>': {saopaulo: 'FC Sao Paulo'}
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, soccer, null, (err, result) ->
+        reference.replace value, soccer, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
@@ -520,7 +621,7 @@ describe "References", ->
       values =
         '<<<struct://clubs#europe/germany/.*>>>': [ 'VFB Stuttgart', 'FC Bayern', 'Hamburger SV' ]
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, soccer, null, (err, result) ->
+        reference.replace value, soccer, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
@@ -531,16 +632,21 @@ describe "References", ->
         '<<<struct://clubs#europe/germany/\\w*m\\w*>>>': ['FC Bayern', 'Hamburger SV']
         '<<<struct://clubs#europe/germany/.*[ic].*>>>': 'FC Bayern'
       async.forEachOfSeries values, (check, value, cb) ->
-        reference.replace value, null, soccer, null, (err, result) ->
+        reference.replace value, soccer, (err, result) ->
           expect(err, 'error').to.not.exist
           expect(result, value).to.deep.equal check
           cb()
       , cb
 
     it "should auto parse and access element", (cb) ->
-      reference.replace "<<<struct:///text#one>>>", null,
-          text: '{one: 1, two: 2}'
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: '{one: 1, two: 2}'
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#one>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal 1
         cb()
@@ -548,39 +654,59 @@ describe "References", ->
   describe "join", ->
 
     it "should join array together", (cb) ->
-      reference.replace "<<<struct:///text#$join>>>", null,
-        text: [1, 2, 3, 4]
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: [1, 2, 3, 4]
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#$join>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '1, 2, 3, 4'
         cb()
 
     it "should join multilevel array together", (cb) ->
-      reference.replace "<<<struct:///text#$join  and //, #{}>>>", null,
-        text: [
-          [1, 2, 3, 4]
-          [8, 9]
-        ]
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: [
+                [1, 2, 3, 4]
+                [8, 9]
+              ]
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#$join  and //, #{}>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '1, 2, 3, 4 and 8, 9'
         cb()
 
     it "should join multilevel with same phrase together", (cb) ->
-      reference.replace "<<<struct:///text#$join , #{}>>>", null,
-        text: [
-          [1, 2, 3, 4]
-          [8, 9]
-        ]
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: [
+                [1, 2, 3, 4]
+                [8, 9]
+              ]
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#$join , #{}>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.equal '1, 2, 3, 4, 8, 9'
         cb()
 
     it "should auto join array together", (cb) ->
-      reference.replace "<<<struct:///text#%, #>>>", null,
-        text: [1, 2, 3, 4]
-      , null, (err, result) ->
+      worker = util.extend util.clone(emptyWorker),
+        root:
+          value:
+            text: [1, 2, 3, 4]
+          checked: [
+            'text'
+          ]
+      reference.replace "<<<struct:///text#%, #>>>", worker, (err, result) ->
         expect(err, 'error').to.not.exist
         expect(result, 'result').to.deep.equal [ null, [ '1', '1' ], [ '2', '2' ], [ '3', '3' ], [ '4', '4' ] ]
         cb()
@@ -650,7 +776,7 @@ describe "References", ->
           max: 4
         ], cb
 
-  describe.only "multiref", ->
+  describe "multiref", ->
 
     it "should call struct -> env", (cb) ->
       process.env.MIN = 5
