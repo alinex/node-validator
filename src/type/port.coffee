@@ -474,13 +474,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'integer'
-      min: 0
-      max: 65535
-      optional: true
     allow:
       title: "List of Allowed"
       description: "the list of allowed port numbers, names and ranges"
@@ -533,4 +526,11 @@ exports.selfcheck =
           type: 'string'
           values: Object.keys ports
         ]
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'integer'
+      min: 0
+      max: 65535
+      optional: true

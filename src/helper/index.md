@@ -116,3 +116,47 @@ If not given it will be set to null or the value given by `default`.
 - `default` - value used if optional and no value given
 
 The `default` option automatically makes the setting optional.
+
+Descriptive reporting
+-------------------------------------------------
+To get even more descriptive reporting it is possible to set a title and abstract
+for the given field in the configuration. This will be used in error reporting
+and `describe()` calls.
+
+``` coffee
+validator.check 'test', value,
+  title: 'Overall Timeout'
+  description: 'Time in milliseconds the whole test may take.'
+  type: 'float'
+  min: 500
+, (err, value) ->
+  if err
+    # there will be the error
+  else
+    # do something with value
+```
+
+This may result in the following error:
+
+> Failed: The value is to low, it has to be at least 500 in test.timeout for "Overall Timeout".
+> It should contain the time in milliseconds the whole test may take.
+
+
+Selfchecking
+-------------------------------------------------
+It is also possible to let your complex options be validated against the
+different types. This will help you to find problems in development state.
+To do this you have to add it in your tests:
+
+__Mocha coffee example:__
+
+``` coffee
+# ...
+it "should has correct validator rules", (cb) ->
+  validator.selfcheck
+    name: 'test'        # name to be displayed in errors
+    schema: schema      # definition of checks
+  , (err) ->
+    expect(err).to.not.exist
+# ...
+```

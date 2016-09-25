@@ -116,12 +116,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'url'
-      allowRelative: true
-      optional: true
     toAbsoluteBase:
       title: "Absolute"
       description: "the base URL to make it absolute"
@@ -184,4 +178,10 @@ exports.selfcheck =
       description: "a flag if set to `true` will also allow relative URLs"
       type: 'boolean'
       optional: true
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'url'
+      allowRelative: true
+      optional: true

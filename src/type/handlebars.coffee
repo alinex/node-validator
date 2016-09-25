@@ -75,7 +75,7 @@ exports.selfcheck =
   description: "a handlebars schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend
+  keys: util.extend {}, rules.baseSchema,
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
@@ -90,4 +90,3 @@ exports.selfcheck =
         description: "the default function to use"
         type: 'function'
       ]
-  , rules.baseSchema

@@ -47,7 +47,7 @@ exports.describe = (cb) ->
     text += "Hierarchical paths will be flattened together. "
   # instanceof
   if @schema.instanceOf?
-    text += "The object has to be an instance of class #{@schema.instanceOf.name}. "
+    text += "The object has to be an instance of class `#{@schema.instanceOf.name}`. "
   text = text.replace /object\. The object/, 'object which'
   # mandatoryKeys
   mandatoryKeys = @schema.mandatoryKeys ? []
@@ -60,7 +60,8 @@ exports.describe = (cb) ->
       for entry in @schema.entries
         mandatoryKeys.push entry.key if entry.key?
   if mandatoryKeys.length
-    text += "The following keys have to be present: #{mandatoryKeys.join ', '}. "
+    text += "The following keys have to be present: `#{mandatoryKeys.join '`, `'}`. "
+    text = text.replace /object\. The following/, ' object with the following'
   # allowedKeys
   allowedKeys = @schema.allowedKeys ? []
   if allowedKeys and typeof allowedKeys is 'boolean'
@@ -75,26 +76,30 @@ exports.describe = (cb) ->
     # remove the already mandatory ones
     list = allowedKeys.filter (e) -> not (e in mandatoryKeys)
     if list.length
-      text += "And the following keys are allowed: #{list.join ', '}. "
+      text += "The following keys are allowed: `#{list.join '`, `'}`. "
+      text = text.replace /object\. The following keys are/, ' object with the following keys'
   # subchecks
   async.parallel [
     (cb) =>
       # help for specific key names
       return cb() unless @schema.keys?
-      detail = "The following entries have a specific format: "
+      detail = "The following entries have a specific format:"
       async.map Object.keys(@schema.keys), (key, cb) =>
         # subchecks with new sub worker
         worker = @sub "#{@name}.#{key}", @schema.keys[key]
         worker.describe (err, subtext) ->
           return cb err if err
-          cb null, "\n- #{key}: #{subtext.replace /\n/g, '\n  '}"
+          cb null, "\n\n#{key}\n:   #{subtext.replace /\n/g, '\n    '}"
       , (err, results) ->
         return cb err if err
         cb null, detail + results.join('') + '\n'
     (cb) =>
       # help for pattern matched key names
       return cb() unless @schema.entries?
-      detail = "And all other keys which are: "
+      if @schema.keys
+        detail = "And all other keys have to be: "
+      else
+        detail = "The entries have to be: "
       async.map [0..@schema.entries.length-1], (num, cb) =>
         rule = @schema.entries[num]
         if rule.key?
@@ -232,11 +237,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'object'
-      optional: true
     flatten:
       title: "Flatten"
       description: "a flag to flatten the object structure"
@@ -312,7 +312,12 @@ exports.selfcheck =
       description: "the definition of each key's types"
       type: 'object'
       optional: true
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'object'
+      optional: true
 
 
 # Helper

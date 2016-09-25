@@ -75,14 +75,14 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'any'
-      optional: true
     and:
       type: 'array'
       entries:
         type: 'object'
         mandatoryKeys: ['type']
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'any'
+      optional: true

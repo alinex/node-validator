@@ -17,7 +17,6 @@ Check options:
   (4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')
 - `unsigned` - `Boolean` the integer has to be positive
 
-
 Format options:
 - `toUnit` - `String` unit to convert value to
 - `format` - `String` format number as string
@@ -215,11 +214,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'integer'
-      optional: true
     sanitize:
       title: "Sanitize"
       description: "a flag which allows removing of non numeric characters before evaluating"
@@ -294,4 +288,9 @@ exports.selfcheck =
       type: 'string'
       match: /^[a-z]{2}(?:-[A-Z]{2})?$/
       optional: true
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'integer'
+      optional: true

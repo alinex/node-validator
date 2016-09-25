@@ -174,11 +174,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'datetime'
-      optional: true
     range:
       title: "Date Range"
       description: "a flag set to `true` to require a range of start and end date"
@@ -225,4 +220,9 @@ exports.selfcheck =
       type: 'string'
       match: /^[a-z]{2}(-[A-Z]{2})?$/
       optional: true
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'datetime'
+      optional: true

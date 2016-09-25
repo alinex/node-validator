@@ -1,7 +1,8 @@
 ###
 String
 =================================================
-Checking text entries against multiple rules.
+This will test for strings and have lots of sanitize and optimization filters
+and also different check settings to use.
 
 Sanitize options allowed:
 - `makeString` - `Boolean` convert objects to string, first
@@ -26,6 +27,21 @@ Check options:
   (or list of expressions)
 - `matchNot` - `String|RegExp` string or regular expression which is not allowed to
   match (or list of expressions)
+
+__Example:__
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'string'
+    lowerCase: true
+    upperCase: 'first'
+    values: ['One', 'Two', 'Three']
+, (err, result) ->
+  # do something
+```
 
 #3 Character Case
 
@@ -62,9 +78,10 @@ exports.describe = (cb) ->
     text += "Objects will be converted to their string representation. "
   # remove characters
   remove = []
-  remove.push "Control characters" unless @schema.allowControls
+  remove.push "control characters" unless @schema.allowControls
   remove.push "HTML Tags" if @schema.stripTags
-  text += "#{remove.join ', '} will be removed. " if remove.length
+  text += "All #{remove.join ', '} will be removed. " if remove.length
+  text = text.replace /text entry\. All/, 'text entry in which all'
   # upper/lowercase
   if @schema.lowerCase? and @schema.lowerCase is true
     text += "The text will get lower case. "
@@ -225,11 +242,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'string'
-      optional: true
     makeString:
       title: "Make String"
       description: "a switch to transform objects into string using the `toString()` method"
@@ -446,4 +458,9 @@ exports.selfcheck =
           instanceOf: RegExp
         ]
       ]
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'string'
+      optional: true

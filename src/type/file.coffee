@@ -92,11 +92,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'string'
-      optional: true
     basedir:
       title: "Base Directory"
       description: "the directory to use for relative link resolving"
@@ -135,7 +130,12 @@ exports.selfcheck =
         'socket', 's'
       ]
       optional: true
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'string'
+      optional: true
 
 
 # Helper

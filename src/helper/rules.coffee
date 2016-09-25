@@ -42,7 +42,7 @@ exports.optional =
         util.inspect @schema.default
       return "It's optional and will be set to #{value} if not specified. "
     else
-      return "It's optional."
+      return "It's optional. "
 
   # Check if value is optional or use default.
   #

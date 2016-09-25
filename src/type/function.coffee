@@ -1,6 +1,20 @@
 ###
 Function
 =================================================
+The value has to be a function.
+Other values are not allowed.
+
+__Example:__
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'function'
+, (err, result) ->
+  # do something
+```
 
 
 Schema Specification
@@ -51,10 +65,9 @@ exports.selfcheck =
   description: "a function schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend
+  keys: util.extend {}, rules.baseSchema,
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
       type: 'function'
       optional: true
-  , rules.baseSchema

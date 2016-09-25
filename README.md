@@ -140,10 +140,10 @@ validator.selfcheck
 
 
 
-Ideas
+Further Ideas
 -------------------------------------------------
 
-#### Database (to be implemented later)
+### Database (to be implemented later)
 
 This connector is not implemented so far and will come in one of the next
 releases. But in the example below I show how it will be used.
@@ -155,102 +155,11 @@ releases. But in the example below I show how it will be used.
 ```
 
 
-Descriptive reporting
--------------------------------------------------
-To get even more descriptive reporting it is possible to set a title and abstract
-for the given field in the configuration. This will be used in error reporting
-and `describe()` calls.
-
-``` coffee
-validator.check 'test', value,
-  title: 'Overall Timeout'
-  description: 'Time in milliseconds the whole test may take.'
-  type: 'float'
-  min: 500
-, (err, value) ->
-  if err
-    # there will be the error
-  else
-    # do something with value
-```
-
-This may result in the following error:
-
-> Failed: The value is to low, it has to be at least 500 in test.timeout for "Overall Timeout".
-> It should contain the time in milliseconds the whole test may take.
-
-
-Selfchecking
--------------------------------------------------
-It is also possible to let your complex options be validated against the
-different types. This will help you to find problems in development state.
-To do this you have to add it in your tests:
-
-__Mocha coffee example:__
-
-``` coffee
-# ...
-it "should has correct validator rules", (cb) ->
-  validator.selfcheck
-    name: 'test'        # name to be displayed in errors
-    schema: schema      # definition of checks
-  , (err) ->
-    expect(err).to.not.exist
-# ...
-```
 
 
 Basic Check Types
 -------------------------------------------------
 
-The type `any` is only used internally and matches any value. It is used as default
-if nothing is specified for an value and makes the checks homogeneous.
-
-### boolean
-
-The value has to be a boolean. The value will be true for 1, 'true', 'on',
-'yes', '+' and it will be considered as false for 0, 'false', 'off', 'no',
-'-', null and undefined.
-Other values are not allowed.
-
-__Validate options:__
-
-- `class` - (boolean) only a class or only a normal function is valid
-
-__Format options:__
-
-- `format` - (list) with the values for false and true
-
-__Example:__
-
-``` coffee
-validator.check
-  name: 'test'        # name to be displayed in errors (optional)
-  value: input        # value to check
-  schema:             # definition of checks
-    type: 'boolean'
-, (err, result) ->
-  # do something
-```
-
-### function
-
-The value has to be a function.
-Other values are not allowed.
-
-__Options:__ none
-
-__Example:__
-
-``` coffee
-validator.check
-  name: 'test'        # name to be displayed in errors (optional)
-  value: input        # value to check
-  schema:             # definition of checks
-    type: 'function'
-, (err, result) ->
-  # do something
-```
 
 ### string
 

@@ -132,11 +132,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'float'
-      optional: true
     unit:
       title: "Source Unit"
       description: "the unit in which an only numeric value is given, will transform to base value"
@@ -176,4 +171,9 @@ exports.selfcheck =
       type: 'float'
       optional: true
       min: '<<<min>>>'
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'float'
+      optional: true

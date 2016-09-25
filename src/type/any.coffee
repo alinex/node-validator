@@ -1,6 +1,8 @@
 ###
 Any
 =================================================
+The type `any` is only used internally and matches any value. It is used as default
+if nothing is specified for an value and makes the checks homogeneous.
 
 
 Schema Specification
@@ -25,7 +27,7 @@ rules = require '../helper/rules'
 # and the resulting text
 exports.describe = (cb) ->
   # combine into message
-  text = "Any value is valid. "
+  text = "A value of any type. "
   text += rules.optional.describe.call this
   text = text.replace /\. It's/, ' which is'
   cb null, text
@@ -49,10 +51,9 @@ exports.selfcheck =
   description: "any schema definition"
   type: 'object'
   allowedKeys: true
-  keys: util.extend
+  keys: util.extend {}, rules.baseSchema,
     default:
       title: "Default Value"
       description: "the default value to use if nothing given"
       type: 'any'
       optional: true
-  , rules.baseSchema

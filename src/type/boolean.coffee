@@ -1,6 +1,26 @@
 ###
 Boolean
 =================================================
+The value has to be a boolean. The value will be true for 1, 'true', 'on',
+'yes', '+' and it will be considered as false for 0, 'false', 'off', 'no',
+'-', null and undefined.
+Other values are not allowed.
+
+__Format options:__
+
+- `format` - (list) with the values for false and true
+
+__Example:__
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'boolean'
+, (err, result) ->
+  # do something
+```
 
 
 Schema Specification
@@ -36,7 +56,6 @@ exports.describe = (cb) ->
   text = "A boolean value, which will be true for #{vTrue} and
   will be considered as false for #{vFalse}. "
   text += rules.optional.describe.call this
-  text = text.replace /\. It's/, ' which is'
   if @schema.format
     text += "The values #{@schema.format.join ', '} will be used for output. "
   cb null, text
@@ -70,16 +89,16 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'boolean'
-      optional: true
     format:
       title: "Format"
       description: "the display values for `false` and `true`"
       type: 'array'
       minLength: 2
       maxLength: 2
+      optional: true  
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'boolean'
       optional: true
-  , rules.baseSchema

@@ -112,12 +112,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'string'
-      minLength: 5
-      optional: true
     lowerCase:
       title: "Lower Case"
       description: "a flag to transform to lower case letters"
@@ -133,7 +127,13 @@ exports.selfcheck =
       description: "a flag to also check the MX record of the destination host if possible"
       type: 'boolean'
       optional: true
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'string'
+      minLength: 5
+      optional: true
 
 
 # Helper

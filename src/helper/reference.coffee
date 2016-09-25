@@ -1,7 +1,7 @@
 ###
 References
 =================================================
-References point to values which are used on their place. You can use references
+References point to values which are used instead. You can use references
 within the structure data which is checked and also within the check conditions.
 Not everything is possible, but a lot - see below.
 
@@ -440,7 +440,7 @@ handler =
 
   This allows you to reference to already validated or system internal information.
 
-      <<<context:///absolute/*/min>>>
+      <<<context:///absolute/* /min>>>
 
   The syntax is nearly the same as for the value structure but relative paths makes
   no sense because you don't have a base position in the structure.
@@ -637,30 +637,6 @@ handler =
   ###
 
   ###
-  #3 Checks
-
-  It is possible to validate a value within the path using the validator itself.
-
-      {type: 'integer'}
-
-  Therefore this part of the path have to be a javascript object.
-  ###
-
-  # Value checks.
-  #
-  check: (proto, loc, data, base, worker, cb) ->
-    # get the check schema reading as js
-    vm ?= require 'vm'
-    schema = vm.runInNewContext "x=#{loc}"
-    # instantiate new object
-    Worker ?= require './worker'
-    worker = new Worker "reference-#{loc}", schema, null, data
-    # run the check
-    worker.check (err) ->
-      return cb err if err
-      cb null, worker.value
-
-  ###
   #3 Split
 
   A split generates a two-dimensional array (rows and columns) out of a simple text.
@@ -809,9 +785,9 @@ handler =
   You can search by using asterisk as directory placeholder or a double asterisk to
   go multiple level depth:
 
-      name/*/min - within any subelement
-      name/*/*/min - within any subelement (two level depth)
-      name/**/min - within any subelement in any depth
+      name/* /min - within any subelement
+      name/* /* /min - within any subelement (two level depth)
+      name/** /min - within any subelement in any depth
 
   You may also use regexp notation to find the correct element:
 
@@ -845,3 +821,27 @@ handler =
     loc = loc[6..]
     splitter = if loc then loc.split '//' else [', ']
     cb null, arrayJoin data, splitter
+
+  ###
+  #3 Checks
+
+  It is possible to validate a value within the path using the validator itself.
+
+      {type: 'integer'}
+
+  Therefore this part of the path have to be a javascript object.
+  ###
+
+  # Value checks.
+  #
+  check: (proto, loc, data, base, worker, cb) ->
+    # get the check schema reading as js
+    vm ?= require 'vm'
+    schema = vm.runInNewContext "x=#{loc}"
+    # instantiate new object
+    Worker ?= require './worker'
+    worker = new Worker "reference-#{loc}", schema, null, data
+    # run the check
+    worker.check (err) ->
+      return cb err if err
+      cb null, worker.value

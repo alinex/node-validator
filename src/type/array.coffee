@@ -56,8 +56,11 @@ exports.describe = (cb) ->
   if @schema.unique?
     text += "All values have to be unique. "
   if @schema.minLength? and @schema.maxLength?
-    text += "The number of entries have to be between #{@schema.minLength}
-      and #{@schema.maxLength}. "
+    if @schema.minLength is @schema.maxLength
+      text += "The number of entries have to be exactly #{@schema.minLength} elements. "
+    else
+      text += "The number of entries have to be between #{@schema.minLength}
+        and #{@schema.maxLength} elements. "
   else if @schema.minLength?
     text += "At least #{@schema.minLength} elements should be given. "
   else if @schema.maxLength?
@@ -79,14 +82,18 @@ exports.describe = (cb) ->
         cb null, detail + results.join('') + '\n'
     (cb) =>
       return cb() unless @schema.entries?
-      detail = "And all other entries have to be:\n- "
+      if @schema.list
+        detail = "And all other entries have to be\\\n"
+      else
+        detail = "Each entry have to be:\\\n"
       # subchecks with new sub worker
       worker = @sub "#{@name}#entries", @schema.entries
       worker.describe (err, subtext) ->
         return cb err if err
-        cb null, detail + "\nEntries should be: " + subtext
+        cb null, detail + subtext
   ], (err, results) =>
     return cb err if err
+    text = text.replace /A list\. Each entry have to be/, 'A list with each entry as'
     text = (text + results.join '').trim() + ' '
     if @schema.format?
       text += "The value will be formatted as #{@schema.format} list. "
@@ -174,11 +181,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'array'
-      optional: true
     delimiter:
       title: "Delimiter"
       description: "the delimiter to split given string into list"
@@ -243,4 +245,9 @@ exports.selfcheck =
       type: 'string'
       values: ['simple', 'pretty', 'json']
       optional: true
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'array'
+      optional: true

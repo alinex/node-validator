@@ -27,9 +27,9 @@ rules = require '../helper/rules'
 # and the resulting text
 exports.describe = (cb) ->
   # combine into message
-  text = "At least one of the following checks have to succeed:"
+  text = "It has to be one of the following types: "
   text += rules.optional.describe.call this
-  text = text.replace /\. It's/, ' which is'
+  text = text.replace /: It's/, ' (optional):'
   # check all possibilities
   async.map [0..@schema.or.length-1], (num, cb) =>
     # subchecks with new sub worker
@@ -78,11 +78,6 @@ exports.selfcheck =
   type: 'object'
   allowedKeys: true
   keys: util.extend
-    default:
-      title: "Default Value"
-      description: "the default value to use if nothing given"
-      type: 'any'
-      optional: true
     or:
       title: "Alternatives"
       description: "the list of alternatives for the value"
@@ -92,4 +87,9 @@ exports.selfcheck =
         description: "an alternative for the value"
         type: 'object'
         mandatoryKeys: ['type']
-  , rules.baseSchema
+  , rules.baseSchema,
+    default:
+      title: "Default Value"
+      description: "the default value to use if nothing given"
+      type: 'any'
+      optional: true
