@@ -19,6 +19,11 @@ Validating children:
 Formatting options:
 - `format` - one of 'simple', 'pretty', 'json'
 
+    data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
+    # simple -> "1, 2, 3, a, [object Object], c,9"
+    # pretty -> "1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]"
+    # json -> '[1,2,3,"a",{"b":1},["c",9]]'
+
 
 Schema Specification
 ---------------------------------------------------

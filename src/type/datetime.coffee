@@ -1,15 +1,69 @@
 ###
 Datetime
 =================================================
+This validator will parse the given format using different technologies in nearly
+all common formats:
 
-Check options:
-- `part` - `String` with: 'date', 'time' or 'datetime'
+- ISO 8601 datetimes
+  - '2013-02-08'
+  - '2013-W06-5'
+  - '2013-039'
+  - '2013-02-08 09'
+  - '2013-02-08T09'
+  - '2013-02-08 09:30'
+  - '2013-02-08T09:30'
+  - '2013-02-08 09:30:26'
+  - '2013-02-08T09:30:26'
+  - '2013-02-08 09:30:26.123'
+  - '2013-02-08 24:00:00.00'
+- ISO 8601 time only
+- ISO 8601 date only
+  - '2013-02-08 09'
+  - '2013-W06-5 09'
+  - '2013-039 09'
+- ISO 8601 with timezone
+  - '2013-02-08 09+07:00'
+  - '2013-02-08 09-0100'
+  - '2013-02-08 09Z'
+  - '2013-02-08 09:30:26.123+07:00'
+- natural language: 'today', 'tomorrow', 'yesterday', 'last friday'
+- named dates
+  - '17 August 2013'
+  - '19 Aug 2013'
+  - '20 Aug. 2013'
+  - 'Sat Aug 17 2013 18:40:39 GMT+0900 (JST)'
+- relative dates
+  - 'This Friday at 13:00'
+  - '5 days ago'
+- specials: 'now'
+
+__Parse options:__
+- `range` - `Boolean` the value has to be a range consisting of two dates
+- `timezone` - `String` specify timezone if none given
+
+__Check options:__
 - `min` - `Integer` the date should be after
 - `max` - `Integer` the date should be before
+
+__Format options:__
+- `part` - `String` with: 'date', 'time' or 'datetime'
 - `format` - `String` how to format result as string
-- `range` - `Boolean` the value has to be a range consisting of two dates
 - 'locale' - `String` used for formatting
 - `toTimezone` - `String` transform date/time to the given timezone
+
+__Output formats__
+
+If not specified it is a Date object.
+
+If `format = 'unix'` it will be an unix timestamp (seconds since January 1, 1970).
+
+For all other format settings a corresponding output string will be generated. Use
+the aliases like ISO8601, RFC1123, RFC2822, RFC822, RFC1036 are supported and any
+[moment.js](http://momentjs.com/docs/#/displaying/) format.
+
+Also see the interval validator for time ranges without context.
+
+The timezones may be 'America/Toronto', 'EST' or 'Eastern Standard Time' for example.
 
 
 Schema Specification

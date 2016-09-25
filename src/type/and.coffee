@@ -6,6 +6,35 @@ Collection of types combined with logical and.
 This checks will be done in series to allow each one to possibly change the value
 and give it on.
 
+This is used to give multiple rules which will be executed in a series and
+all have to succeed.
+
+__Option:__
+
+- `and` - (array) with multiple check rules
+
+With this it is possible to use a string-check to sanitize and then use an
+other test to finalize the value like:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'and'
+    and: [
+      type: 'string'
+      toString: true
+      replace: [/,/g, '.']
+    ,
+      type: 'float'
+    ]
+, (err, result) ->
+  # do something
+```
+
+This allows to give float numbers in the european format: xx,x
+
 
 Schema Specification
 ---------------------------------------------------

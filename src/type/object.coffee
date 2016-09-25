@@ -1,19 +1,159 @@
 ###
 Object
 =================================================
-An complex object.
+For all complex data structures you use the object type which checks for named
+arrays or instance objects.
+
+This is the most complex validation form because it has different checks and
+uses subchecks on each entry.
 
 Sanitize options:
 - `flatten` - flatten hierarchical values
 
 Check options:
-- `instanceOf` - only objects of given class type are allowed
-- `mandatoryKeys` - the list of elements which are mandatory
-- `allowedKeys` - gives a list of elements which are also allowed
+- `instanceOf` - `Class` only objects of given class type are allowed
+- `flatten` - `Boolean` flatten deep structures
+- `mandatoryKeys` - `Àrray` the list of elements which are mandatory
+- `allowedKeys` - `Array` gives a list of elements which are also allowed
   or true to use the list from entries definition
 
 Validating children:
-- `entries` - specification for entries
+- `entries` - `Object` specification for entries
+- `keys` - `Object` specification for all entries per each key name
+
+So you have two different ways to specify objects. First you can use the `instanceOf`
+check. Or specify a data object.
+
+The `mandatoryKeys` and `allowedKeys` may both contain normal strings for complete
+key names and also regular expressions to match multiple. In case of using it
+in the mandatoryKeys field at least one matching key have to be present.
+And as you may suspect the `mandatoryKeys` are automatically also `allowedKeys`.
+If `mandatoryKeys` or `allowedKeys` are set to true instead of a list all of the
+specified keys in entries or keys are meant.
+
+The `keys` specify the subcheck for each containing object attribute. If they are
+not optional or contain a default entry they will be seen also as mandatory field.
+
+The `entries` list do the same as the `keys` section but works using key matching
+on multiple entires. If an object attribute matches multiple entries-rules the
+first will be used.
+
+__Examples:__
+
+The follwoing will check for an instance:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    instanceOf: RegeExp
+, (err, result) ->
+  # do something
+```
+
+Or you may specify the data object structure:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    mandatoryKeys: ['name']
+    allowedKeys: ['mail', 'phone']
+    entries: [
+      type: 'string'
+    ]
+, (err, result) ->
+  # do something
+```
+
+Here all object values have to be strings.
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    mandatoryKeys: ['name']
+    entries: [
+      key: /^num-\d+/
+      type: 'integer'
+    ,
+      type: 'string'
+    ]
+, (err, result) ->
+  # do something
+```
+
+And here the keys matching the key-check (starting with 'num-...') have to be
+integers and all other strings.
+
+If you don't specify `allowedKeys` more attributes with other names are possible.
+
+And the most complex situation is a deep checking structure with checking each
+key for its specifics:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    allowedKeys: true
+    keys:
+      name:
+        type: 'string'
+      mail:
+        type: 'string'
+        optional: true
+      phone:
+        type: 'string'
+        optional: true
+, (err, result) ->
+  # do something
+```
+
+Here `allowedKeys` will check that no attributes are used which are not specified
+in the entries. Which attribute is optional may be specified within the attributes
+specification. That means this check is the same as above but also checks that the
+three attributes are strings.
+
+If you specify `entries` and `keys`, the entries check will only be used as default
+for all keys which has no own specification.
+
+Another option is to flatten the structure before checking it:
+
+``` coffee
+# value to check
+input =
+  first:
+    num: { one: 1, two: 2 }
+  second:
+    num: { one: 1, two: 2 }
+    name: { anna: 1, berta: 2 }
+# run the validation
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    flatten: true
+, (err, result) ->
+  # do something
+```
+
+This will give you the following result:
+
+``` coffee
+result =
+  'first-num': { one: 1, two: 2 }
+  'second-num': { one: 1, two: 2 }
+  'second-name': { anna: 1, berta: 2 }
+```
 
 
 Schema Specification
