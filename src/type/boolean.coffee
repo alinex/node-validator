@@ -95,7 +95,7 @@ exports.selfcheck =
       type: 'array'
       minLength: 2
       maxLength: 2
-      optional: true  
+      optional: true
   , rules.baseSchema,
     default:
       title: "Default Value"

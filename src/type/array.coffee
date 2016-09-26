@@ -7,16 +7,16 @@ Sanitize options:
 - `delimiter` - allow value text with specified list separator
  (it can also be an regular expression)
 
-Check options:
+__Check options:__
 - `notEmpty` - set to true if an empty array is not valid
 - `minLength` - minimum number of entries
 - `maxLength` - maximum number of entries
 - `toArray` - convert scalar values into array
 
-Validating children:
+__Validating children:__
 - `entries` - specification for all entries or as array for each element
 
-Formatting options:
+__Formatting options:__
 - `format` - one of 'simple', 'pretty', 'json'
 
       data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]

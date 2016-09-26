@@ -794,7 +794,8 @@ handler =
       name/test[AB]/min - pattern match with one missing character
       name/test\d+/min - pattern match with multiple missing characters
 
-  See the [Mozilla Developer Network](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+  See the [Mozilla Developer Network](https://developer.mozilla.org/de/docs/Web/
+  JavaScript/Reference/Global_Objects/RegExp)
   for the possible syntax but without modifier.
   ###
 

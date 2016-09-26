@@ -13,7 +13,9 @@ __Sanitize options:__
 - `normalize` `Boolean` remove tags, alternative domains and subdomains
 
 __Check options:__
-- `checkServer` `Boolean` also check for working email servers
+- `checkServer` - `Boolean` also check for working email servers
+- `denyBlacklisted` - `Boolean` deny all mail servers which are currently blacklisted
+- `denyUntrusted` - `Boolean` deny all mail servers which are on the untrusted list
 
 
 Schema Specification
@@ -26,11 +28,15 @@ Schema Specification
 # -------------------------------------------------
 async = require 'async'
 chalk = require 'chalk'
+fs = require 'fs'
+util = require 'alinex-util'
 dns = null # load on demand
 request = null # load on demand
-util = require 'alinex-util'
+format = null # load on demand
 # include classes and helper
 rules = require '../helper/rules'
+dnsbl = # loaded on demand
+dnsgl = # loaded on demand
 
 
 # Exported Methods
@@ -50,6 +56,10 @@ exports.describe = (cb) ->
   if @schema.normalize
     text += "Extended formats like additional domains, subdomains and tags which
     mostly belong to the same mailbox will be removed. "
+  if @schema.blacklisted
+    text += "Don't allow mail servers which are one one of the public blacklists. "
+  if @schema.untrusted
+    text += "Deny all mail servers which are marked as untrusted and often used for spam. "
   cb null, text
 
 # Check value against schema.
@@ -95,15 +105,33 @@ exports.check = (cb) ->
         return @sendSuccess cb
       # find mx records
       dns ?= require 'dns'
-      dns.resolveMx host, (err, addresses) =>
-        checkMailServer.call this, addresses, ip, (ok) =>
-          return @sendSuccess cb if ok
-          # find a-record
-          dns.resolve host, (err, addresses) =>
-            checkMailServer.call this, addresses, ip, (ok) =>
-              return @sendSuccess cb if ok
-              @sendError "No correct responding mail server
-              could be detected for this domain", cb
+      dns.resolveMx host, (err, list) =>
+#        checkMailServer.call this, addresses, ip, (ok) =>
+#          return @sendSuccess cb if ok
+#          # find a-record
+#          dns.resolve host, (err, addresses) =>
+#
+#            ], (err)
+#            checkMailServer.call this, addresses, ip, (ok) =>
+#              return @sendSuccess cb if ok
+#              @sendError "No correct responding mail server
+#              could be detected for this domain", cb
+        # check each server entry
+        unless list?
+          return @sendError "Could not find nameserver entry for mail server", cb
+        list = list.sort (a, b) -> a.priority - b.priority
+        .map (e) -> e.exchange
+        async.parallel [
+          # check for existing mailserver
+          (cb) => checkMailServer.call this, list, ip, cb
+          # check for blacklisted
+          (cb) => checkBlacklisted.call this, list, ip, cb
+          # check for untrusted
+          (cb) => checkUntrusted.call this, list, ip, cb
+        ], (err) =>
+          return @sendError err.message, cb if err
+          @sendSuccess cb
+
 
 # ### Selfcheck Schema
 #
@@ -129,6 +157,18 @@ exports.selfcheck =
       description: "a flag to also check the MX record of the destination host if possible"
       type: 'boolean'
       optional: true
+    denyBlacklisted:
+      title: "Deny Blacklisted Server"
+      description: "a flag to deny all mail addresses of servers which are currently on
+      any blacklist"
+      type: 'boolean'
+      optional: true
+    denyUntrusted:
+      title: "Deny Untrusted Server"
+      description: "a flag to deny also mail addresses of untrusted servers which users
+      are unverified"
+      type: 'boolean'
+      optional: true
   , rules.baseSchema,
     default:
       title: "Default Value"
@@ -140,6 +180,18 @@ exports.selfcheck =
 
 # Helper
 # -------------------------------------------------
+
+# @param {String} host hostname to normalize
+# @return {Function(local, host)} which will normalize local and host part of address
+normalize = (host) ->
+  return switch
+    when host.match /^g(oogle)?mail\.com$/i
+      (local) ->
+        [local.replace(/\.|\+.*$/g, ''), 'gmail.com']
+    else
+      (local, host) ->
+        [local.replace(/\+.*$/g, ''), host.toLowerCase()]
+        #.replace(/.*?(\w+\.\w+)$/, '$1')]
 
 myIP = null # for later mail server checks
 
@@ -159,11 +211,9 @@ getMyIP = (cb) ->
 # @param {String} ip local ip address
 # @param {Function(Boolean)} cb callback with `true` if server has a ns record
 checkMailServer = (list, ip, cb) ->
-  return cb false unless list?.length
+  unless list?.length
+    return cb new Error "No correct responding mail server could be detected for this domain"
   net = require 'net'
-  # check email exchange server
-  list = list.sort (a, b) -> a.priority - b.priority
-  .map (e) -> e.exchange
   async.detect list, (domain, cb) =>
     @debug chalk.grey "#{@name}: check mail server under #{domain}"
     res = ''
@@ -180,16 +230,76 @@ checkMailServer = (list, ip, cb) ->
     client.on 'end', =>
       @debug chalk.grey l for l in res.split /\n/
       cb null, res?.length > 0
-  , (err, res) -> cb res
+  , (err, res) ->
+    return cb() if res
+    cb new Error "No correct responding mail server could be detected for this domain"
 
-# @param {String} host hostname to normalize
-# @return {Function(local, host)} which will normalize local and host part of address
-normalize = (host) ->
-  return switch
-    when host.match /^g(oogle)?mail\.com$/i
-      (local) ->
-        [local.replace(/\.|\+.*$/g, ''), 'gmail.com']
-    else
-      (local, host) ->
-        [local.replace(/\+.*$/g, ''), host.toLowerCase()]
-        #.replace(/.*?(\w+\.\w+)$/, '$1')]
+checkBlacklisted = (list, ip, cb) ->
+  return cb() unless @schema.denyBlacklisted
+  loadDnsbl (err) =>
+    return cb err if err
+    async.each list, (host, cb) =>
+      dns.resolve host, (err, addresses) =>
+        return cb() if err
+        # each address
+        async.each addresses, (address, cb) =>
+          # reverse ip
+          reverse = address.split '.'
+          .reverse()
+          .join '.'
+          # each list entry
+          async.each dnsbl, (bl, cb) =>
+            # dns lookup
+            dns.resolve "#{reverse}.#{bl.zone}", (err) ->
+              return cb() if err
+              cb new Error "Server #{host} (#{address}) is found on #{bl.name} list
+              check at #{bl.url}"
+        , cb
+    , cb
+
+checkUntrusted = (list, ip, cb) ->
+  return cb() unless @schema.denyUntrusted
+  loadDnsgl (err) =>
+    return cb err if err
+    async.each list, (host, cb) =>
+      dns.resolve host, (err, addresses) =>
+        return cb() if err
+        # each address
+        async.each addresses, (address, cb) =>
+          # reverse ip
+          reverse = address.split '.'
+          .reverse()
+          .join '.'
+          # each list entry
+          async.each dnsgl, (bl, cb) =>
+            # dns lookup
+            dns.resolve "#{reverse}.#{bl.zone}", (err) ->
+              return cb() if err
+              cb new Error "Server #{host} (#{address}) is found on #{bl.name} list
+              check at #{bl.url}"
+        , cb
+    , cb
+
+loadDnsbl = (cb) ->
+  return cb() if dnsbl
+  # load blacklist
+  format ?= require 'alinex-format'
+  fs.readFile "#{__dirname}/data/blacklists.yaml", 'UTF8', (err, content) ->
+    return cb err if err
+    format.parse content, 'yaml', (err, data) ->
+      return cb err if err
+      v.name = k for k, v of data
+      dnsbl = data
+      cb()
+
+loadDnsgl = (cb) ->
+  return cb() if dnsgl
+  # load blacklist
+  format ?= require 'alinex-format'
+  fs.readFile "#{__dirname}/data/graylists.yaml", 'UTF8', (err, content) ->
+    return cb err if err
+    format.parse content, 'yaml', (err, data) ->
+      return cb err if err
+      v.name = k for k, v of data
+      dnsgl = data
+      cb()
