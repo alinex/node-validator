@@ -3,13 +3,13 @@ Byte
 =================================================
 To test for byte values which may contain prefixes like `18M` or `6.2 GB`.
 
-Sanitize options allowed:
+__Sanitize options allowed:__
 - `unit` - `String` unit to convert to if no number is given
 - `round` - `Boolean` rounding can be set to true for arithmetic rounding
  or use `floor` or `ceil` for the corresponding methods
 - `decimals` - `Integer`  number of decimal digits to round to
 
-Check options:
+__Check options:__
 - `min` - `Integer` the smalles allowed number
 - `max` - `Integer` the biggest allowed number
 

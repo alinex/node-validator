@@ -19,10 +19,10 @@ Validating children:
 Formatting options:
 - `format` - one of 'simple', 'pretty', 'json'
 
-    data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
-    # simple -> "1, 2, 3, a, [object Object], c,9"
-    # pretty -> "1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]"
-    # json -> '[1,2,3,"a",{"b":1},["c",9]]'
+      data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
+      # simple -> "1, 2, 3, a, [object Object], c,9"
+      # pretty -> "1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]"
+      # json -> '[1,2,3,"a",{"b":1},["c",9]]'
 
 
 Schema Specification
@@ -74,7 +74,7 @@ exports.describe = (cb) ->
   async.parallel [
     (cb) =>
       return cb() unless @schema.list?
-      detail = "The following entries have a specific format:"
+      detail = "The following entries have a specific format: "
       max = @schema.list.length - 1
       async.map [0..max], (num, cb) =>
         # subchecks with new sub worker
@@ -88,14 +88,14 @@ exports.describe = (cb) ->
     (cb) =>
       return cb() unless @schema.entries?
       if @schema.list
-        detail = "And all other entries have to be\\\n"
+        detail = "And all other entries have to be of type:\n> "
       else
-        detail = "Each entry have to be:\\\n"
+        detail = "Each entry has to be of type:\n> "
       # subchecks with new sub worker
       worker = @sub "#{@name}#entries", @schema.entries
       worker.describe (err, subtext) ->
         return cb err if err
-        cb null, detail + subtext
+        cb null, detail + subtext.replace /\n/g, '\n> '
   ], (err, results) =>
     return cb err if err
     text = text.replace /A list\. Each entry have to be/, 'A list with each entry as'

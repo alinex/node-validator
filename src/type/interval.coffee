@@ -1,7 +1,11 @@
 ###
 Interval
 =================================================
-Check for time interval.
+A time interval may be given:
+
+- directly as number
+- in a string with days, minutes and seconds: `1d 3h 12m 10s 400ms`
+- in a time format: `03:20`, `02:18:10.5`
 
 Sanitize options allowed:
 - `unit` - `String` type of unit to convert if not integer given

@@ -107,7 +107,17 @@ class Worker
     if @debug.enabled
       @debug "#{@name}: #{@schema.title}" if @schema.title
       @debug chalk.grey "#{@name}: describe schema #{@inspectSchema()}"
-    @lib.describe.call this, cb
+    # add title and description
+    text = ''
+    if @schema.title
+      text += "__#{@schema.title}__ "
+      sp = if @schema.title[-1..] is 's' and @schema.title[-2..] isnt 'ss' then 'are' else 'is'
+      text += "#{sp} #{@schema.description}." if @schema.description
+      text += "\n\n"
+    # add details
+    @lib.describe.call this, (err, detail) ->
+      return cb err if err
+      cb null, text + detail
 
   # Check the given value against schema.
   #

@@ -1,7 +1,8 @@
 ###
 RegExp
 =================================================
-Checking regular expressions.
+Check that the given value is a regular expression. If a text is given it will be
+compiled into an regular expression.
 
 Check options:
 - `optional` - `Boolean` the value must not be present (will return null)

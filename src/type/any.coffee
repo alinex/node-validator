@@ -4,6 +4,8 @@ Any
 The type `any` is only used internally and matches any value. It is used as default
 if nothing is specified for an value and makes the checks homogeneous.
 
+`any` has no special options.
+
 
 Schema Specification
 ---------------------------------------------------

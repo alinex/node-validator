@@ -98,9 +98,9 @@ rules = require '../helper/rules'
 # and the resulting text
 exports.describe = (cb) ->
   # combine into message
-  text = "It has to be one of the following types: "
+  text = "It has to be __one of__ the following types: "
   text += rules.optional.describe.call this
-  text = text.replace /: It's/, ' (optional):'
+  text = text.replace /: It's optional./, ' (optional):'
   # check all possibilities
   async.map [0..@schema.or.length-1], (num, cb) =>
     # subchecks with new sub worker

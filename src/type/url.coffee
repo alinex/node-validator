@@ -3,9 +3,11 @@ URL
 =================================================
 Checking text for a valid URL.
 
-Check options:
+Sanitize options:
 - `toAbsoluteBase` - `String` convert to absolute with given base
 - `removeQuery` - `Boolean` remove query and hash from url
+
+Check options:
 - `hostsAllowed` - `String|RegExp` list of allowed hosts by string or regexp
 - `hostsDenied` - `String|RegExp` list of denied hosts by string or regexp
 - `allowProtocols` - `Array` lust of allowed protocols

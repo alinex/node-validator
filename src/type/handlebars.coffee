@@ -7,6 +7,28 @@ A template function or template source or normal text are all valid and result i
 returning a function which may be called with a context will return the template's
 resulting text.
 
+A text which may contain [handlebars syntax](http://alinex.github.io/develop/lang/handlebars.html)
+will be compiled into a function which if called with the context
+object will return the resulting text.
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: 'hello {{name}}' # value to check
+  schema:             # definition of checks
+    type: 'handlebars'
+, (err, result) ->
+  # then use it
+  console.log result
+    name: 'alex'
+  # this will output 'hello alex'
+```
+
+Within the handlebars templates you may use:
+
+- [builtin helpers](http://alinex.github.io/develop/lang/handlebars.html#built-in-helpers)
+- additional [handlebars](http://alinex.github.io/node-handlebars) helpers
+
 
 Schema Specification
 ---------------------------------------------------

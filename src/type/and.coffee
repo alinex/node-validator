@@ -100,13 +100,17 @@ exports.check = (cb) ->
 # Schema for selfchecking of this type
 exports.selfcheck =
   title: "And"
-  description: "multiple schema definitions"
+  description: "the logic for multiple, serial schema definitions"
   type: 'object'
   allowedKeys: true
   keys: util.extend
     and:
+      title: "Conditions"
+      description: "the list of all serial checks which have to succeed"
       type: 'array'
       entries:
+        title: "Condition"
+        description: "one of the checks which have to succeed"
         type: 'object'
         mandatoryKeys: ['type']
   , rules.baseSchema,

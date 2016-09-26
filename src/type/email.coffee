@@ -1,16 +1,18 @@
 ###
 Email
 =================================================
-There are a lot of crazy possibilities in the RFC2822 which  specifies the Email
-format. Perhaps it came from letting different existing email systems represented
-their account, to encompass anything that was valid before.
+There are a lot of crazy possibilities in the [RFC2822](https://www.ietf.org/rfc/rfc2822.txt)
+which  specifies the Email format. Perhaps it came from letting different existing
+email systems represented their account, to encompass anything that was valid before.
 
 So this check will not aim to allow all emails allowed through RFC but only
 those which are reasonable and commonly used.
 
-Check options:
+__Sanitize options:__
 - `lowerCase` domain and gmail addresses completely
 - `normalize` `Boolean` remove tags, alternative domains and subdomains
+
+__Check options:__
 - `checkServer` `Boolean` also check for working email servers
 
 

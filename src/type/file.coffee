@@ -1,6 +1,7 @@
 ###
-URL
+File
 =================================================
+Check the value as valid file or directory entry.
 
 __Sanitize options:__
 - `basedir` - `String` relative paths are calculated from this directory
@@ -114,8 +115,8 @@ exports.selfcheck =
       toArray: true
       optional: true
       entries:
-        title: "Find Directory"
-        description: "the directory in which to search for the file"
+        title: "Find Directories"
+        description: "the directories in which to search for the file"
         type: 'string'
     filetype:
       title: "File Type"

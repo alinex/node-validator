@@ -1,6 +1,7 @@
 ###
 Hostname
 =================================================
+The value has to be a valid hostname definition.
 
 
 Schema Specification

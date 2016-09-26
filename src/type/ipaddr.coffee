@@ -1,14 +1,36 @@
 ###
 IP Address
 =================================================
+The value has to be an IP address.
 
 Check options:
 - `optional` - `Boolean` the value must not be present (will return null)
 - `default` - `String` the value to use if none given
 - `version` - `String` one of 'ipv4' or 'ipv6' and the value will be converted, if possible
-- `format` - `String` compression method to use: 'short', 'long'
 - `allow` - `Array` the allowed ip ranges
 - `deny` - `Array` the denied ip ranges
+
+Format options:
+- `format` - `String` compression method to use: 'short', 'long'
+
+The addresses may be converted from IPv6 to IPv4 and from IPv4 to IPv6 if possible.
+
+Ranges for `deny` and `allow` may contain a list of multiple IP ranges which are
+given in with the IP address and the significant bits behind: '127.0.0.1/8' or as
+a range name.
+Range names are: unspecified, broadcast, multicast, linklocal, loopback, private,
+reserved, uniquelocal, ipv4mapped, rfc6145, rfc6052, 6to4, teredo.
+Or use the range 'special' to specify all of the named ranges.
+
+|  has allow  |  has deny | in allow | in deny | in both | in other |
+|-------------|-----------|----------|---------|---------|----------|
+|   no        |   no      |    -     |    -    |    -    |   ok     |
+|   yes       |   no      |    ok    |    -    |    -    |   fail   |
+|   no        |   yes     |    -     |   fail  |    -    |   ok     |
+|   yes       |   yes     |    ok    |   fail  |    ok   |   ok     |
+
+The output will always be without leading '0' and by default compressed to the short
+form for IPv6 addresses. To get the long form use the 'format' option.
 
 
 Schema Specification

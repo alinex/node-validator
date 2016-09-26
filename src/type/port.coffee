@@ -9,6 +9,21 @@ Check options:
 
 If `allow` and `deny` is both used the `deny` settings has precedence.
 
+The ports can also be given as standardized names as known in the /etc/services
+list like: 'ftp', 'http', 'ssh', ...
+
+Ranges for `deny` and `allow` may contain a list of multiple ports or ranges. Ranges
+are 'system', 'registered' and 'dynamic' representing the three range parts.
+
+The table shows how the result is detected if both given:
+
+|  has allow  |  has deny | in allow | in deny | in both | in other |
+|-------------|-----------|----------|---------|---------|----------|
+|   no        |   no      |    -     |    -    |    -    |   ok     |
+|   yes       |   no      |    ok    |    -    |    -    |   fail   |
+|   no        |   yes     |    -     |   fail  |    -    |   ok     |
+|   yes       |   yes     |    ok    |   fail  |    ok   |   ok     |
+
 
 Schema Specification
 ---------------------------------------------------

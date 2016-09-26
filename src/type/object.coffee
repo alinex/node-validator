@@ -229,7 +229,7 @@ exports.describe = (cb) ->
         worker = @sub "#{@name}.#{key}", @schema.keys[key]
         worker.describe (err, subtext) ->
           return cb err if err
-          cb null, "\n\n#{key}\n:   #{subtext.replace /\n/g, '\n    '}"
+          cb null, "\n\n`#{key}`\n:   #{subtext.replace /\n/g, '\n    '}"
       , (err, results) ->
         return cb err if err
         cb null, detail + results.join('') + '\n'
@@ -384,7 +384,7 @@ exports.selfcheck =
       optional: true
     instanceOf:
       title: "Class Check"
-      description: "the class, the object have to be instantiated from"
+      description: "the class, the object to be instantiated from"
       type: 'function'
       optional: true
     mandatoryKeys:
@@ -402,7 +402,7 @@ exports.selfcheck =
         type: 'array'
         entries:
           title: "Mandatory Key"
-          description: "the key which have to be present"
+          description: "the key which to be present"
           type: 'or'
           or: [
             title: "Key Name"

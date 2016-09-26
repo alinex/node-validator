@@ -120,7 +120,7 @@ exports.describe = (cb) ->
       list = list.split /,\s*/
     else if typeof list is 'object' and not Array.isArray list
       list = Object.keys list
-    text += "Only the values: #{list} are allowed. "
+    text += "Only the values: #{list.join ', '} are allowed. "
   # matching
   if @schema.startsWith?
     text += "It has to start with #{@schema.startsWith}... "
