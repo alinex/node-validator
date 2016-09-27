@@ -64,6 +64,13 @@ describe.only "Email", ->
         schema.checkServer = true
         test.same schema, ['alexander.schilling@divibib.com'], cb
 
+      it.only "should check server with blacklists and graylists", (cb) ->
+        @timeout 5000
+        schema.checkServer = true
+        schema.denyBlacklisted = true
+        schema.denyGraylisted = true
+        test.same schema, ['alexander.schilling@divibib.com'], cb
+
     it "should fail to check server", (cb) ->
       @timeout 5000
       schema.checkServer = true

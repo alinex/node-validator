@@ -15,7 +15,7 @@ __Sanitize options:__
 __Check options:__
 - `checkServer` - `Boolean` also check for working email servers
 - `denyBlacklisted` - `Boolean` deny all mail servers which are currently blacklisted
-- `denyUntrusted` - `Boolean` deny all mail servers which are on the untrusted list
+- `denyGraylistes` - `Boolean` deny all mail servers which are on the untrusted lists (graylists)
 
 
 Schema Specification
@@ -127,7 +127,7 @@ exports.check = (cb) ->
           # check for blacklisted
           (cb) => checkBlacklisted.call this, list, ip, cb
           # check for untrusted
-          (cb) => checkUntrusted.call this, list, ip, cb
+          (cb) => checkGraylistes.call this, list, ip, cb
         ], (err) =>
           return @sendError err.message, cb if err
           @sendSuccess cb
@@ -163,8 +163,8 @@ exports.selfcheck =
       any blacklist"
       type: 'boolean'
       optional: true
-    denyUntrusted:
-      title: "Deny Untrusted Server"
+    denyGraylistes:
+      title: "Deny Graylistes Server"
       description: "a flag to deny also mail addresses of untrusted servers which users
       are unverified"
       type: 'boolean'
@@ -239,44 +239,52 @@ checkBlacklisted = (list, ip, cb) ->
   loadDnsbl (err) =>
     return cb err if err
     async.each list, (host, cb) =>
+      @debug chalk.gray "#{@name}: check #{host} in blacklists"
       dns.resolve host, (err, addresses) =>
-        return cb() if err
+        if err
+          @debug chalk.magenta err.message
+          return cb()
         # each address
-        async.each addresses, (address, cb) =>
+        async.each addresses, (address, cb) ->
           # reverse ip
           reverse = address.split '.'
           .reverse()
           .join '.'
           # each list entry
-          async.each dnsbl, (bl, cb) =>
+          async.each dnsbl, (bl, cb) ->
             # dns lookup
             dns.resolve "#{reverse}.#{bl.zone}", (err) ->
               return cb() if err
               cb new Error "Server #{host} (#{address}) is found on #{bl.name} list
               check at #{bl.url}"
+          , cb
         , cb
     , cb
 
-checkUntrusted = (list, ip, cb) ->
-  return cb() unless @schema.denyUntrusted
+checkGraylistes = (list, ip, cb) ->
+  return cb() unless @schema.denyGraylisted
   loadDnsgl (err) =>
     return cb err if err
     async.each list, (host, cb) =>
+      @debug chalk.gray "#{@name}: check #{host} in graylists"
       dns.resolve host, (err, addresses) =>
-        return cb() if err
+        if err
+          @debug chalk.magenta err.message
+          return cb()
         # each address
-        async.each addresses, (address, cb) =>
+        async.each addresses, (address, cb) ->
           # reverse ip
           reverse = address.split '.'
           .reverse()
           .join '.'
           # each list entry
-          async.each dnsgl, (bl, cb) =>
+          async.each dnsgl, (bl, cb) ->
             # dns lookup
             dns.resolve "#{reverse}.#{bl.zone}", (err) ->
               return cb() if err
               cb new Error "Server #{host} (#{address}) is found on #{bl.name} list
               check at #{bl.url}"
+          , cb
         , cb
     , cb
 
