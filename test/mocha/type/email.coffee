@@ -1,7 +1,7 @@
 test = require '../../test'
 ### eslint-env node, mocha ###
 
-describe.only "Email", ->
+describe "Email", ->
 
   schema = null
   beforeEach ->
@@ -64,7 +64,7 @@ describe.only "Email", ->
         schema.checkServer = true
         test.same schema, ['alexander.schilling@divibib.com'], cb
 
-      it.only "should check server with blacklists and graylists", (cb) ->
+      it "should check server with blacklists and graylists", (cb) ->
         @timeout 5000
         schema.checkServer = true
         schema.denyBlacklisted = true
