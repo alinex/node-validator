@@ -4,6 +4,65 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.0.0 (2016-09-27)
+-------------------------------------------------
+New internal structure with slightly optimized checks, and rename of toString option to makeString.
+
+- Fix for new alinex-fs find call.
+- Update  alinex-handlebars@1.2.1, async@2.0.1, chrono-node@1.2.4, ipaddr.js@1.2.0, mathjs@3.5.3, moment@2.15.1, request@2.75.0, alinex-builder@2.3.8, alinex-fs@3.0.2, moment-timezone@0.5.5
+- Add dnsbl support in email validation
+- Add blacklist support in email validation.
+- Update all schema specifications for optimal description text.
+- Updated schema documentation.
+- Basic type documentation.
+- Updated documentation for references.
+- updated documentation.
+- Fixed references and got the tests to succeed.
+- Integrated references into checks for value and schema.
+- Remove circular reference.
+- Create sub worker with root reference through member method.
+- All single validators fixed.
+- Update documentation.
+- Update alinex-builder@2.3.8, mathjs@3.5.1, moment@2.15.0, request@2.75.0, alinex-fs@3.0.2
+- Fixed multiple validators to work their tests now.
+- Fixed validation of object.
+- Fix selfcheck definition to not change base rule definition.
+- Fixes in validation.
+- String balidator use makeString instead of toString.
+- Fixed code to run all internal reference checks.
+- Restructured reference checking and made simple calls runable.
+- Create new reference module.
+- Finished basic rewrite of all validators.
+- Rewrite of more validators.
+- Rewrite of email validator.
+- Rewrite of file validator.
+- Rewrite of handlebars validator.
+- Rewrite of hostname validation.
+- Rewrite of interval validator.
+- Rewrite ipaddr validator.
+- Ipaddr validator rewritten.
+- Rewrite of object validator.
+- Rewrite or validator.
+- Rewrite of percent validator with some extensions like pro mille...
+- Instantiate type specific debug in worker.
+- Rewrite port validator.
+- Rewrite of regexp validator.
+- Rewrite of string validator.
+- Rewrite string check.
+- Rewritten int type.
+- Set float selfcheck definition.
+- Rework describe for float type.
+- Fixed float checks to work in new structure.
+- Start rewriting of internal library for better performance.
+- Updated ignore files.
+- Update travis.
+- Add sync methods using deasync.
+- Rename links to Alinex Namespace.
+- Add copyright sign.
+- Add test for if block in handlebars.
+- Upgraded builder package.
+- Change to new mapValue from rc.6.
+
 Version 1.6.6 (2016-06-08)
 -------------------------------------------------
 Hot fix for changed behaviour in async causing "Type undefined error".
