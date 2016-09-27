@@ -73,6 +73,7 @@ exports.check = (cb) ->
     return cb err if err
     unless found
       return @sendError "Could not find the file #{@value}", cb
+    found = found[2..] if found[0..1] is './' # remove unneccessary path
     # resolve
     filepath = fspath.resolve basedir, found
     found = filepath if @schema.resolve
@@ -152,9 +153,10 @@ find = (value, cb) ->
     return @sendError "Wrong find option, array is needed for file validation", cb
   # search in list
   async.map search, (dir, cb) =>
-    @debug "#{@name}: search in #{dir}..."
+    @debug "#{@name}: search in #{dir}"
     fs.find dir,
-      include: value
+      filter:
+        include: @value
     , (err, list) ->
       cb null, list
   , (err, lists) ->
