@@ -1,871 +1,413 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>ipaddr.coffee</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="../../doc-style.css" />
-  <script src="../../doc-filelist.js"></script>
-  <script>
-    var relativeDir = "../../";
-    var thisFile = "src/type/ipaddr.coffee";
-    var defaultSidebar = true;
-  </script>
-  <script src="../../doc-script.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IP Address</title>
+    <meta name="HandheldFriendly" content="true" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">#topnav{text-align:center;background:#333;padding-bottom:20px;position:fixed;margin-top:0;width:100%;bottom:0;top:51px;}#topnav .navbar-nav{margin:0;margin-top:8px;display:-webkit-inline-box;display:-moz-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-box;display:inline-flex}#topnav .sidebar-to-top .btn{text-align:left}#topnav .sidebar-to-top li.level2>a{margin-left:20px}#topnav .sidebar-to-top li.level3>a{margin-left:40px}#topnav .sidebar-to-top li.level4>a{margin-left:60px}#topnav .sidebar-to-top li.level5>a{margin-left:80px}#topnav .sidebar-to-top li.level6>a{margin-left:100px}.navbar-fixed-top .navbar-collapse{max-height:100%}.navbar{min-width:300px}.nav>li{padding:2px 12px}.navbar-inverse .nav>li>a{color:#222;font-weight:bold;padding-top:6px;padding-bottom:6px;}.navbar-inverse .nav>li>a:focus,.navbar-inverse .nav>li>a:hover{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x}.navbar-inverse .nav>li>a.btn-warning:focus,.navbar-inverse .nav>li>a.btn-warning:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x}.navbar-spacer{height:51px}.btn-warning:active,.btn-primary:active{-webkit-transform:scale(.92);-moz-transform:scale(.92);-o-transform:scale(.92);-ms-transform:scale(.92);transform:scale(.92)}.btn-warning{background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x}.btn-primary{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x}.sidebar .nav{display:none;list-style:disc;padding-left:25px;}.sidebar .nav>li{display:list-item;}.sidebar .nav>li>a{color:#222;}.sidebar .nav>li>a:active{-webkit-box-shadow:0 2px 10px 2px rgba(0,0,0,0.25);box-shadow:0 2px 10px 2px rgba(0,0,0,0.25)}.sidebar .nav>li>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header,.sidebar .nav>li.active{display:none}.sidebar .nav>li.active>a{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x;}.sidebar .nav>li.active>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header>a{font-weight:bold;background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x;}.sidebar .nav>li.header>a:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x;color:#fff}.sidebar .nav>li.level2>a{padding-left:30px}.sidebar .nav>li.level3>a{padding-left:50px}.sidebar .nav>li.level4>a{padding-left:70px}.sidebar .nav>li.level5>a,.sidebar .nav>li.level6>a{padding-left:90px}.navbar-inverse .navbar-toggle{background-color:#444;}.navbar-inverse .navbar-toggle:hover{background-color:#666}@media (min-width:768px){#topnav{position:inherit;background:#222;padding-bottom:0}#topnav .nav>li{padding:0 4px}#topnav .sidebar-to-top{display:none}.navbar-right{margin-right:0}.navbar-nav >li>a{padding:6px 10px}.sidebar{overflow:auto;position:fixed;top:51px;left:0;bottom:0;background:#ddd;padding:0;}.sidebar h1,.sidebar h2{display:none}.sidebar .nav{display:block;list-style:none;padding-left:0;}.sidebar .nav>li{padding:0;}.sidebar .nav>li.header,.sidebar .nav>li.active{display:block;}.sidebar .nav>li.header.level2>a:before,.sidebar .nav>li.active.level2>a:before,.sidebar .nav>li.header.level3>a:before,.sidebar .nav>li.active.level3>a:before,.sidebar .nav>li.header.level4>a:before,.sidebar .nav>li.active.level4>a:before,.sidebar .nav>li.header.level5>a:before,.sidebar .nav>li.active.level5>a:before,.sidebar .nav>li.header.level6>a:before,.sidebar .nav>li.active.level6>a:before{content:"•"}.sidebar .nav>li>a{padding-top:8px;padding-bottom:8px}.sidebar .nav>li.level2>a:before,.sidebar .nav>li.level3>a:before,.sidebar .nav>li.level4>a:before,.sidebar .nav>li.level5>a:before,.sidebar .nav>li.level6>a:before{content:"◦";font-size:150%;line-height:10%;font-weight:bold;padding-right:5px;display:block;float:left;margin-top:8px;margin-left:-15px;color:#666}}img.preload{display:none}body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:16px;line-height:1.2;-ms-word-break:break-all;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;-ms-hyphens:auto;hyphens:auto;-webkit-hyphenate-before:2;-webkit-hyphenate-after:3;hyphenate-lines:3;min-width:300px}h1,h2,h3,h4,h5,h6{font-weight:bold;}h1:before,h2:before,h3:before,h4:before,h5:before,h6:before{display:block;content:" ";margin-top:-66px;height:66px;visibility:hidden}h1,h2,h3{clear:both}h1{border-bottom:3px solid #222;padding-bottom:5px}h2{border-bottom:2px dotted #222;padding-bottom:3px}h3{border-bottom:2px dotted #aaa;padding-bottom:2px}h4{border-bottom:1px dotted #aaa}dt{font-weight:bold;margin-top:8px}dd{margin-left:20px}blockquote{border:1px solid #eee;border-radius:3px;border-left:5px solid #337ab7;padding:5px 15px;margin:10px 0;}blockquote ul li p{margin-bottom:0}svg,img{max-width:100%}table{border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all;margin-bottom:10px;}table th,table td{padding:6px 13px;border:1px solid #ddd}table th{background-color:rgba(0,0,0,0.04);font-weight:bold;border-bottom:3px solid #999}table tr{background-color:#fff;border-top:1px solid #ccc;}table tr:nth-child(2n){background-color:rgba(0,0,0,0.04)}img{vertical-align:middle}.emoji{height:1em}abbr,acronym{border-bottom:dotted 1px}a code{color:#337ab7}code,tt{background-color:#fafafa;border-radius:4px;font-size:85%;margin:0;padding:.2em 0}pre{background-color:#fafafa;border-radius:10px;border:1px solid #a4a4a4;font-size:85%;margin:20px;padding:10px;}pre code,pre tt{background:none}pre.language{counter-reset:line;max-height:265px;padding-top:30px;padding-bottom:0;overflow-x:hidden;}pre.language code,pre.language tt{display:block;position:relative;float:left;width:100%;border-left:45px solid #ddd;margin-left:-10px;padding-left:5px;}pre.language code:before,pre.language tt:before{counter-increment:line;content:counter(line);min-width:35px;float:left;text-align:right;padding-right:5px;color:#808080;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-user-select:none;margin-left:-45px}pre.language code:first-of-type,pre.language tt:first-of-type{padding-top:10px}pre.language code:last-child,pre.language tt:last-child{padding-bottom:10px}pre.language header{border-top-left-radius:4px;border-top-right-radius:4px;font-weight:bold;background:#fafafa;margin:-30px -10px 0 -10px;padding:5px 15px}pre.language.coffeescript header,pre.language.javascript header,pre.language.ruby header,pre.language.python header,pre.language.perl header,pre.language.cc header,pre.language.cpp header,pre.language.cs header,pre.language.java header,pre.language.jsp header,pre.language.groovy header,pre.language.php header,pre.language.bash header,pre.language.sql header,pre.language.makefile header{background:#f0ad4e}pre.language.json header,pre.language.cson header,pre.language.yaml header{background:#61b961}pre.language.handlebars header,pre.language.css header,pre.language.stylus header,pre.language.scss header,pre.language.less header,pre.language.markdown header{background:#76abca}ul.table-of-contents{max-width:100px;max-height:30px;overflow:hidden;position:fixed;top:51px;right:0;background:#ddd;padding:5px 15px;-webkit-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-moz-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-o-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-ms-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;border-left:2px solid #999;border-bottom:2px solid #999;border-bottom-left-radius:10px;list-style-type:none;white-space:nowrap;z-index:100;}ul.table-of-contents:hover{max-width:285px;max-height:248px;-webkit-transition:max-width 100ms ease, max-height 1s ease 100ms;-moz-transition:max-width 100ms ease, max-height 1s ease 100ms;-o-transition:max-width 100ms ease, max-height 1s ease 100ms;-ms-transition:max-width 100ms ease, max-height 1s ease 100ms;transition:max-width 100ms ease, max-height 1s ease 100ms;overflow-y:auto}ul.table-of-contents header{background:#999;font-weight:bold;margin:-5px -15px;padding:5px 15px}ul.table-of-contents>li{padding-bottom:2px;padding-right:8px;}ul.table-of-contents>li:first-of-type{padding-top:10px}ul.table-of-contents a{color:#222}ul.table-of-contents li.sidebar{display:list-item}@media (min-width:768px){ul.table-of-contents li.sidebar{display:none}}div.detail,div.info,div.warning,div.alert{padding:30px 10px 6px 10px;margin:5px 0 8px 0;border-radius:3px;padding-left:60px;border-radius:18px;border-top-left-radius:0;}div.detail>p,div.info>p,div.warning>p,div.alert>p{margin-bottom:0}div.detail header,div.info header,div.warning header,div.alert header{font-weight:bold;position:absolute;margin-top:-30px;margin-left:-60px;padding:3px 20px 3px 10px;border-bottom-right-radius:18px}div:before{content:'\24D8';color:#666;position:absolute;font-size:28px;font-weight:900;padding-top:5px;margin-left:-50px}div.detail{background-color:#fafafa;border:2px solid #ddd;padding-top:0}div.info{background-color:#9f9;background-image:-webkit-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-moz-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-o-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-ms-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:linear-gradient(to bottom, #bfb 0%, #6d6 100%);border:2px solid #6d6;}div.info header{background-color:#6d6}div.info:before{content:'\24D8';text-shadow:0 -1px 0 #6d6}div.warning{background-color:#fc9;background-image:-webkit-linear-gradient(top, #f97 0%, #e86 100%);background-image:-moz-linear-gradient(top, #f97 0%, #e86 100%);background-image:-o-linear-gradient(top, #f97 0%, #e86 100%);background-image:-ms-linear-gradient(top, #f97 0%, #e86 100%);background-image:linear-gradient(to bottom, #f97 0%, #e86 100%);border:2px solid #e86;}div.warning header{background-color:#e86}div.warning:before{content:'\2605';text-shadow:0 -1px 0 #e86}div.alert{background-color:#f99;background-image:-webkit-linear-gradient(top, #faa 0%, #c00 100%);background-image:-moz-linear-gradient(top, #faa 0%, #c00 100%);background-image:-o-linear-gradient(top, #faa 0%, #c00 100%);background-image:-ms-linear-gradient(top, #faa 0%, #c00 100%);background-image:linear-gradient(to bottom, #faa 0%, #c00 100%);border:2px solid #c00;}div.alert header{background-color:#c00;color:#fff}div.alert:before{content:'\24D8';text-shadow:0 -1px 0 #c00}.cse .gsc-control-cse,.gsc-control-cse{padding:0 !important;}.cse .gsc-control-cse table tr,.gsc-control-cse table tr,.cse .gsc-control-cse table th,.gsc-control-cse table th,.cse .gsc-control-cse table td,.gsc-control-cse table td{border:0}.cse .gsc-control-cse .gsc-cursor-current-page,.gsc-control-cse .gsc-cursor-current-page{color:#fff !important}.cse .gsc-control-cse .gsc-webResult.gsc-result:hover,.gsc-control-cse .gsc-webResult.gsc-result:hover,.cse .gsc-control-cse .gsc-imageResult:hover,.gsc-control-cse .gsc-imageResult:hover{border-left:5px solid #337ab7;padding-left:3px}.cse .gsc-control-cse .gcsc-branding,.gsc-control-cse .gcsc-branding{display:none !important}.gsc-adBlock{display:none !important}@media print{.navbar-spacer,.table-of-contents,.sidebar{display:none}.main{left:0;width:100%}pre.language header{border-bottom:2px solid #999}}.text-red{color:#d13f19}.text-green{color:#2ecc40}.text-yellow{color:#ffdc00}.text-blue{color:#0074d9}.text-magenta{color:#f0f}.text-cyan{color:#0ff}.text-gray{color:#aaa}.bg-white{background-color:#fff}.center{text-align:center}.left{float:left}.right{float:right}.spacing{padding:10px}.hidden{display:none}@media (max-width:767px){.hidden-small{display:none}}@media (min-width:768px){.hidden-large{display:none}}</style>
+  </head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
-<body>
-  <nav>
-<div class="logo"><a href="http://alinex.github.io"
-  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
-  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
-    width="150" title="Alinex Universe Homepage" />
-  </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png"
-    style="display:none" alt="preloading" />
-</div>
-<div class="links">
-  <a href="http://alinex.github.io/blog"
-    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
-  <a href="http://alinex.github.io/develop"
-    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
-  <a href="http://alinex.github.io/code.html"
-    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
-</div>
-</nav><div id="sidebar_wrapper">
-    <div id="sidebar_switch">
-      <span class="tree">Files</span>
-      <span class="headings">Headings</span>
-    </div>
-    <div id="tree"></div>
-    <div id="headings">
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topnav" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://alinex.github.io/" onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Homepage">
+</a>
+<img class="preload" src="https://alinex.github.io/images/Alinex-200.png" aria-hidden="true">
 
-      <div class="heading h1">
-        <a href="#ip-address-validation">IP Address validation</a>
+        </div>
+        <div id="topnav" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://alinex.github.io/blog" class="btn btn-primary">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Blog
+  </a></li>
+<li><a href="https://alinex.github.io/develop" class="btn btn-primary">
+    <span class="glyphicon glyphicon-book" aria-hidden="true"></span> Develop
+  </a></li>
+<li><a href="https://alinex.github.io/code.html" class="btn btn-warning">
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Code
+  </a></li>
+
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input name="q" type="text" class="form-control" placeholder="Search...">
+          </form>
+          <ul class="nav sidebar-to-top">
+                <li class="level0">
+                  <a href="../../README.md.html" title="Alinex Validator: Readme (/README.md)" class="btn btn-primary">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="../index.coffee.html" title="Controller - API Usage (/src/index.coffee)" class="btn btn-primary">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="../helper/index.md.html" title="Schema Definition (/src/helper/index.md)" class="btn btn-primary">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)" class="btn btn-primary">References</a>
+                </li>
+                <li class="level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)" class="btn btn-primary">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="and.coffee.html" title="And (/src/type/and.coffee)" class="btn btn-primary">And</a>
+                </li>
+                <li class="level2">
+                  <a href="any.coffee.html" title="Any (/src/type/any.coffee)" class="btn btn-primary">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="array.coffee.html" title="Array (/src/type/array.coffee)" class="btn btn-primary">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)" class="btn btn-primary">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)" class="btn btn-primary">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)" class="btn btn-primary">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="email.coffee.html" title="Email (/src/type/email.coffee)" class="btn btn-primary">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="file.coffee.html" title="File (/src/type/file.coffee)" class="btn btn-primary">File</a>
+                </li>
+                <li class="level2">
+                  <a href="float.coffee.html" title="Float (/src/type/float.coffee)" class="btn btn-primary">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="function.coffee.html" title="Function (/src/type/function.coffee)" class="btn btn-primary">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)" class="btn btn-primary">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)" class="btn btn-primary">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="integer.coffee.html" title="Integer (/src/type/integer.coffee)" class="btn btn-primary">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="interval.coffee.html" title="Interval (/src/type/interval.coffee)" class="btn btn-primary">Interval</a>
+                </li>
+                <li class="active level2">
+                  <a href="ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)" class="btn btn-warning">IP Address <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level2">
+                  <a href="object.coffee.html" title="Object (/src/type/object.coffee)" class="btn btn-primary">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="or.coffee.html" title="Or (/src/type/or.coffee)" class="btn btn-primary">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="percent.coffee.html" title="Percent (/src/type/percent.coffee)" class="btn btn-primary">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)" class="btn btn-primary">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)" class="btn btn-primary">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="string.coffee.html" title="String (/src/type/string.coffee)" class="btn btn-primary">String</a>
+                </li>
+                <li class="level2">
+                  <a href="url.coffee.html" title="URL (/src/type/url.coffee)" class="btn btn-primary">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="../../Changelog.md.html" title="Version changes (/Changelog.md)" class="btn btn-primary">Version changes</a>
+                </li>
+          </ul>
+        </div>
       </div>
+    </nav>
 
-      <div class="heading h2">
-        <a href="#node-modules">Node modules</a>
-      </div>
+    <div class="navbar-spacer"></div>
 
-      <div class="heading h2">
-        <a href="#configuration">Configuration</a>
-      </div>
+    <div class="container-fluid">
+      <div class="row">
 
-      <div class="heading h2">
-        <a href="#type-implementation">Type implementation</a>
-      </div>
+        <div class="col-sm-9 col-sm-push-3 main">
+          <script>
+  (function() {
+    var cx = '010539487162786288372:chxqbheanxc';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchresults-only></gcse:searchresults-only>
 
-    </div>
-  </div>
-  <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
-    <div class="background highlight"></div>
-<table cellpadding="0" cellspacing="0">
-  <tbody>
-    
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="ip-address-validation">
-  <h1>
-    <a href="#ip-address-validation" name="ip-address-validation" class="pilcrow"></a>
-IP Address validation
-  </h1>
-</div>
-
-        </td>
-        <td class="code highlight">
-          
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2"></a>
-</div>
+          <main><p><ul class="table-of-contents" aria-hidden="true"><header>Index</header>
+<li><a href="#schema-specification">Schema Specification</a></li>
+</ul>
+</p>
+<h1 id="ip-address">IP Address</h1>
+<blockquote>
+<p>Path: <code>/src/type/ipaddr.coffee</code> compiled to <code>/lib/type/ipaddr.js</code></p>
+</blockquote>
+<p>The value has to be an IP address.</p>
 <p>Check options:</p>
 <ul>
-<li><code>optional</code> - the value must not be present (will return null)</li>
-<li><code>default</code> - the value to use if none given</li>
-<li><code>version</code> - one of 'ipv4' or 'ipv6' and the value will be converted, if possible</li>
-<li><code>format</code> - compression method to use: 'short', 'long'</li>
-<li><code>allow</code> - (list) the allowed ip ranges</li>
-<li><code>deny</code> - (list) the denied ip ranges</li>
+<li><code>optional</code> - <code>Boolean</code> the value must not be present (will return null)</li>
+<li><code>default</code> - <code>String</code> the value to use if none given</li>
+<li><code>version</code> - <code>String</code> one of ‘ipv4’ or ‘ipv6’ and the value will be converted, if possible</li>
+<li><code>allow</code> - <code>Array</code> the allowed ip ranges</li>
+<li><code>deny</code> - <code>Array</code> the denied ip ranges</li>
 </ul>
-
-        </td>
-        <td class="code highlight">
-          
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="node-modules">
-  <h2>
-    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
-Node modules
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:ipaddr'</span>)
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-ipaddr = <span class="hljs-built_in">require</span> <span class="hljs-string">'ipaddr.js'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4"></a>
-</div>
-<p>alinex modules</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5"></a>
-</div>
-<p>include classes and helper</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="configuration">
-  <h2>
-    <a href="#configuration" name="configuration" class="pilcrow"></a>
-Configuration
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">specialRanges =
-  unspecified: [
-    <span class="hljs-string">'0.0.0.0/8'</span>
-    <span class="hljs-string">'0::/128'</span> <span class="hljs-comment"># RFC4291, here and after</span>
-  ]
-  broadcast: [ <span class="hljs-string">'255.255.255.255/32'</span> ]
-  multicast: [
-    <span class="hljs-string">'224.0.0.0/4'</span> <span class="hljs-comment"># RFC3171</span>
-    <span class="hljs-string">'ff00::/8'</span>
-  ]
-  linklocal: [
-    <span class="hljs-string">'169.254.0.0/16'</span> <span class="hljs-comment"># RFC3927</span>
-    <span class="hljs-string">'fe80::/10'</span>
-  ]
-  loopback: [
-    <span class="hljs-string">'127.0.0.0/8'</span>
-    <span class="hljs-string">'::1/128'</span>
-  ] <span class="hljs-comment"># RFC5735</span>
-  private: [
-    <span class="hljs-string">'10.0.0.0/8'</span> <span class="hljs-comment"># RFC1918</span>
-    <span class="hljs-string">'172.16.0.0/12'</span> <span class="hljs-comment"># RFC1918</span>
-    <span class="hljs-string">'192.168.0.0/16'</span> <span class="hljs-comment"># RFC1918</span>
-  ]</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7"></a>
-</div>
-<p>Reserved and testing-only ranges; RFCs 5735, 5737, 2544, 1700</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  reserved: [
-    <span class="hljs-string">'192.0.0.0/24'</span>
-    <span class="hljs-string">'192.88.99.0/24'</span>
-    <span class="hljs-string">'198.51.100.0/24'</span>
-    <span class="hljs-string">'203.0.113.0/24'</span>
-    <span class="hljs-string">'240.0.0.0/4'</span>
-    <span class="hljs-string">'2001:db8::/32'</span> <span class="hljs-comment"># RFC4291</span>
-  ]
-  uniquelocal: [ <span class="hljs-string">'fc00::/7'</span> ]
-  ipv4mapped: [ <span class="hljs-string">'::ffff:0:0/96'</span> ]
-  rfc6145: [ <span class="hljs-string">'::ffff:0:0:0/96'</span> ] <span class="hljs-comment"># RFC6145</span>
-  rfc6052: [ <span class="hljs-string">'64:ff9b::/96'</span> ] <span class="hljs-comment"># RFC6052</span>
-  <span class="hljs-string">'6to4'</span>: [ <span class="hljs-string">'2002::/16'</span> ] <span class="hljs-comment"># RFC3056</span>
-  teredo: [ <span class="hljs-string">'2001::/32'</span> ] <span class="hljs-comment"># RFC6052, RFC6146</span>
-all = []
-all.concat list <span class="hljs-keyword">for</span> name, list <span class="hljs-keyword">of</span> specialRanges
-specialRanges.special = all</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="type-implementation">
-  <h2>
-    <a href="#type-implementation" name="type-implementation" class="pilcrow"></a>
-Type implementation
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  text = <span class="hljs-string">'A valid IP address as string. '</span>
-  text += check.optional.describe work
-  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
-  <span class="hljs-keyword">if</span> work.pos.version
-    <span class="hljs-keyword">if</span> work.pos.version <span class="hljs-keyword">is</span> <span class="hljs-string">'ipv4'</span>
-      text += <span class="hljs-string">"Only IPv4 addresses are valid. "</span>
-    <span class="hljs-keyword">else</span>
-      text += <span class="hljs-string">"Only IPv6 addresses are valid. "</span>
-    <span class="hljs-keyword">if</span> work.pos.ipv4Mapping
-      text += <span class="hljs-string">"IPv4 addresses may be automatically converted. "</span>
-  <span class="hljs-keyword">if</span> work.pos.deny
-    text += <span class="hljs-string">"The IP address should not be in the ranges: '<span class="hljs-subst">#{work.pos.deny.join <span class="hljs-string">'\', \''</span>}</span>'. "</span>
-    <span class="hljs-keyword">if</span> work.pos.allow
-      text += <span class="hljs-string">"But IP address in the ranges: '<span class="hljs-subst">#{work.pos.allow.join <span class="hljs-string">'\', \''</span>}</span>' are allowed. "</span>
-  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.allow
-    text += <span class="hljs-string">"The IP address have to be in the ranges: '<span class="hljs-subst">#{work.pos.allow.join <span class="hljs-string">'\', \''</span>}</span>'. "</span>
-  <span class="hljs-keyword">switch</span> work.pos.format
-    <span class="hljs-keyword">when</span> <span class="hljs-string">'short'</span>
-      text += <span class="hljs-string">'An IPv6 address will be compressed as possible. '</span>
-    <span class="hljs-keyword">when</span> <span class="hljs-string">'long'</span>
-      text += <span class="hljs-string">'An IPv6 address will be normalized with all octets visible. '</span>
-  cb <span class="hljs-literal">null</span>, text
-
-exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9"></a>
-</div>
-<p>base checks</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">try</span>
-    <span class="hljs-keyword">if</span> check.optional.run work
-      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-      <span class="hljs-keyword">return</span> cb()
-  <span class="hljs-keyword">catch</span> error
-    <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10"></a>
-</div>
-<p>first check input type</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  name = work.spec.name ? <span class="hljs-string">'value'</span>
-  <span class="hljs-keyword">if</span> work.path.length
-    name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
-  check.run
-    name: name
-    value: work.value
-    schema:
-      type: <span class="hljs-string">'string'</span>
-  , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11"></a>
-</div>
-<p>validate</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">unless</span> ipaddr.isValid value
-      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{value}</span>' is no valid IPv6
-        or IPv4 address"</span>), cb
-    ip = ipaddr.parse value
-    debug <span class="hljs-string">"analyzed <span class="hljs-subst">#{ip.kind()}</span>"</span>, ip</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12"></a>
-</div>
-<p>format value</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.version
-      <span class="hljs-keyword">if</span> work.pos.version <span class="hljs-keyword">is</span> <span class="hljs-string">'ipv4'</span>
-        <span class="hljs-keyword">if</span> ip.kind() <span class="hljs-keyword">is</span> <span class="hljs-string">'ipv6'</span>
-          <span class="hljs-keyword">if</span> ip.isIPv4MappedAddress() <span class="hljs-keyword">and</span> work.pos.ipv4Mapping
-            debug <span class="hljs-string">'convert to ipv4'</span>
-            ip = ip.toIPv4Address()
-          <span class="hljs-keyword">else</span>
-            <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{value}</span>' is no valid
-              IPv<span class="hljs-subst">#{work.pos.version}</span> address"</span>), cb
-      <span class="hljs-keyword">else</span>
-        <span class="hljs-keyword">if</span> ip.kind() <span class="hljs-keyword">is</span> <span class="hljs-string">'ipv4'</span>
-          <span class="hljs-keyword">unless</span> work.pos.ipv4Mapping
-            <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given value '<span class="hljs-subst">#{value}</span>' is no valid
-              IPv<span class="hljs-subst">#{work.pos.version}</span> address"</span>), cb
-          debug <span class="hljs-string">'convert to ipv4mapped'</span>
-          ip = ip.toIPv4MappedAddress()
-    <span class="hljs-keyword">if</span> ip.kind() <span class="hljs-keyword">is</span> <span class="hljs-string">'ipv6'</span>
-      value = <span class="hljs-keyword">if</span> work.pos.format <span class="hljs-keyword">is</span> <span class="hljs-string">'long'</span> <span class="hljs-keyword">then</span> ip.toNormalizedString() <span class="hljs-keyword">else</span> ip.toString()
-    <span class="hljs-keyword">else</span>
-      value = ip.toString()</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13"></a>
-</div>
-<p>check ranges</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.allow
-      <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> work.pos.allow
-        <span class="hljs-keyword">if</span> specialRanges[entry]?
-          <span class="hljs-keyword">for</span> subentry <span class="hljs-keyword">in</span> specialRanges[entry]
-            [addr, bits] = subentry.split <span class="hljs-regexp">/\//</span>
-            <span class="hljs-keyword">if</span> ip.match ipaddr.parse(addr), bits
-              debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-              <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
-        <span class="hljs-keyword">else</span>
-          [addr, bits] = entry.split <span class="hljs-regexp">/\//</span>
-          <span class="hljs-keyword">if</span> ip.match ipaddr.parse(addr), bits
-            debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14"></a>
-</div>
-<p>ip not in the allowed range</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">      <span class="hljs-keyword">unless</span> work.pos.deny
-        <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given ip address '<span class="hljs-subst">#{value}</span>' is not in
-          the allowed ranges"</span>), cb
-    <span class="hljs-keyword">if</span> work.pos.deny
-      <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> work.pos.deny
-        <span class="hljs-keyword">if</span> specialRanges[entry]?
-          <span class="hljs-keyword">for</span> subentry <span class="hljs-keyword">in</span> specialRanges[entry]
-            [addr, bits] = subentry.split <span class="hljs-regexp">/\//</span>
-            <span class="hljs-keyword">if</span> ip.match ipaddr.parse(addr), bits
-              <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given ip address '<span class="hljs-subst">#{value}</span>' is
-                denied because in range <span class="hljs-subst">#{entry}</span>"</span>), cb
-        <span class="hljs-keyword">else</span>
-          [addr, bits] = entry.split <span class="hljs-regexp">/\//</span>
-          <span class="hljs-keyword">if</span> ip.match ipaddr.parse(addr), bits
-            <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given ip address '<span class="hljs-subst">#{value}</span>' is
-              denied because in range <span class="hljs-subst">#{entry}</span>"</span>), cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15"></a>
-</div>
-<p>ip also not in the denied range so allowed again
-done return resulting value</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-    cb <span class="hljs-literal">null</span>, value
-
-exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
-  check.run
-    schema:
-      type: <span class="hljs-string">'object'</span>
-      allowedKeys: <span class="hljs-literal">true</span>
-      keys: util.extend util.clone(check.base),
-        default:
-          type: <span class="hljs-string">'string'</span>
-          optional: <span class="hljs-literal">true</span>
-        version:
-          type: <span class="hljs-string">'string'</span>
-          values: [<span class="hljs-string">'ipv4'</span>, <span class="hljs-string">'ipv6'</span>]
-          optional: <span class="hljs-literal">true</span>
-        ipv4Mapping:
-          type: <span class="hljs-string">'boolean'</span>
-          optional: <span class="hljs-literal">true</span>
-        deny:
-          type: <span class="hljs-string">'array'</span>
-          optional: <span class="hljs-literal">true</span>
-          entries:
-            type: <span class="hljs-string">'string'</span>
-            match: <span class="hljs-regexp">///
-              ^
-              unspecified|broadcast|multicast|linklocal|loopback|private
-              |reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special
-</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16"></a>
-</div>
-<p>ipv6 mask</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">              |(</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17"></a>
-</div>
-<p>1:2:3:4:5:6:7:8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">7</span>,<span class="hljs-number">7</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18"></a>
-</div>
-<p>1::                              1:2:3:4:5:6:7::</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}:</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19"></a>
-</div>
-<p>1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>}:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-20" id="section-20"></a>
-</div>
-<p>1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-21" id="section-21"></a>
-</div>
-<p>1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-22" id="section-22"></a>
-</div>
-<p>1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23"></a>
-</div>
-<p>1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-24" id="section-24"></a>
-</div>
-<p>1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:((:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>})</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-25" id="section-25"></a>
-</div>
-<p>::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |:((:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}|:)</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-26" id="section-26"></a>
-</div>
-<p>fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |fe80:(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}%[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-zA-Z]{<span class="hljs-number">1</span>,}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-27" id="section-27"></a>
-</div>
-<p>::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
-(IPv4-mapped IPv6 addresses and IPv4-translated addresses)</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |::(ffff(:<span class="hljs-number">0</span>{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}:){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}
-                  ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-28" id="section-28"></a>
-</div>
-<p>2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:
-                  ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-29" id="section-29"></a>
-</div>
-<p>/128</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">              )\/(<span class="hljs-number">12</span>[<span class="hljs-number">0</span><span class="hljs-number">-8</span>]|(<span class="hljs-number">1</span>[<span class="hljs-number">01</span>][<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-30" id="section-30"></a>
-</div>
-<p>ipv4 mask 255.255.255.255/32</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">              |(
-                ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                (<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])
-              )\/(<span class="hljs-number">3</span>[<span class="hljs-number">0</span><span class="hljs-number">-2</span>]|[<span class="hljs-number">12</span>]{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])
-              $
-            <span class="hljs-regexp">///
-        allow:
-          type: 'array'
-          optional: true
-          entries:
-            type: 'string'
-            match: ///</span>
-              ^
-              unspecified|broadcast|multicast|linklocal|loopback|private
-              |reserved|uniquelocal|ipv4mapped|rfc(<span class="hljs-number">6145</span>|<span class="hljs-number">6052</span>)|<span class="hljs-number">6</span>to4|teredo|special</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-31" id="section-31"></a>
-</div>
-<p>ipv6 mask</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">              |(</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-32" id="section-32"></a>
-</div>
-<p>1:2:3:4:5:6:7:8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">7</span>,<span class="hljs-number">7</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-33" id="section-33"></a>
-</div>
-<p>1::                              1:2:3:4:5:6:7::</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}:</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-34" id="section-34"></a>
-</div>
-<p>1::8             1:2:3:4:5:6::8  1:2:3:4:5:6::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>}:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-35" id="section-35"></a>
-</div>
-<p>1::7:8           1:2:3:4:5::7:8  1:2:3:4:5::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-36" id="section-36"></a>
-</div>
-<p>1::6:7:8         1:2:3:4::6:7:8  1:2:3:4::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-37" id="section-37"></a>
-</div>
-<p>1::5:6:7:8       1:2:3::5:6:7:8  1:2:3::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">3</span>}(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-38" id="section-38"></a>
-</div>
-<p>1::4:5:6:7:8     1:2::4:5:6:7:8  1:2::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">2</span>}(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">5</span>}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-39" id="section-39"></a>
-</div>
-<p>1::3:4:5:6:7:8   1::3:4:5:6:7:8  1::8</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:((:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">6</span>})</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-40" id="section-40"></a>
-</div>
-<p>::2:3:4:5:6:7:8  ::2:3:4:5:6:7:8 ::8       ::</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |:((:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">1</span>,<span class="hljs-number">7</span>}|:)</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-41" id="section-41"></a>
-</div>
-<p>fe80::7:8%eth0   fe80::7:8%1     (link-local IPv6 addresses with zone index)</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |fe80:(:[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">4</span>}%[<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-zA-Z]{<span class="hljs-number">1</span>,}</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-42" id="section-42"></a>
-</div>
-<p>::255.255.255.255   ::ffff:255.255.255.255  ::ffff:0:255.255.255.255
-(IPv4-mapped IPv6 addresses and IPv4-translated addresses)</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |::(ffff(:<span class="hljs-number">0</span>{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}:){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}
-                  ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-43" id="section-43"></a>
-</div>
-<p>2001:db8:3:4::192.0.2.33  64:ff9b::192.0.2.33 (IPv4-Embedded IPv6 Address)</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">                |([<span class="hljs-number">0</span><span class="hljs-number">-9</span>a-fA-F]{<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:){<span class="hljs-number">1</span>,<span class="hljs-number">4</span>}:
-                  ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                  (<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-44" id="section-44"></a>
-</div>
-<p>/128</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">              )\/(<span class="hljs-number">12</span>[<span class="hljs-number">0</span><span class="hljs-number">-8</span>]|(<span class="hljs-number">1</span>[<span class="hljs-number">01</span>][<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-45" id="section-45"></a>
-</div>
-<p>ipv4 mask 255.255.255.255/32</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">              |(
-                ((<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])\.){<span class="hljs-number">3</span>,<span class="hljs-number">3</span>}
-                (<span class="hljs-number">25</span>[<span class="hljs-number">0</span><span class="hljs-number">-5</span>]|(<span class="hljs-number">2</span>[<span class="hljs-number">0</span><span class="hljs-number">-4</span>]|<span class="hljs-number">1</span>{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>]){<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])
-              )\/(<span class="hljs-number">3</span>[<span class="hljs-number">0</span><span class="hljs-number">-2</span>]|[<span class="hljs-number">12</span>]{<span class="hljs-number">0</span>,<span class="hljs-number">1</span>}[<span class="hljs-number">0</span><span class="hljs-number">-9</span>])
-              $
-            <span class="hljs-regexp">///
-        format:
-          type: 'string'
-          default: 'short'
-          values: ['short', 'long']
-    value: schema
-  , cb
-
-</span></pre>
-        </td>
-      </tr>
-    
-  </tbody>
+<p>Format options:</p>
+<ul>
+<li><code>format</code> - <code>String</code> compression method to use: ‘short’, ‘long’</li>
+</ul>
+<p>The addresses may be converted from IPv6 to IPv4 and from IPv4 to IPv6 if possible.</p>
+<p>Ranges for <code>deny</code> and <code>allow</code> may contain a list of multiple IP ranges which are
+given in with the IP address and the significant bits behind: ‘127.0.0.1/8’ or as
+a range name.
+Range names are: unspecified, broadcast, multicast, linklocal, loopback, private,
+reserved, uniquelocal, ipv4mapped, rfc6145, rfc6052, 6to4, teredo.
+Or use the range ‘special’ to specify all of the named ranges.</p>
+<table>
+<thead>
+<tr>
+<th>has allow</th>
+<th>has deny</th>
+<th>in allow</th>
+<th>in deny</th>
+<th>in both</th>
+<th>in other</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no</td>
+<td>no</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>ok</td>
+</tr>
+<tr>
+<td>yes</td>
+<td>no</td>
+<td>ok</td>
+<td>-</td>
+<td>-</td>
+<td>fail</td>
+</tr>
+<tr>
+<td>no</td>
+<td>yes</td>
+<td>-</td>
+<td>fail</td>
+<td>-</td>
+<td>ok</td>
+</tr>
+<tr>
+<td>yes</td>
+<td>yes</td>
+<td>ok</td>
+<td>fail</td>
+<td>ok</td>
+<td>ok</td>
+</tr>
+</tbody>
 </table>
+<p>The output will always be without leading ‘0’ and by default compressed to the short
+form for IPv6 addresses. To get the long form use the ‘format’ option.</p>
+<h2 id="schema-specification">Schema Specification</h2>
+<p><strong>IP Address</strong> is an ip address schema definition.</p>
+<p>An  object with the following keys allowed: <code>version</code>, <code>ipv4Mapping</code>, <code>deny</code>, <code>allow</code>, <code>format</code>, <code>title</code>, <code>description</code>, <code>key</code>, <code>type</code>, <code>optional</code>, <code>default</code>. The following entries have a specific format:</p>
+<dl>
+<dt><code>version</code></dt>
+<dd>
+<p><strong>IP Type</strong> is the ip address version to use. .</p>
+<p>A text entry which is optional. All control characters will be removed. Only the values: ipv4, ipv6 are allowed.</p>
+</dd>
+<dt><code>ipv4Mapping</code></dt>
+<dd>
+<p><strong>Map IPv4 to IPv6</strong> is the default value to use if nothing given.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>deny</code></dt>
+<dd>
+<p><strong>Deny Addresses</strong> are a list of addresses or ranges to deny.</p>
+<p>A list which is optional. Each entry has to be of type:</p>
+<blockquote>
+<p><strong>Deny Address</strong> is the address or range to deny.</p>
+<p>A text entry in which all control characters will be removed. The text should match: /^unspecified|broadcast|multicast|linklocal|loopback|private|reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special|(|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,7}<img class="emoji" draggable="false" alt="😐" src="https://twemoji.maxcdn.com/72x72/1f610.png">([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😦" src="https://twemoji.maxcdn.com/72x72/1f626.png">(:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,4}<img class="emoji" draggable="false" alt="😦" src="https://twemoji.maxcdn.com/72x72/1f626.png">(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/(12[0-8]|(1[01][0-9]){0,1}[0-9])|(((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/(3[0-2]|[12]{0,1}[0-9])$/.</p>
+</blockquote>
+</dd>
+<dt><code>allow</code></dt>
+<dd>
+<p><strong>Allow Addresses</strong> are a list of addresses or ranges to allow.</p>
+<p>A list which is optional. Each entry has to be of type:</p>
+<blockquote>
+<p><strong>Allow Address</strong> is the address or range to allow.</p>
+<p>A text entry in which all control characters will be removed. The text should match: /^unspecified|broadcast|multicast|linklocal|loopback|private|reserved|uniquelocal|ipv4mapped|rfc(6145|6052)|6to4|teredo|special|(|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,7}<img class="emoji" draggable="false" alt="😐" src="https://twemoji.maxcdn.com/72x72/1f610.png">([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😦" src="https://twemoji.maxcdn.com/72x72/1f626.png">(:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,4}<img class="emoji" draggable="false" alt="😦" src="https://twemoji.maxcdn.com/72x72/1f626.png">(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/(12[0-8]|(1[01][0-9]){0,1}[0-9])|(((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/(3[0-2]|[12]{0,1}[0-9])$/.</p>
+</blockquote>
+</dd>
+<dt><code>format</code></dt>
+<dd>
+<p><strong>Format</strong> is the display format tu use.</p>
+<p>A text entry which is optional and will be set to ‘short’ if not specified. All control characters will be removed. Only the values: short, long are allowed.</p>
+</dd>
+<dt><code>title</code></dt>
+<dd>
+<p><strong>Title</strong> is the title used to describe the element.</p>
+<p>A text entry which is optional. All control characters will be removed.</p>
+</dd>
+<dt><code>description</code></dt>
+<dd>
+<p><strong>Description</strong> is the free description of the element.</p>
+<p>A text entry which is optional. All control characters will be removed.</p>
+</dd>
+<dt><code>key</code></dt>
+<dd>
+<p><strong>Binding to Keyname</strong> is the mapping to which key names in an object this element belongs.</p>
+<p>A valid regular expression which is optional. It has to be <strong>one of</strong> the following types:</p>
+<ul>
+<li>An object which has to be an instance of class <code>RegExp</code>.</li>
+<li>A text entry in which all control characters will be removed. The text should match: /^/.<em>?/[gim]</em>$/.</li>
+</ul>
+</dd>
+<dt><code>type</code></dt>
+<dd>
+<p><strong>Type</strong> is the type of element.</p>
+<p>A text entry in which all control characters will be removed.</p>
+</dd>
+<dt><code>optional</code></dt>
+<dd>
+<p><strong>Optional</strong> is a flag defining if this element is optional.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>default</code></dt>
+<dd>
+<p><strong>Default Value</strong> is the default value to use if nothing given.</p>
+<p>A text entry which is optional. All control characters will be removed. The text should match: /^(([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,7}<img class="emoji" draggable="false" alt="😐" src="https://twemoji.maxcdn.com/72x72/1f610.png">([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😦" src="https://twemoji.maxcdn.com/72x72/1f626.png">(:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}<img class="emoji" draggable="false" alt="😃" src="https://twemoji.maxcdn.com/72x72/1f603.png">{1,4}<img class="emoji" draggable="false" alt="😦" src="https://twemoji.maxcdn.com/72x72/1f626.png">(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))|(((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]).){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/.</p>
+</dd>
+</dl>
+</main>
+        </div>
+        <div class="col-sm-3 col-cm-pull-9 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="header">
+              <a href="../../README.md.html">Alinex Validator</a>
+            </li>
+                <li class="level0">
+                  <a href="../../README.md.html" title="Alinex Validator: Readme (/README.md)">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="../index.coffee.html" title="Controller - API Usage (/src/index.coffee)">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="../helper/index.md.html" title="Schema Definition (/src/helper/index.md)">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)">References</a>
+                </li>
+                <li class="level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="and.coffee.html" title="And (/src/type/and.coffee)">And</a>
+                </li>
+                <li class="level2">
+                  <a href="any.coffee.html" title="Any (/src/type/any.coffee)">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="array.coffee.html" title="Array (/src/type/array.coffee)">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="email.coffee.html" title="Email (/src/type/email.coffee)">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="file.coffee.html" title="File (/src/type/file.coffee)">File</a>
+                </li>
+                <li class="level2">
+                  <a href="float.coffee.html" title="Float (/src/type/float.coffee)">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="function.coffee.html" title="Function (/src/type/function.coffee)">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="integer.coffee.html" title="Integer (/src/type/integer.coffee)">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="interval.coffee.html" title="Interval (/src/type/interval.coffee)">Interval</a>
+                </li>
+                <li class="active level2">
+                  <a href="ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)">IP Address <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level2">
+                  <a href="object.coffee.html" title="Object (/src/type/object.coffee)">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="or.coffee.html" title="Or (/src/type/or.coffee)">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="percent.coffee.html" title="Percent (/src/type/percent.coffee)">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="string.coffee.html" title="String (/src/type/string.coffee)">String</a>
+                </li>
+                <li class="level2">
+                  <a href="url.coffee.html" title="URL (/src/type/url.coffee)">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="../../Changelog.md.html" title="Version changes (/Changelog.md)">Version changes</a>
+                </li>
+          </ul>
+        </div>
 
-  </div>
-</body>
+      </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script type="text/javascript"><!--
+    $(".table-of-contents").bind("mouseleave", function(event) { $(".table-of-contents").scrollTop(0); });
+    //--></script>
+  </body>
 </html>

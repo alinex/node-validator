@@ -1,312 +1,340 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Changelog.md</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="doc-style.css" />
-  <script src="doc-filelist.js"></script>
-  <script>
-    var relativeDir = "";
-    var thisFile = "Changelog.md";
-    var defaultSidebar = true;
-  </script>
-  <script src="doc-script.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Version changes</title>
+    <meta name="HandheldFriendly" content="true" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">#topnav{text-align:center;background:#333;padding-bottom:20px;position:fixed;margin-top:0;width:100%;bottom:0;top:51px;}#topnav .navbar-nav{margin:0;margin-top:8px;display:-webkit-inline-box;display:-moz-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-box;display:inline-flex}#topnav .sidebar-to-top .btn{text-align:left}#topnav .sidebar-to-top li.level2>a{margin-left:20px}#topnav .sidebar-to-top li.level3>a{margin-left:40px}#topnav .sidebar-to-top li.level4>a{margin-left:60px}#topnav .sidebar-to-top li.level5>a{margin-left:80px}#topnav .sidebar-to-top li.level6>a{margin-left:100px}.navbar-fixed-top .navbar-collapse{max-height:100%}.navbar{min-width:300px}.nav>li{padding:2px 12px}.navbar-inverse .nav>li>a{color:#222;font-weight:bold;padding-top:6px;padding-bottom:6px;}.navbar-inverse .nav>li>a:focus,.navbar-inverse .nav>li>a:hover{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x}.navbar-inverse .nav>li>a.btn-warning:focus,.navbar-inverse .nav>li>a.btn-warning:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x}.navbar-spacer{height:51px}.btn-warning:active,.btn-primary:active{-webkit-transform:scale(.92);-moz-transform:scale(.92);-o-transform:scale(.92);-ms-transform:scale(.92);transform:scale(.92)}.btn-warning{background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x}.btn-primary{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x}.sidebar .nav{display:none;list-style:disc;padding-left:25px;}.sidebar .nav>li{display:list-item;}.sidebar .nav>li>a{color:#222;}.sidebar .nav>li>a:active{-webkit-box-shadow:0 2px 10px 2px rgba(0,0,0,0.25);box-shadow:0 2px 10px 2px rgba(0,0,0,0.25)}.sidebar .nav>li>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header,.sidebar .nav>li.active{display:none}.sidebar .nav>li.active>a{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x;}.sidebar .nav>li.active>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header>a{font-weight:bold;background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x;}.sidebar .nav>li.header>a:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x;color:#fff}.sidebar .nav>li.level2>a{padding-left:30px}.sidebar .nav>li.level3>a{padding-left:50px}.sidebar .nav>li.level4>a{padding-left:70px}.sidebar .nav>li.level5>a,.sidebar .nav>li.level6>a{padding-left:90px}.navbar-inverse .navbar-toggle{background-color:#444;}.navbar-inverse .navbar-toggle:hover{background-color:#666}@media (min-width:768px){#topnav{position:inherit;background:#222;padding-bottom:0}#topnav .nav>li{padding:0 4px}#topnav .sidebar-to-top{display:none}.navbar-right{margin-right:0}.navbar-nav >li>a{padding:6px 10px}.sidebar{overflow:auto;position:fixed;top:51px;left:0;bottom:0;background:#ddd;padding:0;}.sidebar h1,.sidebar h2{display:none}.sidebar .nav{display:block;list-style:none;padding-left:0;}.sidebar .nav>li{padding:0;}.sidebar .nav>li.header,.sidebar .nav>li.active{display:block;}.sidebar .nav>li.header.level2>a:before,.sidebar .nav>li.active.level2>a:before,.sidebar .nav>li.header.level3>a:before,.sidebar .nav>li.active.level3>a:before,.sidebar .nav>li.header.level4>a:before,.sidebar .nav>li.active.level4>a:before,.sidebar .nav>li.header.level5>a:before,.sidebar .nav>li.active.level5>a:before,.sidebar .nav>li.header.level6>a:before,.sidebar .nav>li.active.level6>a:before{content:"•"}.sidebar .nav>li>a{padding-top:8px;padding-bottom:8px}.sidebar .nav>li.level2>a:before,.sidebar .nav>li.level3>a:before,.sidebar .nav>li.level4>a:before,.sidebar .nav>li.level5>a:before,.sidebar .nav>li.level6>a:before{content:"◦";font-size:150%;line-height:10%;font-weight:bold;padding-right:5px;display:block;float:left;margin-top:8px;margin-left:-15px;color:#666}}img.preload{display:none}body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:16px;line-height:1.2;-ms-word-break:break-all;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;-ms-hyphens:auto;hyphens:auto;-webkit-hyphenate-before:2;-webkit-hyphenate-after:3;hyphenate-lines:3;min-width:300px}h1,h2,h3,h4,h5,h6{font-weight:bold;}h1:before,h2:before,h3:before,h4:before,h5:before,h6:before{display:block;content:" ";margin-top:-66px;height:66px;visibility:hidden}h1,h2,h3{clear:both}h1{border-bottom:3px solid #222;padding-bottom:5px}h2{border-bottom:2px dotted #222;padding-bottom:3px}h3{border-bottom:2px dotted #aaa;padding-bottom:2px}h4{border-bottom:1px dotted #aaa}dt{font-weight:bold;margin-top:8px}dd{margin-left:20px}blockquote{border:1px solid #eee;border-radius:3px;border-left:5px solid #337ab7;padding:5px 15px;margin:10px 0;}blockquote ul li p{margin-bottom:0}svg,img{max-width:100%}table{border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all;margin-bottom:10px;}table th,table td{padding:6px 13px;border:1px solid #ddd}table th{background-color:rgba(0,0,0,0.04);font-weight:bold;border-bottom:3px solid #999}table tr{background-color:#fff;border-top:1px solid #ccc;}table tr:nth-child(2n){background-color:rgba(0,0,0,0.04)}img{vertical-align:middle}.emoji{height:1em}abbr,acronym{border-bottom:dotted 1px}a code{color:#337ab7}code,tt{background-color:#fafafa;border-radius:4px;font-size:85%;margin:0;padding:.2em 0}pre{background-color:#fafafa;border-radius:10px;border:1px solid #a4a4a4;font-size:85%;margin:20px;padding:10px;}pre code,pre tt{background:none}pre.language{counter-reset:line;max-height:265px;padding-top:30px;padding-bottom:0;overflow-x:hidden;}pre.language code,pre.language tt{display:block;position:relative;float:left;width:100%;border-left:45px solid #ddd;margin-left:-10px;padding-left:5px;}pre.language code:before,pre.language tt:before{counter-increment:line;content:counter(line);min-width:35px;float:left;text-align:right;padding-right:5px;color:#808080;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-user-select:none;margin-left:-45px}pre.language code:first-of-type,pre.language tt:first-of-type{padding-top:10px}pre.language code:last-child,pre.language tt:last-child{padding-bottom:10px}pre.language header{border-top-left-radius:4px;border-top-right-radius:4px;font-weight:bold;background:#fafafa;margin:-30px -10px 0 -10px;padding:5px 15px}pre.language.coffeescript header,pre.language.javascript header,pre.language.ruby header,pre.language.python header,pre.language.perl header,pre.language.cc header,pre.language.cpp header,pre.language.cs header,pre.language.java header,pre.language.jsp header,pre.language.groovy header,pre.language.php header,pre.language.bash header,pre.language.sql header,pre.language.makefile header{background:#f0ad4e}pre.language.json header,pre.language.cson header,pre.language.yaml header{background:#61b961}pre.language.handlebars header,pre.language.css header,pre.language.stylus header,pre.language.scss header,pre.language.less header,pre.language.markdown header{background:#76abca}ul.table-of-contents{max-width:100px;max-height:30px;overflow:hidden;position:fixed;top:51px;right:0;background:#ddd;padding:5px 15px;-webkit-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-moz-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-o-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-ms-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;border-left:2px solid #999;border-bottom:2px solid #999;border-bottom-left-radius:10px;list-style-type:none;white-space:nowrap;z-index:100;}ul.table-of-contents:hover{max-width:285px;max-height:248px;-webkit-transition:max-width 100ms ease, max-height 1s ease 100ms;-moz-transition:max-width 100ms ease, max-height 1s ease 100ms;-o-transition:max-width 100ms ease, max-height 1s ease 100ms;-ms-transition:max-width 100ms ease, max-height 1s ease 100ms;transition:max-width 100ms ease, max-height 1s ease 100ms;overflow-y:auto}ul.table-of-contents header{background:#999;font-weight:bold;margin:-5px -15px;padding:5px 15px}ul.table-of-contents>li{padding-bottom:2px;padding-right:8px;}ul.table-of-contents>li:first-of-type{padding-top:10px}ul.table-of-contents a{color:#222}ul.table-of-contents li.sidebar{display:list-item}@media (min-width:768px){ul.table-of-contents li.sidebar{display:none}}div.detail,div.info,div.warning,div.alert{padding:30px 10px 6px 10px;margin:5px 0 8px 0;border-radius:3px;padding-left:60px;border-radius:18px;border-top-left-radius:0;}div.detail>p,div.info>p,div.warning>p,div.alert>p{margin-bottom:0}div.detail header,div.info header,div.warning header,div.alert header{font-weight:bold;position:absolute;margin-top:-30px;margin-left:-60px;padding:3px 20px 3px 10px;border-bottom-right-radius:18px}div:before{content:'\24D8';color:#666;position:absolute;font-size:28px;font-weight:900;padding-top:5px;margin-left:-50px}div.detail{background-color:#fafafa;border:2px solid #ddd;padding-top:0}div.info{background-color:#9f9;background-image:-webkit-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-moz-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-o-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-ms-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:linear-gradient(to bottom, #bfb 0%, #6d6 100%);border:2px solid #6d6;}div.info header{background-color:#6d6}div.info:before{content:'\24D8';text-shadow:0 -1px 0 #6d6}div.warning{background-color:#fc9;background-image:-webkit-linear-gradient(top, #f97 0%, #e86 100%);background-image:-moz-linear-gradient(top, #f97 0%, #e86 100%);background-image:-o-linear-gradient(top, #f97 0%, #e86 100%);background-image:-ms-linear-gradient(top, #f97 0%, #e86 100%);background-image:linear-gradient(to bottom, #f97 0%, #e86 100%);border:2px solid #e86;}div.warning header{background-color:#e86}div.warning:before{content:'\2605';text-shadow:0 -1px 0 #e86}div.alert{background-color:#f99;background-image:-webkit-linear-gradient(top, #faa 0%, #c00 100%);background-image:-moz-linear-gradient(top, #faa 0%, #c00 100%);background-image:-o-linear-gradient(top, #faa 0%, #c00 100%);background-image:-ms-linear-gradient(top, #faa 0%, #c00 100%);background-image:linear-gradient(to bottom, #faa 0%, #c00 100%);border:2px solid #c00;}div.alert header{background-color:#c00;color:#fff}div.alert:before{content:'\24D8';text-shadow:0 -1px 0 #c00}.cse .gsc-control-cse,.gsc-control-cse{padding:0 !important;}.cse .gsc-control-cse table tr,.gsc-control-cse table tr,.cse .gsc-control-cse table th,.gsc-control-cse table th,.cse .gsc-control-cse table td,.gsc-control-cse table td{border:0}.cse .gsc-control-cse .gsc-cursor-current-page,.gsc-control-cse .gsc-cursor-current-page{color:#fff !important}.cse .gsc-control-cse .gsc-webResult.gsc-result:hover,.gsc-control-cse .gsc-webResult.gsc-result:hover,.cse .gsc-control-cse .gsc-imageResult:hover,.gsc-control-cse .gsc-imageResult:hover{border-left:5px solid #337ab7;padding-left:3px}.cse .gsc-control-cse .gcsc-branding,.gsc-control-cse .gcsc-branding{display:none !important}.gsc-adBlock{display:none !important}@media print{.navbar-spacer,.table-of-contents,.sidebar{display:none}.main{left:0;width:100%}pre.language header{border-bottom:2px solid #999}}.text-red{color:#d13f19}.text-green{color:#2ecc40}.text-yellow{color:#ffdc00}.text-blue{color:#0074d9}.text-magenta{color:#f0f}.text-cyan{color:#0ff}.text-gray{color:#aaa}.bg-white{background-color:#fff}.center{text-align:center}.left{float:left}.right{float:right}.spacing{padding:10px}.hidden{display:none}@media (max-width:767px){.hidden-small{display:none}}@media (min-width:768px){.hidden-large{display:none}}</style>
+  </head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
-<body>
-  <nav>
-<div class="logo"><a href="http://alinex.github.io"
-  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
-  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
-    width="150" title="Alinex Universe Homepage" />
-  </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png"
-    style="display:none" alt="preloading" />
-</div>
-<div class="links">
-  <a href="http://alinex.github.io/blog"
-    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
-  <a href="http://alinex.github.io/develop"
-    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
-  <a href="http://alinex.github.io/code.html"
-    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
-</div>
-</nav><div id="sidebar_wrapper">
-    <div id="sidebar_switch">
-      <span class="tree">Files</span>
-      <span class="headings">Headings</span>
-    </div>
-    <div id="tree"></div>
-    <div id="headings">
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topnav" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://alinex.github.io/" onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Homepage">
+</a>
+<img class="preload" src="https://alinex.github.io/images/Alinex-200.png" aria-hidden="true">
 
-      <div class="heading h1">
-        <a href="#version-changes">Version changes</a>
+        </div>
+        <div id="topnav" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://alinex.github.io/blog" class="btn btn-primary">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Blog
+  </a></li>
+<li><a href="https://alinex.github.io/develop" class="btn btn-primary">
+    <span class="glyphicon glyphicon-book" aria-hidden="true"></span> Develop
+  </a></li>
+<li><a href="https://alinex.github.io/code.html" class="btn btn-warning">
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Code
+  </a></li>
+
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input name="q" type="text" class="form-control" placeholder="Search...">
+          </form>
+          <ul class="nav sidebar-to-top">
+                <li class="level0">
+                  <a href="README.md.html" title="Alinex Validator: Readme (/README.md)" class="btn btn-primary">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="src/index.coffee.html" title="Controller - API Usage (/src/index.coffee)" class="btn btn-primary">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="src/helper/index.md.html" title="Schema Definition (/src/helper/index.md)" class="btn btn-primary">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="src/helper/reference.coffee.html" title="References (/src/helper/reference.coffee)" class="btn btn-primary">References</a>
+                </li>
+                <li class="level1">
+                  <a href="src/type/index.md.html" title="Schema Types (/src/type/index.md)" class="btn btn-primary">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/and.coffee.html" title="And (/src/type/and.coffee)" class="btn btn-primary">And</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/any.coffee.html" title="Any (/src/type/any.coffee)" class="btn btn-primary">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/array.coffee.html" title="Array (/src/type/array.coffee)" class="btn btn-primary">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)" class="btn btn-primary">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/byte.coffee.html" title="Byte (/src/type/byte.coffee)" class="btn btn-primary">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)" class="btn btn-primary">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/email.coffee.html" title="Email (/src/type/email.coffee)" class="btn btn-primary">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/file.coffee.html" title="File (/src/type/file.coffee)" class="btn btn-primary">File</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/float.coffee.html" title="Float (/src/type/float.coffee)" class="btn btn-primary">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/function.coffee.html" title="Function (/src/type/function.coffee)" class="btn btn-primary">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)" class="btn btn-primary">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)" class="btn btn-primary">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/integer.coffee.html" title="Integer (/src/type/integer.coffee)" class="btn btn-primary">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/interval.coffee.html" title="Interval (/src/type/interval.coffee)" class="btn btn-primary">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)" class="btn btn-primary">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/object.coffee.html" title="Object (/src/type/object.coffee)" class="btn btn-primary">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/or.coffee.html" title="Or (/src/type/or.coffee)" class="btn btn-primary">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/percent.coffee.html" title="Percent (/src/type/percent.coffee)" class="btn btn-primary">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)" class="btn btn-primary">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)" class="btn btn-primary">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/string.coffee.html" title="String (/src/type/string.coffee)" class="btn btn-primary">String</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/url.coffee.html" title="URL (/src/type/url.coffee)" class="btn btn-primary">URL</a>
+                </li>
+                <li class="active level0">
+                  <a href="Changelog.md.html" title="Version changes (/Changelog.md)" class="btn btn-warning">Version changes <span class="sr-only">(current)</span></a>
+                </li>
+          </ul>
+        </div>
       </div>
+    </nav>
 
-      <div class="heading h2">
-        <a href="#version-1.6.2-2016-05-02">Version 1.6.2 (2016-05-02)</a>
-      </div>
+    <div class="navbar-spacer"></div>
 
-      <div class="heading h2">
-        <a href="#version-1.6.1-2016-04-29">Version 1.6.1 (2016-04-29)</a>
-      </div>
+    <div class="container-fluid">
+      <div class="row">
 
-      <div class="heading h2">
-        <a href="#version-1.6.0-2016-04-21">Version 1.6.0 (2016-04-21)</a>
-      </div>
+        <div class="col-sm-9 col-sm-push-3 main">
+          <script>
+  (function() {
+    var cx = '010539487162786288372:chxqbheanxc';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchresults-only></gcse:searchresults-only>
 
-      <div class="heading h2">
-        <a href="#version-1.5.0-2016-04-15">Version 1.5.0 (2016-04-15)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.4.6-2016-04-11">Version 1.4.6 (2016-04-11)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.4.5-2016-04-08">Version 1.4.5 (2016-04-08)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.4.4-2016-04-08">Version 1.4.4 (2016-04-08)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.4.3-2016-03-31">Version 1.4.3 (2016-03-31)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.4.2-2016-03-21">Version 1.4.2 (2016-03-21)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.4.1-2016-03-21">Version 1.4.1 (2016-03-21)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.4.0-2016-03-18">Version 1.4.0 (2016-03-18)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.3.2-2016-03-16">Version 1.3.2 (2016-03-16)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.3.1-2016-02-25">Version 1.3.1 (2016-02-25)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.3.0-2016-02-10">Version 1.3.0 (2016-02-10)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.2.4-2016-02-04">Version 1.2.4 (2016-02-04)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.2.3-2016-02-01">Version 1.2.3 (2016-02-01)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.2.0-2016-01-31">Version 1.2.0 (2016-01-31)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.1.0-2016-01-29">Version 1.1.0 (2016-01-29)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.9-2015-11-28">Version 1.0.9 (2015-11-28)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.8-2015-11-06">Version 1.0.8 (2015-11-06)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.7-2015-10-27">Version 1.0.7 (2015-10-27)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.7-2015-10-26">Version 1.0.7 (2015-10-26)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.6-2015-10-23">Version 1.0.6 (2015-10-23)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.5-2015-10-05">Version 1.0.5 (2015-10-05)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.4-2015-09-24">Version 1.0.4 (2015-09-24)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.3-2015-09-02">Version 1.0.3 (2015-09-02)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.2-2015-07-21">Version 1.0.2 (2015-07-21)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.1-2015-06-19">Version 1.0.1 (2015-06-19)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-1.0.0-2015-06-16">Version 1.0.0 (2015-06-16)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.15-2015-03-20">Version 0.3.15 (2015-03-20)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.14-2015-03-18">Version 0.3.14 (2015-03-18)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.13-2015-03-10">Version 0.3.13 (2015-03-10)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.13-2015-03-10-1">Version 0.3.13 (2015-03-10)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.13-2015-03-10-2">Version 0.3.13 (2015-03-10)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.12-2015-03-10">Version 0.3.12 (2015-03-10)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.11-2015-03-05">Version 0.3.11 (2015-03-05)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.10-2015-03-04">Version 0.3.10 (2015-03-04)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.9-2015-02-12">Version 0.3.9 (2015-02-12)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.8-2015-02-12">Version 0.3.8 (2015-02-12)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.7-2015-02-03">Version 0.3.7 (2015-02-03)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.6-2015-01-21">Version 0.3.6 (2015-01-21)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.5-2015-01-21">Version 0.3.5 (2015-01-21)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.4-2014-12-10">Version 0.3.4 (2014-12-10)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.3-2014-12-04">Version 0.3.3 (2014-12-04)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.2-2014-11-03">Version 0.3.2 (2014-11-03)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.1-2014-10-08">Version 0.3.1 (2014-10-08)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.3.0-2014-09-24">Version 0.3.0 (2014-09-24)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.2.3-2014-09-17">Version 0.2.3 (2014-09-17)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.2.2-2014-08-24">Version 0.2.2 (2014-08-24)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.2.1-2014-08-21">Version 0.2.1 (2014-08-21)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.2.0-2014-08-18">Version 0.2.0 (2014-08-18)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.1.1-2014-08-09">Version 0.1.1 (2014-08-09)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.1.0-2014-08-08">Version 0.1.0 (2014-08-08)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.0.3-2014-08-08">Version 0.0.3 (2014-08-08)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.0.2-2014-08-07">Version 0.0.2 (2014-08-07)</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#version-0.0.1-2014-08-06">Version 0.0.1 (2014-08-06)</a>
-      </div>
-
-    </div>
-  </div>
-  <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
-    <div class="docs markdown"><div class="pilwrap" id="version-changes">
-  <h1>
-    <a href="#version-changes" name="version-changes" class="pilcrow"></a>
-Version changes
-  </h1>
-</div>
+          <main><p><ul class="table-of-contents" aria-hidden="true"><header>Index</header>
+<li><a href="#version-201-2016-09-29">Version 2.0.1 (2016-09-29)</a></li>
+<li><a href="#version-200-2016-09-27">Version 2.0.0 (2016-09-27)</a></li>
+<li><a href="#version-166-2016-06-08">Version 1.6.6 (2016-06-08)</a></li>
+<li><a href="#version-165-2016-06-02">Version 1.6.5 (2016-06-02)</a></li>
+<li><a href="#version-164-2016-05-31">Version 1.6.4 (2016-05-31)</a></li>
+<li><a href="#version-163-2016-05-31">Version 1.6.3 (2016-05-31)</a></li>
+<li><a href="#version-162-2016-05-02">Version 1.6.2 (2016-05-02)</a></li>
+<li><a href="#version-161-2016-04-29">Version 1.6.1 (2016-04-29)</a></li>
+<li><a href="#version-160-2016-04-21">Version 1.6.0 (2016-04-21)</a></li>
+<li><a href="#version-150-2016-04-15">Version 1.5.0 (2016-04-15)</a></li>
+<li><a href="#version-146-2016-04-11">Version 1.4.6 (2016-04-11)</a></li>
+<li><a href="#version-145-2016-04-08">Version 1.4.5 (2016-04-08)</a></li>
+<li><a href="#version-144-2016-04-08">Version 1.4.4 (2016-04-08)</a></li>
+<li><a href="#version-143-2016-03-31">Version 1.4.3 (2016-03-31)</a></li>
+<li><a href="#version-142-2016-03-21">Version 1.4.2 (2016-03-21)</a></li>
+<li><a href="#version-141-2016-03-21">Version 1.4.1 (2016-03-21)</a></li>
+<li><a href="#version-140-2016-03-18">Version 1.4.0 (2016-03-18)</a></li>
+<li><a href="#version-132-2016-03-16">Version 1.3.2 (2016-03-16)</a></li>
+<li><a href="#version-131-2016-02-25">Version 1.3.1 (2016-02-25)</a></li>
+<li><a href="#version-130-2016-02-10">Version 1.3.0 (2016-02-10)</a></li>
+<li><a href="#version-124-2016-02-04">Version 1.2.4 (2016-02-04)</a></li>
+<li><a href="#version-123-2016-02-01">Version 1.2.3 (2016-02-01)</a></li>
+<li><a href="#version-120-2016-01-31">Version 1.2.0 (2016-01-31)</a></li>
+<li><a href="#version-110-2016-01-29">Version 1.1.0 (2016-01-29)</a></li>
+<li><a href="#version-109-2015-11-28">Version 1.0.9 (2015-11-28)</a></li>
+<li><a href="#version-108-2015-11-06">Version 1.0.8 (2015-11-06)</a></li>
+<li><a href="#version-107-2015-10-27">Version 1.0.7 (2015-10-27)</a></li>
+<li><a href="#version-107-2015-10-26">Version 1.0.7 (2015-10-26)</a></li>
+<li><a href="#version-106-2015-10-23">Version 1.0.6 (2015-10-23)</a></li>
+<li><a href="#version-105-2015-10-05">Version 1.0.5 (2015-10-05)</a></li>
+<li><a href="#version-104-2015-09-24">Version 1.0.4 (2015-09-24)</a></li>
+<li><a href="#version-103-2015-09-02">Version 1.0.3 (2015-09-02)</a></li>
+<li><a href="#version-102-2015-07-21">Version 1.0.2 (2015-07-21)</a></li>
+<li><a href="#version-101-2015-06-19">Version 1.0.1 (2015-06-19)</a></li>
+<li><a href="#version-100-2015-06-16">Version 1.0.0 (2015-06-16)</a></li>
+<li><a href="#version-0315-2015-03-20">Version 0.3.15 (2015-03-20)</a></li>
+<li><a href="#version-0314-2015-03-18">Version 0.3.14 (2015-03-18)</a></li>
+<li><a href="#version-0313-2015-03-10">Version 0.3.13 (2015-03-10)</a></li>
+<li><a href="#version-0313-2015-03-10-2">Version 0.3.13 (2015-03-10)</a></li>
+<li><a href="#version-0313-2015-03-10-3">Version 0.3.13 (2015-03-10)</a></li>
+<li><a href="#version-0312-2015-03-10">Version 0.3.12 (2015-03-10)</a></li>
+<li><a href="#version-0311-2015-03-05">Version 0.3.11 (2015-03-05)</a></li>
+<li><a href="#version-0310-2015-03-04">Version 0.3.10 (2015-03-04)</a></li>
+<li><a href="#version-039-2015-02-12">Version 0.3.9 (2015-02-12)</a></li>
+<li><a href="#version-038-2015-02-12">Version 0.3.8 (2015-02-12)</a></li>
+<li><a href="#version-037-2015-02-03">Version 0.3.7 (2015-02-03)</a></li>
+<li><a href="#version-036-2015-01-21">Version 0.3.6 (2015-01-21)</a></li>
+<li><a href="#version-035-2015-01-21">Version 0.3.5 (2015-01-21)</a></li>
+<li><a href="#version-034-2014-12-10">Version 0.3.4 (2014-12-10)</a></li>
+<li><a href="#version-033-2014-12-04">Version 0.3.3 (2014-12-04)</a></li>
+<li><a href="#version-032-2014-11-03">Version 0.3.2 (2014-11-03)</a></li>
+<li><a href="#version-031-2014-10-08">Version 0.3.1 (2014-10-08)</a></li>
+<li><a href="#version-030-2014-09-24">Version 0.3.0 (2014-09-24)</a></li>
+<li><a href="#version-023-2014-09-17">Version 0.2.3 (2014-09-17)</a></li>
+<li><a href="#version-022-2014-08-24">Version 0.2.2 (2014-08-24)</a></li>
+<li><a href="#version-021-2014-08-21">Version 0.2.1 (2014-08-21)</a></li>
+<li><a href="#version-020-2014-08-18">Version 0.2.0 (2014-08-18)</a></li>
+<li><a href="#version-011-2014-08-09">Version 0.1.1 (2014-08-09)</a></li>
+<li><a href="#version-010-2014-08-08">Version 0.1.0 (2014-08-08)</a></li>
+<li><a href="#version-003-2014-08-08">Version 0.0.3 (2014-08-08)</a></li>
+<li><a href="#version-002-2014-08-07">Version 0.0.2 (2014-08-07)</a></li>
+<li><a href="#version-001-2014-08-06">Version 0.0.1 (2014-08-06)</a></li>
+</ul>
+</p>
+<h1 id="version-changes">Version changes</h1>
 <p>The following list gives a short overview about what is changed between
 individual versions:</p>
-<div class="pilwrap" id="version-1.6.2-2016-05-02">
-  <h2>
-    <a href="#version-1.6.2-2016-05-02" name="version-1.6.2-2016-05-02" class="pilcrow"></a>
-Version 1.6.2 (2016-05-02)
-  </h2>
-</div>
+<h2 id="version-201-2016-09-29">Version 2.0.1 (2016-09-29)</h2>
+<ul>
+<li>Add debug information in documentation.</li>
+<li>Add automatic schema testing befor checking if in debug mode.</li>
+<li>Optimize debug calls when not used.</li>
+</ul>
+<h2 id="version-200-2016-09-27">Version 2.0.0 (2016-09-27)</h2>
+<p>New internal structure with slightly optimized checks, and rename of toString option to makeString.</p>
+<ul>
+<li>Fix for new alinex-fs find call.</li>
+<li>Update  alinex-handlebars@1.2.1, async@2.0.1, chrono-node@1.2.4, ipaddr.js@1.2.0, mathjs@3.5.3, moment@2.15.1, request@2.75.0, alinex-builder@2.3.8, alinex-fs@3.0.2, moment-timezone@0.5.5</li>
+<li>Add dnsbl support in email validation</li>
+<li>Add blacklist support in email validation.</li>
+<li>Update all schema specifications for optimal description text.</li>
+<li>Updated schema documentation.</li>
+<li>Basic type documentation.</li>
+<li>Updated documentation for references.</li>
+<li>updated documentation.</li>
+<li>Fixed references and got the tests to succeed.</li>
+<li>Integrated references into checks for value and schema.</li>
+<li>Remove circular reference.</li>
+<li>Create sub worker with root reference through member method.</li>
+<li>All single validators fixed.</li>
+<li>Update documentation.</li>
+<li>Update alinex-builder@2.3.8, mathjs@3.5.1, moment@2.15.0, request@2.75.0, alinex-fs@3.0.2</li>
+<li>Fixed multiple validators to work their tests now.</li>
+<li>Fixed validation of object.</li>
+<li>Fix selfcheck definition to not change base rule definition.</li>
+<li>Fixes in validation.</li>
+<li>String balidator use makeString instead of toString.</li>
+<li>Fixed code to run all internal reference checks.</li>
+<li>Restructured reference checking and made simple calls runable.</li>
+<li>Create new reference module.</li>
+<li>Finished basic rewrite of all validators.</li>
+<li>Rewrite of more validators.</li>
+<li>Rewrite of email validator.</li>
+<li>Rewrite of file validator.</li>
+<li>Rewrite of handlebars validator.</li>
+<li>Rewrite of hostname validation.</li>
+<li>Rewrite of interval validator.</li>
+<li>Rewrite ipaddr validator.</li>
+<li>Ipaddr validator rewritten.</li>
+<li>Rewrite of object validator.</li>
+<li>Rewrite or validator.</li>
+<li>Rewrite of percent validator with some extensions like pro mille…</li>
+<li>Instantiate type specific debug in worker.</li>
+<li>Rewrite port validator.</li>
+<li>Rewrite of regexp validator.</li>
+<li>Rewrite of string validator.</li>
+<li>Rewrite string check.</li>
+<li>Rewritten int type.</li>
+<li>Set float selfcheck definition.</li>
+<li>Rework describe for float type.</li>
+<li>Fixed float checks to work in new structure.</li>
+<li>Start rewriting of internal library for better performance.</li>
+<li>Updated ignore files.</li>
+<li>Update travis.</li>
+<li>Add sync methods using deasync.</li>
+<li>Rename links to Alinex Namespace.</li>
+<li>Add copyright sign.</li>
+<li>Add test for if block in handlebars.</li>
+<li>Upgraded builder package.</li>
+<li>Change to new mapValue from rc.6.</li>
+</ul>
+<h2 id="version-166-2016-06-08">Version 1.6.6 (2016-06-08)</h2>
+<p>Hot fix for changed behaviour in async causing “Type undefined error”.</p>
+<ul>
+<li>Fix duplicate use of variables.</li>
+<li>Upgrade formatter-&gt;format, builder.</li>
+<li>Hot fix for new async rc.6</li>
+<li>Optimized errors for unsupported type.</li>
+</ul>
+<h2 id="version-165-2016-06-02">Version 1.6.5 (2016-06-02)</h2>
+<ul>
+<li>Upgraded builder and handlebars-helper package.</li>
+<li>Upgrade builder package.</li>
+<li>coveralls test</li>
+<li>Skip server check on travis.</li>
+<li>Next test.</li>
+<li>Make test verbose.</li>
+<li>Test email check on travis.</li>
+<li>Fix some other tests for travis.</li>
+<li>Fix test to use other timezone on travis.</li>
+<li>Try to optimize tests for travis.</li>
+<li>Upgraded formatter, ipaddr and builder packages.</li>
+</ul>
+<h2 id="version-164-2016-05-31">Version 1.6.4 (2016-05-31)</h2>
+<ul>
+<li>Fix max stack trace problem by using setImmediate on object and array keys.</li>
+</ul>
+<h2 id="version-163-2016-05-31">Version 1.6.3 (2016-05-31)</h2>
+<ul>
+<li>Upgraded async package.</li>
+<li>Fixed document style.</li>
+<li>Use alinex-formatter for string parsing.</li>
+<li>Updated fs, util, chrono, timezone and builder packages.</li>
+</ul>
+<h2 id="version-162-2016-05-02">Version 1.6.2 (2016-05-02)</h2>
 <ul>
 <li>Upgraded handlebars and builder.</li>
-<li>Added v6 for travis but didn't activate, yet.</li>
+<li>Added v6 for travis but didn’t activate, yet.</li>
 </ul>
-<div class="pilwrap" id="version-1.6.1-2016-04-29">
-  <h2>
-    <a href="#version-1.6.1-2016-04-29" name="version-1.6.1-2016-04-29" class="pilcrow"></a>
-Version 1.6.1 (2016-04-29)
-  </h2>
-</div>
+<h2 id="version-161-2016-04-29">Version 1.6.1 (2016-04-29)</h2>
 <ul>
 <li>Changes async to 2.ß syntax in tests.</li>
 <li>Replace async calls with v 2.0 syntax.</li>
 <li>Upgraded builder, mathjs, handlebars, util packages.</li>
 </ul>
-<div class="pilwrap" id="version-1.6.0-2016-04-21">
-  <h2>
-    <a href="#version-1.6.0-2016-04-21" name="version-1.6.0-2016-04-21" class="pilcrow"></a>
-Version 1.6.0 (2016-04-21)
-  </h2>
-</div>
+<h2 id="version-160-2016-04-21">Version 1.6.0 (2016-04-21)</h2>
 <ul>
 <li>BACKWARD INCOMPATIBLE CHANGES in handlebars helper.</li>
 <li>Upgraded handlebars to new version with i18n support.</li>
@@ -321,12 +349,7 @@ Version 1.6.0 (2016-04-21)
 <li>Replace deprecated extend and clone calls.</li>
 <li>Upgraded util, yaml, mathjs, moment and request package.</li>
 </ul>
-<div class="pilwrap" id="version-1.5.0-2016-04-15">
-  <h2>
-    <a href="#version-1.5.0-2016-04-15" name="version-1.5.0-2016-04-15" class="pilcrow"></a>
-Version 1.5.0 (2016-04-15)
-  </h2>
-</div>
+<h2 id="version-150-2016-04-15">Version 1.5.0 (2016-04-15)</h2>
 <ul>
 <li>Upgraded request package.</li>
 <li>Added format option to array.</li>
@@ -338,61 +361,31 @@ Version 1.5.0 (2016-04-15)
 <li>Extended selfcheck.</li>
 <li>Document locale setting for datetime.</li>
 </ul>
-<div class="pilwrap" id="version-1.4.6-2016-04-11">
-  <h2>
-    <a href="#version-1.4.6-2016-04-11" name="version-1.4.6-2016-04-11" class="pilcrow"></a>
-Version 1.4.6 (2016-04-11)
-  </h2>
-</div>
+<h2 id="version-146-2016-04-11">Version 1.4.6 (2016-04-11)</h2>
 <ul>
 <li>Updated documentation for datetime.</li>
 <li>Fixed bug in date part with format.</li>
 </ul>
-<div class="pilwrap" id="version-1.4.5-2016-04-08">
-  <h2>
-    <a href="#version-1.4.5-2016-04-08" name="version-1.4.5-2016-04-08" class="pilcrow"></a>
-Version 1.4.5 (2016-04-08)
-  </h2>
-</div>
+<h2 id="version-145-2016-04-08">Version 1.4.5 (2016-04-08)</h2>
 <ul>
 <li>Make delimiter output debug level.</li>
 </ul>
-<div class="pilwrap" id="version-1.4.4-2016-04-08">
-  <h2>
-    <a href="#version-1.4.4-2016-04-08" name="version-1.4.4-2016-04-08" class="pilcrow"></a>
-Version 1.4.4 (2016-04-08)
-  </h2>
-</div>
+<h2 id="version-144-2016-04-08">Version 1.4.4 (2016-04-08)</h2>
 <ul>
 <li>Upgraded util, mathjs and request packages.</li>
 <li>Remove unneccessary whitespace.</li>
 </ul>
-<div class="pilwrap" id="version-1.4.3-2016-03-31">
-  <h2>
-    <a href="#version-1.4.3-2016-03-31" name="version-1.4.3-2016-03-31" class="pilcrow"></a>
-Version 1.4.3 (2016-03-31)
-  </h2>
-</div>
+<h2 id="version-143-2016-03-31">Version 1.4.3 (2016-03-31)</h2>
 <ul>
 <li>Fixed bug in argument parsing for handlebar helpers.</li>
 <li>Upgraded mathjs and util packages.</li>
 <li>Added unique option for array.</li>
 </ul>
-<div class="pilwrap" id="version-1.4.2-2016-03-21">
-  <h2>
-    <a href="#version-1.4.2-2016-03-21" name="version-1.4.2-2016-03-21" class="pilcrow"></a>
-Version 1.4.2 (2016-03-21)
-  </h2>
-</div>
+<h2 id="version-142-2016-03-21">Version 1.4.2 (2016-03-21)</h2>
 <ul>
 <li>Upgrade utils.</li>
 </ul>
-<div class="pilwrap" id="version-1.4.1-2016-03-21">
-  <h2>
-    <a href="#version-1.4.1-2016-03-21" name="version-1.4.1-2016-03-21" class="pilcrow"></a>
-Version 1.4.1 (2016-03-21)
-  </h2>
-</div>
+<h2 id="version-141-2016-03-21">Version 1.4.1 (2016-03-21)</h2>
 <ul>
 <li>Reenable all tests.</li>
 <li>Fixed handlebars is differentiating between object and not object.</li>
@@ -401,12 +394,7 @@ Version 1.4.1 (2016-03-21)
 <li>Make handlebars is operatoor work on array/object size.</li>
 <li>Add examples.</li>
 </ul>
-<div class="pilwrap" id="version-1.4.0-2016-03-18">
-  <h2>
-    <a href="#version-1.4.0-2016-03-18" name="version-1.4.0-2016-03-18" class="pilcrow"></a>
-Version 1.4.0 (2016-03-18)
-  </h2>
-</div>
+<h2 id="version-140-2016-03-18">Version 1.4.0 (2016-03-18)</h2>
 <ul>
 <li>Upgrade yaml, chrono, moment, mathjs and builder.</li>
 <li>Added unitFormat handlebars helper.</li>
@@ -415,36 +403,21 @@ Version 1.4.0 (2016-03-18)
 <li>Fixed typo error.</li>
 <li>Update link to handlebars syntax page.</li>
 </ul>
-<div class="pilwrap" id="version-1.3.2-2016-03-16">
-  <h2>
-    <a href="#version-1.3.2-2016-03-16" name="version-1.3.2-2016-03-16" class="pilcrow"></a>
-Version 1.3.2 (2016-03-16)
-  </h2>
-</div>
+<h2 id="version-132-2016-03-16">Version 1.3.2 (2016-03-16)</h2>
 <ul>
 <li>Upgraded mathjs and node-util.</li>
 <li>Fixed bug in array validation: not using new value from subchecks.</li>
 <li>Fixed general link in README.</li>
 <li>Fix typo in documentation.</li>
 </ul>
-<div class="pilwrap" id="version-1.3.1-2016-02-25">
-  <h2>
-    <a href="#version-1.3.1-2016-02-25" name="version-1.3.1-2016-02-25" class="pilcrow"></a>
-Version 1.3.1 (2016-02-25)
-  </h2>
-</div>
+<h2 id="version-131-2016-02-25">Version 1.3.1 (2016-02-25)</h2>
 <ul>
 <li>Upgraded chrono and yaml parser.</li>
 <li>Add dateAdd helper to handlebars.</li>
 <li>Trim output of commands.</li>
 <li>Fixed wrong test command in package.json.</li>
 </ul>
-<div class="pilwrap" id="version-1.3.0-2016-02-10">
-  <h2>
-    <a href="#version-1.3.0-2016-02-10" name="version-1.3.0-2016-02-10" class="pilcrow"></a>
-Version 1.3.0 (2016-02-10)
-  </h2>
-</div>
+<h2 id="version-130-2016-02-10">Version 1.3.0 (2016-02-10)</h2>
 <ul>
 <li>Allow match definitions as string.</li>
 <li>Added join helper for handlebars.</li>
@@ -453,12 +426,7 @@ Version 1.3.0 (2016-02-10)
 <li>Made intl support in validator work.</li>
 <li>Added partly working intl support in handlebars.</li>
 </ul>
-<div class="pilwrap" id="version-1.2.4-2016-02-04">
-  <h2>
-    <a href="#version-1.2.4-2016-02-04" name="version-1.2.4-2016-02-04" class="pilcrow"></a>
-Version 1.2.4 (2016-02-04)
-  </h2>
-</div>
+<h2 id="version-124-2016-02-04">Version 1.2.4 (2016-02-04)</h2>
 <ul>
 <li>Remove alinex-error because no longer used.</li>
 <li>updated ignore files.</li>
@@ -467,23 +435,13 @@ Version 1.2.4 (2016-02-04)
 <li>Updated meta data of package and travis build versions.</li>
 <li>Fixed changelog.</li>
 </ul>
-<div class="pilwrap" id="version-1.2.3-2016-02-01">
-  <h2>
-    <a href="#version-1.2.3-2016-02-01" name="version-1.2.3-2016-02-01" class="pilcrow"></a>
-Version 1.2.3 (2016-02-01)
-  </h2>
-</div>
+<h2 id="version-123-2016-02-01">Version 1.2.3 (2016-02-01)</h2>
 <ul>
 <li>publish again because was buggy.</li>
 <li>Allow all tests to run again.</li>
 <li>Fixed flatten option on object.</li>
 </ul>
-<div class="pilwrap" id="version-1.2.0-2016-01-31">
-  <h2>
-    <a href="#version-1.2.0-2016-01-31" name="version-1.2.0-2016-01-31" class="pilcrow"></a>
-Version 1.2.0 (2016-01-31)
-  </h2>
-</div>
+<h2 id="version-120-2016-01-31">Version 1.2.0 (2016-01-31)</h2>
 <ul>
 <li>Allow objects as string.values option.</li>
 <li>Added documentation for url.</li>
@@ -491,12 +449,7 @@ Version 1.2.0 (2016-01-31)
 <li>New url check basically working.</li>
 <li>Store my ip globally.</li>
 </ul>
-<div class="pilwrap" id="version-1.1.0-2016-01-29">
-  <h2>
-    <a href="#version-1.1.0-2016-01-29" name="version-1.1.0-2016-01-29" class="pilcrow"></a>
-Version 1.1.0 (2016-01-29)
-  </h2>
-</div>
+<h2 id="version-110-2016-01-29">Version 1.1.0 (2016-01-29)</h2>
 <ul>
 <li>Optimized tests for linter and removed unused variables.</li>
 <li>Added server check for email addresses.</li>
@@ -504,69 +457,39 @@ Version 1.1.0 (2016-01-29)
 <li>Added flatten option to object sanititzer.</li>
 <li>Fixed some minor linter warnings.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.9-2015-11-28">
-  <h2>
-    <a href="#version-1.0.9-2015-11-28" name="version-1.0.9-2015-11-28" class="pilcrow"></a>
-Version 1.0.9 (2015-11-28)
-  </h2>
-</div>
+<h2 id="version-109-2015-11-28">Version 1.0.9 (2015-11-28)</h2>
 <ul>
 <li>Fixed to allow empty objects if no keys are mandatory.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.8-2015-11-06">
-  <h2>
-    <a href="#version-1.0.8-2015-11-06" name="version-1.0.8-2015-11-06" class="pilcrow"></a>
-Version 1.0.8 (2015-11-06)
-  </h2>
-</div>
+<h2 id="version-108-2015-11-06">Version 1.0.8 (2015-11-06)</h2>
 <ul>
 <li>Small fix in test routine.</li>
 <li>Fixed bug in or validation in which default values from first try are stored in the successfull second try.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.7-2015-10-27">
-  <h2>
-    <a href="#version-1.0.7-2015-10-27" name="version-1.0.7-2015-10-27" class="pilcrow"></a>
-Version 1.0.7 (2015-10-27)
-  </h2>
-</div>
+<h2 id="version-107-2015-10-27">Version 1.0.7 (2015-10-27)</h2>
 <ul>
 <li>Fix version number.</li>
 <li>Added information for version 1.0.7</li>
 <li>Allow revalidation of handlebars type.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.7-2015-10-26">
-  <h2>
-    <a href="#version-1.0.7-2015-10-26" name="version-1.0.7-2015-10-26" class="pilcrow"></a>
-Version 1.0.7 (2015-10-26)
-  </h2>
-</div>
+<h2 id="version-107-2015-10-26">Version 1.0.7 (2015-10-26)</h2>
 <ul>
 <li>Allow revalidation of handlebars type.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.6-2015-10-23">
-  <h2>
-    <a href="#version-1.0.6-2015-10-23" name="version-1.0.6-2015-10-23" class="pilcrow"></a>
-Version 1.0.6 (2015-10-23)
-  </h2>
-</div>
+<h2 id="version-106-2015-10-23">Version 1.0.6 (2015-10-23)</h2>
 <ul>
 <li>Fixed code style.</li>
 <li>Document and fix possibility to reference value from schema.</li>
 <li>Better display of paths in error messages.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.5-2015-10-05">
-  <h2>
-    <a href="#version-1.0.5-2015-10-05" name="version-1.0.5-2015-10-05" class="pilcrow"></a>
-Version 1.0.5 (2015-10-05)
-  </h2>
-</div>
+<h2 id="version-105-2015-10-05">Version 1.0.5 (2015-10-05)</h2>
 <ul>
 <li>Finished datetime validation.</li>
 <li>Add description for datetime validator.</li>
 <li>Added support for defined datetime aliases.</li>
 <li>Added local formatting and unix timestamp to datetime validator.</li>
 <li>Support min/max options.</li>
-<li>Allow parsing 'now'.</li>
+<li>Allow parsing ‘now’.</li>
 <li>Added parsing of natural language times.</li>
 <li>Parse ISO date and time strings.</li>
 <li>Parse first date using chrono-node.</li>
@@ -574,12 +497,7 @@ Version 1.0.5 (2015-10-05)
 <li>Add example to make a switch configuration using the or-type.</li>
 <li>Add travis tests in node v4.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.4-2015-09-24">
-  <h2>
-    <a href="#version-1.0.4-2015-09-24" name="version-1.0.4-2015-09-24" class="pilcrow"></a>
-Version 1.0.4 (2015-09-24)
-  </h2>
-</div>
+<h2 id="version-104-2015-09-24">Version 1.0.4 (2015-09-24)</h2>
 <ul>
 <li>Fixed null pointer error in optional check.</li>
 <li>Fix other object checks to work again.</li>
@@ -588,12 +506,7 @@ Version 1.0.4 (2015-09-24)
 <li>Added debug message for optional setting.</li>
 <li>Add new tests for default and option in objects.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.3-2015-09-02">
-  <h2>
-    <a href="#version-1.0.3-2015-09-02" name="version-1.0.3-2015-09-02" class="pilcrow"></a>
-Version 1.0.3 (2015-09-02)
-  </h2>
-</div>
+<h2 id="version-103-2015-09-02">Version 1.0.3 (2015-09-02)</h2>
 <ul>
 <li>Fixed bps type definition to work in newer mathjs lib.</li>
 <li>Fix bug in string with values.</li>
@@ -604,12 +517,7 @@ Version 1.0.3 (2015-09-02)
 <li>Also allow pipe and socket filetypes for file validator.</li>
 <li>Added rtmp port (1935).</li>
 </ul>
-<div class="pilwrap" id="version-1.0.2-2015-07-21">
-  <h2>
-    <a href="#version-1.0.2-2015-07-21" name="version-1.0.2-2015-07-21" class="pilcrow"></a>
-Version 1.0.2 (2015-07-21)
-  </h2>
-</div>
+<h2 id="version-102-2015-07-21">Version 1.0.2 (2015-07-21)</h2>
 <ul>
 <li>Removed .only from tests</li>
 <li>Added port validator.</li>
@@ -625,12 +533,7 @@ Version 1.0.2 (2015-07-21)
 <li>Updated insstall documentation.</li>
 <li>Made badge links npm compatible in documentation.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.1-2015-06-19">
-  <h2>
-    <a href="#version-1.0.1-2015-06-19" name="version-1.0.1-2015-06-19" class="pilcrow"></a>
-Version 1.0.1 (2015-06-19)
-  </h2>
-</div>
+<h2 id="version-101-2015-06-19">Version 1.0.1 (2015-06-19)</h2>
 <ul>
 <li>Extended tests.</li>
 <li>Fixed key checking in objects.</li>
@@ -643,12 +546,7 @@ Version 1.0.1 (2015-06-19)
 <li>Added more tests and fixed bug in references with auto join.</li>
 <li>Optimized API documentation.</li>
 </ul>
-<div class="pilwrap" id="version-1.0.0-2015-06-16">
-  <h2>
-    <a href="#version-1.0.0-2015-06-16" name="version-1.0.0-2015-06-16" class="pilcrow"></a>
-Version 1.0.0 (2015-06-16)
-  </h2>
-</div>
+<h2 id="version-100-2015-06-16">Version 1.0.0 (2015-06-16)</h2>
 <ul>
 <li>Updated documentation.</li>
 <li>Only use values for references after they are checked.</li>
@@ -724,7 +622,7 @@ Version 1.0.0 (2015-06-16)
 <li>Optimized second run to make only things nit done in the first run.</li>
 <li>Made references for values work using a second round if needed.</li>
 <li>Optimized debug output in check and object.</li>
-<li>Merge branch 'master' of https://github.com/alinex/node-validator</li>
+<li>Merge branch ‘master’ of <a href="https://github.com/alinex/node-validator">https://github.com/alinex/node-validator</a></li>
 <li>Text changes.</li>
 <li>Try to restructure again loop.</li>
 <li>Finished struct references to use different path mappings.</li>
@@ -735,7 +633,7 @@ Version 1.0.0 (2015-06-16)
 <li>Add rudimentary reference type used for new reference checks.</li>
 <li>Glue first sentences of description text into one to make it more natural sounding.</li>
 <li>Optimize headings in documentation.</li>
-<li>Don't support leading 0 as optional but read it as octal notation.</li>
+<li>Don’t support leading 0 as optional but read it as octal notation.</li>
 <li>Changed reference plan.</li>
 <li>Planing referenc restructuring.</li>
 <li>Give file checks more time on slow test machines.</li>
@@ -752,30 +650,15 @@ Version 1.0.0 (2015-06-16)
 <li>Added tests for regexp and made small fixes.</li>
 <li>Add simple handlebar validation.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.15-2015-03-20">
-  <h2>
-    <a href="#version-0.3.15-2015-03-20" name="version-0.3.15-2015-03-20" class="pilcrow"></a>
-Version 0.3.15 (2015-03-20)
-  </h2>
-</div>
+<h2 id="version-0315-2015-03-20">Version 0.3.15 (2015-03-20)</h2>
 <ul>
 <li>Added debug message for directory search paths.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.14-2015-03-18">
-  <h2>
-    <a href="#version-0.3.14-2015-03-18" name="version-0.3.14-2015-03-18" class="pilcrow"></a>
-Version 0.3.14 (2015-03-18)
-  </h2>
-</div>
+<h2 id="version-0314-2015-03-18">Version 0.3.14 (2015-03-18)</h2>
 <ul>
 <li>Added possibility to use dynamic find values for file search.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.13-2015-03-10">
-  <h2>
-    <a href="#version-0.3.13-2015-03-10" name="version-0.3.13-2015-03-10" class="pilcrow"></a>
-Version 0.3.13 (2015-03-10)
-  </h2>
-</div>
+<h2 id="version-0313-2015-03-10">Version 0.3.13 (2015-03-10)</h2>
 <ul>
 <li>More async changes.</li>
 <li>Added information for version 0.3.13</li>
@@ -784,139 +667,74 @@ Version 0.3.13 (2015-03-10)
 <li>Added information for version 0.3.13</li>
 <li>Replace async with alinex-async.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.13-2015-03-10-1">
-  <h2>
-    <a href="#version-0.3.13-2015-03-10-1" name="version-0.3.13-2015-03-10-1" class="pilcrow"></a>
-Version 0.3.13 (2015-03-10)
-  </h2>
-</div>
+<h2 id="version-0313-2015-03-10-2">Version 0.3.13 (2015-03-10)</h2>
 <ul>
 <li>Revert version number.</li>
 <li>More fixes for alinex-async.</li>
 <li>Added information for version 0.3.13</li>
 <li>Replace async with alinex-async.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.13-2015-03-10-2">
-  <h2>
-    <a href="#version-0.3.13-2015-03-10-2" name="version-0.3.13-2015-03-10-2" class="pilcrow"></a>
-Version 0.3.13 (2015-03-10)
-  </h2>
-</div>
+<h2 id="version-0313-2015-03-10-3">Version 0.3.13 (2015-03-10)</h2>
 <ul>
 <li>Replace async with alinex-async.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.12-2015-03-10">
-  <h2>
-    <a href="#version-0.3.12-2015-03-10" name="version-0.3.12-2015-03-10" class="pilcrow"></a>
-Version 0.3.12 (2015-03-10)
-  </h2>
-</div>
+<h2 id="version-0312-2015-03-10">Version 0.3.12 (2015-03-10)</h2>
 <ul>
 <li>Fix file.find to work with multiple folders.</li>
 <li>Update documentation structure.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.11-2015-03-05">
-  <h2>
-    <a href="#version-0.3.11-2015-03-05" name="version-0.3.11-2015-03-05" class="pilcrow"></a>
-Version 0.3.11 (2015-03-05)
-  </h2>
-</div>
+<h2 id="version-0311-2015-03-05">Version 0.3.11 (2015-03-05)</h2>
 <ul>
 <li>Added correct error message if referenced file could not be found.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.10-2015-03-04">
-  <h2>
-    <a href="#version-0.3.10-2015-03-04" name="version-0.3.10-2015-03-04" class="pilcrow"></a>
-Version 0.3.10 (2015-03-04)
-  </h2>
-</div>
+<h2 id="version-0310-2015-03-04">Version 0.3.10 (2015-03-04)</h2>
 <ul>
 <li>Optimized description text display.</li>
 <li>Optimized wording in error messages.</li>
 <li>Rewrite examples in coffeescript.</li>
 <li>Updated dependent modules.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.9-2015-02-12">
-  <h2>
-    <a href="#version-0.3.9-2015-02-12" name="version-0.3.9-2015-02-12" class="pilcrow"></a>
-Version 0.3.9 (2015-02-12)
-  </h2>
-</div>
+<h2 id="version-039-2015-02-12">Version 0.3.9 (2015-02-12)</h2>
 <ul>
 <li>Fixed type error in regexp check.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.8-2015-02-12">
-  <h2>
-    <a href="#version-0.3.8-2015-02-12" name="version-0.3.8-2015-02-12" class="pilcrow"></a>
-Version 0.3.8 (2015-02-12)
-  </h2>
-</div>
+<h2 id="version-038-2015-02-12">Version 0.3.8 (2015-02-12)</h2>
 <ul>
 <li>Added regexp validation.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.7-2015-02-03">
-  <h2>
-    <a href="#version-0.3.7-2015-02-03" name="version-0.3.7-2015-02-03" class="pilcrow"></a>
-Version 0.3.7 (2015-02-03)
-  </h2>
-</div>
+<h2 id="version-037-2015-02-03">Version 0.3.7 (2015-02-03)</h2>
 <ul>
 <li>Extended file find check to use multiple search paths.</li>
 <li>Small code optimization, prevent duplicate call of same function.</li>
 <li>Bugfix: async file check exitst because of uncatched throw.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.6-2015-01-21">
-  <h2>
-    <a href="#version-0.3.6-2015-01-21" name="version-0.3.6-2015-01-21" class="pilcrow"></a>
-Version 0.3.6 (2015-01-21)
-  </h2>
-</div>
+<h2 id="version-036-2015-01-21">Version 0.3.6 (2015-01-21)</h2>
 <ul>
 <li>Fixed bug in async checks for files.</li>
 <li>Fixed bug with check for existing path.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.5-2015-01-21">
-  <h2>
-    <a href="#version-0.3.5-2015-01-21" name="version-0.3.5-2015-01-21" class="pilcrow"></a>
-Version 0.3.5 (2015-01-21)
-  </h2>
-</div>
+<h2 id="version-035-2015-01-21">Version 0.3.5 (2015-01-21)</h2>
 <ul>
 <li>Fixed bug in debug output caused missing option display.</li>
 <li>Extended string test.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.4-2014-12-10">
-  <h2>
-    <a href="#version-0.3.4-2014-12-10" name="version-0.3.4-2014-12-10" class="pilcrow"></a>
-Version 0.3.4 (2014-12-10)
-  </h2>
-</div>
+<h2 id="version-034-2014-12-10">Version 0.3.4 (2014-12-10)</h2>
 <ul>
 <li>Fixed mathjs package specification.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.3-2014-12-04">
-  <h2>
-    <a href="#version-0.3.3-2014-12-04" name="version-0.3.3-2014-12-04" class="pilcrow"></a>
-Version 0.3.3 (2014-12-04)
-  </h2>
-</div>
+<h2 id="version-033-2014-12-04">Version 0.3.3 (2014-12-04)</h2>
 <ul>
 <li>Updates allowed versions for alinex-fs module.</li>
 <li>Use absolute path on basedir in file validator.</li>
 <li>Finished basic version of file validator.</li>
 <li>Adding file validator stubs.</li>
 <li>Added unit support for integer and float.</li>
-<li>Add support for derived unit 'bps' in byte type.</li>
+<li>Add support for derived unit ‘bps’ in byte type.</li>
 <li>Removed test output.</li>
-<li>Added subelement errors in error message of 'any'-type.</li>
+<li>Added subelement errors in error message of ‘any’-type.</li>
 <li>Fixed indentation in format description.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.2-2014-11-03">
-  <h2>
-    <a href="#version-0.3.2-2014-11-03" name="version-0.3.2-2014-11-03" class="pilcrow"></a>
-Version 0.3.2 (2014-11-03)
-  </h2>
-</div>
+<h2 id="version-032-2014-11-03">Version 0.3.2 (2014-11-03)</h2>
 <ul>
 <li>Updated package description.</li>
 <li>Fixed small bug in which stripTags is done on string without specifications.</li>
@@ -925,74 +743,49 @@ Version 0.3.2 (2014-11-03)
 <li>Fixed package.json version notation.</li>
 <li>Fixed bug with not using new chalk module.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.1-2014-10-08">
-  <h2>
-    <a href="#version-0.3.1-2014-10-08" name="version-0.3.1-2014-10-08" class="pilcrow"></a>
-Version 0.3.1 (2014-10-08)
-  </h2>
-</div>
+<h2 id="version-031-2014-10-08">Version 0.3.1 (2014-10-08)</h2>
 <ul>
 <li>Fixed npmignore file.</li>
 <li>Fixed bug with path and duplicate callback in async call.</li>
 <li>Add informal unit setting for byte type.</li>
 <li>Updated alinex-make.</li>
-<li>Allow 'default: false' in boolen type.</li>
+<li>Allow ‘default: false’ in boolen type.</li>
 <li>Fixed bug in objects with one rule for all keys and optimized description text.</li>
 </ul>
-<div class="pilwrap" id="version-0.3.0-2014-09-24">
-  <h2>
-    <a href="#version-0.3.0-2014-09-24" name="version-0.3.0-2014-09-24" class="pilcrow"></a>
-Version 0.3.0 (2014-09-24)
-  </h2>
-</div>
+<h2 id="version-030-2014-09-24">Version 0.3.0 (2014-09-24)</h2>
 <ul>
 <li>Updated description for objects.</li>
 <li>Added describe text to error messages.</li>
 <li>Finished rewriting of object checks.</li>
 <li>Extended object documentation.</li>
 <li>Started rework for optional use in objects.</li>
-<li>Added new validation type 'byte'.</li>
+<li>Added new validation type ‘byte’.</li>
 <li>Make reference selfcheck more specific.</li>
 <li>Add possibility to use operations on references.</li>
-<li>Added 'hostname' type as example for string extension.</li>
+<li>Added ‘hostname’ type as example for string extension.</li>
 <li>Removed async there not needed.</li>
 <li>Bug fixes in selfcheck and object validation.</li>
-<li>Added new check type 'and'.</li>
+<li>Added new check type ‘and’.</li>
 <li>Adding description for selfcheck.</li>
-<li>Allow the general keys 'title' and 'description' in all selftests.</li>
+<li>Allow the general keys ‘title’ and ‘description’ in all selftests.</li>
 </ul>
-<div class="pilwrap" id="version-0.2.3-2014-09-17">
-  <h2>
-    <a href="#version-0.2.3-2014-09-17" name="version-0.2.3-2014-09-17" class="pilcrow"></a>
-Version 0.2.3 (2014-09-17)
-  </h2>
-</div>
+<h2 id="version-023-2014-09-17">Version 0.2.3 (2014-09-17)</h2>
 <ul>
 <li>Differentiate between normale function and class in check.</li>
 <li>Optimized source in error message and fixed bug in object test.</li>
-<li>Fixed 'function' check.</li>
+<li>Fixed ‘function’ check.</li>
 <li>Initial version of function check.</li>
 <li>Added selfcheck for other types.</li>
 <li>Added selfcheck for float and string and removed old reference implementation.</li>
 <li>Added selfcheck method for integers.</li>
 <li>Updated to debug 2.0.0</li>
 </ul>
-<div class="pilwrap" id="version-0.2.2-2014-08-24">
-  <h2>
-    <a href="#version-0.2.2-2014-08-24" name="version-0.2.2-2014-08-24" class="pilcrow"></a>
-Version 0.2.2 (2014-08-24)
-  </h2>
-</div>
+<h2 id="version-022-2014-08-24">Version 0.2.2 (2014-08-24)</h2>
 <ul>
 <li>Fixed references with mocha tests.</li>
 <li>Added support for references.</li>
 </ul>
-<div class="pilwrap" id="version-0.2.1-2014-08-21">
-  <h2>
-    <a href="#version-0.2.1-2014-08-21" name="version-0.2.1-2014-08-21" class="pilcrow"></a>
-Version 0.2.1 (2014-08-21)
-  </h2>
-</div>
+<h2 id="version-021-2014-08-21">Version 0.2.1 (2014-08-21)</h2>
 <ul>
 <li>Finished internal rewrite but removed reference implementation.</li>
 <li>Updated string type to new structure.</li>
@@ -1004,12 +797,7 @@ Version 0.2.1 (2014-08-21)
 <li>Fixed reference bug and optimized debug messages.</li>
 <li>Added percent validator.</li>
 </ul>
-<div class="pilwrap" id="version-0.2.0-2014-08-18">
-  <h2>
-    <a href="#version-0.2.0-2014-08-18" name="version-0.2.0-2014-08-18" class="pilcrow"></a>
-Version 0.2.0 (2014-08-18)
-  </h2>
-</div>
+<h2 id="version-020-2014-08-18">Version 0.2.0 (2014-08-18)</h2>
 <ul>
 <li>Added time format in interval type.</li>
 <li>Added first reference check with name resolution.</li>
@@ -1026,21 +814,11 @@ Version 0.2.0 (2014-08-18)
 <li>Optimized debug output and fixed async array check bug.</li>
 <li>Added default option and made internal restructure.</li>
 </ul>
-<div class="pilwrap" id="version-0.1.1-2014-08-09">
-  <h2>
-    <a href="#version-0.1.1-2014-08-09" name="version-0.1.1-2014-08-09" class="pilcrow"></a>
-Version 0.1.1 (2014-08-09)
-  </h2>
-</div>
+<h2 id="version-011-2014-08-09">Version 0.1.1 (2014-08-09)</h2>
 <ul>
 <li>Fixed bug in asynchronous call of type.any</li>
 </ul>
-<div class="pilwrap" id="version-0.1.0-2014-08-08">
-  <h2>
-    <a href="#version-0.1.0-2014-08-08" name="version-0.1.0-2014-08-08" class="pilcrow"></a>
-Version 0.1.0 (2014-08-08)
-  </h2>
-</div>
+<h2 id="version-010-2014-08-08">Version 0.1.0 (2014-08-08)</h2>
 <ul>
 <li>Added short documentation of type.any check.</li>
 <li>Changed structure to use central result method with better debugging.</li>
@@ -1048,34 +826,19 @@ Version 0.1.0 (2014-08-08)
 <li>Added possibility to give title and description for error reporting of values.</li>
 <li>Fixed some async problems and added typecheck to date.interval.</li>
 </ul>
-<div class="pilwrap" id="version-0.0.3-2014-08-08">
-  <h2>
-    <a href="#version-0.0.3-2014-08-08" name="version-0.0.3-2014-08-08" class="pilcrow"></a>
-Version 0.0.3 (2014-08-08)
-  </h2>
-</div>
+<h2 id="version-003-2014-08-08">Version 0.0.3 (2014-08-08)</h2>
 <ul>
 <li>Added async module.</li>
 <li>Make it possible to not define allowed keys but only the mandatory keys and other may exist.</li>
 <li>Removed debugging console output.</li>
 </ul>
-<div class="pilwrap" id="version-0.0.2-2014-08-07">
-  <h2>
-    <a href="#version-0.0.2-2014-08-07" name="version-0.0.2-2014-08-07" class="pilcrow"></a>
-Version 0.0.2 (2014-08-07)
-  </h2>
-</div>
+<h2 id="version-002-2014-08-07">Version 0.0.2 (2014-08-07)</h2>
 <ul>
 <li>Fixed date.interval checks.</li>
 <li>Basically running date.interval check with some small errors.</li>
 <li>Added describe texts for array and object options.</li>
 </ul>
-<div class="pilwrap" id="version-0.0.1-2014-08-06">
-  <h2>
-    <a href="#version-0.0.1-2014-08-06" name="version-0.0.1-2014-08-06" class="pilcrow"></a>
-Version 0.0.1 (2014-08-06)
-  </h2>
-</div>
+<h2 id="version-001-2014-08-06">Version 0.0.1 (2014-08-06)</h2>
 <ul>
 <li>Finished array and object checks.</li>
 <li>Removed options sublevel in configuration to make simpler definitions.</li>
@@ -1090,7 +853,108 @@ Version 0.0.1 (2014-08-06)
 <li>First runable version with only a boolean check.</li>
 <li>Initial commit</li>
 </ul>
-</div>
-  </div>
-</body>
+</main>
+        </div>
+        <div class="col-sm-3 col-cm-pull-9 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="header">
+              <a href="README.md.html">Alinex Validator</a>
+            </li>
+                <li class="level0">
+                  <a href="README.md.html" title="Alinex Validator: Readme (/README.md)">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="src/index.coffee.html" title="Controller - API Usage (/src/index.coffee)">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="src/helper/index.md.html" title="Schema Definition (/src/helper/index.md)">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="src/helper/reference.coffee.html" title="References (/src/helper/reference.coffee)">References</a>
+                </li>
+                <li class="level1">
+                  <a href="src/type/index.md.html" title="Schema Types (/src/type/index.md)">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/and.coffee.html" title="And (/src/type/and.coffee)">And</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/any.coffee.html" title="Any (/src/type/any.coffee)">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/array.coffee.html" title="Array (/src/type/array.coffee)">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/byte.coffee.html" title="Byte (/src/type/byte.coffee)">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/email.coffee.html" title="Email (/src/type/email.coffee)">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/file.coffee.html" title="File (/src/type/file.coffee)">File</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/float.coffee.html" title="Float (/src/type/float.coffee)">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/function.coffee.html" title="Function (/src/type/function.coffee)">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/integer.coffee.html" title="Integer (/src/type/integer.coffee)">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/interval.coffee.html" title="Interval (/src/type/interval.coffee)">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/object.coffee.html" title="Object (/src/type/object.coffee)">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/or.coffee.html" title="Or (/src/type/or.coffee)">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/percent.coffee.html" title="Percent (/src/type/percent.coffee)">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/string.coffee.html" title="String (/src/type/string.coffee)">String</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/url.coffee.html" title="URL (/src/type/url.coffee)">URL</a>
+                </li>
+                <li class="active level0">
+                  <a href="Changelog.md.html" title="Version changes (/Changelog.md)">Version changes <span class="sr-only">(current)</span></a>
+                </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script type="text/javascript"><!--
+    $(".table-of-contents").bind("mouseleave", function(event) { $(".table-of-contents").scrollTop(0); });
+    //--></script>
+  </body>
 </html>

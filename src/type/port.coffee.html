@@ -1,731 +1,416 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>port.coffee</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="../../doc-style.css" />
-  <script src="../../doc-filelist.js"></script>
-  <script>
-    var relativeDir = "../../";
-    var thisFile = "src/type/port.coffee";
-    var defaultSidebar = true;
-  </script>
-  <script src="../../doc-script.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TCP/UDP Ports</title>
+    <meta name="HandheldFriendly" content="true" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">#topnav{text-align:center;background:#333;padding-bottom:20px;position:fixed;margin-top:0;width:100%;bottom:0;top:51px;}#topnav .navbar-nav{margin:0;margin-top:8px;display:-webkit-inline-box;display:-moz-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-box;display:inline-flex}#topnav .sidebar-to-top .btn{text-align:left}#topnav .sidebar-to-top li.level2>a{margin-left:20px}#topnav .sidebar-to-top li.level3>a{margin-left:40px}#topnav .sidebar-to-top li.level4>a{margin-left:60px}#topnav .sidebar-to-top li.level5>a{margin-left:80px}#topnav .sidebar-to-top li.level6>a{margin-left:100px}.navbar-fixed-top .navbar-collapse{max-height:100%}.navbar{min-width:300px}.nav>li{padding:2px 12px}.navbar-inverse .nav>li>a{color:#222;font-weight:bold;padding-top:6px;padding-bottom:6px;}.navbar-inverse .nav>li>a:focus,.navbar-inverse .nav>li>a:hover{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x}.navbar-inverse .nav>li>a.btn-warning:focus,.navbar-inverse .nav>li>a.btn-warning:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x}.navbar-spacer{height:51px}.btn-warning:active,.btn-primary:active{-webkit-transform:scale(.92);-moz-transform:scale(.92);-o-transform:scale(.92);-ms-transform:scale(.92);transform:scale(.92)}.btn-warning{background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x}.btn-primary{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x}.sidebar .nav{display:none;list-style:disc;padding-left:25px;}.sidebar .nav>li{display:list-item;}.sidebar .nav>li>a{color:#222;}.sidebar .nav>li>a:active{-webkit-box-shadow:0 2px 10px 2px rgba(0,0,0,0.25);box-shadow:0 2px 10px 2px rgba(0,0,0,0.25)}.sidebar .nav>li>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header,.sidebar .nav>li.active{display:none}.sidebar .nav>li.active>a{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x;}.sidebar .nav>li.active>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header>a{font-weight:bold;background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x;}.sidebar .nav>li.header>a:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x;color:#fff}.sidebar .nav>li.level2>a{padding-left:30px}.sidebar .nav>li.level3>a{padding-left:50px}.sidebar .nav>li.level4>a{padding-left:70px}.sidebar .nav>li.level5>a,.sidebar .nav>li.level6>a{padding-left:90px}.navbar-inverse .navbar-toggle{background-color:#444;}.navbar-inverse .navbar-toggle:hover{background-color:#666}@media (min-width:768px){#topnav{position:inherit;background:#222;padding-bottom:0}#topnav .nav>li{padding:0 4px}#topnav .sidebar-to-top{display:none}.navbar-right{margin-right:0}.navbar-nav >li>a{padding:6px 10px}.sidebar{overflow:auto;position:fixed;top:51px;left:0;bottom:0;background:#ddd;padding:0;}.sidebar h1,.sidebar h2{display:none}.sidebar .nav{display:block;list-style:none;padding-left:0;}.sidebar .nav>li{padding:0;}.sidebar .nav>li.header,.sidebar .nav>li.active{display:block;}.sidebar .nav>li.header.level2>a:before,.sidebar .nav>li.active.level2>a:before,.sidebar .nav>li.header.level3>a:before,.sidebar .nav>li.active.level3>a:before,.sidebar .nav>li.header.level4>a:before,.sidebar .nav>li.active.level4>a:before,.sidebar .nav>li.header.level5>a:before,.sidebar .nav>li.active.level5>a:before,.sidebar .nav>li.header.level6>a:before,.sidebar .nav>li.active.level6>a:before{content:"•"}.sidebar .nav>li>a{padding-top:8px;padding-bottom:8px}.sidebar .nav>li.level2>a:before,.sidebar .nav>li.level3>a:before,.sidebar .nav>li.level4>a:before,.sidebar .nav>li.level5>a:before,.sidebar .nav>li.level6>a:before{content:"◦";font-size:150%;line-height:10%;font-weight:bold;padding-right:5px;display:block;float:left;margin-top:8px;margin-left:-15px;color:#666}}img.preload{display:none}body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:16px;line-height:1.2;-ms-word-break:break-all;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;-ms-hyphens:auto;hyphens:auto;-webkit-hyphenate-before:2;-webkit-hyphenate-after:3;hyphenate-lines:3;min-width:300px}h1,h2,h3,h4,h5,h6{font-weight:bold;}h1:before,h2:before,h3:before,h4:before,h5:before,h6:before{display:block;content:" ";margin-top:-66px;height:66px;visibility:hidden}h1,h2,h3{clear:both}h1{border-bottom:3px solid #222;padding-bottom:5px}h2{border-bottom:2px dotted #222;padding-bottom:3px}h3{border-bottom:2px dotted #aaa;padding-bottom:2px}h4{border-bottom:1px dotted #aaa}dt{font-weight:bold;margin-top:8px}dd{margin-left:20px}blockquote{border:1px solid #eee;border-radius:3px;border-left:5px solid #337ab7;padding:5px 15px;margin:10px 0;}blockquote ul li p{margin-bottom:0}svg,img{max-width:100%}table{border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all;margin-bottom:10px;}table th,table td{padding:6px 13px;border:1px solid #ddd}table th{background-color:rgba(0,0,0,0.04);font-weight:bold;border-bottom:3px solid #999}table tr{background-color:#fff;border-top:1px solid #ccc;}table tr:nth-child(2n){background-color:rgba(0,0,0,0.04)}img{vertical-align:middle}.emoji{height:1em}abbr,acronym{border-bottom:dotted 1px}a code{color:#337ab7}code,tt{background-color:#fafafa;border-radius:4px;font-size:85%;margin:0;padding:.2em 0}pre{background-color:#fafafa;border-radius:10px;border:1px solid #a4a4a4;font-size:85%;margin:20px;padding:10px;}pre code,pre tt{background:none}pre.language{counter-reset:line;max-height:265px;padding-top:30px;padding-bottom:0;overflow-x:hidden;}pre.language code,pre.language tt{display:block;position:relative;float:left;width:100%;border-left:45px solid #ddd;margin-left:-10px;padding-left:5px;}pre.language code:before,pre.language tt:before{counter-increment:line;content:counter(line);min-width:35px;float:left;text-align:right;padding-right:5px;color:#808080;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-user-select:none;margin-left:-45px}pre.language code:first-of-type,pre.language tt:first-of-type{padding-top:10px}pre.language code:last-child,pre.language tt:last-child{padding-bottom:10px}pre.language header{border-top-left-radius:4px;border-top-right-radius:4px;font-weight:bold;background:#fafafa;margin:-30px -10px 0 -10px;padding:5px 15px}pre.language.coffeescript header,pre.language.javascript header,pre.language.ruby header,pre.language.python header,pre.language.perl header,pre.language.cc header,pre.language.cpp header,pre.language.cs header,pre.language.java header,pre.language.jsp header,pre.language.groovy header,pre.language.php header,pre.language.bash header,pre.language.sql header,pre.language.makefile header{background:#f0ad4e}pre.language.json header,pre.language.cson header,pre.language.yaml header{background:#61b961}pre.language.handlebars header,pre.language.css header,pre.language.stylus header,pre.language.scss header,pre.language.less header,pre.language.markdown header{background:#76abca}ul.table-of-contents{max-width:100px;max-height:30px;overflow:hidden;position:fixed;top:51px;right:0;background:#ddd;padding:5px 15px;-webkit-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-moz-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-o-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-ms-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;border-left:2px solid #999;border-bottom:2px solid #999;border-bottom-left-radius:10px;list-style-type:none;white-space:nowrap;z-index:100;}ul.table-of-contents:hover{max-width:285px;max-height:248px;-webkit-transition:max-width 100ms ease, max-height 1s ease 100ms;-moz-transition:max-width 100ms ease, max-height 1s ease 100ms;-o-transition:max-width 100ms ease, max-height 1s ease 100ms;-ms-transition:max-width 100ms ease, max-height 1s ease 100ms;transition:max-width 100ms ease, max-height 1s ease 100ms;overflow-y:auto}ul.table-of-contents header{background:#999;font-weight:bold;margin:-5px -15px;padding:5px 15px}ul.table-of-contents>li{padding-bottom:2px;padding-right:8px;}ul.table-of-contents>li:first-of-type{padding-top:10px}ul.table-of-contents a{color:#222}ul.table-of-contents li.sidebar{display:list-item}@media (min-width:768px){ul.table-of-contents li.sidebar{display:none}}div.detail,div.info,div.warning,div.alert{padding:30px 10px 6px 10px;margin:5px 0 8px 0;border-radius:3px;padding-left:60px;border-radius:18px;border-top-left-radius:0;}div.detail>p,div.info>p,div.warning>p,div.alert>p{margin-bottom:0}div.detail header,div.info header,div.warning header,div.alert header{font-weight:bold;position:absolute;margin-top:-30px;margin-left:-60px;padding:3px 20px 3px 10px;border-bottom-right-radius:18px}div:before{content:'\24D8';color:#666;position:absolute;font-size:28px;font-weight:900;padding-top:5px;margin-left:-50px}div.detail{background-color:#fafafa;border:2px solid #ddd;padding-top:0}div.info{background-color:#9f9;background-image:-webkit-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-moz-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-o-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-ms-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:linear-gradient(to bottom, #bfb 0%, #6d6 100%);border:2px solid #6d6;}div.info header{background-color:#6d6}div.info:before{content:'\24D8';text-shadow:0 -1px 0 #6d6}div.warning{background-color:#fc9;background-image:-webkit-linear-gradient(top, #f97 0%, #e86 100%);background-image:-moz-linear-gradient(top, #f97 0%, #e86 100%);background-image:-o-linear-gradient(top, #f97 0%, #e86 100%);background-image:-ms-linear-gradient(top, #f97 0%, #e86 100%);background-image:linear-gradient(to bottom, #f97 0%, #e86 100%);border:2px solid #e86;}div.warning header{background-color:#e86}div.warning:before{content:'\2605';text-shadow:0 -1px 0 #e86}div.alert{background-color:#f99;background-image:-webkit-linear-gradient(top, #faa 0%, #c00 100%);background-image:-moz-linear-gradient(top, #faa 0%, #c00 100%);background-image:-o-linear-gradient(top, #faa 0%, #c00 100%);background-image:-ms-linear-gradient(top, #faa 0%, #c00 100%);background-image:linear-gradient(to bottom, #faa 0%, #c00 100%);border:2px solid #c00;}div.alert header{background-color:#c00;color:#fff}div.alert:before{content:'\24D8';text-shadow:0 -1px 0 #c00}.cse .gsc-control-cse,.gsc-control-cse{padding:0 !important;}.cse .gsc-control-cse table tr,.gsc-control-cse table tr,.cse .gsc-control-cse table th,.gsc-control-cse table th,.cse .gsc-control-cse table td,.gsc-control-cse table td{border:0}.cse .gsc-control-cse .gsc-cursor-current-page,.gsc-control-cse .gsc-cursor-current-page{color:#fff !important}.cse .gsc-control-cse .gsc-webResult.gsc-result:hover,.gsc-control-cse .gsc-webResult.gsc-result:hover,.cse .gsc-control-cse .gsc-imageResult:hover,.gsc-control-cse .gsc-imageResult:hover{border-left:5px solid #337ab7;padding-left:3px}.cse .gsc-control-cse .gcsc-branding,.gsc-control-cse .gcsc-branding{display:none !important}.gsc-adBlock{display:none !important}@media print{.navbar-spacer,.table-of-contents,.sidebar{display:none}.main{left:0;width:100%}pre.language header{border-bottom:2px solid #999}}.text-red{color:#d13f19}.text-green{color:#2ecc40}.text-yellow{color:#ffdc00}.text-blue{color:#0074d9}.text-magenta{color:#f0f}.text-cyan{color:#0ff}.text-gray{color:#aaa}.bg-white{background-color:#fff}.center{text-align:center}.left{float:left}.right{float:right}.spacing{padding:10px}.hidden{display:none}@media (max-width:767px){.hidden-small{display:none}}@media (min-width:768px){.hidden-large{display:none}}</style>
+  </head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
-<body>
-  <nav>
-<div class="logo"><a href="http://alinex.github.io"
-  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
-  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
-    width="150" title="Alinex Universe Homepage" />
-  </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png"
-    style="display:none" alt="preloading" />
-</div>
-<div class="links">
-  <a href="http://alinex.github.io/blog"
-    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
-  <a href="http://alinex.github.io/develop"
-    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
-  <a href="http://alinex.github.io/code.html"
-    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
-</div>
-</nav><div id="sidebar_wrapper">
-    <div id="sidebar_switch">
-      <span class="tree">Files</span>
-      <span class="headings">Headings</span>
-    </div>
-    <div id="tree"></div>
-    <div id="headings">
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topnav" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://alinex.github.io/" onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Homepage">
+</a>
+<img class="preload" src="https://alinex.github.io/images/Alinex-200.png" aria-hidden="true">
 
-      <div class="heading h1">
-        <a href="#tcpudp-ports">TCP/UDP Ports</a>
+        </div>
+        <div id="topnav" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://alinex.github.io/blog" class="btn btn-primary">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Blog
+  </a></li>
+<li><a href="https://alinex.github.io/develop" class="btn btn-primary">
+    <span class="glyphicon glyphicon-book" aria-hidden="true"></span> Develop
+  </a></li>
+<li><a href="https://alinex.github.io/code.html" class="btn btn-warning">
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Code
+  </a></li>
+
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input name="q" type="text" class="form-control" placeholder="Search...">
+          </form>
+          <ul class="nav sidebar-to-top">
+                <li class="level0">
+                  <a href="../../README.md.html" title="Alinex Validator: Readme (/README.md)" class="btn btn-primary">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="../index.coffee.html" title="Controller - API Usage (/src/index.coffee)" class="btn btn-primary">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="../helper/index.md.html" title="Schema Definition (/src/helper/index.md)" class="btn btn-primary">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)" class="btn btn-primary">References</a>
+                </li>
+                <li class="level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)" class="btn btn-primary">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="and.coffee.html" title="And (/src/type/and.coffee)" class="btn btn-primary">And</a>
+                </li>
+                <li class="level2">
+                  <a href="any.coffee.html" title="Any (/src/type/any.coffee)" class="btn btn-primary">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="array.coffee.html" title="Array (/src/type/array.coffee)" class="btn btn-primary">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)" class="btn btn-primary">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)" class="btn btn-primary">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)" class="btn btn-primary">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="email.coffee.html" title="Email (/src/type/email.coffee)" class="btn btn-primary">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="file.coffee.html" title="File (/src/type/file.coffee)" class="btn btn-primary">File</a>
+                </li>
+                <li class="level2">
+                  <a href="float.coffee.html" title="Float (/src/type/float.coffee)" class="btn btn-primary">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="function.coffee.html" title="Function (/src/type/function.coffee)" class="btn btn-primary">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)" class="btn btn-primary">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)" class="btn btn-primary">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="integer.coffee.html" title="Integer (/src/type/integer.coffee)" class="btn btn-primary">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="interval.coffee.html" title="Interval (/src/type/interval.coffee)" class="btn btn-primary">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)" class="btn btn-primary">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="object.coffee.html" title="Object (/src/type/object.coffee)" class="btn btn-primary">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="or.coffee.html" title="Or (/src/type/or.coffee)" class="btn btn-primary">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="percent.coffee.html" title="Percent (/src/type/percent.coffee)" class="btn btn-primary">Percent</a>
+                </li>
+                <li class="active level2">
+                  <a href="port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)" class="btn btn-warning">TCP/UDP Ports <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level2">
+                  <a href="regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)" class="btn btn-primary">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="string.coffee.html" title="String (/src/type/string.coffee)" class="btn btn-primary">String</a>
+                </li>
+                <li class="level2">
+                  <a href="url.coffee.html" title="URL (/src/type/url.coffee)" class="btn btn-primary">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="../../Changelog.md.html" title="Version changes (/Changelog.md)" class="btn btn-primary">Version changes</a>
+                </li>
+          </ul>
+        </div>
       </div>
+    </nav>
 
-      <div class="heading h2">
-        <a href="#node-modules">Node modules</a>
-      </div>
+    <div class="navbar-spacer"></div>
 
-      <div class="heading h2">
-        <a href="#named-ports">Named ports</a>
-      </div>
+    <div class="container-fluid">
+      <div class="row">
 
-      <div class="heading h2">
-        <a href="#type-implementation">Type implementation</a>
-      </div>
+        <div class="col-sm-9 col-sm-push-3 main">
+          <script>
+  (function() {
+    var cx = '010539487162786288372:chxqbheanxc';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchresults-only></gcse:searchresults-only>
 
-    </div>
-  </div>
-  <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
-    <div class="background highlight"></div>
-<table cellpadding="0" cellspacing="0">
-  <tbody>
-    
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="tcpudp-ports">
-  <h1>
-    <a href="#tcpudp-ports" name="tcpudp-ports" class="pilcrow"></a>
-TCP/UDP Ports
-  </h1>
-</div>
-
-        </td>
-        <td class="code highlight">
-          
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2"></a>
-</div>
+          <main><p><ul class="table-of-contents" aria-hidden="true"><header>Index</header>
+<li><a href="#schema-specification">Schema Specification</a></li>
+</ul>
+</p>
+<h1 id="tcpudp-ports">TCP/UDP Ports</h1>
+<blockquote>
+<p>Path: <code>/src/type/port.coffee</code> compiled to <code>/lib/type/port.js</code></p>
+</blockquote>
+<p>Checking text entries against multiple rules.</p>
 <p>Check options:</p>
 <ul>
-<li><code>allow</code> - (list) list of allowed ports or ranges 'system', 'registered', 'dynamic'</li>
-<li><code>deny</code> - (list) list of denied ports or ranges 'system', 'registered', 'dynamic'</li>
+<li><code>allow</code> - <code>Array</code> list of allowed ports or ranges ‘system’, ‘registered’, ‘dynamic’</li>
+<li><code>deny</code> - <code>Array</code> list of denied ports or ranges ‘system’, ‘registered’, ‘dynamic’</li>
 </ul>
-
-        </td>
-        <td class="code highlight">
-          
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="node-modules">
-  <h2>
-    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
-Node modules
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:port'</span>)
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4"></a>
-</div>
-<p>alinex modules</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5"></a>
-</div>
-<p>include classes and helper</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="named-ports">
-  <h2>
-    <a href="#named-ports" name="named-ports" class="pilcrow"></a>
-Named ports
-  </h2>
-</div>
-<p>cat /etc/services | sed 's//.<em>//' | sed 's/[ \t][ \t]</em>/: /'
-| sed &quot;s/([0-9a-z-]*)/'\1'/&quot; | sort -u</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">ports =
-  <span class="hljs-string">'rtmp'</span>: <span class="hljs-number">1935</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7"></a>
-</div>
-<p>from /etc/services</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-string">'acr-nema'</span>: <span class="hljs-number">104</span>
-  <span class="hljs-string">'afbackup'</span>: <span class="hljs-number">2988</span>
-  <span class="hljs-string">'afmbackup'</span>: <span class="hljs-number">2989</span>
-  <span class="hljs-string">'afpovertcp'</span>: <span class="hljs-number">548</span>
-  <span class="hljs-string">'afs3-bos'</span>: <span class="hljs-number">7007</span>
-  <span class="hljs-string">'afs3-callback'</span>: <span class="hljs-number">7001</span>
-  <span class="hljs-string">'afs3-errors'</span>: <span class="hljs-number">7006</span>
-  <span class="hljs-string">'afs3-fileserver'</span>: <span class="hljs-number">7000</span>
-  <span class="hljs-string">'afs3-kaserver'</span>: <span class="hljs-number">7004</span>
-  <span class="hljs-string">'afs3-prserver'</span>: <span class="hljs-number">7002</span>
-  <span class="hljs-string">'afs3-rmtsys'</span>: <span class="hljs-number">7009</span>
-  <span class="hljs-string">'afs3-update'</span>: <span class="hljs-number">7008</span>
-  <span class="hljs-string">'afs3-vlserver'</span>: <span class="hljs-number">7003</span>
-  <span class="hljs-string">'afs3-volser'</span>: <span class="hljs-number">7005</span>
-  <span class="hljs-string">'amanda'</span>: <span class="hljs-number">10080</span>
-  <span class="hljs-string">'amandaidx'</span>: <span class="hljs-number">10082</span>
-  <span class="hljs-string">'amidxtape'</span>: <span class="hljs-number">10083</span>
-  <span class="hljs-string">'amqp'</span>: <span class="hljs-number">5672</span>
-  <span class="hljs-string">'aol'</span>: <span class="hljs-number">5190</span>
-  <span class="hljs-string">'asf-rmcp'</span>: <span class="hljs-number">623</span>
-  <span class="hljs-string">'asp'</span>: <span class="hljs-number">27374</span>
-  <span class="hljs-string">'at-echo'</span>: <span class="hljs-number">204</span>
-  <span class="hljs-string">'at-nbp'</span>: <span class="hljs-number">202</span>
-  <span class="hljs-string">'at-rtmp'</span>: <span class="hljs-number">201</span>
-  <span class="hljs-string">'at-zis'</span>: <span class="hljs-number">206</span>
-  <span class="hljs-string">'auth'</span>: <span class="hljs-number">113</span>
-  <span class="hljs-string">'bacula-dir'</span>: <span class="hljs-number">9101</span>
-  <span class="hljs-string">'bacula-fd'</span>: <span class="hljs-number">9102</span>
-  <span class="hljs-string">'bacula-sd'</span>: <span class="hljs-number">9103</span>
-  <span class="hljs-string">'bgp'</span>: <span class="hljs-number">179</span>
-  <span class="hljs-string">'bgpd'</span>: <span class="hljs-number">2605</span>
-  <span class="hljs-string">'bgpsim'</span>: <span class="hljs-number">5675</span>
-  <span class="hljs-string">'biff'</span>: <span class="hljs-number">512</span>
-  <span class="hljs-string">'binkp'</span>: <span class="hljs-number">24554</span>
-  <span class="hljs-string">'bootpc'</span>: <span class="hljs-number">68</span>
-  <span class="hljs-string">'bootps'</span>: <span class="hljs-number">67</span>
-  <span class="hljs-string">'bpcd'</span>: <span class="hljs-number">13782</span>
-  <span class="hljs-string">'bpdbm'</span>: <span class="hljs-number">13721</span>
-  <span class="hljs-string">'bpjava-msvc'</span>: <span class="hljs-number">13722</span>
-  <span class="hljs-string">'bprd'</span>: <span class="hljs-number">13720</span>
-  <span class="hljs-string">'canna'</span>: <span class="hljs-number">5680</span>
-  <span class="hljs-string">'cfengine'</span>: <span class="hljs-number">5308</span>
-  <span class="hljs-string">'cfinger'</span>: <span class="hljs-number">2003</span>
-  <span class="hljs-string">'chargen'</span>: <span class="hljs-number">19</span>
-  <span class="hljs-string">'cisco-sccp'</span>: <span class="hljs-number">2000</span>
-  <span class="hljs-string">'clc-build-daemon'</span>: <span class="hljs-number">8990</span>
-  <span class="hljs-string">'clearcase'</span>: <span class="hljs-number">371</span>
-  <span class="hljs-string">'cmip-agent'</span>: <span class="hljs-number">164</span>
-  <span class="hljs-string">'cmip-man'</span>: <span class="hljs-number">163</span>
-  <span class="hljs-string">'codaauth2'</span>: <span class="hljs-number">370</span>
-  <span class="hljs-string">'codasrv'</span>: <span class="hljs-number">2432</span>
-  <span class="hljs-string">'codasrv-se'</span>: <span class="hljs-number">2433</span>
-  <span class="hljs-string">'conference'</span>: <span class="hljs-number">531</span>
-  <span class="hljs-string">'courier'</span>: <span class="hljs-number">530</span>
-  <span class="hljs-string">'csnet-ns'</span>: <span class="hljs-number">105</span>
-  <span class="hljs-string">'csync2'</span>: <span class="hljs-number">30865</span>
-  <span class="hljs-string">'customs'</span>: <span class="hljs-number">1001</span>
-  <span class="hljs-string">'cvspserver'</span>: <span class="hljs-number">2401</span>
-  <span class="hljs-string">'daap'</span>: <span class="hljs-number">3689</span>
-  <span class="hljs-string">'datametrics'</span>: <span class="hljs-number">1645</span>
-  <span class="hljs-string">'daytime'</span>: <span class="hljs-number">13</span>
-  <span class="hljs-string">'db-lsp'</span>: <span class="hljs-number">17500</span>
-  <span class="hljs-string">'dcap'</span>: <span class="hljs-number">22125</span>
-  <span class="hljs-string">'dhcpv6-client'</span>: <span class="hljs-number">546</span>
-  <span class="hljs-string">'dhcpv6-server'</span>: <span class="hljs-number">547</span>
-  <span class="hljs-string">'dicom'</span>: <span class="hljs-number">11112</span>
-  <span class="hljs-string">'dict'</span>: <span class="hljs-number">2628</span>
-  <span class="hljs-string">'dircproxy'</span>: <span class="hljs-number">57000</span>
-  <span class="hljs-string">'discard'</span>: <span class="hljs-number">9</span>
-  <span class="hljs-string">'distcc'</span>: <span class="hljs-number">3632</span>
-  <span class="hljs-string">'distmp3'</span>: <span class="hljs-number">4600</span>
-  <span class="hljs-string">'domain'</span>: <span class="hljs-number">53</span>
-  <span class="hljs-string">'echo'</span>: <span class="hljs-number">4</span>
-  <span class="hljs-string">'echo'</span>: <span class="hljs-number">7</span>
-  <span class="hljs-string">'eklogin'</span>: <span class="hljs-number">2105</span>
-  <span class="hljs-string">'enbd-cstatd'</span>: <span class="hljs-number">5051</span>
-  <span class="hljs-string">'enbd-sstatd'</span>: <span class="hljs-number">5052</span>
-  <span class="hljs-string">'epmd'</span>: <span class="hljs-number">4369</span>
-  <span class="hljs-string">'exec'</span>: <span class="hljs-number">512</span>
-  <span class="hljs-string">'f5-globalsite'</span>: <span class="hljs-number">2792</span>
-  <span class="hljs-string">'f5-iquery'</span>: <span class="hljs-number">4353</span>
-  <span class="hljs-string">'fatserv'</span>: <span class="hljs-number">347</span>
-  <span class="hljs-string">'fax'</span>: <span class="hljs-number">4557</span>
-  <span class="hljs-string">'fido'</span>: <span class="hljs-number">60179</span>
-  <span class="hljs-string">'finger'</span>: <span class="hljs-number">79</span>
-  <span class="hljs-string">'font-service'</span>: <span class="hljs-number">7100</span>
-  <span class="hljs-string">'freeciv'</span>: <span class="hljs-number">5556</span>
-  <span class="hljs-string">'frox'</span>: <span class="hljs-number">2121</span>
-  <span class="hljs-string">'fsp'</span>: <span class="hljs-number">21</span>
-  <span class="hljs-string">'ftp'</span>: <span class="hljs-number">21</span>
-  <span class="hljs-string">'ftp-data'</span>: <span class="hljs-number">20</span>
-  <span class="hljs-string">'ftps'</span>: <span class="hljs-number">990</span>
-  <span class="hljs-string">'ftps-data'</span>: <span class="hljs-number">989</span>
-  <span class="hljs-string">'gdomap'</span>: <span class="hljs-number">538</span>
-  <span class="hljs-string">'gds-db'</span>: <span class="hljs-number">3050</span>
-  <span class="hljs-string">'ggz'</span>: <span class="hljs-number">5688</span>
-  <span class="hljs-string">'git'</span>: <span class="hljs-number">9418</span>
-  <span class="hljs-string">'gnunet'</span>: <span class="hljs-number">2086</span>
-  <span class="hljs-string">'gnutella-rtr'</span>: <span class="hljs-number">6347</span>
-  <span class="hljs-string">'gnutella-svc'</span>: <span class="hljs-number">6346</span>
-  <span class="hljs-string">'gopher'</span>: <span class="hljs-number">70</span>
-  <span class="hljs-string">'gpsd'</span>: <span class="hljs-number">2947</span>
-  <span class="hljs-string">'gris'</span>: <span class="hljs-number">2135</span>
-  <span class="hljs-string">'groupwise'</span>: <span class="hljs-number">1677</span>
-  <span class="hljs-string">'gsidcap'</span>: <span class="hljs-number">22128</span>
-  <span class="hljs-string">'gsiftp'</span>: <span class="hljs-number">2811</span>
-  <span class="hljs-string">'gsigatekeeper'</span>: <span class="hljs-number">2119</span>
-  <span class="hljs-string">'hkp'</span>: <span class="hljs-number">11371</span>
-  <span class="hljs-string">'hmmp-ind'</span>: <span class="hljs-number">612</span>
-  <span class="hljs-string">'hostmon'</span>: <span class="hljs-number">5355</span>
-  <span class="hljs-string">'hostnames'</span>: <span class="hljs-number">101</span>
-  <span class="hljs-string">'http'</span>: <span class="hljs-number">80</span>
-  <span class="hljs-string">'http-alt'</span>: <span class="hljs-number">8080</span>
-  <span class="hljs-string">'https'</span>: <span class="hljs-number">443</span>
-  <span class="hljs-string">'hylafax'</span>: <span class="hljs-number">4559</span>
-  <span class="hljs-string">'iax'</span>: <span class="hljs-number">4569</span>
-  <span class="hljs-string">'icpv2'</span>: <span class="hljs-number">3130</span>
-  <span class="hljs-string">'idfp'</span>: <span class="hljs-number">549</span>
-  <span class="hljs-string">'imap2'</span>: <span class="hljs-number">143</span>
-  <span class="hljs-string">'imap3'</span>: <span class="hljs-number">220</span>
-  <span class="hljs-string">'imaps'</span>: <span class="hljs-number">993</span>
-  <span class="hljs-string">'imsp'</span>: <span class="hljs-number">406</span>
-  <span class="hljs-string">'ingreslock'</span>: <span class="hljs-number">1524</span>
-  <span class="hljs-string">'ipp'</span>: <span class="hljs-number">631</span>
-  <span class="hljs-string">'iprop'</span>: <span class="hljs-number">2121</span>
-  <span class="hljs-string">'ipsec-nat-t'</span>: <span class="hljs-number">4500</span>
-  <span class="hljs-string">'ipx'</span>: <span class="hljs-number">213</span>
-  <span class="hljs-string">'irc'</span>: <span class="hljs-number">194</span>
-  <span class="hljs-string">'ircd'</span>: <span class="hljs-number">6667</span>
-  <span class="hljs-string">'ircs'</span>: <span class="hljs-number">994</span>
-  <span class="hljs-string">'isakmp'</span>: <span class="hljs-number">500</span>
-  <span class="hljs-string">'iscsi-target'</span>: <span class="hljs-number">3260</span>
-  <span class="hljs-string">'isdnlog'</span>: <span class="hljs-number">20011</span>
-  <span class="hljs-string">'isisd'</span>: <span class="hljs-number">2608</span>
-  <span class="hljs-string">'iso-tsap'</span>: <span class="hljs-number">102</span>
-  <span class="hljs-string">'kamanda'</span>: <span class="hljs-number">10081</span>
-  <span class="hljs-string">'kazaa'</span>: <span class="hljs-number">1214</span>
-  <span class="hljs-string">'kerberos4'</span>: <span class="hljs-number">750</span>
-  <span class="hljs-string">'kerberos'</span>: <span class="hljs-number">88</span>
-  <span class="hljs-string">'kerberos-adm'</span>: <span class="hljs-number">749</span>
-  <span class="hljs-string">'kerberos-master'</span>: <span class="hljs-number">751</span>
-  <span class="hljs-string">'kermit'</span>: <span class="hljs-number">1649</span>
-  <span class="hljs-string">'klogin'</span>: <span class="hljs-number">543</span>
-  <span class="hljs-string">'knetd'</span>: <span class="hljs-number">2053</span>
-  <span class="hljs-string">'kpasswd'</span>: <span class="hljs-number">464</span>
-  <span class="hljs-string">'kpop'</span>: <span class="hljs-number">1109</span>
-  <span class="hljs-string">'krb-prop'</span>: <span class="hljs-number">754</span>
-  <span class="hljs-string">'krbupdate'</span>: <span class="hljs-number">760</span>
-  <span class="hljs-string">'kshell'</span>: <span class="hljs-number">544</span>
-  <span class="hljs-string">'kx'</span>: <span class="hljs-number">2111</span>
-  <span class="hljs-string">'l2f'</span>: <span class="hljs-number">1701</span>
-  <span class="hljs-string">'ldap'</span>: <span class="hljs-number">389</span>
-  <span class="hljs-string">'ldaps'</span>: <span class="hljs-number">636</span>
-  <span class="hljs-string">'link'</span>: <span class="hljs-number">87</span>
-  <span class="hljs-string">'linuxconf'</span>: <span class="hljs-number">98</span>
-  <span class="hljs-string">'loc-srv'</span>: <span class="hljs-number">135</span>
-  <span class="hljs-string">'login'</span>: <span class="hljs-number">513</span>
-  <span class="hljs-string">'log-server'</span>: <span class="hljs-number">1958</span>
-  <span class="hljs-string">'lotusnote'</span>: <span class="hljs-number">1352</span>
-  <span class="hljs-string">'mailq'</span>: <span class="hljs-number">174</span>
-  <span class="hljs-string">'mandelspawn'</span>: <span class="hljs-number">9359</span>
-  <span class="hljs-string">'mdns'</span>: <span class="hljs-number">5353</span>
-  <span class="hljs-string">'microsoft-ds'</span>: <span class="hljs-number">445</span>
-  <span class="hljs-string">'mmcc'</span>: <span class="hljs-number">5050</span>
-  <span class="hljs-string">'moira-db'</span>: <span class="hljs-number">775</span>
-  <span class="hljs-string">'moira-update'</span>: <span class="hljs-number">777</span>
-  <span class="hljs-string">'moira-ureg'</span>: <span class="hljs-number">779</span>
-  <span class="hljs-string">'mon'</span>: <span class="hljs-number">2583</span>
-  <span class="hljs-string">'mrtd'</span>: <span class="hljs-number">5674</span>
-  <span class="hljs-string">'msnp'</span>: <span class="hljs-number">1863</span>
-  <span class="hljs-string">'msp'</span>: <span class="hljs-number">18</span>
-  <span class="hljs-string">'ms-sql-m'</span>: <span class="hljs-number">1434</span>
-  <span class="hljs-string">'ms-sql-s'</span>: <span class="hljs-number">1433</span>
-  <span class="hljs-string">'mtn'</span>: <span class="hljs-number">4691</span>
-  <span class="hljs-string">'mtp'</span>: <span class="hljs-number">57</span>
-  <span class="hljs-string">'munin'</span>: <span class="hljs-number">4949</span>
-  <span class="hljs-string">'mysql'</span>: <span class="hljs-number">3306</span>
-  <span class="hljs-string">'mysql-proxy'</span>: <span class="hljs-number">6446</span>
-  <span class="hljs-string">'nameserver'</span>: <span class="hljs-number">42</span>
-  <span class="hljs-string">'nbd'</span>: <span class="hljs-number">10809</span>
-  <span class="hljs-string">'nbp'</span>: <span class="hljs-number">2</span>
-  <span class="hljs-string">'nessus'</span>: <span class="hljs-number">1241</span>
-  <span class="hljs-string">'netbios-dgm'</span>: <span class="hljs-number">138</span>
-  <span class="hljs-string">'netbios-ns'</span>: <span class="hljs-number">137</span>
-  <span class="hljs-string">'netbios-ssn'</span>: <span class="hljs-number">139</span>
-  <span class="hljs-string">'netnews'</span>: <span class="hljs-number">532</span>
-  <span class="hljs-string">'netstat'</span>: <span class="hljs-number">15</span>
-  <span class="hljs-string">'netwall'</span>: <span class="hljs-number">533</span>
-  <span class="hljs-string">'nextstep'</span>: <span class="hljs-number">178</span>
-  <span class="hljs-string">'nfs'</span>: <span class="hljs-number">2049</span>
-  <span class="hljs-string">'ninstall'</span>: <span class="hljs-number">2150</span>
-  <span class="hljs-string">'nntp'</span>: <span class="hljs-number">119</span>
-  <span class="hljs-string">'nntps'</span>: <span class="hljs-number">563</span>
-  <span class="hljs-string">'noclog'</span>: <span class="hljs-number">5354</span>
-  <span class="hljs-string">'npmp-gui'</span>: <span class="hljs-number">611</span>
-  <span class="hljs-string">'npmp-local'</span>: <span class="hljs-number">610</span>
-  <span class="hljs-string">'nqs'</span>: <span class="hljs-number">607</span>
-  <span class="hljs-string">'nrpe'</span>: <span class="hljs-number">5666</span>
-  <span class="hljs-string">'nsca'</span>: <span class="hljs-number">5667</span>
-  <span class="hljs-string">'ntalk'</span>: <span class="hljs-number">518</span>
-  <span class="hljs-string">'ntp'</span>: <span class="hljs-number">123</span>
-  <span class="hljs-string">'nut'</span>: <span class="hljs-number">3493</span>
-  <span class="hljs-string">'omirr'</span>: <span class="hljs-number">808</span>
-  <span class="hljs-string">'omniorb'</span>: <span class="hljs-number">8088</span>
-  <span class="hljs-string">'openvpn'</span>: <span class="hljs-number">1194</span>
-  <span class="hljs-string">'ospf6d'</span>: <span class="hljs-number">2606</span>
-  <span class="hljs-string">'ospfapi'</span>: <span class="hljs-number">2607</span>
-  <span class="hljs-string">'ospfd'</span>: <span class="hljs-number">2604</span>
-  <span class="hljs-string">'passwd-server'</span>: <span class="hljs-number">752</span>
-  <span class="hljs-string">'pawserv'</span>: <span class="hljs-number">345</span>
-  <span class="hljs-string">'pcrd'</span>: <span class="hljs-number">5151</span>
-  <span class="hljs-string">'pipe-server'</span>: <span class="hljs-number">2010</span>
-  <span class="hljs-string">'pop2'</span>: <span class="hljs-number">109</span>
-  <span class="hljs-string">'pop3'</span>: <span class="hljs-number">110</span>
-  <span class="hljs-string">'pop3s'</span>: <span class="hljs-number">995</span>
-  <span class="hljs-string">'poppassd'</span>: <span class="hljs-number">106</span>
-  <span class="hljs-string">'postgresql'</span>: <span class="hljs-number">5432</span>
-  <span class="hljs-string">'predict'</span>: <span class="hljs-number">1210</span>
-  <span class="hljs-string">'printer'</span>: <span class="hljs-number">515</span>
-  <span class="hljs-string">'proofd'</span>: <span class="hljs-number">1093</span>
-  <span class="hljs-string">'prospero'</span>: <span class="hljs-number">191</span>
-  <span class="hljs-string">'prospero-np'</span>: <span class="hljs-number">1525</span>
-  <span class="hljs-string">'pwdgen'</span>: <span class="hljs-number">129</span>
-  <span class="hljs-string">'qmqp'</span>: <span class="hljs-number">628</span>
-  <span class="hljs-string">'qmtp'</span>: <span class="hljs-number">209</span>
-  <span class="hljs-string">'qotd'</span>: <span class="hljs-number">17</span>
-  <span class="hljs-string">'radius'</span>: <span class="hljs-number">1812</span>
-  <span class="hljs-string">'radius-acct'</span>: <span class="hljs-number">1813</span>
-  <span class="hljs-string">'radmin-port'</span>: <span class="hljs-number">4899</span>
-  <span class="hljs-string">'re-mail-ck'</span>: <span class="hljs-number">50</span>
-  <span class="hljs-string">'remctl'</span>: <span class="hljs-number">4373</span>
-  <span class="hljs-string">'remotefs'</span>: <span class="hljs-number">556</span>
-  <span class="hljs-string">'remoteping'</span>: <span class="hljs-number">1959</span>
-  <span class="hljs-string">'rfe'</span>: <span class="hljs-number">5002</span>
-  <span class="hljs-string">'ripd'</span>: <span class="hljs-number">2602</span>
-  <span class="hljs-string">'ripngd'</span>: <span class="hljs-number">2603</span>
-  <span class="hljs-string">'rje'</span>: <span class="hljs-number">77</span>
-  <span class="hljs-string">'rlp'</span>: <span class="hljs-number">39</span>
-  <span class="hljs-string">'rmiregistry'</span>: <span class="hljs-number">1099</span>
-  <span class="hljs-string">'rmtcfg'</span>: <span class="hljs-number">1236</span>
-  <span class="hljs-string">'rootd'</span>: <span class="hljs-number">1094</span>
-  <span class="hljs-string">'route'</span>: <span class="hljs-number">520</span>
-  <span class="hljs-string">'rpc2portmap'</span>: <span class="hljs-number">369</span>
-  <span class="hljs-string">'rplay'</span>: <span class="hljs-number">5555</span>
-  <span class="hljs-string">'rsync'</span>: <span class="hljs-number">873</span>
-  <span class="hljs-string">'rtcm-sc104'</span>: <span class="hljs-number">2101</span>
-  <span class="hljs-string">'rtelnet'</span>: <span class="hljs-number">107</span>
-  <span class="hljs-string">'rtmp'</span>: <span class="hljs-number">1</span>
-  <span class="hljs-string">'rtsp'</span>: <span class="hljs-number">554</span>
-  <span class="hljs-string">'saft'</span>: <span class="hljs-number">487</span>
-  <span class="hljs-string">'sa-msg-port'</span>: <span class="hljs-number">1646</span>
-  <span class="hljs-string">'sane-port'</span>: <span class="hljs-number">6566</span>
-  <span class="hljs-string">'search'</span>: <span class="hljs-number">2010</span>
-  <span class="hljs-string">'sftp'</span>: <span class="hljs-number">115</span>
-  <span class="hljs-string">'sge-execd'</span>: <span class="hljs-number">6445</span>
-  <span class="hljs-string">'sge-qmaster'</span>: <span class="hljs-number">6444</span>
-  <span class="hljs-string">'sgi-cad'</span>: <span class="hljs-number">17004</span>
-  <span class="hljs-string">'sgi-cmsd'</span>: <span class="hljs-number">17001</span>
-  <span class="hljs-string">'sgi-crsd'</span>: <span class="hljs-number">17002</span>
-  <span class="hljs-string">'sgi-gcd'</span>: <span class="hljs-number">17003</span>
-  <span class="hljs-string">'shell'</span>: <span class="hljs-number">514</span>
-  <span class="hljs-string">'sieve'</span>: <span class="hljs-number">4190</span>
-  <span class="hljs-string">'silc'</span>: <span class="hljs-number">706</span>
-  <span class="hljs-string">'sip'</span>: <span class="hljs-number">5060</span>
-  <span class="hljs-string">'sip-tls'</span>: <span class="hljs-number">5061</span>
-  <span class="hljs-string">'skkserv'</span>: <span class="hljs-number">1178</span>
-  <span class="hljs-string">'smsqp'</span>: <span class="hljs-number">11201</span>
-  <span class="hljs-string">'smtp'</span>: <span class="hljs-number">25</span>
-  <span class="hljs-string">'smux'</span>: <span class="hljs-number">199</span>
-  <span class="hljs-string">'snmp'</span>: <span class="hljs-number">161</span>
-  <span class="hljs-string">'snmp-trap'</span>: <span class="hljs-number">162</span>
-  <span class="hljs-string">'snpp'</span>: <span class="hljs-number">444</span>
-  <span class="hljs-string">'socks'</span>: <span class="hljs-number">1080</span>
-  <span class="hljs-string">'spamd'</span>: <span class="hljs-number">783</span>
-  <span class="hljs-string">'ssh'</span>: <span class="hljs-number">22</span>
-  <span class="hljs-string">'submission'</span>: <span class="hljs-number">587</span>
-  <span class="hljs-string">'sunrpc'</span>: <span class="hljs-number">111</span>
-  <span class="hljs-string">'supdup'</span>: <span class="hljs-number">95</span>
-  <span class="hljs-string">'supfiledbg'</span>: <span class="hljs-number">1127</span>
-  <span class="hljs-string">'supfilesrv'</span>: <span class="hljs-number">871</span>
-  <span class="hljs-string">'support'</span>: <span class="hljs-number">1529</span>
-  <span class="hljs-string">'suucp'</span>: <span class="hljs-number">4031</span>
-  <span class="hljs-string">'svn'</span>: <span class="hljs-number">3690</span>
-  <span class="hljs-string">'svrloc'</span>: <span class="hljs-number">427</span>
-  <span class="hljs-string">'swat'</span>: <span class="hljs-number">901</span>
-  <span class="hljs-string">'syslog'</span>: <span class="hljs-number">514</span>
-  <span class="hljs-string">'syslog-tls'</span>: <span class="hljs-number">6514</span>
-  <span class="hljs-string">'sysrqd'</span>: <span class="hljs-number">4094</span>
-  <span class="hljs-string">'systat'</span>: <span class="hljs-number">11</span>
-  <span class="hljs-string">'tacacs'</span>: <span class="hljs-number">49</span>
-  <span class="hljs-string">'tacacs-ds'</span>: <span class="hljs-number">65</span>
-  <span class="hljs-string">'talk'</span>: <span class="hljs-number">517</span>
-  <span class="hljs-string">'tcpmux'</span>: <span class="hljs-number">1</span>
-  <span class="hljs-string">'telnet'</span>: <span class="hljs-number">23</span>
-  <span class="hljs-string">'telnets'</span>: <span class="hljs-number">992</span>
-  <span class="hljs-string">'tempo'</span>: <span class="hljs-number">526</span>
-  <span class="hljs-string">'tfido'</span>: <span class="hljs-number">60177</span>
-  <span class="hljs-string">'tftp'</span>: <span class="hljs-number">69</span>
-  <span class="hljs-string">'time'</span>: <span class="hljs-number">37</span>
-  <span class="hljs-string">'timed'</span>: <span class="hljs-number">525</span>
-  <span class="hljs-string">'tinc'</span>: <span class="hljs-number">655</span>
-  <span class="hljs-string">'tproxy'</span>: <span class="hljs-number">8081</span>
-  <span class="hljs-string">'ulistserv'</span>: <span class="hljs-number">372</span>
-  <span class="hljs-string">'unix-status'</span>: <span class="hljs-number">1957</span>
-  <span class="hljs-string">'urd'</span>: <span class="hljs-number">465</span>
-  <span class="hljs-string">'uucp'</span>: <span class="hljs-number">540</span>
-  <span class="hljs-string">'uucp-path'</span>: <span class="hljs-number">117</span>
-  <span class="hljs-string">'vboxd'</span>: <span class="hljs-number">20012</span>
-  <span class="hljs-string">'venus'</span>: <span class="hljs-number">2430</span>
-  <span class="hljs-string">'venus-se'</span>: <span class="hljs-number">2431</span>
-  <span class="hljs-string">'vnetd'</span>: <span class="hljs-number">13724</span>
-  <span class="hljs-string">'vopied'</span>: <span class="hljs-number">13783</span>
-  <span class="hljs-string">'webmin'</span>: <span class="hljs-number">10000</span>
-  <span class="hljs-string">'webster'</span>: <span class="hljs-number">765</span>
-  <span class="hljs-string">'who'</span>: <span class="hljs-number">513</span>
-  <span class="hljs-string">'whois'</span>: <span class="hljs-number">43</span>
-  <span class="hljs-string">'wipld'</span>: <span class="hljs-number">1300</span>
-  <span class="hljs-string">'wnn6'</span>: <span class="hljs-number">22273</span>
-  <span class="hljs-string">'x11-1'</span>: <span class="hljs-number">6001</span>
-  <span class="hljs-string">'x11-2'</span>: <span class="hljs-number">6002</span>
-  <span class="hljs-string">'x11-3'</span>: <span class="hljs-number">6003</span>
-  <span class="hljs-string">'x11-4'</span>: <span class="hljs-number">6004</span>
-  <span class="hljs-string">'x11-5'</span>: <span class="hljs-number">6005</span>
-  <span class="hljs-string">'x11'</span>: <span class="hljs-number">6000</span>
-  <span class="hljs-string">'x11-6'</span>: <span class="hljs-number">6006</span>
-  <span class="hljs-string">'x11-7'</span>: <span class="hljs-number">6007</span>
-  <span class="hljs-string">'xdmcp'</span>: <span class="hljs-number">177</span>
-  <span class="hljs-string">'xinetd'</span>: <span class="hljs-number">9098</span>
-  <span class="hljs-string">'xmms2'</span>: <span class="hljs-number">9667</span>
-  <span class="hljs-string">'xmpp-client'</span>: <span class="hljs-number">5222</span>
-  <span class="hljs-string">'xmpp-server'</span>: <span class="hljs-number">5269</span>
-  <span class="hljs-string">'xpilot'</span>: <span class="hljs-number">15345</span>
-  <span class="hljs-string">'xtel'</span>: <span class="hljs-number">1313</span>
-  <span class="hljs-string">'xtell'</span>: <span class="hljs-number">4224</span>
-  <span class="hljs-string">'xtelw'</span>: <span class="hljs-number">1314</span>
-  <span class="hljs-string">'z3950'</span>: <span class="hljs-number">210</span>
-  <span class="hljs-string">'zabbix-agent'</span>: <span class="hljs-number">10050</span>
-  <span class="hljs-string">'zabbix-trapper'</span>: <span class="hljs-number">10051</span>
-  <span class="hljs-string">'zebra'</span>: <span class="hljs-number">2601</span>
-  <span class="hljs-string">'zebrasrv'</span>: <span class="hljs-number">2600</span>
-  <span class="hljs-string">'zephyr-clt'</span>: <span class="hljs-number">2103</span>
-  <span class="hljs-string">'zephyr-hm'</span>: <span class="hljs-number">2104</span>
-  <span class="hljs-string">'zephyr-srv'</span>: <span class="hljs-number">2102</span>
-  <span class="hljs-string">'zip'</span>: <span class="hljs-number">6</span>
-  <span class="hljs-string">'zope'</span>: <span class="hljs-number">9673</span>
-  <span class="hljs-string">'zope-ftp'</span>: <span class="hljs-number">8021</span>
-  <span class="hljs-string">'zserv'</span>: <span class="hljs-number">346</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="type-implementation">
-  <h2>
-    <a href="#type-implementation" name="type-implementation" class="pilcrow"></a>
-Type implementation
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9"></a>
-</div>
-<p>combine into message</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  text = <span class="hljs-string">"A TCP/UDP port number or name. "</span>
-  text += check.optional.describe work
-  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
-  <span class="hljs-keyword">if</span> work.pos.deny
-    text += <span class="hljs-string">"The port should not be: '<span class="hljs-subst">#{work.pos.deny.join <span class="hljs-string">'\', \''</span>}</span>'. "</span>
-    <span class="hljs-keyword">if</span> work.pos.allow
-      text += <span class="hljs-string">"But the following ports are allowed: '<span class="hljs-subst">#{work.pos.allow.join <span class="hljs-string">'\', \''</span>}</span>' are allowed. "</span>
-  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.allow
-    text += <span class="hljs-string">"The port have to be: '<span class="hljs-subst">#{work.pos.allow.join <span class="hljs-string">'\', \''</span>}</span>'. "</span>
-  cb <span class="hljs-literal">null</span>, text
-
-subcheck =
-  type: <span class="hljs-string">'or'</span>
-  or: [
-    type: <span class="hljs-string">'integer'</span>
-    min: <span class="hljs-number">0</span>
-    max: <span class="hljs-number">65535</span>
-  ,
-    type: <span class="hljs-string">'string'</span>
-    values: Object.keys ports
-  ]
-
-exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10"></a>
-</div>
-<p>base checks</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">try</span>
-    <span class="hljs-keyword">if</span> check.optional.run work
-      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
-      <span class="hljs-keyword">return</span> cb()
-  <span class="hljs-keyword">catch</span> error
-    <span class="hljs-keyword">return</span> work.report error, cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11"></a>
-</div>
-<p>first check input type</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  name = work.spec.name ? <span class="hljs-string">'value'</span>
-  <span class="hljs-keyword">if</span> work.path.length
-    name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
-  check.run
-    name: name
-    value: work.value
-    schema: subcheck
-  , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12"></a>
-</div>
-<p>transform string to int</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    value = ports[value] <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13"></a>
-</div>
-<p>check allow / deny</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.allow
-      <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> (work.pos.allow.map (e) -&gt; ports[e] ? e)
-        <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> entry <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-          <span class="hljs-keyword">if</span> (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'system'</span> <span class="hljs-keyword">and</span> value &lt; <span class="hljs-number">1024</span>) <span class="hljs-keyword">or</span>
-          (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'registered'</span> <span class="hljs-keyword">and</span> <span class="hljs-number">1024</span> &lt;= value &lt;= <span class="hljs-number">49151</span>) <span class="hljs-keyword">or</span>
-          (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'dynamic'</span> <span class="hljs-keyword">and</span> <span class="hljs-number">49152</span> &lt;= value &lt;= <span class="hljs-number">65535</span>)
-            debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
-        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> value <span class="hljs-keyword">is</span> entry
-          debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-          <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14"></a>
-</div>
-<p>ip not in the allowed range</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">      <span class="hljs-keyword">unless</span> work.pos.deny
-        <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given tcp/udp port '<span class="hljs-subst">#{value}</span>' is not in
-          the allowed ranges"</span>), cb
-    <span class="hljs-keyword">if</span> work.pos.deny
-      <span class="hljs-keyword">for</span> entry <span class="hljs-keyword">in</span> (work.pos.deny.map (e) -&gt; ports[e] ? e)
-        <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> entry <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span>
-          <span class="hljs-keyword">if</span> (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'system'</span> <span class="hljs-keyword">and</span> value &lt; <span class="hljs-number">1024</span>) <span class="hljs-keyword">or</span>
-          (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'registered'</span> <span class="hljs-keyword">and</span> <span class="hljs-number">1024</span> &lt;= value &lt;= <span class="hljs-number">49151</span>) <span class="hljs-keyword">or</span>
-          (entry <span class="hljs-keyword">is</span> <span class="hljs-string">'dynamic'</span> <span class="hljs-keyword">and</span> <span class="hljs-number">49152</span> &lt;= value &lt;= <span class="hljs-number">65535</span>)
-            <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given tcp/udp port '<span class="hljs-subst">#{value}</span>' is
-              denied because in range <span class="hljs-subst">#{entry}</span>"</span>), cb
-        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> value <span class="hljs-keyword">is</span> entry
-          <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The given tcp/udp port '<span class="hljs-subst">#{value}</span>' is denied."</span>), cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15"></a>
-</div>
-<p>ip also not in the denied range so allowed again
-done return resulting value</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-    cb <span class="hljs-literal">null</span>, value
-
-exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
-  check.run
-    schema:
-      type: <span class="hljs-string">'object'</span>
-      allowedKeys: <span class="hljs-literal">true</span>
-      keys: util.extend util.clone(check.base),
-        default:
-          type: <span class="hljs-string">'float'</span>
-          optional: <span class="hljs-literal">true</span>
-        allow:
-          type: <span class="hljs-string">'array'</span>
-          optional: <span class="hljs-literal">true</span>
-          entries:
-            type: <span class="hljs-string">'or'</span>
-            or: [
-              type: <span class="hljs-string">'integer'</span>
-            ,
-              type: <span class="hljs-string">'string'</span>
-              values: [<span class="hljs-string">'system'</span>, <span class="hljs-string">'registered'</span>, <span class="hljs-string">'dynamic'</span>]
-            ,
-              type: <span class="hljs-string">'string'</span>
-              values: Object.keys ports
-            ]
-        deny:
-          type: <span class="hljs-string">'array'</span>
-          optional: <span class="hljs-literal">true</span>
-          entries:
-            type: <span class="hljs-string">'or'</span>
-            or: [
-              type: <span class="hljs-string">'integer'</span>
-            ,
-              type: <span class="hljs-string">'string'</span>
-              values: [<span class="hljs-string">'system'</span>, <span class="hljs-string">'registered'</span>, <span class="hljs-string">'dynamic'</span>]
-            ,
-              type: <span class="hljs-string">'string'</span>
-              values: Object.keys ports
-            ]
-    value: schema
-  , cb</pre>
-        </td>
-      </tr>
-    
-  </tbody>
+<p>If <code>allow</code> and <code>deny</code> is both used the <code>deny</code> settings has precedence.</p>
+<p>The ports can also be given as standardized names as known in the /etc/services
+list like: ‘ftp’, ‘http’, ‘ssh’, …</p>
+<p>Ranges for <code>deny</code> and <code>allow</code> may contain a list of multiple ports or ranges. Ranges
+are ‘system’, ‘registered’ and ‘dynamic’ representing the three range parts.</p>
+<p>The table shows how the result is detected if both given:</p>
+<table>
+<thead>
+<tr>
+<th>has allow</th>
+<th>has deny</th>
+<th>in allow</th>
+<th>in deny</th>
+<th>in both</th>
+<th>in other</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no</td>
+<td>no</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>ok</td>
+</tr>
+<tr>
+<td>yes</td>
+<td>no</td>
+<td>ok</td>
+<td>-</td>
+<td>-</td>
+<td>fail</td>
+</tr>
+<tr>
+<td>no</td>
+<td>yes</td>
+<td>-</td>
+<td>fail</td>
+<td>-</td>
+<td>ok</td>
+</tr>
+<tr>
+<td>yes</td>
+<td>yes</td>
+<td>ok</td>
+<td>fail</td>
+<td>ok</td>
+<td>ok</td>
+</tr>
+</tbody>
 </table>
+<h2 id="schema-specification">Schema Specification</h2>
+<p><strong>Port</strong> is a port schema definition.</p>
+<p>An  object with the following keys allowed: <code>allow</code>, <code>deny</code>, <code>title</code>, <code>description</code>, <code>key</code>, <code>type</code>, <code>optional</code>, <code>default</code>. The following entries have a specific format:</p>
+<dl>
+<dt><code>allow</code></dt>
+<dd>
+<p><strong>List of Allowed</strong> is the list of allowed port numbers, names and ranges.</p>
+<p>A list which is optional. Each entry has to be of type:</p>
+<blockquote>
+<p><strong>Allow</strong> is a port number, name or range which is allowed.</p>
+<p>It has to be <strong>one of</strong> the following types:</p>
+<ul>
+<li>
+<p><strong>Allow Port Number</strong> is a port number which is allowed.</p>
+<p>An integer value. The value should be between 0 and 65535.</p>
+</li>
+<li>
+<p><strong>Allow Port Name</strong> is a port name which is allowed.</p>
+<p>A text entry in which all control characters will be removed.</p>
+</li>
+<li>
+<p><strong>Allow Range</strong> is a range which is allowed.</p>
+<p>A text entry in which all control characters will be removed. Only the values: rtmp, acr-nema, afbackup, afmbackup, afpovertcp, afs3-bos, afs3-callback, afs3-errors, afs3-fileserver, afs3-kaserver, afs3-prserver, afs3-rmtsys, afs3-update, afs3-vlserver, afs3-volser, amanda, amandaidx, amidxtape, amqp, aol, asf-rmcp, asp, at-echo, at-nbp, at-rtmp, at-zis, auth, bacula-dir, bacula-fd, bacula-sd, bgp, bgpd, bgpsim, biff, binkp, bootpc, bootps, bpcd, bpdbm, bpjava-msvc, bprd, canna, cfengine, cfinger, chargen, cisco-sccp, clc-build-daemon, clearcase, cmip-agent, cmip-man, codaauth2, codasrv, codasrv-se, conference, courier, csnet-ns, csync2, customs, cvspserver, daap, datametrics, daytime, db-lsp, dcap, dhcpv6-client, dhcpv6-server, dicom, dict, dircproxy, discard, distcc, distmp3, domain, echo, eklogin, enbd-cstatd, enbd-sstatd, epmd, exec, f5-globalsite, f5-iquery, fatserv, fax, fido, finger, font-service, freeciv, frox, fsp, ftp, ftp-data, ftps, ftps-data, gdomap, gds-db, ggz, git, gnunet, gnutella-rtr, gnutella-svc, gopher, gpsd, gris, groupwise, gsidcap, gsiftp, gsigatekeeper, hkp, hmmp-ind, hostmon, hostnames, http, http-alt, https, hylafax, iax, icpv2, idfp, imap2, imap3, imaps, imsp, ingreslock, ipp, iprop, ipsec-nat-t, ipx, irc, ircd, ircs, isakmp, iscsi-target, isdnlog, isisd, iso-tsap, kamanda, kazaa, kerberos4, kerberos, kerberos-adm, kerberos-master, kermit, klogin, knetd, kpasswd, kpop, krb-prop, krbupdate, kshell, kx, l2f, ldap, ldaps, link, linuxconf, loc-srv, login, log-server, lotusnote, mailq, mandelspawn, mdns, microsoft-ds, mmcc, moira-db, moira-update, moira-ureg, mon, mrtd, msnp, msp, ms-sql-m, ms-sql-s, mtn, mtp, munin, mysql, mysql-proxy, nameserver, nbd, nbp, nessus, netbios-dgm, netbios-ns, netbios-ssn, netnews, netstat, netwall, nextstep, nfs, ninstall, nntp, nntps, noclog, npmp-gui, npmp-local, nqs, nrpe, nsca, ntalk, ntp, nut, omirr, omniorb, openvpn, ospf6d, ospfapi, ospfd, passwd-server, pawserv, pcrd, pipe-server, pop2, pop3, pop3s, poppassd, postgresql, predict, printer, proofd, prospero, prospero-np, pwdgen, qmqp, qmtp, qotd, radius, radius-acct, radmin-port, re-mail-ck, remctl, remotefs, remoteping, rfe, ripd, ripngd, rje, rlp, rmiregistry, rmtcfg, rootd, route, rpc2portmap, rplay, rsync, rtcm-sc104, rtelnet, rtsp, saft, sa-msg-port, sane-port, search, sftp, sge-execd, sge-qmaster, sgi-cad, sgi-cmsd, sgi-crsd, sgi-gcd, shell, sieve, silc, sip, sip-tls, skkserv, smsqp, smtp, smux, snmp, snmp-trap, snpp, socks, spamd, ssh, submission, sunrpc, supdup, supfiledbg, supfilesrv, support, suucp, svn, svrloc, swat, syslog, syslog-tls, sysrqd, systat, tacacs, tacacs-ds, talk, tcpmux, telnet, telnets, tempo, tfido, tftp, time, timed, tinc, tproxy, ulistserv, unix-status, urd, uucp, uucp-path, vboxd, venus, venus-se, vnetd, vopied, webmin, webster, who, whois, wipld, wnn6, x11-1, x11-2, x11-3, x11-4, x11-5, x11, x11-6, x11-7, xdmcp, xinetd, xmms2, xmpp-client, xmpp-server, xpilot, xtel, xtell, xtelw, z3950, zabbix-agent, zabbix-trapper, zebra, zebrasrv, zephyr-clt, zephyr-hm, zephyr-srv, zip, zope, zope-ftp, zserv are allowed.</p>
+</li>
+</ul>
+</blockquote>
+</dd>
+<dt><code>deny</code></dt>
+<dd>
+<p><strong>List of Denied</strong> is the list of denied port numbers, names and ranges.</p>
+<p>A list which is optional. Each entry has to be of type:</p>
+<blockquote>
+<p><strong>Deny</strong> is a port number, name or range which is denied.</p>
+<p>It has to be <strong>one of</strong> the following types:</p>
+<ul>
+<li>
+<p><strong>Deny Port Number</strong> is a port number which is denied.</p>
+<p>An integer value. The value should be between 0 and 65535.</p>
+</li>
+<li>
+<p><strong>Deny Port Name</strong> is a port name which is denied.</p>
+<p>A text entry in which all control characters will be removed.</p>
+</li>
+<li>
+<p><strong>Deny Range</strong> is a range which is denied.</p>
+<p>A text entry in which all control characters will be removed. Only the values: rtmp, acr-nema, afbackup, afmbackup, afpovertcp, afs3-bos, afs3-callback, afs3-errors, afs3-fileserver, afs3-kaserver, afs3-prserver, afs3-rmtsys, afs3-update, afs3-vlserver, afs3-volser, amanda, amandaidx, amidxtape, amqp, aol, asf-rmcp, asp, at-echo, at-nbp, at-rtmp, at-zis, auth, bacula-dir, bacula-fd, bacula-sd, bgp, bgpd, bgpsim, biff, binkp, bootpc, bootps, bpcd, bpdbm, bpjava-msvc, bprd, canna, cfengine, cfinger, chargen, cisco-sccp, clc-build-daemon, clearcase, cmip-agent, cmip-man, codaauth2, codasrv, codasrv-se, conference, courier, csnet-ns, csync2, customs, cvspserver, daap, datametrics, daytime, db-lsp, dcap, dhcpv6-client, dhcpv6-server, dicom, dict, dircproxy, discard, distcc, distmp3, domain, echo, eklogin, enbd-cstatd, enbd-sstatd, epmd, exec, f5-globalsite, f5-iquery, fatserv, fax, fido, finger, font-service, freeciv, frox, fsp, ftp, ftp-data, ftps, ftps-data, gdomap, gds-db, ggz, git, gnunet, gnutella-rtr, gnutella-svc, gopher, gpsd, gris, groupwise, gsidcap, gsiftp, gsigatekeeper, hkp, hmmp-ind, hostmon, hostnames, http, http-alt, https, hylafax, iax, icpv2, idfp, imap2, imap3, imaps, imsp, ingreslock, ipp, iprop, ipsec-nat-t, ipx, irc, ircd, ircs, isakmp, iscsi-target, isdnlog, isisd, iso-tsap, kamanda, kazaa, kerberos4, kerberos, kerberos-adm, kerberos-master, kermit, klogin, knetd, kpasswd, kpop, krb-prop, krbupdate, kshell, kx, l2f, ldap, ldaps, link, linuxconf, loc-srv, login, log-server, lotusnote, mailq, mandelspawn, mdns, microsoft-ds, mmcc, moira-db, moira-update, moira-ureg, mon, mrtd, msnp, msp, ms-sql-m, ms-sql-s, mtn, mtp, munin, mysql, mysql-proxy, nameserver, nbd, nbp, nessus, netbios-dgm, netbios-ns, netbios-ssn, netnews, netstat, netwall, nextstep, nfs, ninstall, nntp, nntps, noclog, npmp-gui, npmp-local, nqs, nrpe, nsca, ntalk, ntp, nut, omirr, omniorb, openvpn, ospf6d, ospfapi, ospfd, passwd-server, pawserv, pcrd, pipe-server, pop2, pop3, pop3s, poppassd, postgresql, predict, printer, proofd, prospero, prospero-np, pwdgen, qmqp, qmtp, qotd, radius, radius-acct, radmin-port, re-mail-ck, remctl, remotefs, remoteping, rfe, ripd, ripngd, rje, rlp, rmiregistry, rmtcfg, rootd, route, rpc2portmap, rplay, rsync, rtcm-sc104, rtelnet, rtsp, saft, sa-msg-port, sane-port, search, sftp, sge-execd, sge-qmaster, sgi-cad, sgi-cmsd, sgi-crsd, sgi-gcd, shell, sieve, silc, sip, sip-tls, skkserv, smsqp, smtp, smux, snmp, snmp-trap, snpp, socks, spamd, ssh, submission, sunrpc, supdup, supfiledbg, supfilesrv, support, suucp, svn, svrloc, swat, syslog, syslog-tls, sysrqd, systat, tacacs, tacacs-ds, talk, tcpmux, telnet, telnets, tempo, tfido, tftp, time, timed, tinc, tproxy, ulistserv, unix-status, urd, uucp, uucp-path, vboxd, venus, venus-se, vnetd, vopied, webmin, webster, who, whois, wipld, wnn6, x11-1, x11-2, x11-3, x11-4, x11-5, x11, x11-6, x11-7, xdmcp, xinetd, xmms2, xmpp-client, xmpp-server, xpilot, xtel, xtell, xtelw, z3950, zabbix-agent, zabbix-trapper, zebra, zebrasrv, zephyr-clt, zephyr-hm, zephyr-srv, zip, zope, zope-ftp, zserv are allowed.</p>
+</li>
+</ul>
+</blockquote>
+</dd>
+<dt><code>title</code></dt>
+<dd>
+<p><strong>Title</strong> is the title used to describe the element.</p>
+<p>A text entry which is optional. All control characters will be removed.</p>
+</dd>
+<dt><code>description</code></dt>
+<dd>
+<p><strong>Description</strong> is the free description of the element.</p>
+<p>A text entry which is optional. All control characters will be removed.</p>
+</dd>
+<dt><code>key</code></dt>
+<dd>
+<p><strong>Binding to Keyname</strong> is the mapping to which key names in an object this element belongs.</p>
+<p>A valid regular expression which is optional. It has to be <strong>one of</strong> the following types:</p>
+<ul>
+<li>An object which has to be an instance of class <code>RegExp</code>.</li>
+<li>A text entry in which all control characters will be removed. The text should match: /^/.<em>?/[gim]</em>$/.</li>
+</ul>
+</dd>
+<dt><code>type</code></dt>
+<dd>
+<p><strong>Type</strong> is the type of element.</p>
+<p>A text entry in which all control characters will be removed.</p>
+</dd>
+<dt><code>optional</code></dt>
+<dd>
+<p><strong>Optional</strong> is a flag defining if this element is optional.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>default</code></dt>
+<dd>
+<p><strong>Default Value</strong> is the default value to use if nothing given.</p>
+<p>An integer value which is optional. The value should be between 0 and 65535.</p>
+</dd>
+</dl>
+</main>
+        </div>
+        <div class="col-sm-3 col-cm-pull-9 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="header">
+              <a href="../../README.md.html">Alinex Validator</a>
+            </li>
+                <li class="level0">
+                  <a href="../../README.md.html" title="Alinex Validator: Readme (/README.md)">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="../index.coffee.html" title="Controller - API Usage (/src/index.coffee)">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="../helper/index.md.html" title="Schema Definition (/src/helper/index.md)">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)">References</a>
+                </li>
+                <li class="level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="and.coffee.html" title="And (/src/type/and.coffee)">And</a>
+                </li>
+                <li class="level2">
+                  <a href="any.coffee.html" title="Any (/src/type/any.coffee)">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="array.coffee.html" title="Array (/src/type/array.coffee)">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="email.coffee.html" title="Email (/src/type/email.coffee)">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="file.coffee.html" title="File (/src/type/file.coffee)">File</a>
+                </li>
+                <li class="level2">
+                  <a href="float.coffee.html" title="Float (/src/type/float.coffee)">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="function.coffee.html" title="Function (/src/type/function.coffee)">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="integer.coffee.html" title="Integer (/src/type/integer.coffee)">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="interval.coffee.html" title="Interval (/src/type/interval.coffee)">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="object.coffee.html" title="Object (/src/type/object.coffee)">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="or.coffee.html" title="Or (/src/type/or.coffee)">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="percent.coffee.html" title="Percent (/src/type/percent.coffee)">Percent</a>
+                </li>
+                <li class="active level2">
+                  <a href="port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)">TCP/UDP Ports <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level2">
+                  <a href="regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="string.coffee.html" title="String (/src/type/string.coffee)">String</a>
+                </li>
+                <li class="level2">
+                  <a href="url.coffee.html" title="URL (/src/type/url.coffee)">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="../../Changelog.md.html" title="Version changes (/Changelog.md)">Version changes</a>
+                </li>
+          </ul>
+        </div>
 
-  </div>
-</body>
+      </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script type="text/javascript"><!--
+    $(".table-of-contents").bind("mouseleave", function(event) { $(".table-of-contents").scrollTop(0); });
+    //--></script>
+  </body>
 </html>

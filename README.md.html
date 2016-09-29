@@ -1,242 +1,180 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>README.md</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="doc-style.css" />
-  <script src="doc-filelist.js"></script>
-  <script>
-    var relativeDir = "";
-    var thisFile = "README.md";
-    var defaultSidebar = true;
-  </script>
-  <script src="doc-script.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alinex Validator: Readme</title>
+    <meta name="HandheldFriendly" content="true" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/highlight.js/8.5.0/styles/solarized_light.min.css" /><style type="text/css">#topnav{text-align:center;background:#333;padding-bottom:20px;position:fixed;margin-top:0;width:100%;bottom:0;top:51px;}#topnav .navbar-nav{margin:0;margin-top:8px;display:-webkit-inline-box;display:-moz-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-box;display:inline-flex}#topnav .sidebar-to-top .btn{text-align:left}#topnav .sidebar-to-top li.level2>a{margin-left:20px}#topnav .sidebar-to-top li.level3>a{margin-left:40px}#topnav .sidebar-to-top li.level4>a{margin-left:60px}#topnav .sidebar-to-top li.level5>a{margin-left:80px}#topnav .sidebar-to-top li.level6>a{margin-left:100px}.navbar-fixed-top .navbar-collapse{max-height:100%}.navbar{min-width:300px}.nav>li{padding:2px 12px}.navbar-inverse .nav>li>a{color:#222;font-weight:bold;padding-top:6px;padding-bottom:6px;}.navbar-inverse .nav>li>a:focus,.navbar-inverse .nav>li>a:hover{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x}.navbar-inverse .nav>li>a.btn-warning:focus,.navbar-inverse .nav>li>a.btn-warning:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x}.navbar-spacer{height:51px}.btn-warning:active,.btn-primary:active{-webkit-transform:scale(.92);-moz-transform:scale(.92);-o-transform:scale(.92);-ms-transform:scale(.92);transform:scale(.92)}.btn-warning{background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x}.btn-primary{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x}.sidebar .nav{display:none;list-style:disc;padding-left:25px;}.sidebar .nav>li{display:list-item;}.sidebar .nav>li>a{color:#222;}.sidebar .nav>li>a:active{-webkit-box-shadow:0 2px 10px 2px rgba(0,0,0,0.25);box-shadow:0 2px 10px 2px rgba(0,0,0,0.25)}.sidebar .nav>li>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header,.sidebar .nav>li.active{display:none}.sidebar .nav>li.active>a{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x;}.sidebar .nav>li.active>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header>a{font-weight:bold;background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x;}.sidebar .nav>li.header>a:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x;color:#fff}.sidebar .nav>li.level2>a{padding-left:30px}.sidebar .nav>li.level3>a{padding-left:50px}.sidebar .nav>li.level4>a{padding-left:70px}.sidebar .nav>li.level5>a,.sidebar .nav>li.level6>a{padding-left:90px}.navbar-inverse .navbar-toggle{background-color:#444;}.navbar-inverse .navbar-toggle:hover{background-color:#666}@media (min-width:768px){#topnav{position:inherit;background:#222;padding-bottom:0}#topnav .nav>li{padding:0 4px}#topnav .sidebar-to-top{display:none}.navbar-right{margin-right:0}.navbar-nav >li>a{padding:6px 10px}.sidebar{overflow:auto;position:fixed;top:51px;left:0;bottom:0;background:#ddd;padding:0;}.sidebar h1,.sidebar h2{display:none}.sidebar .nav{display:block;list-style:none;padding-left:0;}.sidebar .nav>li{padding:0;}.sidebar .nav>li.header,.sidebar .nav>li.active{display:block;}.sidebar .nav>li.header.level2>a:before,.sidebar .nav>li.active.level2>a:before,.sidebar .nav>li.header.level3>a:before,.sidebar .nav>li.active.level3>a:before,.sidebar .nav>li.header.level4>a:before,.sidebar .nav>li.active.level4>a:before,.sidebar .nav>li.header.level5>a:before,.sidebar .nav>li.active.level5>a:before,.sidebar .nav>li.header.level6>a:before,.sidebar .nav>li.active.level6>a:before{content:"•"}.sidebar .nav>li>a{padding-top:8px;padding-bottom:8px}.sidebar .nav>li.level2>a:before,.sidebar .nav>li.level3>a:before,.sidebar .nav>li.level4>a:before,.sidebar .nav>li.level5>a:before,.sidebar .nav>li.level6>a:before{content:"◦";font-size:150%;line-height:10%;font-weight:bold;padding-right:5px;display:block;float:left;margin-top:8px;margin-left:-15px;color:#666}}img.preload{display:none}body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:16px;line-height:1.2;-ms-word-break:break-all;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;-ms-hyphens:auto;hyphens:auto;-webkit-hyphenate-before:2;-webkit-hyphenate-after:3;hyphenate-lines:3;min-width:300px}h1,h2,h3,h4,h5,h6{font-weight:bold;}h1:before,h2:before,h3:before,h4:before,h5:before,h6:before{display:block;content:" ";margin-top:-66px;height:66px;visibility:hidden}h1,h2,h3{clear:both}h1{border-bottom:3px solid #222;padding-bottom:5px}h2{border-bottom:2px dotted #222;padding-bottom:3px}h3{border-bottom:2px dotted #aaa;padding-bottom:2px}h4{border-bottom:1px dotted #aaa}dt{font-weight:bold;margin-top:8px}dd{margin-left:20px}blockquote{border:1px solid #eee;border-radius:3px;border-left:5px solid #337ab7;padding:5px 15px;margin:10px 0;}blockquote ul li p{margin-bottom:0}svg,img{max-width:100%}table{border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all;margin-bottom:10px;}table th,table td{padding:6px 13px;border:1px solid #ddd}table th{background-color:rgba(0,0,0,0.04);font-weight:bold;border-bottom:3px solid #999}table tr{background-color:#fff;border-top:1px solid #ccc;}table tr:nth-child(2n){background-color:rgba(0,0,0,0.04)}img{vertical-align:middle}.emoji{height:1em}abbr,acronym{border-bottom:dotted 1px}a code{color:#337ab7}code,tt{background-color:#fafafa;border-radius:4px;font-size:85%;margin:0;padding:.2em 0}pre{background-color:#fafafa;border-radius:10px;border:1px solid #a4a4a4;font-size:85%;margin:20px;padding:10px;}pre code,pre tt{background:none}pre.language{counter-reset:line;max-height:265px;padding-top:30px;padding-bottom:0;overflow-x:hidden;}pre.language code,pre.language tt{display:block;position:relative;float:left;width:100%;border-left:45px solid #ddd;margin-left:-10px;padding-left:5px;}pre.language code:before,pre.language tt:before{counter-increment:line;content:counter(line);min-width:35px;float:left;text-align:right;padding-right:5px;color:#808080;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-user-select:none;margin-left:-45px}pre.language code:first-of-type,pre.language tt:first-of-type{padding-top:10px}pre.language code:last-child,pre.language tt:last-child{padding-bottom:10px}pre.language header{border-top-left-radius:4px;border-top-right-radius:4px;font-weight:bold;background:#fafafa;margin:-30px -10px 0 -10px;padding:5px 15px}pre.language.coffeescript header,pre.language.javascript header,pre.language.ruby header,pre.language.python header,pre.language.perl header,pre.language.cc header,pre.language.cpp header,pre.language.cs header,pre.language.java header,pre.language.jsp header,pre.language.groovy header,pre.language.php header,pre.language.bash header,pre.language.sql header,pre.language.makefile header{background:#f0ad4e}pre.language.json header,pre.language.cson header,pre.language.yaml header{background:#61b961}pre.language.handlebars header,pre.language.css header,pre.language.stylus header,pre.language.scss header,pre.language.less header,pre.language.markdown header{background:#76abca}ul.table-of-contents{max-width:100px;max-height:30px;overflow:hidden;position:fixed;top:51px;right:0;background:#ddd;padding:5px 15px;-webkit-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-moz-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-o-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-ms-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;border-left:2px solid #999;border-bottom:2px solid #999;border-bottom-left-radius:10px;list-style-type:none;white-space:nowrap;z-index:100;}ul.table-of-contents:hover{max-width:285px;max-height:248px;-webkit-transition:max-width 100ms ease, max-height 1s ease 100ms;-moz-transition:max-width 100ms ease, max-height 1s ease 100ms;-o-transition:max-width 100ms ease, max-height 1s ease 100ms;-ms-transition:max-width 100ms ease, max-height 1s ease 100ms;transition:max-width 100ms ease, max-height 1s ease 100ms;overflow-y:auto}ul.table-of-contents header{background:#999;font-weight:bold;margin:-5px -15px;padding:5px 15px}ul.table-of-contents>li{padding-bottom:2px;padding-right:8px;}ul.table-of-contents>li:first-of-type{padding-top:10px}ul.table-of-contents a{color:#222}ul.table-of-contents li.sidebar{display:list-item}@media (min-width:768px){ul.table-of-contents li.sidebar{display:none}}div.detail,div.info,div.warning,div.alert{padding:30px 10px 6px 10px;margin:5px 0 8px 0;border-radius:3px;padding-left:60px;border-radius:18px;border-top-left-radius:0;}div.detail>p,div.info>p,div.warning>p,div.alert>p{margin-bottom:0}div.detail header,div.info header,div.warning header,div.alert header{font-weight:bold;position:absolute;margin-top:-30px;margin-left:-60px;padding:3px 20px 3px 10px;border-bottom-right-radius:18px}div:before{content:'\24D8';color:#666;position:absolute;font-size:28px;font-weight:900;padding-top:5px;margin-left:-50px}div.detail{background-color:#fafafa;border:2px solid #ddd;padding-top:0}div.info{background-color:#9f9;background-image:-webkit-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-moz-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-o-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-ms-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:linear-gradient(to bottom, #bfb 0%, #6d6 100%);border:2px solid #6d6;}div.info header{background-color:#6d6}div.info:before{content:'\24D8';text-shadow:0 -1px 0 #6d6}div.warning{background-color:#fc9;background-image:-webkit-linear-gradient(top, #f97 0%, #e86 100%);background-image:-moz-linear-gradient(top, #f97 0%, #e86 100%);background-image:-o-linear-gradient(top, #f97 0%, #e86 100%);background-image:-ms-linear-gradient(top, #f97 0%, #e86 100%);background-image:linear-gradient(to bottom, #f97 0%, #e86 100%);border:2px solid #e86;}div.warning header{background-color:#e86}div.warning:before{content:'\2605';text-shadow:0 -1px 0 #e86}div.alert{background-color:#f99;background-image:-webkit-linear-gradient(top, #faa 0%, #c00 100%);background-image:-moz-linear-gradient(top, #faa 0%, #c00 100%);background-image:-o-linear-gradient(top, #faa 0%, #c00 100%);background-image:-ms-linear-gradient(top, #faa 0%, #c00 100%);background-image:linear-gradient(to bottom, #faa 0%, #c00 100%);border:2px solid #c00;}div.alert header{background-color:#c00;color:#fff}div.alert:before{content:'\24D8';text-shadow:0 -1px 0 #c00}.cse .gsc-control-cse,.gsc-control-cse{padding:0 !important;}.cse .gsc-control-cse table tr,.gsc-control-cse table tr,.cse .gsc-control-cse table th,.gsc-control-cse table th,.cse .gsc-control-cse table td,.gsc-control-cse table td{border:0}.cse .gsc-control-cse .gsc-cursor-current-page,.gsc-control-cse .gsc-cursor-current-page{color:#fff !important}.cse .gsc-control-cse .gsc-webResult.gsc-result:hover,.gsc-control-cse .gsc-webResult.gsc-result:hover,.cse .gsc-control-cse .gsc-imageResult:hover,.gsc-control-cse .gsc-imageResult:hover{border-left:5px solid #337ab7;padding-left:3px}.cse .gsc-control-cse .gcsc-branding,.gsc-control-cse .gcsc-branding{display:none !important}.gsc-adBlock{display:none !important}@media print{.navbar-spacer,.table-of-contents,.sidebar{display:none}.main{left:0;width:100%}pre.language header{border-bottom:2px solid #999}}.text-red{color:#d13f19}.text-green{color:#2ecc40}.text-yellow{color:#ffdc00}.text-blue{color:#0074d9}.text-magenta{color:#f0f}.text-cyan{color:#0ff}.text-gray{color:#aaa}.bg-white{background-color:#fff}.center{text-align:center}.left{float:left}.right{float:right}.spacing{padding:10px}.hidden{display:none}@media (max-width:767px){.hidden-small{display:none}}@media (min-width:768px){.hidden-large{display:none}}</style>
+  </head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
-<body>
-  <nav>
-<div class="logo"><a href="http://alinex.github.io"
-  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
-  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
-    width="150" title="Alinex Universe Homepage" />
-  </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png"
-    style="display:none" alt="preloading" />
-</div>
-<div class="links">
-  <a href="http://alinex.github.io/blog"
-    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
-  <a href="http://alinex.github.io/develop"
-    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
-  <a href="http://alinex.github.io/code.html"
-    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
-</div>
-</nav><div id="sidebar_wrapper">
-    <div id="sidebar_switch">
-      <span class="tree">Files</span>
-      <span class="headings">Headings</span>
-    </div>
-    <div id="tree"></div>
-    <div id="headings">
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topnav" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://alinex.github.io/" onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Homepage">
+</a>
+<img class="preload" src="https://alinex.github.io/images/Alinex-200.png" aria-hidden="true">
 
-      <div class="heading h1">
-        <a href="#package-alinex-validator">Package: alinex-validator</a>
+        </div>
+        <div id="topnav" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://alinex.github.io/blog" class="btn btn-primary">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Blog
+  </a></li>
+<li><a href="https://alinex.github.io/develop" class="btn btn-primary">
+    <span class="glyphicon glyphicon-book" aria-hidden="true"></span> Develop
+  </a></li>
+<li><a href="https://alinex.github.io/code.html" class="btn btn-warning">
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Code
+  </a></li>
+
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input name="q" type="text" class="form-control" placeholder="Search...">
+          </form>
+          <ul class="nav sidebar-to-top">
+                <li class="active level0">
+                  <a href="README.md.html" title="Alinex Validator: Readme (/README.md)" class="btn btn-warning">Readme <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level0">
+                  <a href="src/index.coffee.html" title="Controller - API Usage (/src/index.coffee)" class="btn btn-primary">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="src/helper/index.md.html" title="Schema Definition (/src/helper/index.md)" class="btn btn-primary">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="src/helper/reference.coffee.html" title="References (/src/helper/reference.coffee)" class="btn btn-primary">References</a>
+                </li>
+                <li class="level1">
+                  <a href="src/type/index.md.html" title="Schema Types (/src/type/index.md)" class="btn btn-primary">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/and.coffee.html" title="And (/src/type/and.coffee)" class="btn btn-primary">And</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/any.coffee.html" title="Any (/src/type/any.coffee)" class="btn btn-primary">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/array.coffee.html" title="Array (/src/type/array.coffee)" class="btn btn-primary">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)" class="btn btn-primary">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/byte.coffee.html" title="Byte (/src/type/byte.coffee)" class="btn btn-primary">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)" class="btn btn-primary">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/email.coffee.html" title="Email (/src/type/email.coffee)" class="btn btn-primary">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/file.coffee.html" title="File (/src/type/file.coffee)" class="btn btn-primary">File</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/float.coffee.html" title="Float (/src/type/float.coffee)" class="btn btn-primary">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/function.coffee.html" title="Function (/src/type/function.coffee)" class="btn btn-primary">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)" class="btn btn-primary">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)" class="btn btn-primary">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/integer.coffee.html" title="Integer (/src/type/integer.coffee)" class="btn btn-primary">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/interval.coffee.html" title="Interval (/src/type/interval.coffee)" class="btn btn-primary">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)" class="btn btn-primary">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/object.coffee.html" title="Object (/src/type/object.coffee)" class="btn btn-primary">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/or.coffee.html" title="Or (/src/type/or.coffee)" class="btn btn-primary">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/percent.coffee.html" title="Percent (/src/type/percent.coffee)" class="btn btn-primary">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)" class="btn btn-primary">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)" class="btn btn-primary">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/string.coffee.html" title="String (/src/type/string.coffee)" class="btn btn-primary">String</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/url.coffee.html" title="URL (/src/type/url.coffee)" class="btn btn-primary">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="Changelog.md.html" title="Version changes (/Changelog.md)" class="btn btn-primary">Version changes</a>
+                </li>
+          </ul>
+        </div>
       </div>
+    </nav>
 
-      <div class="heading h2">
-        <a href="#install">Install</a>
-      </div>
+    <div class="navbar-spacer"></div>
 
-      <div class="heading h2">
-        <a href="#usage">Usage</a>
-      </div>
+    <div class="container-fluid">
+      <div class="row">
 
-      <div class="heading h2">
-        <a href="#schema-definition">Schema Definition</a>
-      </div>
+        <div class="col-sm-9 col-sm-push-3 main">
+          <script>
+  (function() {
+    var cx = '010539487162786288372:chxqbheanxc';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchresults-only></gcse:searchresults-only>
 
-      <div class="heading h3">
-        <a href="#compositing">Compositing</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#optional-values">Optional values</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#references">References</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#syntax">Syntax</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#combine">Combine</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#data-sources">Data Sources</a>
-      </div>
-
-      <div class="heading h4">
-        <a href="#value-structure">Value Structure</a>
-      </div>
-
-      <div class="heading h4">
-        <a href="#context">Context</a>
-      </div>
-
-      <div class="heading h4">
-        <a href="#environment">Environment</a>
-      </div>
-
-      <div class="heading h4">
-        <a href="#file-paths">File Paths</a>
-      </div>
-
-      <div class="heading h4">
-        <a href="#web-ressources">Web Ressources</a>
-      </div>
-
-      <div class="heading h4">
-        <a href="#command">Command</a>
-      </div>
-
-      <div class="heading h4">
-        <a href="#database-to-be-implemented-later">Database (to be implemented later)</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#path-locator">Path Locator</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#descriptive-reporting">Descriptive reporting</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#selfchecking">Selfchecking</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#basic-check-types">Basic Check Types</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#boolean">boolean</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#function">function</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#string">string</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#integer">integer</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#float">float</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#array">array</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#object">object</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#alternative-multiple-checks">Alternative-/Multiple Checks</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#or">or</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#and">and</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#additional-check-types">Additional Check Types</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#byte">byte</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#datetime">datetime</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#emails">emails</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#file">file</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#handlebars">handlebars</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#hostname">hostname</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#interval">interval</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#ipaddr">ipaddr</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#percent">percent</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#port">port</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#regexp">regexp</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#url">url</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#package-structure">Package structure</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#license">License</a>
-      </div>
-
-    </div>
-  </div>
-  <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
-    <div class="docs markdown"><div class="pilwrap" id="package-alinex-validator">
-  <h1>
-    <a href="#package-alinex-validator" name="package-alinex-validator" class="pilcrow"></a>
-Package: alinex-validator
-  </h1>
-</div>
-<p><a href="https://travis-ci.org/alinex/node-validator"><img src="https://travis-ci.org/alinex/node-validator.svg?branch=master" alt="Build Status"></a>
-<a href="https://coveralls.io/r/alinex/node-validator?branch=master"><img src="https://coveralls.io/repos/alinex/node-validator/badge.svg?branch=master" alt="Coverage Status"></a>
-<a href="https://gemnasium.com/alinex/node-validator"><img src="https://gemnasium.com/alinex/node-validator.png" alt="Dependency Status"></a></p>
+          <main><p><ul class="table-of-contents" aria-hidden="true"><header>Index</header>
+<li><a href="#install">Install</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#debugging">Debugging</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+</p>
+<h1 id="alinex-validator-readme">Alinex Validator: Readme</h1>
+<p class="right"><a href="https://github.com/alinex/node-validator/subscription"><img src="https://img.shields.io/github/watchers/alinex/node-validator.svg?style=social&amp;label=Watch&amp;maxAge=2592000" alt="GitHub watchers" class="hidden-small" /></a>
+<a href="https://github.com/alinex/node-validator"><img src="https://img.shields.io/github/stars/alinex/node-validator.svg?style=social&amp;label=Star&amp;maxAge=2592000" alt="GitHub stars" /></a>
+<a href="https://github.com/alinex/node-validator"><img src="https://img.shields.io/github/forks/alinex/node-validator.svg?style=social&amp;label=Fork&amp;maxAge=2592000" alt="GitHub forks" class="hidden-small" /></a></p>
+<p><a href="https://www.npmjs.com/package/alinex-validator"><img src="https://img.shields.io/npm/v/alinex-validator.svg?maxAge=2592000&amp;label=latest%20version" alt="npm package" /></a>
+<a href="#license"><img src="https://img.shields.io/npm/l/alinex-validator.svg?maxAge=2592000" alt="latest version" class="hidden-small" /></a>
+<a href="https://travis-ci.org/alinex/node-validator"><img src="https://img.shields.io/travis/alinex/node-validator.svg?maxAge=2592000&amp;label=develop" alt="Travis status" /></a>
+<a href="https://coveralls.io/r/alinex/node-validator?branch=master"><img src="https://img.shields.io/coveralls/alinex/node-validator.svg?maxAge=2592000" alt="Coveralls status" /></a>
+<a href="https://gemnasium.com/alinex/node-validator"><img src="https://img.shields.io/gemnasium/alinex/node-validator.svg?maxAge=2592000" alt="Gemnasium status" /></a>
+<a href="https://github.com/alinex/node-validator/issues"><img src="https://img.shields.io/github/issues/alinex/node-validator.svg?maxAge=2592000" alt="GitHub issues" class="hidden-small" /></a></p>
 <p>This module will help validating complex structures. And should be used on all
 external information.</p>
 <ul>
@@ -248,1368 +186,183 @@ external information.</p>
 <li>usable for value formating, too</li>
 </ul>
 <p>The validation rules are really simple, but they will get more complex as your
-data structure gains complexity. But if you know the basic rules it's all
+data structure gains complexity. But if you know the basic rules it’s all
 a composition of some simple structures. Like you will see below.</p>
 <p>This library can help you make your life secure and easy but you have to run
 every external data through it using a detailed data description. If you do so
 you can trust and use the values as they are without further checks.
-And you'll get the benefit of automatically optimized values like for <code>handlebars</code>
+And you’ll get the benefit of automatically optimized values like for <code>handlebars</code>
 type you get a ready to use handlebar function back.</p>
 <blockquote>
-<p>It is one of the modules of the <a href="http://alinex.github.io/code.html">Alinex Universe</a>
-following the code standards defined in the <a href="http://alinex.github.io/develop">General Docs</a>.</p>
+<p>It is one of the modules of the <a href="https://alinex.github.io/code.html">Alinex Namespace</a>
+following the code standards defined in the <a href="https://alinex.github.io/develop">General Docs</a>.</p>
 </blockquote>
-<div class="pilwrap" id="install">
-  <h2>
-    <a href="#install" name="install" class="pilcrow"></a>
-Install
-  </h2>
-</div>
-<p><a href="https://www.npmjs.com/package/alinex-validator"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM">
-<img src="https://nodei.co/npm-dl/alinex-validator.png?months=9&amp;height=3" alt="Downloads">
+<p class="hidden"><strong>Read the complete documentation under
+<a href="https://alinex.github.io/node-codedoc">https://alinex.github.io/node-codedoc</a>.</strong></p>
+<h2 id="install">Install</h2>
+<p><a href="https://www.npmjs.com/package/alinex-validator"><img src="https://nodei.co/npm/alinex-validator.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM" />
+<img src="https://nodei.co/npm-dl/alinex-validator.png?months=9&amp;height=3" alt="Downloads" />
 </a></p>
 <p>The easiest way is to let npm add the module directly to your modules
 (from within you node modules directory):</p>
-<pre><code class="sh">npm install alinex-validator --save
-</code></pre>
+<pre class="language bash"><header>Shell Script</header><code>npm install alinex-validator --save</code></pre>
 <p>And update it to the latest version later:</p>
-<pre><code class="sh">npm update alinex-validator --save
-</code></pre>
-<p>Always have a look at the latest <a href="Changelog.md.html">changes</a>.</p>
-<div class="pilwrap" id="usage">
-  <h2>
-    <a href="#usage" name="usage" class="pilcrow"></a>
-Usage
-  </h2>
-</div>
+<pre class="language bash"><header>Shell Script</header><code>npm update alinex-validator --save</code></pre>
+<p>Always have a look at the latest changes in the <a href="Changelog.md.html" title="File: Changelog.md">Version changes</a></p>
+<h2 id="usage">Usage</h2>
 <p>This library is implemented completely asynchronous, to allow io based checks
 and references within the structure.</p>
 <p>To use the validator you have to first include it:</p>
-<pre><code class="coffee">validator = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-validator'</span>
-</code></pre>
+<pre class="language coffeescript"><header>CoffeeScript Code</header><code>validator = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-validator'</span></code></pre>
 <p>The main method will validate and sanitize the value or value structure:</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema: schema      <span class="hljs-comment"># definition of checks</span>
-  context: <span class="hljs-literal">null</span>       <span class="hljs-comment"># additional data (optional)</span>
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
+<pre class="language coffeescript"><header>CoffeeScript Code</header><code>validator.check</code>
+<code>  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span></code>
+<code>  value: input        <span class="hljs-comment"># value to check</span></code>
+<code>  schema: schema      <span class="hljs-comment"># definition of checks</span></code>
+<code>  context: <span class="hljs-literal">null</span>       <span class="hljs-comment"># additional data (optional)</span></code>
+<code>, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span></code>
+<code>  <span class="hljs-comment"># do something</span></code></pre>
 <p>The checks are completely asynchronous because they may contain some IO checks.</p>
 <p>To get a human readable description call:</p>
-<pre><code class="coffee">message = validator.describe
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  schema: schema      <span class="hljs-comment"># definition of checks</span>
-  pos: <span class="hljs-string">''</span>             <span class="hljs-comment"># position which to describe (optional)</span>
-  depth: <span class="hljs-number">2</span>            <span class="hljs-comment"># level of depth to describe (optional)</span>
-, <span class="hljs-function"><span class="hljs-params">(err, text)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
+<pre class="language coffeescript"><header>CoffeeScript Code</header><code>message = validator.describe</code>
+<code>  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span></code>
+<code>  schema: schema      <span class="hljs-comment"># definition of checks</span></code>
+<code>, <span class="hljs-function"><span class="hljs-params">(err, text)</span> -&gt;</span></code>
+<code>  <span class="hljs-comment"># do something</span></code></pre>
 <p>This will get the description un markdown format.</p>
 <p>Within your tests you may check your schema configurations:</p>
-<pre><code class="coffee">validator.selfcheck
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors</span>
-  schema: schema      <span class="hljs-comment"># definition to check</span>
-, <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
+<pre class="language coffeescript"><header>CoffeeScript Code</header><code>validator.selfcheck</code>
+<code>  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors</span></code>
+<code>  schema: schema      <span class="hljs-comment"># definition to check</span></code>
+<code>, <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span></code>
+<code>  <span class="hljs-comment"># do something</span></code></pre>
+<h2 id="debugging">Debugging</h2>
+<p>If you have any problems you may debug the code with the predefined flags. It uses
+the debug module to let you define what to debug.</p>
+<p>Call it with the DEBUG environment variable set to the types you want to debug.
+The most valueable flags will be:</p>
+<pre><code>DEBUG=validator           # general information and checking schema
+DEBUG=validator:array     # to check the array type validation
+DEBUG=validator:reference # to check the reference resolving
 </code></pre>
-<p>And to be portable you can also export the schema in other formats but you may
-loose some information:</p>
-<pre><code class="coffee">jsonSchema = validator.toJson schema
-</code></pre>
-<div class="pilwrap" id="schema-definition">
-  <h2>
-    <a href="#schema-definition" name="schema-definition" class="pilcrow"></a>
-Schema Definition
-  </h2>
-</div>
-<p>The Schema definition is defined as object with the concrete specification as
-attributes. The common attributes are:</p>
-<ul>
-<li>title - gives a short title for the element</li>
-<li>description - has a more descriptive information</li>
-<li>type - check type</li>
-<li>key - used in object's entries to give a regexp matchhing the keys for which
-the rule is specified.</li>
-</ul>
-<p>In it's easiest way the schema definition includes only a type:</p>
-<pre><code class="coffee">schema =
-  type: <span class="hljs-string">'integer'</span>
-</code></pre>
-<p>Or with the above descriptive fields:</p>
-<pre><code class="coffee">schema =
-  title: <span class="hljs-string">"Max runs"</span>
-  description: <span class="hljs-string">'The number of runs which may occur.'</span>
-  type: <span class="hljs-string">'integer'</span>
-</code></pre>
-<p>Further each type has it's own additional attributes which may be set to
-specify how it works.</p>
-<pre><code class="coffee">address =
-  type: <span class="hljs-string">'object'</span>
-  allowedKeys: <span class="hljs-literal">true</span>
-  entries:
-    name:
-      type: <span class="hljs-string">'string'</span>
-    street:
-      type: <span class="hljs-string">'string'</span>
-    city:
-      type: <span class="hljs-string">'string'</span>
-    country:
-      type: <span class="hljs-string">'string'</span>
-    email:
-      type: <span class="hljs-string">'string'</span>
-</code></pre>
-<p>This attributes will be differentiated into the groups:</p>
-<ul>
-<li>sanitize options - try to make the value parseable</li>
-<li>validate options - check if the value is valid</li>
-<li>format options - change the value to a specific output format</li>
-</ul>
-<div class="pilwrap" id="compositing">
-  <h3>
-    <a href="#compositing" name="compositing" class="pilcrow"></a>
-Compositing
-  </h3>
-</div>
-<p>As your structure gets more and more complex it may help you keep the overview
-if you divide by setting some parts to variables first before compositing all
-together:</p>
-<pre><code class="coffee">address =
-  type: <span class="hljs-string">'object'</span>
-  allowedKeys: <span class="hljs-literal">true</span>
-  entries:
-    name:
-      type: <span class="hljs-string">'string'</span>
-    street:
-      type: <span class="hljs-string">'string'</span>
-    city:
-      type: <span class="hljs-string">'string'</span>
-    country:
-      type: <span class="hljs-string">'string'</span>
-    email:
-      type: <span class="hljs-string">'string'</span>
-
-<span class="hljs-built_in">console</span>.log validator.<span class="hljs-keyword">is</span> <span class="hljs-string">'audiocd'</span>, value,
-  type: <span class="hljs-string">'object'</span>
-  allowedKeys: <span class="hljs-literal">true</span>
-  entries:
-    title:
-      type: <span class="hljs-string">'string'</span>
-    publisher: address
-    artists:
-      type: <span class="hljs-string">'array'</span>
-      notEmpty: <span class="hljs-literal">true</span>
-      entries: address
-    composer: address
-</code></pre>
-<p>The above example shows how to composite a complex structure out of parts and
-how to reuse the same elements.</p>
-<div class="pilwrap" id="optional-values">
-  <h3>
-    <a href="#optional-values" name="optional-values" class="pilcrow"></a>
-Optional values
-  </h3>
-</div>
-<p>All types (excluding boolean) support the <code>optional</code> parameter, which makes an
-entry in the data structure optional.
-If not given it will be set to null or the value given with <code>default</code>.</p>
-<ul>
-<li><code>optional</code> - the value must not be present (will return null)</li>
-<li><code>default</code> - value used if optional and no value given</li>
-</ul>
-<p>The <code>default</code> option automatically makes the setting optional.</p>
-<div class="pilwrap" id="references">
-  <h2>
-    <a href="#references" name="references" class="pilcrow"></a>
-References
-  </h2>
-</div>
-<p>References point to values which are used on their place. You can use references
-within the structure data which is checked and also within the check conditions.
-Not everything is possible, but a lot - see below.</p>
-<div class="pilwrap" id="syntax">
-  <h3>
-    <a href="#syntax" name="syntax" class="pilcrow"></a>
-Syntax
-  </h3>
-</div>
-<p>The syntax looks easy but has a lot of variations and possibilities.</p>
-<pre><code class="text">&lt;&lt;&lt;source://path&gt;&gt;&gt;
-&lt;&lt;&lt;source://path | source://path | default&gt;&gt;&gt;
-&lt;&lt;&lt;source://path#{type:&quot;integer&quot;} | source://path | default&gt;&gt;&gt;
-</code></pre>
-<p>Within the curly braces the source from which to retrieve the value is given.
-The source is given in form of an URI.
-Like you see in line two you may use multiple fallback URIs and also a default
-value at last.
-And at last in the third line you see how to add a special check condition
-after an URI. If this fails the next URI is checked.</p>
-<p>The path may also have different possibilities based on the <code>source</code> protocol
-type.</p>
-<div class="pilwrap" id="combine">
-  <h3>
-    <a href="#combine" name="combine" class="pilcrow"></a>
-Combine
-  </h3>
-</div>
-<p>You may also combine the resulting value(s) of the reference(s) into one
-string:</p>
-<pre><code class="text">&lt;&lt;&lt;host&gt;&gt;&gt;:&lt;&lt;&lt;port&gt;&gt;&gt;
-</code></pre>
-<p>This will result in <code>localhost:8080</code> as example.</p>
-<div class="pilwrap" id="data-sources">
-  <h3>
-    <a href="#data-sources" name="data-sources" class="pilcrow"></a>
-Data Sources
-  </h3>
-</div>
-<p>The following examples shows the different possible data sources with their URI
-syntax and usage.</p>
-<div class="pilwrap" id="value-structure">
-  <h4>
-    <a href="#value-structure" name="value-structure" class="pilcrow"></a>
-Value Structure
-  </h4>
-</div>
-<p>The <code>struct</code> protocol is used to search for the value in the current data structure.</p>
-<p>If you don't use a protocol on the first alternative it is assumed as structure
-call so you may use the shortcut:</p>
-<pre><code class="text">&lt;&lt;&lt;name&gt;&gt;&gt;            # shortcut
-&lt;&lt;&lt;struct://name&gt;&gt;&gt;   # same result
-</code></pre>
-<p>But this is really only possible in the first alternative because in each other
-it will be assumed as default value.</p>
-<p><strong>Absolute path</strong></p>
-<pre><code class="text">&lt;&lt;&lt;struct:///absolute/field&gt;&gt;&gt;
-&lt;&lt;&lt;struct:///absolute/field.0&gt;&gt;&gt;
-</code></pre>
-<p>Like in the first line you give the path to the value which will be used. In the
-second line <code>field</code> is an array and the first value of it will be used.</p>
-<p><strong>Relative path</strong></p>
-<pre><code class="text">&lt;&lt;&lt;struct://relative/field&gt;&gt;&gt;
-&lt;&lt;&lt;struct://../relative/field&gt;&gt;&gt;
-</code></pre>
-<p>This will search for the <code>relative</code> node in the current path backwards and
-then for the <code>field</code> subentry  which value is used. It will look for the
-neighbor elements, the parent and it'S neighborts and so on back to root.</p>
-<p>In relative paths you can also make backreferences like in the filesystem. So
-line 2 makes no difference but line 3 of the examples goes one level up.</p>
-<p><strong>Matching</strong></p>
-<p>See below in the path locator description for the more complex search patterns.</p>
-<p><strong>Subchecks</strong></p>
-<p>Here you may also go into a file which is referenced:</p>
-<pre><code class="text">&lt;&lt;&lt;struct://file#address.info#1&gt;&gt;&gt;
-</code></pre>
-<p>Searches for a field, reads the file path there, loads the file and gets the first
-line.</p>
-<div class="pilwrap" id="context">
-  <h4>
-    <a href="#context" name="context" class="pilcrow"></a>
-Context
-  </h4>
-</div>
-<p>Additional to the validating structure which have to be completely checked an
-additional context structure may be given. The values therein are not validated
-but can be used in the references.</p>
-<p>This allows you to reference to already validated or system internal information.</p>
-<pre><code class="text">&lt;&lt;&lt;context:///absolute/*/min&gt;&gt;&gt;
-</code></pre>
-<p>The syntax is nearly the same as for the value structure but relative paths makes
-no sense because you don't have a base position in the structure.</p>
-<p>This is also used if you want to reference some part of the value from the schema
-definition. You can check for a valid name which is defined elsewhere in the value
-structure like follows:</p>
-<p>Schema:</p>
-<pre><code class="text">templates:
-  type: 'object'
-  entries: [
-    type: 'handlebars'
-  ]
-default:
-  type: 'string'
-  list: '&lt;&lt;&lt;context:///templates&gt;&gt;&gt;'
-</code></pre>
-<p>Value:</p>
-<pre><code class="text">templates:
-  first: &quot;Wellcome {{name}}&quot;
-  ongoing: &quot;Hello {{name}}&quot;
-default: 'ongoing'
-</code></pre>
-<div class="pilwrap" id="environment">
-  <h4>
-    <a href="#environment" name="environment" class="pilcrow"></a>
-Environment
-  </h4>
-</div>
-<p>The following syntax allows to read from an environment variable which may be
-set on start of the program or before.</p>
-<pre><code class="text">&lt;&lt;&lt;env://MY_HOME&gt;&gt;&gt;
-</code></pre>
-<p>This uses the content of the <code>MY_HOME</code> environment variable.</p>
-<div class="pilwrap" id="file-paths">
-  <h4>
-    <a href="#file-paths" name="file-paths" class="pilcrow"></a>
-File Paths
-  </h4>
-</div>
-<p>File paths should be given absolute because relative paths are calculated from
-the current working directory.</p>
-<pre><code class="text">&lt;&lt;&lt;file:///etc/myvalue&gt;&gt;&gt;
-&lt;&lt;&lt;file:///etc/myvalue#14&gt;&gt;&gt;
-&lt;&lt;&lt;file:///etc/myvalue#14/5-8&gt;&gt;&gt;
-&lt;&lt;&lt;file:///etc/myvalue#name/min&gt;&gt;&gt;
-</code></pre>
-<p>This will load the content of a text file (line 1) or use only line number 14
-of the file. separated by a colon you can also specify which column (character)
-range to use.
-And in the last example line the file has to contain some type of
-structured information from which the given element path will be used.</p>
-<div class="pilwrap" id="web-ressources">
-  <h4>
-    <a href="#web-ressources" name="web-ressources" class="pilcrow"></a>
-Web Ressources
-  </h4>
-</div>
-<p>Only use a valid URL therefore:</p>
-<pre><code class="text">&lt;&lt;&lt;http://any.server.com/service&gt;&gt;&gt;
-</code></pre>
-<p>It is not allowed to use a # anchor in the URL.
-But you may use the <code>#</code> anchor to access a specific line or structured element.</p>
-<p>Possible protocols are:</p>
-<ul>
-<li>http like <code>http://domain:port/...</code></li>
-<li>https like <code>https://domain:port/...</code></li>
-</ul>
-<p>And you may connect to UNIX Sockets like <code>http://unix:/absolute/unix.socket:/request/path</code>
-but the paths have to be absoulte.</p>
-<div class="pilwrap" id="command">
-  <h4>
-    <a href="#command" name="command" class="pilcrow"></a>
-Command
-  </h4>
-</div>
-<p>The complete path will be execute as if it is typed into the command line on
-the current directory or the one given in <code>work.dir</code>.</p>
-<pre><code class="text">&lt;&lt;&lt;cmd://date&gt;&gt;&gt;
-&lt;&lt;&lt;cmd:///user/local/bin/date&gt;&gt;&gt;
-&lt;&lt;&lt;cmd://df -h&gt;&gt;&gt;
-</code></pre>
-<p>It will use the value returned on STDOUT.</p>
-<p>Note: If you use pipes remove the space before or behind, because if you have
-both it is recognized as alternative reference.</p>
-<pre><code class="text">&lt;&lt;&lt;cmd://cat test/data/poem| head -1&gt;&gt;&gt;
-</code></pre>
-<div class="pilwrap" id="database-to-be-implemented-later">
-  <h4>
-    <a href="#database-to-be-implemented-later" name="database-to-be-implemented-later" class="pilcrow"></a>
-Database (to be implemented later)
-  </h4>
-</div>
-<p>This connector is not implemented so far and will come in one of the next
-releases. But in the example below I show how it will be used.</p>
-<pre><code class="text">&lt;&lt;&lt;mysql://user:password@host:port/database/table/id=15/field&gt;&gt;&gt;
-&lt;&lt;&lt;mysql:///dataname/table/id=15/field&gt;&gt;&gt;
-&lt;&lt;&lt;mysql:///dataname/select name from xxx where id=15&gt;&gt;&gt;
-</code></pre>
-<div class="pilwrap" id="path-locator">
-  <h3>
-    <a href="#path-locator" name="path-locator" class="pilcrow"></a>
-Path Locator
-  </h3>
-</div>
-<p>They may be used directly as the path in <code>struc</code> references or as anchor to
-get a subvalue (region).</p>
-<p><strong>Subsearch</strong></p>
-<p>Multiple anchors are possible to specify a next subsearch like:</p>
-<pre><code class="text">&lt;&lt;&lt;struct:///absolute.field#1&gt;&gt;&gt;
-&lt;&lt;&lt;file:///data/book.yml#publishing.notice#2-4&gt;&gt;&gt;
-</code></pre>
-<p>That means then either a # character comes up the search will use this value
-and uses the rest of the path on this.</p>
-<p>It is also possible to inject references through the referenced field like:</p>
-<pre><code class="text">&lt;&lt;&lt;struct://file#address.info#1&gt;&gt;&gt;
-file = &lt;&lt;&lt;file:///myconfig.yml&gt;&gt;&gt;
-</code></pre>
-<p>This means that the <code>file</code> element of the structure will be used and as this
-is also a reference the value of this will first be retrieved by the reference to
-the <code>myconfig.yml</code> file. Then the result comes back the main path will be followed
-and the specific element is used.</p>
-<p>But to keep the system secure not any context can be used in another one. The
-Following list shows the precedence and can only be used top to bottom.</p>
-<ol>
-<li>environment</li>
-<li>struct</li>
-<li>context</li>
-<li>file, command</li>
-<li>web</li>
-<li>value structure or range in value are always possible</li>
-</ol>
-<p>Within the same level references between both are possible.</p>
-<p>This keeps the security, so that a user can not compromise the system by injecting
-references to extract internal data.</p>
-<p>To use the resulting value as datasource and only use some part of it you may
-first convert it if it is a text entry. If nothing of the following is specified
-but a range or object selection comes it will be automatically converted
-using defaults.</p>
-<p><strong>Split</strong></p>
-<p>A split generates a two-dimensional array (rows and columns) out of a simple text.
-It is used for range selections.</p>
-<pre><code class="text">%\n - split in lines and characters
-%\n//\t - split by newline and tab
-%\n//\t - split by newline and tab
-%\n//;\\s* - csv like reader with optional spaces
-</code></pre>
-<p>The separator may be a simple string or an regular expression (as string).
-The resulting array has:</p>
-<pre><code class="text">[0] = null
-[1][0] = row 1 as text
-[1][1] = text of row 1, column 1
-...
-</code></pre>
-<p>If no other path follows better always add a <code>#</code> at the end to prevent problems
-if last separsator is a whitespace.</p>
-<p><strong>Match</strong></p>
-<p>Alternatively to splits you may use an regular expression on your text. You can
-use range selections also, but without column specifier.</p>
-<pre><code class="text">/.../ - give an regular expression `/g` is used automatically
-</code></pre>
-<p>The resulting array has the found results in elements 1..n.</p>
-<p><strong>Parse</strong></p>
-<p>Additional to the two methods above this can do complex transformations into
-object structures to do object selections later.</p>
-<pre><code class="text">$js - parse javascript to object
-$json - JSON to object
-$yaml - YAML to object
-$xml - XML to object
-...and more
-$auto - try to autodetect correct parser
-</code></pre>
-<p>See <a href="http://alinex.github.io/node-formatter">formatter</a> for all possible formats
-and examples of them.</p>
-<p><strong>Range Selection</strong></p>
-<p>If the given value is a text it will be splitted into lines and characters.</p>
-<p>Within a text element you may use the following ranges:</p>
-<pre><code class="text">3 - specific row as string
-3-5 - specific row range as array
-3,5 - specific row and column as array
-3,5-8 - specific column range in row as array
-1-2,5-8 - specific row and column range as array
-3[2] - specific element (2nd element of third line) as string
-3[2-4] - specific elements (2nd to 4th element of third line) as array
-3[2-4,8],4[2] - and all combined ;-)
-</code></pre>
-<p>The result may be a single value, an array or an array of arrays depending on the
-selected result.</p>
-<p><strong>Object Selection</strong></p>
-<p>If it is a structured information you may specify the path by name:</p>
-<pre><code class="text">name - get first element with this name
-group/sub/name - get element with path
-</code></pre>
-<p>You can search by using asterisk as directory placeholder or a double asterisk to
-go multiple level depth:</p>
-<pre><code class="text">name/*/min - within any subelement
-name/*/*/min - within any subelement (two level depth)
-name/**/min - within any subelement in any depth
-</code></pre>
-<p>You may also use regexp notation to find the correct element:</p>
-<pre><code class="text">name/test[AB]/min - pattern match with one missing character
-name/test\d+/min - pattern match with multiple missing characters
-</code></pre>
-<p>See the <a href="https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/RegExp">Mozilla Developer Network</a>
-for the possible syntax but without modifier.</p>
-<p><strong>Join</strong></p>
-<p>As opposite to split and match the results maybe joined together into a single
-string using some separators.</p>
-<pre><code class="text">$join , - using , as separator
-$join \n//, - using newline for first level and , as separator below
-name/test\d+/min - pattern match with multiple missing characters
-</code></pre>
-<p>If no other path follows better always add a <code>#</code> at the end to prevent problems
-if last separsator is a whitespace.</p>
-<div class="pilwrap" id="descriptive-reporting">
-  <h2>
-    <a href="#descriptive-reporting" name="descriptive-reporting" class="pilcrow"></a>
-Descriptive reporting
-  </h2>
-</div>
-<p>To get even more descriptive reporting it is possible to set a title and abstract
-for the given field in the configuration. This will be used in error reporting
-and <code>describe()</code> calls.</p>
-<pre><code class="coffee">validator.check <span class="hljs-string">'test'</span>, value,
-  title: <span class="hljs-string">'Overall Timeout'</span>
-  description: <span class="hljs-string">'Time in milliseconds the whole test may take.'</span>
-  type: <span class="hljs-string">'float'</span>
-  min: <span class="hljs-number">500</span>
-, <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-  <span class="hljs-keyword">if</span> err
-    <span class="hljs-comment"># there will be the error</span>
-  <span class="hljs-keyword">else</span>
-    <span class="hljs-comment"># do something with value</span>
-</code></pre>
-<p>This may result in the following error:</p>
-<blockquote>
-<p>Failed: The value is to low, it has to be at least 500 in test.timeout for &quot;Overall Timeout&quot;.
-It should contain the time in milliseconds the whole test may take.</p>
-</blockquote>
-<div class="pilwrap" id="selfchecking">
-  <h2>
-    <a href="#selfchecking" name="selfchecking" class="pilcrow"></a>
-Selfchecking
-  </h2>
-</div>
-<p>It is also possible to let your complex options be validated against the
-different types. This will help you to find problems in development state.
-To do this you have to add it in your tests:</p>
-<p><strong>Mocha coffee example:</strong></p>
-<pre><code class="coffee"><span class="hljs-comment"># ...</span>
-it <span class="hljs-string">"should has correct validator rules"</span>, <span class="hljs-function"><span class="hljs-params">(cb)</span> -&gt;</span>
-  validator.selfcheck
-    name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors</span>
-    schema: schema      <span class="hljs-comment"># definition of checks</span>
-  , <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
-    expect(err).to.<span class="hljs-keyword">not</span>.exist
-<span class="hljs-comment"># ...</span>
-</code></pre>
-<div class="pilwrap" id="basic-check-types">
-  <h2>
-    <a href="#basic-check-types" name="basic-check-types" class="pilcrow"></a>
-Basic Check Types
-  </h2>
-</div>
-<p>The type <code>any</code> is only used internally and matches any value. It is used as default
-if nothing is specified for an value and makes the checks homogeneous.</p>
-<div class="pilwrap" id="boolean">
-  <h3>
-    <a href="#boolean" name="boolean" class="pilcrow"></a>
-boolean
-  </h3>
-</div>
-<p>The value has to be a boolean. The value will be true for 1, 'true', 'on',
-'yes', '+' and it will be considered as false for 0, 'false', 'off', 'no',
-'-', null and undefined.
-Other values are not allowed.</p>
-<p><strong>Validate options:</strong></p>
-<ul>
-<li><code>class</code> - (boolean) only a class or only a normal function is valid</li>
-</ul>
-<p><strong>Format options:</strong></p>
-<ul>
-<li><code>format</code> - (list) with the values for false and true</li>
-</ul>
-<p><strong>Example:</strong></p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'boolean'</span>
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<div class="pilwrap" id="function">
-  <h3>
-    <a href="#function" name="function" class="pilcrow"></a>
-function
-  </h3>
-</div>
-<p>The value has to be a function.
-Other values are not allowed.</p>
-<p><strong>Options:</strong> none</p>
-<p><strong>Example:</strong></p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'function'</span>
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<div class="pilwrap" id="string">
-  <h3>
-    <a href="#string" name="string" class="pilcrow"></a>
-string
-  </h3>
-</div>
-<p>This will test for strings and have lots of sanitize and optimization filters
-and also different check settings to use.</p>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>toString</code> - convert objects to string, first</li>
-<li><code>allowControls</code> - keep control characters in string instead of
-stripping them (but keep \r\n)</li>
-<li><code>stripTags</code> - remove all html tags</li>
-<li><code>lowerCase</code> - set to <code>true</code> or <code>first</code></li>
-<li><code>upperCase</code> - set to <code>true</code> or <code>first</code></li>
-<li><code>replace</code> - replacement or list with each replacement to contain of [search,
-replacement text] while search may be a string or RegExp</li>
-<li><code>trim</code> - strip whitespace from the beginning and end</li>
-<li><code>crop</code> - crop text after number of characters</li>
-</ul>
-<p><strong>Validate options:</strong></p>
-<ul>
-<li><code>minLength</code> - minimum text length in characters</li>
-<li><code>maxLength</code> - maximum text length in characters</li>
-<li><code>values</code> - array of possible values (complete text) or object keys</li>
-<li><code>startsWith</code> - start of text</li>
-<li><code>endsWith</code> - end of text</li>
-<li><code>match</code> - string or regular expression which have to be matched
-(or list of expressions)</li>
-<li><code>matchNot</code> - string or regular expression which is not allowed to
-match (or list of expressions)</li>
-</ul>
-<p><strong>Example:</strong></p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'string'</span>
-    lowerCase: <span class="hljs-literal">true</span>
-    upperCase: <span class="hljs-string">'first'</span>
-    values: [<span class="hljs-string">'One'</span>, <span class="hljs-string">'Two'</span>, <span class="hljs-string">'Three'</span>]
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<div class="pilwrap" id="integer">
-  <h3>
-    <a href="#integer" name="integer" class="pilcrow"></a>
-integer
-  </h3>
-</div>
-<p>To test for integer values which may be sanitized.</p>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>sanitize</code> - (bool) remove invalid characters</li>
-<li><code>unit</code> - (string) unit to convert to if no number is given</li>
-<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
-rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
-</ul>
-<p><strong>Validate options:</strong></p>
-<ul>
-<li><code>min</code> - (integer) the smalles allowed number</li>
-<li><code>max</code> - (integer) the biggest allowed number</li>
-<li><code>inttype</code> - (integer|string) the integer is of given type
-(4, 8, 16, 32, 64, 'byte', 'short','long','quad', 'safe')</li>
-<li><code>unsigned</code> - (bool) the integer has to be positive</li>
-</ul>
-<p><strong>Format options:</strong></p>
-<ul>
-<li><code>toUnit</code> - (string) unit used for output, my be combined with format and locale</li>
-<li><code>format</code> - (string) pattern how to format numbers (see <a href="http://numeraljs.com">numeral.js</a>)</li>
-<li><code>locale</code> - (string) locale to use in format like 'de'</li>
-</ul>
-<div class="pilwrap" id="float">
-  <h3>
-    <a href="#float" name="float" class="pilcrow"></a>
-float
-  </h3>
-</div>
-<p>Nearly the same as for integer values but here are floats allowed, too.</p>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>sanitize</code> - (bool) remove invalid characters</li>
-<li><code>unit</code> - (string) unit to convert to if no number is given</li>
-<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
-rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
-<li><code>decimals</code> - (int) number of decimal digits to round to</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>min</code> - (numeric) the smalles allowed number</li>
-<li><code>max</code> - (numeric) the biggest allowed number</li>
-</ul>
-<p><strong>Format options:</strong></p>
-<ul>
-<li><code>toUnit</code> - (string) unit used for output, my be combined with format and locale</li>
-<li><code>format</code> - (string) pattern how to format numbers (see <a href="http://numeraljs.com">numeral.js</a>)</li>
-<li><code>locale</code> - (string) locale to use in format like 'de'</li>
-</ul>
-<div class="pilwrap" id="array">
-  <h3>
-    <a href="#array" name="array" class="pilcrow"></a>
-array
-  </h3>
-</div>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>delimiter</code> - allow value text with specified list separator
-(it can also be an regular expression)</li>
-<li><code>toArray</code> - will convert single values into array with one element</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>unique</code> - set to true to have only unique values</li>
-<li><code>notEmpty</code> - set to true if an empty array is not valid</li>
-<li><code>minLength</code> - minimum number of entries</li>
-<li><code>maxLength</code> - maximum number of entries</li>
-</ul>
-<p><strong>Validating children:</strong></p>
-<ul>
-<li><code>entries</code> - default specification for all entries</li>
-<li><code>list</code> - specification for entries per each key number</li>
-</ul>
-<p><strong>Format options:</strong></p>
-<ul>
-<li><code>format</code> - transform to string using one of the formats 'simple', 'pretty' or 'json'</li>
-</ul>
-<pre><code class="text">data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
-# simple -&gt; &quot;1, 2, 3, a, [object Object], c,9&quot;
-# pretty -&gt; &quot;1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]&quot;
-# json -&gt; '[1,2,3,&quot;a&quot;,{&quot;b&quot;:1},[&quot;c&quot;,9]]'
-</code></pre>
-<div class="pilwrap" id="object">
-  <h3>
-    <a href="#object" name="object" class="pilcrow"></a>
-object
-  </h3>
-</div>
-<p>For all complex data structures you use the object type which checks for named
-arrays or instance objects.</p>
-<p>This is the most complex validation form because it has different checks and
-uses subchecks on each entry.</p>
-<p><strong>Options:</strong></p>
-<ul>
-<li><code>flatten</code> - (boolean) flatten deep structures</li>
-<li><code>instanceOf</code> - (class) only objects of given class type are allowed</li>
-<li><code>mandatoryKeys</code> - (list or boolean) the list of elements which are mandatory</li>
-<li><code>allowedKeys</code> - (list or boolean) gives a list of elements which are
-also allowed or true to use the list from entries definition or an regular
-expression</li>
-<li><code>entries</code> - specification for multiple entries based on match and default</li>
-<li><code>keys</code> - specification for all entries per each key name</li>
-</ul>
-<p>So you have two different ways to specify objects. First you can use the <code>instanceOf</code>
-check. Or specify a data object.</p>
-<p>The <code>mandatoryKeys</code> and <code>allowedKeys</code> may both contain normal strings for complete
-key names and also regular expressions to match multiple. In case of using it
-in the mandatoryKeys field at least one matching key have to be present.
-And as you may suspect the <code>mandatoryKeys</code> are automatically also <code>allowedKeys</code>.
-If <code>mandatoryKeys</code> or <code>allowedKeys</code> are set to true instead of a list all of the
-specified keys in entries or keys are meant.</p>
-<p>The <code>keys</code> specify the subcheck for each containing object attribute. If they are
-not optional or contain a default entry they will be seen also as mandatory field.</p>
-<p>The <code>entries</code> list do the same as the <code>keys</code> section but works using key matching
-on multiple entires. If an object attribute matches multiple entries-rules the
-first will be used.</p>
-<p><strong>Examples:</strong></p>
-<p>The follwoing will check for an instance:</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'object'</span>
-    instanceOf: RegeExp
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<p>Or you may specify the data object structure:</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'object'</span>
-    mandatoryKeys: [<span class="hljs-string">'name'</span>]
-    allowedKeys: [<span class="hljs-string">'mail'</span>, <span class="hljs-string">'phone'</span>]
-    entries: [
-      type: <span class="hljs-string">'string'</span>
-    ]
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<p>Here all object values have to be strings.</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'object'</span>
-    mandatoryKeys: [<span class="hljs-string">'name'</span>]
-    entries: [
-      key: <span class="hljs-regexp">/^num-\d+/</span>
-      type: <span class="hljs-string">'integer'</span>
-    ,
-      type: <span class="hljs-string">'string'</span>
-    ]
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<p>And here the keys matching the key-check (starting with 'num-...') have to be
-integers and all other strings.</p>
-<p>If you don't specify <code>allowedKeys</code> more attributes with other names are possible.</p>
-<p>And the most complex situation is a deep checking structure with checking each
-key for its specifics:</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'object'</span>
-    allowedKeys: <span class="hljs-literal">true</span>
-    keys:
-      name:
-        type: <span class="hljs-string">'string'</span>
-      mail:
-        type: <span class="hljs-string">'string'</span>
-        optional: <span class="hljs-literal">true</span>
-      phone:
-        type: <span class="hljs-string">'string'</span>
-        optional: <span class="hljs-literal">true</span>
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<p>Here <code>allowedKeys</code> will check that no attributes are used which are not specified
-in the entries. Which attribute is optional may be specified within the attributes
-specification. That means this check is the same as above but also checks that the
-three attributes are strings.</p>
-<p>If you specify <code>entries</code> and <code>keys</code>, the entries check will only be used as default
-for all keys which has no own specification.</p>
-<p>Another option is to flatten the structure before checking it:</p>
-<pre><code class="coffee"><span class="hljs-comment"># value to check</span>
-input =
-  first:
-    num: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }
-  second:
-    num: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }
-    name: { anna: <span class="hljs-number">1</span>, berta: <span class="hljs-number">2</span> }
-<span class="hljs-comment"># run the validation</span>
-validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'object'</span>
-    flatten: <span class="hljs-literal">true</span>
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<p>This will give you the following result:</p>
-<pre><code class="coffee">result =
-  <span class="hljs-string">'first-num'</span>: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }
-  <span class="hljs-string">'second-num'</span>: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }
-  <span class="hljs-string">'second-name'</span>: { anna: <span class="hljs-number">1</span>, berta: <span class="hljs-number">2</span> }
-</code></pre>
-<div class="pilwrap" id="alternative-multiple-checks">
-  <h2>
-    <a href="#alternative-multiple-checks" name="alternative-multiple-checks" class="pilcrow"></a>
-Alternative-/Multiple Checks
-  </h2>
-</div>
-<div class="pilwrap" id="or">
-  <h3>
-    <a href="#or" name="or" class="pilcrow"></a>
-or
-  </h3>
-</div>
-<p>This is used to give some alternatives from which at least one check have to
-succeed. The first one succeeding will work.</p>
-<p><strong>Option:</strong></p>
-<ul>
-<li><code>or</code> - (array) with different check alternatives</li>
-</ul>
-<p><strong>Example:</strong></p>
-<p>You may allow numeric and special format input:</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'or'</span>
-    or: [
-      type: <span class="hljs-string">'float'</span>
-    ,
-      type: <span class="hljs-string">'string'</span>
-      match: <span class="hljs-regexp">///
-        ^\s*      <span class="hljs-comment"># start with possible spaces</span>
-        [+-]?     <span class="hljs-comment"># sign possible</span>
-        \s*\d+(\.\d*)? <span class="hljs-comment"># float number</span>
-        \s*%?     <span class="hljs-comment"># percent sign with spaces</span>
-        \s*$      <span class="hljs-comment"># end of text with spaces</span>
-        ///</span>
-    ]
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<p>With this type you can also use different option alternatives:</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'or'</span>
-    or: [
-      type: <span class="hljs-string">'object'</span>
-      allowedKeys: <span class="hljs-literal">true</span>
-      keys:
-        type:
-          type: <span class="hljs-string">'string'</span>
-          lowerCase: <span class="hljs-literal">true</span>
-          values: [<span class="hljs-string">'mysql'</span>]
-        port:
-          type: <span class="hljs-string">'integer'</span>
-          default: <span class="hljs-number">3306</span>
-        <span class="hljs-comment"># ...</span>
-    ,
-      type: <span class="hljs-string">'object'</span>
-      allowedKeys: <span class="hljs-literal">true</span>
-      keys:
-        type:
-          type: <span class="hljs-string">'string'</span>
-          lowerCase: <span class="hljs-literal">true</span>
-          values: [<span class="hljs-string">'postgres'</span>]
-        port:
-          type: <span class="hljs-string">'integer'</span>
-          default: <span class="hljs-number">5432</span>
-        <span class="hljs-comment"># ...</span>
-    ]
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<p>In the example above only the default port is changed, but you may also add different
-options.</p>
-<div class="pilwrap" id="and">
-  <h3>
-    <a href="#and" name="and" class="pilcrow"></a>
-and
-  </h3>
-</div>
-<p>This is used to give multiple rules which will be executed in a series and
-all have to succeed.</p>
-<p><strong>Option:</strong></p>
-<ul>
-<li><code>and</code> - (array) with multiple check rules</li>
-</ul>
-<p>With this it is possible to use a string-check to sanitize and then use an
-other test to finalize the value like:</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: input        <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'and'</span>
-    and: [
-      type: <span class="hljs-string">'string'</span>
-      toString: <span class="hljs-literal">true</span>
-      replace: [<span class="hljs-regexp">/,/g</span>, <span class="hljs-string">'.'</span>]
-    ,
-      type: <span class="hljs-string">'float'</span>
-    ]
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># do something</span>
-</code></pre>
-<p>This allows to give float numbers in the european format: xx,x</p>
-<div class="pilwrap" id="additional-check-types">
-  <h2>
-    <a href="#additional-check-types" name="additional-check-types" class="pilcrow"></a>
-Additional Check Types
-  </h2>
-</div>
-<div class="pilwrap" id="byte">
-  <h3>
-    <a href="#byte" name="byte" class="pilcrow"></a>
-byte
-  </h3>
-</div>
-<p>To test for byte values which may contain prefixes like <code>18M</code> or <code>6.2 GB</code>.</p>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>unit</code> - (string) unit to convert to if no number is given: B, kB, Byte, b, bps, bits, ...</li>
-<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
-rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
-<li><code>decimals</code> - (int) number of decimal digits to round to</li>
-</ul>
-<p><strong>Validate options:</strong></p>
-<ul>
-<li><code>min</code> - (integer) the smalles allowed number</li>
-<li><code>max</code> - (integer) the biggest allowed number</li>
-</ul>
-<div class="pilwrap" id="datetime">
-  <h3>
-    <a href="#datetime" name="datetime" class="pilcrow"></a>
-datetime
-  </h3>
-</div>
-<p>Check for date and time.</p>
-<p>This validator will parse the given format using different technologies in nearly
-all common formats:</p>
-<ul>
-<li>ISO 8601 datetimes
-<ul>
-<li>'2013-02-08'</li>
-<li>'2013-W06-5'</li>
-<li>'2013-039'</li>
-<li>'2013-02-08 09'</li>
-<li>'2013-02-08T09'</li>
-<li>'2013-02-08 09:30'</li>
-<li>'2013-02-08T09:30'</li>
-<li>'2013-02-08 09:30:26'</li>
-<li>'2013-02-08T09:30:26'</li>
-<li>'2013-02-08 09:30:26.123'</li>
-<li>'2013-02-08 24:00:00.00'</li>
-</ul>
-</li>
-<li>ISO 8601 time only</li>
-<li>ISO 8601 date only
-<ul>
-<li>'2013-02-08 09'</li>
-<li>'2013-W06-5 09'</li>
-<li>'2013-039 09'</li>
-</ul>
-</li>
-<li>ISO 8601 with timezone
-<ul>
-<li>'2013-02-08 09+07:00'</li>
-<li>'2013-02-08 09-0100'</li>
-<li>'2013-02-08 09Z'</li>
-<li>'2013-02-08 09:30:26.123+07:00'</li>
-</ul>
-</li>
-<li>natural language: 'today', 'tomorrow', 'yesterday', 'last friday'</li>
-<li>named dates
-<ul>
-<li>'17 August 2013'</li>
-<li>'19 Aug 2013'</li>
-<li>'20 Aug. 2013'</li>
-<li>'Sat Aug 17 2013 18:40:39 GMT+0900 (JST)'</li>
-</ul>
-</li>
-<li>relative dates
-<ul>
-<li>'This Friday at 13:00'</li>
-<li>'5 days ago'</li>
-</ul>
-</li>
-<li>specials: 'now'</li>
-</ul>
-<p><strong>Parse options:</strong></p>
-<ul>
-<li><code>range</code> - (boolean) parsing ranges contains two dates (start/end)</li>
-<li><code>timezone</code> - (string) specify timezone if none given</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>min</code> - (datetime) time has to be at or after this</li>
-<li><code>max</code> - (datetime) time has to be at or before this</li>
-</ul>
-<p><strong>Format options:</strong></p>
-<ul>
-<li><code>part</code> - 'date', 'time' or 'datetime'</li>
-<li><code>format</code> - how the output should be formatted</li>
-<li><code>locale</code> - country specific format to use (ISO language code)</li>
-<li><code>toTimezone</code> - (string) show in given timezone</li>
-</ul>
-<p><strong>Output formats</strong></p>
-<p>If not specified it is a Date object.</p>
-<p>If <code>format = 'unix'</code> it will be an unix timestamp (seconds since January 1, 1970).</p>
-<p>For all other format settings a corresponding output string will be generated. Use
-the aliases like ISO8601, RFC1123, RFC2822, RFC822, RFC1036 are supported and any
-<a href="http://momentjs.com/docs/#/displaying/">moment.js</a> format.</p>
-<p>Also see the interval validator for time ranges without context.</p>
-<p>The timezones may be 'America/Toronto', 'EST' or 'Eastern Standard Time' for example.</p>
-<div class="pilwrap" id="emails">
-  <h3>
-    <a href="#emails" name="emails" class="pilcrow"></a>
-emails
-  </h3>
-</div>
-<p>There are a lot of crazy possibilities in the RFC2822 which  specifies the Email
-format. Perhaps it came from letting different existing email systems represented
-their account, to encompass anything that was valid before.</p>
-<p>So this check will not aim to allow all emails allowed through RFC but only
-those which are reasonable and commonly used.</p>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>lowerCase</code> domain and gmail addresses completely</li>
-<li><code>normalize</code> (boolean) remove tags, alternative domains and subdomains</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>checkServer</code> (boolean) also check for working email servers</li>
-</ul>
-<div class="pilwrap" id="file">
-  <h3>
-    <a href="#file" name="file" class="pilcrow"></a>
-file
-  </h3>
-</div>
-<p>Check the value as valid file or directory entry.</p>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>basedir</code> - (string) relative paths are calculated from this directory</li>
-<li><code>resolve</code> - (bool) should the given value be resolved to a full path</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>exists</code> - (bool) true to check for already existing entry</li>
-<li><code>find</code> - (array or function) list of directories in which to search for the file
-The function should return an array if called without parameters.</li>
-<li><code>filetype</code> - (string) check against inode type: f, file, d, dir, directory, l, link,
-p, pipe, fifo, s, socket</li>
-</ul>
-<div class="pilwrap" id="handlebars">
-  <h3>
-    <a href="#handlebars" name="handlebars" class="pilcrow"></a>
-handlebars
-  </h3>
-</div>
-<p>You may also add a text which may contain <a href="http://alinex.github.io/develop/lang/handlebars.html">handlebars syntax</a>
-This will be compiled into a function which if called with the context
-object will return the resulting text.</p>
-<pre><code class="coffee">validator.check
-  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span>
-  value: <span class="hljs-string">'hello {{name}}'</span> <span class="hljs-comment"># value to check</span>
-  schema:             <span class="hljs-comment"># definition of checks</span>
-    type: <span class="hljs-string">'handlebars'</span>
-, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span>
-  <span class="hljs-comment"># then use it</span>
-  <span class="hljs-built_in">console</span>.log result
-    name: <span class="hljs-string">'alex'</span>
-  <span class="hljs-comment"># this will output 'hello alex'</span>
-</code></pre>
-<p>Within the handlebars templates you may use:</p>
-<ul>
-<li><a href="http://alinex.github.io/develop/lang/handlebars.html#built-in-helpers">builtin helpers</a></li>
-<li>additional <a href="http://alinex.github.io/node-handlebars">handlebars</a> helpers</li>
-</ul>
-<div class="pilwrap" id="hostname">
-  <h3>
-    <a href="#hostname" name="hostname" class="pilcrow"></a>
-hostname
-  </h3>
-</div>
-<p>The value has to be a valid hostname definition.</p>
-<div class="pilwrap" id="interval">
-  <h3>
-    <a href="#interval" name="interval" class="pilcrow"></a>
-interval
-  </h3>
-</div>
-<p>A time interval may be given:</p>
-<ul>
-<li>directly as number</li>
-<li>in a string with days, minutes and seconds: <code>1d 3h 12m 10s 400ms</code></li>
-<li>in a time format: <code>03:20</code>, <code>02:18:10.5</code></li>
-</ul>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>unit</code> - (string) type of unit to convert if not integer given</li>
-<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
-rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
-<li><code>decimals</code> - (int) number of decimal digits to round to</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>min</code> - (integer) the smalles allowed number</li>
-<li><code>max</code> - (integer) the biggest allowed number</li>
-</ul>
-<div class="pilwrap" id="ipaddr">
-  <h3>
-    <a href="#ipaddr" name="ipaddr" class="pilcrow"></a>
-ipaddr
-  </h3>
-</div>
-<p>The value has to be an IP address.</p>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>version</code> - one of 'ipv4' or 'ipv6' and the value will be converted, if possible</li>
-<li><code>ipv4Mapping</code> - (boolean) set to true to allow mapping ipv4 addresses in both
-directions to succeed version specification if possible.</li>
-<li><code>allow</code> - the allowed ip ranges</li>
-<li><code>deny</code> - the denied ip ranges</li>
-</ul>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>format</code> - compression method to use: 'short', 'long'</li>
-</ul>
-<p>The addresses may be converted from IPv6 to IPv4 and from IPv4 to IPv6 if possible.</p>
-<p>Ranges for <code>deny</code> and <code>allow</code> may contain a list of multiple IP ranges which are
-given in with the IP address and the significant bits behind: '127.0.0.1/8' or as
-a range name.
-Range names are: unspecified, broadcast, multicast, linklocal, loopback, private,
-reserved, uniquelocal, ipv4mapped, rfc6145, rfc6052, 6to4, teredo.
-Or use the range 'special' to specify all of the named ranges.</p>
-<table>
-<thead>
-<tr>
-<th>has allow</th>
-<th>has deny</th>
-<th>in allow</th>
-<th>in deny</th>
-<th>in both</th>
-<th>in other</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>no</td>
-<td>no</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>ok</td>
-</tr>
-<tr>
-<td>yes</td>
-<td>no</td>
-<td>ok</td>
-<td>-</td>
-<td>-</td>
-<td>fail</td>
-</tr>
-<tr>
-<td>no</td>
-<td>yes</td>
-<td>-</td>
-<td>fail</td>
-<td>-</td>
-<td>ok</td>
-</tr>
-<tr>
-<td>yes</td>
-<td>yes</td>
-<td>ok</td>
-<td>fail</td>
-<td>ok</td>
-<td>ok</td>
-</tr>
-</tbody>
-</table>
-<p>The output will always be without leading '0' and by default compressed to the short
-form for IPv6 addresses. To get the long form use the 'format' option.</p>
-<div class="pilwrap" id="percent">
-  <h3>
-    <a href="#percent" name="percent" class="pilcrow"></a>
-percent
-  </h3>
-</div>
-<p>Nearly the same as float but values which are given as string using the % sign
-like 50% are converted to floats like 0.5.</p>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>round</code> - (bool or string) rounding of float can be set to true for arithmetic
-rounding or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
-<li><code>decimals</code> - (int) number of decimal digits to round to</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>min</code> - (numeric) the smalles allowed number</li>
-<li><code>max</code> - (numeric) the biggest allowed number</li>
-</ul>
-<p><strong>Format options:</strong></p>
-<ul>
-<li><code>format</code> - (string) pattern how to format percent value (see <a href="http://numeraljs.com">numeral.js</a>)</li>
-<li><code>locale</code> - (string) locale to use in format like 'de'</li>
-</ul>
-<div class="pilwrap" id="port">
-  <h3>
-    <a href="#port" name="port" class="pilcrow"></a>
-port
-  </h3>
-</div>
-<p>The value has to be a TCP/UDP port number.</p>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>allow</code> - the allowed ports or ranges</li>
-<li><code>deny</code> - the denied ports or ranges</li>
-</ul>
-<p>The ports can also be given as standardized names as known in the /etc/services
-list.</p>
-<p>Ranges for <code>deny</code> and <code>allow</code> may contain a list of multiple ports or ranges. Ranges
-are 'system', 'registered' and 'dynamic' representing the three range parts.</p>
-<p>The table shows how the result is detected if both given:</p>
-<table>
-<thead>
-<tr>
-<th>has allow</th>
-<th>has deny</th>
-<th>in allow</th>
-<th>in deny</th>
-<th>in both</th>
-<th>in other</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>no</td>
-<td>no</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>ok</td>
-</tr>
-<tr>
-<td>yes</td>
-<td>no</td>
-<td>ok</td>
-<td>-</td>
-<td>-</td>
-<td>fail</td>
-</tr>
-<tr>
-<td>no</td>
-<td>yes</td>
-<td>-</td>
-<td>fail</td>
-<td>-</td>
-<td>ok</td>
-</tr>
-<tr>
-<td>yes</td>
-<td>yes</td>
-<td>ok</td>
-<td>fail</td>
-<td>ok</td>
-<td>ok</td>
-</tr>
-</tbody>
-</table>
-<div class="pilwrap" id="regexp">
-  <h3>
-    <a href="#regexp" name="regexp" class="pilcrow"></a>
-regexp
-  </h3>
-</div>
-<p>Check that the given value is a regular expression. If a text is given it will be
-compiled into an regular expression.</p>
-<div class="pilwrap" id="url">
-  <h3>
-    <a href="#url" name="url" class="pilcrow"></a>
-url
-  </h3>
-</div>
-<p>Check the given string for a valid url.</p>
-<p><strong>Sanitize options:</strong></p>
-<ul>
-<li><code>toAbsoluteBase</code> - convert to absolute with given base</li>
-<li><code>removeQuery</code> - (boolean) remove query and hash from url</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>hostsAllowed</code> - list of allowed hosts by string or regexp</li>
-<li><code>hostsDenied</code> - list of denied hosts by string or regexp</li>
-<li><code>allowProtocols</code> - lust of allowed protocols</li>
-<li><code>allowRelative</code> - (boolean) to allow also relative urls</li>
-</ul>
-<div class="pilwrap" id="package-structure">
-  <h2>
-    <a href="#package-structure" name="package-structure" class="pilcrow"></a>
-Package structure
-  </h2>
-</div>
-<p>The validator is implemented as <code>index</code> which has the public available methods,
-<code>check</code> is used for the real check calls and each type has it's own module
-with the implementation loaded on demand (type-subfolder).</p>
-<div class="pilwrap" id="license">
-  <h2>
-    <a href="#license" name="license" class="pilcrow"></a>
-License
-  </h2>
-</div>
-<p>Copyright 2014-2016 Alexander Schilling</p>
-<p>Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<p>You can also combine them using comma or use only DEBUG=* to show all.</p>
+<p>Additional value checking will be done if the debugging for the general <code>validator</code>
+is enabled.</p>
+<h2 id="license">License</h2>
+<p>© Copyright 2014-2016 Alexander Schilling</p>
+<p>Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at</p>
 <blockquote>
 <p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
 </blockquote>
 <p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+distributed under the License is distributed on an “AS IS” BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.</p>
-</div>
-  </div>
-</body>
+</main>
+        </div>
+        <div class="col-sm-3 col-cm-pull-9 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="header">
+              <a href="README.md.html">Alinex Validator</a>
+            </li>
+                <li class="active level0">
+                  <a href="README.md.html" title="Alinex Validator: Readme (/README.md)">Readme <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level0">
+                  <a href="src/index.coffee.html" title="Controller - API Usage (/src/index.coffee)">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="src/helper/index.md.html" title="Schema Definition (/src/helper/index.md)">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="src/helper/reference.coffee.html" title="References (/src/helper/reference.coffee)">References</a>
+                </li>
+                <li class="level1">
+                  <a href="src/type/index.md.html" title="Schema Types (/src/type/index.md)">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/and.coffee.html" title="And (/src/type/and.coffee)">And</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/any.coffee.html" title="Any (/src/type/any.coffee)">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/array.coffee.html" title="Array (/src/type/array.coffee)">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/byte.coffee.html" title="Byte (/src/type/byte.coffee)">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/email.coffee.html" title="Email (/src/type/email.coffee)">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/file.coffee.html" title="File (/src/type/file.coffee)">File</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/float.coffee.html" title="Float (/src/type/float.coffee)">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/function.coffee.html" title="Function (/src/type/function.coffee)">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/integer.coffee.html" title="Integer (/src/type/integer.coffee)">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/interval.coffee.html" title="Interval (/src/type/interval.coffee)">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/object.coffee.html" title="Object (/src/type/object.coffee)">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/or.coffee.html" title="Or (/src/type/or.coffee)">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/percent.coffee.html" title="Percent (/src/type/percent.coffee)">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/string.coffee.html" title="String (/src/type/string.coffee)">String</a>
+                </li>
+                <li class="level2">
+                  <a href="src/type/url.coffee.html" title="URL (/src/type/url.coffee)">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="Changelog.md.html" title="Version changes (/Changelog.md)">Version changes</a>
+                </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script type="text/javascript"><!--
+    $(".table-of-contents").bind("mouseleave", function(event) { $(".table-of-contents").scrollTop(0); });
+    //--></script>
+  </body>
 </html>

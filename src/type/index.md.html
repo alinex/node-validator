@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Byte</title>
+    <title>Schema Types</title>
     <meta name="HandheldFriendly" content="true" />
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -62,8 +62,8 @@
                 <li class="level2">
                   <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)" class="btn btn-primary">References</a>
                 </li>
-                <li class="level1">
-                  <a href="index.md.html" title="Schema Types (/src/type/index.md)" class="btn btn-primary">Schema Types</a>
+                <li class="active level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)" class="btn btn-warning">Schema Types <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="level2">
                   <a href="and.coffee.html" title="And (/src/type/and.coffee)" class="btn btn-primary">And</a>
@@ -77,8 +77,8 @@
                 <li class="level2">
                   <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)" class="btn btn-primary">Boolean</a>
                 </li>
-                <li class="active level2">
-                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)" class="btn btn-warning">Byte <span class="sr-only">(current)</span></a>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)" class="btn btn-primary">Byte</a>
                 </li>
                 <li class="level2">
                   <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)" class="btn btn-primary">Datetime</a>
@@ -158,101 +158,43 @@
 </script>
 <gcse:searchresults-only></gcse:searchresults-only>
 
-          <main><p><ul class="table-of-contents" aria-hidden="true"><header>Index</header>
-<li><a href="#schema-specification">Schema Specification</a></li>
-</ul>
-</p>
-<h1 id="byte">Byte</h1>
-<blockquote>
-<p>Path: <code>/src/type/byte.coffee</code> compiled to <code>/lib/type/byte.js</code></p>
-</blockquote>
-<p>To test for byte values which may contain prefixes like <code>18M</code> or <code>6.2 GB</code>.</p>
-<p><strong>Sanitize options allowed:</strong></p>
-<ul>
-<li><code>unit</code> - <code>String</code> unit to convert to if no number is given</li>
-<li><code>round</code> - <code>Boolean</code> rounding can be set to true for arithmetic rounding
-or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li>
-<li><code>decimals</code> - <code>Integer</code>  number of decimal digits to round to</li>
-</ul>
-<p><strong>Check options:</strong></p>
-<ul>
-<li><code>min</code> - <code>Integer</code> the smalles allowed number</li>
-<li><code>max</code> - <code>Integer</code> the biggest allowed number</li>
-</ul>
-<p>This supports the units: B, Bytes, b, bps, bits</p>
-<h2 id="schema-specification">Schema Specification</h2>
-<p><strong>Byte</strong> is a definition for number of bytes or bits.</p>
-<p>An  object with the following keys allowed: <code>unit</code>, <code>round</code>, <code>decimals</code>, <code>min</code>, <code>max</code>, <code>title</code>, <code>description</code>, <code>key</code>, <code>type</code>, <code>optional</code>, <code>default</code>. The following entries have a specific format:</p>
+          <main><p></p>
+<h1 id="schema-types">Schema Types</h1>
+<p>The following types are possible in the schema definition. And each type has it’s
+own possible properties which are described further in the type itself.</p>
+<p>See the lists below in which the different types are sorted into different categories:</p>
 <dl>
-<dt><code>unit</code></dt>
-<dd>
-<p><strong>Source Unit</strong> is the unit in which an only numeric value is given, will transform to base unit.</p>
-<p>A text entry which is optional and will be set to ‘B’ if not specified. All control characters will be removed.</p>
-</dd>
-<dt><code>round</code></dt>
-<dd>
-<p><strong>Rounding</strong> is the value can be rounded in different ways.</p>
-<p>It has to be <strong>one of</strong> the following types (optional):</p>
-<ul>
-<li>
-<p><strong>Arithmetic Rounding</strong> is a flag which allows arithmetic rounding (till 4 down, from 5 up) if set to <code>true</code>.</p>
-<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false.</p>
-</li>
-<li>
-<p><strong>Alternative Rounding</strong> is the alternative rounding method to be used.</p>
-<p>A text entry in which all control characters will be removed. Only the values: floor, ceil are allowed.</p>
-</li>
-</ul>
-</dd>
-<dt><code>decimals</code></dt>
-<dd>
-<p><strong>Decimals</strong> are the number of decimal digits to round to.</p>
-<p>An integer value which is optional. The value should be greater than 0.</p>
-</dd>
-<dt><code>min</code></dt>
-<dd>
-<p><strong>Min Value</strong> is the minimal value to be set.</p>
-<p>A numeric floating point number which is optional.</p>
-</dd>
-<dt><code>max</code></dt>
-<dd>
-<p><strong>Max Value</strong> is the maximal value to be set.</p>
-<p>A numeric floating point number which is optional. The value should be greater than &lt;&lt;<min>&gt;&gt;.</p>
-</dd>
-<dt><code>title</code></dt>
-<dd>
-<p><strong>Title</strong> is the title used to describe the element.</p>
-<p>A text entry which is optional. All control characters will be removed.</p>
-</dd>
-<dt><code>description</code></dt>
-<dd>
-<p><strong>Description</strong> is the free description of the element.</p>
-<p>A text entry which is optional. All control characters will be removed.</p>
-</dd>
-<dt><code>key</code></dt>
-<dd>
-<p><strong>Binding to Keyname</strong> is the mapping to which key names in an object this element belongs.</p>
-<p>A valid regular expression which is optional. It has to be <strong>one of</strong> the following types:</p>
-<ul>
-<li>An object which has to be an instance of class <code>RegExp</code>.</li>
-<li>A text entry in which all control characters will be removed. The text should match: /^/.<em>?/[gim]</em>$/.</li>
-</ul>
-</dd>
-<dt><code>type</code></dt>
-<dd>
-<p><strong>Type</strong> is the type of element.</p>
-<p>A text entry in which all control characters will be removed.</p>
-</dd>
-<dt><code>optional</code></dt>
-<dd>
-<p><strong>Optional</strong> is a flag defining if this element is optional.</p>
-<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
-</dd>
-<dt><code>default</code></dt>
-<dd>
-<p><strong>Default Value</strong> is the default value to use if nothing given.</p>
-<p>A numeric floating point number which is optional.</p>
-</dd>
+<dt>Basic Types</dt>
+<dd><a href="any.coffee.html" title="File: any">Any</a> -
+<a href="boolean.coffee.html" title="File: boolean">Boolean</a> -
+<a href="string.coffee.html" title="File: string">String</a> -</dd>
+<dt>Collections</dt>
+<dd><a href="array.coffee.html" title="File: array">Array</a> -
+<a href="object.coffee.html" title="File: object">Object</a> -</dd>
+<dt>Logic Types</dt>
+<dd><a href="and.coffee.html" title="File: and">And</a> -
+<a href="or.coffee.html" title="File: or">Or</a> -</dd>
+<dt>Numerical Types</dt>
+<dd><a href="float.coffee.html" title="File: float">Float</a> -
+<a href="integer.coffee.html" title="File: integer">Integer</a> -
+<a href="percent.coffee.html" title="File: percent">Percent</a> -
+<a href="byte.coffee.html" title="File: byte">Byte</a> -</dd>
+<dt>Time Elements</dt>
+<dd><a href="datetime.coffee.html" title="File: datetime">Datetime</a> -
+<a href="interval.coffee.html" title="File: interval">Interval</a> -</dd>
+<dt>Network Types</dt>
+<dd><a href="ipaddr.coffee.html" title="File: ipaddr">IP Address</a> -
+<a href="hostname.coffee.html" title="File: hostname">Hostname</a> -
+<a href="port.coffee.html" title="File: port">TCP/UDP Ports</a> -
+<a href="url.coffee.html" title="File: url">URL</a> -
+<a href="email.coffee.html" title="File: email">Email</a> -
+<a href="file.coffee.html" title="File: file">File</a> -</dd>
+<dt>Code Elements</dt>
+<dd><a href="function.coffee.html" title="File: function">Function</a> -
+<a href="object.coffee.html" title="File: object">Object</a> -
+<a href="regexp.coffee.html" title="File: regexp">RegExp</a> -</dd>
+<dt>Special Formats</dt>
+<dd><a href="handlebars.coffee.html" title="File: handlebars">Handlebars</a> -</dd>
 </dl>
 </main>
         </div>
@@ -273,8 +215,8 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
                 <li class="level2">
                   <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)">References</a>
                 </li>
-                <li class="level1">
-                  <a href="index.md.html" title="Schema Types (/src/type/index.md)">Schema Types</a>
+                <li class="active level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)">Schema Types <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="level2">
                   <a href="and.coffee.html" title="And (/src/type/and.coffee)">And</a>
@@ -288,8 +230,8 @@ or use <code>floor</code> or <code>ceil</code> for the corresponding methods</li
                 <li class="level2">
                   <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)">Boolean</a>
                 </li>
-                <li class="active level2">
-                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)">Byte <span class="sr-only">(current)</span></a>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)">Byte</a>
                 </li>
                 <li class="level2">
                   <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)">Datetime</a>

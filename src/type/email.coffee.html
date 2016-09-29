@@ -1,534 +1,353 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>email.coffee</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="../../doc-style.css" />
-  <script src="../../doc-filelist.js"></script>
-  <script>
-    var relativeDir = "../../";
-    var thisFile = "src/type/email.coffee";
-    var defaultSidebar = true;
-  </script>
-  <script src="../../doc-script.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email</title>
+    <meta name="HandheldFriendly" content="true" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">#topnav{text-align:center;background:#333;padding-bottom:20px;position:fixed;margin-top:0;width:100%;bottom:0;top:51px;}#topnav .navbar-nav{margin:0;margin-top:8px;display:-webkit-inline-box;display:-moz-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-box;display:inline-flex}#topnav .sidebar-to-top .btn{text-align:left}#topnav .sidebar-to-top li.level2>a{margin-left:20px}#topnav .sidebar-to-top li.level3>a{margin-left:40px}#topnav .sidebar-to-top li.level4>a{margin-left:60px}#topnav .sidebar-to-top li.level5>a{margin-left:80px}#topnav .sidebar-to-top li.level6>a{margin-left:100px}.navbar-fixed-top .navbar-collapse{max-height:100%}.navbar{min-width:300px}.nav>li{padding:2px 12px}.navbar-inverse .nav>li>a{color:#222;font-weight:bold;padding-top:6px;padding-bottom:6px;}.navbar-inverse .nav>li>a:focus,.navbar-inverse .nav>li>a:hover{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x}.navbar-inverse .nav>li>a.btn-warning:focus,.navbar-inverse .nav>li>a.btn-warning:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x}.navbar-spacer{height:51px}.btn-warning:active,.btn-primary:active{-webkit-transform:scale(.92);-moz-transform:scale(.92);-o-transform:scale(.92);-ms-transform:scale(.92);transform:scale(.92)}.btn-warning{background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x}.btn-primary{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x}.sidebar .nav{display:none;list-style:disc;padding-left:25px;}.sidebar .nav>li{display:list-item;}.sidebar .nav>li>a{color:#222;}.sidebar .nav>li>a:active{-webkit-box-shadow:0 2px 10px 2px rgba(0,0,0,0.25);box-shadow:0 2px 10px 2px rgba(0,0,0,0.25)}.sidebar .nav>li>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header,.sidebar .nav>li.active{display:none}.sidebar .nav>li.active>a{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x;}.sidebar .nav>li.active>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header>a{font-weight:bold;background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x;}.sidebar .nav>li.header>a:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x;color:#fff}.sidebar .nav>li.level2>a{padding-left:30px}.sidebar .nav>li.level3>a{padding-left:50px}.sidebar .nav>li.level4>a{padding-left:70px}.sidebar .nav>li.level5>a,.sidebar .nav>li.level6>a{padding-left:90px}.navbar-inverse .navbar-toggle{background-color:#444;}.navbar-inverse .navbar-toggle:hover{background-color:#666}@media (min-width:768px){#topnav{position:inherit;background:#222;padding-bottom:0}#topnav .nav>li{padding:0 4px}#topnav .sidebar-to-top{display:none}.navbar-right{margin-right:0}.navbar-nav >li>a{padding:6px 10px}.sidebar{overflow:auto;position:fixed;top:51px;left:0;bottom:0;background:#ddd;padding:0;}.sidebar h1,.sidebar h2{display:none}.sidebar .nav{display:block;list-style:none;padding-left:0;}.sidebar .nav>li{padding:0;}.sidebar .nav>li.header,.sidebar .nav>li.active{display:block;}.sidebar .nav>li.header.level2>a:before,.sidebar .nav>li.active.level2>a:before,.sidebar .nav>li.header.level3>a:before,.sidebar .nav>li.active.level3>a:before,.sidebar .nav>li.header.level4>a:before,.sidebar .nav>li.active.level4>a:before,.sidebar .nav>li.header.level5>a:before,.sidebar .nav>li.active.level5>a:before,.sidebar .nav>li.header.level6>a:before,.sidebar .nav>li.active.level6>a:before{content:"•"}.sidebar .nav>li>a{padding-top:8px;padding-bottom:8px}.sidebar .nav>li.level2>a:before,.sidebar .nav>li.level3>a:before,.sidebar .nav>li.level4>a:before,.sidebar .nav>li.level5>a:before,.sidebar .nav>li.level6>a:before{content:"◦";font-size:150%;line-height:10%;font-weight:bold;padding-right:5px;display:block;float:left;margin-top:8px;margin-left:-15px;color:#666}}img.preload{display:none}body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:16px;line-height:1.2;-ms-word-break:break-all;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;-ms-hyphens:auto;hyphens:auto;-webkit-hyphenate-before:2;-webkit-hyphenate-after:3;hyphenate-lines:3;min-width:300px}h1,h2,h3,h4,h5,h6{font-weight:bold;}h1:before,h2:before,h3:before,h4:before,h5:before,h6:before{display:block;content:" ";margin-top:-66px;height:66px;visibility:hidden}h1,h2,h3{clear:both}h1{border-bottom:3px solid #222;padding-bottom:5px}h2{border-bottom:2px dotted #222;padding-bottom:3px}h3{border-bottom:2px dotted #aaa;padding-bottom:2px}h4{border-bottom:1px dotted #aaa}dt{font-weight:bold;margin-top:8px}dd{margin-left:20px}blockquote{border:1px solid #eee;border-radius:3px;border-left:5px solid #337ab7;padding:5px 15px;margin:10px 0;}blockquote ul li p{margin-bottom:0}svg,img{max-width:100%}table{border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all;margin-bottom:10px;}table th,table td{padding:6px 13px;border:1px solid #ddd}table th{background-color:rgba(0,0,0,0.04);font-weight:bold;border-bottom:3px solid #999}table tr{background-color:#fff;border-top:1px solid #ccc;}table tr:nth-child(2n){background-color:rgba(0,0,0,0.04)}img{vertical-align:middle}.emoji{height:1em}abbr,acronym{border-bottom:dotted 1px}a code{color:#337ab7}code,tt{background-color:#fafafa;border-radius:4px;font-size:85%;margin:0;padding:.2em 0}pre{background-color:#fafafa;border-radius:10px;border:1px solid #a4a4a4;font-size:85%;margin:20px;padding:10px;}pre code,pre tt{background:none}pre.language{counter-reset:line;max-height:265px;padding-top:30px;padding-bottom:0;overflow-x:hidden;}pre.language code,pre.language tt{display:block;position:relative;float:left;width:100%;border-left:45px solid #ddd;margin-left:-10px;padding-left:5px;}pre.language code:before,pre.language tt:before{counter-increment:line;content:counter(line);min-width:35px;float:left;text-align:right;padding-right:5px;color:#808080;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-user-select:none;margin-left:-45px}pre.language code:first-of-type,pre.language tt:first-of-type{padding-top:10px}pre.language code:last-child,pre.language tt:last-child{padding-bottom:10px}pre.language header{border-top-left-radius:4px;border-top-right-radius:4px;font-weight:bold;background:#fafafa;margin:-30px -10px 0 -10px;padding:5px 15px}pre.language.coffeescript header,pre.language.javascript header,pre.language.ruby header,pre.language.python header,pre.language.perl header,pre.language.cc header,pre.language.cpp header,pre.language.cs header,pre.language.java header,pre.language.jsp header,pre.language.groovy header,pre.language.php header,pre.language.bash header,pre.language.sql header,pre.language.makefile header{background:#f0ad4e}pre.language.json header,pre.language.cson header,pre.language.yaml header{background:#61b961}pre.language.handlebars header,pre.language.css header,pre.language.stylus header,pre.language.scss header,pre.language.less header,pre.language.markdown header{background:#76abca}ul.table-of-contents{max-width:100px;max-height:30px;overflow:hidden;position:fixed;top:51px;right:0;background:#ddd;padding:5px 15px;-webkit-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-moz-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-o-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-ms-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;border-left:2px solid #999;border-bottom:2px solid #999;border-bottom-left-radius:10px;list-style-type:none;white-space:nowrap;z-index:100;}ul.table-of-contents:hover{max-width:285px;max-height:248px;-webkit-transition:max-width 100ms ease, max-height 1s ease 100ms;-moz-transition:max-width 100ms ease, max-height 1s ease 100ms;-o-transition:max-width 100ms ease, max-height 1s ease 100ms;-ms-transition:max-width 100ms ease, max-height 1s ease 100ms;transition:max-width 100ms ease, max-height 1s ease 100ms;overflow-y:auto}ul.table-of-contents header{background:#999;font-weight:bold;margin:-5px -15px;padding:5px 15px}ul.table-of-contents>li{padding-bottom:2px;padding-right:8px;}ul.table-of-contents>li:first-of-type{padding-top:10px}ul.table-of-contents a{color:#222}ul.table-of-contents li.sidebar{display:list-item}@media (min-width:768px){ul.table-of-contents li.sidebar{display:none}}div.detail,div.info,div.warning,div.alert{padding:30px 10px 6px 10px;margin:5px 0 8px 0;border-radius:3px;padding-left:60px;border-radius:18px;border-top-left-radius:0;}div.detail>p,div.info>p,div.warning>p,div.alert>p{margin-bottom:0}div.detail header,div.info header,div.warning header,div.alert header{font-weight:bold;position:absolute;margin-top:-30px;margin-left:-60px;padding:3px 20px 3px 10px;border-bottom-right-radius:18px}div:before{content:'\24D8';color:#666;position:absolute;font-size:28px;font-weight:900;padding-top:5px;margin-left:-50px}div.detail{background-color:#fafafa;border:2px solid #ddd;padding-top:0}div.info{background-color:#9f9;background-image:-webkit-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-moz-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-o-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-ms-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:linear-gradient(to bottom, #bfb 0%, #6d6 100%);border:2px solid #6d6;}div.info header{background-color:#6d6}div.info:before{content:'\24D8';text-shadow:0 -1px 0 #6d6}div.warning{background-color:#fc9;background-image:-webkit-linear-gradient(top, #f97 0%, #e86 100%);background-image:-moz-linear-gradient(top, #f97 0%, #e86 100%);background-image:-o-linear-gradient(top, #f97 0%, #e86 100%);background-image:-ms-linear-gradient(top, #f97 0%, #e86 100%);background-image:linear-gradient(to bottom, #f97 0%, #e86 100%);border:2px solid #e86;}div.warning header{background-color:#e86}div.warning:before{content:'\2605';text-shadow:0 -1px 0 #e86}div.alert{background-color:#f99;background-image:-webkit-linear-gradient(top, #faa 0%, #c00 100%);background-image:-moz-linear-gradient(top, #faa 0%, #c00 100%);background-image:-o-linear-gradient(top, #faa 0%, #c00 100%);background-image:-ms-linear-gradient(top, #faa 0%, #c00 100%);background-image:linear-gradient(to bottom, #faa 0%, #c00 100%);border:2px solid #c00;}div.alert header{background-color:#c00;color:#fff}div.alert:before{content:'\24D8';text-shadow:0 -1px 0 #c00}.cse .gsc-control-cse,.gsc-control-cse{padding:0 !important;}.cse .gsc-control-cse table tr,.gsc-control-cse table tr,.cse .gsc-control-cse table th,.gsc-control-cse table th,.cse .gsc-control-cse table td,.gsc-control-cse table td{border:0}.cse .gsc-control-cse .gsc-cursor-current-page,.gsc-control-cse .gsc-cursor-current-page{color:#fff !important}.cse .gsc-control-cse .gsc-webResult.gsc-result:hover,.gsc-control-cse .gsc-webResult.gsc-result:hover,.cse .gsc-control-cse .gsc-imageResult:hover,.gsc-control-cse .gsc-imageResult:hover{border-left:5px solid #337ab7;padding-left:3px}.cse .gsc-control-cse .gcsc-branding,.gsc-control-cse .gcsc-branding{display:none !important}.gsc-adBlock{display:none !important}@media print{.navbar-spacer,.table-of-contents,.sidebar{display:none}.main{left:0;width:100%}pre.language header{border-bottom:2px solid #999}}.text-red{color:#d13f19}.text-green{color:#2ecc40}.text-yellow{color:#ffdc00}.text-blue{color:#0074d9}.text-magenta{color:#f0f}.text-cyan{color:#0ff}.text-gray{color:#aaa}.bg-white{background-color:#fff}.center{text-align:center}.left{float:left}.right{float:right}.spacing{padding:10px}.hidden{display:none}@media (max-width:767px){.hidden-small{display:none}}@media (min-width:768px){.hidden-large{display:none}}</style>
+  </head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
-<body>
-  <nav>
-<div class="logo"><a href="http://alinex.github.io"
-  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
-  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
-    width="150" title="Alinex Universe Homepage" />
-  </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png"
-    style="display:none" alt="preloading" />
-</div>
-<div class="links">
-  <a href="http://alinex.github.io/blog"
-    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
-  <a href="http://alinex.github.io/develop"
-    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
-  <a href="http://alinex.github.io/code.html"
-    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
-</div>
-</nav><div id="sidebar_wrapper">
-    <div id="sidebar_switch">
-      <span class="tree">Files</span>
-      <span class="headings">Headings</span>
-    </div>
-    <div id="tree"></div>
-    <div id="headings">
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topnav" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://alinex.github.io/" onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Homepage">
+</a>
+<img class="preload" src="https://alinex.github.io/images/Alinex-200.png" aria-hidden="true">
 
-      <div class="heading h1">
-        <a href="#email-validation">Email validation</a>
+        </div>
+        <div id="topnav" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://alinex.github.io/blog" class="btn btn-primary">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Blog
+  </a></li>
+<li><a href="https://alinex.github.io/develop" class="btn btn-primary">
+    <span class="glyphicon glyphicon-book" aria-hidden="true"></span> Develop
+  </a></li>
+<li><a href="https://alinex.github.io/code.html" class="btn btn-warning">
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Code
+  </a></li>
+
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input name="q" type="text" class="form-control" placeholder="Search...">
+          </form>
+          <ul class="nav sidebar-to-top">
+                <li class="level0">
+                  <a href="../../README.md.html" title="Alinex Validator: Readme (/README.md)" class="btn btn-primary">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="../index.coffee.html" title="Controller - API Usage (/src/index.coffee)" class="btn btn-primary">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="../helper/index.md.html" title="Schema Definition (/src/helper/index.md)" class="btn btn-primary">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)" class="btn btn-primary">References</a>
+                </li>
+                <li class="level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)" class="btn btn-primary">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="and.coffee.html" title="And (/src/type/and.coffee)" class="btn btn-primary">And</a>
+                </li>
+                <li class="level2">
+                  <a href="any.coffee.html" title="Any (/src/type/any.coffee)" class="btn btn-primary">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="array.coffee.html" title="Array (/src/type/array.coffee)" class="btn btn-primary">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)" class="btn btn-primary">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)" class="btn btn-primary">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)" class="btn btn-primary">Datetime</a>
+                </li>
+                <li class="active level2">
+                  <a href="email.coffee.html" title="Email (/src/type/email.coffee)" class="btn btn-warning">Email <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level2">
+                  <a href="file.coffee.html" title="File (/src/type/file.coffee)" class="btn btn-primary">File</a>
+                </li>
+                <li class="level2">
+                  <a href="float.coffee.html" title="Float (/src/type/float.coffee)" class="btn btn-primary">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="function.coffee.html" title="Function (/src/type/function.coffee)" class="btn btn-primary">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)" class="btn btn-primary">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)" class="btn btn-primary">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="integer.coffee.html" title="Integer (/src/type/integer.coffee)" class="btn btn-primary">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="interval.coffee.html" title="Interval (/src/type/interval.coffee)" class="btn btn-primary">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)" class="btn btn-primary">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="object.coffee.html" title="Object (/src/type/object.coffee)" class="btn btn-primary">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="or.coffee.html" title="Or (/src/type/or.coffee)" class="btn btn-primary">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="percent.coffee.html" title="Percent (/src/type/percent.coffee)" class="btn btn-primary">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)" class="btn btn-primary">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)" class="btn btn-primary">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="string.coffee.html" title="String (/src/type/string.coffee)" class="btn btn-primary">String</a>
+                </li>
+                <li class="level2">
+                  <a href="url.coffee.html" title="URL (/src/type/url.coffee)" class="btn btn-primary">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="../../Changelog.md.html" title="Version changes (/Changelog.md)" class="btn btn-primary">Version changes</a>
+                </li>
+          </ul>
+        </div>
       </div>
+    </nav>
 
-      <div class="heading h2">
-        <a href="#node-modules">Node modules</a>
-      </div>
+    <div class="navbar-spacer"></div>
 
-      <div class="heading h2">
-        <a href="#subchecks">Subchecks</a>
-      </div>
+    <div class="container-fluid">
+      <div class="row">
 
-      <div class="heading h2">
-        <a href="#host-specific-normalization">Host specific normalization</a>
-      </div>
+        <div class="col-sm-9 col-sm-push-3 main">
+          <script>
+  (function() {
+    var cx = '010539487162786288372:chxqbheanxc';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchresults-only></gcse:searchresults-only>
 
-      <div class="heading h2">
-        <a href="#type-implementation">Type implementation</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#schema-check">Schema check</a>
-      </div>
-
-      <div class="heading h2">
-        <a href="#helper">Helper</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#get-own-ip">get own IP</a>
-      </div>
-
-      <div class="heading h3">
-        <a href="#contact-the-server">contact the server</a>
-      </div>
-
-    </div>
-  </div>
-  <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
-    <div class="background highlight"></div>
-<table cellpadding="0" cellspacing="0">
-  <tbody>
-    
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="email-validation">
-  <h1>
-    <a href="#email-validation" name="email-validation" class="pilcrow"></a>
-Email validation
-  </h1>
-</div>
-<p>There are a lot of crazy possibilities in the RFC2822 which  specifies the Email
-format. Perhaps it came from letting different existing email systems represented
-their account, to encompass anything that was valid before.</p>
+          <main><p><ul class="table-of-contents" aria-hidden="true"><header>Index</header>
+<li><a href="#schema-specification">Schema Specification</a></li>
+</ul>
+</p>
+<h1 id="email">Email</h1>
+<blockquote>
+<p>Path: <code>/src/type/email.coffee</code> compiled to <code>/lib/type/email.js</code></p>
+</blockquote>
+<p>There are a lot of crazy possibilities in the <a href="https://www.ietf.org/rfc/rfc2822.txt">RFC2822</a>
+which  specifies the Email format. Perhaps it came from letting different existing
+email systems represented their account, to encompass anything that was valid before.</p>
 <p>So this check will not aim to allow all emails allowed through RFC but only
 those which are reasonable and commonly used.</p>
-
-        </td>
-        <td class="code highlight">
-          
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2"></a>
-</div>
-<p>Check options:</p>
+<p><strong>Sanitize options:</strong></p>
 <ul>
 <li><code>lowerCase</code> domain and gmail addresses completely</li>
-<li><code>normalize</code> (boolean) remove tags, alternative domains and subdomains</li>
-<li><code>checkServer</code> (boolean) also check for working email servers</li>
+<li><code>normalize</code> <code>Boolean</code> remove tags, alternative domains and subdomains</li>
 </ul>
+<p><strong>Check options:</strong></p>
+<ul>
+<li><code>checkServer</code> - <code>Boolean</code> also check for working email servers</li>
+<li><code>denyBlacklisted</code> - <code>Boolean</code> deny all mail servers which are currently blacklisted</li>
+<li><code>denyGraylistes</code> - <code>Boolean</code> deny all mail servers which are on the untrusted lists (graylists)</li>
+</ul>
+<h2 id="schema-specification">Schema Specification</h2>
+<p><strong>Email</strong> is an email schema definition.</p>
+<p>An  object with the following keys allowed: <code>lowerCase</code>, <code>normalize</code>, <code>checkServer</code>, <code>denyBlacklisted</code>, <code>denyGraylistes</code>, <code>title</code>, <code>description</code>, <code>key</code>, <code>type</code>, <code>optional</code>, <code>default</code>. The following entries have a specific format:</p>
+<dl>
+<dt><code>lowerCase</code></dt>
+<dd>
+<p><strong>Lower Case</strong> is a flag to transform to lower case letters.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>normalize</code></dt>
+<dd>
+<p><strong>Normalize</strong> is a flag to normalize some common email address variants to their base.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>checkServer</code></dt>
+<dd>
+<p><strong>Check Server</strong> is a flag to also check the MX record of the destination host if possible.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>denyBlacklisted</code></dt>
+<dd>
+<p><strong>Deny Blacklisted Server</strong> is a flag to deny all mail addresses of servers which are currently on any blacklist.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>denyGraylistes</code></dt>
+<dd>
+<p><strong>Deny Graylistes Server</strong> is a flag to deny also mail addresses of untrusted servers which users are unverified.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>title</code></dt>
+<dd>
+<p><strong>Title</strong> is the title used to describe the element.</p>
+<p>A text entry which is optional. All control characters will be removed.</p>
+</dd>
+<dt><code>description</code></dt>
+<dd>
+<p><strong>Description</strong> is the free description of the element.</p>
+<p>A text entry which is optional. All control characters will be removed.</p>
+</dd>
+<dt><code>key</code></dt>
+<dd>
+<p><strong>Binding to Keyname</strong> is the mapping to which key names in an object this element belongs.</p>
+<p>A valid regular expression which is optional. It has to be <strong>one of</strong> the following types:</p>
+<ul>
+<li>An object which has to be an instance of class <code>RegExp</code>.</li>
+<li>A text entry in which all control characters will be removed. The text should match: /^/.<em>?/[gim]</em>$/.</li>
+</ul>
+</dd>
+<dt><code>type</code></dt>
+<dd>
+<p><strong>Type</strong> is the type of element.</p>
+<p>A text entry in which all control characters will be removed.</p>
+</dd>
+<dt><code>optional</code></dt>
+<dd>
+<p><strong>Optional</strong> is a flag defining if this element is optional.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>default</code></dt>
+<dd>
+<p><strong>Default Value</strong> is the default value to use if nothing given.</p>
+<p>A text entry which is optional. All control characters will be removed. It has to be at least 5 characters long.</p>
+</dd>
+</dl>
+</main>
+        </div>
+        <div class="col-sm-3 col-cm-pull-9 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="header">
+              <a href="../../README.md.html">Alinex Validator</a>
+            </li>
+                <li class="level0">
+                  <a href="../../README.md.html" title="Alinex Validator: Readme (/README.md)">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="../index.coffee.html" title="Controller - API Usage (/src/index.coffee)">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="../helper/index.md.html" title="Schema Definition (/src/helper/index.md)">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)">References</a>
+                </li>
+                <li class="level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="and.coffee.html" title="And (/src/type/and.coffee)">And</a>
+                </li>
+                <li class="level2">
+                  <a href="any.coffee.html" title="Any (/src/type/any.coffee)">Any</a>
+                </li>
+                <li class="level2">
+                  <a href="array.coffee.html" title="Array (/src/type/array.coffee)">Array</a>
+                </li>
+                <li class="level2">
+                  <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)">Datetime</a>
+                </li>
+                <li class="active level2">
+                  <a href="email.coffee.html" title="Email (/src/type/email.coffee)">Email <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level2">
+                  <a href="file.coffee.html" title="File (/src/type/file.coffee)">File</a>
+                </li>
+                <li class="level2">
+                  <a href="float.coffee.html" title="Float (/src/type/float.coffee)">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="function.coffee.html" title="Function (/src/type/function.coffee)">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="integer.coffee.html" title="Integer (/src/type/integer.coffee)">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="interval.coffee.html" title="Interval (/src/type/interval.coffee)">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="object.coffee.html" title="Object (/src/type/object.coffee)">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="or.coffee.html" title="Or (/src/type/or.coffee)">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="percent.coffee.html" title="Percent (/src/type/percent.coffee)">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="string.coffee.html" title="String (/src/type/string.coffee)">String</a>
+                </li>
+                <li class="level2">
+                  <a href="url.coffee.html" title="URL (/src/type/url.coffee)">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="../../Changelog.md.html" title="Version changes (/Changelog.md)">Version changes</a>
+                </li>
+          </ul>
+        </div>
 
-        </td>
-        <td class="code highlight">
-          
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="node-modules">
-  <h2>
-    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
-Node modules
-  </h2>
-</div>
+      </div>
+    </div>
 
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:email'</span>)
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'async'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4"></a>
-</div>
-<p>alinex modules</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5"></a>
-</div>
-<p>include classes and helper</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="subchecks">
-  <h2>
-    <a href="#subchecks" name="subchecks" class="pilcrow"></a>
-Subchecks
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">subcheck =
-  type: <span class="hljs-string">'string'</span>
-  minLength: <span class="hljs-number">5</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="host-specific-normalization">
-  <h2>
-    <a href="#host-specific-normalization" name="host-specific-normalization" class="pilcrow"></a>
-Host specific normalization
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">normalize</span> = <span class="hljs-params">(host)</span> -&gt;</span>
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">switch</span>
-    <span class="hljs-keyword">when</span> host.match <span class="hljs-regexp">/^g(oogle)?mail\.com$/i</span>
-      (local) -&gt;
-        [local.replace(<span class="hljs-regexp">/\.|\+.*$/g</span>, <span class="hljs-string">''</span>), <span class="hljs-string">'gmail.com'</span>]
-    <span class="hljs-keyword">else</span>
-      (local, host) -&gt;
-        [local.replace(<span class="hljs-regexp">/\+.*$/g</span>, <span class="hljs-string">''</span>), host.replace(<span class="hljs-regexp">/.*?(\w+\.\w+)$/</span>, <span class="hljs-string">'$1'</span>)]</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="type-implementation">
-  <h2>
-    <a href="#type-implementation" name="type-implementation" class="pilcrow"></a>
-Type implementation
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  text = <span class="hljs-string">'A reasonable working email address. '</span>
-  text += check.optional.describe work
-  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9"></a>
-</div>
-<p>subcheck</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  name = work.spec.name ? <span class="hljs-string">'value'</span>
-  <span class="hljs-keyword">if</span> work.path.length
-    name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
-  subcheck.lowerCase = work.pos.lowerCase</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10"></a>
-</div>
-<p>no error in string describe possible, so go on</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.lowerCase
-    text += <span class="hljs-string">"It will be lowercased. "</span>
-  <span class="hljs-keyword">if</span> work.pos.normalize
-    text += <span class="hljs-string">"Extended formats like additional domains, subdomains and tags which
-    mostly belong to the same mailbox will be removed. "</span>
-  cb <span class="hljs-literal">null</span>, text
-
-exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11"></a>
-</div>
-<p>base checks</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">try</span>
-    <span class="hljs-keyword">if</span> check.optional.run work
-      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect work.value ? <span class="hljs-literal">null</span>}</span>"</span>
-      <span class="hljs-keyword">return</span> cb()
-  <span class="hljs-keyword">catch</span> error
-    <span class="hljs-keyword">return</span> work.report error, cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12"></a>
-</div>
-<p>validate using subcheck</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  name = work.spec.name ? <span class="hljs-string">'value'</span>
-  <span class="hljs-keyword">if</span> work.path.length
-    name += <span class="hljs-string">"/<span class="hljs-subst">#{work.path.join <span class="hljs-string">'/'</span>}</span>"</span>
-  subcheck.lowerCase = work.pos.lowerCase
-  check.run
-    name: name
-    value: work.value
-    schema: subcheck
-  , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13"></a>
-</div>
-<p>validate</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    [local, host] = parts = value.split <span class="hljs-regexp">/@/</span>
-    <span class="hljs-keyword">if</span> parts.length <span class="hljs-keyword">isnt</span> <span class="hljs-number">2</span>
-      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The address is not a valid format, too few or
-      much @-signs."</span>), cb
-    <span class="hljs-keyword">if</span> local.length &gt; <span class="hljs-number">64</span>
-      <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The local mailbox name is too long (64 chars max)."</span>), cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14"></a>
-</div>
-<p>check hostname</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    check.run
-      name: name + <span class="hljs-string">':host'</span>
-      value: host
-      schema:
-        type: <span class="hljs-string">'hostname'</span>
-    , <span class="hljs-function"><span class="hljs-params">(err, host)</span> -&gt;</span>
-      <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15"></a>
-</div>
-<p>normalize</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">      [local, host] = normalize(host) local, host</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16"></a>
-</div>
-<p>done everything ok</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">      value = <span class="hljs-string">"<span class="hljs-subst">#{local}</span>@<span class="hljs-subst">#{host}</span>"</span>
-      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">unless</span> work.pos.checkServer
-      <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> host <span class="hljs-keyword">is</span> <span class="hljs-string">'localhost'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17"></a>
-</div>
-<p>check server</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">      getMyIP (err, ip) -&gt;
-        <span class="hljs-keyword">if</span> err
-          debug chalk.magenta <span class="hljs-string">"could not detect own ip address"</span>
-          <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18"></a>
-</div>
-<p>find mx records</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">        dns = <span class="hljs-built_in">require</span> <span class="hljs-string">'dns'</span>
-        dns.resolveMx host, <span class="hljs-function"><span class="hljs-params">(err, addresses)</span> -&gt;</span>
-          checkMailServer addresses, ip, <span class="hljs-function"><span class="hljs-params">(ok)</span> -&gt;</span>
-            <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> ok</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-19" id="section-19"></a>
-</div>
-<p>find a-record</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">            dns.resolve host, <span class="hljs-function"><span class="hljs-params">(err, addresses)</span> -&gt;</span>
-              checkMailServer addresses, ip, <span class="hljs-function"><span class="hljs-params">(ok)</span> -&gt;</span>
-                <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value <span class="hljs-keyword">if</span> ok
-                <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"No correct responding mail server
-                could be detected for this domain."</span>), cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="schema-check">
-  <h2>
-    <a href="#schema-check" name="schema-check" class="pilcrow"></a>
-Schema check
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
-  check.run
-    schema:
-      type: <span class="hljs-string">'object'</span>
-      allowedKeys: <span class="hljs-literal">true</span>
-      keys: util.extend util.clone(check.base),
-        default: subcheck
-        lowerCase:
-          type: <span class="hljs-string">'boolean'</span>
-          optional: <span class="hljs-literal">true</span>
-        normalize:
-          type: <span class="hljs-string">'boolean'</span>
-          optional: <span class="hljs-literal">true</span>
-        checkServer:
-          type: <span class="hljs-string">'boolean'</span>
-          optional: <span class="hljs-literal">true</span>
-    value: schema
-  , cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="helper">
-  <h2>
-    <a href="#helper" name="helper" class="pilcrow"></a>
-Helper
-  </h2>
-</div>
-<div class="pilwrap" id="get-own-ip">
-  <h3>
-    <a href="#get-own-ip" name="get-own-ip" class="pilcrow"></a>
-get own IP
-  </h3>
-</div>
-<p>for later mail server checks</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">myIP = <span class="hljs-literal">null</span>
-<span class="hljs-function"><span class="hljs-title">getMyIP</span> = <span class="hljs-params">(cb)</span> -&gt;</span>
-  <span class="hljs-keyword">return</span> cb myIP <span class="hljs-keyword">if</span> myIP
-  request = <span class="hljs-built_in">require</span> <span class="hljs-string">'request'</span>
-  request <span class="hljs-string">'http://ipinfo.io/ip'</span>, <span class="hljs-function"><span class="hljs-params">(err, response, body)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> err <span class="hljs-keyword">and</span> response.statusCode <span class="hljs-keyword">is</span> <span class="hljs-number">200</span>
-      cb <span class="hljs-literal">null</span>, body.trim()
-    <span class="hljs-keyword">else</span>
-      cb <span class="hljs-keyword">new</span> Error <span class="hljs-string">'could not get IP address'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="contact-the-server">
-  <h3>
-    <a href="#contact-the-server" name="contact-the-server" class="pilcrow"></a>
-contact the server
-  </h3>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript"><span class="hljs-function"><span class="hljs-title">checkMailServer</span> = <span class="hljs-params">(list, ip, cb)</span> -&gt;</span>
-  <span class="hljs-keyword">return</span> cb <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> list?.length
-  net = <span class="hljs-built_in">require</span> <span class="hljs-string">'net'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-23" id="section-23"></a>
-</div>
-<p>check email exchange server</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  list = list.sort (a, b) -&gt; a.priority - b.priority
-  .map (e) -&gt; e.exchange
-  async.detect list, <span class="hljs-function"><span class="hljs-params">(domain, cb)</span> -&gt;</span>
-    debug chalk.grey <span class="hljs-string">"check mail server under <span class="hljs-subst">#{domain}</span>"</span>
-    res = <span class="hljs-string">''</span>
-    client = net.connect
-      port: <span class="hljs-number">25</span>
-      host: domain
-    , <span class="hljs-function">-&gt;</span>
-      client.write <span class="hljs-string">"HELO <span class="hljs-subst">#{ip}</span>\r\n"</span>
-      client.end()
-    client.<span class="hljs-literal">on</span> <span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-params">(data)</span> -&gt;</span>
-      res += data.toString()
-    client.<span class="hljs-literal">on</span> <span class="hljs-string">'error'</span>, <span class="hljs-function"><span class="hljs-params">(err)</span> -&gt;</span>
-      debug chalk.magenta err
-    client.<span class="hljs-literal">on</span> <span class="hljs-string">'end'</span>, <span class="hljs-function">-&gt;</span>
-      debug chalk.grey l <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> res.split <span class="hljs-regexp">/\n/</span>
-      cb <span class="hljs-literal">null</span>, res?.length &gt; <span class="hljs-number">0</span>
-  , <span class="hljs-function"><span class="hljs-params">(err, res)</span> -&gt;</span> cb res</pre>
-        </td>
-      </tr>
-    
-  </tbody>
-</table>
-
-  </div>
-</body>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script type="text/javascript"><!--
+    $(".table-of-contents").bind("mouseleave", function(event) { $(".table-of-contents").scrollTop(0); });
+    //--></script>
+  </body>
 </html>

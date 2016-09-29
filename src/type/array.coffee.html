@@ -1,476 +1,399 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>array.coffee</title>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="../../doc-style.css" />
-  <script src="../../doc-filelist.js"></script>
-  <script>
-    var relativeDir = "../../";
-    var thisFile = "src/type/array.coffee";
-    var defaultSidebar = true;
-  </script>
-  <script src="../../doc-script.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Array</title>
+    <meta name="HandheldFriendly" content="true" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">#topnav{text-align:center;background:#333;padding-bottom:20px;position:fixed;margin-top:0;width:100%;bottom:0;top:51px;}#topnav .navbar-nav{margin:0;margin-top:8px;display:-webkit-inline-box;display:-moz-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-box;display:inline-flex}#topnav .sidebar-to-top .btn{text-align:left}#topnav .sidebar-to-top li.level2>a{margin-left:20px}#topnav .sidebar-to-top li.level3>a{margin-left:40px}#topnav .sidebar-to-top li.level4>a{margin-left:60px}#topnav .sidebar-to-top li.level5>a{margin-left:80px}#topnav .sidebar-to-top li.level6>a{margin-left:100px}.navbar-fixed-top .navbar-collapse{max-height:100%}.navbar{min-width:300px}.nav>li{padding:2px 12px}.navbar-inverse .nav>li>a{color:#222;font-weight:bold;padding-top:6px;padding-bottom:6px;}.navbar-inverse .nav>li>a:focus,.navbar-inverse .nav>li>a:hover{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x}.navbar-inverse .nav>li>a.btn-warning:focus,.navbar-inverse .nav>li>a.btn-warning:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x}.navbar-spacer{height:51px}.btn-warning:active,.btn-primary:active{-webkit-transform:scale(.92);-moz-transform:scale(.92);-o-transform:scale(.92);-ms-transform:scale(.92);transform:scale(.92)}.btn-warning{background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x}.btn-primary{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x}.sidebar .nav{display:none;list-style:disc;padding-left:25px;}.sidebar .nav>li{display:list-item;}.sidebar .nav>li>a{color:#222;}.sidebar .nav>li>a:active{-webkit-box-shadow:0 2px 10px 2px rgba(0,0,0,0.25);box-shadow:0 2px 10px 2px rgba(0,0,0,0.25)}.sidebar .nav>li>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header,.sidebar .nav>li.active{display:none}.sidebar .nav>li.active>a{background:#73aad8;background:#4b91cd -webkit-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -moz-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -o-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd -ms-linear-gradient(270deg, #73aad8, #4b91cd) repeat-x;background:#4b91cd linear-gradient(180deg, #73aad8, #4b91cd) repeat-x;}.sidebar .nav>li.active>a:hover{background:#3d88c9;background:#2e6ea5 -webkit-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -moz-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -o-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 -ms-linear-gradient(270deg, #3d88c9, #2e6ea5) repeat-x;background:#2e6ea5 linear-gradient(180deg, #3d88c9, #2e6ea5) repeat-x;color:#fff}.sidebar .nav>li.header>a{font-weight:bold;background:#f2b560;background:#ee9f31 -webkit-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -moz-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -o-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 -ms-linear-gradient(270deg, #f2b560, #ee9f31) repeat-x;background:#ee9f31 linear-gradient(180deg, #f2b560, #ee9f31) repeat-x;}.sidebar .nav>li.header>a:hover{background:#ec9721;background:#c97c11 -webkit-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -moz-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -o-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 -ms-linear-gradient(270deg, #ec9721, #c97c11) repeat-x;background:#c97c11 linear-gradient(180deg, #ec9721, #c97c11) repeat-x;color:#fff}.sidebar .nav>li.level2>a{padding-left:30px}.sidebar .nav>li.level3>a{padding-left:50px}.sidebar .nav>li.level4>a{padding-left:70px}.sidebar .nav>li.level5>a,.sidebar .nav>li.level6>a{padding-left:90px}.navbar-inverse .navbar-toggle{background-color:#444;}.navbar-inverse .navbar-toggle:hover{background-color:#666}@media (min-width:768px){#topnav{position:inherit;background:#222;padding-bottom:0}#topnav .nav>li{padding:0 4px}#topnav .sidebar-to-top{display:none}.navbar-right{margin-right:0}.navbar-nav >li>a{padding:6px 10px}.sidebar{overflow:auto;position:fixed;top:51px;left:0;bottom:0;background:#ddd;padding:0;}.sidebar h1,.sidebar h2{display:none}.sidebar .nav{display:block;list-style:none;padding-left:0;}.sidebar .nav>li{padding:0;}.sidebar .nav>li.header,.sidebar .nav>li.active{display:block;}.sidebar .nav>li.header.level2>a:before,.sidebar .nav>li.active.level2>a:before,.sidebar .nav>li.header.level3>a:before,.sidebar .nav>li.active.level3>a:before,.sidebar .nav>li.header.level4>a:before,.sidebar .nav>li.active.level4>a:before,.sidebar .nav>li.header.level5>a:before,.sidebar .nav>li.active.level5>a:before,.sidebar .nav>li.header.level6>a:before,.sidebar .nav>li.active.level6>a:before{content:"•"}.sidebar .nav>li>a{padding-top:8px;padding-bottom:8px}.sidebar .nav>li.level2>a:before,.sidebar .nav>li.level3>a:before,.sidebar .nav>li.level4>a:before,.sidebar .nav>li.level5>a:before,.sidebar .nav>li.level6>a:before{content:"◦";font-size:150%;line-height:10%;font-weight:bold;padding-right:5px;display:block;float:left;margin-top:8px;margin-left:-15px;color:#666}}img.preload{display:none}body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:16px;line-height:1.2;-ms-word-break:break-all;word-break:break-all;word-break:break-word;-webkit-hyphens:auto;-moz-hyphens:auto;-ms-hyphens:auto;hyphens:auto;-webkit-hyphenate-before:2;-webkit-hyphenate-after:3;hyphenate-lines:3;min-width:300px}h1,h2,h3,h4,h5,h6{font-weight:bold;}h1:before,h2:before,h3:before,h4:before,h5:before,h6:before{display:block;content:" ";margin-top:-66px;height:66px;visibility:hidden}h1,h2,h3{clear:both}h1{border-bottom:3px solid #222;padding-bottom:5px}h2{border-bottom:2px dotted #222;padding-bottom:3px}h3{border-bottom:2px dotted #aaa;padding-bottom:2px}h4{border-bottom:1px dotted #aaa}dt{font-weight:bold;margin-top:8px}dd{margin-left:20px}blockquote{border:1px solid #eee;border-radius:3px;border-left:5px solid #337ab7;padding:5px 15px;margin:10px 0;}blockquote ul li p{margin-bottom:0}svg,img{max-width:100%}table{border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all;margin-bottom:10px;}table th,table td{padding:6px 13px;border:1px solid #ddd}table th{background-color:rgba(0,0,0,0.04);font-weight:bold;border-bottom:3px solid #999}table tr{background-color:#fff;border-top:1px solid #ccc;}table tr:nth-child(2n){background-color:rgba(0,0,0,0.04)}img{vertical-align:middle}.emoji{height:1em}abbr,acronym{border-bottom:dotted 1px}a code{color:#337ab7}code,tt{background-color:#fafafa;border-radius:4px;font-size:85%;margin:0;padding:.2em 0}pre{background-color:#fafafa;border-radius:10px;border:1px solid #a4a4a4;font-size:85%;margin:20px;padding:10px;}pre code,pre tt{background:none}pre.language{counter-reset:line;max-height:265px;padding-top:30px;padding-bottom:0;overflow-x:hidden;}pre.language code,pre.language tt{display:block;position:relative;float:left;width:100%;border-left:45px solid #ddd;margin-left:-10px;padding-left:5px;}pre.language code:before,pre.language tt:before{counter-increment:line;content:counter(line);min-width:35px;float:left;text-align:right;padding-right:5px;color:#808080;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-user-select:none;margin-left:-45px}pre.language code:first-of-type,pre.language tt:first-of-type{padding-top:10px}pre.language code:last-child,pre.language tt:last-child{padding-bottom:10px}pre.language header{border-top-left-radius:4px;border-top-right-radius:4px;font-weight:bold;background:#fafafa;margin:-30px -10px 0 -10px;padding:5px 15px}pre.language.coffeescript header,pre.language.javascript header,pre.language.ruby header,pre.language.python header,pre.language.perl header,pre.language.cc header,pre.language.cpp header,pre.language.cs header,pre.language.java header,pre.language.jsp header,pre.language.groovy header,pre.language.php header,pre.language.bash header,pre.language.sql header,pre.language.makefile header{background:#f0ad4e}pre.language.json header,pre.language.cson header,pre.language.yaml header{background:#61b961}pre.language.handlebars header,pre.language.css header,pre.language.stylus header,pre.language.scss header,pre.language.less header,pre.language.markdown header{background:#76abca}ul.table-of-contents{max-width:100px;max-height:30px;overflow:hidden;position:fixed;top:51px;right:0;background:#ddd;padding:5px 15px;-webkit-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-moz-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-o-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;-ms-transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;transition:max-width 100ms ease 1.2s, max-height 1s ease 200ms;border-left:2px solid #999;border-bottom:2px solid #999;border-bottom-left-radius:10px;list-style-type:none;white-space:nowrap;z-index:100;}ul.table-of-contents:hover{max-width:285px;max-height:248px;-webkit-transition:max-width 100ms ease, max-height 1s ease 100ms;-moz-transition:max-width 100ms ease, max-height 1s ease 100ms;-o-transition:max-width 100ms ease, max-height 1s ease 100ms;-ms-transition:max-width 100ms ease, max-height 1s ease 100ms;transition:max-width 100ms ease, max-height 1s ease 100ms;overflow-y:auto}ul.table-of-contents header{background:#999;font-weight:bold;margin:-5px -15px;padding:5px 15px}ul.table-of-contents>li{padding-bottom:2px;padding-right:8px;}ul.table-of-contents>li:first-of-type{padding-top:10px}ul.table-of-contents a{color:#222}ul.table-of-contents li.sidebar{display:list-item}@media (min-width:768px){ul.table-of-contents li.sidebar{display:none}}div.detail,div.info,div.warning,div.alert{padding:30px 10px 6px 10px;margin:5px 0 8px 0;border-radius:3px;padding-left:60px;border-radius:18px;border-top-left-radius:0;}div.detail>p,div.info>p,div.warning>p,div.alert>p{margin-bottom:0}div.detail header,div.info header,div.warning header,div.alert header{font-weight:bold;position:absolute;margin-top:-30px;margin-left:-60px;padding:3px 20px 3px 10px;border-bottom-right-radius:18px}div:before{content:'\24D8';color:#666;position:absolute;font-size:28px;font-weight:900;padding-top:5px;margin-left:-50px}div.detail{background-color:#fafafa;border:2px solid #ddd;padding-top:0}div.info{background-color:#9f9;background-image:-webkit-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-moz-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-o-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:-ms-linear-gradient(top, #bfb 0%, #6d6 100%);background-image:linear-gradient(to bottom, #bfb 0%, #6d6 100%);border:2px solid #6d6;}div.info header{background-color:#6d6}div.info:before{content:'\24D8';text-shadow:0 -1px 0 #6d6}div.warning{background-color:#fc9;background-image:-webkit-linear-gradient(top, #f97 0%, #e86 100%);background-image:-moz-linear-gradient(top, #f97 0%, #e86 100%);background-image:-o-linear-gradient(top, #f97 0%, #e86 100%);background-image:-ms-linear-gradient(top, #f97 0%, #e86 100%);background-image:linear-gradient(to bottom, #f97 0%, #e86 100%);border:2px solid #e86;}div.warning header{background-color:#e86}div.warning:before{content:'\2605';text-shadow:0 -1px 0 #e86}div.alert{background-color:#f99;background-image:-webkit-linear-gradient(top, #faa 0%, #c00 100%);background-image:-moz-linear-gradient(top, #faa 0%, #c00 100%);background-image:-o-linear-gradient(top, #faa 0%, #c00 100%);background-image:-ms-linear-gradient(top, #faa 0%, #c00 100%);background-image:linear-gradient(to bottom, #faa 0%, #c00 100%);border:2px solid #c00;}div.alert header{background-color:#c00;color:#fff}div.alert:before{content:'\24D8';text-shadow:0 -1px 0 #c00}.cse .gsc-control-cse,.gsc-control-cse{padding:0 !important;}.cse .gsc-control-cse table tr,.gsc-control-cse table tr,.cse .gsc-control-cse table th,.gsc-control-cse table th,.cse .gsc-control-cse table td,.gsc-control-cse table td{border:0}.cse .gsc-control-cse .gsc-cursor-current-page,.gsc-control-cse .gsc-cursor-current-page{color:#fff !important}.cse .gsc-control-cse .gsc-webResult.gsc-result:hover,.gsc-control-cse .gsc-webResult.gsc-result:hover,.cse .gsc-control-cse .gsc-imageResult:hover,.gsc-control-cse .gsc-imageResult:hover{border-left:5px solid #337ab7;padding-left:3px}.cse .gsc-control-cse .gcsc-branding,.gsc-control-cse .gcsc-branding{display:none !important}.gsc-adBlock{display:none !important}@media print{.navbar-spacer,.table-of-contents,.sidebar{display:none}.main{left:0;width:100%}pre.language header{border-bottom:2px solid #999}}.text-red{color:#d13f19}.text-green{color:#2ecc40}.text-yellow{color:#ffdc00}.text-blue{color:#0074d9}.text-magenta{color:#f0f}.text-cyan{color:#0ff}.text-gray{color:#aaa}.bg-white{background-color:#fff}.center{text-align:center}.left{float:left}.right{float:right}.spacing{padding:10px}.hidden{display:none}@media (max-width:767px){.hidden-small{display:none}}@media (min-width:768px){.hidden-large{display:none}}</style>
+  </head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" /></head>
-<body>
-  <nav>
-<div class="logo"><a href="http://alinex.github.io"
-  onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'"
-  onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
-  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png"
-    width="150" title="Alinex Universe Homepage" />
-  </a>
-  <img src="http://alinex.github.io/images/Alinex-200.png"
-    style="display:none" alt="preloading" />
-</div>
-<div class="links">
-  <a href="http://alinex.github.io/blog"
-    class="btn btn-primary"><span class="glyphicon-pencil"></span> Blog</a>
-  <a href="http://alinex.github.io/develop"
-    class="btn btn-primary"><span class="glyphicon-book"></span> Develop</a>
-  <a href="http://alinex.github.io/code.html"
-    class="btn btn-warning"><span class="glyphicon-cog"></span> Code</a>
-</div>
-</nav><div id="sidebar_wrapper">
-    <div id="sidebar_switch">
-      <span class="tree">Files</span>
-      <span class="headings">Headings</span>
-    </div>
-    <div id="tree"></div>
-    <div id="headings">
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topnav" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="https://alinex.github.io/" onmouseover="logo.src='https://alinex.github.io/images/Alinex-200.png'" onmouseout="logo.src='https://alinex.github.io/images/Alinex-black-200.png'">
+  <img name="logo" src="https://alinex.github.io/images/Alinex-black-200.png" width="150" title="Alinex Homepage">
+</a>
+<img class="preload" src="https://alinex.github.io/images/Alinex-200.png" aria-hidden="true">
 
-      <div class="heading h1">
-        <a href="#array-validator">Array validator</a>
+        </div>
+        <div id="topnav" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://alinex.github.io/blog" class="btn btn-primary">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Blog
+  </a></li>
+<li><a href="https://alinex.github.io/develop" class="btn btn-primary">
+    <span class="glyphicon glyphicon-book" aria-hidden="true"></span> Develop
+  </a></li>
+<li><a href="https://alinex.github.io/code.html" class="btn btn-warning">
+    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Code
+  </a></li>
+
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input name="q" type="text" class="form-control" placeholder="Search...">
+          </form>
+          <ul class="nav sidebar-to-top">
+                <li class="level0">
+                  <a href="../../README.md.html" title="Alinex Validator: Readme (/README.md)" class="btn btn-primary">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="../index.coffee.html" title="Controller - API Usage (/src/index.coffee)" class="btn btn-primary">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="../helper/index.md.html" title="Schema Definition (/src/helper/index.md)" class="btn btn-primary">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)" class="btn btn-primary">References</a>
+                </li>
+                <li class="level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)" class="btn btn-primary">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="and.coffee.html" title="And (/src/type/and.coffee)" class="btn btn-primary">And</a>
+                </li>
+                <li class="level2">
+                  <a href="any.coffee.html" title="Any (/src/type/any.coffee)" class="btn btn-primary">Any</a>
+                </li>
+                <li class="active level2">
+                  <a href="array.coffee.html" title="Array (/src/type/array.coffee)" class="btn btn-warning">Array <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level2">
+                  <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)" class="btn btn-primary">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)" class="btn btn-primary">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)" class="btn btn-primary">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="email.coffee.html" title="Email (/src/type/email.coffee)" class="btn btn-primary">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="file.coffee.html" title="File (/src/type/file.coffee)" class="btn btn-primary">File</a>
+                </li>
+                <li class="level2">
+                  <a href="float.coffee.html" title="Float (/src/type/float.coffee)" class="btn btn-primary">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="function.coffee.html" title="Function (/src/type/function.coffee)" class="btn btn-primary">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)" class="btn btn-primary">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)" class="btn btn-primary">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="integer.coffee.html" title="Integer (/src/type/integer.coffee)" class="btn btn-primary">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="interval.coffee.html" title="Interval (/src/type/interval.coffee)" class="btn btn-primary">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)" class="btn btn-primary">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="object.coffee.html" title="Object (/src/type/object.coffee)" class="btn btn-primary">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="or.coffee.html" title="Or (/src/type/or.coffee)" class="btn btn-primary">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="percent.coffee.html" title="Percent (/src/type/percent.coffee)" class="btn btn-primary">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)" class="btn btn-primary">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)" class="btn btn-primary">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="string.coffee.html" title="String (/src/type/string.coffee)" class="btn btn-primary">String</a>
+                </li>
+                <li class="level2">
+                  <a href="url.coffee.html" title="URL (/src/type/url.coffee)" class="btn btn-primary">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="../../Changelog.md.html" title="Version changes (/Changelog.md)" class="btn btn-primary">Version changes</a>
+                </li>
+          </ul>
+        </div>
       </div>
+    </nav>
 
-      <div class="heading h2">
-        <a href="#node-modules">Node modules</a>
-      </div>
+    <div class="navbar-spacer"></div>
 
-      <div class="heading h2">
-        <a href="#type-implementation">Type implementation</a>
-      </div>
+    <div class="container-fluid">
+      <div class="row">
 
-    </div>
-  </div>
-  <div id="sidebar-toggle"></div>
-  <div id="container" tabindex="0"><a id="fork" href="https://github.com/alinex/node-validator" title="Fork me on GitHub"></a>
-    <div class="background highlight"></div>
-<table cellpadding="0" cellspacing="0">
-  <tbody>
-    
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="array-validator">
-  <h1>
-    <a href="#array-validator" name="array-validator" class="pilcrow"></a>
-Array validator
-  </h1>
-</div>
+        <div class="col-sm-9 col-sm-push-3 main">
+          <script>
+  (function() {
+    var cx = '010539487162786288372:chxqbheanxc';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchresults-only></gcse:searchresults-only>
 
-        </td>
-        <td class="code highlight">
-          
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-2" id="section-2"></a>
-</div>
+          <main><p><ul class="table-of-contents" aria-hidden="true"><header>Index</header>
+<li><a href="#schema-specification">Schema Specification</a></li>
+</ul>
+</p>
+<h1 id="array">Array</h1>
+<blockquote>
+<p>Path: <code>/src/type/array.coffee</code> compiled to <code>/lib/type/array.js</code></p>
+</blockquote>
+<p>A list of something.</p>
 <p>Sanitize options:</p>
 <ul>
 <li><code>delimiter</code> - allow value text with specified list separator
 (it can also be an regular expression)</li>
 </ul>
-<p>Check options:</p>
+<p><strong>Check options:</strong></p>
 <ul>
 <li><code>notEmpty</code> - set to true if an empty array is not valid</li>
 <li><code>minLength</code> - minimum number of entries</li>
 <li><code>maxLength</code> - maximum number of entries</li>
 <li><code>toArray</code> - convert scalar values into array</li>
 </ul>
-<p>Validating children:</p>
+<p><strong>Validating children:</strong></p>
 <ul>
-<li><code>èntries</code> - specification for all entries or as array for each element</li>
+<li><code>entries</code> - specification for all entries or as array for each element</li>
 </ul>
+<p><strong>Formatting options:</strong></p>
+<ul>
+<li>
+<p><code>format</code> - one of ‘simple’, ‘pretty’, ‘json’</p>
+<pre><code>data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
+# simple -&gt; &quot;1, 2, 3, a, [object Object], c,9&quot;
+# pretty -&gt; &quot;1, 2, 3, 'a', { b: 1 }, [ 'c', 9 ]&quot;
+# json -&gt; '[1,2,3,&quot;a&quot;,{&quot;b&quot;:1},[&quot;c&quot;,9]]'
+</code></pre>
+</li>
+</ul>
+<h2 id="schema-specification">Schema Specification</h2>
+<p><strong>Array</strong> is the array schema definitions.</p>
+<p>An  object with the following keys allowed: <code>delimiter</code>, <code>toArray</code>, <code>unique</code>, <code>notEmpty</code>, <code>minLength</code>, <code>maxLength</code>, <code>list</code>, <code>entries</code>, <code>format</code>, <code>title</code>, <code>description</code>, <code>key</code>, <code>type</code>, <code>optional</code>, <code>default</code>. The following entries have a specific format:</p>
+<dl>
+<dt><code>delimiter</code></dt>
+<dd>
+<p><strong>Delimiter</strong> is the delimiter to split given string into list.</p>
+<p>It has to be <strong>one of</strong> the following types (optional):</p>
+<ul>
+<li>
+<p><strong>Characters</strong> are the characters to be used as explicit delimiter.</p>
+<p>A text entry in which all control characters will be removed.</p>
+</li>
+<li>
+<p><strong>RegExp</strong> is the expression to split into list.</p>
+<p>An object which has to be an instance of class <code>RegExp</code>.</p>
+</li>
+</ul>
+</dd>
+<dt><code>toArray</code></dt>
+<dd>
+<p><strong>To Array</strong> is a flag to automatically pack other data into an array.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>unique</code></dt>
+<dd>
+<p><strong>Unique</strong> is a flag to remove duplicate entries in list.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>notEmpty</code></dt>
+<dd>
+<p><strong>Not Empty</strong> is a flag to not allow an empty list.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>minLength</code></dt>
+<dd>
+<p><strong>Minimum</strong> is the minimum number of elements in list.</p>
+<p>An integer value which is optional. The value should be greater than 0.</p>
+</dd>
+<dt><code>maxLength</code></dt>
+<dd>
+<p><strong>Maximum</strong> is the maximum number of elements in list.</p>
+<p>An integer value which is optional. The value should be greater than &lt;&lt;<minLength>&gt;&gt;.</p>
+</dd>
+<dt><code>list</code></dt>
+<dd>
+<p><strong>Specific Formats</strong> are the schema for each element.</p>
+<p>A list which is optional. Each entry has to be of type:</p>
+<blockquote>
+<p><strong>Element Format</strong> is the schema definition for a specific element.</p>
+<p>An  object with the following keys have to be present: <code>type</code>.</p>
+</blockquote>
+</dd>
+<dt><code>entries</code></dt>
+<dd>
+<p><strong>Element Format</strong> is the general schema definition for the entries.</p>
+<p>An object which is optional. The following keys have to be present: <code>type</code>.</p>
+</dd>
+<dt><code>format</code></dt>
+<dd>
+<p><strong>Format</strong> is the type of output format to use.</p>
+<p>A text entry which is optional. All control characters will be removed. Only the values: simple, pretty, json are allowed.</p>
+</dd>
+<dt><code>title</code></dt>
+<dd>
+<p><strong>Title</strong> is the title used to describe the element.</p>
+<p>A text entry which is optional. All control characters will be removed.</p>
+</dd>
+<dt><code>description</code></dt>
+<dd>
+<p><strong>Description</strong> is the free description of the element.</p>
+<p>A text entry which is optional. All control characters will be removed.</p>
+</dd>
+<dt><code>key</code></dt>
+<dd>
+<p><strong>Binding to Keyname</strong> is the mapping to which key names in an object this element belongs.</p>
+<p>A valid regular expression which is optional. It has to be <strong>one of</strong> the following types:</p>
+<ul>
+<li>An object which has to be an instance of class <code>RegExp</code>.</li>
+<li>A text entry in which all control characters will be removed. The text should match: /^/.<em>?/[gim]</em>$/.</li>
+</ul>
+</dd>
+<dt><code>type</code></dt>
+<dd>
+<p><strong>Type</strong> is the type of element.</p>
+<p>A text entry in which all control characters will be removed.</p>
+</dd>
+<dt><code>optional</code></dt>
+<dd>
+<p><strong>Optional</strong> is a flag defining if this element is optional.</p>
+<p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false. It’s optional.</p>
+</dd>
+<dt><code>default</code></dt>
+<dd>
+<p><strong>Default Value</strong> is the default value to use if nothing given.</p>
+<p>A list which is optional.</p>
+</dd>
+</dl>
+</main>
+        </div>
+        <div class="col-sm-3 col-cm-pull-9 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="header">
+              <a href="../../README.md.html">Alinex Validator</a>
+            </li>
+                <li class="level0">
+                  <a href="../../README.md.html" title="Alinex Validator: Readme (/README.md)">Readme</a>
+                </li>
+                <li class="level0">
+                  <a href="../index.coffee.html" title="Controller - API Usage (/src/index.coffee)">API Usage</a>
+                </li>
+                <li class="level1">
+                  <a href="../helper/index.md.html" title="Schema Definition (/src/helper/index.md)">Schema Definition</a>
+                </li>
+                <li class="level2">
+                  <a href="../helper/reference.coffee.html" title="References (/src/helper/reference.coffee)">References</a>
+                </li>
+                <li class="level1">
+                  <a href="index.md.html" title="Schema Types (/src/type/index.md)">Schema Types</a>
+                </li>
+                <li class="level2">
+                  <a href="and.coffee.html" title="And (/src/type/and.coffee)">And</a>
+                </li>
+                <li class="level2">
+                  <a href="any.coffee.html" title="Any (/src/type/any.coffee)">Any</a>
+                </li>
+                <li class="active level2">
+                  <a href="array.coffee.html" title="Array (/src/type/array.coffee)">Array <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="level2">
+                  <a href="boolean.coffee.html" title="Boolean (/src/type/boolean.coffee)">Boolean</a>
+                </li>
+                <li class="level2">
+                  <a href="byte.coffee.html" title="Byte (/src/type/byte.coffee)">Byte</a>
+                </li>
+                <li class="level2">
+                  <a href="datetime.coffee.html" title="Datetime (/src/type/datetime.coffee)">Datetime</a>
+                </li>
+                <li class="level2">
+                  <a href="email.coffee.html" title="Email (/src/type/email.coffee)">Email</a>
+                </li>
+                <li class="level2">
+                  <a href="file.coffee.html" title="File (/src/type/file.coffee)">File</a>
+                </li>
+                <li class="level2">
+                  <a href="float.coffee.html" title="Float (/src/type/float.coffee)">Float</a>
+                </li>
+                <li class="level2">
+                  <a href="function.coffee.html" title="Function (/src/type/function.coffee)">Function</a>
+                </li>
+                <li class="level2">
+                  <a href="handlebars.coffee.html" title="Handlebars (/src/type/handlebars.coffee)">Handlebars</a>
+                </li>
+                <li class="level2">
+                  <a href="hostname.coffee.html" title="Hostname (/src/type/hostname.coffee)">Hostname</a>
+                </li>
+                <li class="level2">
+                  <a href="integer.coffee.html" title="Integer (/src/type/integer.coffee)">Integer</a>
+                </li>
+                <li class="level2">
+                  <a href="interval.coffee.html" title="Interval (/src/type/interval.coffee)">Interval</a>
+                </li>
+                <li class="level2">
+                  <a href="ipaddr.coffee.html" title="IP Address (/src/type/ipaddr.coffee)">IP Address</a>
+                </li>
+                <li class="level2">
+                  <a href="object.coffee.html" title="Object (/src/type/object.coffee)">Object</a>
+                </li>
+                <li class="level2">
+                  <a href="or.coffee.html" title="Or (/src/type/or.coffee)">Or</a>
+                </li>
+                <li class="level2">
+                  <a href="percent.coffee.html" title="Percent (/src/type/percent.coffee)">Percent</a>
+                </li>
+                <li class="level2">
+                  <a href="port.coffee.html" title="TCP/UDP Ports (/src/type/port.coffee)">TCP/UDP Ports</a>
+                </li>
+                <li class="level2">
+                  <a href="regexp.coffee.html" title="RegExp (/src/type/regexp.coffee)">RegExp</a>
+                </li>
+                <li class="level2">
+                  <a href="string.coffee.html" title="String (/src/type/string.coffee)">String</a>
+                </li>
+                <li class="level2">
+                  <a href="url.coffee.html" title="URL (/src/type/url.coffee)">URL</a>
+                </li>
+                <li class="level0">
+                  <a href="../../Changelog.md.html" title="Version changes (/Changelog.md)">Version changes</a>
+                </li>
+          </ul>
+        </div>
 
-        </td>
-        <td class="code highlight">
-          
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="node-modules">
-  <h2>
-    <a href="#node-modules" name="node-modules" class="pilcrow"></a>
-Node modules
-  </h2>
-</div>
+      </div>
+    </div>
 
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'validator:array'</span>)
-chalk = <span class="hljs-built_in">require</span> <span class="hljs-string">'chalk'</span>
-async = <span class="hljs-built_in">require</span> <span class="hljs-string">'async'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-4" id="section-4"></a>
-</div>
-<p>alinex modules</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">util = <span class="hljs-built_in">require</span> <span class="hljs-string">'alinex-util'</span>
-{string, array} = util</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-5" id="section-5"></a>
-</div>
-<p>include classes and helper</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">check = <span class="hljs-built_in">require</span> <span class="hljs-string">'../check'</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap" id="type-implementation">
-  <h2>
-    <a href="#type-implementation" name="type-implementation" class="pilcrow"></a>
-Type implementation
-  </h2>
-</div>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">exports.describe = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  text = <span class="hljs-string">'A list. '</span>
-  text += check.optional.describe work
-  text = text.replace <span class="hljs-regexp">/\. It's/</span>, <span class="hljs-string">' which is'</span>
-  <span class="hljs-keyword">if</span> work.pos.notEmpty
-    text += <span class="hljs-string">"It's not allowed to be empty. "</span>
-  <span class="hljs-keyword">if</span> work.pos.delimiter?
-    text += <span class="hljs-string">"You may also give a text or RegExp using '<span class="hljs-subst">#{work.pos.delimiter}</span>'
-      as separator for the individual entries. "</span>
-  <span class="hljs-keyword">if</span> work.pos.unique?
-    text += <span class="hljs-string">"All values have to be unique. "</span>
-  <span class="hljs-keyword">if</span> work.pos.minLength? <span class="hljs-keyword">and</span> work.pos.maxLength?
-    text += <span class="hljs-string">"The number of entries have to be between <span class="hljs-subst">#{work.pos.minLength}</span>
-      and <span class="hljs-subst">#{work.pos.maxLength}</span>. "</span>
-  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.minLength?
-    text += <span class="hljs-string">"At least <span class="hljs-subst">#{work.pos.minLength}</span> elements should be given. "</span>
-  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.maxLength?
-    text += <span class="hljs-string">"Not more than <span class="hljs-subst">#{work.pos.maxLength}</span> elements are allowed. "</span>
-  async.parallel [
-    (cb) -&gt;
-      <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> work.pos.list?
-      subtext = <span class="hljs-string">"The following entries have a specific format:"</span>
-      max = work.pos.list.length - <span class="hljs-number">1</span>
-      async.map [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-7" id="section-7"></a>
-</div>
-<p>run subcheck</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">        check.describe work.goInto([<span class="hljs-string">'list'</span>, num]), <span class="hljs-function"><span class="hljs-params">(err, text)</span> -&gt;</span>
-          <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-          cb <span class="hljs-literal">null</span>, <span class="hljs-string">"\n- <span class="hljs-subst">#{num}</span>: <span class="hljs-subst">#{text.replace <span class="hljs-regexp">/\n/g</span>, <span class="hljs-string">'\n  '</span>}</span>"</span>
-      , <span class="hljs-function"><span class="hljs-params">(err, results)</span> -&gt;</span>
-        <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-        cb <span class="hljs-literal">null</span>, subtext + results.join(<span class="hljs-string">''</span>) + <span class="hljs-string">'\n'</span>
-    (cb) -&gt;
-      <span class="hljs-keyword">return</span> cb() <span class="hljs-keyword">unless</span> work.pos.entries?
-      subtext = <span class="hljs-string">"And all other entries have to be:\n- "</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-8" id="section-8"></a>
-</div>
-<p>run subcheck</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">      check.describe work.goInto([<span class="hljs-string">'entries'</span>]), <span class="hljs-function"><span class="hljs-params">(err, text)</span> -&gt;</span>
-        <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-        cb <span class="hljs-literal">null</span>, subtext + (text.replace <span class="hljs-regexp">/\n/g</span>, <span class="hljs-string">'\n  '</span>) + <span class="hljs-string">'\n'</span>
-  ], <span class="hljs-function"><span class="hljs-params">(err, results)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err
-    <span class="hljs-keyword">if</span> work.pos.format?
-      text += <span class="hljs-string">"The value will be formatted as <span class="hljs-subst">#{work.pos.format}</span> list. "</span>
-    cb <span class="hljs-literal">null</span>, (text + results.join <span class="hljs-string">''</span>).trim() + <span class="hljs-string">' '</span>
-
-exports.run = <span class="hljs-function"><span class="hljs-params">(work, cb)</span> -&gt;</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> with <span class="hljs-subst">#{util.inspect work.value}</span> as <span class="hljs-subst">#{work.pos.type}</span>"</span>
-  debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> <span class="hljs-subst">#{chalk.grey util.inspect work.pos}</span>"</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-9" id="section-9"></a>
-</div>
-<p>base checks</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">try</span>
-    <span class="hljs-keyword">if</span> check.optional.run work
-      debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-      <span class="hljs-keyword">return</span> cb()
-  <span class="hljs-keyword">catch</span> error
-    <span class="hljs-keyword">return</span> work.report error, cb
-  value = work.value</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-10" id="section-10"></a>
-</div>
-<p>string to array</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> value <span class="hljs-keyword">is</span> <span class="hljs-string">'string'</span> <span class="hljs-keyword">and</span> work.pos.delimiter?
-    del = string.toRegExp work.pos.delimiter
-    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> use delimiter <span class="hljs-subst">#{<span class="hljs-keyword">typeof</span> del}</span> <span class="hljs-subst">#{util.inspect del}</span>"</span>
-    work.value = value = value.split del
-  <span class="hljs-keyword">if</span> work.pos.toArray <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> Array.isArray value
-    work.value = value = [value]</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-11" id="section-11"></a>
-</div>
-<p>is array</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">unless</span> Array.isArray value
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"The value has to be an array"</span>), cb
-  <span class="hljs-keyword">if</span> work.pos.unique
-    value = array.unique value</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-12" id="section-12"></a>
-</div>
-<p>not empty</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.notEmpty <span class="hljs-keyword">and</span> value.length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"An empty array/list is not allowed"</span>), cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-13" id="section-13"></a>
-</div>
-<p>min/macLength</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">if</span> work.pos.minLength? <span class="hljs-keyword">and</span> work.pos.minLength <span class="hljs-keyword">is</span> work.pos.maxLength <span class="hljs-keyword">and</span> (
-    value.length <span class="hljs-keyword">isnt</span> work.pos.minLength)
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"Exactly <span class="hljs-subst">#{work.pos.minLength}</span> entries are required"</span>), cb
-  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.minLength? <span class="hljs-keyword">and</span> work.pos.minLength &gt; value.length
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"At least <span class="hljs-subst">#{work.pos.minLength}</span> entries are required as list"</span>), cb
-  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.maxLength? <span class="hljs-keyword">and</span> work.pos.maxLength &lt; value.length
-    <span class="hljs-keyword">return</span> work.report (<span class="hljs-keyword">new</span> Error <span class="hljs-string">"Not more than <span class="hljs-subst">#{work.pos.maxLength}</span> entries
-    are allowed as list"</span>), cb</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-14" id="section-14"></a>
-</div>
-<p>values</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">  <span class="hljs-keyword">unless</span> value.length</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-15" id="section-15"></a>
-</div>
-<p>done return resulting value</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-    <span class="hljs-keyword">return</span> cb <span class="hljs-literal">null</span>, value
-  max = value.length - <span class="hljs-number">1</span>
-  async.map [<span class="hljs-number">0.</span>.max], <span class="hljs-function"><span class="hljs-params">(num, cb)</span> -&gt;</span></pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-16" id="section-16"></a>
-</div>
-<p>find sub-check</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.list?[num]?
-      sub = work.goInto [<span class="hljs-string">'list'</span>, num], [num]
-    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> work.pos.entries?
-      sub = work.goInto [<span class="hljs-string">'entries'</span>], [num]
-    <span class="hljs-keyword">else</span>
-      name = work.spec.name ? <span class="hljs-string">'value'</span>
-      path = work.path.concat num
-      name += <span class="hljs-string">"/<span class="hljs-subst">#{path.join <span class="hljs-string">'/'</span>}</span>"</span>
-      sub = work.goInto <span class="hljs-literal">null</span>, [num]
-      sub.spec.schema =
-        type: <span class="hljs-keyword">switch</span>
-          <span class="hljs-keyword">when</span> Array.isArray value[num]
-            <span class="hljs-string">'array'</span>
-          <span class="hljs-keyword">when</span> <span class="hljs-keyword">typeof</span> value[num] <span class="hljs-keyword">is</span> <span class="hljs-string">'object'</span>
-            <span class="hljs-string">'object'</span>
-          <span class="hljs-keyword">else</span>
-            <span class="hljs-string">'any'</span>
-        optional: <span class="hljs-literal">true</span>
-      sub.path = []
-      sub.pos = sub.spec.schema
-    check.run sub, cb
-  , <span class="hljs-function"><span class="hljs-params">(err, value)</span> -&gt;</span>
-    <span class="hljs-keyword">return</span> cb err <span class="hljs-keyword">if</span> err</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-17" id="section-17"></a>
-</div>
-<p>format value</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    <span class="hljs-keyword">if</span> work.pos.format
-      <span class="hljs-keyword">switch</span> work.pos.format
-        <span class="hljs-keyword">when</span> <span class="hljs-string">'simple'</span>
-          value = value.join <span class="hljs-string">', '</span>
-        <span class="hljs-keyword">when</span> <span class="hljs-string">'pretty'</span>
-          value = value.map(<span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span> util.inspect e).join <span class="hljs-string">', '</span>
-        <span class="hljs-keyword">when</span> <span class="hljs-string">'json'</span>
-          value = JSON.stringify value</pre>
-        </td>
-      </tr>
-    
-      <tr>
-        <td class="docs">
-          <div class="pilwrap">
-  <a class="pilcrow" href="#section-18" id="section-18"></a>
-</div>
-<p>done return resulting value</p>
-
-        </td>
-        <td class="code highlight">
-          <pre class="coffeescript">    debug <span class="hljs-string">"<span class="hljs-subst">#{work.debug}</span> result <span class="hljs-subst">#{util.inspect value ? <span class="hljs-literal">null</span>}</span>"</span>
-    cb <span class="hljs-literal">null</span>, value
-
-exports.selfcheck = <span class="hljs-function"><span class="hljs-params">(schema, cb)</span> -&gt;</span>
-  check.run
-    schema:
-      type: <span class="hljs-string">'object'</span>
-      allowedKeys: <span class="hljs-literal">true</span>
-      keys: util.extend util.clone(check.base),
-        default:
-          type: <span class="hljs-string">'array'</span>
-          optional: <span class="hljs-literal">true</span>
-        delimiter:
-          type: <span class="hljs-string">'or'</span>
-          optional: <span class="hljs-literal">true</span>
-          or: [
-            type: <span class="hljs-string">'string'</span>
-          ,
-            type: <span class="hljs-string">'object'</span>
-            instanceOf: RegExp
-          ]
-        toArray:
-          type: <span class="hljs-string">'boolean'</span>
-          optional: <span class="hljs-literal">true</span>
-        unique:
-          type: <span class="hljs-string">'boolean'</span>
-          optional: <span class="hljs-literal">true</span>
-        notEmpty:
-          type: <span class="hljs-string">'boolean'</span>
-          optional: <span class="hljs-literal">true</span>
-        minLength:
-          type: <span class="hljs-string">'integer'</span>
-          optional: <span class="hljs-literal">true</span>
-          min: <span class="hljs-number">0</span>
-        maxLength:
-          type: <span class="hljs-string">'integer'</span>
-          optional: <span class="hljs-literal">true</span>
-          min: <span class="hljs-string">'&lt;&lt;&lt;minLength&gt;&gt;&gt;'</span>
-        list:
-          type: <span class="hljs-string">'or'</span>
-          optional: <span class="hljs-literal">true</span>
-          or: [
-            type: <span class="hljs-string">'object'</span>
-          ,
-            type: <span class="hljs-string">'array'</span>
-          ]
-        entries:
-          type: <span class="hljs-string">'any'</span>
-          optional: <span class="hljs-literal">true</span>
-        format:
-          type: <span class="hljs-string">'string'</span>
-          values: [<span class="hljs-string">'simple'</span>, <span class="hljs-string">'pretty'</span>, <span class="hljs-string">'json'</span>]
-    value: schema
-  , cb</pre>
-        </td>
-      </tr>
-    
-  </tbody>
-</table>
-
-  </div>
-</body>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script type="text/javascript"><!--
+    $(".table-of-contents").bind("mouseleave", function(event) { $(".table-of-contents").scrollTop(0); });
+    //--></script>
+  </body>
 </html>
