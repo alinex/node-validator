@@ -4,6 +4,12 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.0.1 (2016-09-29)
+-------------------------------------------------
+- Add debug information in documentation.
+- Add automatic schema testing befor checking if in debug mode.
+- Optimize debug calls when not used.
+
 Version 2.0.0 (2016-09-27)
 -------------------------------------------------
 New internal structure with slightly optimized checks, and rename of toString option to makeString.
