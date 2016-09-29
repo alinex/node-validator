@@ -11,6 +11,7 @@ uses more cpu performance.
 # Node modules
 # -------------------------------------------------
 debug = require('debug')('validator')
+chalk = require 'chalk'
 deasync = require 'deasync'
 # alinex packages
 util = require 'alinex-util'
@@ -115,9 +116,16 @@ exports.check = (spec, cb) ->
   name = spec.name ? 'value'
   schema = util.clone spec.schema
   schema.title ?= "'unnamed schema'"
-  debug "#{name} initialize to check as #{schema.title}" if debug.enabled
   value = util.clone spec.value
+  # check schema on debug
+  if debug.enabled and not spec.selfcheck
+    try
+      debug chalk.grey "#{name} check schema"
+      exports.selfcheckSync schema
+    catch error
+      debug chalk.magenta "#{name} schema not valid: #{error.message}"
   # instantiate new object
+  debug "#{name} initialize to check as #{schema.title}" if debug.enabled
   worker = new Worker name, schema, spec.context, value
   # run the check
   worker.check (err) ->
@@ -177,6 +185,7 @@ exports.selfcheck = (schema, cb) ->
     name: 'schema'
     schema: Worker.load(schema.type).selfcheck
     value: schema
+    selfcheck: true
   , cb
 
 ###

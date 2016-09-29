@@ -302,7 +302,8 @@ read = (list, path, worker, cb, last, data) ->
   handler[type] proto, loc, data, path, worker, (err, result) ->
     if err
       if debug.enabled
-        debug chalk.magenta "/#{path} #{proto}://#{loc} -> failed: #{err.message}".replace /\n/, '\\n'
+        debug chalk.magenta "/#{path} #{proto}://#{loc} -> failed:
+        #{err.message}".replace /\n/, '\\n'
       return cb err
     unless result # no result so stop this uri
       if list.length and debug.enabled # more to do

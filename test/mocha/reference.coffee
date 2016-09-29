@@ -712,6 +712,7 @@ describe "References", ->
         cb()
 
   describe "integration", ->
+    @timeout 4000
 
     it "should call references in values", (cb) ->
       test.equal
