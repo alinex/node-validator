@@ -77,10 +77,10 @@ exports.check = (cb) ->
     return @sendError "The given value is no integer as needed", cb
   # compile if handlebars syntax found
   if @value.match /\{\{.*?\}\}/
-    @debug "#{@name}: compile handlebars"
+    @debug "#{@name}: compile handlebars" if @debug.enabled
     template = handlebars.compile @value
     fn = (context) =>
-      @debug "#{@name}: execute template with #{util.inspect context}"
+      @debug "#{@name}: execute template with #{util.inspect context}" if @debug.enabled
       return template context
   else
     v = @value

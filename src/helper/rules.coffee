@@ -53,11 +53,11 @@ exports.optional =
     return false unless isEmpty @value # go on if value given
     if @schema.default? # use default and go on
       @value = @schema.default
-      @debug chalk.grey "#{@name}: use default #{@inspectValue()}"
+      @debug chalk.grey "#{@name}: use default #{@inspectValue()}" if @debug.enabled
       return false
     if @schema.optional # end this test without value
       delete @value
-      @debug chalk.grey "#{@name}: result #{@inspectValue()}"
+      @debug chalk.grey "#{@name}: result #{@inspectValue()}" if @debug.enabled
       return true
     @sendError "A value is needed", (err) ->
       err

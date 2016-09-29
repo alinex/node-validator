@@ -52,12 +52,12 @@ exports.describe = (spec, cb) ->
   name = spec.name ? 'value'
   schema = util.clone spec.schema
   schema.title ?= "'unnamed schema'"
-  debug "#{name} initialize to describe #{schema.title}"
+  debug "#{name} initialize to describe #{schema.title}" if debug.enabled
   # instantiate new object
   worker = new Worker name, schema, spec.context
   # run the check
   worker.describe (err, text) ->
-    debug "#{name}: failed with: #{err.message}" if err
+    debug "#{name}: failed with: #{err.message}" if err and debug.enabled
     cb err, text
 
 ###
@@ -115,16 +115,17 @@ exports.check = (spec, cb) ->
   name = spec.name ? 'value'
   schema = util.clone spec.schema
   schema.title ?= "'unnamed schema'"
-  debug "#{name} initialize to check as #{schema.title}"
+  debug "#{name} initialize to check as #{schema.title}" if debug.enabled
   value = util.clone spec.value
   # instantiate new object
   worker = new Worker name, schema, spec.context, value
   # run the check
   worker.check (err) ->
-    debug if err
-      "#{name}: failed with: #{err.message}"
-    else
-      "#{name}: succeeded"
+    if debug.enabled
+      debug if err
+        "#{name}: failed with: #{err.message}"
+      else
+        "#{name}: succeeded"
     cb err, worker.value
 
 ###

@@ -48,9 +48,9 @@ class Worker
       try
         Worker.lib[type] = require "../type/#{type}"
         Worker.lib[type].debug = Debug "validator:#{type}"
-        debug "loaded #{type} check library"
+        debug "loaded #{type} check library" if debug.enabled
       catch error
-        debug chalk.magenta error.message
+        debug chalk.magenta error.message if debug.enabled
         throw new Error "Could not load library for '#{type}' type at #{name}"
     Worker.lib[type]
 
@@ -186,10 +186,11 @@ class Worker
   sendError: (msg, cb) =>
     err = new Error "#{msg} at validation of #{@name}"
     err.worker = this
-    @debug chalk.magenta msg
-    @debug chalk.grey "  validation of #{@name}"
-    @debug chalk.grey "  value: #{@inspectValue.call this}"
-    @debug chalk.grey "  schema: #{@inspectSchema.call this}"
+    if @debug.enabled
+      @debug chalk.magenta msg
+      @debug chalk.grey "  validation of #{@name}"
+      @debug chalk.grey "  value: #{@inspectValue.call this}"
+      @debug chalk.grey "  schema: #{@inspectSchema.call this}"
     cb err
 
   # End check with success.

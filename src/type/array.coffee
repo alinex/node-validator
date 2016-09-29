@@ -115,7 +115,7 @@ exports.check = (cb) ->
   # string to array
   if typeof @value is 'string' and @schema.delimiter?
     del = string.toRegExp @schema.delimiter
-    @debug "#{@name}: use delimiter #{typeof del} #{util.inspect del}"
+    @debug "#{@name}: use delimiter #{typeof del} #{util.inspect del}" if @debug.enabled
     @value = @value.split del
   if @schema.toArray and not Array.isArray @value
     @value = [@value]

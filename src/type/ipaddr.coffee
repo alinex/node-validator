@@ -141,7 +141,7 @@ exports.check = (cb) ->
     if @schema.version is 'ipv4'
       if ip.kind() is 'ipv6'
         if ip.isIPv4MappedAddress() and @schema.ipv4Mapping
-          @debug "#{@name}: convert to ipv4"
+          @debug "#{@name}: convert to ipv4" if @debug.enabled
           ip = ip.toIPv4Address()
         else
           return @sendError "The given value is no valid IPv#{@schema.version} address", cb
@@ -149,7 +149,7 @@ exports.check = (cb) ->
       if ip.kind() is 'ipv4'
         unless @schema.ipv4Mapping
           return @sendError "The given value is no valid IPv#{@schema.version} address", cb
-        @debug "#{@name}: convert to ipv4mapped"
+        @debug "#{@name}: convert to ipv4mapped" if @debug.enabled
         ip = ip.toIPv4MappedAddress()
   @value = if ip.kind() is 'ipv6'
     if @schema.format is 'long'

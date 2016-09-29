@@ -101,7 +101,8 @@ exports.check = (cb) ->
     # check server
     getMyIP (err, ip) =>
       if err
-        @debug chalk.magenta "#{@name}: could not detect own ip address"
+        if @debug.enabled
+          @debug chalk.magenta "#{@name}: could not detect own ip address"
         return @sendSuccess cb
       # find mx records
       dns ?= require 'dns'
@@ -215,7 +216,8 @@ checkMailServer = (list, ip, cb) ->
     return cb new Error "No correct responding mail server could be detected for this domain"
   net = require 'net'
   async.detect list, (domain, cb) =>
-    @debug chalk.grey "#{@name}: check mail server under #{domain}"
+    if @debug.enabled
+      @debug chalk.grey "#{@name}: check mail server under #{domain}"
     res = ''
     client = net.connect
       port: 25
@@ -226,9 +228,11 @@ checkMailServer = (list, ip, cb) ->
     client.on 'data', (data) ->
       res += data.toString()
     client.on 'error', (err) =>
-      @debug chalk.magenta err
+      if @debug.enabled
+        @debug chalk.magenta err
     client.on 'end', =>
-      @debug chalk.grey l for l in res.split /\n/
+      if @debug.enabled
+        @debug chalk.grey l for l in res.split /\n/
       cb null, res?.length > 0
   , (err, res) ->
     return cb() if res
@@ -239,10 +243,10 @@ checkBlacklisted = (list, ip, cb) ->
   loadDnsbl (err) =>
     return cb err if err
     async.each list, (host, cb) =>
-      @debug chalk.gray "#{@name}: check #{host} in blacklists"
+      @debug chalk.gray "#{@name}: check #{host} in blacklists" if @debug.enabled
       dns.resolve host, (err, addresses) =>
         if err
-          @debug chalk.magenta err.message
+          @debug chalk.magenta err.message if @debug.enabled
           return cb()
         # each address
         async.each addresses, (address, cb) ->
@@ -266,10 +270,10 @@ checkGraylistes = (list, ip, cb) ->
   loadDnsgl (err) =>
     return cb err if err
     async.each list, (host, cb) =>
-      @debug chalk.gray "#{@name}: check #{host} in graylists"
+      @debug chalk.gray "#{@name}: check #{host} in graylists" if @debug.enabled
       dns.resolve host, (err, addresses) =>
         if err
-          @debug chalk.magenta err.message
+          @debug chalk.magenta err.message if @debug.enabled
           return cb()
         # each address
         async.each addresses, (address, cb) ->

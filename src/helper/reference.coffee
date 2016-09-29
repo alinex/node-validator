@@ -164,7 +164,7 @@ exports.replace = (value, worker, cb, clone = false) ->
 # @param {Function(Error, value)} cb callback which is called with resulting value
 multiple = (value, path, worker, cb) ->
   path = path[1..] if path[0] is '/'
-  debug "/#{path} replace #{util.inspect value}..."
+  debug "/#{path} replace #{util.inspect value}..." if debug.enabled
   list = value.split /(<<<[^]*?>>>)/
   list = [list[1]] if list.length is 3 and list[0] is '' and list[2] is ''
   # step over multiple references
@@ -176,11 +176,13 @@ multiple = (value, path, worker, cb) ->
     return cb err if err
     # reference only value
     if results.length is 1
-      debug "/#{path} #{util.inspect value} is replaced by #{util.inspect results[0]}"
+      if debug.enabled
+        debug "/#{path} #{util.inspect value} is replaced by #{util.inspect results[0]}"
       return cb null, results[0]
     # combine reference together
     result = results.join ''
-    debug "/#{path} #{util.inspect value} is replaced by #{util.inspect result}"
+    if debug.enabled
+      debug "/#{path} #{util.inspect value} is replaced by #{util.inspect result}"
     cb null, result
 
 # Resolve alternative sources which are separated by ` | ` and the first possible
@@ -194,7 +196,8 @@ multiple = (value, path, worker, cb) ->
 # - `checked` the list of validated entries
 # @param {Function(Error, value)} cb callback which is called with resulting value
 alternatives = (value, path, worker, cb) ->
-  debug chalk.grey "/#{path} resolve #{util.inspect value}..."
+  if debug.enabled
+    debug chalk.grey "/#{path} resolve #{util.inspect value}..."
   first = true
   async.map value.split(/\s+\|\s+/), (alt, cb) ->
     # automatically set first element to `struct` if no other protocol set
@@ -205,12 +208,14 @@ alternatives = (value, path, worker, cb) ->
     .split /#/
     # return default value
     if list.length is 1 and not ~alt.indexOf '://'
-      debug chalk.grey "/#{path} #{alt} -> use as default value".replace /\n/, '\\n'
+      if debug.enabled
+        debug chalk.grey "/#{path} #{alt} -> use as default value".replace /\n/, '\\n'
       return cb null, alt
     # read value from given uri parts
     read list, path, worker, (err, result) ->
       return cb err if err
-      debug chalk.grey "/#{path} #{alt} -> #{util.inspect result}".replace /\n/, '\\n'
+      if debug.enabled
+        debug chalk.grey "/#{path} #{alt} -> #{util.inspect result}".replace /\n/, '\\n'
       cb null, result
   , (err, results) ->
     return cb err if err
@@ -277,8 +282,9 @@ read = (list, path, worker, cb, last, data) ->
     (typeof data isnt 'string' and proto in ['split', 'match', 'parse']) or
     (typeof data isnt 'object' and proto is 'object')
     )
-      debug chalk.magenta "/#{path} stop at part #{proto}://#{loc} because wrong
-      result type".replace /\n/, '\\n'
+      if debug.enabled
+        debug chalk.magenta "/#{path} stop at part #{proto}://#{loc} because wrong
+        result type".replace /\n/, '\\n'
       return cb()
   proto = proto.toLowerCase()
   # find type handler
@@ -290,17 +296,19 @@ read = (list, path, worker, cb, last, data) ->
   if last? and typePrecedence[type] > typePrecedence[last?]
     return cb new Error "#{type}-reference can not be called from #{last}-reference
     for security reasons"
-  debug chalk.grey "/#{path} evaluating #{proto}://#{loc}".replace /\n/, '\\n'
+  if debug.enabled
+    debug chalk.grey "/#{path} evaluating #{proto}://#{loc}".replace /\n/, '\\n'
   # run type handler and return if nothing found
   handler[type] proto, loc, data, path, worker, (err, result) ->
     if err
-      debug chalk.magenta "/#{path} #{proto}://#{loc} -> failed: #{err.message}".replace /\n/, '\\n'
+      if debug.enabled
+        debug chalk.magenta "/#{path} #{proto}://#{loc} -> failed: #{err.message}".replace /\n/, '\\n'
       return cb err
     unless result # no result so stop this uri
-      if list.length # more to do
+      if list.length and debug.enabled # more to do
         debug chalk.grey "/#{path} #{proto}://#{loc} -> undefined".replace /\n/, '\\n'
       return cb()
-    if list.length # more to do
+    if list.length and debug.enabled # more to do
       debug chalk.grey "/#{path} #{proto}://#{loc} -> #{util.inspect result}".replace /\n/, '\\n'
     # no reference in result
     return cb null, result unless list.length # stop if last entry of uri path
@@ -331,12 +339,12 @@ pathSearch = (loc, path = '', data, worker, cb) ->
     cb null, result
   , (err, result) ->
     if err
-      debug chalk.magenta "/#{path} has a circular reference at #{q}"
+      debug chalk.magenta "/#{path} has a circular reference at #{q}" if debug.enabled
       return cb err
     if result
-      debug chalk.grey "/#{path} succeeded data read at #{q}"
+      debug chalk.grey "/#{path} succeeded data read at #{q}" if debug.enabled
       return cb null, result
-    debug chalk.grey "/#{path} failed data read at #{q}"
+    debug chalk.grey "/#{path} failed data read at #{q}" if debug.enabled
     # search neighbors by sub call on parent
     if ~path.indexOf '/'
       return pathSearch loc, fspath.dirname(path), data, worker, cb

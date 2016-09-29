@@ -153,7 +153,7 @@ find = (value, cb) ->
     return @sendError "Wrong find option, array is needed for file validation", cb
   # search in list
   async.map search, (dir, cb) =>
-    @debug "#{@name}: search in #{dir}"
+    @debug "#{@name}: search in #{dir}" if @debug.enabled
     fs.find dir,
       filter:
         include: @value
@@ -183,17 +183,17 @@ filetype = (value, cb) ->
     switch @schema.filetype
       when 'file', 'f'
         return cb() if stats.isFile()
-        @debug "#{@name}: skip #{value} because not a file entry"
+        @debug "#{@name}: skip #{value} because not a file entry" if @debug.enabled
       when 'directory', 'dir', 'd'
         return cb() if stats.isDirectory()
-        @debug "#{@name}: skip #{value} because not a directory entry"
+        @debug "#{@name}: skip #{value} because not a directory entry" if @debug.enabled
       when 'link', 'l'
         return cb() if stats.isSymbolicLink()
-        @debug "#{@name}: skip #{value} because not a link entry"
+        @debug "#{@name}: skip #{value} because not a link entry" if @debug.enabled
       when 'fifo', 'pipe', 'p'
         return cb() if stats.isFIFO()
-        @debug "#{@name}: skip #{value} because not a FIFO entry"
+        @debug "#{@name}: skip #{value} because not a FIFO entry" if @debug.enabled
       when 'socket', 's'
         return cb() if stats.isSocket()
-        @debug "#{@name}: skip #{value} because not a socket entry"
+        @debug "#{@name}: skip #{value} because not a socket entry" if @debug.enabled
     @sendError "The given file is not a #{@schema.filetype} entry", cb
