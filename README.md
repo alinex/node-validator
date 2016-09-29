@@ -132,6 +132,24 @@ validator.selfcheck
 ```
 
 
+Debugging
+-------------------------------------------------
+If you have any problems you may debug the code with the predefined flags. It uses
+the debug module to let you define what to debug.
+
+Call it with the DEBUG environment variable set to the types you want to debug.
+The most valueable flags will be:
+
+    DEBUG=validator           # general information and checking schema
+    DEBUG=validator:array     # to check the array type validation
+    DEBUG=validator:reference # to check the reference resolving
+
+You can also combine them using comma or use only DEBUG=* to show all.
+
+Additional value checking will be done if the debugging for the general `validator`
+is enabled.
+
+
 License
 -------------------------------------------------
 
