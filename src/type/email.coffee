@@ -238,6 +238,12 @@ checkMailServer = (list, ip, cb) ->
     return cb() if res
     cb new Error "No correct responding mail server could be detected for this domain"
 
+# Check list of addresses against blacklists and fails if at least one is found in
+# any blacklist.
+#
+# @param {Array<String>} list ip addresses to check
+# @param {String} ip own ip address to use on calls
+# @param {Function(<Error>)} cb callback which will get an error if on a list
 checkBlacklisted = (list, ip, cb) ->
   return cb() unless @schema.denyBlacklisted
   loadDnsbl (err) =>
@@ -265,6 +271,12 @@ checkBlacklisted = (list, ip, cb) ->
         , cb
     , cb
 
+# Check list of addresses against graylists and fails if at least one is found in
+# any graylist.
+#
+# @param {Array<String>} list ip addresses to check
+# @param {String} ip own ip address to use on calls
+# @param {Function(<Error>)} cb callback which will get an error if on a list
 checkGraylistes = (list, ip, cb) ->
   return cb() unless @schema.denyGraylisted
   loadDnsgl (err) =>
@@ -292,6 +304,9 @@ checkGraylistes = (list, ip, cb) ->
         , cb
     , cb
 
+# Load blacklist from file if not done, yet.
+#
+# @param {Function} cb callback is called after blacklist is loaded
 loadDnsbl = (cb) ->
   return cb() if dnsbl
   # load blacklist
@@ -304,6 +319,9 @@ loadDnsbl = (cb) ->
       dnsbl = data
       cb()
 
+# Load graylist from file if not done, yet.
+#
+# @param {Function} cb callback is called after blacklist is loaded
 loadDnsgl = (cb) ->
   return cb() if dnsgl
   # load blacklist
