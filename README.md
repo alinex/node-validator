@@ -31,7 +31,6 @@ Alinex Validator: Readme
   https://img.shields.io/github/issues/alinex/node-validator.svg?maxAge=2592000)](
   https://github.com/alinex/node-validator/issues)<!-- {.hidden-small} -->
 
-
 This module will help validating complex structures. And should be used on all
 external information.
 
