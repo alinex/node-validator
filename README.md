@@ -55,7 +55,7 @@ type you get a ready to use handlebar function back.
 > following the code standards defined in the [General Docs](https://alinex.github.io/develop).
 
 __Read the complete documentation under
-[https://alinex.github.io/node-codedoc](https://alinex.github.io/node-codedoc).__
+[https://alinex.github.io/node-validator](https://alinex.github.io/node-validator).__
 <!-- {p: .hidden} -->
 
 
