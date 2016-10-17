@@ -158,13 +158,12 @@ exports.check = (cb) ->
         optional: true
       , @value[num]
     # run the check on the named entry
-    async.setImmediate =>
-      worker.check (err) =>
-        return cb err if err
-        @value[num] = worker.value
-        cb()
-  , (err) =>
+    async.setImmediate ->
+      worker.check (err) ->
+        cb err, worker.value
+  , (err, result) =>
     return cb err if err
+    @value = result
     # format value
     if @schema.format
       switch @schema.format
