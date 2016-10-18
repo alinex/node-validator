@@ -237,15 +237,15 @@ exports.describe = (cb) ->
       # help for pattern matched key names
       return cb() unless @schema.entries?
       if @schema.keys
-        detail = "And all other keys have to be: "
+        detail = "And all other keys are: "
       else
-        detail = "The entries have to be: "
+        detail = "The entries are: "
       async.map [0..@schema.entries.length-1], (num, cb) =>
         rule = @schema.entries[num]
         if rule.key?
           ruletext = "\n- matching #{rule.key}: "
         else
-          ruletext = "\n- other keys: "
+          ruletext = "\n- any key: "
         # subchecks with new sub worker
         worker = @sub "#{@name}##{num}", @schema.entries[num]
         worker.describe (err, subtext) ->
