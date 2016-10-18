@@ -4,6 +4,14 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.0.2 (2016-10-18)
+-------------------------------------------------
+- Optimize array validation.
+- Fix documentation link.
+- Small docu fix.
+- Remove unneccessary entry in docignore.
+- Add missing internal documentation.
+
 Version 2.0.1 (2016-09-29)
 -------------------------------------------------
 - Add debug information in documentation.
