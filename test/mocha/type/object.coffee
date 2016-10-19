@@ -66,7 +66,7 @@ describe "Object", ->
       test.same schema, [{one: 1, two: 2}], ->
         test.fail schema, [{one: 1, two: 2, three: 3}], cb
 
-    it "should support mandatoryKeys option", (cb) ->
+    it "should support mandatoryKeys all mandatory option", (cb) ->
       schema.mandatoryKeys = true
       schema.keys =
         one:
@@ -79,9 +79,19 @@ describe "Object", ->
       test.same schema, [{one: 1, two: 2, three: 3, test1: 1}], ->
         test.fail schema, [{one: 1, three: 3}], cb
 
-    it "should support mandatoryKeys list option", (cb) ->
+    it "should support mandatoryKeys list mandatory option", (cb) ->
       schema.mandatoryKeys = ['three']
-      test.same schema, [{one: 1, two: 2, three: 3}], ->
+      schema.keys =
+        one:
+          type: 'integer'
+        two:
+          type: 'integer'
+        three:
+          type: 'integer'
+      test.same schema, [
+        {one: 1, two: 2, three: 3}
+        {one: 1, three: 3}
+      ], ->
         test.fail schema, [{one: 1, two: 2}], ->
           schema.mandatoryKeys = [/test\d/]
           test.fail schema, [{one: 1, two: 2}], cb

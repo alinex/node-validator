@@ -13,8 +13,8 @@ Sanitize options:
 Check options:
 - `instanceOf` - `Class` only objects of given class type are allowed
 - `flatten` - `Boolean` flatten deep structures
-- `mandatoryKeys` - `Àrray` the list of elements which are mandatory
-- `allowedKeys` - `Array` gives a list of elements which are also allowed
+- `mandatoryKeys` - `Array|Boolean` the list of elements which are mandatory
+- `allowedKeys` - `Array|Boolean` gives a list of elements which are also allowed
   or true to use the list from entries definition
 
 Validating children:
@@ -153,6 +153,49 @@ result =
   'first-num': { one: 1, two: 2 }
   'second-num': { one: 1, two: 2 }
   'second-name': { anna: 1, berta: 2 }
+```
+
+
+Optional Elements
+----------------------------------------------------
+You have two possibilities to make elements optional:
+
+First you can specify the mandatory names and all other are optional:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    mandatoryKeys: ['name']
+    keys:
+      name:
+        type: 'string'
+      age:
+        type: `integer`
+, (err, result) ->
+  # do something
+```
+
+Or you can set the generall rule to all are mandatory and define in each one if it
+is optional:
+
+``` coffee
+validator.check
+  name: 'test'        # name to be displayed in errors (optional)
+  value: input        # value to check
+  schema:             # definition of checks
+    type: 'object'
+    mandatoryKeys: true
+    keys:
+      name:
+        type: 'string'
+      age:
+        type: `integer`
+        optional: true
+, (err, result) ->
+  # do something
 ```
 
 
@@ -302,18 +345,24 @@ exports.check = (cb) ->
     return cb() if key instanceof RegExp # skip expressions here
     # get subcheck with new sub worker
     if @schema.keys?[key]? and typeof @schema.keys[key] is 'object'
+      schema = {}
+      schema[k] = v for k, v of @schema.keys[key]
+      schema.optional ?= true if key not in mandatoryKeys
       # defined directly with key
-      worker = @sub "#{@name}.#{key}", @schema.keys[key], @value[key]
+      worker = @sub "#{@name}.#{key}", schema, @value[key]
     else if @schema.entries?
       for rule, i in @schema.entries
+        schema = {}
+        schema[k] = v for k, v of @schema.entries[i]
+        schema.optional ?= true if key not in mandatoryKeys
         if rule.key?
           # defined with wntries match
           continue unless key.match rule.key
-          worker = @sub "#{@name}#entries-#{i}.#{key}", @schema.entries[i], @value[key]
+          worker = @sub "#{@name}#entries-#{i}.#{key}", schema, @value[key]
           break
         else
           # defined with general rule
-          worker = @sub "#{@name}#entries-#{i}.#{key}", @schema.entries[i], @value[key]
+          worker = @sub "#{@name}#entries-#{i}.#{key}", schema, @value[key]
     # undefined
     unless worker
       worker = @sub "#{@name}#.#{key}",
@@ -394,7 +443,7 @@ exports.selfcheck =
       optional: true
       or: [
         title: "All Mandatory"
-        description: "the value `true` marks all schema defined keys mandatory"
+        description: "a flag if set to `true` marks all schema defined keys mandatory"
         type: 'boolean'
       ,
         title: "Mandatory List"
@@ -421,7 +470,7 @@ exports.selfcheck =
       optional: true
       or: [
         title: "No more Allowed"
-        description: "the value `true` marks only the schema defined keys as allowed"
+        description: "a flag if set to `true` marks only the schema defined keys as allowed"
         type: 'boolean'
       ,
         title: "Allowed List"
