@@ -134,7 +134,7 @@ describe "Object", ->
       ], cb
 
     it "should fail on optional option", (cb) ->
-      schema.allowedKeys = true
+      schema.mandatoryKeys = true
       schema.keys =
         one:
           type: 'integer'
