@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.0.4 (2016-10-19)
+-------------------------------------------------
+- Fix test.
+- Fix mandatory keys to keep not mentioned keys optional.
+
 Version 2.0.3 (2016-10-18)
 -------------------------------------------------
 - Put possible string values in quotes for description.
