@@ -3,13 +3,15 @@ Alinex Validator: Readme
 
 [![GitHub watchers](
   https://img.shields.io/github/watchers/alinex/node-validator.svg?style=social&label=Watch&maxAge=2592000)](
-  https://github.com/alinex/node-validator/subscription)<!-- {.hidden-small} -->
+  https://github.com/alinex/node-validator/subscription)
+<!-- {.hidden-small} -->
 [![GitHub stars](
   https://img.shields.io/github/stars/alinex/node-validator.svg?style=social&label=Star&maxAge=2592000)](
   https://github.com/alinex/node-validator)
 [![GitHub forks](
   https://img.shields.io/github/forks/alinex/node-validator.svg?style=social&label=Fork&maxAge=2592000)](
-  https://github.com/alinex/node-validator)<!-- {.hidden-small} -->
+  https://github.com/alinex/node-validator)
+<!-- {.hidden-small} -->
 <!-- {p:.right} -->
 
 [![npm package](
@@ -17,7 +19,8 @@ Alinex Validator: Readme
   https://www.npmjs.com/package/alinex-validator)
 [![latest version](
   https://img.shields.io/npm/l/alinex-validator.svg?maxAge=2592000)](
-  #license)<!-- {.hidden-small} -->
+  #license)
+<!-- {.hidden-small} -->
 [![Travis status](
   https://img.shields.io/travis/alinex/node-validator.svg?maxAge=2592000&label=develop)](
   https://travis-ci.org/alinex/node-validator)
@@ -29,7 +32,9 @@ Alinex Validator: Readme
   https://gemnasium.com/alinex/node-validator)
 [![GitHub issues](
   https://img.shields.io/github/issues/alinex/node-validator.svg?maxAge=2592000)](
-  https://github.com/alinex/node-validator/issues)<!-- {.hidden-small} -->
+  https://github.com/alinex/node-validator/issues)
+<!-- {.hidden-small} -->
+
 
 This module will help validating complex structures. And should be used on all
 external information.
