@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.0.5 (2016-10-20)
+-------------------------------------------------
+- Fix documentation to hide style comments in github view.
+
 Version 2.0.4 (2016-10-19)
 -------------------------------------------------
 - Fix test.
