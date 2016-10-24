@@ -90,7 +90,7 @@ exports.describe = (cb) ->
       if @schema.list
         detail = "And all other entries have to be of type:\n> "
       else
-        detail = "Each entry has to be of type:\n> "
+        detail = "Each entry has to be of type #{@schema.entries.type}:\n> "
       # subchecks with new sub worker
       worker = @sub "#{@name}#entries", @schema.entries
       worker.describe (err, subtext) ->
