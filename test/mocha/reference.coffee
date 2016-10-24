@@ -861,3 +861,25 @@ describe "References", ->
           one: 6
         ]
       ], cb
+
+  describe.only "schema", ->
+
+    it "should call references to values", (cb) ->
+      test.equal
+        type: 'object'
+        keys:
+          list:
+            type: 'array'
+            entries:
+              type: 'string'
+          default:
+            type: 'string'
+            list: '<<<list>>>'
+      , [
+        [
+          list: ['test1', 'test2']
+          default: 'test2'
+        ,
+          'name'
+        ]
+      ], cb

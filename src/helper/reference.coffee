@@ -150,6 +150,26 @@ exports.replace = (value, worker, cb, clone = false) ->
   else multiple value, worker.path, worker.root, cb
 
 
+exports.replaceSchema = (value, worker, cb, clone = false) ->
+  return cb null, value unless existsObject value
+  # for arrays and objects
+  if typeof value is 'object'
+    copy = if clone
+      if Array.isArray value then [] else {}
+    else value
+    async.eachOf value, (e, k, cb) ->
+      copy[k] ?= e # reference element if cloned
+      return cb() unless existsObject e
+      multiple e, "#{worker.path}/#{k}", worker.root, (err, result) ->
+        return cb err if err
+        copy[k] = result
+        cb()
+    , (err) ->
+      return cb err if err
+      cb null, copy
+  # for strings
+  else multiple value, worker.path, worker.root, cb
+
 # Helper Methods
 # -------------------------------------------------
 
@@ -483,6 +503,7 @@ handler =
   # Read from additional context.
   #
   context: (proto, loc, data, base, worker, cb) ->
+    console.log worker.context
     pathSearch loc, null, worker.context, null, cb
 
   ###

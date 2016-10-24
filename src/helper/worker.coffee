@@ -131,13 +131,14 @@ class Worker
     async.parallel [
       # dereference value
       (cb) =>
-        reference.replace @value,  this, (err, value) =>
+        reference.replace @value, this, (err, value) =>
           return cb err if err
           @value = value
           cb()
       # dereference schema
       (cb) =>
-        reference.replace @schema, this, (err, value) =>
+        console.log 'ssssssssssssssssssssssssss'
+        reference.replaceSchema @schema, this, (err, value) =>
           return cb err if err
           @schema = value
           cb()
