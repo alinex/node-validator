@@ -70,6 +70,7 @@ class Worker
   #
   # And only in the root worker:
   # - `checked` - list of already checked elements (used for references)
+  # - 'allowData' - `Boolean` references to data:// only allowed in schema to value
   #
   # And the possible methods are:
   # - `check` - run the type specific check
@@ -126,8 +127,7 @@ class Worker
   check: (cb) ->
     if @debug.enabled
       @debug "#{@name}: #{@schema.title}" if @schema.title
-      @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be
-      #{@inspectSchema()}"
+      @debug chalk.grey "#{@name}: resolve possible references"
     async.parallel [
       # dereference value
       (cb) =>
@@ -137,7 +137,6 @@ class Worker
           cb()
       # dereference schema
       (cb) =>
-        console.log 'ssssssssssssssssssssssssss'
         reference.replaceSchema @schema, this, (err, value) =>
           return cb err if err
           @schema = value
@@ -146,10 +145,14 @@ class Worker
       (cb) =>
         reference.existsWait this, (err) =>
           return cb err if err
-          @lib.check.call this, (err) =>
+          reference.existsSchemaWait this, (err) =>
             return cb err if err
-            @root.checked.push @path
-            cb()
+            @debug chalk.grey "#{@name}: check value #{@inspectValue()} which should be
+            #{@inspectSchema()}"
+            @lib.check.call this, (err) =>
+              return cb err if err
+              @root.checked.push @path
+              cb()
     ], cb
 
   # Create a sub worker instance.

@@ -862,7 +862,7 @@ describe "References", ->
         ]
       ], cb
 
-  describe.only "schema", ->
+  describe "schema", ->
 
     it "should call references to values", (cb) ->
       test.equal
@@ -874,12 +874,29 @@ describe "References", ->
               type: 'string'
           default:
             type: 'string'
-            list: '<<<list>>>'
+            values: '<<<data://list>>>'
       , [
         [
           list: ['test1', 'test2']
           default: 'test2'
         ,
-          'name'
+          list: ['test1', 'test2']
+          default: 'test2'
         ]
+      ], cb
+
+    it "should fail on references to values", (cb) ->
+      test.fail
+        type: 'object'
+        keys:
+          list:
+            type: 'array'
+            entries:
+              type: 'string'
+          default:
+            type: 'string'
+            values: '<<<data://list>>>'
+      , [
+        list: ['test1', 'test2']
+        default: 'test3'
       ], cb

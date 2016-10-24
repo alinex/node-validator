@@ -120,6 +120,19 @@ exports.existsWait = (worker, cb) ->
     cb new Error "Reference #{worker.value} can not be resolved"
   , cb
 
+# Wait till references in schema are resolved.
+#
+# @param {Worker} worker to check value for references
+# @param {Function(Error)} cb callback if reference is resolved or error if neither
+exports.existsSchemaWait = (worker, cb) ->
+  async.retry
+    times: MAXRETRY
+    interval: TIMEOUT
+  , (cb) ->
+    return cb() unless existsObject worker.schema
+    cb new Error "Reference #{worker.schema} can not be resolved"
+  , cb
+
 # Replace references with there referenced values.
 #
 # @param {String|Array|Object} value to replaces references within
@@ -149,9 +162,22 @@ exports.replace = (value, worker, cb, clone = false) ->
   # for strings
   else multiple value, worker.path, worker.root, cb
 
-
+# Replace references in schema with there referenced values.
+#
+# @param {String|Array|Object} value to replaces references within
+# @param {Worker} worker the current worker with
+# - `path` position in structure where value comes from
+# - `root.value` complete value object
+# - `context` context additional object
+# @param {Function(Error, value)} cb callback which is called with resulting value
+# @param {Boolean} clone should the object be cloned instead of changed
 exports.replaceSchema = (value, worker, cb, clone = false) ->
   return cb null, value unless existsObject value
+  # shallow clone
+  schemaWorker = {}
+  schemaWorker[k] = v for k, v of worker.root
+  schemaWorker.allowData = true
+  schemaWorker.name = "#{worker.name}#schema"
   # for arrays and objects
   if typeof value is 'object'
     copy = if clone
@@ -160,7 +186,7 @@ exports.replaceSchema = (value, worker, cb, clone = false) ->
     async.eachOf value, (e, k, cb) ->
       copy[k] ?= e # reference element if cloned
       return cb() unless existsObject e
-      multiple e, "#{worker.path}/#{k}", worker.root, (err, result) ->
+      multiple e, "#{worker.path}", schemaWorker, (err, result) ->
         return cb err if err
         copy[k] = result
         cb()
@@ -168,7 +194,7 @@ exports.replaceSchema = (value, worker, cb, clone = false) ->
       return cb err if err
       cb null, copy
   # for strings
-  else multiple value, worker.path, worker.root, cb
+  else multiple value, worker.path, schemaWorker, cb
 
 # Helper Methods
 # -------------------------------------------------
@@ -184,7 +210,7 @@ exports.replaceSchema = (value, worker, cb, clone = false) ->
 # @param {Function(Error, value)} cb callback which is called with resulting value
 multiple = (value, path, worker, cb) ->
   path = path[1..] if path[0] is '/'
-  debug "/#{path} replace #{util.inspect value}..." if debug.enabled
+  debug "#{worker.name}: /#{path} replace #{util.inspect value}..." if debug.enabled
   list = value.split /(<<<[^]*?>>>)/
   list = [list[1]] if list.length is 3 and list[0] is '' and list[2] is ''
   # step over multiple references
@@ -197,12 +223,14 @@ multiple = (value, path, worker, cb) ->
     # reference only value
     if results.length is 1
       if debug.enabled
-        debug "/#{path} #{util.inspect value} is replaced by #{util.inspect results[0]}"
+        debug "#{worker.name}: /#{path} #{util.inspect value} is replaced by
+        #{util.inspect results[0]}"
       return cb null, results[0]
     # combine reference together
     result = results.join ''
     if debug.enabled
-      debug "/#{path} #{util.inspect value} is replaced by #{util.inspect result}"
+      debug "#{worker.name}: /#{path} #{util.inspect value} is replaced by
+      #{util.inspect result}"
     cb null, result
 
 # Resolve alternative sources which are separated by ` | ` and the first possible
@@ -217,7 +245,7 @@ multiple = (value, path, worker, cb) ->
 # @param {Function(Error, value)} cb callback which is called with resulting value
 alternatives = (value, path, worker, cb) ->
   if debug.enabled
-    debug chalk.grey "/#{path} resolve #{util.inspect value}..."
+    debug chalk.grey "#{worker.name}: /#{path} resolve #{util.inspect value}..."
   first = true
   async.map value.split(/\s+\|\s+/), (alt, cb) ->
     # automatically set first element to `struct` if no other protocol set
@@ -229,13 +257,15 @@ alternatives = (value, path, worker, cb) ->
     # return default value
     if list.length is 1 and not ~alt.indexOf '://'
       if debug.enabled
-        debug chalk.grey "/#{path} #{alt} -> use as default value".replace /\n/, '\\n'
+        debug chalk.grey "#{worker.name}: /#{path} #{alt} ->
+        use as default value".replace /\n/, '\\n'
       return cb null, alt
     # read value from given uri parts
     read list, path, worker, (err, result) ->
       return cb err if err
       if debug.enabled
-        debug chalk.grey "/#{path} #{alt} -> #{util.inspect result}".replace /\n/, '\\n'
+        debug chalk.grey "#{worker.name}: /#{path} #{alt} ->
+        #{util.inspect result}".replace /\n/, '\\n'
       cb null, result
   , (err, results) ->
     return cb err if err
@@ -303,7 +333,7 @@ read = (list, path, worker, cb, last, data) ->
     (typeof data isnt 'object' and proto is 'object')
     )
       if debug.enabled
-        debug chalk.magenta "/#{path} stop at part #{proto}://#{loc} because wrong
+        debug chalk.magenta "#{worker.name}: /#{path} stop at part #{proto}://#{loc} because wrong
         result type".replace /\n/, '\\n'
       return cb()
   proto = proto.toLowerCase()
@@ -317,20 +347,22 @@ read = (list, path, worker, cb, last, data) ->
     return cb new Error "#{type}-reference can not be called from #{last}-reference
     for security reasons"
   if debug.enabled
-    debug chalk.grey "/#{path} evaluating #{proto}://#{loc}".replace /\n/, '\\n'
+    debug chalk.grey "#{worker.name}: /#{path} evaluating #{proto}://#{loc}".replace /\n/, '\\n'
   # run type handler and return if nothing found
   handler[type] proto, loc, data, path, worker, (err, result) ->
     if err
       if debug.enabled
-        debug chalk.magenta "/#{path} #{proto}://#{loc} -> failed:
+        debug chalk.magenta "#{worker.name}: /#{path} #{proto}://#{loc} -> failed:
         #{err.message}".replace /\n/, '\\n'
       return cb err
     unless result # no result so stop this uri
       if list.length and debug.enabled # more to do
-        debug chalk.grey "/#{path} #{proto}://#{loc} -> undefined".replace /\n/, '\\n'
+        debug chalk.grey "#{worker.name}: /#{path} #{proto}://#{loc} ->
+        undefined".replace /\n/, '\\n'
       return cb()
     if list.length and debug.enabled # more to do
-      debug chalk.grey "/#{path} #{proto}://#{loc} -> #{util.inspect result}".replace /\n/, '\\n'
+      debug chalk.grey "#{worker.name}: /#{path} #{proto}://#{loc} ->
+      #{util.inspect result}".replace /\n/, '\\n'
     # no reference in result
     return cb null, result unless list.length # stop if last entry of uri path
     # process next list entry
@@ -344,7 +376,9 @@ read = (list, path, worker, cb, last, data) ->
 # @param {Worker} worker the root worker with
 # - `checked` the list of validated entries
 # @param {Function(Error, value)} cb callback which is called with resulting value
-pathSearch = (loc, path = '', data, worker, cb) ->
+# @param {Boolean} [check] set to true if check for already checked value should be done
+# (default: `true`)
+pathSearch = (loc, path = '', data, worker, cb, check = true) ->
   # direct search
   q = fspath.resolve "/#{path}", loc
   # retry read till there is no reference found or timeout
@@ -355,26 +389,32 @@ pathSearch = (loc, path = '', data, worker, cb) ->
     result = util.object.pathSearch data, q
     if exists result
       return cb new Error "Reference pointing to #{q} can not be resolved"
-    if result and worker? and not (q[1..] in worker.checked)
+    if result and check and not (q[1..] in worker.checked)
       return cb new Error "Referenced value at #{q} is not validated"
     cb null, result
   , (err, result) ->
     if err
-      debug chalk.magenta "/#{path} has a circular reference at #{q}" if debug.enabled
+      if debug.enabled
+        debug chalk.magenta "#{worker.name}: /#{path} has a circular reference at #{q}
+        (#{err})"
       return cb err
     if result
-      debug chalk.grey "/#{path} succeeded data read at #{q}" if debug.enabled
+      debug chalk.grey "#{worker.name}: /#{path} succeeded data read at #{q}" if debug.enabled
       return cb null, result
-    debug chalk.grey "/#{path} failed data read at #{q}" if debug.enabled
+    debug chalk.grey "#{worker.name}: /#{path} failed data read at #{q}" if debug.enabled
     # search neighbors by sub call on parent
     if ~path.indexOf '/'
-      return pathSearch loc, fspath.dirname(path), data, worker, cb
+      return pathSearch loc, fspath.dirname(path), data, worker, cb, check
     else if path
-      return pathSearch loc, null, data, worker, cb
+      return pathSearch loc, null, data, worker, cb, check
     # neither found
     cb()
 
-# ### Recursively join array of arrays together
+# Recursively join array of arrays together
+#
+# @param {Array} data to join
+# @param {String|Array<String>} splitter join string for each level
+# @return {String} combined string
 arrayJoin = (data, splitter) ->
   glue = if splitter.length is 1 then splitter[0] else splitter.shift()
   result = ''
@@ -461,6 +501,50 @@ handler =
     pathSearch loc, base, worker.value, worker, cb
 
   ###
+  #3 Data
+
+  This may only be used within the schema definuition and allows to reference data
+  elements within the schema definition.
+
+      <<<data://relative/path>>>
+
+  The current path in the value will be kept for relative references.
+
+  This allows to have names as values in your data structure which are checked to
+  be defined on another level in the data structure like in the following simplified
+  example.
+
+  __Example:__
+
+  ``` coffee
+  shema =
+    type: 'object'
+    keys:
+      list:
+        type: 'array'
+        entries:
+          type: 'string'
+      default:
+        type: 'string'
+        values: '<<<data://list>>>'
+
+    value =
+      list: ['test1', 'test2']
+      default: 'test2'
+  ```
+
+  ###
+
+  # Read from data structure.
+  #
+  # In the first schema check it is ignored and will not be dereferenced.
+  # But in the real {@link replaceSchema} call it will be replaced with the values
+  # from the corresponding data.
+  data: (proto, loc, data, base, worker, cb) ->
+    return cb null, "#{proto}://#{loc}" unless worker.allowData
+    pathSearch loc, base, worker.value, worker, cb
+
+  ###
   #3 Context
 
   Additional to the validating structure which have to be completely checked an
@@ -503,8 +587,7 @@ handler =
   # Read from additional context.
   #
   context: (proto, loc, data, base, worker, cb) ->
-    console.log worker.context
-    pathSearch loc, null, worker.context, null, cb
+    pathSearch loc, null, worker.context, worker, cb, false
 
   ###
   #3 Environment

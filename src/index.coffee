@@ -52,7 +52,7 @@ exports.describe = (spec, cb) ->
   # optimize data
   name = spec.name ? 'value'
   schema = util.clone spec.schema
-  schema.title ?= "'unnamed schema'"
+  schema.title ?= "#{util.string.ucFirst name} Data"
   debug "#{name} initialize to describe #{schema.title}" if debug.enabled
   # instantiate new object
   worker = new Worker name, schema, spec.context
@@ -115,7 +115,7 @@ exports.check = (spec, cb) ->
   # optimize data
   name = spec.name ? 'value'
   schema = util.clone spec.schema
-  schema.title ?= "'unnamed schema'"
+  schema.title ?= "#{util.string.ucFirst name} Data"
   value = util.clone spec.value
   # check schema on debug
   if debug.enabled and not spec.selfcheck
