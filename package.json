@@ -43,9 +43,9 @@
     "debug": "^2.2.0",
     "handlebars": "^4.0.5",
     "ipaddr.js": "^1.2.0",
-    "mathjs": "^3.5.3",
-    "moment": "^2.15.1",
-    "moment-timezone": "^0.5.5",
+    "mathjs": "^3.6.0",
+    "moment": "^2.15.2",
+    "moment-timezone": "^0.5.7",
     "numeral": "^1.5.3",
     "request": "^2.75.0"
   },
