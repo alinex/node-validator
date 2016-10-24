@@ -4,6 +4,13 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.0.6 (2016-10-24)
+-------------------------------------------------
+- Update moment@2.15.2, mathjs@3.6.0, moment-timezone@0.5.7
+- Add possibility to reference data structure from within the schema definition.
+- Test bug with referencing values from schema.
+- Optimize description of array.
+
 Version 2.0.5 (2016-10-20)
 -------------------------------------------------
 - Fix documentation to hide style comments in github view.
