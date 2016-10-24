@@ -159,6 +159,7 @@
 <gcse:searchresults-only></gcse:searchresults-only>
 
           <main><p><ul class="table-of-contents" aria-hidden="true"><header>Index</header>
+<li><a href="#optional-elements">Optional Elements</a></li>
 <li><a href="#schema-specification">Schema Specification</a></li>
 </ul>
 </p>
@@ -178,8 +179,8 @@ uses subchecks on each entry.</p>
 <ul>
 <li><code>instanceOf</code> - <code>Class</code> only objects of given class type are allowed</li>
 <li><code>flatten</code> - <code>Boolean</code> flatten deep structures</li>
-<li><code>mandatoryKeys</code> - <code>Àrray</code> the list of elements which are mandatory</li>
-<li><code>allowedKeys</code> - <code>Array</code> gives a list of elements which are also allowed
+<li><code>mandatoryKeys</code> - <code>Array|Boolean</code> the list of elements which are mandatory</li>
+<li><code>allowedKeys</code> - <code>Array|Boolean</code> gives a list of elements which are also allowed
 or true to use the list from entries definition</li>
 </ul>
 <p>Validating children:</p>
@@ -288,6 +289,38 @@ for all keys which has no own specification.</p>
 <code>  <span class="hljs-string">'first-num'</span>: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }</code>
 <code>  <span class="hljs-string">'second-num'</span>: { one: <span class="hljs-number">1</span>, two: <span class="hljs-number">2</span> }</code>
 <code>  <span class="hljs-string">'second-name'</span>: { anna: <span class="hljs-number">1</span>, berta: <span class="hljs-number">2</span> }</code></pre>
+<h2 id="optional-elements">Optional Elements</h2>
+<p>You have two possibilities to make elements optional:</p>
+<p>First you can specify the mandatory names and all other are optional:</p>
+<pre class="language coffeescript"><header>CoffeeScript Code</header><code>validator.check</code>
+<code>  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span></code>
+<code>  value: input        <span class="hljs-comment"># value to check</span></code>
+<code>  schema:             <span class="hljs-comment"># definition of checks</span></code>
+<code>    type: <span class="hljs-string">'object'</span></code>
+<code>    mandatoryKeys: [<span class="hljs-string">'name'</span>]</code>
+<code>    keys:</code>
+<code>      name:</code>
+<code>        type: <span class="hljs-string">'string'</span></code>
+<code>      age:</code>
+<code>        type: `<span class="javascript">integer</span>`</code>
+<code>, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span></code>
+<code>  <span class="hljs-comment"># do something</span></code></pre>
+<p>Or you can set the generall rule to all are mandatory and define in each one if it
+is optional:</p>
+<pre class="language coffeescript"><header>CoffeeScript Code</header><code>validator.check</code>
+<code>  name: <span class="hljs-string">'test'</span>        <span class="hljs-comment"># name to be displayed in errors (optional)</span></code>
+<code>  value: input        <span class="hljs-comment"># value to check</span></code>
+<code>  schema:             <span class="hljs-comment"># definition of checks</span></code>
+<code>    type: <span class="hljs-string">'object'</span></code>
+<code>    mandatoryKeys: <span class="hljs-literal">true</span></code>
+<code>    keys:</code>
+<code>      name:</code>
+<code>        type: <span class="hljs-string">'string'</span></code>
+<code>      age:</code>
+<code>        type: `<span class="javascript">integer</span>`</code>
+<code>        optional: <span class="hljs-literal">true</span></code>
+<code>, <span class="hljs-function"><span class="hljs-params">(err, result)</span> -&gt;</span></code>
+<code>  <span class="hljs-comment"># do something</span></code></pre>
 <h2 id="schema-specification">Schema Specification</h2>
 <p><strong>Object</strong> is the object schema definitions.</p>
 <p>An  object with the following keys allowed: <code>flatten</code>, <code>instanceOf</code>, <code>mandatoryKeys</code>, <code>allowedKeys</code>, <code>entries</code>, <code>keys</code>, <code>title</code>, <code>description</code>, <code>key</code>, <code>type</code>, <code>optional</code>, <code>default</code>. The following entries have a specific format:</p>
@@ -308,7 +341,7 @@ for all keys which has no own specification.</p>
 <p>It has to be <strong>one of</strong> the following types (optional):</p>
 <ul>
 <li>
-<p><strong>All Mandatory</strong> is the value <code>true</code> marks all schema defined keys mandatory.</p>
+<p><strong>All Mandatory</strong> is a flag if set to <code>true</code> marks all schema defined keys mandatory.</p>
 <p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false.</p>
 </li>
 <li>
@@ -341,7 +374,7 @@ for all keys which has no own specification.</p>
 <p>It has to be <strong>one of</strong> the following types (optional):</p>
 <ul>
 <li>
-<p><strong>No more Allowed</strong> is the value <code>true</code> marks only the schema defined keys as allowed.</p>
+<p><strong>No more Allowed</strong> is a flag if set to <code>true</code> marks only the schema defined keys as allowed.</p>
 <p>A boolean value, which will be true for ‘true’, ‘1’, ‘on’, ‘yes’, ‘+’, 1, true and will be considered as false for ‘false’, ‘0’, ‘off’, ‘no’, ‘-’, 0, false.</p>
 </li>
 <li>
