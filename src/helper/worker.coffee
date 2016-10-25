@@ -19,14 +19,14 @@ reference = require './reference'
 
 class Worker
 
-  # on demand loaded type libraries
+  # On demand loaded type libraries
   # `Object` list of loaded type libraries with the following methods:
   # - `init` - called for first initialization (optional)
   # - `describe` - get human readable description
   # - `check` - run the check for these element
   @lib: {}
 
-  # easy call to inspect data structures for debugging
+  # Easy call to inspect data structures for debugging
   #
   # @param obj to be inspected
   # @param {Integer} depth the number of times to recurse into object
