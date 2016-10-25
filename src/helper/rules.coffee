@@ -5,30 +5,17 @@
 # Node modules
 # -------------------------------------------------
 chalk = require 'chalk'
-# alinex packages
 util = require 'alinex-util'
-# internal classes and helper
-
-
-# ### Is value empty?
-isEmpty = (value) ->
-  return true unless value?
-#  switch
-#    when Array.isArray value
-#      if value.length is 0
-#        return true
-#    when typeof value is 'object'
-#      if value.constructor.name is 'Object' and Object.keys(value).length is 0
-#        return true
-  false
 
 
 # General checks
 # -------------------------------------------------
 
-# ### Optional and default checks
+# Optional and default checks
 exports.optional =
 
+  # #3 optional.describe()
+  #
   # Describe the optional setting human readable.
   #
   # @return {String} the result text
@@ -44,13 +31,15 @@ exports.optional =
     else
       return "It's optional. "
 
+  # #3 optional.check()
+  #
   # Check if value is optional or use default.
   #
   # @return [Boolean] `true` if further check may be skipped (cause of allowed empty value)
   # @throw {Error} if value is not correct
   check: ->
     # check for value
-    return false unless isEmpty @value # go on if value given
+    return false if @value? # go on if value given
     if @schema.default? # use default and go on
       @value = @schema.default
       @debug chalk.grey "#{@name}: use default #{@inspectValue()}" if @debug.enabled
@@ -62,8 +51,9 @@ exports.optional =
     @sendError "A value is needed", (err) ->
       err
 
-# ### selfcheck schema for base options
-# These are common for all types.
+# Selfcheck schema for base options.
+# These are common for all types and are added into the selfcheck schema for each
+# individual check.
 exports.baseSchema =
   title:
     title: "Title"
