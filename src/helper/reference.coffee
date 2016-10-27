@@ -177,7 +177,7 @@ exports.replaceSchema = (value, worker, cb, clone = false) ->
   schemaWorker = {}
   schemaWorker[k] = v for k, v of worker.root
   schemaWorker.allowData = true
-  schemaWorker.name = "#{worker.name}#schema"
+  schemaWorker.name += "#schema"
   # for arrays and objects
   if typeof value is 'object'
     copy = if clone

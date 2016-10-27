@@ -162,7 +162,7 @@ class Worker
   # @param value original value
   # @return {Worker} instance
   sub: (name, schema, value) ->
-    new Worker name, schema, @context, value, this
+    new Worker name, schema, @context, value, this.root
 
 
   # Type Helper Methods
