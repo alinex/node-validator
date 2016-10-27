@@ -4,6 +4,13 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.0.7 (2016-10-27)
+-------------------------------------------------
+- Update request@2.76.0, moment-timezone@0.5.7
+- Fixed bug in reference resolving caused by wrong worker.root setting.
+- Typo fixture in documenatation.
+- Optimize documentation and remove seldom used internal isEmpty function.
+
 Version 2.0.6 (2016-10-24)
 -------------------------------------------------
 - Update moment@2.15.2, mathjs@3.6.0, moment-timezone@0.5.7
