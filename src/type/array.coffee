@@ -17,6 +17,7 @@ __Validating children:__
 - `entries` - specification for all entries or as array for each element
 
 __Formatting options:__
+- `shuffle` - set to true to shuffle elements on validation
 - `format` - one of 'simple', 'pretty', 'json'
 
       data = [1, 2, 3, 'a', {b: 1}, ['c', 9]]
@@ -100,6 +101,8 @@ exports.describe = (cb) ->
     return cb err if err
     text = text.replace /A list\. Each entry have to be/, 'A list with each entry as'
     text = (text + results.join '').trim() + ' '
+    if @schema.shuffle
+      text += "The list will be shuffled to get a random order. "
     if @schema.format?
       text += "The value will be formatted as #{@schema.format} list. "
     cb null, text
@@ -164,6 +167,9 @@ exports.check = (cb) ->
   , (err, result) =>
     return cb err if err
     @value = result
+    # shuffle list
+    if @schema.shuffle
+      util.array.shuffle @value
     # format value
     if @schema.format
       switch @schema.format
@@ -242,6 +248,11 @@ exports.selfcheck =
       description: "the general schema definition for the entries"
       type: 'object'
       mandatoryKeys: ['type']
+      optional: true
+    shuffle:
+      title: "Shuffle"
+      description: "the list will be shuffled to get a random order"
+      type: 'boolean'
       optional: true
     format:
       title: "Format"

@@ -125,14 +125,9 @@ describe "Array", ->
       test.same schema, [[1, 2], []], ->
         test.fail schema, [['one'], [1, 'two']], cb
 
-    it "should support specific subchecks", (cb) ->
-      schema.list = [
-        type: 'integer'
-      ,
-        type: 'float'
-      ]
-      test.same schema, [[1, 2.0], [], [-1, 0.7]], ->
-        test.fail schema, [[1.5, 2.0], [-1.4, 0]], cb
+    it "should support shuffle", (cb) ->
+      schema.shuffle = true
+      test.success schema, [[1..9]], cb
 
   describe "description", ->
 
