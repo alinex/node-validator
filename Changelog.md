@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.1.0 (2016-10-28)
+-------------------------------------------------
+- Add array.shuffle option.
+
 Version 2.0.7 (2016-10-27)
 -------------------------------------------------
 - Update request@2.76.0, moment-timezone@0.5.7
