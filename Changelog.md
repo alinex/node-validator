@@ -4,6 +4,10 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.1.1 (2016-11-26)
+-------------------------------------------------
+- Output default values as code.
+
 Version 2.1.0 (2016-10-28)
 -------------------------------------------------
 - Add array.shuffle option.
