@@ -27,7 +27,7 @@ exports.optional =
         '[function]'
       else
         util.inspect @schema.default
-      return "It's optional and will be set to #{value} if not specified. "
+      return "It's optional and will be set to `#{value}` if not specified. "
     else
       return "It's optional. "
 
