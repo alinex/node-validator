@@ -46,7 +46,7 @@
     "mathjs": "^3.6.0",
     "moment": "^2.15.2",
     "moment-timezone": "^0.5.7",
-    "numeral": "^1.5.3",
+    "numeral": "^2.0.1",
     "request": "^2.76.0"
   },
   "optionalDependencies": {},
