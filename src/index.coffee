@@ -72,6 +72,7 @@ schema = validator.describeSync
 ```
 
 See the possibilities in [schema definition](helper/index.md).
+
 @name describeSync()
 @param {Object} spec specification for validation
 - `name` - `String` descriptive name of the data
