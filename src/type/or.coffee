@@ -125,7 +125,7 @@ exports.check = (cb) ->
   error = []
   async.map [0..@schema.or.length-1], (num, cb) =>
     # subchecks with new sub worker
-    worker = @sub "#{@name}##{num}", @schema.or[num], @value
+    worker = @sub "#{@name}##{num}", @schema.or[num], util.clone @value
     worker.check (err) ->
       if err
         error[num] = err
