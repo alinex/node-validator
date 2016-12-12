@@ -44,7 +44,6 @@ Schema Specification
 # Node Modules
 # -------------------------------------------------
 math = null # loaded on demand
-numeral = null # load on demans
 util = require 'alinex-util'
 # include classes and helper
 rules = require '../helper/rules'
@@ -154,34 +153,26 @@ exports.check = (cb) ->
     @value = @value.to 'h' if @value.units[0].unit.name is 'min' and @value.toNumber('min') > 120
     @value = @value.to 'day' if @value.units[0].unit.name is 'h' and @value.toNumber('h') > 48
     if @schema.format
-      numeral ?= require 'numeral'
+      numeral = require 'numeral'
       if @schema.locale
         try
-          locale = require "numeral/src/locales/#{@schema.locale}"
-          unless Object.keys(locale).length
-            throw new Error "numeral/src/locales/#{@schema.locale} not correctly initialized"
-          numeral.locale @schema.locale
-        catch error
-          console.error error
+          numeral.language @schema.locale, require "numeral/languages/#{@schema.locale}"
+          numeral.language @schema.locale
       [v, p] = @value.format().split /[ ]/
       @value = numeral(v).format(@schema.format) + ' ' + p
       if @schema.locale
-        numeral.locale 'en'
+        numeral.language 'en'
     else
       @value = @value.format()
   else if @schema.format
-    numeral ?= require 'numeral'
+    numeral = require 'numeral'
     if @schema.locale
       try
-        locale = require "numeral/src/locales/#{@schema.locale}"
-        unless Object.keys(locale).length
-          throw new Error "numeral/src/locales/#{@schema.locale} not correctly initialized"
-        numeral.locale @schema.locale
-      catch error
-        console.error error
+        numeral.language @schema.locale, require "numeral/languages/#{@schema.locale}"
+        numeral.language @schema.locale
     @value = numeral(@value).format @schema.format
     if @schema.locale
-      numeral.reset()
+      numeral.language 'en'
   # done checking and sanuitizing
   @sendSuccess cb
 
