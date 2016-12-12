@@ -4,6 +4,17 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.1.2 (2016-12-12)
+-------------------------------------------------
+- Don't upgrade numeral because buggy.
+- Revert "Update numeral@2.0.1 because of problems with iit"
+- Revert "Try to change integer and float validators for new numeral because I got problems with locales."
+- Merge branch 'master' of https://github.com/alinex/node-validator
+- Fix documentation style.
+- Try to change integer and float validators for new numeral but got problems with locales.
+- Update numeral@2.0.1
+- Fix or condition which allowed overwriting the result of the returning one by other subchecks.
+
 Version 2.1.1 (2016-11-26)
 -------------------------------------------------
 - Output default values as code.
