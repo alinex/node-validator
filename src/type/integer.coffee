@@ -103,9 +103,10 @@ exports.describe = (cb) ->
   # integer type
   max = min = null
   if @schema.inttype?
-    type = integerTypes[@schema.inttype] ? "#{@schema.inttype}bit"
+    type = integerTypes[@schema.inttype] ? @schema.inttype
     unsigned = if @schema.unsigned then 'an unsigned' else 'a signed'
-    text += "Only values in the range of #{unsigned} #{type}-integer
+    text += "Only values in the range of #{unsigned}
+      #{if typeof @schema.inttype isnt 'number' then @schema.inttype else type}-integer
       are allowed. "
     unsigned = if @schema.unsigned then 1 else 0
     max = (Math.pow 2, type-1+unsigned)-1
