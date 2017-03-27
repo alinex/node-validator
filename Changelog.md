@@ -4,6 +4,14 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.1.3 (2017-03-27)
+-------------------------------------------------
+- Merge
+- Merge branch 'master' of https://github.com/alinex/node-validator
+- Update alinex-util@2.5.1, async@2.2.0, chrono-node@1.3.1, debug@2.6.3, ipaddr.js@1.3.0, mathjs@3.10.1, moment@2.18.1, request@2.81.0, alinex-builder@2.4.1, moment-timezone@0.5.11
+- Optimize description of inttypes.
+- Add another test to or check.
+
 Version 2.1.2 (2016-12-12)
 -------------------------------------------------
 - Don't upgrade numeral because buggy.
