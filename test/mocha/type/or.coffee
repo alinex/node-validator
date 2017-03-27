@@ -38,7 +38,31 @@ describe "Or", ->
     it "should match boolean", (cb) ->
       test.fail schema, [15.3, '', [], (new Error '????'), {}], cb
 
-  describe "description", ->
+  describe "problems", ->
+
+    it "should not interfere", (cb) ->
+      test.same
+        type: 'or'
+        or: [
+          type: 'object'
+          keys:
+            type:
+              type: 'string'
+              values: ['car']
+            wheels:
+              type: 'integer'
+              default: 4
+        ,
+          type: 'object'
+          keys:
+            type:
+              type: 'string'
+              values: ['boat']
+        ]
+      , [type: 'boat']
+      , cb
+      describe "description", ->
+
 
     it "should give simple description", (cb) ->
       test.describe schema, cb
