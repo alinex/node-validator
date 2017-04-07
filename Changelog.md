@@ -4,6 +4,11 @@ Version changes
 The following list gives a short overview about what is changed between
 individual versions:
 
+Version 2.1.4 (2017-04-07)
+-------------------------------------------------
+- Update async@2.3.0, mathjs@3.11.4, moment-timezone@0.5.13
+- Fix wording in type description.
+
 Version 2.1.3 (2017-03-27)
 -------------------------------------------------
 - Merge
