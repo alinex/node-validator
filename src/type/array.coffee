@@ -57,7 +57,7 @@ exports.describe = (cb) ->
   if @schema.notEmpty
     text += "It's not allowed to be empty. "
   if @schema.delimiter?
-    text += "You may also give a text or RegExp using '#{@schema.delimiter}'
+    text += "You may also give it as text using '#{@schema.delimiter}'
       as separator for the individual entries. "
   if @schema.unique?
     text += "All values have to be unique. "
