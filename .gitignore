@@ -1,14 +1,38 @@
-.project
-.settings
-.DS_Store
-*.sublime-*
-/report/
-/data/
-/doc/
-/lib/
-/log/
-/node_modules/
-/var/lib/
-/var/local/
-npm-debug.log
-/old/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage tools like jscoverage/JSCover, nyc or istanbul
+lib-cov
+coverage
+.nyc_output
+
+# Build tools like npm, yarn, grunt or bower
+.grunt
+bower_components
+.npm
+/*.tgz
+.yarn-integrity
+
+# Other caching like eslint or repl
+.eslintcache
+.node_repl_history
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Compiled code
+dist
+
+# Runtime data
+local

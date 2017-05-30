@@ -1,4 +1,0 @@
-Spamhaus PBL Policy Block List:
-  zone: pbl.spamhaus.org
-  url:  http://www.spamhaus.org/pbl/
-  desc: IP address ranges which should not be delivering unauthenticated SMTP email to any Internet mail server

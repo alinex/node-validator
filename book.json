@@ -1,0 +1,21 @@
+{
+  "root": "./doc",
+
+  "pdf": {
+    "pageNumbers": true,
+    "headerTemplate": " ",
+    "footerTemplate": " "
+  },
+
+  "plugins": [
+    "todo", "mermaid-gb3", "puml",
+    "toggle-chapters", "navigator", "downloadpdf"
+  ],
+  "pluginsConfig": {
+    "downloadpdf": {
+      "base": "https://www.gitbook.com/download/pdf/book/alinex/validator",
+      "label": "Download PDF",
+      "multilingual": false
+    }
+  }
+}
