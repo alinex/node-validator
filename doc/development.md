@@ -14,12 +14,3 @@ use specific techniques or not.
 
 Within this module especially the following foreign modules are used:
 -
-
-
-## Systems in this Area
-
-[JSON Schema](http://json-schema.org/)
-https://github.com/hapijs/joi
-http://symfony.com/doc/current/validation.html
-https://validatejs.org/
-https://jqueryvalidation.org/category/validator/
