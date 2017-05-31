@@ -48,6 +48,7 @@
     "babel-preset-env": "^1.5.1",
     "babel-preset-stage-3": "^6.24.1",
     "babel-register": "^6.24.1",
+    "chai": "^4.0.0",
     "coveralls": "^2.13.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
@@ -64,8 +65,6 @@
     "nodemon": "^1.11.0",
     "nyc": "^10.3.2",
     "request": "^2.81.0",
-    "should": "^11.2.1",
-    "should-http": "^0.1.1",
     "yarn": "^0.24.5"
   },
   "engines": {
