@@ -5,67 +5,47 @@ Heavily based on joi API...
 
 http://2ality.com/i/index2.html private properties
 
-## Schema definition
 
-- create schema class
-- elements are instance of type classes
-- import() load from literal schema
+## Type definition
 
-```js
-import validator from 'alinex-validator'
+- new class
+- extends `Schema` or other schema
+- may have some validation properties
+- with rules to set them
+- and an overwritten `validate` method
 
-class Person extends validator.Object {
-    name: new validator.Integer().min(10).max(100),
-}
-export default Person
+## Schema setup
 
-// load from literal
-class Individual extends validator.Object {}
-await Individual.loadSchemaFromFile('individual.json')
-export default Individual
-```
+- import schema
+- instantiate it
+- set validation settings
 
 ## Validation
 
-- describe()
-- new () load values
-- validate() bool
-- get() direct access
-- object() export object
-- toJS() export javascript
+- `load` data
+- `validate`
+- `describe`
 
-```js
-import Person from './person'
+## Accessing values
 
-const person = new Person(data)
-await person.validate()
-console.log person.object().name
-if (person.has('home/street')) console.log person.get('home/street')
-// reload
-person.clean().load(base).load(data) // load with base and extension
-// ...
-```
+- `object`
+- `get` direct value (on object)
+- `toJS` export javascript
 
 ## CLI
 
 - convert yaml
 
+## Special
 
-## Usage
-
-- loading object structure
-- import javascript data
-
-
-
-
-## Schema
-
-data
-result
-
+- `clear` data
+- multiple loading
+- json schema import
 
 ## Ideas
 
 - defaults in schema
 - default as extra data structure
+- source info
+- error list
+- structure

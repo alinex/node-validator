@@ -14,6 +14,7 @@ module.exports = {
     'no-unused-vars': [ 'warn' ],
     'no-console': [ process.env.NODE_ENV === 'production' ? 'error' : 'warn' ],
     'no-shadow': ['error', { 'allow': ['cb', 'err'] }],
-    'import/prefer-default-export': 'warn'
+    'import/prefer-default-export': 'warn',
+    'no-underscore-dangle': 'off'
   }
 };
