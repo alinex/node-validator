@@ -1,7 +1,7 @@
 // @flow
 import Schema from '../Schema'
 
-class SchemaAny extends Schema {
+class AnySchema extends Schema {
 
   // validation data
 
@@ -16,7 +16,7 @@ class SchemaAny extends Schema {
 
   // setup validation
 
-  allow(value: any): SchemaAny {
+  allow(value: any): AnySchema {
     if (value === undefined) {
       this._optional = true
     } else if (Array.isArray(value)) {
@@ -35,7 +35,7 @@ class SchemaAny extends Schema {
     return this
   }
 
-  disallow(value: any): SchemaAny {
+  disallow(value: any): AnySchema {
     if (value === undefined) {
       this._optional = false
     } else if (Array.isArray(value)) {
@@ -68,4 +68,4 @@ class SchemaAny extends Schema {
 
 }
 
-export default SchemaAny
+export default AnySchema

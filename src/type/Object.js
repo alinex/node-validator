@@ -1,6 +1,8 @@
 // @flow
-class SchemaObject {
+import Schema from '../Schema'
+
+class ObjectSchema extends Schema {
 
 }
 
-export default SchemaObject
+export default ObjectSchema
