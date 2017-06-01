@@ -1,6 +1,8 @@
 module.exports = {
   env: { es6: true, node: true },
   extends: 'airbnb',
+  plugins: ["flowtype"],
+  parser: "babel-eslint",
   parserOptions: { sourceType: 'module' },
   rules: {
     'max-len': [ 'warn', 100 ],

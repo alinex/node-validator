@@ -1,6 +1,10 @@
+// @flow
 class SchemaAny {
 
-  constructor(data) {
+  data: any
+  result: any
+
+  constructor(data: any) {
     this.data = data
   }
 
