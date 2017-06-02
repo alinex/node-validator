@@ -58,6 +58,7 @@ class AnySchema extends Schema {
 
   validate(): Promise<void> {
     return new Promise((resolve, reject) => {
+      if (this._optional && this.data === undefined) return resolve()
       // reject if marked as invalid
       if (this._invalid.size && this._invalid.has(this.data)) {
         return reject(this.fail('Element found in blacklist (disallowed item)'))
