@@ -1,8 +1,10 @@
 import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
 import Debug from 'debug'
 
 import * as validator from '../../src/index'
 
+chai.use(chaiAsPromised)
 const expect = chai.expect
 const debug = Debug('test')
 
@@ -18,9 +20,7 @@ describe('basic', () => {
     expect(schema).to.be.an('object')
     const data = 5
     schema.load(data)
-    expect(async () => {
-      await schema.validate()
-    }).to.not.throw()
+    expect(schema.validate()).to.eventually.be.fulfilled
     expect(schema.object()).to.equal(data)
   })
 
@@ -29,10 +29,19 @@ describe('basic', () => {
     const schema = new validator.Any()
     schema.allow('a')
     schema.load(data)
-    expect(async () => {
-      await schema.validate()
-    }).to.not.throw()
+    expect(schema.validate()).to.eventually.be.fulfilled
     expect(schema.object()).to.equal(data)
+  })
+
+  it('should fail', () => {
+    const data = 'a'
+    const schema = new validator.Any()
+    schema.allow('a')
+    schema.load('b')
+    expect(schema.validate()).to.be.rejectedWith(Error)
+    expect(schema.error).to.exist
+    .and.has.property('schema')
+    expect(schema.object()).to.not.exist
   })
 
   // should work with instance changes

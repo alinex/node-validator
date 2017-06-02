@@ -1,8 +1,11 @@
 // @flow
+import SchemaError from './SchemaError'
+
 class Schema {
 
   data: any
   result: any
+  error: Error
 
   // validation data
 
@@ -30,6 +33,11 @@ class Schema {
   validate(): Promise<void> {
     this.result = this.data
     return Promise.resolve()
+  }
+
+  fail(msg: string) {
+    this.error = new SchemaError(this, msg)
+    return this.error
   }
 
   // after validating

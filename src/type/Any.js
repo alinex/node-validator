@@ -57,13 +57,19 @@ class AnySchema extends Schema {
   // using schema
 
   validate(): Promise<void> {
-    // reject if marked as invalid
-    if (this._invalid.size && this._invalid.has(this.data)) return Promise.reject()
-    // reject if valid is set but not included
-    if (this._valid.size && !this._valid.has(this.data)) return Promise.reject()
-    // ok
-    this.result = this.data
-    return Promise.resolve()
+    return new Promise((resolve, reject) => {
+      // reject if marked as invalid
+      if (this._invalid.size && this._invalid.has(this.data)) {
+        return reject(this.fail('Element found in blacklist (disallowed item)'))
+      }
+      // reject if valid is set but not included
+      if (this._valid.size && !this._valid.has(this.data)) {
+        return reject(this.fail('Element not in whitelist (allowed item)'))
+      }
+      // ok
+      this.result = this.data
+      return resolve()
+    })
   }
 
 }
