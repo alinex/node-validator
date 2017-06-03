@@ -49,13 +49,20 @@ class Schema {
 
   validate(): Promise<void> {
     return new Promise((resolve, reject) => {
-      const value = this.data === undefined && this._default ? this._default : this.data
-      if (!this._optional && value === undefined) {
-        return reject(this.fail('This element is mandatory!'))
-      }
+      // check optional
+      const value = this.validateOptional(this.data)
+      // ok
       this.result = value
       return resolve()
     })
+  }
+
+  validateOptional(data: any): any {
+    const value = data === undefined && this._default ? this._default : data
+    if (!this._optional && value === undefined) {
+      throw this.fail('This element is mandatory!')
+    }
+    return value
   }
 
   // after validating

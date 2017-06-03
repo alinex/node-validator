@@ -56,19 +56,20 @@ class AnySchema extends Schema {
 
   // using schema
 
-  validate(): Promise<void> {
+  validate(): Promise<any> {
     return new Promise((resolve, reject) => {
-      if (this._optional && this.data === undefined) return resolve()
+      // optional and default
+      const value = this.validateOptional(this.data)
       // reject if marked as invalid
-      if (this._invalid.size && this._invalid.has(this.data)) {
+      if (this._invalid.size && this._invalid.has(value)) {
         return reject(this.fail('Element found in blacklist (disallowed item)'))
       }
       // reject if valid is set but not included
-      if (this._valid.size && !this._valid.has(this.data)) {
+      if (this._valid.size && !this._valid.has(value)) {
         return reject(this.fail('Element not in whitelist (allowed item)'))
       }
       // ok
-      this.result = this.data
+      this.result = value
       return resolve()
     })
   }

@@ -10,12 +10,13 @@ const debug = Debug('test')
 
 describe('schema', () => {
 
-  it('should work with data loading', () => {
+  it('should work without specification', () => {
     const schema = new Schema()
     expect(schema, 'schema').to.be.an('object')
     const data = 5
     schema.load(data)
     expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
+    console.log(schema)
     expect(schema.object(), 'object()').to.equal(data)
   })
 
@@ -40,7 +41,7 @@ describe('schema', () => {
     expect(schema.object(), 'object()').not.exist
   })
 
-  describe('options', () => {
+  describe('optional/default', () => {
 
     it('should work with not optional', () => {
       const schema = new Schema()
