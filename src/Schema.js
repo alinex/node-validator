@@ -50,17 +50,17 @@ class Schema {
   validate(): Promise<void> {
     return new Promise((resolve, reject) => {
       // check optional
-      const value = this.validateOptional(this.data)
+      const value = this._validateOptional(this.data)
       // ok
       this.result = value
       return resolve()
     })
   }
 
-  validateOptional(data: any): any {
+  _validateOptional(data: any): any {
     const value = data === undefined && this._default ? this._default : data
     if (!this._optional && value === undefined) {
-      throw this.fail('This element is mandatory!')
+      throw this._fail('This element is mandatory!')
     }
     return value
   }
@@ -73,7 +73,7 @@ class Schema {
 
   // helper methods
 
-  fail(msg: string) {
+  _fail(msg: string) {
     this.error = new SchemaError(this, msg)
     return this.error
   }
