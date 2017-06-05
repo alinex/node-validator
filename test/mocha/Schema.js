@@ -8,20 +8,22 @@ chai.use(chaiAsPromised)
 const expect = chai.expect
 const debug = Debug('test')
 
+// to simplify copy and paste in other Schemas
+const MySchema = Schema
+
 describe('schema', () => {
 
   it('should work without specification', () => {
-    const schema = new Schema()
+    const schema = new MySchema()
     expect(schema, 'schema').to.be.an('object')
     const data = 5
     schema.load(data)
     expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
-    console.log(schema)
     expect(schema.object(), 'object()').to.equal(data)
   })
 
   it('should work with overloading', () => {
-    const schema = new Schema()
+    const schema = new MySchema()
     expect(schema, 'schema').to.be.an('object')
     const data = 5
     schema.load(2)
@@ -31,7 +33,7 @@ describe('schema', () => {
   })
 
   it('should work with clear', () => {
-    const schema = new Schema()
+    const schema = new MySchema()
     expect(schema).to.be.an('object')
     const data = 5
     schema.load(2)
@@ -44,19 +46,18 @@ describe('schema', () => {
   describe('optional/default', () => {
 
     it('should work with not optional', () => {
-      const schema = new Schema()
-      expect(schema).to.be.an('object')
       const data = 5
-      schema.optional(false)
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      schema.not.optional
       .load(data)
       expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
       expect(schema.object(), 'object()').to.equal(data)
     })
 
     it('should fail with not optional', () => {
-      const data = 'a'
-      const schema = new Schema()
-      schema.optional(false)
+      const schema = new MySchema()
+      schema.not.optional
       expect(schema.validate(), 'validate()').to.be.rejectedWith(Error)
       expect(schema.error, 'error').to.exist
       .and.has.property('schema')
@@ -65,7 +66,7 @@ describe('schema', () => {
     })
 
     it('should work with default', () => {
-      const schema = new Schema()
+      const schema = new MySchema()
       expect(schema).to.be.an('object')
       const data = 5
       schema.default(data)
@@ -75,8 +76,8 @@ describe('schema', () => {
 
     it('should fail with not optional and undefined default', () => {
       const data = 'a'
-      const schema = new Schema()
-      schema.optional(false).default(undefined)
+      const schema = new MySchema()
+      schema.not.optional.default(undefined)
       expect(schema.validate(), 'validate()').to.be.rejectedWith(Error)
       expect(schema.error, 'error').to.exist
       .and.has.property('schema')
@@ -89,23 +90,23 @@ describe('schema', () => {
   // should work with instance changes
 
   it('should describe', () => {
-    const schema = new Schema()
+    const schema = new MySchema()
     const msg = schema.describe()
     debug(msg)
     expect(msg).to.be.a('string')
   })
 
-  it('should describe optional with default', () => {
-    const schema = new Schema()
-    schema.default(8)
+  it('should describe not optional', () => {
+    const schema = new MySchema()
+    schema.not.optional
     const msg = schema.describe()
     debug(msg)
     expect(msg).to.be.a('string')
   })
 
   it('should describe not optional with default', () => {
-    const schema = new Schema()
-    schema.optional(false).default(8)
+    const schema = new MySchema()
+    schema.default(8)
     const msg = schema.describe()
     debug(msg)
     expect(msg).to.be.a('string')

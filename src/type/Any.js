@@ -18,39 +18,31 @@ class AnySchema extends Schema {
 
   allow(value: any): AnySchema {
     if (value === undefined) {
-      this._optional = true
+      this._optional = !this._negate // true for allow fals for not allow
     } else if (Array.isArray(value)) {
       value.forEach((v) => {
         if (v === undefined) {
-          this._optional = true
+          this._optional = !this._negate
+        } else if (this._negate) {
+          // disallow
+          this._invalid.add(v)
+          this._valid.delete(v)
         } else {
+          // allow
           this._valid.add(v)
           this._invalid.delete(v)
         }
       })
+    } else if (this._negate) {
+      // disallow
+      this._invalid.add(value)
+      this._valid.delete(value)
     } else {
+      // allow
       this._valid.add(value)
       this._invalid.delete(value)
     }
-    return this
-  }
-
-  disallow(value: any): AnySchema {
-    if (value === undefined) {
-      this._optional = false
-    } else if (Array.isArray(value)) {
-      value.forEach((v) => {
-        if (v === undefined) {
-          this._optional = true
-        } else {
-          this._invalid.add(v)
-          this._valid.delete(v)
-        }
-      })
-    } else {
-      this._invalid.add(value)
-      this._valid.delete(value)
-    }
+    this._negate = false
     return this
   }
 
@@ -60,6 +52,7 @@ class AnySchema extends Schema {
     return new Promise((resolve, reject) => {
       // optional and default
       const value = this._validateOptional(this.data)
+      if (this._optional && value === undefined) return resolve()
       // reject if marked as invalid
       if (this._invalid.size && this._invalid.has(value)) {
         return reject(this._fail('Element found in blacklist (disallowed item)'))
@@ -70,7 +63,7 @@ class AnySchema extends Schema {
       }
       // ok
       this.result = value
-      return resolve()
+      return resolve(value)
     })
   }
 

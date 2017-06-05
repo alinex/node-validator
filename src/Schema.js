@@ -11,15 +11,23 @@ class Schema {
 
   // validation data
 
+  _negate: bool
   _optional: bool
   _default: any
 
   constructor() {
+    this._negate = false
     this._optional = true
   }
 
-  optional(value: bool): Schema {
-    this._optional = value
+  get not(): Schema {
+    this._negate = !this._negate
+    return this
+  }
+
+  get optional(): Schema {
+    this._optional = !this._negate
+    this._negate = false
     return this
   }
 
@@ -48,12 +56,12 @@ class Schema {
   }
 
   validate(): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       // check optional
       const value = this._validateOptional(this.data)
       // ok
       this.result = value
-      return resolve()
+      return resolve(value)
     })
   }
 
