@@ -16,10 +16,9 @@ describe('type any', () => {
   it('should work without specification', () => {
     const schema = new MySchema()
     expect(schema, 'schema').to.be.an('object')
+    // use schema
     const data = 5
-    schema.load(data)
-    expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
-    expect(schema.object(), 'object()').to.equal(data)
+    expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
   })
 
   describe('optional/default', () => {
@@ -27,22 +26,19 @@ describe('type any', () => {
     it('should work with not optional', () => {
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      const data = 5
       schema.not.optional
-      .load(data)
-      expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
-      expect(schema.object(), 'object()').to.equal(data)
+      // use schema
+      const data = 5
+      expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
     })
 
     it('should fail with not optional', () => {
-      const data = 'a'
       const schema = new MySchema()
       schema.not.optional
-      expect(schema.validate(), 'validate()').to.be.rejectedWith(Error)
-      expect(schema.error, 'error').to.exist
-      .and.has.property('schema')
-      debug(schema.error.message)
-      expect(schema.object(), 'object()').to.not.exist
+      // use schema
+      let res
+      expect(res = schema.validate(), 'validate()').to.be.rejectedWith(Error)
+      res.catch(error => debug(error.message))
     })
 
     it('should work with default', () => {
@@ -50,19 +46,17 @@ describe('type any', () => {
       expect(schema).to.be.an('object')
       const data = 5
       schema.default(data)
-      expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
-      expect(schema.object(), 'object()').to.equal(data)
+      // use schema
+      expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
     })
 
     it('should fail with not optional and undefined default', () => {
-      const data = 'a'
       const schema = new MySchema()
       schema.not.optional.default(undefined)
-      expect(schema.validate(), 'validate()').to.be.rejectedWith(Error)
-      expect(schema.error, 'error').to.exist
-      .and.has.property('schema')
-      debug(schema.error.message)
-      expect(schema.object(), 'object()').to.not.exist
+      // use schema
+      let res
+      expect(res = schema.validate(), 'validate()').to.be.rejectedWith(Error)
+      res.catch(error => debug(error.message))
     })
 
   })
@@ -70,45 +64,39 @@ describe('type any', () => {
   describe('allow', () => {
 
     it('should allow specific object', () => {
-      const data = 'a'
       const schema = new MySchema()
+      const data = 'a'
       schema.allow(data)
-      .load(data)
-      expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
-      expect(schema.object(), 'object()').to.equal(data)
+      // use schema
+      expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
     })
 
     it('should fail if not in allowed list', () => {
-      const data = 'a'
       const schema = new MySchema()
       schema.allow('a')
-      .load('b')
-      expect(schema.validate(), 'validate()').to.be.rejectedWith(Error)
-      expect(schema.error, 'error').to.exist
-      .and.has.property('schema')
-      debug(schema.error.message)
-      expect(schema.object(), 'object()').to.not.exist
+      // use schema
+      const data = 'b'
+      let res
+      expect(res = schema.validate(data), 'validate()').to.be.rejectedWith(Error)
+      res.catch(error => debug(error.message))
     })
 
     it('should fail if in disallowed list', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.not.allow(data)
-      .load(data)
-      expect(schema.validate(), 'validate()').to.be.rejectedWith(Error)
-      expect(schema.error, 'error').to.exist
-      .and.has.property('schema')
-      debug(schema.error.message)
-      expect(schema.object(), 'object()').to.not.exist
+      // use schema
+      let res
+      expect(res = schema.validate(data), 'validate()').to.be.rejectedWith(Error)
+      res.catch(error => debug(error.message))
     })
 
     it('should work if not in disallowed list', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.not.allow('b')
-      .load(data)
-      expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
-      expect(schema.object(), 'object()').to.equal(data)
+      // use schema
+      expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
     })
 
     it('should remove from disallow if allowed later', () => {
@@ -116,15 +104,15 @@ describe('type any', () => {
       const schema = new MySchema()
       schema.not.allow(data)
       .allow(data)
-      .load(data)
-      expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
-      expect(schema.object(), 'object()').to.equal(data)
+      // use schema
+      expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
     })
 
     it('should be optional if undefined is allowed', () => {
       const schema = new MySchema()
       schema.not.optional
       .allow(undefined)
+      // use schema
       expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
     })
 
@@ -132,27 +120,25 @@ describe('type any', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.allow(['a', 'b', 'c'])
-      .load(data)
-      expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
-      expect(schema.object(), 'object()').to.equal(data)
+      // use schema
+      expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
     })
 
     it('should allow to define disallow as list', () => {
-      const data = 'a'
       const schema = new MySchema()
       schema.not.allow(['a', 'b', 'c'])
-      .load(data)
-      expect(schema.validate(), 'validate()').to.be.rejectedWith(Error)
-      expect(schema.error, 'error').to.exist
-      .and.has.property('schema')
-      debug(schema.error.message)
-      expect(schema.object(), 'object()').to.not.exist
+      // use schema
+      const data = 'a'
+      let res
+      expect(res = schema.validate(data), 'validate()').to.be.rejectedWith(Error)
+      res.catch(error => debug(error.message))
     })
 
     it('should be optional if undefined in allowed list', () => {
       const schema = new MySchema()
       schema.not.optional
       .allow(['a', undefined])
+      // use schema
       expect(schema.validate(), 'validate()').to.eventually.be.fulfilled
     })
 
@@ -160,7 +146,10 @@ describe('type any', () => {
 
   it('should describe', () => {
     const schema = new MySchema()
-    expect(schema.describe()).to.be.a('string')
+    // use schema
+    let msg
+    expect(msg = schema.description).to.be.a('string')
+    debug(msg)
   })
 
 })

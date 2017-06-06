@@ -1,5 +1,6 @@
 // @flow
 import Schema from '../Schema'
+import SchemaError from '../SchemaError'
 
 class AnySchema extends Schema {
 
@@ -48,21 +49,20 @@ class AnySchema extends Schema {
 
   // using schema
 
-  validate(): Promise<any> {
+  validate(data: any): Promise<any> {
     return new Promise((resolve, reject) => {
       // optional and default
-      const value = this._validateOptional(this.data)
-      if (this._optional && value === undefined) return resolve()
+      const value = this._validateOptional(data)
+      if (this._optional && value === undefined) return resolve(value)
       // reject if marked as invalid
       if (this._invalid.size && this._invalid.has(value)) {
-        return reject(this._fail('Element found in blacklist (disallowed item)'))
+        return reject(new SchemaError(this, 'Element found in blacklist (disallowed item)'))
       }
       // reject if valid is set but not included
       if (this._valid.size && !this._valid.has(value)) {
-        return reject(this._fail('Element not in whitelist (allowed item)'))
+        return reject(new SchemaError(this, 'Element not in whitelist (allowed item)'))
       }
       // ok
-      this.result = value
       return resolve(value)
     })
   }

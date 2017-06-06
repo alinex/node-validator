@@ -1,5 +1,5 @@
 // @flow
-import type Schema from './Schema'
+import Schema from './Schema'
 
 class SchemaError extends Error {
 
