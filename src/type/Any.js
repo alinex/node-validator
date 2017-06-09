@@ -1,7 +1,7 @@
 // @flow
 import Schema from '../Schema'
 import SchemaError from '../SchemaError'
-import SchemaData from '../SchemaData'
+import type SchemaData from '../SchemaData'
 
 class AnySchema extends Schema {
 
@@ -21,7 +21,7 @@ class AnySchema extends Schema {
 
   // setup schema
 
-  allow(value: any): AnySchema {
+  allow(value: any): this {
     if (value === undefined) {
       this._optional = !this._negate // true for allow fals for not allow
     } else if (Array.isArray(value)) {
@@ -66,16 +66,16 @@ class AnySchema extends Schema {
   _allowValidator(data: SchemaData): Promise<void> {
     // reject if marked as invalid
     if (this._invalid.size && this._invalid.has(data.value)) {
-      return Promise.reject(new SchemaError(this, data.value,
+      return Promise.reject(new SchemaError(this, data,
         'Element found in blacklist (disallowed item).'))
     }
     // reject if valid is set but not included
     if (this._valid.size && !this._valid.has(data.value)) {
-      return Promise.reject(new SchemaError(this, data.value,
+      return Promise.reject(new SchemaError(this, data,
         'Element not in whitelist (allowed item).'))
     }
     // ok
-    return Promise.resolve(data.value)
+    return Promise.resolve()
   }
 }
 

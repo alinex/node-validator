@@ -27,7 +27,7 @@
   "scripts": {
     "dev": "nodemon src/index.js --exec 'npm run test -s'",
     "test": "npm run lint -s && npm run unit -s",
-    "unit": "mocha --require babel-core/register --require babel-polyfill test/mocha --recursive",
+    "unit": "mocha --require babel-core/register --require babel-polyfill test/mocha --recursive -b",
     "coverage": "nyc --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",
     "lint": "./node_modules/.bin/flow && eslint src --ext .js",
     "test-travis": "nyc --reporter=lcov --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",

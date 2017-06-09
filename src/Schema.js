@@ -29,18 +29,18 @@ class Schema {
 
   // setup schema
 
-  get not(): Schema {
+  get not(): this {
     this._negate = !this._negate
     return this
   }
 
-  get optional(): Schema {
+  get optional(): this {
     this._optional = !this._negate
     this._negate = false
     return this
   }
 
-  default(value: any): Schema {
+  default(value: any): this {
     this._default = value
     return this
   }

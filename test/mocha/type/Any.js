@@ -1,7 +1,7 @@
 // @flow
 import chai from 'chai'
 
-import validator from '../../../src/index'
+import * as validator from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 

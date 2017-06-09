@@ -1,3 +1,4 @@
+// @flow
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import Debug from 'debug'
@@ -29,7 +30,7 @@ describe('base', () => {
 > Given value was: 5
 > At path: /any/path
 
-But __Any__ should be defined with: Any data type. `)
+But __Any__ should be defined with: Any data type. It is optional and must not be set.`)
   })
 
 })
