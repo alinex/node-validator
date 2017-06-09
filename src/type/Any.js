@@ -10,13 +10,16 @@ class AnySchema extends Schema {
   _valid: Set<any>
   _invalid: Set<any>
 
-  constructor() {
-    super()
+  constructor(title?: string, detail?: string) {
+    super(title, detail)
+    // init settings
     this._valid = new Set()
     this._invalid = new Set()
+    // add check rules
+    this._rules.add([this._allowDescriptor, this._allowValidator])
   }
 
-  // setup validation
+  // setup schema
 
   allow(value: any): AnySchema {
     if (value === undefined) {
@@ -50,27 +53,29 @@ class AnySchema extends Schema {
 
   // using schema
 
-  validate(value: any, source?: string): Promise<any> {
-    const data = value instanceof SchemaData ? value : new SchemaData(value, source)
-    return this._optionalValidator(data)
-    .then(() => this._validateAllow(data))
-    .then(() => data.value)
-    .catch(err => (err ? Promise.reject(err) : data.value))
+  _allowDescriptor() {
+    if (this._invalid.size) {
+      return `The keys ${Array.from(this._invalid).join(', ')} are not allowed. `
+    }
+    if (this._valid.size) {
+      return `Only the keys ${Array.from(this._valid).join(', ')} are allowed. `
+    }
+    return ''
   }
 
-  _validateAllow(value: any): Promise<any> {
+  _allowValidator(data: SchemaData): Promise<void> {
     // reject if marked as invalid
-    if (this._invalid.size && this._invalid.has(value)) {
-      return Promise.reject(new SchemaError(this, value,
-        'Element found in blacklist (disallowed item)'))
+    if (this._invalid.size && this._invalid.has(data.value)) {
+      return Promise.reject(new SchemaError(this, data.value,
+        'Element found in blacklist (disallowed item).'))
     }
     // reject if valid is set but not included
-    if (this._valid.size && !this._valid.has(value)) {
-      return Promise.reject(new SchemaError(this, value,
-        'Element not in whitelist (allowed item)'))
+    if (this._valid.size && !this._valid.has(data.value)) {
+      return Promise.reject(new SchemaError(this, data.value,
+        'Element not in whitelist (allowed item).'))
     }
     // ok
-    return Promise.resolve(value)
+    return Promise.resolve(data.value)
   }
 }
 

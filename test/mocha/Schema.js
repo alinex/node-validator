@@ -9,7 +9,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = Schema
 
-describe.only('schema', () => {
+describe('schema', () => {
 
   it('should work without specification', (done) => {
     const data = 5
@@ -32,15 +32,14 @@ describe.only('schema', () => {
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-        done()
-      })
+      }, done)
     })
 
     it('should fail with not optional', (done) => {
       const schema = new MySchema()
       schema.not.optional
       // use schema
-      helper.validateFail(schema, undefined, (err) => done())
+      helper.validateFail(schema, undefined, undefined, done)
     })
 
     it('should work with default', (done) => {
@@ -50,15 +49,14 @@ describe.only('schema', () => {
       schema.default(data)
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-        done()
-      })
+      }, done)
     })
 
     it('should fail with not optional and undefined default', (done) => {
       const schema = new MySchema()
       schema.not.optional.default(undefined)
       // use schema
-      helper.validateFail(schema, undefined, () => done())
+      helper.validateFail(schema, undefined, undefined, done)
     })
 
   })

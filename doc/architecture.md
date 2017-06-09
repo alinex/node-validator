@@ -1,9 +1,16 @@
 # Architecture
 
-Heavily based on joi API...
+The Validator is based on classes which helps you to easily define a specific data
+schema. Therefore the appropriate class is used to create an instance and set it up
+using it´s methods. This newly created schema may also be a structure and combination
+of different schema class instances.
 
+This schema can describe itself human readable and can be given a data structure
+to validate. It will run asynchronously over the data structure to check and optimize
+it. As a result it will return an promise with the resulting data structure.
 
-http://2ality.com/i/index2.html private properties
+If the data isn´t valid it will reject with an Error object which can show the
+real problem in detail.
 
 
 ## Type definition

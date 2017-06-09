@@ -23,9 +23,11 @@ class Schema {
     // init settings
     this._negate = false
     this._optional = true
-    // check optional
+    // add check rules
     this._rules.add([this._optionalDescriptor, this._optionalValidator])
   }
+
+  // setup schema
 
   get not(): Schema {
     this._negate = !this._negate
@@ -47,15 +49,15 @@ class Schema {
 
   get description(): string {
     let msg = 'Any data type. '
-    this._rules.forEach((rule) => { msg += rule[0]() })
+    this._rules.forEach((rule) => { msg += rule[0].call(this) })
     return msg.trim()
   }
 
-  validate(value: any, source?: string): Promise<any> {
-    const data = value instanceof SchemaData ? value : new SchemaData(value, source)
+  validate(value: any, source?: string, options?: Object): Promise<any> {
+    const data = value instanceof SchemaData ? value : new SchemaData(value, source, options)
     // run rules seriously
     let p = Promise.resolve()
-    this._rules.forEach((rule) => { p = p.then(() => rule[1](data)) })
+    this._rules.forEach((rule) => { p = p.then(() => rule[1].call(this, data)) })
     // p = p.then(() => this._optionalValidator(data))
     return p.then(() => data.value)
     .catch(err => (err ? Promise.reject(err) : data.value))
@@ -74,7 +76,6 @@ class Schema {
     return Promise.reject(new SchemaError(this, data,
       'This element is mandatory!'))
   }
-
 }
 
 export default Schema
