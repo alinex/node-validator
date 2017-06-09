@@ -1,18 +1,14 @@
 // @flow
 import util from 'util'
 
+import SchemaData from './SchemaData'
 import SchemaError from './SchemaError'
 
-// TODO maybe data class
-// structure of data Object
-// references to schema to use
-// checker = new validator.check(data, schema)
-// checker.load(date2)
-// checker.validate()
-//
-//
-
 class Schema {
+
+  title: string
+  detail: string
+  _rules: Set<Array<Function>>
 
   // validation data
 
@@ -20,9 +16,15 @@ class Schema {
   _optional: bool
   _default: any
 
-  constructor() {
+  constructor(title?: string, detail?: string) {
+    this.title = title || this.constructor.name.replace(/(.)Schema/, '$1')
+    this.detail = detail || 'should be defined with:'
+    this._rules = new Set()
+    // init settings
     this._negate = false
     this._optional = true
+    // check optional
+    this._rules.add([this._optionalDescriptor, this._optionalValidator])
   }
 
   get not(): Schema {
@@ -44,24 +46,33 @@ class Schema {
   // using schema
 
   get description(): string {
-    if (this._default) return `It will default to ${util.inspect(this._default)} if not set.`
-    return this._optional ? 'It is optional and must not be set.' : ''
+    let msg = 'Any data type. '
+    this._rules.forEach((rule) => { msg += rule[0]() })
+    return msg.trim()
   }
 
-  validate(data: any): Promise<void> {
-    return new Promise((resolve) => {
-      // check optional
-      const value = this._validateOptional(data)
-      return resolve(value)
-    })
+  validate(value: any, source?: string): Promise<any> {
+    const data = value instanceof SchemaData ? value : new SchemaData(value, source)
+    // run rules seriously
+    let p = Promise.resolve()
+    this._rules.forEach((rule) => { p = p.then(() => rule[1](data)) })
+    // p = p.then(() => this._optionalValidator(data))
+    return p.then(() => data.value)
+    .catch(err => (err ? Promise.reject(err) : data.value))
   }
 
-  _validateOptional(data: any): any {
-    const value = data === undefined && this._default ? this._default : data
-    if (!this._optional && value === undefined) {
-      throw new SchemaError(this, 'This element is mandatory!')
-    }
-    return value
+  _optionalDescriptor() {
+    if (this._default) return `It will default to ${util.inspect(this._default)} if not set. `
+    if (this._optional) return 'It is optional and must not be set. '
+    return ''
+  }
+
+  _optionalValidator(data: SchemaData): Promise<void> {
+    if (data.value === undefined && this._default) data.value = this._default
+    if (data.value !== undefined) return Promise.resolve()
+    if (this._optional) return Promise.reject() // stop processing
+    return Promise.reject(new SchemaError(this, data,
+      'This element is mandatory!'))
   }
 
 }

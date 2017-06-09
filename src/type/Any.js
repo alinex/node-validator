@@ -1,6 +1,7 @@
 // @flow
 import Schema from '../Schema'
 import SchemaError from '../SchemaError'
+import SchemaData from '../SchemaData'
 
 class AnySchema extends Schema {
 
@@ -49,24 +50,28 @@ class AnySchema extends Schema {
 
   // using schema
 
-  validate(data: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      // optional and default
-      const value = this._validateOptional(data)
-      if (this._optional && value === undefined) return resolve(value)
-      // reject if marked as invalid
-      if (this._invalid.size && this._invalid.has(value)) {
-        return reject(new SchemaError(this, 'Element found in blacklist (disallowed item)'))
-      }
-      // reject if valid is set but not included
-      if (this._valid.size && !this._valid.has(value)) {
-        return reject(new SchemaError(this, 'Element not in whitelist (allowed item)'))
-      }
-      // ok
-      return resolve(value)
-    })
+  validate(value: any, source?: string): Promise<any> {
+    const data = value instanceof SchemaData ? value : new SchemaData(value, source)
+    return this._optionalValidator(data)
+    .then(() => this._validateAllow(data))
+    .then(() => data.value)
+    .catch(err => (err ? Promise.reject(err) : data.value))
   }
 
+  _validateAllow(value: any): Promise<any> {
+    // reject if marked as invalid
+    if (this._invalid.size && this._invalid.has(value)) {
+      return Promise.reject(new SchemaError(this, value,
+        'Element found in blacklist (disallowed item)'))
+    }
+    // reject if valid is set but not included
+    if (this._valid.size && !this._valid.has(value)) {
+      return Promise.reject(new SchemaError(this, value,
+        'Element not in whitelist (allowed item)'))
+    }
+    // ok
+    return Promise.resolve(value)
+  }
 }
 
 export default AnySchema

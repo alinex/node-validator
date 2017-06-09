@@ -15,6 +15,8 @@ module.exports = {
     'no-console': [ process.env.NODE_ENV === 'production' ? 'error' : 'warn' ],
     'no-shadow': ['error', { 'allow': ['cb', 'err'] }],
     'import/prefer-default-export': 'warn',
-    'no-underscore-dangle': 'off'
+    'no-underscore-dangle': 'off',
+    'no-restricted-syntax': 'off',
+    'no-param-reassign': 'off'
   }
 };

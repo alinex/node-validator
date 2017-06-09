@@ -1,62 +1,64 @@
+// @flow
 import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
-import Debug from 'debug'
 
 import Schema from '../../src/Schema'
+import * as helper from './helper'
 
-chai.use(chaiAsPromised)
 const expect = chai.expect
-const debug = Debug('test')
 
 // to simplify copy and paste in other Schemas
 const MySchema = Schema
 
-describe('schema', () => {
+describe.only('schema', () => {
 
-  it('should work without specification', () => {
+  it('should work without specification', (done) => {
+    const data = 5
     const schema = new MySchema()
     expect(schema, 'schema').to.be.an('object')
     // use schema
-    const data = 5
-    expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
+    helper.validateOk(schema, data, (res) => {
+      expect(res).deep.equal(data)
+      done()
+    })
   })
 
   describe('optional/default', () => {
 
-    it('should work with not optional', () => {
+    it('should work with not optional', (done) => {
+      const data = 5
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.not.optional
       // use schema
-      const data = 5
-      expect(schema.validate(data), 'validate()').to.eventually.deep.equal(data)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+        done()
+      })
     })
 
-    it('should fail with not optional', () => {
+    it('should fail with not optional', (done) => {
       const schema = new MySchema()
       schema.not.optional
       // use schema
-      let res
-      expect(res = schema.validate(), 'validate()').to.be.rejectedWith(Error)
-      res.catch(error => debug(error.message))
+      helper.validateFail(schema, undefined, (err) => done())
     })
 
-    it('should work with default', () => {
+    it('should work with default', (done) => {
+      const data = 5
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      // use schema
-      const data = 5
       schema.default(data)
-      expect(schema.validate(), 'validate()').to.eventually.deep.equal(data)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+        done()
+      })
     })
 
-    it('should fail with not optional and undefined default', () => {
+    it('should fail with not optional and undefined default', (done) => {
       const schema = new MySchema()
       schema.not.optional.default(undefined)
       // use schema
-      let res
-      expect(res = schema.validate(), 'validate()').to.be.rejectedWith(Error)
-      res.catch(error => debug(error.message))
+      helper.validateFail(schema, undefined, () => done())
     })
 
   })
@@ -66,27 +68,21 @@ describe('schema', () => {
   it('should describe', () => {
     const schema = new MySchema()
     // use schema
-    let msg
-    expect(msg = schema.description).to.be.a('string')
-    debug(msg)
+    expect(helper.description(schema)).to.equal('Any data type.')
   })
 
   it('should describe not optional', () => {
     const schema = new MySchema()
     schema.not.optional
     // use schema
-    const msg = schema.description
-    debug(msg)
-    expect(msg).to.be.a('string')
+    expect(helper.description(schema)).to.equal('Any data type.')
   })
 
   it('should describe not optional with default', () => {
     const schema = new MySchema()
     schema.default(8)
     // use schema
-    const msg = schema.description
-    debug(msg)
-    expect(msg).to.be.a('string')
+    expect(helper.description(schema)).to.equal('Any data type.')
   })
 
 })
