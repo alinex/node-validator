@@ -40,7 +40,7 @@ describe('type any', () => {
       const schema = new MySchema()
       schema.not.optional
       // use schema
-      helper.validateFail(schema, undefined, (err) => done())
+      helper.validateFail(schema, undefined, undefined, done)
     })
 
     it('should work with default', (done) => {
@@ -57,7 +57,7 @@ describe('type any', () => {
       const schema = new MySchema()
       schema.not.optional.default(undefined)
       // use schema
-      helper.validateFail(schema, undefined, () => done())
+      helper.validateFail(schema, undefined, undefined, done)
     })
 
   })

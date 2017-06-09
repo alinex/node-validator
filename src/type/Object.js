@@ -1,4 +1,6 @@
 // @flow
+import util from 'util'
+
 import Schema from '../Schema'
 import SchemaError from '../SchemaError'
 import type SchemaData from '../SchemaData'
@@ -17,12 +19,12 @@ class ObjectSchema extends Schema {
     this._pattern = new Map()
     // add check rules
     this._rules.add([this._typeDescriptor, this._typeValidator])
-    // this._rules.add([this._keysDescriptor, this._keysValidator])
+    this._rules.add([this._keysDescriptor, this._keysValidator])
   }
 
   // setup schema
 
-  keys(name: string, check?: Schema): this {
+  key(name: string, check?: Schema): this {
     if (this._negate) {
       // remove
       this._keys.delete(name)
@@ -51,21 +53,25 @@ class ObjectSchema extends Schema {
   // using schema
 
   _typeDescriptor() { // eslint-disable-line class-methods-use-this
-    return 'It have to be an object. '
+    return 'A data object is needed. '
   }
 
   _typeValidator(data: SchemaData): Promise<void> {
-    if (typeof data !== 'object') {
-      return Promise.reject(new SchemaError(this, data, 'An object is needed.'))
+    if (typeof data.value !== 'object') {
+      return Promise.reject(new SchemaError(this, data, 'A data object is needed.'))
     }
     return Promise.resolve()
   }
 
   _keysDescriptor() {
     let msg = ''
-    if (this._keys.size) {
-      msg += 'The following keys have a special format:\n'
+    for (const [key, schema] of this._keys) {
+      msg += `- \`${key}\`: ${schema.description}\n`
     }
+    for (const [re, schema] of this._pattern) {
+      msg += `- \`${util.inspect(re)}\`: ${schema.description}\n`
+    }
+    if (msg.length) msg = `The following keys have a special format:\n${msg}\n`
     return msg
   }
 
