@@ -25,20 +25,20 @@ describe('type any', () => {
 
   describe('optional/default', () => {
 
-    it('should work with not optional', (done) => {
+    it('should work with required', (done) => {
       const data = 5
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      schema.not.optional
+      schema.required
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       }, done)
     })
 
-    it('should fail with not optional', (done) => {
+    it('should fail with required', (done) => {
       const schema = new MySchema()
-      schema.not.optional
+      schema.required
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -53,9 +53,9 @@ describe('type any', () => {
       }, done)
     })
 
-    it('should fail with not optional and undefined default', (done) => {
+    it('should fail with required and undefined default', (done) => {
       const schema = new MySchema()
-      schema.not.optional.default(undefined)
+      schema.required.default(undefined)
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -114,7 +114,7 @@ describe('type any', () => {
     it('should be optional if undefined is allowed', (done) => {
       const data = undefined
       const schema = new MySchema()
-      schema.not.optional
+      schema.required
       .allow(undefined)
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -145,7 +145,7 @@ describe('type any', () => {
     it('should be optional if undefined in allowed list', (done) => {
       const data = undefined
       const schema = new MySchema()
-      schema.not.optional
+      schema.required
       .allow(['a', undefined])
       // use schema
       helper.validateOk(schema, data, (res) => {

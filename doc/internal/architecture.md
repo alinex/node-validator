@@ -93,3 +93,13 @@ are both defined in the base `Schema` class and don´t need to be overwritten.
 
 With the defined rules they will collect all information from the concrete subclass
 or run all validations.
+
+### Setter methods
+
+To keep it simple there are no alias method names to set properties. Also there
+are no pretty coding methods like 'is', 'be', 'should'...
+
+All boolean settings are set using getters and support the `not` property before.
+As possible the default should be a `false` value which is then set. So if the
+default is to be optional the method should better be called `require` to
+don´t need the not in most cases.

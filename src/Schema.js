@@ -13,7 +13,7 @@ class Schema {
   // validation data
 
   _negate: bool
-  _optional: bool
+  _required: bool
   _default: any
 
   constructor(title?: string, detail?: string) {
@@ -22,7 +22,7 @@ class Schema {
     this._rules = new Set()
     // init settings
     this._negate = false
-    this._optional = true
+    this._required = false
     // add check rules
     this._rules.add([this._optionalDescriptor, this._optionalValidator])
   }
@@ -34,8 +34,8 @@ class Schema {
     return this
   }
 
-  get optional(): this {
-    this._optional = !this._negate
+  get required(): this {
+    this._required = !this._negate
     this._negate = false
     return this
   }
@@ -58,23 +58,24 @@ class Schema {
     // run rules seriously
     let p = Promise.resolve()
     this._rules.forEach((rule) => { p = p.then(() => rule[1].call(this, data)) })
-    // p = p.then(() => this._optionalValidator(data))
     return p.then(() => data.value)
     .catch(err => (err ? Promise.reject(err) : data.value))
   }
 
   _optionalDescriptor() {
     if (this._default) return `It will default to ${util.inspect(this._default)} if not set. `
-    if (this._optional) return 'It is optional and must not be set. '
+    if (!this._required) return 'It is optional and must not be set. '
     return ''
   }
 
   _optionalValidator(data: SchemaData): Promise<void> {
     if (data.value === undefined && this._default) data.value = this._default
     if (data.value !== undefined) return Promise.resolve()
-    if (this._optional) return Promise.reject() // stop processing
-    return Promise.reject(new SchemaError(this, data,
+    if (this._required) {
+      return Promise.reject(new SchemaError(this, data,
       'This element is mandatory!'))
+    }
+    return Promise.reject() // stop processing, optional is ok
   }
 }
 

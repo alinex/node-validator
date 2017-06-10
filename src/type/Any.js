@@ -23,11 +23,11 @@ class AnySchema extends Schema {
 
   allow(value: any): this {
     if (value === undefined) {
-      this._optional = !this._negate // true for allow fals for not allow
+      this._required = this._negate // false for allow, true for not allow
     } else if (Array.isArray(value)) {
       value.forEach((v) => {
         if (v === undefined) {
-          this._optional = !this._negate
+          this._required = this._negate
         } else if (this._negate) {
           // disallow
           this._invalid.add(v)
@@ -47,7 +47,7 @@ class AnySchema extends Schema {
       this._valid.add(value)
       this._invalid.delete(value)
     }
-    this._negate = false
+    this._negate = false // been used
     return this
   }
 

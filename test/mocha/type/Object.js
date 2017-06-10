@@ -31,20 +31,20 @@ describe('type object', () => {
 
   describe('optional/default', () => {
 
-    it('should work with not optional', (done) => {
+    it('should work with required', (done) => {
       const data = {a: 1}
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      schema.not.optional
+      schema.required
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       }, done)
     })
 
-    it('should fail with not optional', (done) => {
+    it('should fail with required', (done) => {
       const schema = new MySchema()
-      schema.not.optional
+      schema.required
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -59,9 +59,9 @@ describe('type object', () => {
       }, done)
     })
 
-    it('should fail with not optional and undefined default', (done) => {
+    it('should fail with required and undefined default', (done) => {
       const schema = new MySchema()
-      schema.not.optional.default(undefined)
+      schema.required.default(undefined)
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
