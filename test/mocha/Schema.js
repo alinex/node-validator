@@ -59,6 +59,34 @@ describe('schema', () => {
       helper.validateFail(schema, undefined, undefined, done)
     })
 
+    it('should fail with stripEmpty and null', (done) => {
+      const schema = new MySchema()
+      schema.required.stripEmpty
+      // use schema
+      helper.validateFail(schema, null, undefined, done)
+    })
+
+    it('should fail with stripEmpty and empty String', (done) => {
+      const schema = new MySchema()
+      schema.required.stripEmpty
+      // use schema
+      helper.validateFail(schema, '', undefined, done)
+    })
+
+    it('should fail with stripEmpty and empty Array', (done) => {
+      const schema = new MySchema()
+      schema.required.stripEmpty
+      // use schema
+      helper.validateFail(schema, [], undefined, done)
+    })
+
+    it('should fail with stripEmpty and empty Object', (done) => {
+      const schema = new MySchema()
+      schema.required.stripEmpty
+      // use schema
+      helper.validateFail(schema, {}, undefined, done)
+    })
+
   })
 
   // should work with instance changes

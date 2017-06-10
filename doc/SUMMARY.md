@@ -4,6 +4,7 @@
 - [Architecture](architecture.md)
 
 - [Schema Builder](schema/README.md)
+  - [Base](schema/base.md)
   - [Any](schema/any.md)
   - [Object](schema/object.md)
 

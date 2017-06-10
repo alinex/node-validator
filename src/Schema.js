@@ -14,6 +14,7 @@ class Schema {
 
   _negate: bool
   _required: bool
+  _stripEmpty: bool
   _default: any
 
   constructor(title?: string, detail?: string) {
@@ -23,7 +24,9 @@ class Schema {
     // init settings
     this._negate = false
     this._required = false
+    this._stripEmpty = false
     // add check rules
+    this._rules.add([this._emptyDescriptor, this._emptyValidator])
     this._rules.add([this._optionalDescriptor, this._optionalValidator])
   }
 
@@ -35,8 +38,12 @@ class Schema {
   }
 
   get required(): this {
-    this._required = !this._negate
-    this._negate = false
+    this._required = true
+    return this
+  }
+
+  get stripEmpty(): this {
+    this._stripEmpty = true
     return this
   }
 
@@ -60,6 +67,20 @@ class Schema {
     this._rules.forEach((rule) => { p = p.then(() => rule[1].call(this, data)) })
     return p.then(() => data.value)
     .catch(err => (err ? Promise.reject(err) : data.value))
+  }
+
+  _emptyDescriptor() {
+    return this._stripEmpty ? 'Empty values are set to `undefined`. ' : ''
+  }
+
+  _emptyValidator(data: SchemaData): Promise<void> {
+    if (this._stripEmpty && (
+      data.value === '' || data.value === null || (Array.isArray(data.value) && !data.value.length)
+      || (Object.keys(data.value).length === 0 && data.value.constructor === Object)
+    )) {
+      data.value = undefined
+    }
+    return Promise.resolve()
   }
 
   _optionalDescriptor() {
