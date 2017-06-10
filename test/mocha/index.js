@@ -23,7 +23,7 @@ describe('base', () => {
     const value = 5
     const data = new SchemaData(value, '/any/path')
     const err = new SchemaError(schema, data, 'Something is wrong.')
-    const msg = err.markdown
+    const msg = err.text
     debug(msg)
     expect(msg, 'detail').to.equal(`__Something is wrong.__
 

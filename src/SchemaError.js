@@ -15,7 +15,7 @@ class SchemaError extends Error {
     if (data) this.data = data
   }
 
-  get markdown(): string {
+  get text(): string {
     return `__${this.message}__
 
 > Given value was: ${util.inspect(this.data.value)}

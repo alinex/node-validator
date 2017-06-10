@@ -85,7 +85,9 @@ describe('type object', () => {
       const schema = new MySchema()
       schema.key('a', new validator.Any())
       // use schema
-      expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set. A data object is needed. The following keys have a special format:\n- `a`: Any data type. It is optional and must not be set.')
+      expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set. \
+A data object is needed. The following keys have a special format:\n\
+- `a`: Any data type. It is optional and must not be set.')
     })
 
     it('should work with defined pattern', (done) => {
@@ -103,7 +105,9 @@ describe('type object', () => {
       const schema = new MySchema()
       schema.pattern(/name\d/, new validator.Any())
       // use schema
-      expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set. A data object is needed. The following keys have a special format:\n- `/name\\d/`: Any data type. It is optional and must not be set.')
+      expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set. \
+A data object is needed. The following keys have a special format:\n\
+- `/name\\d/`: Any data type. It is optional and must not be set.')
     })
 
   })

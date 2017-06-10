@@ -1,4 +1,11 @@
-# Development Environment
+# Development
+
+This chapter is only necessary if you would have a deeper look into this modules
+structure and want to contribute. You may add more type schemas or enhance some
+of the existing ones.
+
+
+## Environment
 
 See the [Alinex NodeJS Modules Book](https://alinex.gitbooks.io/nodejs) for a detailed
 description.
@@ -8,9 +15,3 @@ and how to bring it all together.
 
 It also explains a lot of common concepts around the Alinex modules and why to
 use specific techniques or not.
-
-
-## Technologies
-
-Within this module especially the following foreign modules are used:
--
