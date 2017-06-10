@@ -28,3 +28,19 @@ defined all other elements are possible.
 ```js
 const schema = new validator.Any().not.allow(5)
 ```
+
+## allowAll(value: Array<any>)
+
+This will add a complete list of values like each is given using `allow()`.
+
+```js
+const schema = new validator.Any().allowAll(3, 4, 5)
+```
+
+## not.allowAll(value: Array<any>)
+
+This will add a complete list of values like each is given using `not.allow()`.
+
+```js
+const schema = new validator.Any().not.allowAll(3, 4, 5)
+```

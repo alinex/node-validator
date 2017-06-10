@@ -125,7 +125,7 @@ describe('type any', () => {
     it('should allow to define allow as list', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.allow(['a', 'b', 'c'])
+      schema.allowAll(['a', 'b', 'c'])
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -135,7 +135,7 @@ describe('type any', () => {
     it('should allow to define disallow as list', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.not.allow(['a', 'b', 'c'])
+      schema.not.allowAll(['a', 'b', 'c'])
       // use schema
       helper.validateFail(schema, data, (err) => {
         expect(err.message).to.equal('Element found in blacklist (disallowed item).')
@@ -146,7 +146,17 @@ describe('type any', () => {
       const data = undefined
       const schema = new MySchema()
       schema.required
-      .allow(['a', undefined])
+      .allowAll(['a', undefined])
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should allow with array', (done) => {
+      const data = [1, 2, 3]
+      const schema = new MySchema()
+      schema.allow([1, 2, 3])
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
