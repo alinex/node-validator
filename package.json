@@ -33,7 +33,7 @@
     "test-travis": "nyc --reporter=lcov --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",
     "build": "babel src -d dist --require babel-polyfill",
     "start": "cross-env NODE_ENV=production node dist/index.js",
-    "postinstall": "node_modules/.bin/flow-typed install --overwrite",
+    "flowinstall": "node_modules/.bin/flow-typed install --overwrite",
     "prepublishOnly": "npm run lint -s && npm run build -s"
   },
   "directories": {
@@ -47,11 +47,11 @@
     "babel-cli": "^6.24.1",
     "babel-eslint": "^7.2.3",
     "babel-polyfill": "^6.23.0",
-    "babel-preset-env": "^1.5.1",
+    "babel-preset-env": "^1.5.2",
     "babel-preset-flow": "^6.23.0",
     "babel-preset-stage-3": "^6.24.1",
     "babel-register": "^6.24.1",
-    "chai": "^4.0.0",
+    "chai": "^4.0.2",
     "chai-as-promised": "^6.0.0",
     "coveralls": "^2.13.1",
     "eslint": "^3.19.0",
@@ -70,7 +70,7 @@
     "flow-typed": "^2.1.2",
     "mocha": "^3.4.1",
     "nodemon": "^1.11.0",
-    "nyc": "^11.0.1",
+    "nyc": "^11.0.2",
     "request": "^2.81.0"
   },
   "engines": {

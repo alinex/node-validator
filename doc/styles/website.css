@@ -1,1 +1,7 @@
-.code-line-highlight {background-color: #ffff00;}
+.code-line-highlight {background-color: #ffff00}
+/* navbar fixes */
+#anchors-navbar {color: darkgray; right: 28px; top: 45px}
+#goTop {display: none}
+@media (max-width: 660px) {
+  #anchors-navbar {display: none}
+}

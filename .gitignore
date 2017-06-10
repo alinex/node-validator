@@ -30,7 +30,6 @@ bower_components
 # Dependency directories
 node_modules/
 jspm_packages/
-flow-typed/
 
 # Compiled code
 dist

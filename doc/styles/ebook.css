@@ -1,1 +1,3 @@
 .code-line-highlight {background-color: #ffff00;}
+/* navigator settings */
+#anchors-navbar, #goTop {display: none}
