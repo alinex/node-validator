@@ -12,6 +12,8 @@ the optional here. The `not` negates this and makes the schema not optional.
 const schema = new validator.Any().required
 ```
 
+It may be inverted using `not.required`.
+
 ## default(value: any)
 
 The given value is used as an default if nothing is given meaning the value is set
@@ -32,3 +34,5 @@ the default if an empty element is given.
 ```js
 const schema = new validator.Any().stripEmpty.default(3)
 ```
+
+It may be inverted using `not.stripEmpty`.

@@ -29,6 +29,12 @@ describe('type object', () => {
     helper.validateFail(schema, data, undefined, done)
   })
 
+  it('should describe', () => {
+    const schema = new MySchema()
+    // use schema
+    expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set. A data object is needed.')
+  })
+
   describe('optional/default', () => {
 
     it('should work with required', (done) => {
@@ -112,10 +118,113 @@ A data object is needed. The following keys have a special format:\n\
 
   })
 
-  it('should describe', () => {
-    const schema = new MySchema()
-    // use schema
-    expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set. A data object is needed.')
+  describe('removeUnspecified', () => {
+
+    it('should work with defined keys', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().removeUnspecified
+      .key('a', new validator.Any())
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({a: 1})
+      }, done)
+    })
+
+    it('should work with pattern', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().removeUnspecified
+      .pattern(/[ab]/, new validator.Any())
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({a: 1, b: 2})
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().removeUnspecified
+      .key('a', new validator.Any())
+      // use schema
+      expect(helper.description(schema)).to.equal('Any data type. \
+It is optional and must not be set. A data object is needed. \
+The following keys have a special format:\n\
+- `a`: Any data type. It is optional and must not be set.\n\
+\n\
+Keys not defined with the rules before will be removed.')
+    })
+
+  })
+
+  describe('length', () => {
+
+    it('should work with min', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().min(2)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with min', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().min(5)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with max', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().max(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with max', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().max(2)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with length', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().length(3)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with length', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().length(2)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with min and max', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().min(2).max(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe length', () => {
+      const schema = new MySchema().length(4)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe min and max', () => {
+      const schema = new MySchema().min(2).max(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
   })
 
 })

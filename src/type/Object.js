@@ -11,15 +11,21 @@ class ObjectSchema extends Schema {
 
   _keys: Map<string, Schema>
   _pattern: Map<RegExp, Schema>
+  _removeUnspecified: bool
+  _min: number
+  _max: number
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // init settings
     this._keys = new Map()
     this._pattern = new Map()
+    this._removeUnspecified = false
     // add check rules
     this._rules.add([this._typeDescriptor, this._typeValidator])
     this._rules.add([this._keysDescriptor, this._keysValidator])
+    this._rules.add([this._removeUnspecifiedDescriptor, this._removeUnspecifiedValidator])
+    this._rules.add([this._lengthDescriptor, this._lengthValidator])
   }
 
   // setup schema
@@ -47,6 +53,40 @@ class ObjectSchema extends Schema {
       throw new Error('Pattern without schema can´t be defined.')
     }
     this._negate = false
+    return this
+  }
+
+  get removeUnspecified(): this {
+    this._removeUnspecified = !this._negate
+    this._negate = false
+    return this
+  }
+
+  min(limit: number): this {
+    const int = parseInt(limit, 10)
+    if (int < 0) throw new Error('Length for min() has to be positive')
+    if (this._max && int > this._max) {
+      throw new Error('Length for min() should be equal or below max')
+    }
+    this._min = int
+    return this
+  }
+
+  max(limit: number): this {
+    const int = parseInt(limit, 10)
+    if (int < 0) throw new Error('Length for max() has to be positive')
+    if (this._min && int < this._min) {
+      throw new Error('Length for max() should be equal or above min')
+    }
+    this._max = int
+    return this
+  }
+
+  length(limit: number): this {
+    const int = parseInt(limit, 10)
+    if (int < 0) throw new Error('Length for length() has to be positive')
+    this._min = int
+    this._max = int
     return this
   }
 
@@ -98,7 +138,11 @@ class ObjectSchema extends Schema {
           }
         }
         // not specified keep it without check
-        if (!found) sum[key] = data.value[key]
+        if (!found) {
+          if (!data.temp.unchecked) data.temp.unchecked = []
+          data.temp.unchecked[key] = true
+          sum[key] = data.value[key]
+        }
       }
     })
     return Promise.all(checks)
@@ -110,6 +154,42 @@ class ObjectSchema extends Schema {
       data.value = sum
       return Promise.resolve()
     })
+  }
+
+  _removeUnspecifiedDescriptor() {
+    return this._removeUnspecified ? 'Keys not defined with the rules before will be removed. ' : ''
+  }
+
+  _removeUnspecifiedValidator(data: SchemaData): Promise<void> {
+    if (this._removeUnspecified) {
+      for (const key in data.temp.unchecked) if (key) delete data.value[key]
+    }
+    return Promise.resolve()
+  }
+
+  _lengthDescriptor() {
+    if (this._min && this._max) {
+      return this._min === this._max ? `The object has to contain exactly ${this._min} elements. `
+      : `The object needs between ${this._min} and ${this._max} elements. `
+    }
+    if (this._min) return `The object needs at least ${this._min} elements. `
+    if (this._max) return `The object allows up to ${this._min} elements. `
+    return ''
+  }
+
+  _lengthValidator(data: SchemaData): Promise<void> {
+    const num = Object.keys(data.value).length
+    if (this._min && num < this._min) {
+      return Promise.reject(new SchemaError(this, data,
+      `The object has a length of ${num} elements. \
+This is too less, at least ${this._min} are needed.`))
+    }
+    if (this._max && num > this._max) {
+      return Promise.reject(new SchemaError(this, data,
+      `The object has a length of ${num} elements. \
+This is too much, not more than ${this._max} are allowed.`))
+    }
+    return Promise.resolve()
   }
 
 }

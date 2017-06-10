@@ -38,12 +38,14 @@ class Schema {
   }
 
   get required(): this {
-    this._required = true
+    this._required = !this._negate
+    this._negate = false
     return this
   }
 
   get stripEmpty(): this {
-    this._stripEmpty = true
+    this._stripEmpty = !this._negate
+    this._negate = false
     return this
   }
 
@@ -53,6 +55,11 @@ class Schema {
   }
 
   // using schema
+
+  get clone(): this {
+    return this
+//    return Object.assign(Object.create(this), this)
+  }
 
   get description(): string {
     let msg = 'Any data type. '

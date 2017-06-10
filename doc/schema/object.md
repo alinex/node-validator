@@ -1,46 +1,48 @@
 # Object Schema
 
-Create a schema that matches any data type.
+Create a schema that matches any data object which contains key/value pairs.
 
-This is an universal type which may be used everywhere there no further knowledge
-of the structure is known. It can also be used to make a loose checking schema
-first and later replace it through detailed specifications.
+The values may be of any other type.
 
-## optional / not.optional
+See at [Base Schema](base.md) for the inherited methods you may call like:
+- `required`
+- `default()`
+- `stripEmpty`
 
-The value may be optional (default), meaning if no value is given it will be set
-as undefined. A value of `null` is considered as a concrete value and won´t trigger
-the optional here. The `not` negates this and makes the schema not optional.
+## key(name: string, check: Schema)
+
+Specify the schema for a specific value.
 
 ```js
-const schema = new validator.Any().not.optional
+const schema = new validator.Object()
+.key('one', new validator.Any())
 ```
 
-## default(value: any)
+## pattern(regexp: RegExp, check: Schema)
 
-The given value is used as an default if nothing is given meaning the value is set
-to `undefined`. The default value will also go through the further rules and have
-to succeed all other constraints.
-If this is used the `optional` setting don't have to be used.
+Specify the schema for all values which keys match the given pattern. Only the first
+match is used and directly specified `key` goes first, too.
 
 ```js
-const schema = new validator.Any().default(1)
+const schema = new validator.Object()
+.pattern(/number\d/, new validator.Any())
 ```
 
-## allow(value: any)
+## removeUnspecified
 
-If you specify at least one value which is allowed only the allowed values are
-possible. Therefore a deep check will be done.
+This will remove all unchecked keys from the object. So only the specified are returned.
 
 ```js
-const schema = new validator.Any().allow(5)
+const schema = new validator.Object().removeUnspecified
+.key('one', new validator.Any())
 ```
 
-## not.allow(value: any)
+It may be inverted using `not.required`.
 
-Also you may define which elements you won´t allow. If only invalid elements are
-defined all other elements are possible.
+## min(limit: number) / max(limit: number) / length(limit: number)
+
+Specifies the number of keys the object is allowed to have.
 
 ```js
-const schema = new validator.Any().not.allow(5)
+const schema = new validator.Object().min(1).max(3)
 ```
