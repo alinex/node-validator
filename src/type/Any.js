@@ -65,13 +65,14 @@ class AnySchema extends Schema {
   // using schema
 
   _allowDescriptor() {
+    let msg = ''
     if (this._invalid.size) {
-      return `The keys ${Array.from(this._invalid).join(', ')} are not allowed. `
+      msg += `The keys ${Array.from(this._invalid).join(', ')} are not allowed. `
     }
     if (this._valid.size) {
-      return `Only the keys ${Array.from(this._valid).join(', ')} are allowed. `
+      msg += `Only the keys ${Array.from(this._valid).join(', ')} are allowed. `
     }
-    return ''
+    return `${msg.trim()}\n`
   }
 
   _allowValidator(data: SchemaData): Promise<void> {

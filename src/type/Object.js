@@ -13,8 +13,8 @@ class ObjectSchema extends Schema {
   _removeUnknown: bool
   _min: number
   _max: number
-  _keysRequired: Array<string>
-  _keysForbidden: Array<string>
+  _keysRequired: Set<string>
+  _keysForbidden: Set<string>
   _logic: Array<string>
 
   constructor(title?: string, detail?: string) {
@@ -22,10 +22,14 @@ class ObjectSchema extends Schema {
     // init settings
     this._keys = new Map()
     this._removeUnknown = false
+    this._keysRequired = new Set()
+    this._keysForbidden = new Set()
+    this._logic = []
     // add check rules
     this._rules.add([this._typeDescriptor, this._typeValidator])
     this._rules.add([this._keysDescriptor, this._keysValidator])
     this._rules.add([this._removeUnknownDescriptor, this._removeUnknownValidator])
+    this._rules.add([this._keysRequiredDescriptor, this._keysRequiredValidator])
     this._rules.add([this._lengthDescriptor, this._lengthValidator])
   }
 
@@ -87,6 +91,38 @@ without schema can´t be defined.`)
       this._min = int
       this._max = int
     }
+    return this
+  }
+
+  keysRequired(...keys: Array<string|Array<string>>): this {
+    for (const e of keys) {
+      if (typeof e === 'string') {
+        if (this._negate) this._keysRequired.delete(e)
+        else if (!this._keysRequired.has(e)) this._keysRequired.add(e)
+      } else { // array
+        for (const l of e) {
+          if (this._negate) this._keysRequired.delete(l)
+          else if (!this._keysRequired.has(l)) this._keysRequired.add(l)
+        }
+      }
+    }
+    this._negate = false
+    return this
+  }
+
+  keysForbidden(...keys: Array<string|Array<string>>): this {
+    for (const e of keys) {
+      if (typeof e === 'string') {
+        if (this._negate) this._keysForbidden.delete(e)
+        else if (!this._keysForbidden.has(e)) this._keysForbidden.add(e)
+      } else { // array
+        for (const l of e) {
+          if (this._negate) this._keysForbidden.delete(l)
+          else if (!this._keysForbidden.has(l)) this._keysForbidden.add(l)
+        }
+      }
+    }
+    this._negate = false
     return this
   }
 
@@ -185,6 +221,28 @@ This is too less, at least ${this._min} are needed.`))
       return Promise.reject(new SchemaError(this, data,
       `The object has a length of ${num} elements. \
 This is too much, not more than ${this._max} are allowed.`))
+    }
+    return Promise.resolve()
+  }
+
+  _keysRequiredDescriptor() {
+    let msg = ''
+    if (this._keysRequired.size) {
+      const list = Array.from(this._keysRequired)
+      .map(e => `\`${e}\``).join(', ')
+      msg += `The keys ${list} are required. `
+    }
+    if (this._keysForbidden.size) {
+      const list = Array.from(this._keysForbidden)
+      .map(e => `\`${e}\``).join(', ')
+      msg += `None of the keys ${list} are allowed.\n`
+    }
+    return msg
+  }
+
+  _keysRequiredValidator(data: SchemaData): Promise<void> {
+    if (this._keysRequired.size) {
+      data.value = 1
     }
     return Promise.resolve()
   }

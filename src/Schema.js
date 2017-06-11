@@ -80,7 +80,7 @@ class Schema {
   }
 
   _emptyDescriptor() {
-    return this._stripEmpty ? 'Empty values are set to `undefined`. ' : ''
+    return this._stripEmpty ? 'Empty values are set to `undefined`.\n' : ''
   }
 
   _emptyValidator(data: SchemaData): Promise<void> {
@@ -94,8 +94,8 @@ class Schema {
   }
 
   _optionalDescriptor() {
-    if (this._default) return `It will default to ${util.inspect(this._default)} if not set. `
-    if (!this._required) return 'It is optional and must not be set. '
+    if (this._default) return `It will default to ${util.inspect(this._default)} if not set.\n`
+    if (!this._required) return 'It is optional and must not be set.\n'
     return ''
   }
 

@@ -72,7 +72,7 @@ to be defined in this pattern:
 
   _allowDescriptor() {
     if (this._valid.size) {
-      return `Only the keys ${Array.from(this._valid).join(', ')} are allowed. `
+      return `Only the keys ${Array.from(this._valid).join(', ')} are allowed.\n`
     }
     return ''
   }
@@ -87,6 +87,9 @@ to be defined in this pattern:
     return Promise.resolve()
   }
 ```
+
+The descriptor returns simple markdown and need a newline as last character to format
+nicely as text if multiple messages are collected.
 
 And at last close the class and export it. To make it available it has to be
 re-exported in `src/index.js`
