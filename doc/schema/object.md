@@ -53,14 +53,22 @@ const schema = new validator.Object().requiredKeys('a', 'b', 'c')
 
 > Use `not` to remove them from one of the lists.
 
-## and(list: string...|Array) / not.and(list: string...|Array)
+## and(list: string...|Array)
 
 With this logic check you ensure that all of the given keys or none of them are
 present in the data object.
 
 ```js
 const schema = new validator.Object().and('a', 'b', 'c')
-.not.and(['d', 'e', 'f'])
+```
+
+## not.and(list: string...|Array)
+
+With this logic check you ensure that some of the given keys may be set but neither
+all of them.
+
+```js
+const schema = new validator.Object().not.and('a', 'b', 'c')
 ```
 
 ## or(list: string...|Array)

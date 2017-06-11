@@ -22,3 +22,6 @@ second paragraph defines the schema with two specified keys. And in the last par
 the schema is used to validate a data structure.
 
 See the different schema descriptions for their possible settings and use cases.
+
+To see exactly what your schema allows output it's `description` property and you
+will get the resulting configuration explained.
