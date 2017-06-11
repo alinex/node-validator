@@ -94,7 +94,7 @@ without schema can´t be defined.`)
     return this
   }
 
-  keysRequired(...keys: Array<string|Array<string>>): this {
+  requiredKeys(...keys: Array<string|Array<string>>): this {
     for (const e of keys) {
       if (typeof e === 'string') {
         if (this._negate) this._keysRequired.delete(e)
@@ -110,7 +110,7 @@ without schema can´t be defined.`)
     return this
   }
 
-  keysForbidden(...keys: Array<string|Array<string>>): this {
+  forbiddenKeys(...keys: Array<string|Array<string>>): this {
     for (const e of keys) {
       if (typeof e === 'string') {
         if (this._negate) this._keysForbidden.delete(e)
@@ -228,21 +228,37 @@ This is too much, not more than ${this._max} are allowed.`))
   _keysRequiredDescriptor() {
     let msg = ''
     if (this._keysRequired.size) {
-      const list = Array.from(this._keysRequired)
+      let list = Array.from(this._keysRequired)
       .map(e => `\`${e}\``).join(', ')
+      list = list.replace(/(.*),/, '$1 and')
       msg += `The keys ${list} are required. `
     }
     if (this._keysForbidden.size) {
-      const list = Array.from(this._keysForbidden)
+      let list = Array.from(this._keysForbidden)
       .map(e => `\`${e}\``).join(', ')
+      list = list.replace(/(.*),/, '$1 and')
       msg += `None of the keys ${list} are allowed.\n`
     }
     return msg
   }
 
   _keysRequiredValidator(data: SchemaData): Promise<void> {
+    const keys = Object.keys(data.value)
     if (this._keysRequired.size) {
-      data.value = 1
+      for (const check of this._keysRequired) {
+        if (!keys.includes(check)) {
+          return Promise.reject(new SchemaError(this, data,
+            `The key ${check} is missing. `))
+        }
+      }
+    }
+    if (this._keysForbidden.size) {
+      for (const check of this._keysForbidden) {
+        if (keys.includes(check)) {
+          return Promise.reject(new SchemaError(this, data,
+            `The key ${check} is not allowed here. `))
+        }
+      }
     }
     return Promise.resolve()
   }

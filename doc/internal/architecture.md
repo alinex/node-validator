@@ -9,6 +9,8 @@ Each schema class should inherit from `Schema` or any of it´s subclasses.
 
 ### Example
 
+A full schema is described in this example.
+
 ```js
 // @flow
 import Schema from '../Schema'
@@ -96,7 +98,7 @@ re-exported in `src/index.js`
 ```js
 }
 
-export default AnySchema
+export default MySchema
 ```
 
 ### How it works

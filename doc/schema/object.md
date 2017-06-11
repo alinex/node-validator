@@ -40,3 +40,15 @@ Specifies the number of keys the object is allowed to have.
 ```js
 const schema = new validator.Object().min(1).max(3)
 ```
+
+## requiredKeys(list: string...|Array) / forbiddenKeys(list: string...|Array)
+
+These two methods allow to define the key names which are allowed or disallowed.
+It may be called multiple times to specify it.
+
+```js
+const schema = new validator.Object().requiredKeys('a', 'b', 'c')
+.forbiddenKeys(['d', 'e'])
+```
+
+> Use `not` to remove them from one of the lists.

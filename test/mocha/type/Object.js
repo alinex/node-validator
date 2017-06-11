@@ -271,4 +271,112 @@ A data object is needed. The following keys have a special format:\n\
 
   })
 
+  describe('requiredKeys', () => {
+
+    it('should work with required key', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().requiredKeys('a')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should work with required key list', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().requiredKeys('a', 'b', 'c')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should work with required key array', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().requiredKeys(['a', 'b', 'c'])
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with required keys', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().requiredKeys('d')
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow to remove with not', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().requiredKeys('a', 'b', 'c', 'd')
+      .not.requiredKeys('d')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe min and max', () => {
+      const schema = new MySchema().requiredKeys('a', 'b', 'c')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('forbiddenKeys', () => {
+
+    it('should work with forbidden key', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().forbiddenKeys('d')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should work with forbidden key list', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().forbiddenKeys('d', 'e', 'f')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should work with forbidden key array', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().forbiddenKeys(['d', 'e', 'f'])
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with forbidden keys', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().forbiddenKeys('a')
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow to remove with not', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().forbiddenKeys('c', 'd', 'e', 'f')
+      .not.forbiddenKeys('c')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe min and max', () => {
+      const schema = new MySchema().forbiddenKeys('a', 'b', 'c')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
 })
