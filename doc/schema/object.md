@@ -9,23 +9,15 @@ See at [Base Schema](base.md) for the inherited methods you may call like:
 - `default()`
 - `stripEmpty`
 
-## key(name: string, check: Schema)
+## key(name: string|RegExp, check: Schema)
 
-Specify the schema for a specific value.
-
-```js
-const schema = new validator.Object()
-.key('one', new validator.Any())
-```
-
-## pattern(regexp: RegExp, check: Schema)
-
-Specify the schema for all values which keys match the given pattern. Only the first
+Specify the schema for a specific value or for all values which keys match the given pattern. Only the first
 match is used and directly specified `key` goes first, too.
 
 ```js
 const schema = new validator.Object()
-.pattern(/number\d/, new validator.Any())
+.key('one', new validator.Any())
+.key(/number\d/, new validator.Any())
 ```
 
 ## removeUnknown

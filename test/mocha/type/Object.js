@@ -74,7 +74,7 @@ describe('type object', () => {
 
   })
 
-  describe('key/pattern', () => {
+  describe('key', () => {
 
     it('should work with defined keys', (done) => {
       const data = {a: 1}
@@ -100,7 +100,7 @@ A data object is needed. The following keys have a special format:\n\
       const data = {name1: 1}
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      schema.pattern(/name\d/, new validator.Any())
+      schema.key(/name\d/, new validator.Any())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -109,7 +109,7 @@ A data object is needed. The following keys have a special format:\n\
 
     it('should describe with defined pattern', () => {
       const schema = new MySchema()
-      schema.pattern(/name\d/, new validator.Any())
+      schema.key(/name\d/, new validator.Any())
       // use schema
       expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set. \
 A data object is needed. The following keys have a special format:\n\
@@ -133,7 +133,7 @@ A data object is needed. The following keys have a special format:\n\
     it('should work with pattern', (done) => {
       const data = {a: 1, b: 2, c: 3}
       const schema = new MySchema().removeUnknown
-      .pattern(/[ab]/, new validator.Any())
+      .key(/[ab]/, new validator.Any())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({a: 1, b: 2})

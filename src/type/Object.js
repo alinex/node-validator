@@ -9,8 +9,7 @@ class ObjectSchema extends Schema {
 
   // validation data
 
-  _keys: Map<string, Schema>
-  _pattern: Map<RegExp, Schema>
+  _keys: Map<string|RegExp, Schema>
   _removeUnknown: bool
   _min: number
   _max: number
@@ -19,7 +18,6 @@ class ObjectSchema extends Schema {
     super(title, detail)
     // init settings
     this._keys = new Map()
-    this._pattern = new Map()
     this._removeUnknown = false
     // add check rules
     this._rules.add([this._typeDescriptor, this._typeValidator])
@@ -30,27 +28,15 @@ class ObjectSchema extends Schema {
 
   // setup schema
 
-  key(name: string, check?: Schema): this {
+  key(name: string|RegExp, check?: Schema): this {
     if (this._negate) {
       // remove
       this._keys.delete(name)
     } else if (check) {
       this._keys.set(name, check)
     } else {
-      throw new Error('Key without schema can´t be defined.')
-    }
-    this._negate = false
-    return this
-  }
-
-  pattern(regexp: RegExp, check?: Schema): this {
-    if (this._negate) {
-      // remove
-      this._pattern.delete(regexp)
-    } else if (check) {
-      this._pattern.set(regexp, check)
-    } else {
-      throw new Error('Pattern without schema can´t be defined.')
+      throw new Error(`${typeof name === 'string' ? 'Key' : 'Pattern'} \
+without schema can´t be defined.`)
     }
     this._negate = false
     return this
@@ -106,10 +92,7 @@ class ObjectSchema extends Schema {
   _keysDescriptor() {
     let msg = ''
     for (const [key, schema] of this._keys) {
-      msg += `- \`${key}\`: ${schema.description}\n`
-    }
-    for (const [re, schema] of this._pattern) {
-      msg += `- \`${util.inspect(re)}\`: ${schema.description}\n`
+      msg += `- \`${typeof key === 'string' ? key : util.inspect(key)}\`: ${schema.description}\n`
     }
     if (msg.length) msg = `The following keys have a special format:\n${msg}\n`
     return msg
@@ -129,8 +112,8 @@ class ObjectSchema extends Schema {
         keys.push(key)
       } else {
         let found = false
-        for (const p of this._pattern.entries()) {
-          if (key.match(p[0])) {
+        for (const p of this._keys.entries()) {
+          if (typeof p !== 'string' && key.match(p[0])) {
             checks.push(p[1].validate(data.value[key]))
             keys.push(key)
             found = true
