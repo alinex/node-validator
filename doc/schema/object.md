@@ -52,3 +52,53 @@ const schema = new validator.Object().requiredKeys('a', 'b', 'c')
 ```
 
 > Use `not` to remove them from one of the lists.
+
+## and(list: string...|Array) / not.and(list: string...|Array)
+
+With this logic check you ensure that all of the given keys or none of them are
+present in the data object.
+
+```js
+const schema = new validator.Object().and('a', 'b', 'c')
+.not.and(['d', 'e', 'f'])
+```
+
+## or(list: string...|Array)
+
+With this logic check you ensure that at least one of the given keys are
+present in the data object.
+
+```js
+const schema = new validator.Object().or('a', 'b', 'c')
+```
+
+> If you use the `not` operator it is identical to define them as `forbiddenKeys`.
+
+## xor(list: string...|Array)
+
+With this logic check you ensure that exactly one and not multiple of the given keys are
+present in the data object.
+
+```js
+const schema = new validator.Object().xor('a', 'b', 'c')
+```
+
+> If you use the `not` operator it is identical to define them as `forbiddenKeys`.
+
+## with(key: string, peers: string...|Array)
+
+With this logic check you ensure that if the given 'key' is set all of the other
+peers have to be present, too.
+
+```js
+const schema = new validator.Object().with('a', ['b', 'c'])
+```
+
+## not.with(key: string, peers: string...|Array)
+
+With this logic check you ensure that if the given 'key' is set none of the other
+peers are allowed.
+
+```js
+const schema = new validator.Object().not.with('a', ['b', 'c'])
+```
