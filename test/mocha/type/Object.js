@@ -118,11 +118,11 @@ A data object is needed. The following keys have a special format:\n\
 
   })
 
-  describe('removeUnspecified', () => {
+  describe('removeUnknown', () => {
 
     it('should work with defined keys', (done) => {
       const data = {a: 1, b: 2, c: 3}
-      const schema = new MySchema().removeUnspecified
+      const schema = new MySchema().removeUnknown
       .key('a', new validator.Any())
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -132,7 +132,7 @@ A data object is needed. The following keys have a special format:\n\
 
     it('should work with pattern', (done) => {
       const data = {a: 1, b: 2, c: 3}
-      const schema = new MySchema().removeUnspecified
+      const schema = new MySchema().removeUnknown
       .pattern(/[ab]/, new validator.Any())
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -141,7 +141,7 @@ A data object is needed. The following keys have a special format:\n\
     })
 
     it('should describe', () => {
-      const schema = new MySchema().removeUnspecified
+      const schema = new MySchema().removeUnknown
       .key('a', new validator.Any())
       // use schema
       expect(helper.description(schema)).to.equal('Any data type. \

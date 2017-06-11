@@ -11,7 +11,7 @@ class ObjectSchema extends Schema {
 
   _keys: Map<string, Schema>
   _pattern: Map<RegExp, Schema>
-  _removeUnspecified: bool
+  _removeUnknown: bool
   _min: number
   _max: number
 
@@ -20,11 +20,11 @@ class ObjectSchema extends Schema {
     // init settings
     this._keys = new Map()
     this._pattern = new Map()
-    this._removeUnspecified = false
+    this._removeUnknown = false
     // add check rules
     this._rules.add([this._typeDescriptor, this._typeValidator])
     this._rules.add([this._keysDescriptor, this._keysValidator])
-    this._rules.add([this._removeUnspecifiedDescriptor, this._removeUnspecifiedValidator])
+    this._rules.add([this._removeUnknownDescriptor, this._removeUnknownValidator])
     this._rules.add([this._lengthDescriptor, this._lengthValidator])
   }
 
@@ -56,8 +56,8 @@ class ObjectSchema extends Schema {
     return this
   }
 
-  get removeUnspecified(): this {
-    this._removeUnspecified = !this._negate
+  get removeUnknown(): this {
+    this._removeUnknown = !this._negate
     this._negate = false
     return this
   }
@@ -156,12 +156,12 @@ class ObjectSchema extends Schema {
     })
   }
 
-  _removeUnspecifiedDescriptor() {
-    return this._removeUnspecified ? 'Keys not defined with the rules before will be removed. ' : ''
+  _removeUnknownDescriptor() {
+    return this._removeUnknown ? 'Keys not defined with the rules before will be removed. ' : ''
   }
 
-  _removeUnspecifiedValidator(data: SchemaData): Promise<void> {
-    if (this._removeUnspecified) {
+  _removeUnknownValidator(data: SchemaData): Promise<void> {
+    if (this._removeUnknown) {
       for (const key in data.temp.unchecked) if (key) delete data.value[key]
     }
     return Promise.resolve()

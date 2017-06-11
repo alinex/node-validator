@@ -28,12 +28,12 @@ const schema = new validator.Object()
 .pattern(/number\d/, new validator.Any())
 ```
 
-## removeUnspecified
+## removeUnknown
 
 This will remove all unchecked keys from the object. So only the specified are returned.
 
 ```js
-const schema = new validator.Object().removeUnspecified
+const schema = new validator.Object().removeUnknown
 .key('one', new validator.Any())
 ```
 
