@@ -49,10 +49,20 @@ As next part some public methods are used to set the properties.
   // setup schema
 
   allow(value: any): this {
-    this._valid.add(value)
-    this._invalid.delete(value)
+    if (this.negate) {
+      this._invalid.add(value)
+      this._valid.delete(value)
+    } else {
+      this._valid.add(value)
+      this._invalid.delete(value)      
+    }
+    this._negate = false
+    return this
   }
 ```
+
+Like also seen in the code you always have to support the `this._negate` setting
+and reset it's value.
 
 Now the previously added methods each as `...Descriptor` and `..Validator` have
 to be defined in this pattern:

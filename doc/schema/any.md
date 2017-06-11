@@ -11,7 +11,7 @@ See at [Base Schema](base.md) for the inherited methods you may call like:
 - `default()`
 - `stripEmpty`
 
-## allow(value: any)
+## allow(value: any) / not.allow(value: any)
 
 If you specify at least one value which is allowed only the allowed values are
 possible. Therefore a deep check will be done.
@@ -20,8 +20,6 @@ possible. Therefore a deep check will be done.
 const schema = new validator.Any().allow(5)
 ```
 
-## not.allow(value: any)
-
 Also you may define which elements you won´t allow. If only invalid elements are
 defined all other elements are possible.
 
@@ -29,7 +27,7 @@ defined all other elements are possible.
 const schema = new validator.Any().not.allow(5)
 ```
 
-## allowAll(value: Array<any>)
+## allowAll(value: Array<any>) / not.allowAll(value: Array<any>)
 
 This will add a complete list of values like each is given using `allow()`.
 
@@ -37,10 +35,14 @@ This will add a complete list of values like each is given using `allow()`.
 const schema = new validator.Any().allowAll(3, 4, 5)
 ```
 
-## not.allowAll(value: Array<any>)
-
 This will add a complete list of values like each is given using `not.allow()`.
 
 ```js
 const schema = new validator.Any().not.allowAll(3, 4, 5)
 ```
+
+## allowToClear / not.allowToClear
+
+This method allows you to clear the list of valid or invalid entries completely.
+It's the only way to get a value out of both lists because the normal `allow` and
+`not.allow` always removes from one and inserts in the other list.

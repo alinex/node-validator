@@ -49,16 +49,19 @@ class Schema {
     return this
   }
 
-  default(value: any): this {
-    this._default = value
+  default(value?: any): this {
+    if (this._negate || value === undefined) delete this._default
+    else this._default = value
+    this._negate = false
     return this
   }
 
   // using schema
 
   get clone(): this {
-    return this
+    this._negate = false // no support
 //    return Object.assign(Object.create(this), this)
+    return this
   }
 
   get description(): string {

@@ -20,6 +20,8 @@ const schema = new validator.Object()
 .key(/number\d/, new validator.Any())
 ```
 
+> It may be removed using `not.key`.
+
 ## removeUnknown
 
 This will remove all unchecked keys from the object. So only the specified are returned.
@@ -29,7 +31,7 @@ const schema = new validator.Object().removeUnknown
 .key('one', new validator.Any())
 ```
 
-It may be inverted using `not.required`.
+> It may be inverted using `not.required`.
 
 ## min(limit: number) / max(limit: number) / length(limit: number)
 

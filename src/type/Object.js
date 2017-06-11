@@ -13,6 +13,9 @@ class ObjectSchema extends Schema {
   _removeUnknown: bool
   _min: number
   _max: number
+  _keysRequired: Array<string>
+  _keysForbidden: Array<string>
+  _logic: Array<string>
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
@@ -48,31 +51,42 @@ without schema can´t be defined.`)
     return this
   }
 
-  min(limit: number): this {
-    const int = parseInt(limit, 10)
-    if (int < 0) throw new Error('Length for min() has to be positive')
-    if (this._max && int > this._max) {
-      throw new Error('Length for min() should be equal or below max')
+  min(limit?: number): this {
+    if (this._negate || limit === undefined) delete this._min
+    else {
+      const int = parseInt(limit, 10)
+      if (int < 0) throw new Error('Length for min() has to be positive')
+      if (this._max && int > this._max) {
+        throw new Error('Length for min() should be equal or below max')
+      }
+      this._min = int
     }
-    this._min = int
     return this
   }
 
-  max(limit: number): this {
-    const int = parseInt(limit, 10)
-    if (int < 0) throw new Error('Length for max() has to be positive')
-    if (this._min && int < this._min) {
-      throw new Error('Length for max() should be equal or above min')
+  max(limit?: number): this {
+    if (this._negate || limit === undefined) delete this._max
+    else {
+      const int = parseInt(limit, 10)
+      if (int < 0) throw new Error('Length for max() has to be positive')
+      if (this._min && int < this._min) {
+        throw new Error('Length for max() should be equal or above min')
+      }
+      this._max = int
     }
-    this._max = int
     return this
   }
 
-  length(limit: number): this {
-    const int = parseInt(limit, 10)
-    if (int < 0) throw new Error('Length for length() has to be positive')
-    this._min = int
-    this._max = int
+  length(limit?: number): this {
+    if (this._negate || limit === undefined) {
+      delete this._min
+      delete this._max
+    } else {
+      const int = parseInt(limit, 10)
+      if (int < 0) throw new Error('Length for length() has to be positive')
+      this._min = int
+      this._max = int
+    }
     return this
   }
 

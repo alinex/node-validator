@@ -2,6 +2,23 @@
 
 This are the settings which are common for all schema types.
 
+## not
+
+Some methods allow to negate their function. If this makes sense it is added
+in the examples. Therefore the not is added before the method call.
+
+```js
+const schema = new validator.Any().not.allow(1)
+```
+
+This operator is only valid for the next method. If you need it again it has to
+be given again.
+
+Also on a lot of methods you may need the `not` operator to go back to the initial
+setting. This is especially useful if you cloned a schema from somewhere else and
+want to change something here. Such possibilities are mostly added as a short note
+in each method description.
+
 ## required
 
 The value may be optional (default), meaning if no value is given it will be set
@@ -12,7 +29,7 @@ the optional here. The `not` negates this and makes the schema not optional.
 const schema = new validator.Any().required
 ```
 
-It may be inverted using `not.required`.
+> It may be inverted using `not.required`.
 
 ## default(value: any)
 
@@ -35,4 +52,4 @@ the default if an empty element is given.
 const schema = new validator.Any().stripEmpty.default(3)
 ```
 
-It may be inverted using `not.stripEmpty`.
+> It may be inverted using `not.stripEmpty`.

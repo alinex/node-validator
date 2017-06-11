@@ -116,6 +116,18 @@ A data object is needed. The following keys have a special format:\n\
 - `/name\\d/`: Any data type. It is optional and must not be set.')
     })
 
+    it('should remove defined keys', (done) => {
+      const data = {a: 1}
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      schema.key('a', new validator.Any()).not.key('a')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+        expect(schema._keys.size).to.equal(0)
+      }, done)
+    })
+
   })
 
   describe('removeUnknown', () => {
@@ -137,6 +149,16 @@ A data object is needed. The following keys have a special format:\n\
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({a: 1, b: 2})
+      }, done)
+    })
+
+    it('should work with negate', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().removeUnknown
+      .key('a', new validator.Any()).not.removeUnknown
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({a: 1, b: 2, c: 3})
       }, done)
     })
 
@@ -207,6 +229,33 @@ Keys not defined with the rules before will be removed.')
     it('should work with min and max', (done) => {
       const data = {a: 1, b: 2, c: 3}
       const schema = new MySchema().min(2).max(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove min', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().min(5).not.min()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove max', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().max(2).not.max()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove length', (done) => {
+      const data = {a: 1, b: 2, c: 3}
+      const schema = new MySchema().length(5).not.length()
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)

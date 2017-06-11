@@ -22,6 +22,12 @@ describe('schema', () => {
     })
   })
 
+  it('should describe', () => {
+    const schema = new MySchema()
+    // use schema
+    expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.')
+  })
+
   describe('optional/default', () => {
 
     it('should work with required', (done) => {
@@ -42,6 +48,14 @@ describe('schema', () => {
       helper.validateFail(schema, undefined, undefined, done)
     })
 
+    it('should remove required', (done) => {
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      schema.required.not.required
+      // use schema
+      helper.validateOk(schema, undefined, undefined, done)
+    })
+
     it('should work with default', (done) => {
       const data = 5
       const schema = new MySchema()
@@ -58,6 +72,40 @@ describe('schema', () => {
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
+
+    it('should remove default using not', (done) => {
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      schema.default(5).not.default()
+      // use schema
+      helper.validateOk(schema, undefined, undefined, done)
+    })
+
+    it('should remove default using no value', (done) => {
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      schema.default(5).default()
+      // use schema
+      helper.validateOk(schema, undefined, undefined, done)
+    })
+
+    it('should describe required', () => {
+      const schema = new MySchema()
+      schema.required
+      // use schema
+      expect(helper.description(schema)).to.equal('Any data type.')
+    })
+
+    it('should describe default', () => {
+      const schema = new MySchema()
+      schema.default(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('stripEmpty', () => {
 
     it('should fail with stripEmpty and null', (done) => {
       const schema = new MySchema()
@@ -87,28 +135,13 @@ describe('schema', () => {
       helper.validateFail(schema, {}, undefined, done)
     })
 
-  })
+    it('should describe required with default', () => {
+      const schema = new MySchema()
+      schema.default(8)
+      // use schema
+      expect(helper.description(schema)).to.equal('Any data type. It will default to 8 if not set.')
+    })
 
-  // should work with instance changes
-
-  it('should describe', () => {
-    const schema = new MySchema()
-    // use schema
-    expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.')
-  })
-
-  it('should describe required', () => {
-    const schema = new MySchema()
-    schema.required
-    // use schema
-    expect(helper.description(schema)).to.equal('Any data type.')
-  })
-
-  it('should describe required with default', () => {
-    const schema = new MySchema()
-    schema.default(8)
-    // use schema
-    expect(helper.description(schema)).to.equal('Any data type. It will default to 8 if not set.')
   })
 
 })

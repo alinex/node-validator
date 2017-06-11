@@ -23,6 +23,12 @@ describe('type any', () => {
     })
   })
 
+  it('should describe', () => {
+    const schema = new MySchema()
+    // use schema
+    expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.')
+  })
+
   describe('optional/default', () => {
 
     it('should work with required', (done) => {
@@ -122,6 +128,34 @@ describe('type any', () => {
       }, done)
     })
 
+    it('should allow with array', (done) => {
+      const data = [1, 2, 3]
+      const schema = new MySchema()
+      schema.allow([1, 2, 3])
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe allow', () => {
+      const schema = new MySchema()
+      schema.allow('a')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe not allow', () => {
+      const schema = new MySchema()
+      schema.not.allow('a')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('allowAll', () => {
+
     it('should allow to define allow as list', (done) => {
       const data = 'a'
       const schema = new MySchema()
@@ -153,22 +187,20 @@ describe('type any', () => {
       }, done)
     })
 
-    it('should allow with array', (done) => {
-      const data = [1, 2, 3]
+  })
+
+  describe('allowToClear', () => {
+
+    it('should allow specific object', (done) => {
+      const data = 'a'
       const schema = new MySchema()
-      schema.allow([1, 2, 3])
+      schema.not.allow(data).not.allowToClear
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       }, done)
     })
 
-  })
-
-  it('should describe', () => {
-    const schema = new MySchema()
-    // use schema
-    expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.')
   })
 
 })

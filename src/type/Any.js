@@ -55,6 +55,13 @@ class AnySchema extends Schema {
     return this
   }
 
+  get allowToClear(): this {
+    if (this._negate) this._invalid.clear()
+    else this._valid.clear()
+    this._negate = false
+    return this
+  }
+
   // using schema
 
   _allowDescriptor() {
