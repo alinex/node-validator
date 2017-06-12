@@ -60,6 +60,7 @@ class Schema {
 
   get clone(): this {
     this._negate = false // no support
+//    return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
 //    return Object.assign(Object.create(this), this)
     return this
   }
