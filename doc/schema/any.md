@@ -11,7 +11,7 @@ See at [Base Schema](base.md) for the inherited methods you may call like:
 - `default()`
 - `stripEmpty`
 
-## allow(value: any) / not.allow(value: any)
+## allow(value) / not.allow(value)
 
 If you specify at least one value which is allowed only the allowed values are
 possible. Therefore a deep check will be done.
@@ -27,7 +27,7 @@ defined all other elements are possible.
 const schema = new validator.Any().not.allow(5)
 ```
 
-## allowAll(value: Array<any>) / not.allowAll(value: Array<any>)
+## allowAll(list) / not.allowAll(list)
 
 This will add a complete list of values like each is given using `allow()`.
 

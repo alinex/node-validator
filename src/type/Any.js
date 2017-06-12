@@ -37,8 +37,8 @@ class AnySchema extends Schema {
     return this
   }
 
-  allowAll(value: Array<any>): this {
-    value.forEach((v) => {
+  allowAll(list: Array<any>): this {
+    list.forEach((v) => {
       if (v === undefined) {
         this._required = this._negate
       } else if (this._negate) {

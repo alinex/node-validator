@@ -31,7 +31,7 @@ const schema = new validator.Any().required
 
 > It may be inverted using `not.required`.
 
-## default(value: any)
+## default(value)
 
 The given value is used as an default if nothing is given meaning the value is set
 to `undefined`. The default value will also go through the further rules and have

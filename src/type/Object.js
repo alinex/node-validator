@@ -21,6 +21,8 @@ class ObjectSchema extends Schema {
 
   // validation data
 
+  _deepen: string|RegExp
+  _flatten: string
   _keys: Map<string|RegExp, Schema>
   _removeUnknown: bool
   _min: number
@@ -39,6 +41,7 @@ class ObjectSchema extends Schema {
     this._logic = []
     // add check rules
     this._rules.add([this._typeDescriptor, this._typeValidator])
+    this._rules.add([this._structureDescriptor, this._structureValidator])
     this._rules.add([this._keysDescriptor, this._keysValidator])
     this._rules.add([this._removeUnknownDescriptor, this._removeUnknownValidator])
     this._rules.add([this._keysRequiredDescriptor, this._keysRequiredValidator])
@@ -47,6 +50,24 @@ class ObjectSchema extends Schema {
   }
 
   // setup schema
+
+  deepen(separator: string|RegExp): this {
+    if (this._negate) {
+      delete this._deepen
+      this._negate = false
+    }
+    this._deepen = separator
+    return this
+  }
+
+  flatten(separator: string): this {
+    if (this._negate) {
+      delete this._flatten
+      this._negate = false
+    }
+    this._flatten = separator
+    return this
+  }
 
   key(name: string|RegExp, check?: Schema): this {
     if (this._negate) {
@@ -177,12 +198,67 @@ without schema can´t be defined.`)
   // using schema
 
   _typeDescriptor() { // eslint-disable-line class-methods-use-this
-    return 'A data object is needed. '
+    return 'A data object is needed.\n'
   }
 
   _typeValidator(data: SchemaData): Promise<void> {
     if (typeof data.value !== 'object') {
       return Promise.reject(new SchemaError(this, data, 'A data object is needed.'))
+    }
+    return Promise.resolve()
+  }
+
+  _structureDescriptor() {
+    let msg = ''
+    if (this._deepen) {
+      msg += `Key names will be split on \
+\`${typeof this._deepen === 'string' ? this._deepen : util.inspect(this.deepen)}\` \
+into deeper structures. `
+    }
+    if (this._flatten) {
+      msg += `Deep structures will be flattened by combining key names using \
+\`${this._flatten}\` as separator. `
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _structureValidator(data: SchemaData): Promise<void> {
+    if (this._deepen) {
+      Object.keys(data.value).forEach((key) => {
+        const value = data.value[key]
+        const parts = key.split(this._deepen)
+        if (parts.length > 1) {
+          let obj = data.value
+          const last = parts.pop()
+          parts.forEach((e) => {
+            if (!obj[e]) obj[e] = {}
+            obj = obj[e]
+          })
+          obj[last] = value
+          delete data.value[key]
+        }
+      })
+    }
+    if (this._flatten) {
+      const result = {}
+      const separator = this._flatten
+      function recurse(cur, prop) { // eslint-disable-line no-inner-declarations
+        if (Object(cur) !== cur) {
+          result[prop] = cur
+        } else if (Array.isArray(cur) && cur.length) {
+          for (let i = 0, l = cur.length; i < l; i += 1) recurse(cur[i], `${prop}${separator}${i}`)
+        } else if (Object.keys(cur).length) {
+          for (const p in cur) {
+            if (Object.prototype.hasOwnProperty.call(cur, p)) {
+              recurse(cur[p], prop ? `${prop}${separator}${p}` : p)
+            }
+          }
+        } else { // empty
+          result[prop] = cur
+        }
+      }
+      recurse(data.value, '')
+      data.value = result
     }
     return Promise.resolve()
   }

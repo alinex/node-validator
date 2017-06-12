@@ -92,7 +92,8 @@ describe('type object', () => {
       schema.key('a', new validator.Any())
       // use schema
       expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.\n\
-A data object is needed. The following keys have a special format:\n\
+A data object is needed.\n\
+The following keys have a special format:\n\
 - `a`: Any data type. It is optional and must not be set.')
     })
 
@@ -112,7 +113,8 @@ A data object is needed. The following keys have a special format:\n\
       schema.key(/name\d/, new validator.Any())
       // use schema
       expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.\n\
-A data object is needed. The following keys have a special format:\n\
+A data object is needed.\n\
+The following keys have a special format:\n\
 - `/name\\d/`: Any data type. It is optional and must not be set.')
     })
 
@@ -556,7 +558,67 @@ A data object is needed. The following keys have a special format:\n\
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
-    // clearLogic
+
+    it('should allow to clearLogic', (done) => {
+      const data = {a: 1, b: 2}
+      const schema = new MySchema().and('a', 'b', 'c').clearLogic
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+  })
+
+  describe('deepen/flatten', () => {
+
+    it('should work with deepen as string', (done) => {
+      const data = {'a.a': 1, 'a.b': 2, c: 3}
+      const schema = new MySchema().deepen('.')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({a: {a: 1, b: 2}, c: 3})
+      }, done)
+    })
+
+    it('should work with flatten as string', (done) => {
+      const data = {a: {a: 1, b: 2}, c: 3}
+      const schema = new MySchema().flatten('.')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({'a.a': 1, 'a.b': 2, c: 3})
+      }, done)
+    })
+
+    it('should remove deepen', (done) => {
+      const data = {'a.a': 1, 'a.b': 2, c: 3}
+      const schema = new MySchema().deepen('.').not.deepen()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove flatten', (done) => {
+      const data = {a: {a: 1, b: 2}, c: 3}
+      const schema = new MySchema().flatten('.').not.flatten()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe deepen', () => {
+      const schema = new MySchema().deepen('.')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe flatten', () => {
+      const schema = new MySchema().flatten('.')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
 
   })
 

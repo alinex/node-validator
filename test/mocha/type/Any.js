@@ -191,7 +191,7 @@ describe('type any', () => {
 
   describe('allowToClear', () => {
 
-    it('should allow specific object', (done) => {
+    it('should allow in invalid list', (done) => {
       const data = 'a'
       const schema = new MySchema()
       schema.not.allow(data).not.allowToClear
@@ -199,6 +199,14 @@ describe('type any', () => {
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       }, done)
+    })
+
+    it('should allow in valid list', (done) => {
+      const data = 'a'
+      const schema = new MySchema()
+      schema.allow(data).allowToClear.allow('b')
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
     })
 
   })

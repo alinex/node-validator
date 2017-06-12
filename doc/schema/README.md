@@ -25,3 +25,4 @@ See the different schema descriptions for their possible settings and use cases.
 
 To see exactly what your schema allows output it's `description` property and you
 will get the resulting configuration explained.
+  
