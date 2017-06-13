@@ -67,10 +67,12 @@ class AnySchema extends Schema {
   _allowDescriptor() {
     let msg = ''
     if (this._invalid.size) {
-      msg += `The keys ${Array.from(this._invalid).join(', ')} are not allowed. `
+      msg += `The keys ${Array.from(this._invalid).join(', ').replace(/(.*),/, '$1 and')} \
+are not allowed. `
     }
     if (this._valid.size) {
-      msg += `Only the keys ${Array.from(this._valid).join(', ')} are allowed. `
+      msg += `Only the keys ${Array.from(this._valid).join(', ').replace(/(.*),/, '$1 and')} \
+are allowed. `
     }
     return `${msg.trim()}\n`
   }

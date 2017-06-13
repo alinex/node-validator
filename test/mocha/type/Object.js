@@ -581,6 +581,15 @@ The following keys have a special format:\n\
       }, done)
     })
 
+    it('should work with deepen as pattern', (done) => {
+      const data = {'a.a': 1, 'a.b': 2, c: 3}
+      const schema = new MySchema().deepen(/\./)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({a: {a: 1, b: 2}, c: 3})
+      }, done)
+    })
+
     it('should work with flatten as string', (done) => {
       const data = {a: {a: 1, b: 2}, c: 3}
       const schema = new MySchema().flatten('.')

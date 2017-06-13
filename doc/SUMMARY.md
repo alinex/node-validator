@@ -6,6 +6,7 @@
 - [Schema Builder](schema/README.md)
   - [Base](schema/base.md)
   - [Any](schema/any.md)
+  - [Boolean](schema/boolean.md)
   - [Object](schema/object.md)
 
 - [How To](howto.md)

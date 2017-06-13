@@ -74,7 +74,7 @@ The list of keys can be given as:
 
 > Use `not` to remove them from one of the lists.
 
-## and(list)
+### and(list)
 
 With this logic check you ensure that all of the given keys or none of them are
 present in the data object.
@@ -87,7 +87,7 @@ The list of keys can be given as:
 - one or multiple `string`
 - Array of `string`
 
-## not.and(list)
+### not.and(list)
 
 With this logic check you ensure that some of the given keys may be set but neither
 all of them.
@@ -100,7 +100,7 @@ The list of keys can be given as:
 - one or multiple `string`
 - Array of `string`
 
-## or(list)
+### or(list)
 
 With this logic check you ensure that at least one of the given keys are
 present in the data object.
@@ -115,7 +115,7 @@ The list of keys can be given as:
 
 > If you use the `not` operator it is identical to define them as `forbiddenKeys`.
 
-## xor(list)
+### xor(list)
 
 With this logic check you ensure that exactly one and not multiple of the given keys are
 present in the data object.
@@ -130,7 +130,7 @@ The list of keys can be given as:
 
 > If you use the `not` operator it is identical to define them as `forbiddenKeys`.
 
-## with(key, peers)
+### with(key, peers)
 
 With this logic check you ensure that if the given 'key' is set all of the other
 peers have to be present, too.
@@ -144,7 +144,7 @@ The parameters may be:
 - first `string` as the key to check and Array of `string` peers (more clear in
   reading code)
 
-## not.with(key, peers)
+### not.with(key, peers)
 
 With this logic check you ensure that if the given 'key' is set none of the other
 peers are allowed.
