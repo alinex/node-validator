@@ -27,8 +27,8 @@ describe('base', () => {
     debug(msg)
     expect(msg, 'detail').to.equal(`__Something is wrong.__
 
-> Given value was: 5
-> At path: /any/path
+> Given value was: \`5\`
+> At path: \`/any/path\`
 
 But __Any__ should be defined with:
 Any data type. It is optional and must not be set.`)

@@ -4,9 +4,9 @@ The schema defines how to validate and sanitize the data structures. It is defin
 by using instances of the schema classes and setting their properties.
 
 ```js
-import { Object, Any } from 'alinex-validator'
+import { ObjectSchema, AnySchema } from 'alinex-validator'
 
-const schema = new Object('MyTest', 'is an easy schema to show it´s use')
+const schema = new ObjectSchema('MyTest', 'is an easy schema to show it´s use')
 .key('one', new Any().not.optional)
 .key('two', new Any().default(2))
 
@@ -25,4 +25,3 @@ See the different schema descriptions for their possible settings and use cases.
 
 To see exactly what your schema allows output it's `description` property and you
 will get the resulting configuration explained.
-  

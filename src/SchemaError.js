@@ -18,8 +18,8 @@ class SchemaError extends Error {
   get text(): string {
     return `__${this.message}__
 
-> Given value was: ${util.inspect(this.data.value)}
-> At path: ${this.data.source}
+> Given value was: \`${util.inspect(this.data.value)}\`
+> At path: \`${this.data.source}\`
 
 But __${this.schema.title}__ ${this.schema.detail}
 ${this.schema.description}`

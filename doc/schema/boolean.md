@@ -23,7 +23,7 @@ as attributes but if you want to use an array as the value it have to be nested 
 an array itself.
 
 ```js
-const schema = new validator.Boolean().truthy(1, 'yes').falsy(0, 'no')
+const schema = new BooleanSchema().truthy(1, 'yes').falsy(0, 'no')
 ```
 
 ### tolerant
@@ -33,7 +33,7 @@ This is equal to set the following values:
 - `false`: `0`, `'0'`, `'false'`, `'off'`, `'no'`, `'-'`
 
 ```js
-const schema = new validator.Boolean().tolerant
+const schema = new BooleanSchema().tolerant
 ```
 
 > Use the `not.tolerant` to remove all truthy /falsy settings done through any method.
@@ -44,7 +44,7 @@ This makes only sense together with `tolerant` or `truthy`, `falsy` and will mat
 strings case insensitive.
 
 ```js
-const schema = new validator.Boolean().tolerant.insensitive
+const schema = new BooleanSchema().tolerant.insensitive
 ```
 
 ## Output
@@ -55,5 +55,5 @@ To specify the value returned for `true` and `false` call this method with the
 values used for both.
 
 ```js
-const schema = new validator.Boolean().format('YES', 'NO')
+const schema = new BooleanSchema().format('YES', 'NO')
 ```

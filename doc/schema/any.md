@@ -17,14 +17,14 @@ If you specify at least one value which is allowed only the allowed values are
 possible. Therefore a deep check will be done.
 
 ```js
-const schema = new validator.Any().allow(5)
+const schema = new AnySchema().allow(5)
 ```
 
 Also you may define which elements you won´t allow. If only invalid elements are
 defined all other elements are possible.
 
 ```js
-const schema = new validator.Any().not.allow(5)
+const schema = new AnySchema().not.allow(5)
 ```
 
 ## allowAll(list) / not.allowAll(list)
@@ -32,13 +32,13 @@ const schema = new validator.Any().not.allow(5)
 This will add a complete list of values like each is given using `allow()`.
 
 ```js
-const schema = new validator.Any().allowAll(3, 4, 5)
+const schema = new AnySchema().allowAll(3, 4, 5)
 ```
 
 This will add a complete list of values like each is given using `not.allow()`.
 
 ```js
-const schema = new validator.Any().not.allowAll(3, 4, 5)
+const schema = new AnySchema().not.allowAll(3, 4, 5)
 ```
 
 ## allowToClear / not.allowToClear

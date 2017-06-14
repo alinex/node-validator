@@ -8,7 +8,7 @@ Some methods allow to negate their function. If this makes sense it is added
 in the examples. Therefore the not is added before the method call.
 
 ```js
-const schema = new validator.Any().not.allow(1)
+const schema = new AnySchema().not.allow(1)
 ```
 
 This operator is only valid for the next method. If you need it again it has to
@@ -26,7 +26,7 @@ as `undefined`. A value of `null` is considered as a concrete value and won´t t
 the optional here. The `not` negates this and makes the schema not optional.
 
 ```js
-const schema = new validator.Any().required
+const schema = new AnySchema().required
 ```
 
 > It may be inverted using `not.required`.
@@ -39,7 +39,7 @@ to succeed all other constraints.
 If this is used the `required` setting don't have to be used.
 
 ```js
-const schema = new validator.Any().default(1)
+const schema = new AnySchema().default(1)
 ```
 
 ## stripEmpty
@@ -49,7 +49,7 @@ before going through the optional and default rules. This allows you to also use
 the default if an empty element is given.
 
 ```js
-const schema = new validator.Any().stripEmpty.default(3)
+const schema = new AnySchema().stripEmpty.default(3)
 ```
 
 > It may be inverted using `not.stripEmpty`.

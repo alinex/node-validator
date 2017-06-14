@@ -19,7 +19,7 @@ converted into a deep structure. The separator may be given as `string` or `RegE
 
 ```js
 // data = {'a.a': 1, 'a.b': 2, c: 3}
-const schema = new MySchema().deepen('.')
+const schema = new ObjectSchema().deepen('.')
 // result = {a: {a: 1, b: 2}, c: 3}
 ```
 
@@ -30,7 +30,7 @@ separator which has to be a `string`.
 
 ```js
 // data = {a: {a: 1, b: 2}, c: 3}
-const schema = new MySchema().flatten('.')
+const schema = new ObjectSchema().flatten('.')
 // result = {'a.a': 1, 'a.b': 2, c: 3}
 ```
 
@@ -40,8 +40,8 @@ This will remove all unchecked keys from the object. So only the specified are r
 All elements which has specific checks set via `key` are checked.
 
 ```js
-const schema = new validator.Object().removeUnknown
-.key('one', new validator.Any())
+const schema = new ObjectSchema().removeUnknown
+.key('one', new AnySchema())
 ```
 
 > It may be inverted using `not.required`.
@@ -55,8 +55,10 @@ Specifies the number of keys the object is allowed to have.
 - `limit` gives the `number` of elements to be within the data object
 
 ```js
-const schema = new validator.Object().min(1).max(3)
+const schema = new ObjectSchema().min(1).max(3)
 ```
+
+> Using `not` it will remove the specified setting.
 
 ### requiredKeys(list) / forbiddenKeys(list)
 
@@ -64,7 +66,7 @@ These two methods allow to define the key names which are allowed or disallowed.
 It may be called multiple times to specify it.
 
 ```js
-const schema = new validator.Object().requiredKeys('a', 'b', 'c')
+const schema = new ObjectSchema().requiredKeys('a', 'b', 'c')
 .forbiddenKeys(['d', 'e'])
 ```
 
@@ -80,7 +82,7 @@ With this logic check you ensure that all of the given keys or none of them are
 present in the data object.
 
 ```js
-const schema = new validator.Object().and('a', 'b', 'c')
+const schema = new ObjectSchema().and('a', 'b', 'c')
 ```
 
 The list of keys can be given as:
@@ -93,7 +95,7 @@ With this logic check you ensure that some of the given keys may be set but neit
 all of them.
 
 ```js
-const schema = new validator.Object().not.and('a', 'b', 'c')
+const schema = new ObjectSchema().not.and('a', 'b', 'c')
 ```
 
 The list of keys can be given as:
@@ -106,7 +108,7 @@ With this logic check you ensure that at least one of the given keys are
 present in the data object.
 
 ```js
-const schema = new validator.Object().or('a', 'b', 'c')
+const schema = new ObjectSchema().or('a', 'b', 'c')
 ```
 
 The list of keys can be given as:
@@ -121,7 +123,7 @@ With this logic check you ensure that exactly one and not multiple of the given 
 present in the data object.
 
 ```js
-const schema = new validator.Object().xor('a', 'b', 'c')
+const schema = new ObjectSchema().xor('a', 'b', 'c')
 ```
 
 The list of keys can be given as:
@@ -136,7 +138,7 @@ With this logic check you ensure that if the given 'key' is set all of the other
 peers have to be present, too.
 
 ```js
-const schema = new validator.Object().with('a', ['b', 'c'])
+const schema = new ObjectSchema().with('a', ['b', 'c'])
 ```
 
 The parameters may be:
@@ -150,7 +152,7 @@ With this logic check you ensure that if the given 'key' is set none of the othe
 peers are allowed.
 
 ```js
-const schema = new validator.Object().not.with('a', ['b', 'c'])
+const schema = new ObjectSchema().not.with('a', ['b', 'c'])
 ```
 
 The parameters may be:
@@ -171,9 +173,9 @@ match is used and directly specified `key` goes first, too.
 __Example__
 
 ```js
-const schema = new validator.Object()
-.key('one', new validator.Any())
-.key(/number\d/, new validator.Any())
+const schema = new ObjectSchema()
+.key('one', new AnySchema())
+.key(/number\d/, new AnySchema())
 ```
 
 > It may be removed using `not.key`.

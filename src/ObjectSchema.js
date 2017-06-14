@@ -121,7 +121,7 @@ without schema can´t be defined.`)
       delete this._max
     } else {
       const int = parseInt(limit, 10)
-      if (int < 0) throw new Error('Length for length() has to be positive')
+      if (int < 0) throw new Error('Length has to be positive')
       this._min = int
       this._max = int
     }
@@ -325,11 +325,11 @@ into deeper structures. `
 
   _lengthDescriptor() {
     if (this._min && this._max) {
-      return this._min === this._max ? `The object has to contain exactly ${this._min} elements. `
-      : `The object needs between ${this._min} and ${this._max} elements. `
+      return this._min === this._max ? `The object has to contain exactly ${this._min} elements.\n`
+      : `The object needs between ${this._min} and ${this._max} elements.\n`
     }
-    if (this._min) return `The object needs at least ${this._min} elements. `
-    if (this._max) return `The object allows up to ${this._min} elements. `
+    if (this._min) return `The object needs at least ${this._min} elements.\n`
+    if (this._max) return `The object allows up to ${this._min} elements.\n`
     return ''
   }
 
