@@ -1,9 +1,9 @@
 // @flow
 import util from 'util'
 
-import Schema from '../Schema'
-import SchemaError from '../SchemaError'
-import type SchemaData from '../SchemaData'
+import Schema from './Schema'
+import SchemaError from './SchemaError'
+import type SchemaData from './SchemaData'
 
 class Logic {
   type: string

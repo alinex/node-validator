@@ -1,14 +1,14 @@
 // @flow
 import chai from 'chai'
 
-import * as validator from '../../../src/index'
+import {BooleanSchema} from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
 const expect = chai.expect
 
 // to simplify copy and paste in other Schemas
-const MySchema = validator.Boolean
+const MySchema = BooleanSchema
 
 describe('type boolean', () => {
 

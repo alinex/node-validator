@@ -1,13 +1,13 @@
 import chai from 'chai'
 
-import * as validator from '../../../src/index'
+import {AnySchema, ObjectSchema} from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
 const expect = chai.expect
 
 // to simplify copy and paste in other Schemas
-const MySchema = validator.Object
+const MySchema = ObjectSchema
 
 describe('type object', () => {
 
@@ -80,7 +80,7 @@ describe('type object', () => {
       const data = {a: 1}
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      schema.key('a', new validator.Any())
+      schema.key('a', new AnySchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -89,7 +89,7 @@ describe('type object', () => {
 
     it('should describe with defined keys', () => {
       const schema = new MySchema()
-      schema.key('a', new validator.Any())
+      schema.key('a', new AnySchema())
       // use schema
       expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.\n\
 A data object is needed.\n\
@@ -101,7 +101,7 @@ The following keys have a special format:\n\
       const data = {name1: 1}
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      schema.key(/name\d/, new validator.Any())
+      schema.key(/name\d/, new AnySchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -110,7 +110,7 @@ The following keys have a special format:\n\
 
     it('should describe with defined pattern', () => {
       const schema = new MySchema()
-      schema.key(/name\d/, new validator.Any())
+      schema.key(/name\d/, new AnySchema())
       // use schema
       expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.\n\
 A data object is needed.\n\
@@ -122,7 +122,7 @@ The following keys have a special format:\n\
       const data = {a: 1}
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      schema.key('a', new validator.Any()).not.key('a')
+      schema.key('a', new AnySchema()).not.key('a')
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -137,7 +137,7 @@ The following keys have a special format:\n\
     it('should work with defined keys', (done) => {
       const data = {a: 1, b: 2, c: 3}
       const schema = new MySchema().removeUnknown
-      .key('a', new validator.Any())
+      .key('a', new AnySchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({a: 1})
@@ -147,7 +147,7 @@ The following keys have a special format:\n\
     it('should work with pattern', (done) => {
       const data = {a: 1, b: 2, c: 3}
       const schema = new MySchema().removeUnknown
-      .key(/[ab]/, new validator.Any())
+      .key(/[ab]/, new AnySchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({a: 1, b: 2})
@@ -157,7 +157,7 @@ The following keys have a special format:\n\
     it('should work with negate', (done) => {
       const data = {a: 1, b: 2, c: 3}
       const schema = new MySchema().removeUnknown
-      .key('a', new validator.Any()).not.removeUnknown
+      .key('a', new AnySchema()).not.removeUnknown
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({a: 1, b: 2, c: 3})
@@ -166,7 +166,7 @@ The following keys have a special format:\n\
 
     it('should describe', () => {
       const schema = new MySchema().removeUnknown
-      .key('a', new validator.Any())
+      .key('a', new AnySchema())
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

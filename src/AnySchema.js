@@ -1,7 +1,7 @@
 // @flow
-import Schema from '../Schema'
-import SchemaError from '../SchemaError'
-import type SchemaData from '../SchemaData'
+import Schema from './Schema'
+import SchemaError from './SchemaError'
+import type SchemaData from './SchemaData'
 
 class AnySchema extends Schema {
 

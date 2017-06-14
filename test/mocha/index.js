@@ -15,11 +15,11 @@ describe('base', () => {
 
   it('should load validator', () => {
     expect(validator, 'module').to.be.an('object')
-    expect(validator.Any, 'AnySchema').to.be.a('function')
+    expect(validator.AnySchema, 'AnySchema').to.be.a('function')
   })
 
   it('should describe error', () => {
-    const schema = new validator.Any()
+    const schema = new validator.AnySchema()
     const value = 5
     const data = new SchemaData(value, '/any/path')
     const err = new SchemaError(schema, data, 'Something is wrong.')
