@@ -35,12 +35,14 @@ class StringSchema extends AnySchema {
   // validation data
 
   _makeString: bool
+  _trim: bool
+  _replace: Array<Replace>
+  _uppercase: 'all' | 'first'
+  _lowercase: 'all' | 'first'
   _min: number
   _max: number
   _truncate: bool
   _pad: Pad
-  _trim: bool
-  _replace: Array<Replace>
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
@@ -52,6 +54,7 @@ class StringSchema extends AnySchema {
     // add check rules
     this._rules.add([this._makeStringDescriptor, this._makeStringValidator])
     this._rules.add([this._replaceDescriptor, this._replaceValidator])
+    this._rules.add([this._caseDescriptor, this._caseValidator])
     this._rules.add([this._lengthDescriptor, this._lengthValidator])
   }
 
@@ -83,6 +86,24 @@ class StringSchema extends AnySchema {
     } else if (match && typeof match !== 'string') {
       this._replace.push(new Replace(match, replace, name))
     } else throw new Error('Needs a RegExp as first argument to define `replace()`.')
+    return this
+  }
+
+  uppercase(what: 'all' | 'first' = 'all') {
+    if (this._negate) {
+      delete this._uppercase
+      this._negate = false
+    } else if (this._lowercase === what) delete this._lowercase
+    else this._uppercase = what
+    return this
+  }
+
+  lowercase(what: 'all' | 'first' = 'all') {
+    if (this._negate) {
+      delete this._lowercase
+      this._negate = false
+    } else if (this._uppercase === what) delete this._uppercase
+    else this._lowercase = what
     return this
   }
 
@@ -172,6 +193,26 @@ class StringSchema extends AnySchema {
     if (this._trim) data.value = data.value.trim()
     if (this._replace.length) {
       this._replace.forEach(e => (data.value = data.value.replace(e.match, e.replace)))
+    }
+    return Promise.resolve()
+  }
+
+  _caseDescriptor() {
+    let msg = ''
+    if (this._lowercase === 'all') msg += 'Convert the whole text to lowercase. '
+    else if (this._uppercase === 'all') msg += 'Convert the whole text to uppercase. '
+    if (this._lowercase === 'first') msg += 'Convert only the first letter to lowercase. '
+    else if (this._uppercase === 'first') msg += 'Convert only the first letter to uppercase. '
+    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
+  }
+
+  _caseValidator(data: SchemaData): Promise<void> {
+    if (this._lowercase === 'all') data.value = data.value.toLowerCase()
+    else if (this._uppercase === 'all') data.value = data.value.toUpperCase()
+    if (this._lowercase === 'first') {
+      data.value = `${data.value.substr(0, 1).toLowerCase()}${data.value.substr(1)}`
+    } else if (this._uppercase === 'first') {
+      data.value = `${data.value.substr(0, 1).toUpperCase()}${data.value.substr(1)}`
     }
     return Promise.resolve()
   }
