@@ -5,6 +5,8 @@ import AnySchema from './AnySchema'
 import SchemaError from './SchemaError'
 import type SchemaData from './SchemaData'
 
+let striptags // load on demand
+
 type PadType = 'left' | 'right' | 'both'
 class Pad {
 
@@ -39,10 +41,16 @@ class StringSchema extends AnySchema {
   _replace: Array<Replace>
   _uppercase: 'all' | 'first'
   _lowercase: 'all' | 'first'
+  _alphanum: bool
+  _hex: bool
+  _controls: bool
+  _noHTML: bool
+  _stripDisallowed: bool
   _min: number
   _max: number
   _truncate: bool
   _pad: Pad
+
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
@@ -55,6 +63,7 @@ class StringSchema extends AnySchema {
     this._rules.add([this._makeStringDescriptor, this._makeStringValidator])
     this._rules.add([this._replaceDescriptor, this._replaceValidator])
     this._rules.add([this._caseDescriptor, this._caseValidator])
+    this._rules.add([this._checkDescriptor, this._checkValidator])
     this._rules.add([this._lengthDescriptor, this._lengthValidator])
   }
 
@@ -104,6 +113,38 @@ class StringSchema extends AnySchema {
       this._negate = false
     } else if (this._uppercase === what) delete this._uppercase
     else this._lowercase = what
+    return this
+  }
+
+  get alphanum(): this {
+    if (!this._negate && this._hex) throw new Error('The value already has to be hexadecimal.')
+    this._alphanum = !this._negate
+    this._negate = false
+    return this
+  }
+
+  get hex(): this {
+    if (!this._negate) this._alphanum = false
+    this._hex = !this._negate
+    this._negate = false
+    return this
+  }
+
+  get controls(): this {
+    this._controls = !this._negate
+    this._negate = false
+    return this
+  }
+
+  get noHTML(): this {
+    this._noHTML = !this._negate
+    this._negate = false
+    return this
+  }
+
+  get stripDisallowed(): this {
+    this._stripDisallowed = !this._negate
+    this._negate = false
     return this
   }
 
@@ -213,6 +254,47 @@ class StringSchema extends AnySchema {
       data.value = `${data.value.substr(0, 1).toLowerCase()}${data.value.substr(1)}`
     } else if (this._uppercase === 'first') {
       data.value = `${data.value.substr(0, 1).toUpperCase()}${data.value.substr(1)}`
+    }
+    return Promise.resolve()
+  }
+
+  _checkDescriptor() {
+//    _stripDisallowed: bool
+    let msg = ''
+    if (this._alphanum) msg += 'Only alpha numerical characters are allowed. '
+    if (this._hex) msg += 'Only hexa decimal characters are allowed. '
+    if (this._controls) msg += 'Control characters are also allowed. '
+    if (this._noHTML) msg += 'No HTML tags allowed. '
+    if (this._stripDisallowed) msg += 'All not allowed characters will be removed. '
+    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
+  }
+
+  _checkValidator(data: SchemaData): Promise<void> {
+    if (this._stripDisallowed) {
+      if (this._alphanum) data.value = data.value.replace(/\W/g, '')
+      if (this._hex) data.value = data.value.replace(/[^a-fA-F0-9]/g, '')
+      if (!this._controls) data.value = data.value.replace(/[^\x20-\x7E]/g, '')
+      if (this._noHTML) {
+        if (!striptags) striptags = require('striptags') // eslint-disable-line global-require
+        data.value = striptags(data.value)
+      }
+    } else {
+      if (this._alphanum && data.value.match(/\W/)) {
+        return Promise.reject(new SchemaError(this, data,
+        'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
+      }
+      if (this._hex && data.value.match(/[^a-fA-F0-9]/)) {
+        return Promise.reject(new SchemaError(this, data,
+        'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
+      }
+      if (!this._controls && data.value.match(/[^\x20-\x7E]/)) {
+        return Promise.reject(new SchemaError(this, data,
+        'Control characters are not allowed.'))
+      }
+      if (this._noHTML && data.value.match(/<[\s\S]*>/)) {
+        return Promise.reject(new SchemaError(this, data,
+        'No tags allowed in this text.'))
+      }
     }
     return Promise.resolve()
   }

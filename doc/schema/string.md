@@ -56,6 +56,35 @@ const schema = new StringSchema().replace(/(\w),\s?/g, '$1 and ', ', to and')
 > Using `not.replace()` without parameters will remove all rules while if a before
 > defined name is given only these will be removed.
 
+### lowercase(what) / uppercase(what)
+
+This will change between uppercase and lowercase on the whole text (with no parameter)
+or only on the first with parameter `first`.
+
+```js
+const schema = new StringSchema().lowercase().uppercase('first')
+```
+
+This will make everything lowercase but the first character uppercase.
+
+> The `not` operator is used to remove this settings.
+
+### stripDisallowed
+
+This will remove all disallowed characters defined through the checks:
+- `alphanum`
+- `hex`
+- `controls`
+- `noHTML`
+
+```js
+const schema = new StringSchema().alphanum.stripDisallowed
+```
+
+See the description of the check rules below.
+
+> With `not` the flag can be removed again.
+
 ### truncate
 
 In combination with `max()` or `length()` it will crop after max characters.
@@ -86,6 +115,58 @@ on the left, the second half on the right side with possible repeat.
 > Use `not` before to remove padding.
 
 ## Checks
+
+### alphanum
+
+Only alphanumeric characters are allowed: a-z, A-Z, 0-9 and _
+
+```js
+const schema = new StringSchema().alphanum
+```
+
+In combination with `stripDisallowed` invalid characters will be removed to make
+the text passable.
+
+> With `not` the flag can be removed again.
+
+### hex
+
+Only hexadecimal characters are allowed: a-f, A-F and 0-9
+
+```js
+const schema = new StringSchema().hex
+```
+
+In combination with `stripDisallowed` invalid characters will be removed to make
+the text passable.
+
+> With `not` the flag can be removed again.
+
+### controls
+
+Allow control characters in text.
+
+```js
+const schema = new StringSchema().controls
+```
+
+In combination with `stripDisallowed` invalid characters will be removed to make
+the text passable.
+
+> With `not` the flag can be removed again.
+
+### noHTML
+
+Disallow the use of HTML or XML tags.
+
+```js
+const schema = new StringSchema().noHTML
+```
+
+In combination with `stripDisallowed` invalid tags will be removed to make
+the text passable.
+
+> With `not` the flag can be removed again.
 
 ### min(limit) / max(limit) / length(limit)
 

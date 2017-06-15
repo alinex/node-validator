@@ -125,29 +125,30 @@ format()<y:LabelModel>
     <node id="n4">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="306.7116666666663" width="122.75" x="215.375" y="-487.4202159512449"/>
+          <y:Geometry height="319.37833333333293" width="122.75" x="215.375" y="-500.08688261791156"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="39.8125" x="41.46875" y="4.0">String</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="269.40625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="117.958984375" x="2.0" y="29.96875">makeString()
-trim()
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="283.375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="top" visible="true" width="107.904296875" x="2.0" y="29.96875">makeString()
+trim
 replace()
-stripTags
 lowercase()
 uppercase()
+alphanum
+hex
+base64
+allowControls
+noHTML
+stripDisallowed
 truncate
 pad()
 min()
 max()
 length()
-(not) match()
 insensitive
-#(not) startsWith()
-(not) endsWith()
-alphanum
-hex
-base64
-allowControls<y:LabelModel>
+(not) match()
+(not) startsWith()
+(not) endsWith()<y:LabelModel>
               <y:ErdAttributesNodeLabelModel/>
             </y:LabelModel>
             <y:ModelParameter>
