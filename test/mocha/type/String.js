@@ -100,6 +100,89 @@ describe('type string', () => {
 
   })
 
+  describe('trim', () => {
+
+    it('should work', (done) => {
+      const data = '   abc  '
+      const schema = new MySchema().trim
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc')
+      }, done)
+    })
+
+    it('should not work if removed', (done) => {
+      const data = '   abc  '
+      const schema = new MySchema().trim.not.trim
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().trim
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('replace', () => {
+
+    it('should work', (done) => {
+      const data = 'abc'
+      const schema = new MySchema()
+      .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('123')
+      }, done)
+    })
+
+    it('should work with references', (done) => {
+      const data = 'b2c'
+      const schema = new MySchema().replace(/(.)2/, 'a$1')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc')
+      }, done)
+    })
+
+    it('should work with remove', (done) => {
+      const data = 'abc'
+      const schema = new MySchema()
+      .replace(/a/)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('bc')
+      }, done)
+    })
+
+    it('should remove named replace only', (done) => {
+      const data = 'abc'
+      const schema = new MySchema()
+      .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
+      .not.replace('b')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('1b3')
+      }, done)
+    })
+
+    it('should remove all replaces', (done) => {
+      const data = 'abc'
+      const schema = new MySchema()
+      .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
+      .not.replace()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema()
+      .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
   describe('length', () => {
 
     it('should check for minimal length', (done) => {

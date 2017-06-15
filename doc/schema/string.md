@@ -28,6 +28,34 @@ const schema = new StringSchema().makeString
 
 > In combination with `not` this will be disabled.
 
+### trim
+
+If this flag is set all whitespace characters will be removed from the begin and
+end of the string.
+
+```js
+const schema = new StringSchema().trim
+```
+
+> In combination with `not` this will be disabled.
+
+### replace(match, replace, name)
+
+Strings maybe changed using regular expression replacements. Therefore call this
+method using:
+- `match` - a `RegExp` which defines what to replace
+- `replace` - the `string` which is used as replacements (may include $1... for captured
+  groups), if not given the match will be removed
+- `name` - a short identification to possibly remove only this rule later and to
+  explain the rule a bit
+
+```js
+const schema = new StringSchema().replace(/(\w),\s?/g, '$1 and ', ', to and')
+```
+
+> Using `not.replace()` without parameters will remove all rules while if a before
+> defined name is given only these will be removed.
+
 ### truncate
 
 In combination with `max()` or `length()` it will crop after max characters.

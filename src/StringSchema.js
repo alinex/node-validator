@@ -17,6 +17,19 @@ class Pad {
   }
 }
 
+class Replace {
+
+  match: RegExp
+  replace: string
+  name: string
+
+  constructor(match: RegExp, replace: string, name?: string) {
+    this.match = match
+    this.replace = replace
+    if (name) this.name = name
+  }
+}
+
 class StringSchema extends AnySchema {
 
   // validation data
@@ -26,14 +39,19 @@ class StringSchema extends AnySchema {
   _max: number
   _truncate: bool
   _pad: Pad
+  _trim: bool
+  _replace: Array<Replace>
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // init settings
     this._makeString = false
     this._truncate = false
+    this._trim = false
+    this._replace = []
     // add check rules
     this._rules.add([this._makeStringDescriptor, this._makeStringValidator])
+    this._rules.add([this._replaceDescriptor, this._replaceValidator])
     this._rules.add([this._lengthDescriptor, this._lengthValidator])
   }
 
@@ -42,6 +60,29 @@ class StringSchema extends AnySchema {
   get makeString(): this {
     this._makeString = !this._negate
     this._negate = false
+    return this
+  }
+
+  get trim(): this {
+    this._trim = !this._negate
+    this._negate = false
+    return this
+  }
+
+  replace(match?: RegExp|string, replace: string = '', name?: string): this {
+    if (typeof match === 'string') name = match
+    if (this._negate) {
+      if (name) {
+        const len = this._replace.length
+        this._replace = this._replace.filter(e => e.name !== name)
+        if (len === this._replace.length) {
+          throw new Error(`No replacer with the name \`${name}\` is defined`)
+        }
+      } else this._replace = []
+      this._negate = false
+    } else if (match && typeof match !== 'string') {
+      this._replace.push(new Replace(match, replace, name))
+    } else throw new Error('Needs a RegExp as first argument to define `replace()`.')
     return this
   }
 
@@ -111,6 +152,26 @@ class StringSchema extends AnySchema {
     if (this._makeString && typeof data.value !== 'string') data.value = data.value.toString()
     if (typeof data.value !== 'string') {
       return Promise.reject(new SchemaError(this, data, 'A `string` value is needed here.'))
+    }
+    return Promise.resolve()
+  }
+
+  _replaceDescriptor() {
+    let msg = ''
+    if (this._trim) msg += 'Whitespace characters at the begin and end of the string are removed. '
+    if (this._replace.length) {
+      const list = this._replace
+      .map(e => `- \`${util.inspect(e.match)}\` => \`${e.replace}\`${e.name ? ` (${e.name})` : ''}`)
+      .join('\n')
+      msg += `The following replacements will be done:\n${list}\n`
+    }
+    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
+  }
+
+  _replaceValidator(data: SchemaData): Promise<void> {
+    if (this._trim) data.value = data.value.trim()
+    if (this._replace.length) {
+      this._replace.forEach(e => (data.value = data.value.replace(e.match, e.replace)))
     }
     return Promise.resolve()
   }
