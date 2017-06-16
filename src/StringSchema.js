@@ -50,7 +50,8 @@ class StringSchema extends AnySchema {
   _max: number
   _truncate: bool
   _pad: Pad
-
+  _match: Array<RegExp>
+  _notMatch: Array<RegExp>
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
@@ -59,12 +60,15 @@ class StringSchema extends AnySchema {
     this._truncate = false
     this._trim = false
     this._replace = []
+    this._match = []
+    this._notMatch = []
     // add check rules
     this._rules.add([this._makeStringDescriptor, this._makeStringValidator])
     this._rules.add([this._replaceDescriptor, this._replaceValidator])
     this._rules.add([this._caseDescriptor, this._caseValidator])
     this._rules.add([this._checkDescriptor, this._checkValidator])
     this._rules.add([this._lengthDescriptor, this._lengthValidator])
+    this._rules.add([this._matchDescriptor, this._matchValidator])
   }
 
   // setup schema
@@ -203,6 +207,21 @@ class StringSchema extends AnySchema {
     return this
   }
 
+  match(re: RegExp): this {
+    if (this._negate) {
+      this._negate = false
+      this._notMatch.push(re)
+    } else this._match.push(re)
+    return this
+  }
+
+  get clearMatch(): this {
+    if (this._negate) throw new Error('Negation of clearMatch is not possible')
+    this._match = []
+    this._notMatch = []
+    return this
+  }
+
   // using schema
 
   _makeStringDescriptor() {
@@ -259,7 +278,6 @@ class StringSchema extends AnySchema {
   }
 
   _checkDescriptor() {
-//    _stripDisallowed: bool
     let msg = ''
     if (this._alphanum) msg += 'Only alpha numerical characters are allowed. '
     if (this._hex) msg += 'Only hexa decimal characters are allowed. '
@@ -363,6 +381,43 @@ This is too less, at least ${this._min} are needed.`))
       return Promise.reject(new SchemaError(this, data,
       `The string has a length of ${num} characters. \
 This is too much, not more than ${this._max} are allowed.`))
+    }
+    return Promise.resolve()
+  }
+
+  _matchDescriptor() {
+    let msg = ''
+    if (this._match.length || this._notMatch.length) {
+      msg += 'The text should:'
+      if (this._match.length) {
+        msg += this._match.map(e => `\n- match \`${util.inspect(e)}\``).join('')
+      }
+      if (this._notMatch.length) {
+        msg += this._notMatch.map(e => `\n- match \`${util.inspect(e)}\``).join('')
+      }
+      msg += '\n\n'
+    }
+    return msg
+  }
+
+  _matchValidator(data: SchemaData): Promise<void> {
+    if (this._match.length) {
+      const fail = this._match.filter(e => !data.value.match(e))
+      .map(e => `\`${util.inspect(e)}\``)
+      .join(', ').replace(/(.*), /, '$1 and ')
+      if (fail) {
+        return Promise.reject(new SchemaError(this, data,
+          `The text should match: ${fail}`))
+      }
+    }
+    if (this._notMatch.length) {
+      const fail = this._notMatch.filter(e => data.value.match(e))
+      .map(e => `\`${util.inspect(e)}\``)
+      .join(', ').replace(/(.*), /, '$1 and ')
+      if (fail) {
+        return Promise.reject(new SchemaError(this, data,
+          `The text should not match: ${fail}`))
+      }
     }
     return Promise.resolve()
   }

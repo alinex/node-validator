@@ -174,7 +174,17 @@ Specifies the number of characters the string is allowed to have.
 - `limit` gives the `number` of characters for the string
 
 ```js
-const schema = new ObjectSchema().min(1).max(3)
+const schema = new StringSchema().min(1).max(3)
 ```
 
 > Using `not` it will remove the specified setting.
+
+### match(re) / not.match(re) / clearMatch
+
+Set a regular expression which have to match or should not match:
+
+```js
+const schema = new StringSchema().match(/ab/)
+```
+
+> To remove positive and negative matches use `clearMatch` instead of not.

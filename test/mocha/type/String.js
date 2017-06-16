@@ -543,4 +543,58 @@ describe('type string', () => {
 
   })
 
+  describe('match', () => {
+
+    it('should match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().match(/ab/)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().match(/cd/)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe match', () => {
+      const schema = new MySchema().match(/ab/)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should not match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().not.match(/cd/)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for not match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().not.match(/ab/)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe not match', () => {
+      const schema = new MySchema().not.match(/ab/)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should clear match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().not.match(/ab/).clearMatch
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+  })
+
 })

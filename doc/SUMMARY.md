@@ -7,6 +7,8 @@
   - [Base](schema/base.md)
   - [Any](schema/any.md)
   - [Boolean](schema/boolean.md)
+  - [String](schema/string.md)
+  - [Number](schema/number.md)
   - [Object](schema/object.md)
 
 - [How To](howto.md)
