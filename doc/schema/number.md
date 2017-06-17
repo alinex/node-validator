@@ -1,10 +1,6 @@
 # Number Schema
 
-Create a schema that matches any data type.
-
-This is an universal type which may be used everywhere there no further knowledge
-of the structure is known. It can also be used to make a loose checking schema
-first and later replace it through detailed specifications.
+Create a schema that matches a numerical value.
 
 See at [Any Schema](any.md) for the inherited methods you may call like:
 - `required`
@@ -13,3 +9,17 @@ See at [Any Schema](any.md) for the inherited methods you may call like:
 - `allow()`
 - `allowAll()`
 - `allowToClear`
+
+## Sanitize
+
+### sanitize
+
+If this flag is set the first numerical value from the given text will be used.
+That allows any non numerical characters before or after the value, which will be
+stripped away.
+
+```js
+const Schema = new NumberSchema().sanitize
+```
+
+> Using the `not` flag it can also be removed later.

@@ -30,13 +30,23 @@ class NumberSchema extends AnySchema {
   // using schema
 
   _sanitizeDescriptor() {
-    return this._sanitize ?
-    'Strings are matched sanitize for possible `true`/`false` values.\n' : ''
+    let msg = 'A number is needed. '
+    if (this._sanitize) msg += 'Strings are sanitized to get the first numerical value out of it. '
+    return msg.replace(/ $/, '\n')
   }
 
   _sanitizeValidator(data: SchemaData): Promise<void> {
-    if (typeof data.value === 'string') data.value = data.value.replace(/^.*?([-+]?\d+\.?\d*).*?$/, '$1')
-    if (this._sanitize && typeof data.value === 'string') data.value = data.value.toLowerCase()
+    if (typeof data.value === 'string') {
+      if (this._sanitize) data.value = data.value.replace(/^.*?([-+]?\d+\.?\d*).*?$/, '$1')
+      data.value = Number(data.value)
+    }
+    if (typeof data.value !== 'number') {
+      return Promise.reject(new SchemaError(this, data,
+      `The given value is of type ${typeof data.value} but a number is needed.`))
+    } else if (isNaN(data.value)) {
+      return Promise.reject(new SchemaError(this, data,
+      `The given string \`${data.orig}\` is no valid number.`))
+    }
     return Promise.resolve()
   }
 
