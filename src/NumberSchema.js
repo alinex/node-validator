@@ -35,6 +35,7 @@ class NumberSchema extends AnySchema {
   }
 
   _sanitizeValidator(data: SchemaData): Promise<void> {
+    if (typeof data.value === 'string') data.value = data.value.replace(/^.*?([-+]?\d+\.?\d*).*?$/, '$1')
     if (this._sanitize && typeof data.value === 'string') data.value = data.value.toLowerCase()
     return Promise.resolve()
   }

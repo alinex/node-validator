@@ -59,10 +59,8 @@ class Schema {
   // using schema
 
   get clone(): this {
-    this._negate = false // no support
-//    return Object.assign(Object.create(Object.getPrototypeOf(this)), this)
-//    return Object.assign(Object.create(this), this)
-    return this
+    if (this._negate) throw new Error('Impossible tu use `not` with clone method')
+    return Object.assign((Object.create(this): any), this)
   }
 
   get description(): string {

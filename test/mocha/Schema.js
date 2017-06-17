@@ -144,4 +144,15 @@ describe('schema', () => {
 
   })
 
+  describe('clone', () => {
+
+    it('should clone schema', () => {
+      const schema = new MySchema()
+      const clone = schema.clone
+      // use schema
+      expect(clone).to.be.an.instanceof(Schema).and.not.equal(schema)
+    })
+
+  })
+
 })

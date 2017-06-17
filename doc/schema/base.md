@@ -53,3 +53,12 @@ const schema = new AnySchema().stripEmpty.default(3)
 ```
 
 > It may be inverted using `not.stripEmpty`.
+
+## clone
+
+Make a deep clone of this schema to use it elsewhere with some changes.
+
+```js
+const schema = new AnySchema().stripEmpty.default(3)
+const clone = schema.clone
+```
