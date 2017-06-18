@@ -10,7 +10,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = BooleanSchema
 
-describe('type boolean', () => {
+describe('boolean', () => {
 
   it('should work without specification', (done) => {
     const data = true

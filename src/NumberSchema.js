@@ -6,12 +6,27 @@ import AnySchema from './AnySchema'
 import SchemaError from './SchemaError'
 import type SchemaData from './SchemaData'
 
+class Round {
+  precision: number
+  method: 'arithmetic' | 'floor' | 'ceil'
+  // round Half Up
+  // ceil towards positive infinitve
+  // floor towards negative infinity
+
+  constructor(precision: number = 0, method: 'arithmetic' | 'floor' | 'ceil' = 'arithmetic') {
+    if (precision < 0) throw new Error('Precision for round should be 0 or greater.')
+    this.precision = precision
+    this.method = method
+  }
+}
+
 class NumberSchema extends AnySchema {
 
   // validation data
 
   _sanitize: bool
   _unit: string
+  _round: Round
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
@@ -20,6 +35,7 @@ class NumberSchema extends AnySchema {
     // add check rules
     this._rules.add([this._unitDescriptor, this._unitValidator])
     this._rules.add([this._sanitizeDescriptor, this._sanitizeValidator])
+    this._rules.add([this._roundDescriptor, this._roundValidator])
   }
 
   // setup schema
@@ -41,6 +57,16 @@ class NumberSchema extends AnySchema {
       this._unit = unit
     } else {
       throw new Error('To set a unit specify it as parameter to `unit()`')
+    }
+    return this
+  }
+
+  round(precision?: number, method?: 'arithmetic' | 'floor' | 'ceil'): this {
+    if (this._negate) {
+      delete this._round
+      this._negate = false
+    } else {
+      this._round = new Round(precision, method)
     }
     return this
   }
@@ -72,7 +98,7 @@ class NumberSchema extends AnySchema {
   }
 
   _sanitizeDescriptor() {
-    let msg = 'A number is needed. '
+    let msg = 'A numerical value is needed. '
     if (this._sanitize) msg += 'Strings are sanitized to get the first numerical value out of it. '
     return msg.replace(/ $/, '\n')
   }
@@ -92,6 +118,22 @@ class NumberSchema extends AnySchema {
     return Promise.resolve()
   }
 
+  _roundDescriptor() {
+    return this._round ? `The value is rounded to \`${this._round.method}\` with \
+${this._round.precision} digits precision.\n` : ''
+  }
+
+  _roundValidator(data: SchemaData): Promise<void> {
+    if (this._round) {
+      const exp = 10 ** this._round.precision
+      let value = data.value * exp
+      if (this._round.method === 'ceil') value = Math.ceil(value)
+      else if (this._round.method === 'floor') value = Math.floor(value)
+      else value = Math.round(value)
+      data.value = value / exp
+    }
+    return Promise.resolve()
+  }
 }
 
 export default NumberSchema

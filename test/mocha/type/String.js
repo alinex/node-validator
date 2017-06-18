@@ -10,7 +10,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = StringSchema
 
-describe('type string', () => {
+describe('string', () => {
 
   it('should work without specification', (done) => {
     const data = 'abc'
