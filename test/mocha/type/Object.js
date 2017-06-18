@@ -32,7 +32,7 @@ describe('object', () => {
   it('should describe', () => {
     const schema = new MySchema()
     // use schema
-    expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.\nA data object is needed.')
+    expect(helper.description(schema)).to.equal('It is optional and must not be set.\nA data object is needed.')
   })
 
   describe('optional/default', () => {
@@ -91,10 +91,10 @@ describe('object', () => {
       const schema = new MySchema()
       schema.key('a', new AnySchema())
       // use schema
-      expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.\n\
+      expect(helper.description(schema)).to.equal('It is optional and must not be set.\n\
 A data object is needed.\n\
 The following keys have a special format:\n\
-- `a`: Any data type. It is optional and must not be set.')
+- `a`: It is optional and must not be set.')
     })
 
     it('should work with defined pattern', (done) => {
@@ -112,10 +112,10 @@ The following keys have a special format:\n\
       const schema = new MySchema()
       schema.key(/name\d/, new AnySchema())
       // use schema
-      expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.\n\
+      expect(helper.description(schema)).to.equal('It is optional and must not be set.\n\
 A data object is needed.\n\
 The following keys have a special format:\n\
-- `/name\\d/`: Any data type. It is optional and must not be set.')
+- `/name\\d/`: It is optional and must not be set.')
     })
 
     it('should remove defined keys', (done) => {

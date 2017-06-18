@@ -74,7 +74,7 @@ are not allowed. `
       msg += `Only the keys ${Array.from(this._valid).join(', ').replace(/(.*),/, '$1 and')} \
 are allowed. `
     }
-    return `${msg.trim()}\n`
+    return msg.length ? `${msg.trim()}\n` : ''
   }
 
   _allowValidator(data: SchemaData): Promise<void> {

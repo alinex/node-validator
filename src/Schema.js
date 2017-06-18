@@ -64,7 +64,7 @@ class Schema {
   }
 
   get description(): string {
-    let msg = 'Any data type. '
+    let msg = ''
     this._rules.forEach((rule) => { msg += rule[0].call(this) })
     return msg.trim()
   }

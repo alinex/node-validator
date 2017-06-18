@@ -10,7 +10,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = NumberSchema
 
-describe.only('number', () => {
+describe('number', () => {
 
   it('should work without specification', (done) => {
     const data = 12.8
@@ -88,6 +88,15 @@ describe.only('number', () => {
       }, done)
     })
 
+    it('should convert to other unit', (done) => {
+      const data = 1.28
+      const schema = new MySchema().unit('m').toUnit('cm')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(128)
+      }, done)
+    })
+
     it('should fail with unknown unit', (done) => {
       const data = '12.8 alex'
       const schema = new MySchema().unit('cm')
@@ -109,6 +118,15 @@ describe.only('number', () => {
       const schema = new MySchema().unit('cm').not.unit()
       // use schema
       helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove toUnit', (done) => {
+      const data = '1.28 m'
+      const schema = new MySchema().unit('cm').toUnit('km').not.toUnit()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(128)
+      }, done)
     })
 
     it('should convert sanitze, too', (done) => {
@@ -204,6 +222,171 @@ describe.only('number', () => {
 
     it('should describe', () => {
       const schema = new MySchema().round(2, 'ceil')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('minmax', () => {
+
+    it('should be positive', (done) => {
+      const data = 12
+      const schema = new MySchema().positive
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with positive', (done) => {
+      const data = -12
+      const schema = new MySchema().positive
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe positive', () => {
+      const schema = new MySchema().positive
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should be negative', (done) => {
+      const data = -12
+      const schema = new MySchema().negative
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with negative', (done) => {
+      const data = 12
+      const schema = new MySchema().negative
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe negative', () => {
+      const schema = new MySchema().negative
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should be positive', (done) => {
+      const data = 12
+      const schema = new MySchema().positive
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with positive', (done) => {
+      const data = -12
+      const schema = new MySchema().positive
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe positive', () => {
+      const schema = new MySchema().positive
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should support min', (done) => {
+      const data = 12
+      const schema = new MySchema().min(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with min', (done) => {
+      const data = -12
+      const schema = new MySchema().min(5)
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe min', () => {
+      const schema = new MySchema().min(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should support greater', (done) => {
+      const data = 12
+      const schema = new MySchema().greater(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with greater', (done) => {
+      const data = 5
+      const schema = new MySchema().greater(5)
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe greater', () => {
+      const schema = new MySchema().greater(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should support less', (done) => {
+      const data = 4
+      const schema = new MySchema().less(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with less', (done) => {
+      const data = 5
+      const schema = new MySchema().less(5)
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe less', () => {
+      const schema = new MySchema().less(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should support max', (done) => {
+      const data = 4
+      const schema = new MySchema().max(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with max', (done) => {
+      const data = 12
+      const schema = new MySchema().max(5)
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe max', () => {
+      const schema = new MySchema().max(5)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

@@ -25,7 +25,7 @@ describe('schema', () => {
   it('should describe', () => {
     const schema = new MySchema()
     // use schema
-    expect(helper.description(schema)).to.equal('Any data type. It is optional and must not be set.')
+    expect(helper.description(schema)).to.equal('It is optional and must not be set.')
   })
 
   describe('optional/default', () => {
@@ -93,7 +93,7 @@ describe('schema', () => {
       const schema = new MySchema()
       schema.required
       // use schema
-      expect(helper.description(schema)).to.equal('Any data type.')
+      expect(helper.description(schema)).to.equal('')
     })
 
     it('should describe default', () => {
@@ -139,7 +139,7 @@ describe('schema', () => {
       const schema = new MySchema()
       schema.default(8)
       // use schema
-      expect(helper.description(schema)).to.equal('Any data type. It will default to 8 if not set.')
+      expect(helper.description(schema)).to.equal('It will default to 8 if not set.')
     })
 
   })
