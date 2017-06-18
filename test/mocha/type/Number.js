@@ -104,4 +104,64 @@ describe('type number', () => {
 
   })
 
+  describe.only('unit', () => {
+
+    it('should work with float', (done) => {
+      const data = 12.8
+      const schema = new MySchema().unit('cm')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(12.8)
+      }, done)
+    })
+
+    it('should convert', (done) => {
+      const data = '1.28 m'
+      const schema = new MySchema().unit('cm')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(128)
+      }, done)
+    })
+
+    it('should fail with unknown unit', (done) => {
+      const data = '12.8 alex'
+      const schema = new MySchema().unit('cm')
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should fail with not convertable unit', (done) => {
+      const data = '12.8 kg'
+      const schema = new MySchema().unit('cm')
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove unit', (done) => {
+      const data = '1.28 m'
+      const schema = new MySchema().unit('cm').not.unit()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should convert sanitze, too', (done) => {
+      const data = 'the 1.28 m length'
+      const schema = new MySchema().unit('cm').sanitize
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(128)
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().unit('cm')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
 })

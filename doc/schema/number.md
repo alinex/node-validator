@@ -12,6 +12,18 @@ See at [Any Schema](any.md) for the inherited methods you may call like:
 
 ## Sanitize
 
+### unit(unit)
+
+This specifies the unit of the stored numerical value and also allows to give
+values in each compatible unit which will automatically recognized and converted.
+
+```js
+const Schema = new NumberSchema().unit('cm')
+// allows the value to be: '1.28 m'
+```
+
+> It can be removed using the `not` flag.
+
 ### sanitize
 
 If this flag is set the first numerical value from the given text will be used.
