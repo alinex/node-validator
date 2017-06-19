@@ -466,4 +466,31 @@ describe('number', () => {
 
   })
 
+  describe('multiple', () => {
+
+    it('should work', (done) => {
+      const data = 16
+      const schema = new MySchema().multiple(8)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail', (done) => {
+      const data = 12
+      const schema = new MySchema().multiple(8)
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().multiple(8)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
 })

@@ -40,6 +40,7 @@ class NumberSchema extends AnySchema {
   _negative: bool
   _integer: bool
   _integerType: number
+  _multiple: number
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
@@ -53,6 +54,7 @@ class NumberSchema extends AnySchema {
     this._rules.add([this._sanitizeDescriptor, this._sanitizeValidator])
     this._rules.add([this._roundDescriptor, this._roundValidator])
     this._rules.add([this._minmaxDescriptor, this._minmaxValidator])
+    this._rules.add([this._multipleDescriptor, this._multipleValidator])
   }
 
   // setup schema
@@ -231,6 +233,18 @@ class NumberSchema extends AnySchema {
     return this
   }
 
+  multiple(value: number): this {
+    if (this._negate) {
+      delete this._multiple
+      this._negate = false
+    } else {
+      if (this._negative && value > 0) throw new Error('Multiplicator has to be negative, too.')
+      if (this._positive && value < 0) throw new Error('Multiplicator has to be positive, too.')
+      this._multiple = value
+    }
+    return this
+  }
+
   // using schema
 
   _unitDescriptor() {
@@ -405,6 +419,19 @@ ${this._integerType}-bit integer. `
     if (max !== undefined && data.value > max) {
       return Promise.reject(new SchemaError(this, data,
         `The value has to be at least ${max}.`))
+    }
+    return Promise.resolve()
+  }
+
+  _multipleDescriptor() {
+    if (this._multiple) return `The value has to be multiple of ${this._multiple}.\n`
+    return ''
+  }
+
+  _multipleValidator(data: SchemaData): Promise<void> {
+    if (this._multiple && data.value % this._multiple) {
+      return Promise.reject(new SchemaError(this, data,
+        `The value has to be a multiple of ${this._multiple}.`))
     }
     return Promise.resolve()
   }

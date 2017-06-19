@@ -107,3 +107,13 @@ const Schema = new NumberSchema().integerType('byte').positive
 ```
 
 > Using the `not` flag it can also be removed later.
+
+### multiple(value)
+
+The data has to be a multiple of the value set here.
+
+```js
+const Schema = new NumberSchema().multiple(8) // 16 => ok, 12 => fail
+```
+
+> Using the `not` flag it can also be removed later.
