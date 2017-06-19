@@ -1,4 +1,5 @@
 // @flow
+import Numeral from 'numeral'
 import Quantity from 'js-quantities'
 
 import AnySchema from './AnySchema'
@@ -41,6 +42,7 @@ class NumberSchema extends AnySchema {
   _integer: bool
   _integerType: number
   _multiple: number
+  _format: string
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
@@ -55,6 +57,7 @@ class NumberSchema extends AnySchema {
     this._rules.add([this._roundDescriptor, this._roundValidator])
     this._rules.add([this._minmaxDescriptor, this._minmaxValidator])
     this._rules.add([this._multipleDescriptor, this._multipleValidator])
+    this._rules.add([this._formatDescriptor, this._formatValidator])
   }
 
   // setup schema
@@ -241,6 +244,16 @@ class NumberSchema extends AnySchema {
       if (this._negative && value > 0) throw new Error('Multiplicator has to be negative, too.')
       if (this._positive && value < 0) throw new Error('Multiplicator has to be positive, too.')
       this._multiple = value
+    }
+    return this
+  }
+
+  format(format: string): this {
+    if (this._negate) {
+      delete this._format
+      this._negate = false
+    } else {
+      this._format = format
     }
     return this
   }
@@ -432,6 +445,35 @@ ${this._integerType}-bit integer. `
     if (this._multiple && data.value % this._multiple) {
       return Promise.reject(new SchemaError(this, data,
         `The value has to be a multiple of ${this._multiple}.`))
+    }
+    return Promise.resolve()
+  }
+
+  _formatDescriptor() {
+    if (this._format) {
+      return `The value will be formatted as string in the form \`${this._format}\`.\n`
+    }
+    return ''
+  }
+
+  _formatValidator(data: SchemaData): Promise<void> {
+    if (this._format) {
+      const match = this._format.match(/(^.*?)(\s*\$(?:unit|best))/)
+      console.log(match)
+      let unit = match ? match[2] : ''
+//      if (unit.includes('$best')) {
+//        const quantity = Quantity(data.value, this._unit)
+//        console.log(Quantity.getUnits('length'))
+//        unit = unit.replace('$best', '$unit')
+//      }
+      if (unit.includes('$unit')) unit = unit.replace('$unit', this._toUnit || this._unit || '')
+      const format = match ? match[1] : this._format
+      try {
+        data.value = `${Numeral(data.value).format(format)}${unit}`
+      } catch (e) {
+        return Promise.reject(new SchemaError(this, data,
+          `Could not format value: ${e.message}`))
+      }
     }
     return Promise.resolve()
   }

@@ -493,4 +493,41 @@ describe('number', () => {
 
   })
 
+  describe('format', () => {
+
+    it('should work', (done) => {
+      const data = 16
+      const schema = new MySchema().format('0.00')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('16.00')
+      }, done)
+    })
+
+    it('should work with unit', (done) => {
+      const data = 16
+      const schema = new MySchema().unit('cm').format('0.00 $unit')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('16.00 cm')
+      }, done)
+    })
+
+    it.skip('should work with best unit', (done) => {
+      const data = 16000
+      const schema = new MySchema().unit('cm').format('0.00 $best')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('16.00 cm')
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().format('0.00')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
 })

@@ -117,3 +117,37 @@ const Schema = new NumberSchema().multiple(8) // 16 => ok, 12 => fail
 ```
 
 > Using the `not` flag it can also be removed later.
+
+### format(string)
+
+By setting one of the following format strings you will get the value back as a formatted string:
+
+| Number | Format | String |
+| -------| ------ | ------- |
+| 10000 | '0,0.0000' | 10,000.0000 |
+| 10000.23 | '0,0' | 10,000 |
+| 10000.23 | '+0,0' | +10,000 |
+| -10000 | '0,0.0' | -10,000.0 |
+| 10000.1234 | '0.000' | 10000.123 |
+| 100.1234 | '00000' | 00100 |
+| 1000.1234 | '000000,0' | 001,000 |
+| 10 | '000.00' | 010.00 |
+| 10000.1234 | '0[.]00000' | 10000.12340 |
+| -10000 | '(0,0.0000)' | (10,000.0000) |
+| -0.23 | '.00' | -.23 |
+| -0.23 | '(.00)' | (.23) |
+| 0.23 | '0.00000' | 0.23000 |
+| 0.23 | '0.0[0000]' | 0.23 |
+| 1230974 | '0.0a' | 1.2m |
+| 1460 | '0 a' | 1 k |
+| -104000 | '0a' | -104k |
+| 1 | '0o' | 1st |
+| 100 | '0o' | 100th |
+
+You can also add the unit if set earlier by adding `$unit` to the format string.
+
+```js
+const Schema = new NumberSchema().unit('cm').format('0.00 $unit')
+```
+
+> Using the `not` flag it can also be removed later.
