@@ -48,7 +48,18 @@ and a rounding method ('arithmetic', 'floor', 'ceil'). The default is to use
 const Schema = new NumberSchema().round(2)
 ```
 
-> Using the `not` flag it can also be removed later.
+> Using the `not` flag to remove it later.
+
+## integer
+
+The integer flag will check for an integer value. If the sanitize flag is also used it will
+automatically round.
+
+```js
+const Schema = new NumberSchema().integer.sanitize
+```
+
+> Using the `not` flag to remove it later.
 
 ## Value checks
 
@@ -73,6 +84,26 @@ will not.
 
 ```js
 const Schema = new NumberSchema().min(5).less(100)
+```
+
+> Using the `not` flag it can also be removed later.
+
+### integerType(type)
+
+This allows to specify a integer bit size by giving one of the following names or bit-sizes:
+
+| Name | bit Size | min | max | unsigned max |
+| ---- | -------- | --- | --- | ------------ |
+| byte | 8 | -128 | 127 | 255 |
+| short | 16 | -32768 | 32767 | 65535 |
+| long | 32 | -2147483648 | 2147483647 | 4294967295 |
+| safe | 53 | -4503599627370496 | 4503599627370495 | 9007199254740991 |
+| quad | 64 | -9223372036854776000 | 9223372036854776000 | 18446744073709552000 |
+
+Use `positive` to make it unsigned.
+
+```js
+const Schema = new NumberSchema().integerType('byte').positive
 ```
 
 > Using the `not` flag it can also be removed later.

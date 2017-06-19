@@ -220,8 +220,40 @@ describe('number', () => {
       }, done)
     })
 
-    it('should describe', () => {
+    it('should describe round', () => {
       const schema = new MySchema().round(2, 'ceil')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should round to integer', (done) => {
+      const data = 12.8
+      const schema = new MySchema().integer.sanitize
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(13)
+      }, done)
+    })
+
+    it('should check for integer', (done) => {
+      const data = 12
+      const schema = new MySchema().integer
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with float for integer', (done) => {
+      const data = 12.8
+      const schema = new MySchema().integer
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe integer', () => {
+      const schema = new MySchema().integer
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -387,6 +419,47 @@ describe('number', () => {
 
     it('should describe max', () => {
       const schema = new MySchema().max(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should support integer type', (done) => {
+      const data = 4
+      const schema = new MySchema().integerType(8)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should support integer type name', (done) => {
+      const data = 4
+      const schema = new MySchema().integerType('byte')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should support unsigned integer type', (done) => {
+      const data = 4
+      const schema = new MySchema().integerType(8).positive
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with integer type', (done) => {
+      const data = 12000000
+      const schema = new MySchema().integerType(8)
+      schema.required
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe integer type', () => {
+      const schema = new MySchema().integerType(8)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
