@@ -4,6 +4,7 @@ import chaiAsPromised from 'chai-as-promised'
 
 import debug from './debug'
 import type Schema from '../../src/Schema'
+import type Reference from '../../src/Reference'
 import SchemaData from '../../src/SchemaData'
 
 chai.use(chaiAsPromised)
@@ -43,4 +44,16 @@ const description = function(schema: Schema) {
   return msg
 }
 
-export {debug, validateOk, validateFail, description}
+const reference = function(ref: Reference, cb?: Function, done ?: Function) {
+  debug(ref, ref.constructor.name)
+  const res = ref.read()
+  debug(res, ref.constructor.name)
+  expect(res, 'reference()').to.be.fulfilled.notify(() => {
+    res.then(e => {
+      try { if (cb) cb(e); if (done) done() }
+      catch(error) { if (done) done(error) }
+    })
+  })
+}
+
+export {debug, validateOk, validateFail, description, reference}

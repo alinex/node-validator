@@ -2,19 +2,19 @@
 class Reference {
 
   path: string
-  context: Object
+  context: any
 
   constructor(path: string) {
     this.path = path
   }
 
-  set context(value: Object): this {
+  context(value: any): this {
     this.context = value
     return this
   }
 
   read(): Promise<any> {
-    return Promise.resolve(this.path)
+    return Promise.resolve(this.context[this.path])
   }
 
 }

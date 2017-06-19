@@ -19,8 +19,7 @@ describe('string', () => {
     // use schema
     helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)
-      done()
-    })
+    }, done)
   })
 
   it('should describe', () => {
