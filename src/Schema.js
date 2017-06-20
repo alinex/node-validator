@@ -74,7 +74,10 @@ class Schema {
     // run rules seriously
     let p = Promise.resolve()
     this._rules.forEach((rule) => { p = p.then(() => rule[1].call(this, data)) })
-    return p.then(() => data.value)
+    return p.then(() => {
+      data.done(data.value)
+      return data.value
+    })
     .catch(err => (err ? Promise.reject(err) : data.value))
   }
 

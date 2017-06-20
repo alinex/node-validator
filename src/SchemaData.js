@@ -1,11 +1,14 @@
 // @flow
 class SchemaData {
 
-  value: any
-  orig: any
-  source: string
-  options: Object
-  temp: Object
+  value: any            // current value (will change while validating)
+  orig: any             // original value for reporting
+  source: string        // source path for reporting
+  options: Object       // open for enhancement
+  temp: Object          // storage for additional data between the rules
+  parent: SchemaData    // parent data structure (used for references)
+  status: Promise<any>  // wait till value is checked (for references)
+  done: Function        // method used to fullfill status promise
 
   constructor(value: any, source?: string, options?: Object) {
     this.value = value
@@ -13,6 +16,16 @@ class SchemaData {
     this.source = source || '/'
     this.options = options || {}
     this.temp = {}
+    this.status = new Promise((resolve) => {
+      this.done = resolve
+    })
+  }
+
+  sub(key: string): SchemaData {
+    const sub = new SchemaData(this.value[key],
+      `${this.source.replace(/\/$/, '')}/${key}`, this.options)
+    sub.parent = this
+    return sub
   }
 
 }

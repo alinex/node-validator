@@ -287,7 +287,7 @@ into deeper structures. `
         let found = false
         for (const p of this._keys.entries()) {
           if (typeof p !== 'string' && key.match(p[0])) {
-            checks.push(p[1].validate(data.value[key]))
+            checks.push(p[1].validate(data.sub(key)))
             keys.push(key)
             found = true
             break
