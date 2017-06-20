@@ -459,7 +459,7 @@ ${this._integerType}-bit integer. `
   _formatValidator(data: SchemaData): Promise<void> {
     if (this._format) {
       const match = this._format.match(/(^.*?)(\s*\$(?:unit|best))/)
-      console.log(match)
+//      console.log(match)
       let unit = match ? match[2] : ''
 //      if (unit.includes('$best')) {
 //        const quantity = Quantity(data.value, this._unit)

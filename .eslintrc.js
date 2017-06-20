@@ -17,6 +17,7 @@ module.exports = {
     'import/prefer-default-export': 'warn',
     'no-underscore-dangle': 'off',
     'no-restricted-syntax': 'off',
+    'no-multi-str': 'off',
     'no-param-reassign': 'off'
   }
 };

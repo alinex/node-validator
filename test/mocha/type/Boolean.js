@@ -1,7 +1,7 @@
 // @flow
 import chai from 'chai'
 
-import {BooleanSchema} from '../../../src/index'
+import { BooleanSchema } from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -33,9 +33,8 @@ describe('boolean', () => {
 
     it('should work with required', (done) => {
       const data = true
-      const schema = new MySchema()
+      const schema = new MySchema().required
       expect(schema).to.be.an('object')
-      schema.required
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -43,8 +42,7 @@ describe('boolean', () => {
     })
 
     it('should fail with required', (done) => {
-      const schema = new MySchema()
-      schema.required
+      const schema = new MySchema().required
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -199,15 +197,15 @@ describe('boolean', () => {
 
     it('should work with defined false object', (done) => {
       const data = false
-      const schema = new MySchema().format('JA', {no: 1})
+      const schema = new MySchema().format('JA', { no: 1 })
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal({no: 1})
+        expect(res).deep.equal({ no: 1 })
       }, done)
     })
 
     it('should describe', () => {
-      const schema = new MySchema().format('JA', {no: 1})
+      const schema = new MySchema().format('JA', { no: 1 })
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

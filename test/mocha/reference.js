@@ -14,7 +14,7 @@ describe('reference', () => {
 
   it('should create reference', (done) => {
     const ref = new Reference('a')
-    ref.context({a: 1})
+    ref.context({ a: 1 })
     helper.reference(ref, (res) => {
       expect(res).deep.equal(1)
     }, done)

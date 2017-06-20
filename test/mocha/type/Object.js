@@ -1,6 +1,6 @@
 import chai from 'chai'
 
-import {AnySchema, ObjectSchema} from '../../../src/index'
+import { AnySchema, ObjectSchema } from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -12,7 +12,7 @@ const MySchema = ObjectSchema
 describe('object', () => {
 
   it('should work without specification', (done) => {
-    const data = {a: 1}
+    const data = { a: 1 }
     const schema = new MySchema()
     expect(schema, 'schema').to.be.an('object')
     // use schema
@@ -32,16 +32,16 @@ describe('object', () => {
   it('should describe', () => {
     const schema = new MySchema()
     // use schema
-    expect(helper.description(schema)).to.equal('It is optional and must not be set.\nA data object is needed.')
+    expect(helper.description(schema)).to.equal(
+      'It is optional and must not be set.\nA data object is needed.')
   })
 
   describe('optional/default', () => {
 
     it('should work with required', (done) => {
-      const data = {a: 1}
-      const schema = new MySchema()
+      const data = { a: 1 }
+      const schema = new MySchema().required
       expect(schema).to.be.an('object')
-      schema.required
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -49,8 +49,7 @@ describe('object', () => {
     })
 
     it('should fail with required', (done) => {
-      const schema = new MySchema()
-      schema.required
+      const schema = new MySchema().required
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -77,7 +76,7 @@ describe('object', () => {
   describe('key', () => {
 
     it('should work with defined keys', (done) => {
-      const data = {a: 1}
+      const data = { a: 1 }
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.key('a', new AnySchema())
@@ -98,7 +97,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with defined pattern', (done) => {
-      const data = {name1: 1}
+      const data = { name1: 1 }
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.key(/name\d/, new AnySchema())
@@ -119,7 +118,7 @@ The following keys have a special format:\n\
     })
 
     it('should remove defined keys', (done) => {
-      const data = {a: 1}
+      const data = { a: 1 }
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.key('a', new AnySchema()).not.key('a')
@@ -135,32 +134,32 @@ The following keys have a special format:\n\
   describe('removeUnknown', () => {
 
     it('should work with defined keys', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown
       .key('a', new AnySchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal({a: 1})
+        expect(res).deep.equal({ a: 1 })
       }, done)
     })
 
     it('should work with pattern', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown
       .key(/[ab]/, new AnySchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal({a: 1, b: 2})
+        expect(res).deep.equal({ a: 1, b: 2 })
       }, done)
     })
 
     it('should work with negate', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown
       .key('a', new AnySchema()).not.removeUnknown
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal({a: 1, b: 2, c: 3})
+        expect(res).deep.equal({ a: 1, b: 2, c: 3 })
       }, done)
     })
 
@@ -176,7 +175,7 @@ The following keys have a special format:\n\
   describe('length', () => {
 
     it('should work with min', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(2)
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -185,14 +184,14 @@ The following keys have a special format:\n\
     })
 
     it('should fail with min', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(5)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
 
     it('should work with max', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().max(5)
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -201,14 +200,14 @@ The following keys have a special format:\n\
     })
 
     it('should fail with max', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().max(2)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
 
     it('should work with length', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().length(3)
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -217,14 +216,14 @@ The following keys have a special format:\n\
     })
 
     it('should fail with length', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().length(2)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
 
     it('should work with min and max', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(2).max(5)
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -233,7 +232,7 @@ The following keys have a special format:\n\
     })
 
     it('should remove min', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(5).not.min()
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -242,7 +241,7 @@ The following keys have a special format:\n\
     })
 
     it('should remove max', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().max(2).not.max()
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -251,7 +250,7 @@ The following keys have a special format:\n\
     })
 
     it('should remove length', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().length(5).not.length()
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -276,7 +275,7 @@ The following keys have a special format:\n\
   describe('requiredKeys', () => {
 
     it('should work with required key', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('a')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -285,7 +284,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with required key list', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -294,7 +293,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with required key array', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys(['a', 'b', 'c'])
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -303,14 +302,14 @@ The following keys have a special format:\n\
     })
 
     it('should fail with required keys', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('d')
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
 
     it('should allow to remove with not', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('a', 'b', 'c', 'd')
       .not.requiredKeys('d')
       // use schema
@@ -330,7 +329,7 @@ The following keys have a special format:\n\
   describe('forbiddenKeys', () => {
 
     it('should work with forbidden key', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('d')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -339,7 +338,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with forbidden key list', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('d', 'e', 'f')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -348,7 +347,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with forbidden key array', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys(['d', 'e', 'f'])
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -357,14 +356,14 @@ The following keys have a special format:\n\
     })
 
     it('should fail with forbidden keys', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('a')
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
 
     it('should allow to remove with not', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('c', 'd', 'e', 'f')
       .not.forbiddenKeys('c')
       // use schema
@@ -384,7 +383,7 @@ The following keys have a special format:\n\
   describe('logic', () => {
 
     it('should work with and', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().and('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -393,7 +392,7 @@ The following keys have a special format:\n\
     })
 
     it('should fail with and', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().and('a', 'b', 'c')
       // use schema
       helper.validateFail(schema, data, undefined, done)
@@ -406,7 +405,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with nand', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().not.and('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -415,7 +414,7 @@ The following keys have a special format:\n\
     })
 
     it('should fail with nand', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().not.and('a', 'b', 'c')
       // use schema
       helper.validateFail(schema, data, undefined, done)
@@ -428,7 +427,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with or', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().or('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -437,7 +436,7 @@ The following keys have a special format:\n\
     })
 
     it('should fail with or', (done) => {
-      const data = {d: 1, e: 2}
+      const data = { d: 1, e: 2 }
       const schema = new MySchema().or('a', 'b', 'c')
       // use schema
       helper.validateFail(schema, data, undefined, done)
@@ -450,7 +449,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with xor', (done) => {
-      const data = {a: 1}
+      const data = { a: 1 }
       const schema = new MySchema().xor('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -459,7 +458,7 @@ The following keys have a special format:\n\
     })
 
     it('should fail with xor', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().xor('a', 'b', 'c')
       // use schema
       helper.validateFail(schema, data, undefined, done)
@@ -472,7 +471,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with not or', (done) => {
-      const data = {d: 1, e: 2, f: 3}
+      const data = { d: 1, e: 2, f: 3 }
       const schema = new MySchema().not.or('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -481,7 +480,7 @@ The following keys have a special format:\n\
     })
 
     it('should fail with not or', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().not.or('a', 'b', 'c')
       // use schema
       helper.validateFail(schema, data, undefined, done)
@@ -494,7 +493,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with not xor', (done) => {
-      const data = {d: 1, e: 2, f: 3}
+      const data = { d: 1, e: 2, f: 3 }
       const schema = new MySchema().not.xor('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -503,7 +502,7 @@ The following keys have a special format:\n\
     })
 
     it('should fail with not xor', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().not.xor('a', 'b', 'c')
       // use schema
       helper.validateFail(schema, data, undefined, done)
@@ -516,7 +515,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with with', (done) => {
-      const data = {a: 1, b: 2, c: 3}
+      const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().with('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -525,7 +524,7 @@ The following keys have a special format:\n\
     })
 
     it('should fail with with', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().with('a', 'b', 'c')
       // use schema
       helper.validateFail(schema, data, undefined, done)
@@ -538,7 +537,7 @@ The following keys have a special format:\n\
     })
 
     it('should work with without', (done) => {
-      const data = {a: 1, d: 2, e: 3}
+      const data = { a: 1, d: 2, e: 3 }
       const schema = new MySchema().not.with('a', 'b', 'c')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -547,7 +546,7 @@ The following keys have a special format:\n\
     })
 
     it('should fail with without', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().not.with('a', 'b', 'c')
       // use schema
       helper.validateFail(schema, data, undefined, done)
@@ -560,7 +559,7 @@ The following keys have a special format:\n\
     })
 
     it('should allow to clearLogic', (done) => {
-      const data = {a: 1, b: 2}
+      const data = { a: 1, b: 2 }
       const schema = new MySchema().and('a', 'b', 'c').clearLogic
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -573,34 +572,34 @@ The following keys have a special format:\n\
   describe('deepen/flatten', () => {
 
     it('should work with deepen as string', (done) => {
-      const data = {'a.a': 1, 'a.b': 2, c: 3}
+      const data = { 'a.a': 1, 'a.b': 2, c: 3 }
       const schema = new MySchema().deepen('.')
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal({a: {a: 1, b: 2}, c: 3})
+        expect(res).deep.equal({ a: { a: 1, b: 2 }, c: 3 })
       }, done)
     })
 
     it('should work with deepen as pattern', (done) => {
-      const data = {'a.a': 1, 'a.b': 2, c: 3}
+      const data = { 'a.a': 1, 'a.b': 2, c: 3 }
       const schema = new MySchema().deepen(/\./)
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal({a: {a: 1, b: 2}, c: 3})
+        expect(res).deep.equal({ a: { a: 1, b: 2 }, c: 3 })
       }, done)
     })
 
     it('should work with flatten as string', (done) => {
-      const data = {a: {a: 1, b: 2}, c: 3}
+      const data = { a: { a: 1, b: 2 }, c: 3 }
       const schema = new MySchema().flatten('.')
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal({'a.a': 1, 'a.b': 2, c: 3})
+        expect(res).deep.equal({ 'a.a': 1, 'a.b': 2, c: 3 })
       }, done)
     })
 
     it('should remove deepen', (done) => {
-      const data = {'a.a': 1, 'a.b': 2, c: 3}
+      const data = { 'a.a': 1, 'a.b': 2, c: 3 }
       const schema = new MySchema().deepen('.').not.deepen()
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -609,7 +608,7 @@ The following keys have a special format:\n\
     })
 
     it('should remove flatten', (done) => {
-      const data = {a: {a: 1, b: 2}, c: 3}
+      const data = { a: { a: 1, b: 2 }, c: 3 }
       const schema = new MySchema().flatten('.').not.flatten()
       // use schema
       helper.validateOk(schema, data, (res) => {

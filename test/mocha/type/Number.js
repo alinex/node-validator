@@ -1,7 +1,7 @@
 // @flow
 import chai from 'chai'
 
-import {NumberSchema} from '../../../src/index'
+import { NumberSchema } from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -11,7 +11,6 @@ const expect = chai.expect
 const MySchema = NumberSchema
 
 describe('number', () => {
-
   it('should work without specification', (done) => {
     const data = 12.8
     const schema = new MySchema()
@@ -30,12 +29,10 @@ describe('number', () => {
   })
 
   describe('optional/default', () => {
-
     it('should work with required', (done) => {
       const data = 12.8
-      const schema = new MySchema()
+      const schema = new MySchema().required
       expect(schema).to.be.an('object')
-      schema.required
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -43,8 +40,7 @@ describe('number', () => {
     })
 
     it('should fail with required', (done) => {
-      const schema = new MySchema()
-      schema.required
+      const schema = new MySchema().required
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -65,11 +61,9 @@ describe('number', () => {
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
-
   })
 
   describe('unit', () => {
-
     it('should work with float', (done) => {
       const data = 12.8
       const schema = new MySchema().unit('cm')
@@ -100,7 +94,6 @@ describe('number', () => {
     it('should fail with unknown unit', (done) => {
       const data = '12.8 alex'
       const schema = new MySchema().unit('cm')
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -108,7 +101,6 @@ describe('number', () => {
     it('should fail with not convertable unit', (done) => {
       const data = '12.8 kg'
       const schema = new MySchema().unit('cm')
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -143,11 +135,9 @@ describe('number', () => {
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
-
   })
 
   describe('sanitize', () => {
-
     it('should work with string number', (done) => {
       const data = '12.8'
       const schema = new MySchema()
@@ -169,7 +159,6 @@ describe('number', () => {
     it('should fail with additional text', (done) => {
       const data = 'use 12.8 cm'
       const schema = new MySchema()
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -179,11 +168,9 @@ describe('number', () => {
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
-
   })
 
   describe('round', () => {
-
     it('should work with additional text', (done) => {
       const data = 12.8
       const schema = new MySchema().round()
@@ -247,7 +234,6 @@ describe('number', () => {
     it('should fail with float for integer', (done) => {
       const data = 12.8
       const schema = new MySchema().integer
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -257,11 +243,9 @@ describe('number', () => {
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
-
   })
 
   describe('minmax', () => {
-
     it('should be positive', (done) => {
       const data = 12
       const schema = new MySchema().positive
@@ -274,7 +258,6 @@ describe('number', () => {
     it('should fail with positive', (done) => {
       const data = -12
       const schema = new MySchema().positive
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -297,7 +280,6 @@ describe('number', () => {
     it('should fail with negative', (done) => {
       const data = 12
       const schema = new MySchema().negative
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -320,7 +302,6 @@ describe('number', () => {
     it('should fail with positive', (done) => {
       const data = -12
       const schema = new MySchema().positive
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -343,7 +324,6 @@ describe('number', () => {
     it('should fail with min', (done) => {
       const data = -12
       const schema = new MySchema().min(5)
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -366,7 +346,6 @@ describe('number', () => {
     it('should fail with greater', (done) => {
       const data = 5
       const schema = new MySchema().greater(5)
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -389,7 +368,6 @@ describe('number', () => {
     it('should fail with less', (done) => {
       const data = 5
       const schema = new MySchema().less(5)
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -412,7 +390,6 @@ describe('number', () => {
     it('should fail with max', (done) => {
       const data = 12
       const schema = new MySchema().max(5)
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -453,7 +430,6 @@ describe('number', () => {
     it('should fail with integer type', (done) => {
       const data = 12000000
       const schema = new MySchema().integerType(8)
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -463,11 +439,9 @@ describe('number', () => {
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
-
   })
 
   describe('multiple', () => {
-
     it('should work', (done) => {
       const data = 16
       const schema = new MySchema().multiple(8)
@@ -480,7 +454,6 @@ describe('number', () => {
     it('should fail', (done) => {
       const data = 12
       const schema = new MySchema().multiple(8)
-      schema.required
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -490,11 +463,9 @@ describe('number', () => {
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
-
   })
 
   describe('format', () => {
-
     it('should work', (done) => {
       const data = 16
       const schema = new MySchema().format('0.00')
@@ -527,7 +498,5 @@ describe('number', () => {
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
-
   })
-
 })

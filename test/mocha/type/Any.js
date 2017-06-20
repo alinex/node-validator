@@ -1,7 +1,7 @@
 // @flow
 import chai from 'chai'
 
-import {AnySchema} from '../../../src/index'
+import { AnySchema } from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -32,9 +32,8 @@ describe('any', () => {
 
     it('should work with required', (done) => {
       const data = 5
-      const schema = new MySchema()
+      const schema = new MySchema().required
       expect(schema).to.be.an('object')
-      schema.required
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -42,8 +41,7 @@ describe('any', () => {
     })
 
     it('should fail with required', (done) => {
-      const schema = new MySchema()
-      schema.required
+      const schema = new MySchema().required
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -193,7 +191,7 @@ describe('any', () => {
     it('should allow in invalid list', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.not.allow(data).not.allowToClear
+      .not.allow(data).not.allowToClear
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)

@@ -10,33 +10,31 @@ import SchemaData from '../../src/SchemaData'
 chai.use(chaiAsPromised)
 const expect = chai.expect
 
-const validateOk = function(schema: Schema, data: any, cb?: Function, done ?: Function) {
+function validateOk(schema: Schema, data: any, cb?: Function, done ?: Function) {
   debug(schema, schema.constructor.name)
   debug(new SchemaData(data), schema.constructor.name)
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
   expect(res, 'validate()').to.be.fulfilled.notify(() => {
-    res.then(e => {
-      try { if (cb) cb(e); if (done) done() }
-      catch(error) { if (done) done(error) }
+    res.then((e) => {
+      try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
     })
   })
 }
 
-const validateFail = function(schema: Schema, data: any, cb?: Function, done ?: Function) {
+function validateFail(schema: Schema, data: any, cb?: Function, done ?: Function) {
   debug(schema, schema.constructor.name)
   debug(new SchemaData(data), schema.constructor.name)
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
   expect(res, 'validate()').to.be.rejectedWith(Error).notify(() => {
-    res.catch(e => {
-      try { if (cb) cb(e); if (done) done() }
-      catch(error) { if (done) done(error) }
+    res.catch((e) => {
+      try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
     })
   })
 }
 
-const description = function(schema: Schema) {
+function description(schema: Schema) {
   debug(schema, schema.constructor.name)
   const msg = schema.description
   debug(msg, schema.constructor.name)
@@ -44,16 +42,15 @@ const description = function(schema: Schema) {
   return msg
 }
 
-const reference = function(ref: Reference, cb?: Function, done ?: Function) {
+function reference(ref: Reference, cb?: Function, done ?: Function) {
   debug(ref, ref.constructor.name)
   const res = ref.read()
   debug(res, ref.constructor.name)
   expect(res, 'reference()').to.be.fulfilled.notify(() => {
-    res.then(e => {
-      try { if (cb) cb(e); if (done) done() }
-      catch(error) { if (done) done(error) }
+    res.then((e) => {
+      try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
     })
   })
 }
 
-export {debug, validateOk, validateFail, description, reference}
+export { debug, validateOk, validateFail, description, reference }
