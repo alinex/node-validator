@@ -7,6 +7,7 @@ class SchemaData {
   options: Object       // open for enhancement
   temp: Object          // storage for additional data between the rules
   parent: SchemaData    // parent data structure (used for references)
+  root: SchemaData      // root data structure (used for references)
   status: Promise<any>  // wait till value is checked (for references)
   done: Function        // method used to fullfill status promise
 
@@ -16,6 +17,7 @@ class SchemaData {
     this.source = source || '/'
     this.options = options || {}
     this.temp = {}
+    this.root = this
     this.status = new Promise((resolve) => {
       this.done = resolve
     })
@@ -25,6 +27,7 @@ class SchemaData {
     const sub = new SchemaData(this.value[key],
       `${this.source.replace(/\/$/, '')}/${key}`, this.options)
     sub.parent = this
+    sub.root = this.root
     return sub
   }
 

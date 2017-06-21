@@ -1,5 +1,7 @@
 // @flow
 function resolvePath(data: any, def: string): any {
+  // relative
+  // absolute
   return 'xxx'
 }
 // range
