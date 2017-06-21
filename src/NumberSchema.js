@@ -1,6 +1,6 @@
 // @flow
 import Numeral from 'numeral'
-import Quantity from 'js-quantities'
+import convert from 'convert-units'
 
 import AnySchema from './AnySchema'
 import SchemaError from './SchemaError'
@@ -74,7 +74,7 @@ class NumberSchema extends AnySchema {
       this._negate = false
     } else if (unit) {
       try {
-        Quantity(unit)
+        convert().from(unit)
       } catch (e) { throw new Error(`Unit ${unit} not recognized`) }
       this._unit = unit
     } else {
@@ -90,7 +90,7 @@ class NumberSchema extends AnySchema {
       this._negate = false
     } else if (unit) {
       try {
-        Quantity(unit)
+        convert().from(unit)
       } catch (e) { throw new Error(`Unit ${unit} not recognized`) }
       this._toUnit = unit
     } else {
@@ -274,13 +274,14 @@ class NumberSchema extends AnySchema {
       if (this._sanitize) data.value = data.value.replace(/^.*?([-+]?\d+\.?\d*\s*\S*).*?$/, '$1')
       let quantity
       try {
-        quantity = new Quantity(data.value)
+        const match = data.value.match(/(^[-+]?\d+\.?\d*)\s*(\S*)/)
+        quantity = convert(match[1]).from(match[2])
       } catch (e) {
         return Promise.reject(new SchemaError(this, data,
         `Could not parse the unit of ${data.value}: ${e.message}`))
       }
       try {
-        data.value = quantity.to(this._unit).scalar
+        data.value = quantity.to(this._unit)
       } catch (e) {
         return Promise.reject(new SchemaError(this, data,
         `Could not convert to ${this._unit}: ${e.message}`))
@@ -288,7 +289,7 @@ class NumberSchema extends AnySchema {
     }
     if (this._unit && this._toUnit && typeof data.value === 'number') {
       try {
-        data.value = new Quantity(data.value, this._unit).to(this._toUnit).scalar
+        data.value = convert(data.value).from(this._unit).to(this._toUnit)
       } catch (e) {
         return Promise.reject(new SchemaError(this, data,
         `Could not convert ${this._unit} to ${this._toUnit}: ${e.message}`))
