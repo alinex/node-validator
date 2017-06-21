@@ -11,3 +11,5 @@ Within this module especially the following foreign modules are used:
   to remove the HTML/XML tags from a string
 - [js-quantities](http://gentooboontoo.github.io/js-quantities/)
   to transform numbers between different quantities
+- [numeral](http://numeraljs.com/)
+  used to format numbers

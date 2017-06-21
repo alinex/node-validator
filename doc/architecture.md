@@ -5,6 +5,11 @@ schema. Therefore the appropriate class is used to create an instance and set it
 using it´s methods. This newly created schema may also be a structure and combination
 of different schema class instances.
 
+- it is easy to set up
+- has readable code
+- will also check the schema definition
+- parts can be linked and cloned
+
 This schema can describe itself human readable and can be given a data structure
 to validate. It will run asynchronously over the data structure to check and optimize
 it. As a result it will return an promise with the resulting data structure.
