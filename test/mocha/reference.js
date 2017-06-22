@@ -10,15 +10,24 @@ import * as helper from './helper'
 const expect = chai.expect
 const debug = Debug('test')
 
-describe('reference', () => {
+describe.only('reference', () => {
 
   it('should create reference', (done) => {
-    const ref = new Reference('a')
-//    ref.context({ a: 1 })
-//    helper.reference(ref, (res) => {
-//      expect(res).deep.equal(1)
-//    }, done)
-    done()
+    const ref = new Reference({ a: 1 })
+    helper.reference(ref, (res) => {
+      expect(res).deep.equal({ a: 1 })
+    }, done)
+  })
+
+  describe('path', () => {
+
+    it('should get subelement of object', (done) => {
+      const ref = new Reference({ a: 1 }).path('a')
+      helper.reference(ref, (res) => {
+        expect(res).deep.equal(1)
+      }, done)
+    })
+
   })
 
 })
