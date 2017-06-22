@@ -484,12 +484,12 @@ describe('number', () => {
       }, done)
     })
 
-    it.skip('should work with best unit', (done) => {
+    it('should work with best unit', (done) => {
       const data = 16000
       const schema = new MySchema().unit('cm').format('0.00 $best')
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal('16.00 cm')
+        expect(res).deep.equal('160.00 m')
       }, done)
     })
 

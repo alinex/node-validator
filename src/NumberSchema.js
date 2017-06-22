@@ -460,13 +460,12 @@ ${this._integerType}-bit integer. `
   _formatValidator(data: SchemaData): Promise<void> {
     if (this._format) {
       const match = this._format.match(/(^.*?)(\s*\$(?:unit|best))/)
-//      console.log(match)
       let unit = match ? match[2] : ''
-//      if (unit.includes('$best')) {
-//        const quantity = Quantity(data.value, this._unit)
-//        console.log(Quantity.getUnits('length'))
-//        unit = unit.replace('$best', '$unit')
-//      }
+      if (unit.includes('$best')) {
+        const quantity = convert(data.value).from(this._toUnit || this._unit).toBest()
+        data.value = quantity.val
+        unit = unit.replace('$best', quantity.unit)
+      }
       if (unit.includes('$unit')) unit = unit.replace('$unit', this._toUnit || this._unit || '')
       const format = match ? match[1] : this._format
       try {

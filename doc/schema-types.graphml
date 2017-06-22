@@ -161,7 +161,7 @@ clearMatch<y:LabelModel>
     <node id="n5">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="258.37833333333293" width="122.75" x="398.5118243243244" y="-365.39426627914673"/>
+          <y:Geometry height="240.37833333333293" width="122.75" x="380.375" y="-311.16058318428685"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="50.833984375" x="35.9580078125" y="4.0">number</y:NodeLabel>
@@ -215,7 +215,7 @@ format()<y:LabelModel>
     <node id="n7">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="60.125" width="122.75" x="398.5118243243243" y="-30.35479183227349"/>
+          <y:Geometry height="60.125" width="122.75" x="380.375" y="-30.35479183227349"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="49.955078125" x="36.3974609375" y="4.0">Interval</y:NodeLabel>

@@ -150,4 +150,11 @@ You can also add the unit if set earlier by adding `$unit` to the format string.
 const Schema = new NumberSchema().unit('cm').format('0.00 $unit')
 ```
 
+And last but not least use `$best` to let the system change the unit to the best selection:
+
+```js
+const Schema = new NumberSchema().unit('cm').format('0.00 $best')
+// value 16000 -> '160.00 m'
+```
+
 > Using the `not` flag it can also be removed later.
