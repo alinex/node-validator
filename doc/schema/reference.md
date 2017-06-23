@@ -1,59 +1,50 @@
-# Boolean Schema
+# References
 
-Create a schema that matches any data type.
+This is a special type which is used in another form.
 
-This is an universal type which may be used everywhere there no further knowledge
-of the structure is known. It can also be used to make a loose checking schema
-first and later replace it through detailed specifications.
+## Within schema
 
-See at [Base Schema](base.md) for the inherited methods you may call like:
-- `required`
-- `default()`
-- `stripEmpty`
-
-## Parsing
-
-### truthy() / falsy()
-
-With these two methods multiple values can be set which are interpreted as `true`
-or `false`. Using not before is the same as using the other method.
-
-Multiple values can be given as multiple arguments or array. Any type is possible
-as attributes but if you want to use an array as the value it have to be nested inside
-an array itself.
+It can be set in schema settings on the
+normal types to read the setting from the reference instead of using a fixed setting value.
 
 ```js
-const schema = new BooleanSchema().truthy(1, 'yes').falsy(0, 'no')
+const schema = new ObjectSchema()
+// as value
+.key('a', new Reference(...))
+// as setting value
+.key('b', new BooleanSchema().default(new Reference(...)))
+// as flag setting
+.key('c', new BooleanSchema().optional(new Reference(...)))
 ```
 
-### tolerant
+If references are used within a schema it will resolve before using the value. If not specifically
+defined as raw the reference will check for values within the validating structure only after the
+value pointed to is checked itself.
 
-This is equal to set the following values:
-- `true`:  `1`, `'1'`, `'true'`, `'on'`, `'yes'`, `'+'`
-- `false`: `0`, `'0'`, `'false'`, `'off'`, `'no'`, `'-'`
+> This may lead to circular references which will freeze the check. If so change the reference or
+> use the raw value in one place at least.
+
+## Within data structure
+
+A reference may also be used within the data structure:
 
 ```js
-const schema = new BooleanSchema().tolerant
+const data = {
+  // as value
+  a: new Reference(...)
+}
 ```
 
-> Use the `not.tolerant` to remove all truthy /falsy settings done through any method.
+Within the data structure the references will be resolved also before using them. Here the `raw`
+value will always be used ignoring the setting in the reference itself. So no problems with circular
+references will be there.
 
-### insensitive
+## Possibilities
 
-This makes only sense together with `tolerant` or `truthy`, `falsy` and will match
-strings case insensitive.
-
-```js
-const schema = new BooleanSchema().tolerant.insensitive
-```
-
-## Output
-
-### format(truthy, falsy)
-
-To specify the value returned for `true` and `false` call this method with the
-values used for both.
-
-```js
-const schema = new BooleanSchema().format('YES', 'NO')
-```
+The references allows to point to
+- other parts of the validating structure
+- any other data structure
+- an function returning data directly or by promise
+- a web resource
+- a local file content
+- a command output

@@ -12,7 +12,7 @@ const debug = Debug('test')
 
 describe.only('reference', () => {
 
-  it('should create reference', (done) => {
+  it('should get direct value', (done) => {
     const ref = new Reference({ a: 1 })
     helper.reference(ref, (res) => {
       expect(res).deep.equal({ a: 1 })
@@ -29,5 +29,9 @@ describe.only('reference', () => {
     })
 
   })
+
+  // usage in data structure
+  // usage in schema
+  // usage in schema -> schema
 
 })
