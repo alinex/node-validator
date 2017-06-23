@@ -28,6 +28,7 @@ function resolvePath(data: any, def: string): any {
 // addRef
 // fn
 
+
 class Reference {
 
   base: any

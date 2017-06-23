@@ -25,3 +25,15 @@ See the different schema descriptions for their possible settings and use cases.
 
 To see exactly what your schema allows output it's `description` property and you
 will get the resulting configuration explained.
+
+## Overview
+
+All types are based on the `Schema` class directly or indirectly.
+
+![Schema types](schema-types.png)
+
+Each of this classes have different properties and settings which you can use to
+specify it.
+
+One exception is the reference which is a special type which didn't validate but will get the
+value from the defined resource. Read more about this later.

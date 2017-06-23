@@ -20,14 +20,10 @@ real problem in detail.
 
 ## Schema
 
-The core of this module are the schema classes which all are subclasses of `Schema`.
+This is the core of this module and defines the concrete checks see more about the possibilities
+in the following part.
 
-![Schema types](schema-types.png)
-
-Each of this classes have different properties and settings which you can use to
-specify it.
-
-The error object which is returned after the validation failed contains all information
+The error object which is returned after the validation on a schema failed contains all information
 necessary:
 
 ![Schema error](schema-error.png)
