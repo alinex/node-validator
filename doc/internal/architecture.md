@@ -7,6 +7,12 @@ The internal architecture is described only in it´s basics.
 
 Each schema class should inherit from `Schema` or any of it´s subclasses.
 
+
+REWRITE FROM HERE
+
+
+
+
 ### Example
 
 A full schema is described in this example.

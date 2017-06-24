@@ -44,7 +44,7 @@ function description(schema: Schema) {
 
 function reference(ref: Reference, cb?: Function, done ?: Function) {
   debug(ref, ref.constructor.name)
-  const res = ref.read()
+  const res = ref.data
   debug(res, ref.constructor.name)
   expect(res, 'reference()').to.be.fulfilled.notify(() => {
     res.then((e) => {

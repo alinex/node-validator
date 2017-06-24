@@ -4,6 +4,7 @@ import Debug from 'debug'
 
 import Schema from '../../src/Schema'
 import SchemaData from '../../src/SchemaData'
+import Reference from '../../src/Reference'
 
 export default function (element: any, type: string = 'test') {
   const debugLog = Debug(type.match(/^test/) ? type : `test:${type}`)
@@ -17,14 +18,9 @@ export default function (element: any, type: string = 'test') {
       } else debugLog(`Promise failed with ${util.inspect(err)}`)
     })
   } else if (element instanceof Schema) {
-    const disallowed = ['title', 'detail', '_rules']
-    const filtered = Object.keys(element)
-    .filter(key => !disallowed.includes(key))
-    .reduce((obj, key) => {
-      obj[key] = element[key]
-      return obj
-    }, {})
-    debugLog(`${element.constructor.name} set up with: %o`, filtered)
+    debugLog(`${element.constructor.name} set up with: %o`, element._setting)
+  } else if (element instanceof SchemaData && element.orig instanceof Reference) {
+    debugLog(`Given reference as data: ${element.orig.base} -> ${element.orig.access.join(' -> ')}`)
   } else if (element instanceof SchemaData) {
     debugLog(`Given data: ${util.inspect(element.orig)}`)
   } else {

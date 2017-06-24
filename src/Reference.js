@@ -32,6 +32,8 @@ function resolvePath(data: any, def: string): any {
 class Reference {
 
   base: any
+  _raw: bool
+
   // direct object
   // file
   // web
@@ -43,6 +45,12 @@ class Reference {
   constructor(base: any) {
     this.base = base
     this.access = []
+    this._raw = false
+  }
+
+  raw(flag: bool = true): this {
+    this._raw = flag
+    return this
   }
 
   path(def: string): this {
@@ -51,7 +59,7 @@ class Reference {
     return this
   }
 
-  read(): Promise<any> {
+  get data(): Promise<any> {
     // run rules seriously
     let p = Promise.resolve(this.base)
     this.access.forEach(([fn, def]) => { p = p.then(data => fn.call(this, data, def)) })

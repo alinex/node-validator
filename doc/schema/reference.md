@@ -35,7 +35,7 @@ const data = {
 }
 ```
 
-Within the data structure the references will be resolved also before using them. Here the `raw`
+Within the data structure the references will be resolved also before using them. Here the `raw()`
 value will always be used ignoring the setting in the reference itself. So no problems with circular
 references will be there.
 

@@ -32,7 +32,7 @@ describe('schema', () => {
 
     it('should work with required', (done) => {
       const data = 5
-      const schema = new MySchema().required
+      const schema = new MySchema().required()
       expect(schema).to.be.an('object')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -41,13 +41,13 @@ describe('schema', () => {
     })
 
     it('should fail with required', (done) => {
-      const schema = new MySchema().required
+      const schema = new MySchema().required()
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
 
     it('should remove required', (done) => {
-      const schema = new MySchema().required.not.required
+      const schema = new MySchema().required().required(false)
       expect(schema).to.be.an('object')
       // use schema
       helper.validateOk(schema, undefined, undefined, done)
@@ -65,7 +65,7 @@ describe('schema', () => {
 
     it('should fail with required and undefined default', (done) => {
       const schema = new MySchema()
-      schema.required.default(undefined)
+      schema.required().default(undefined)
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -73,7 +73,7 @@ describe('schema', () => {
     it('should remove default using not', (done) => {
       const schema = new MySchema()
       expect(schema).to.be.an('object')
-      schema.default(5).not.default()
+      schema.default(5).default()
       // use schema
       helper.validateOk(schema, undefined, undefined, done)
     })
@@ -87,7 +87,7 @@ describe('schema', () => {
     })
 
     it('should describe required', () => {
-      const schema = new MySchema().required
+      const schema = new MySchema().required()
       // use schema
       expect(helper.description(schema)).to.equal('')
     })
@@ -104,25 +104,25 @@ describe('schema', () => {
   describe('stripEmpty', () => {
 
     it('should fail with stripEmpty and null', (done) => {
-      const schema = new MySchema().required.stripEmpty
+      const schema = new MySchema().required().stripEmpty()
       // use schema
       helper.validateFail(schema, null, undefined, done)
     })
 
     it('should fail with stripEmpty and empty String', (done) => {
-      const schema = new MySchema().required.stripEmpty
+      const schema = new MySchema().required().stripEmpty()
       // use schema
       helper.validateFail(schema, '', undefined, done)
     })
 
     it('should fail with stripEmpty and empty Array', (done) => {
-      const schema = new MySchema().required.stripEmpty
+      const schema = new MySchema().required().stripEmpty()
       // use schema
       helper.validateFail(schema, [], undefined, done)
     })
 
     it('should fail with stripEmpty and empty Object', (done) => {
-      const schema = new MySchema().required.stripEmpty
+      const schema = new MySchema().required().stripEmpty()
       // use schema
       helper.validateFail(schema, {}, undefined, done)
     })

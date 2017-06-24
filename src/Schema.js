@@ -3,6 +3,7 @@ import util from 'util'
 
 import SchemaData from './SchemaData'
 import SchemaError from './SchemaError'
+import Reference from './Reference'
 
 class Schema {
 
@@ -11,20 +12,14 @@ class Schema {
   _rules: Set<Array<Function>>
 
   // validation data
-
-  _negate: bool
-  _required: bool
-  _stripEmpty: bool
-  _default: any
+  _setting: { [string]: any } // definition of object
+  _check: { [string]: any } // resolved data
 
   constructor(title?: string, detail?: string) {
     this.title = title || this.constructor.name.replace(/(.)Schema/, '$1')
     this.detail = detail || 'should be defined with:'
     this._rules = new Set()
-    // init settings
-    this._negate = false
-    this._required = false
-    this._stripEmpty = false
+    this._setting = {}
     // add check rules
     this._rules.add([this._emptyDescriptor, this._emptyValidator])
     this._rules.add([this._optionalDescriptor, this._optionalValidator])
@@ -32,29 +27,20 @@ class Schema {
 
   // setup schema
 
-  get not(): this {
-    this._negate = !this._negate
+  _setFlag(name: string, flag: bool | Reference = true): this {
+    if (flag) this._setting[name] = flag
+    else delete this._setting[name]
+    return this
+  }
+  _setAny(name: string, value: any): this {
+    if (value) this._setting.default = value
+    else delete this._setting.default
     return this
   }
 
-  get required(): this {
-    this._required = !this._negate
-    this._negate = false
-    return this
-  }
-
-  get stripEmpty(): this {
-    this._stripEmpty = !this._negate
-    this._negate = false
-    return this
-  }
-
-  default(value?: any): this {
-    if (this._negate || value === undefined) delete this._default
-    else this._default = value
-    this._negate = false
-    return this
-  }
+  required(flag?: bool | Reference): this { return this._setFlag('required', flag) }
+  stripEmpty(flag?: bool | Reference): this { return this._setFlag('stripEmpty', flag) }
+  default(value?: any): this { return this._setAny('default', value) }
 
   // using schema
 
@@ -65,6 +51,11 @@ class Schema {
 
   get description(): string {
     let msg = ''
+    this._check = {}
+    const set = this._setting
+    for (const key of Object.keys(set)) {
+      this._check[key] = set[key]
+    }
     this._rules.forEach((rule) => { msg += rule[0].call(this) })
     return msg.trim()
   }
@@ -73,6 +64,21 @@ class Schema {
     const data = value instanceof SchemaData ? value : new SchemaData(value, source, options)
     // run rules seriously
     let p = Promise.resolve()
+    // resolve references in value first
+    if (data.value instanceof Reference) {
+      p = p.then(() => data.value.raw().data)
+      .then((res) => { data.value = res })
+    }
+    // resolve check settings
+    this._check = {}
+    const set = this._setting
+    for (const key of Object.keys(set)) {
+      if (set[key] instanceof Reference) {
+        p = p.then(() => set[key].data)
+        .then((res) => { this._check[key] = res })
+      } else this._check[key] = set[key]
+    }
+    // run the rules
     this._rules.forEach((rule) => { p = p.then(() => rule[1].call(this, data)) })
     return p.then(() => {
       data.done(data.value)
@@ -82,11 +88,11 @@ class Schema {
   }
 
   _emptyDescriptor() {
-    return this._stripEmpty ? 'Empty values are set to `undefined`.\n' : ''
+    return this._check.stripEmpty ? 'Empty values are set to `undefined`.\n' : ''
   }
 
   _emptyValidator(data: SchemaData): Promise<void> {
-    if (this._stripEmpty && (
+    if (this._check.stripEmpty && (
       data.value === '' || data.value === null || (Array.isArray(data.value) && !data.value.length)
       || (Object.keys(data.value).length === 0 && data.value.constructor === Object)
     )) {
@@ -96,15 +102,18 @@ class Schema {
   }
 
   _optionalDescriptor() {
-    if (this._default) return `It will default to ${util.inspect(this._default)} if not set.\n`
-    if (!this._required) return 'It is optional and must not be set.\n'
+    if (this._check.default) {
+      return `It will default to ${util.inspect(this._check.default)} if not set.\n`
+    }
+    if (!this._check.required) return 'It is optional and must not be set.\n'
     return ''
   }
 
   _optionalValidator(data: SchemaData): Promise<void> {
-    if (data.value === undefined && this._default) data.value = this._default
+    const check = this._check
+    if (data.value === undefined && check.default) data.value = check.default
     if (data.value !== undefined) return Promise.resolve()
-    if (this._required) {
+    if (this._check.required) {
       return Promise.reject(new SchemaError(this, data,
       'This element is mandatory!'))
     }
