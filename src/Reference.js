@@ -59,6 +59,12 @@ class Reference {
     return this
   }
 
+  get description(): string {
+    let msg = `reference at ${this.base}`
+    if (this.access.length) msg += ` -> ${this.access.join(' -> ')}`
+    return msg
+  }
+
   get data(): Promise<any> {
     // run rules seriously
     let p = Promise.resolve(this.base)

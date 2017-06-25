@@ -57,6 +57,15 @@ describe('reference', () => {
       }, done)
     })
 
+    it('should describe', () => {
+      const data = 'abc'
+      const ref = new Reference(data)
+      const schema = new Schema().default(ref)
+      // use schema
+      expect(helper.description(schema))
+      .to.equal('It will default to reference at abc if not set.')
+    })
+
   })
   // usage in schema -> schema
 
