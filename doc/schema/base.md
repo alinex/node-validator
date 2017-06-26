@@ -2,24 +2,7 @@
 
 This are the settings which are common for all schema types.
 
-## not
-
-Some methods allow to negate their function. If this makes sense it is added
-in the examples. Therefore the not is added before the method call.
-
-```js
-const schema = new AnySchema().not.allow(1)
-```
-
-This operator is only valid for the next method. If you need it again it has to
-be given again.
-
-Also on a lot of methods you may need the `not` operator to go back to the initial
-setting. This is especially useful if you cloned a schema from somewhere else and
-want to change something here. Such possibilities are mostly added as a short note
-in each method description.
-
-## required
+## required(bool)
 
 The value may be optional (default), meaning if no value is given it will be set
 as `undefined`. A value of `null` is considered as a concrete value and won´t trigger

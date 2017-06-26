@@ -2,63 +2,71 @@
 import Schema from './Schema'
 import SchemaError from './SchemaError'
 import type SchemaData from './SchemaData'
+import Reference from './Reference'
 
 class AnySchema extends Schema {
-
-  // validation data
-
-  _valid: Set<any>
-  _invalid: Set<any>
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // init settings
-    this._valid = new Set()
-    this._invalid = new Set()
+    const set = this._setting
+    set.allow = new Set()
+    set.disallow = new Set()
     // add check rules
     this._rules.add([this._allowDescriptor, this._allowValidator])
   }
 
   // setup schema
 
-  allow(value: any): this {
-    if (value === undefined) {
-      this._required = this._negate // false for allow, true for not allow
-    } else if (this._negate) {
-      // disallow
-      this._invalid.add(value)
-      this._valid.delete(value)
-    } else {
-      // allow
-      this._valid.add(value)
-      this._invalid.delete(value)
+  valid(value?: any): this {
+    const set = this._setting
+    if (value instanceof Reference) {
+      throw new Error('Reference is only allowed in allow() and disallow() for complete list')
     }
-    this._negate = false // been used
+    if (value === undefined) set.required = false
+    else if (set.allow instanceof Reference) {
+      throw new Error('No single value if complete allow() list is set as reference.')
+    } else {
+      set.allow.add(value)
+      if (!(set.allow instanceof Reference)) set.disallow.delete(value)
+    }
     return this
   }
-
-  allowAll(list: Array<any>): this {
-    list.forEach((v) => {
-      if (v === undefined) {
-        this._required = this._negate
-      } else if (this._negate) {
-        // disallow
-        this._invalid.add(v)
-        this._valid.delete(v)
-      } else {
-        // allow
-        this._valid.add(v)
-        this._invalid.delete(v)
+  invalid(value?: any): this {
+    const set = this._setting
+    if (value instanceof Reference) {
+      throw new Error('Reference is only allowed in allow() and disallow() for complete list')
+    }
+    if (value === undefined) set.required = true
+    else if (set.disallow instanceof Reference) {
+      throw new Error('No single value if complete disallow() list is set as reference.')
+    } else {
+      set.disallow.add(value)
+      if (!(set.disallow instanceof Reference)) set.allow.delete(value)
+    }
+    return this
+  }
+  allow(value?: Array<any> | Reference): this {
+    const set = this._setting
+    if (value === undefined) set.allow.clear()
+    else if (value instanceof Reference) set.allow = value
+    else {
+      set.allow = new Set()
+      for (const e of value) {
+        set.allow.add(e)
+        if (!(set.allow instanceof Reference)) set.disallow.delete(e)
       }
-    })
-    this._negate = false // been used
+    }
     return this
   }
-
-  get allowToClear(): this {
-    if (this._negate) this._invalid.clear()
-    else this._valid.clear()
-    this._negate = false
+  disallow(value?: Array<any> | Reference): this {
+    const set = this._setting
+    if (value === undefined) set.disallow.clear()
+    else {
+      set.allow = new Set()
+      set.allow.delete(value)
+      set.disallow.add(value)
+    }
     return this
   }
 

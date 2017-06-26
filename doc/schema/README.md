@@ -4,11 +4,11 @@ The schema defines how to validate and sanitize the data structures. It is defin
 by using instances of the schema classes and setting their properties.
 
 ```js
-import { ObjectSchema, AnySchema } from 'alinex-validator'
+import { Reference, ObjectSchema, AnySchema } from 'alinex-validator'
 
 const schema = new ObjectSchema('MyTest', 'is an easy schema to show it´s use')
-.key('one', new Any().not.optional)
-.key('two', new Any().default(2))
+schema.key('one', new Any().optional())
+.key('two', new Any().default(new Reference(schema).path('/one')))
 
 const data = { one: 1 }
 schema.validate(data)
@@ -21,7 +21,10 @@ Everything works like this, in the first line the needed classes are loaded. The
 second paragraph defines the schema with two specified keys. And in the last paragraph
 the schema is used to validate a data structure.
 
-See the different schema descriptions for their possible settings and use cases.
+The core of the Validator is the definition of the schema. This is done step by step and may
+also throw some errors for invalid combinations. Like also shown references are possible
+anywhere.
+See the different reference and schema descriptions for their possible settings and use cases.
 
 To see exactly what your schema allows output it's `description` property and you
 will get the resulting configuration explained.

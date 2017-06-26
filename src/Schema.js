@@ -10,19 +10,31 @@ class Schema {
   title: string
   detail: string
 
-  // validation data
-  _rules: Set<Array<Function>>
+  // rules
+  _rules: {
+    descriptor: Array<Function>,
+    check: Array<Function>,
+    validator: Array<Function>,
+  }
   _setting: { [string]: any } // definition of object
   _check: { [string]: any } // resolved data
 
   constructor(title?: string, detail?: string) {
     this.title = title || this.constructor.name.replace(/(.)Schema/, '$1')
     this.detail = detail || 'should be defined with:'
-    this._rules = new Set()
+    this._rules = {
+      descriptor: [],
+      check: [],
+      validator: [],
+    }
     this._setting = {}
     // add check rules
-    this._rules.add([this._emptyDescriptor, this._emptyValidator])
-    this._rules.add([this._optionalDescriptor, this._optionalValidator])
+    this._rules.descriptor.push(
+      this._emptyDescriptor,
+      this._optionalDescriptor)
+    this._rules.validator.push(
+      this._emptyValidator,
+      this._optionalValidator)
   }
 
   // setup schema
@@ -52,12 +64,14 @@ class Schema {
   get description(): string {
     let msg = ''
     this._check = {}
+    // copy settings to check
     const set = this._setting
     for (const key of Object.keys(set)) {
       this._check[key] = set[key]
     }
-    this._rules.forEach((rule) => {
-      if (rule[0]) msg += rule[0].call(this)
+    // create message using the different rules
+    this._rules.descriptor.forEach((rule) => {
+      if (rule) msg += rule.call(this)
     })
     return msg.trim()
   }
@@ -78,11 +92,19 @@ class Schema {
       if (set[key] instanceof Reference) {
         par.push(set[key].data
         .then((res) => { this._check[key] = res }))
+//      } else if (set[key] instanceof Set) {
+//        this._check[key] = new Set()
+//        for (const e of set[key]) {
+//          if (set[key][e] instanceof Reference) {
+//            par.push(set[key][e].data
+//            .then((res) => { this._check[key].add(res) }))
+//          } else this._check[key].add(set[key][e])
+//        }
       } else this._check[key] = set[key]
     }
     let p = Promise.all(par)
     // run the rules seriously
-    this._rules.forEach((rule) => { p = p.then(() => rule[1].call(this, data)) })
+    this._rules.validator.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
     return p.then(() => {
       data.done(data.value)
       return data.value

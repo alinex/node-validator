@@ -8,6 +8,23 @@ The internal architecture is described only in it´s basics.
 Each schema class should inherit from `Schema` or any of it´s subclasses.
 
 
+## References
+
+
+## Control Flow
+
+- set schema
+- the schema is checked while defining
+- validate
+- data references are resolved
+- schema references are resolved
+- concrete schema definition is checked, maybe error
+- validator rules are called
+- resulting data structure is returned
+
+
+
+
 REWRITE FROM HERE
 
 
