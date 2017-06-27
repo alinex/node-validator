@@ -13,7 +13,15 @@ class AnySchema extends Schema {
     set.allow = new Set()
     set.disallow = new Set()
     // add check rules
-    this._rules.add([this._allowDescriptor, this._allowValidator])
+    this._rules.descriptor.push(
+      this._allowDescriptor,
+    )
+    this._rules.check.push(
+      this._allowCheck,
+    )
+    this._rules.validator.push(
+      this._allowValidator,
+    )
   }
 
   // setup schema
@@ -73,29 +81,49 @@ class AnySchema extends Schema {
   // using schema
 
   _allowDescriptor() {
+    const check = this._check
     let msg = ''
-    if (this._invalid.size) {
-      msg += `The keys ${Array.from(this._invalid).join(', ').replace(/(.*),/, '$1 and')} \
+    if (check.disallow instanceof Reference) {
+      msg += `The keys within ${check.disallow.description} are not allowed. `
+    } else if (check.disallow.size) {
+      msg += `The keys ${Array.from(check.disallow).join(', ').replace(/(.*),/, '$1 and')} \
 are not allowed. `
     }
-    if (this._valid.size) {
-      msg += `Only the keys ${Array.from(this._valid).join(', ').replace(/(.*),/, '$1 and')} \
+    if (check.allow instanceof Reference) {
+      msg += `Only the keys within ${check.allow.description} are allowed. `
+    } else if (check.allow.size) {
+      msg += `Only the keys ${Array.from(check.allow).join(', ').replace(/(.*),/, '$1 and')} \
 are allowed. `
     }
     return msg.length ? `${msg.trim()}\n` : ''
   }
-
+  _allowCheck(): void {
+    const check = this._check
+    // transform arrays from references to set
+    if (!check.allow) check.allow = []
+    else if (check.allow instanceof Set) check.allow = Array.from(check.allow)
+    else if (!Array.isArray(check.allow)) {
+      throw new Error('The `allow` setting have to be a list of values.')
+    }
+    // transform arrays from references to set
+    if (!check.disallow) check.disallow = []
+    else if (check.disallow instanceof Set) check.disallow = Array.from(check.disallow)
+    else if (!Array.isArray(check.disallow)) {
+      throw new Error('The `disallow` setting have to be a list of values.')
+    }
+  }
   _allowValidator(data: SchemaData): Promise<void> {
-    const check = JSON.stringify(data.value)
+    const check = this._check
+    const datastring = JSON.stringify(data.value)
     // reject if marked as invalid
-    if (this._invalid.size && Array.from(this._invalid)
-    .filter(e => check === JSON.stringify(e)).length) {
+    if (check.disallow.size && check.disallow
+    .filter(e => datastring === JSON.stringify(e)).length) {
       return Promise.reject(new SchemaError(this, data,
         'Element found in blacklist (disallowed item).'))
     }
     // reject if valid is set but not included
-    if (this._valid.size && !Array.from(this._valid)
-    .filter(e => check === JSON.stringify(e)).length) {
+    if (check.allow.size && check.allow
+    .filter(e => datastring === JSON.stringify(e)).length) {
       return Promise.reject(new SchemaError(this, data,
         'Element not in whitelist (allowed item).'))
     }

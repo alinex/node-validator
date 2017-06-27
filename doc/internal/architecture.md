@@ -5,10 +5,114 @@ The internal architecture is described only in it´s basics.
 
 ## Schema classes
 
-Each schema class should inherit from `Schema` or any of it´s subclasses.
+Each schema class should inherit from `Schema` or any of it´s subclasses. It needs a constructor
+class like below which calls the parent constructor using `super`.
+
+```js
+constructor(title?: string, detail?: string) {
+  super(title, detail)
+  // init settings
+  const set = this._setting
+  set.allow = new Set()
+  set.disallow = new Set()
+  // add check rules
+  this._rules.descriptor.push(
+    this._allowDescriptor,
+  )
+  this._rules.check.push(
+    this._allowCheck,
+  )
+  this._rules.validator.push(
+    this._allowValidator,
+  )
+}
+```
+
+Within the constructor some settings may be initialized. This is not necessary for flags or simple
+settings.
+
+Then you add the functions to describe, optimize the check values and validate to the `_rules`
+arrays. Because the parent constructor was called the rules from the parent are already set.
+The order may be important.
+
+Next you have to add the methods to set the schema settings:
+
+```js
+stripEmpty(flag?: bool | Reference): this { return this._setFlag('stripEmpty', flag) }
+default(value?: any): this { return this._setAny('default', value) }
+```
+
+The above shows some simple setters which can be completely set using the `_setFlag` and `_setAny`
+methods but you may also code it by hand if it is more complex:
+
+```js
+valid(value?: any): this {
+  const set = this._setting
+  if (value instanceof Reference) {
+    throw new Error('Reference is only allowed in allow() and disallow() for complete list')
+  }
+  if (value === undefined) set.required = false
+  else if (set.allow instanceof Reference) {
+    throw new Error('No single value if complete allow() list is set as reference.')
+  } else {
+    set.allow.add(value)
+    if (!(set.allow instanceof Reference)) set.disallow.delete(value)
+  }
+  return this
+}
+```
+
+Here you see the checking for possible reference values everywhere and that if a value is set at
+one point it may also change another one. This methods may also throw `Error` if anything impossible is set.
+
+And at last the methods for the rules which are referenced in the constructor have to be set.
+The best way is to name the methods after the area and type. Each part may have:
+- descriptor - which generates a human description ending with single newline
+- check - which may change the schema check (resolved setting) values
+- validator - which finally will test and sanitize the value
+
+```js
+_emptyDescriptor() {
+  const check = this._check
+  if (check.stripEmpty instanceof Reference) {
+    return `Empty values are set to \`undefined\` depending on ${check.default.description}.\n`
+  }
+  return check.stripEmpty ? 'Empty values are set to `undefined`.\n' : ''
+}
+
+_allowCheck(): void {
+  const check = this._check
+  // transform arrays from references to set
+  if (!check.allow) check.allow = new Set()
+  else if (Array.isArray(check.allow)) check.allow = new Set(check.allow)
+  else if (!(check.allow instanceof Set)) {
+    throw new Error('The `allow` setting have to be a Set.')
+  }
+}
+
+_emptyValidator(data: SchemaData): Promise<void> {
+  const check = this._check
+  if (check.stripEmpty && (
+    data.value === '' || data.value === null || (Array.isArray(data.value) && !data.value.length)
+    || (Object.keys(data.value).length === 0 && data.value.constructor === Object)
+  )) {
+    data.value = undefined
+  }
+  return Promise.resolve()
+}
+```
+
+While the descriptor method has to be synchronous check and validator methods may be synchronous
+or return a Promise.
 
 
 ## References
+
+References are a core element of this validator. They should be supported everywhere.
+
+
+
+
 
 
 ## Control Flow

@@ -103,6 +103,8 @@ class Schema {
       } else this._check[key] = set[key]
     }
     let p = Promise.all(par)
+    // optimize check values
+    this._rules.check.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
     // run the rules seriously
     this._rules.validator.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
     return p.then(() => {
