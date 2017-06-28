@@ -67,15 +67,15 @@
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-mocha-only": "^0.0.3",
-    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-node": "^5.1.0",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.1.0",
     "eslint-plugin-standard": "^3.0.1",
-    "flow-bin": "^0.48.0",
+    "flow-bin": "^0.49.1",
     "flow-typed": "^2.1.2",
     "mocha": "^3.4.1",
     "nodemon": "^1.11.0",
-    "nyc": "^11.0.2",
+    "nyc": "^11.0.3",
     "request": "^2.81.0"
   },
   "engines": {
