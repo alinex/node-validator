@@ -116,13 +116,13 @@ are allowed. `
     const check = this._check
     const datastring = JSON.stringify(data.value)
     // reject if marked as invalid
-    if (check.disallow.size && check.disallow
+    if (check.disallow.length && check.disallow
     .filter(e => datastring === JSON.stringify(e)).length) {
       return Promise.reject(new SchemaError(this, data,
         'Element found in blacklist (disallowed item).'))
     }
     // reject if valid is set but not included
-    if (check.allow.size && check.allow
+    if (check.allow.length && check.allow
     .filter(e => datastring === JSON.stringify(e)).length) {
       return Promise.reject(new SchemaError(this, data,
         'Element not in whitelist (allowed item).'))

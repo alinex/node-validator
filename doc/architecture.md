@@ -9,6 +9,7 @@ of different schema class instances.
 - has readable code
 - will also check the schema definition
 - parts can be linked and cloned
+- references are a core element fully supported
 
 This schema can describe itself human readable and can be given a data structure
 to validate. It will run asynchronously over the data structure to check and optimize
@@ -30,6 +31,8 @@ necessary:
 
 Mainly you only need the `text` property which will present a markdown formatted
 long text explaining what the problem is and how to correctly define the data structure.
+
+
 
 
 ## CLI

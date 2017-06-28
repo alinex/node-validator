@@ -32,7 +32,7 @@ describe('any', () => {
 
     it('should work with required', (done) => {
       const data = 5
-      const schema = new MySchema().required
+      const schema = new MySchema().required()
       expect(schema).to.be.an('object')
       // use schema
       helper.validateOk(schema, data, (res) => {
@@ -41,7 +41,7 @@ describe('any', () => {
     })
 
     it('should fail with required', (done) => {
-      const schema = new MySchema().required
+      const schema = new MySchema().required()
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
@@ -58,19 +58,19 @@ describe('any', () => {
 
     it('should fail with required and undefined default', (done) => {
       const schema = new MySchema()
-      schema.required.default(undefined)
+      schema.required().default(undefined)
       // use schema
       helper.validateFail(schema, undefined, undefined, done)
     })
 
   })
 
-  describe('allow', () => {
+  describe('valid/invalid', () => {
 
     it('should allow specific object', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.allow(data)
+      schema.valid(data)
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -80,7 +80,7 @@ describe('any', () => {
     it('should fail if not in allowed list', (done) => {
       const data = 'b'
       const schema = new MySchema()
-      schema.allow('a')
+      schema.valid('a')
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -88,7 +88,7 @@ describe('any', () => {
     it('should fail if in disallowed list', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.not.allow(data)
+      schema.invalid(data)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -96,7 +96,7 @@ describe('any', () => {
     it('should work if not in disallowed list', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.not.allow('b')
+      schema.invalid('b')
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -106,8 +106,8 @@ describe('any', () => {
     it('should remove from disallow if allowed later', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.not.allow(data)
-      .allow(data)
+      schema.invalid(data)
+      .valid(data)
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -117,93 +117,26 @@ describe('any', () => {
     it('should be optional if undefined is allowed', (done) => {
       const data = undefined
       const schema = new MySchema()
-      schema.required
-      .allow(undefined)
+      schema.required()
+      .valid(undefined)
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       }, done)
     })
 
-    it('should allow with array', (done) => {
-      const data = [1, 2, 3]
+    it('should describe valid', () => {
       const schema = new MySchema()
-      schema.allow([1, 2, 3])
-      // use schema
-      helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal(data)
-      }, done)
-    })
-
-    it('should describe allow', () => {
-      const schema = new MySchema()
-      schema.allow('a')
+      schema.valid('a')
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should describe not allow', () => {
+    it('should describe invalid', () => {
       const schema = new MySchema()
-      schema.not.allow('a')
+      schema.invalid('a')
       // use schema
       expect(helper.description(schema)).to.be.a('string')
-    })
-
-  })
-
-  describe('allowAll', () => {
-
-    it('should allow to define allow as list', (done) => {
-      const data = 'a'
-      const schema = new MySchema()
-      schema.allowAll(['a', 'b', 'c'])
-      // use schema
-      helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal(data)
-      }, done)
-    })
-
-    it('should allow to define disallow as list', (done) => {
-      const data = 'a'
-      const schema = new MySchema()
-      schema.not.allowAll(['a', 'b', 'c'])
-      // use schema
-      helper.validateFail(schema, data, (err) => {
-        expect(err.message).to.equal('Element found in blacklist (disallowed item).')
-      }, done)
-    })
-
-    it('should be optional if undefined in allowed list', (done) => {
-      const data = undefined
-      const schema = new MySchema()
-      schema.required
-      .allowAll(['a', undefined])
-      // use schema
-      helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal(data)
-      }, done)
-    })
-
-  })
-
-  describe('allowToClear', () => {
-
-    it('should allow in invalid list', (done) => {
-      const data = 'a'
-      const schema = new MySchema()
-      .not.allow(data).not.allowToClear
-      // use schema
-      helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal(data)
-      }, done)
-    })
-
-    it('should allow in valid list', (done) => {
-      const data = 'a'
-      const schema = new MySchema()
-      schema.allow(data).allowToClear.allow('b')
-      // use schema
-      helper.validateFail(schema, data, undefined, done)
     })
 
   })

@@ -7,42 +7,51 @@ of the structure is known. It can also be used to make a loose checking schema
 first and later replace it through detailed specifications.
 
 See at [Base Schema](base.md) for the inherited methods you may call like:
-- `required`
+- `required()`
 - `default()`
-- `stripEmpty`
+- `stripEmpty()`
 
-## allow(value) / not.allow(value)
+A lot of other types are also based on this one.
+
+## Allowed and/or denied elements
+
+### valid(value)
 
 If you specify at least one value which is allowed only the allowed values are
-possible. Therefore a deep check will be done.
+possible. Therefore a deep check of the values will be done.
 
 ```js
-const schema = new AnySchema().allow(5)
+const schema = new AnySchema().valid(5)
 ```
+
+> References are impossible here, use `allow()` therefore.
+
+### invalid(value)
 
 Also you may define which elements you won´t allow. If only invalid elements are
 defined all other elements are possible.
 
 ```js
-const schema = new AnySchema().not.allow(5)
+const schema = new AnySchema().invalid(5)
 ```
+> References are impossible here, use `disallow()` therefore.
 
-## allowAll(list) / not.allowAll(list)
+### allow(list)
 
-This will add a complete list of values like each is given using `allow()`.
+The same as calling `valid()` multiple times you may replace the current list of allowed elements
+by this new list. It will disable this check if you call it with `undefined` or an empty list.
 
 ```js
-const schema = new AnySchema().allowAll(3, 4, 5)
+const schema = new AnySchema().allow([5, 10])
+schema.allow()
 ```
 
-This will add a complete list of values like each is given using `not.allow()`.
+### disallow(list)
+
+The same as calling `invalid()` multiple times you may replace the current list of allowed elements
+by this new list. It will disable this check if you call it with `undefined` or an empty list.
 
 ```js
-const schema = new AnySchema().not.allowAll(3, 4, 5)
+const schema = new AnySchema().inallow([5, 10])
+schema.inallow()
 ```
-
-## allowToClear / not.allowToClear
-
-This method allows you to clear the list of valid or invalid entries completely.
-It's the only way to get a value out of both lists because the normal `allow` and
-`not.allow` always removes from one and inserts in the other list.
