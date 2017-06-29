@@ -17,7 +17,11 @@ function validateOk(schema: Schema, data: any, cb?: Function, done ?: Function) 
   debug(res, schema.constructor.name)
   expect(res, 'validate()').to.be.fulfilled.notify(() => {
     res.then((e) => {
+      debug(schema._check, schema.constructor.name, 'Used checks')
       try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
+    })
+    .catch((e) => {
+      debug(schema._check, schema.constructor.name, 'Used checks')
     })
   })
 }
@@ -28,7 +32,11 @@ function validateFail(schema: Schema, data: any, cb?: Function, done ?: Function
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
   expect(res, 'validate()').to.be.rejectedWith(Error).notify(() => {
-    res.catch((e) => {
+    res.then((e) => {
+      debug(schema._check, schema.constructor.name, 'Used checks')
+    })
+    .catch((e) => {
+      debug(schema._check, schema.constructor.name, 'Used checks')
       try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
     })
   })

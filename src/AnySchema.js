@@ -26,6 +26,34 @@ class AnySchema extends Schema {
 
   // setup schema
 
+  allow(...values: Array<any>): this {
+    const set = this._setting
+    const value = values.reduce((acc, val) => acc.concat(val), [])
+    if (value.length === 1 && value[0] === undefined) set.allow.clear()
+    else if (value.length === 1 && value[0] instanceof Reference) set.allow = value[0]
+    else {
+      set.allow = new Set()
+      for (const e of value) {
+        if (e instanceof Reference) {
+          throw new Error('Reference is only allowed in allow() and disallow() for complete list')
+        }
+        set.allow.add(e)
+        set.disallow.delete(e)
+      }
+    }
+    return this
+  }
+  disallow(value?: Array<any> | Reference): this {
+    const set = this._setting
+    if (value === undefined) set.disallow.clear()
+    else {
+      set.allow = new Set()
+      set.allow.delete(value)
+      set.disallow.add(value)
+    }
+    return this
+  }
+
   valid(value?: any): this {
     const set = this._setting
     if (value instanceof Reference) {
@@ -51,33 +79,6 @@ class AnySchema extends Schema {
     } else {
       set.disallow.add(value)
       if (!(set.disallow instanceof Reference)) set.allow.delete(value)
-    }
-    return this
-  }
-  allow(...values: Array<any> | Array<Reference>): this {
-    const set = this._setting
-    const value = values.reduce((acc, val) => acc.concat(val), [])
-    if (value.length === 1 && value[0] === undefined) set.allow.clear()
-    else if (value.length === 1 && value[0] instanceof Reference) set.allow = value
-    else {
-      set.allow = new Set()
-      for (const e of value) {
-        if (e instanceof Reference) {
-          throw new Error('Reference is only allowed in allow() and disallow() for complete list')
-        }
-        set.allow.add(e)
-        set.disallow.delete(e)
-      }
-    }
-    return this
-  }
-  disallow(value?: Array<any> | Reference): this {
-    const set = this._setting
-    if (value === undefined) set.disallow.clear()
-    else {
-      set.allow = new Set()
-      set.allow.delete(value)
-      set.disallow.add(value)
     }
     return this
   }
@@ -127,7 +128,7 @@ are allowed. `
     }
     // reject if valid is set but not included
     if (check.allow.length && check.allow
-    .filter(e => datastring !== JSON.stringify(e)).length) {
+    .filter(e => datastring === JSON.stringify(e)).length === 0) {
       return Promise.reject(new SchemaError(this, data,
         'Element not in whitelist (allowed item).'))
     }

@@ -13,7 +13,41 @@ See at [Base Schema](base.md) for the inherited methods you may call like:
 
 A lot of other types are also based on this one.
 
-## Allowed and/or denied elements
+## Allow / deny elements
+
+With the following settings specific values may be defined which are allowed or denied. If used
+for some subtypes the values also have to fit into the subtype schema.
+
+### allow(list)
+
+The complete list will be changed by giving a new list as single element, list of elements or
+an array of elements. If this is called multiple times it will always replace the previous list.
+To add some values `valid()` may be used multiple times.
+
+The data element has to deeply equal to at least one of the elements in the allowed list. That works
+like a whitelist.
+
+```js
+const schema = new AnySchema().allow([5, 10])
+schema.allow()
+```
+
+> If called without a value or an empty array it will remove the list.
+
+### disallow(list)
+
+Opposite to `allow()` this allows to specify elements which are not allowed like a blacklist.
+The complete list will be changed by giving a new list as single element, list of elements or
+an array of elements. If this is called multiple times it will always replace the previous list.
+To add some values `invalid()` may be used multiple times.
+
+```js
+const schema = new AnySchema().inallow([5, 10])
+schema.inallow()
+```
+
+
+
 
 ### valid(value)
 
@@ -35,23 +69,3 @@ defined all other elements are possible.
 const schema = new AnySchema().invalid(5)
 ```
 > References are impossible here, use `disallow()` therefore.
-
-### allow(list)
-
-The same as calling `valid()` multiple times you may replace the current list of allowed elements
-by this new list. It will disable this check if you call it with `undefined` or an empty list.
-
-```js
-const schema = new AnySchema().allow([5, 10])
-schema.allow()
-```
-
-### disallow(list)
-
-The same as calling `invalid()` multiple times you may replace the current list of allowed elements
-by this new list. It will disable this check if you call it with `undefined` or an empty list.
-
-```js
-const schema = new AnySchema().inallow([5, 10])
-schema.inallow()
-```

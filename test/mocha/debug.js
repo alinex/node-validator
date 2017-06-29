@@ -6,7 +6,7 @@ import Schema from '../../src/Schema'
 import SchemaData from '../../src/SchemaData'
 import Reference from '../../src/Reference'
 
-export default function (element: any, type: string = 'test') {
+export default function (element: any, type: string = 'test', title?: string) {
   const debugLog = Debug(type.match(/^test/) ? type : `test:${type}`)
   if (element instanceof Promise) {
     element.then((data) => {
@@ -24,6 +24,6 @@ export default function (element: any, type: string = 'test') {
   } else if (element instanceof SchemaData) {
     debugLog(`Given data: ${util.inspect(element.orig)}`)
   } else {
-    debugLog(`Returned ${util.inspect(element)}`)
+    debugLog(`${title || 'Returned'}: ${util.inspect(element)}`)
   }
 }

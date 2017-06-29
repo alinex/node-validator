@@ -9,7 +9,7 @@ It is possible to use the same schema in more than one position but you may also
 ```js
 const schema = new ObjectSchema()
 .key('title', new StringSchema().uppercase().min(3).max(30))
-.key('number', new NumberSchema().positive.integer)
+.key('number', new NumberSchema().positive().integer())
 ```
 
 It is also a good idea to pack the schema into it´s own file and make the `schema` the default
