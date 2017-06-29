@@ -63,7 +63,7 @@ describe('reference', () => {
       const schema = new Schema().default(ref)
       // use schema
       expect(helper.description(schema))
-      .to.equal('It will default to reference at abc if not set.')
+      .to.equal('It will default to reference at \'abc\' if not set.')
     })
 
   })

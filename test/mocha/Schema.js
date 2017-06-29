@@ -61,10 +61,17 @@ describe('schema', () => {
       helper.validateFail(schema, undefined, undefined, done)
     })
 
-    it('should describe required', () => {
+    it('should describe', () => {
       const schema = new MySchema().required()
       // use schema
       expect(helper.description(schema)).to.equal('')
+    })
+
+    it('should describe', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().required(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
     })
 
   })
@@ -115,6 +122,14 @@ describe('schema', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
+    it('should describe with reference', () => {
+      const ref = new Reference(5)
+      const schema = new MySchema()
+      schema.default(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
   })
 
   describe('stripEmpty', () => {
@@ -158,9 +173,17 @@ describe('schema', () => {
 
     it('should describe', () => {
       const schema = new MySchema()
-      schema.default(8)
+      schema.stripEmpty()
       // use schema
-      expect(helper.description(schema)).to.equal('It will default to 8 if not set.')
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema()
+      schema.stripEmpty(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
     })
 
   })

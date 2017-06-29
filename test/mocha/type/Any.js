@@ -96,9 +96,39 @@ describe('any', () => {
       }, done)
     })
 
-    it('should describe allow', () => {
+    it('should allow reference as element', (done) => {
+      const data = 'a'
+      const ref = new Reference(data)
+      const schema = new MySchema()
+      schema.allow(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should allow reference in list', (done) => {
+      const data = 'a'
+      const ref = new Reference(data)
+      const schema = new MySchema()
+      schema.allow(1, ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe', () => {
       const schema = new MySchema()
       schema.allow('a')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('a')
+      const schema = new MySchema()
+      schema.allow(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

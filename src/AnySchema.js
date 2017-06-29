@@ -34,9 +34,6 @@ class AnySchema extends Schema {
     else {
       set.allow = new Set()
       for (const e of value) {
-        if (e instanceof Reference) {
-          throw new Error('Reference is only allowed in allow() and disallow() for complete list')
-        }
         set.allow.add(e)
         set.disallow.delete(e)
       }
@@ -107,15 +104,11 @@ are allowed. `
     // transform arrays from references to set
     if (!check.allow) check.allow = []
     else if (check.allow instanceof Set) check.allow = Array.from(check.allow)
-    else if (!Array.isArray(check.allow)) {
-      throw new Error('The `allow` setting have to be a list of values.')
-    }
+    else if (!Array.isArray(check.allow)) check.allow = [check.allow]
     // transform arrays from references to set
     if (!check.disallow) check.disallow = []
     else if (check.disallow instanceof Set) check.disallow = Array.from(check.disallow)
-    else if (!Array.isArray(check.disallow)) {
-      throw new Error('The `disallow` setting have to be a list of values.')
-    }
+    else if (!Array.isArray(check.disallow)) check.disallow = [check.disallow]
   }
   _allowValidator(data: SchemaData): Promise<void> {
     const check = this._check

@@ -92,14 +92,17 @@ class Schema {
       if (set[key] instanceof Reference) {
         par.push(set[key].data
         .then((res) => { this._check[key] = res }))
-//      } else if (set[key] instanceof Set) {
-//        this._check[key] = new Set()
-//        for (const e of set[key]) {
-//          if (set[key][e] instanceof Reference) {
-//            par.push(set[key][e].data
-//            .then((res) => { this._check[key].add(res) }))
-//          } else this._check[key].add(set[key][e])
-//        }
+      } else if (set[key] instanceof Set) {
+        this._check[key] = []
+        const raw = Array.from(set[key])
+        for (const i of raw.keys()) {
+          const e = raw[i]
+          if (e instanceof Reference) {
+            // preserve position to keep order on async results
+            this._check[key][i] = null
+            par.push(e.data.then((res) => { this._check[key][i] = res }))
+          } else this._check[key].push(e)
+        }
       } else this._check[key] = set[key]
     }
     let p = Promise.all(par)
@@ -117,7 +120,7 @@ class Schema {
   _emptyDescriptor() {
     const check = this._check
     if (check.stripEmpty instanceof Reference) {
-      return `Empty values are set to \`undefined\` depending on ${check.default.description}.\n`
+      return `Empty values are set to \`undefined\` depending on ${check.stripEmpty.description}.\n`
     }
     return check.stripEmpty ? 'Empty values are set to `undefined`.\n' : ''
   }
@@ -141,7 +144,7 @@ class Schema {
       return `It will default to ${value} if not set.\n`
     }
     if (check.required instanceof Reference) {
-      return `It is optional depending on ${check.default.description}.\n`
+      return `It is optional depending on ${check.required.description}.\n`
     }
     if (!check.required) return 'It is optional and must not be set.\n'
     return ''

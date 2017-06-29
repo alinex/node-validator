@@ -60,7 +60,7 @@ class Reference {
   }
 
   get description(): string {
-    let msg = `reference at ${this.base}`
+    let msg = `reference at ${util.inspect(this.base)}`
     if (this.access.length) msg += ` -> ${this.access.join(' -> ')}`
     return msg
   }
