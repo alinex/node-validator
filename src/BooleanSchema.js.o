@@ -4,30 +4,49 @@ import util from 'util'
 import Schema from './Schema'
 import SchemaError from './SchemaError'
 import type SchemaData from './SchemaData'
+import Reference from './Reference'
 
 class BooleanSchema extends Schema {
-
-  // validation data
-
-  _truthy: Set<any>
-  _falsy: Set<any>
-  _insensitive: bool
-  _format: Map<bool, any>
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // init settings
-    this._truthy = new Set()
-    this._falsy = new Set()
-    this._insensitive = false
-    this._format = new Map()
+    const set = this._setting
+    set.truthy = new Set()
+    set.falsy = new Set()
+    set.format = new Map()
     // add check rules
-    this._rules.add([this._insensitiveDescriptor, this._insensitiveValidator])
-    this._rules.add([this._parserDescriptor, this._parserValidator])
-    this._rules.add([this._formatDescriptor, this._formatValidator])
+    this._rules.descriptor.push(
+      this._insensitiveDescriptor,
+      this._parserDescriptor,
+      this._formatDescriptor,
+    )
+    this._rules.check.push(
+      this._Check,
+    )
+    this._rules.validator.push(
+      this._insensitiveValidator,
+      this._parserValidator,
+      this._formatValidator,
+    )
   }
 
   // setup schema
+
+  truthy(...values: any | Array<any> | Reference): this {
+    const set = this._setting
+    values.reduce((acc, val) => acc.concat(val), [])
+    if (value === undefined) set.allow.clear()
+    else if (value instanceof Reference) set.allow = value
+    else {
+      set.allow = new Set()
+      for (const e of value) {
+        set.allow.add(e)
+        if (!(set.allow instanceof Reference)) set.disallow.delete(e)
+      }
+    }
+    return this
+  }
 
   truthy(...values: any|Array<any>): this {
     values.reduce((acc, val) => acc.concat(val), [])

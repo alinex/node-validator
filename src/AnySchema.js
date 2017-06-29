@@ -54,15 +54,19 @@ class AnySchema extends Schema {
     }
     return this
   }
-  allow(value?: Array<any> | Reference): this {
+  allow(...values: Array<any> | Array<Reference>): this {
     const set = this._setting
-    if (value === undefined) set.allow.clear()
-    else if (value instanceof Reference) set.allow = value
+    const value = values.reduce((acc, val) => acc.concat(val), [])
+    if (value.length === 1 && value[0] === undefined) set.allow.clear()
+    else if (value.length === 1 && value[0] instanceof Reference) set.allow = value
     else {
       set.allow = new Set()
       for (const e of value) {
+        if (e instanceof Reference) {
+          throw new Error('Reference is only allowed in allow() and disallow() for complete list')
+        }
         set.allow.add(e)
-        if (!(set.allow instanceof Reference)) set.disallow.delete(e)
+        set.disallow.delete(e)
       }
     }
     return this
