@@ -123,7 +123,7 @@ are allowed. `
     }
     // reject if valid is set but not included
     if (check.allow.length && check.allow
-    .filter(e => datastring === JSON.stringify(e)).length) {
+    .filter(e => datastring !== JSON.stringify(e)).length) {
       return Promise.reject(new SchemaError(this, data,
         'Element not in whitelist (allowed item).'))
     }
