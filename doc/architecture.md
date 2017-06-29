@@ -24,15 +24,15 @@ real problem in detail.
 This is the core of this module and defines the concrete checks see more about the possibilities
 in the following part.
 
-The error object which is returned after the validation on a schema failed contains all information
-necessary:
+![Schema usage](usage.png)
 
-![Schema error](schema-error.png)
+The app contains a specific schema as an instance of any Schema class which is set to the data
+structures specifics. After loading this schema instance and the data structure it may be validated
+which process the correctness and optimizes the values like specified in the schema. The resulting data structure can be trusted and used without further checking.
 
+If an error occurs it will contain the original value and a detailed description beside the error message itself.
 Mainly you only need the `text` property which will present a markdown formatted
 long text explaining what the problem is and how to correctly define the data structure.
-
-
 
 
 ## CLI
