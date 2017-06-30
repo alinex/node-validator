@@ -40,42 +40,40 @@ class AnySchema extends Schema {
     }
     return this
   }
-  disallow(value?: Array<any> | Reference): this {
+  disallow(...values: Array<any>): this {
     const set = this._setting
-    if (value === undefined) set.disallow.clear()
+    const value = values.reduce((acc, val) => acc.concat(val), [])
+    if (value.length === 1 && value[0] === undefined) set.disallow.clear()
+    else if (value.length === 1 && value[0] instanceof Reference) set.disallow = value[0]
     else {
-      set.allow = new Set()
-      set.allow.delete(value)
-      set.disallow.add(value)
+      set.disallow = new Set()
+      for (const e of value) {
+        set.disallow.add(e)
+        set.allow.delete(e)
+      }
     }
     return this
   }
 
   valid(value?: any): this {
     const set = this._setting
-    if (value instanceof Reference) {
-      throw new Error('Reference is only allowed in allow() and disallow() for complete list')
-    }
     if (value === undefined) set.required = false
     else if (set.allow instanceof Reference) {
       throw new Error('No single value if complete allow() list is set as reference.')
     } else {
       set.allow.add(value)
-      if (!(set.allow instanceof Reference)) set.disallow.delete(value)
+      if (!(set.disallow instanceof Reference)) set.disallow.delete(value)
     }
     return this
   }
   invalid(value?: any): this {
     const set = this._setting
-    if (value instanceof Reference) {
-      throw new Error('Reference is only allowed in allow() and disallow() for complete list')
-    }
     if (value === undefined) set.required = true
     else if (set.disallow instanceof Reference) {
       throw new Error('No single value if complete disallow() list is set as reference.')
     } else {
       set.disallow.add(value)
-      if (!(set.disallow instanceof Reference)) set.allow.delete(value)
+      if (!(set.allow instanceof Reference)) set.allow.delete(value)
     }
     return this
   }

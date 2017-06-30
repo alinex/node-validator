@@ -135,8 +135,101 @@ describe('any', () => {
 
   })
 
-// /////////////////////////////////////////////
-// /////////////////////////////////////////////
+  describe('disallow', () => {
+
+    it('should allow single value', (done) => {
+      const data = 'a'
+      const schema = new MySchema()
+      schema.disallow(data)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow list', (done) => {
+      const data = 'a'
+      const schema = new MySchema()
+      schema.disallow(data, 'b')
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow array', (done) => {
+      const data = 'a'
+      const schema = new MySchema()
+      schema.disallow([data, 'b'])
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work if not in disallowed list', (done) => {
+      const data = 'b'
+      const schema = new MySchema()
+      schema.disallow('a')
+      // use schema
+      helper.validateOk(schema, data, undefined, done)
+    })
+
+    it('should overwrite old list', (done) => {
+      const data = 'b'
+      const schema = new MySchema()
+      schema.disallow('b').disallow('a')
+      // use schema
+      helper.validateOk(schema, data, undefined, done)
+    })
+
+    it('should allow remove', (done) => {
+      const data = 'a'
+      const schema = new MySchema()
+      schema.disallow('b').disallow()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should allow reference as list', (done) => {
+      const data = 'a'
+      const ref = new Reference(['a'])
+      const schema = new MySchema()
+      schema.disallow(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference as element', (done) => {
+      const data = 'a'
+      const ref = new Reference(data)
+      const schema = new MySchema()
+      schema.disallow(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference in list', (done) => {
+      const data = 'a'
+      const ref = new Reference(data)
+      const schema = new MySchema()
+      schema.disallow(1, ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema()
+      schema.disallow('a')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('a')
+      const schema = new MySchema()
+      schema.disallow(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
 
   describe('valid', () => {
 
@@ -174,6 +267,17 @@ describe('any', () => {
       const schema = new MySchema()
       schema.required()
       .valid(undefined)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should allow reference', (done) => {
+      const data = 'a'
+      const ref = new Reference('a')
+      const schema = new MySchema()
+      schema.valid(ref)
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -222,6 +326,15 @@ describe('any', () => {
       const data = undefined
       const schema = new MySchema()
       schema.invalid(undefined)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference', (done) => {
+      const data = 'a'
+      const ref = new Reference(data)
+      const schema = new MySchema()
+      schema.invalid(ref)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
