@@ -34,6 +34,7 @@ class AnySchema extends Schema {
     else {
       set.allow = new Set()
       for (const e of value) {
+        if (value === undefined) set.required = false
         set.allow.add(e)
         set.disallow.delete(e)
       }
@@ -48,6 +49,7 @@ class AnySchema extends Schema {
     else {
       set.disallow = new Set()
       for (const e of value) {
+        if (value === undefined) set.required = true
         set.disallow.add(e)
         set.allow.delete(e)
       }

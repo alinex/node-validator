@@ -46,26 +46,26 @@ const schema = new AnySchema().inallow([5, 10])
 schema.inallow()
 ```
 
-
-
-
 ### valid(value)
 
-If you specify at least one value which is allowed only the allowed values are
-possible. Therefore a deep check of the values will be done.
+Instead of `allow()` this will not replace the allowed list but add to it. You may give a single
+value which is added to the list of allowed values. This is impossible if the complete list is
+set as reference.
 
 ```js
 const schema = new AnySchema().valid(5)
 ```
 
-> References are impossible here, use `allow()` therefore.
+> To remove a single value set it as `invalid` which also removes it from the allowed list.,
 
 ### invalid(value)
 
-Also you may define which elements you won´t allow. If only invalid elements are
-defined all other elements are possible.
+Instead of `disallow()` this will not replace the disallowed list but add to it. You may give a single
+value which is added to the list of disallowed values. This is impossible if the complete list is
+set as reference.
 
 ```js
 const schema = new AnySchema().invalid(5)
 ```
-> References are impossible here, use `disallow()` therefore.
+
+> To remove a single value set it as `valid` which also removes it from the allowed list.,
