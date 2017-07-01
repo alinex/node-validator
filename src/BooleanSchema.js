@@ -20,9 +20,9 @@ class BooleanSchema extends Schema {
       this._parserDescriptor,
       this._formatDescriptor,
     )
-//    this._rules.check.push(
-//      this._truthyCheck,
-//    )
+    this._rules.check.push(
+      this._parserCheck,
+    )
     this._rules.validator.push(
       this._parserValidator,
       this._formatValidator,
@@ -62,7 +62,7 @@ class BooleanSchema extends Schema {
     return this
   }
 
-  tolerant(flag?: bool | Reference): this {
+  tolerant(flag: bool | Reference = true): this {
     const set = this._setting
     if (flag) {
       this.truthy(1, '1', 'true', 'on', 'yes', '+')
@@ -78,8 +78,8 @@ class BooleanSchema extends Schema {
 
   format(truthy: any, falsy: any): this {
     const set = this._setting
-    if (truthy) set.format.set('truthy', truthy)
-    if (falsy) set.format.set('falsy', falsy)
+    if (truthy) set.format.set(true, truthy)
+    if (falsy) set.format.set(false, falsy)
     return this
   }
 
@@ -103,19 +103,26 @@ class BooleanSchema extends Schema {
     return msg.replace(/ $/, '\n')
   }
 
+  _parserCheck(): void {
+    const check = this._check
+    if (check.insensitive) {
+      check.truthy = Array.from(check.truthy)
+      .map(e => (typeof e === 'string' ? e.toLowerCase() : e))
+      check.falsy = Array.from(check.falsy)
+      .map(e => (typeof e === 'string' ? e.toLowerCase() : e))
+    }
+    check.truthy.unshift(true)
+    check.falsy.unshift(false)
+  }
+
   _parserValidator(data: SchemaData): Promise<void> {
     const check = this._check
-    const truthy = Array.from(check.truthy)
-    .map(e => (check.insensitive && typeof e === 'string' ? e.toLowerCase() : e))
-    truthy.unshift(true)
-    const falsy = Array.from(check.falsy)
-    .map(e => (check.insensitive && typeof e === 'string' ? e.toLowerCase() : e))
-    falsy.unshift(false)
-    if (truthy.includes(data.value)) data.value = true
-    else if (falsy.includes(data.value)) data.value = false
+    if (check.insensitive) data.value = data.value.toLowerCase()
+    if (check.truthy.includes(data.value)) data.value = true
+    else if (check.falsy.includes(data.value)) data.value = false
     else {
       return Promise.reject(new SchemaError(this, data,
-      'A boolean value is needed but it no allowed `true` nor `false` was given.'))
+      'A boolean value is needed but neither `true` nor `false` was given.'))
     }
     // ok
     return Promise.resolve()
