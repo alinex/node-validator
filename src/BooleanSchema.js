@@ -79,7 +79,9 @@ class BooleanSchema extends Schema {
   format(truthy: any, falsy: any): this {
     const set = this._setting
     if (truthy) set.format.set(true, truthy)
+    else if (truthy === undefined) set.format.delete(true)
     if (falsy) set.format.set(false, falsy)
+    else if (falsy === undefined) set.format.delete(false)
     return this
   }
 
@@ -137,7 +139,7 @@ class BooleanSchema extends Schema {
 
   _formatValidator(data: SchemaData): Promise<void> {
     const check = this._check
-    if (check.format.size) data.value = check.format.get(data.value) || data.value
+    if (Object.keys(check.format).length) data.value = check.format[data.value] || data.value
     return Promise.resolve()
   }
 }

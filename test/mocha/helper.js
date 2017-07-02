@@ -22,6 +22,7 @@ function validateOk(schema: Schema, data: any, cb?: Function, done ?: Function) 
     })
     .catch((e) => {
       debug(schema._check, schema.constructor.name, 'Used checks')
+      if (done) done(new Error('it should not be rejected'))
     })
   })
 }
@@ -34,6 +35,7 @@ function validateFail(schema: Schema, data: any, cb?: Function, done ?: Function
   expect(res, 'validate()').to.be.rejectedWith(Error).notify(() => {
     res.then((e) => {
       debug(schema._check, schema.constructor.name, 'Used checks')
+      if (done) done(new Error('it should not be resolved'))
     })
     .catch((e) => {
       debug(schema._check, schema.constructor.name, 'Used checks')

@@ -28,7 +28,7 @@ const schema = new BooleanSchema().truthy(1, 'yes').falsy(0, 'no')
 schema.truthy() // to remove the list
 ```
 
-### tolerant
+### tolerant()
 
 This is equal to set the following values:
 - `true`:  `1`, `'1'`, `'true'`, `'on'`, `'yes'`, `'+'`
@@ -39,16 +39,20 @@ const schema = new BooleanSchema().tolerant()
 schema.tolerant(false) // to remove it again
 ```
 
-### insensitive
+### insensitive()
 
 This makes only sense together with `tolerant` or `truthy`, `falsy` and will match
 strings case insensitive.
 
 ```js
 const schema = new BooleanSchema().tolerant.insensitive
+schema.insensitive(false) // to remove it again
 ```
 
 ## Output
+
+By default the output value will be a boolean value but can be set to any object for the two
+possible states.
 
 ### format(truthy, falsy)
 
@@ -57,4 +61,5 @@ values used for both.
 
 ```js
 const schema = new BooleanSchema().format('YES', 'NO')
+schema.format() // to remove values
 ```

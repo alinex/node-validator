@@ -3,12 +3,13 @@
 Create a schema that matches a numerical value.
 
 See at [Any Schema](any.md) for the inherited methods you may call like:
-- `required`
+- `required()`
 - `default()`
-- `stripEmpty`
+- `stripEmpty()`
 - `allow()`
-- `allowAll()`
-- `allowToClear`
+- `disallow()`
+- `valid()`
+- `invalid()`
 
 ## Sanitize
 
@@ -20,11 +21,10 @@ values in each compatible unit which will automatically recognized and converted
 - `toUnit()` will make (maybe second) conversion and works only together with `unit()`
 
 ```js
-const Schema = new NumberSchema().unit('m').toUnit('cm')
+const schema = new NumberSchema().unit('m').toUnit('cm')
 // allows the value to be: '1.28 m', '0.00128 km' or 1.28 => 128
+schema.unit().toUnit() // to remove the settings
 ```
-
-> It can be removed using the `not` flag.
 
 ### sanitize
 

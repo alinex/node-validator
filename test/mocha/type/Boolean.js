@@ -97,6 +97,20 @@ describe('boolean', () => {
       }, done)
     })
 
+    it('should allow to remove truthy', (done) => {
+      const data = 1
+      const schema = new MySchema().truthy(1, 'yes').truthy()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow to remove falsy', (done) => {
+      const data = 0
+      const schema = new MySchema().falsy(0, 'no').falsy()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
     it('should allow reference in truthy list', (done) => {
       const data = 1
       const ref = new Reference(1)
@@ -160,8 +174,25 @@ describe('boolean', () => {
       helper.validateFail(schema, 1, undefined, done)
     })
 
+    it('should work with reference', (done) => {
+      const data = 'no'
+      const ref = new Reference(true)
+      const schema = new MySchema().tolerant(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(false)
+      }, done)
+    })
+
     it('should describe', () => {
       const schema = new MySchema().tolerant()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().tolerant(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -185,8 +216,31 @@ describe('boolean', () => {
       helper.validateFail(schema, 'NO', undefined, done)
     })
 
+    it('should allow to remove', (done) => {
+      const schema = new MySchema().tolerant().insensitive().insensitive(false)
+      // use schema
+      helper.validateFail(schema, 'NO', undefined, done)
+    })
+
+    it('should work with reference', (done) => {
+      const data = 'NO'
+      const ref = new Reference(true)
+      const schema = new MySchema().tolerant().insensitive(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(false)
+      }, done)
+    })
+
     it('should describe', () => {
       const schema = new MySchema().tolerant().insensitive()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().tolerant().insensitive(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -212,10 +266,53 @@ describe('boolean', () => {
         expect(res).deep.equal({ no: 1 })
       }, done)
     })
-// only one element
-// ?????????
+
+    it('should work with only true output', (done) => {
+      const data = true
+      const schema = new MySchema().format('JA')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('JA')
+      }, done)
+    })
+
+    it('should work with only false object', (done) => {
+      const data = false
+      const schema = new MySchema().format(null, 'NEIN')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('NEIN')
+      }, done)
+    })
+
+    it('should allow to remove', (done) => {
+      const data = true
+      const schema = new MySchema().format('JA', 'NEIN').format()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(true)
+      }, done)
+    })
+
+    it('should allow reference', (done) => {
+      const data = true
+      const ref = new Reference('JA')
+      const schema = new MySchema().format(ref, 'NEIN')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('JA')
+      }, done)
+    })
+
     it('should describe', () => {
       const schema = new MySchema().format('JA', { no: 1 })
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('Nein')
+      const schema = new MySchema().format('JA', ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

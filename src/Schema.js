@@ -103,6 +103,16 @@ class Schema {
             par.push(e.data.then((res) => { this._check[key][i] = res }))
           } else this._check[key].push(e)
         }
+      } else if (set[key] instanceof Map) {
+        this._check[key] = {}
+        for (const k of set[key].keys()) {
+          const e = set[key].get(k)
+          if (e instanceof Reference) {
+            // preserve position to keep order on async results
+            this._check[key][k] = null
+            par.push(e.data.then((res) => { this._check[key][k] = res }))
+          } else this._check[key][k] = e
+        }
       } else this._check[key] = set[key]
     }
     let p = Promise.all(par)
