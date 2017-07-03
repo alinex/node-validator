@@ -10,7 +10,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = NumberSchema
 
-describe.only('number', () => {
+describe('number', () => {
   it('should work without specification', (done) => {
     const data = 12.8
     const schema = new MySchema()

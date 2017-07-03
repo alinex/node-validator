@@ -16,9 +16,6 @@ class AnySchema extends Schema {
     this._rules.descriptor.push(
       this._allowDescriptor,
     )
-    this._rules.check.push(
-      this._allowCheck,
-    )
     this._rules.validator.push(
       this._allowValidator,
     )
@@ -80,40 +77,30 @@ class AnySchema extends Schema {
     return this
   }
 
-  // using schema
-
   _allowDescriptor() {
-    const check = this._check
+    const set = this._setting
     let msg = ''
-    if (check.disallow instanceof Reference) {
-      msg += `The keys within ${check.disallow.description} are not allowed. `
-    } else if (check.disallow.size) {
-      msg += `The keys ${Array.from(check.disallow).join(', ').replace(/(.*),/, '$1 and')} \
+    if (set.disallow instanceof Reference) {
+      msg += `The keys within ${set.disallow.description} are not allowed. `
+    } else if (set.disallow.size) {
+      msg += `The keys ${Array.from(set.disallow).join(', ').replace(/(.*),/, '$1 and')} \
 are not allowed. `
     }
-    if (check.allow instanceof Reference) {
-      msg += `Only the keys within ${check.allow.description} are allowed. `
-    } else if (check.allow.size) {
-      msg += `Only the keys ${Array.from(check.allow).join(', ').replace(/(.*),/, '$1 and')} \
+    if (set.allow instanceof Reference) {
+      msg += `Only the keys within ${set.allow.description} are allowed. `
+    } else if (set.allow.size) {
+      msg += `Only the keys ${Array.from(set.allow).join(', ').replace(/(.*),/, '$1 and')} \
 are allowed. `
     }
     return msg.length ? `${msg.trim()}\n` : ''
   }
-  _allowCheck(): void {
-    const check = this._check
-    // transform arrays from references to set
-    if (!check.allow) check.allow = []
-    else if (check.allow instanceof Set) check.allow = Array.from(check.allow)
-    else if (!Array.isArray(check.allow)) check.allow = [check.allow]
-    // transform arrays from references to set
-    if (!check.disallow) check.disallow = []
-    else if (check.disallow instanceof Set) check.disallow = Array.from(check.disallow)
-    else if (!Array.isArray(check.disallow)) check.disallow = [check.disallow]
-  }
+
   _allowValidator(data: SchemaData): Promise<void> {
     const check = this._check
-    const datastring = JSON.stringify(data.value)
+    this._checkArray('allow')
+    this._checkArray('disallow')
     // reject if marked as invalid
+    const datastring = JSON.stringify(data.value)
     if (check.disallow.length && check.disallow
     .filter(e => datastring === JSON.stringify(e)).length) {
       return Promise.reject(new SchemaError(this, data,

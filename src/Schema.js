@@ -31,13 +31,15 @@ class Schema {
     // add check rules
     this._rules.descriptor.push(
       this._emptyDescriptor,
-      this._optionalDescriptor)
+      this._optionalDescriptor,
+    )
     this._rules.validator.push(
       this._emptyValidator,
-      this._optionalValidator)
+      this._optionalValidator,
+    )
   }
 
-  // setup schema
+  // helper methods
 
   _setFlag(name: string, flag: bool | Reference = true): this {
     if (flag) this._setting[name] = flag
@@ -49,10 +51,98 @@ class Schema {
     else delete this._setting[name]
     return this
   }
+  _checkBoolean(name: string) {
+    let value
+    switch (typeof this._check[name]) {
+    case 'undefined':
+    case 'boolean':
+      break
+    case 'string':
+      value = this._check[name].toLowerCase()
+      if (['yes', 1, '1', 'true', 't', '+'].includes(value)) this._check[name] = true
+      else if (['no', 0, '0', 'false', 'f', '', '-'].includes(value)) this._check[name] = false
+      break
+    default:
+      throw new Error(`No boolean value for \`${name}\` setting given in \
+${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
+    }
+  }
+  _checkArray(name: string) {
+    const check = this._check
+    if (!check[name]) check[name] = []
+    else if (check[name] instanceof Set) check[name] = Array.from(check[name])
+    else if (!Array.isArray(check[name])) check[name] = [check[name]]
+  }
+  _checkObject(name: string) {
+    const check = this._check
+    if (typeof check[name] !== 'object') {
+      throw new Error(`No boolean value for \`${name}\` setting given in \
+${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
+    }
+  }
+
+  // strip empty values
+
+  stripEmpty(flag?: bool | Reference): this { return this._setFlag('stripEmpty', flag) }
+
+  _emptyDescriptor() {
+    const set = this._setting
+    if (set.stripEmpty instanceof Reference) {
+      return `Empty values are set to \`undefined\` depending on ${set.stripEmpty.description}.\n`
+    }
+    return set.stripEmpty ? 'Empty values are set to `undefined`.\n' : ''
+  }
+
+  _emptyValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('stripEmpty')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    if (check.stripEmpty && (
+      data.value === '' || data.value === null || (Array.isArray(data.value) && !data.value.length)
+      || (Object.keys(data.value).length === 0 && data.value.constructor === Object)
+    )) {
+      data.value = undefined
+    }
+    return Promise.resolve()
+  }
+
+  // optional
 
   required(flag?: bool | Reference): this { return this._setFlag('required', flag) }
-  stripEmpty(flag?: bool | Reference): this { return this._setFlag('stripEmpty', flag) }
   default(value?: any): this { return this._setAny('default', value) }
+
+  _optionalDescriptor() {
+    const set = this._setting
+    if (set.default) {
+      const value = set.default instanceof Reference
+      ? set.default.description : util.inspect(set.default)
+      return `It will default to ${value} if not set.\n`
+    }
+    if (set.required instanceof Reference) {
+      return `It is optional depending on ${set.required.description}.\n`
+    }
+    if (!set.required) return 'It is optional and must not be set.\n'
+    return ''
+  }
+
+  _optionalValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('required')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    if (data.value === undefined && check.default) data.value = check.default
+    if (data.value !== undefined) return Promise.resolve()
+    if (check.required) {
+      return Promise.reject(new SchemaError(this, data,
+      'This element is mandatory!'))
+    }
+    return Promise.reject() // stop processing, optional is ok
+  }
 
   // using schema
 
@@ -63,12 +153,6 @@ class Schema {
 
   get description(): string {
     let msg = ''
-    this._check = {}
-    // copy settings to check
-    const set = this._setting
-    for (const key of Object.keys(set)) {
-      this._check[key] = set[key]
-    }
     // create message using the different rules
     this._rules.descriptor.forEach((rule) => {
       if (rule) msg += rule.call(this)
@@ -126,50 +210,7 @@ class Schema {
     })
     .catch(err => (err ? Promise.reject(err) : data.value))
   }
-
-  _emptyDescriptor() {
-    const check = this._check
-    if (check.stripEmpty instanceof Reference) {
-      return `Empty values are set to \`undefined\` depending on ${check.stripEmpty.description}.\n`
-    }
-    return check.stripEmpty ? 'Empty values are set to `undefined`.\n' : ''
-  }
-
-  _emptyValidator(data: SchemaData): Promise<void> {
-    const check = this._check
-    if (check.stripEmpty && (
-      data.value === '' || data.value === null || (Array.isArray(data.value) && !data.value.length)
-      || (Object.keys(data.value).length === 0 && data.value.constructor === Object)
-    )) {
-      data.value = undefined
-    }
-    return Promise.resolve()
-  }
-
-  _optionalDescriptor() {
-    const check = this._check
-    if (check.default) {
-      const value = check.default instanceof Reference
-      ? check.default.description : util.inspect(check.default)
-      return `It will default to ${value} if not set.\n`
-    }
-    if (check.required instanceof Reference) {
-      return `It is optional depending on ${check.required.description}.\n`
-    }
-    if (!check.required) return 'It is optional and must not be set.\n'
-    return ''
-  }
-
-  _optionalValidator(data: SchemaData): Promise<void> {
-    const check = this._check
-    if (data.value === undefined && check.default) data.value = check.default
-    if (data.value !== undefined) return Promise.resolve()
-    if (check.required) {
-      return Promise.reject(new SchemaError(this, data,
-      'This element is mandatory!'))
-    }
-    return Promise.reject() // stop processing, optional is ok
-  }
 }
+
 
 export default Schema

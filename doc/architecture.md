@@ -29,6 +29,8 @@ in the following part.
 The app contains a specific schema as an instance of any Schema class which is set to the data
 structures specifics. After loading this schema instance and the data structure it may be validated
 which process the correctness and optimizes the values like specified in the schema. The resulting data structure can be trusted and used without further checking.
+The schema is checked as possible on definition time, but in case of references this is not possible
+and the checks will be done within the validation process.
 
 If an error occurs it will contain the original value and a detailed description beside the error message itself.
 Mainly you only need the `text` property which will present a markdown formatted

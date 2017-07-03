@@ -39,9 +39,6 @@ class NumberSchema extends AnySchema {
 //      this._multipleDescriptor,
 //      this._formatDescriptor,
     )
-    this._rules.check.push(
-      this._unitCheck,
-    )
     this._rules.validator.push(
       this._unitValidator,
       this._sanitizeValidator,
@@ -52,9 +49,11 @@ class NumberSchema extends AnySchema {
     )
   }
 
-  // setup schema
+  // sanitize
 
   sanitize(flag?: bool | Reference): this { return this._setFlag('sanitize', flag) }
+
+  // unit
 
   unit(unit?: string | Reference): this {
     const set = this._setting
@@ -80,6 +79,64 @@ class NumberSchema extends AnySchema {
     } else delete set.toUnit
     return this
   }
+
+  _unitDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.unit) {
+      if (set.unit instanceof Reference) {
+        msg += `The value is given in unit specified in ${set.unit.description}. `
+      } else msg += `Give the values in \`${set.unit}\`. `
+      if (set.toUnit instanceof Reference) {
+        msg += `The value converted to unit specified in ${set.toUnit.description}. `
+      } else if (set.toUnit) {
+        msg = msg.replace(/\. $/, ` and onvert the values to \`${set.toUnit}\`. `)
+      }
+    }
+    return msg.length ? msg.replace(/ $/, '\n') : ''
+  }
+
+  _unitValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    if (check.unit) {
+      try {
+        convert().from(check.unit)
+      } catch (e) { throw new Error(`Unit ${check.unit} not recognized`) }
+    }
+    if (check.toUnit) {
+      try {
+        convert().from(check.toUnit)
+      } catch (e) { throw new Error(`Unit ${check.toUnit} not recognized`) }
+    }
+    // check value
+    if (check.unit && typeof data.value === 'string') {
+      if (check.sanitize) data.value = data.value.replace(/^.*?([-+]?\d+\.?\d*\s*\S*).*?$/, '$1')
+      let quantity
+      try {
+        const match = data.value.match(/(^[-+]?\d+\.?\d*)\s*(\S*)/)
+        quantity = convert(match[1]).from(match[2])
+      } catch (e) {
+        return Promise.reject(new SchemaError(this, data,
+        `Could not parse the unit of ${data.value}: ${e.message}`))
+      }
+      try {
+        data.value = quantity.to(check.unit)
+      } catch (e) {
+        return Promise.reject(new SchemaError(this, data,
+        `Could not convert to ${check.unit}: ${e.message}`))
+      }
+    }
+    if (check.unit && check.toUnit && typeof data.value === 'number') {
+      try {
+        data.value = convert(data.value).from(check.unit).to(check.toUnit)
+      } catch (e) {
+        return Promise.reject(new SchemaError(this, data,
+        `Could not convert ${check.unit} to ${check.toUnit}: ${e.message}`))
+      }
+    }
+    return Promise.resolve()
+  }
+
 
 //  round(precision?: number, method?: 'arithmetic' | 'floor' | 'ceil'): this {
 //    const set = this._setting
@@ -112,12 +169,11 @@ class NumberSchema extends AnySchema {
 //    return this
 //  }
 //
-//  min(value: number): this {
+//  min(value?: number | Reference): this {
 //    const set = this._setting
-//    if (set.negate) {
-//      delete set.min
-//      set.negate = false
-//    } else {
+//    if (value) set.min = value
+//    else delete set.min
+//
 //      if (set.max && value > set.max) {
 //        throw new Error('Min can´t be greater than max value')
 //      }
@@ -250,72 +306,12 @@ class NumberSchema extends AnySchema {
 
   // using schema
 
-  _unitDescriptor() {
-    const check = this._check
-    let msg = ''
-    if (check.unit) {
-      if (check.unit instanceof Reference) {
-        msg += `The value is given in unit specified in ${check.unit.description}. `
-      } else msg += `Give the values in \`${check.unit}\`. `
-      if (check.toUnit instanceof Reference) {
-        msg += `The value converted to unit specified in ${check.toUnit.description}. `
-      } else if (check.toUnit) {
-        msg = msg.replace(/\. $/, ` and onvert the values to \`${check.toUnit}\`. `)
-      }
-    }
-    return msg.length ? msg.replace(/ $/, '\n') : ''
-  }
-
-  _unitCheck(): void {
-    const check = this._check
-    if (check.unit) {
-      try {
-        convert().from(check.unit)
-      } catch (e) { throw new Error(`Unit ${check.unit} not recognized`) }
-    }
-    if (check.toUnit) {
-      try {
-        convert().from(check.toUnit)
-      } catch (e) { throw new Error(`Unit ${check.toUnit} not recognized`) }
-    }
-  }
-
-  _unitValidator(data: SchemaData): Promise<void> {
-    const check = this._check
-    if (check.unit && typeof data.value === 'string') {
-      if (check.sanitize) data.value = data.value.replace(/^.*?([-+]?\d+\.?\d*\s*\S*).*?$/, '$1')
-      let quantity
-      try {
-        const match = data.value.match(/(^[-+]?\d+\.?\d*)\s*(\S*)/)
-        quantity = convert(match[1]).from(match[2])
-      } catch (e) {
-        return Promise.reject(new SchemaError(this, data,
-        `Could not parse the unit of ${data.value}: ${e.message}`))
-      }
-      try {
-        data.value = quantity.to(check.unit)
-      } catch (e) {
-        return Promise.reject(new SchemaError(this, data,
-        `Could not convert to ${check.unit}: ${e.message}`))
-      }
-    }
-    if (check.unit && check.toUnit && typeof data.value === 'number') {
-      try {
-        data.value = convert(data.value).from(check.unit).to(check.toUnit)
-      } catch (e) {
-        return Promise.reject(new SchemaError(this, data,
-        `Could not convert ${check.unit} to ${check.toUnit}: ${e.message}`))
-      }
-    }
-    return Promise.resolve()
-  }
-
   _sanitizeDescriptor() {
-    const check = this._check
+    const set = this._setting
     let msg = 'A numerical value is needed. '
-    if (check.sanitize instanceof Reference) {
-      msg += `Strings are sanitized depending on ${check.sanitize.description}. `
-    } else if (check.sanitize) {
+    if (set.sanitize instanceof Reference) {
+      msg += `Strings are sanitized depending on ${set.sanitize.description}. `
+    } else if (set.sanitize) {
       msg += 'Strings are sanitized to get the first numerical value out of it. '
     }
     return msg.replace(/ $/, '\n')

@@ -20,16 +20,13 @@ class BooleanSchema extends Schema {
       this._parserDescriptor,
       this._formatDescriptor,
     )
-    this._rules.check.push(
-      this._parserCheck,
-    )
     this._rules.validator.push(
       this._parserValidator,
       this._formatValidator,
     )
   }
 
-  // setup schema
+  // parse schema
 
   truthy(...values: Array<any>): this {
     const set = this._setting
@@ -76,37 +73,33 @@ class BooleanSchema extends Schema {
 
   insensitive(flag?: bool | Reference): this { return this._setFlag('insensitive', flag) }
 
-  format(truthy: any, falsy: any): this {
-    const set = this._setting
-    if (truthy) set.format.set(true, truthy)
-    else if (truthy === undefined) set.format.delete(true)
-    if (falsy) set.format.set(false, falsy)
-    else if (falsy === undefined) set.format.delete(false)
-    return this
-  }
-
-  // using schema
-
   _parserDescriptor() {
-    const check = this._check
+    const set = this._setting
     let msg = ''
-    let truthy = Array.from(check.truthy)
+    let truthy = Array.from(set.truthy)
     truthy.unshift(true)
     truthy = truthy.map(e => `\`${util.inspect(e)}\``).join(', ').replace(/(.*),/, '$1 and')
-    let falsy = Array.from(check.falsy)
+    let falsy = Array.from(set.falsy)
     falsy.unshift(false)
     falsy = falsy.map(e => `\`${util.inspect(e)}\``).join(', ').replace(/(.*),/, '$1 and')
     msg = `A boolean which is \`true\` for ${truthy} and \`false\` for ${falsy}. `
-    if (check.insensitive instanceof Reference) {
-      msg += `Strings are matched case insensitive depending on ${check.insensitive.description}. `
-    } else if (check.insensitive) {
+    if (set.insensitive instanceof Reference) {
+      msg += `Strings are matched case insensitive depending on ${set.insensitive.description}. `
+    } else if (set.insensitive) {
       msg = 'Strings are matched insensitive for possible `true`/`false` values. '
     }
     return msg.replace(/ $/, '\n')
   }
 
-  _parserCheck(): void {
+  _parserValidator(data: SchemaData): Promise<void> {
     const check = this._check
+    try {
+      this._checkArray('truthy')
+      this._checkArray('falsy')
+      this._checkBoolean('insensitive')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
     if (check.insensitive) {
       check.truthy = Array.from(check.truthy)
       .map(e => (typeof e === 'string' ? e.toLowerCase() : e))
@@ -115,10 +108,7 @@ class BooleanSchema extends Schema {
     }
     check.truthy.unshift(true)
     check.falsy.unshift(false)
-  }
-
-  _parserValidator(data: SchemaData): Promise<void> {
-    const check = this._check
+    // check value
     if (check.insensitive) data.value = data.value.toLowerCase()
     if (check.truthy.includes(data.value)) data.value = true
     else if (check.falsy.includes(data.value)) data.value = false
@@ -130,15 +120,32 @@ class BooleanSchema extends Schema {
     return Promise.resolve()
   }
 
+  // format
+
+  format(truthy: any, falsy: any): this {
+    const set = this._setting
+    if (truthy) set.format.set(true, truthy)
+    else if (truthy === undefined) set.format.delete(true)
+    if (falsy) set.format.set(false, falsy)
+    else if (falsy === undefined) set.format.delete(false)
+    return this
+  }
+
   _formatDescriptor() {
-    const check = this._check
-    return check.format.size ?
-    `Strings are formatted using \`${util.inspect(check.format.get(true))}\` for \
-\`true\` and \`${util.inspect(check.format.get(false))}\` for \`false\`.\n` : ''
+    const set = this._setting
+    return set.format.size ?
+    `Strings are formatted using \`${util.inspect(set.format.get(true))}\` for \
+\`true\` and \`${util.inspect(set.format.get(false))}\` for \`false\`.\n` : ''
   }
 
   _formatValidator(data: SchemaData): Promise<void> {
     const check = this._check
+    try {
+      this._checkObject('format')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
     if (Object.keys(check.format).length) data.value = check.format[data.value] || data.value
     return Promise.resolve()
   }
