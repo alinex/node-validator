@@ -67,6 +67,9 @@ class Schema {
 ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
     }
   }
+  _isReference(name: string) {
+    return this._setting[name] instanceof Reference
+  }
   _checkArray(name: string) {
     const check = this._check
     if (!check[name]) check[name] = []
