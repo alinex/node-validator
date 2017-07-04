@@ -10,7 +10,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = NumberSchema
 
-describe('number', () => {
+describe.only('number', () => {
   it('should work without specification', (done) => {
     const data = 12.8
     const schema = new MySchema()
@@ -29,6 +29,7 @@ describe('number', () => {
   })
 
   describe('unit', () => {
+
     it('should work with float', (done) => {
       const data = 12.8
       const schema = new MySchema().unit('cm')
@@ -188,81 +189,87 @@ describe('number', () => {
     })
 
   })
-//
-//  describe('round', () => {
-//    it('should work with additional text', (done) => {
-//      const data = 12.8
-//      const schema = new MySchema().round()
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(13)
-//      }, done)
-//    })
-//
-//    it('should work with given precision', (done) => {
-//      const data = 12.876
-//      const schema = new MySchema().round(2)
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(12.88)
-//      }, done)
-//    })
-//
-//    it('should work with floor', (done) => {
-//      const data = 12.876
-//      const schema = new MySchema().round(2, 'floor')
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(12.87)
-//      }, done)
-//    })
-//
-//    it('should work with ceil', (done) => {
-//      const data = 12.876
-//      const schema = new MySchema().round(2, 'ceil')
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(12.88)
-//      }, done)
-//    })
-//
-//    it('should describe round', () => {
-//      const schema = new MySchema().round(2, 'ceil')
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should round to integer', (done) => {
-//      const data = 12.8
-//      const schema = new MySchema().integer.sanitize
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(13)
-//      }, done)
-//    })
-//
-//    it('should check for integer', (done) => {
-//      const data = 12
-//      const schema = new MySchema().integer
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail with float for integer', (done) => {
-//      const data = 12.8
-//      const schema = new MySchema().integer
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should describe integer', () => {
-//      const schema = new MySchema().integer
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//  })
+
+  describe('round', () => {
+
+    it('should work with additional text', (done) => {
+      const data = 12.8
+      const schema = new MySchema().round()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(13)
+      }, done)
+    })
+
+    it('should work with given precision', (done) => {
+      const data = 12.876
+      const schema = new MySchema().round(2)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(12.88)
+      }, done)
+    })
+
+    it('should work with floor', (done) => {
+      const data = 12.876
+      const schema = new MySchema().round(2, 'floor')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(12.87)
+      }, done)
+    })
+
+    it('should work with ceil', (done) => {
+      const data = 12.876
+      const schema = new MySchema().round(2, 'ceil')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(12.88)
+      }, done)
+    })
+
+    it('should describe round', () => {
+      const schema = new MySchema().round(2, 'ceil')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should round to integer', (done) => {
+      const data = 12.8
+      const schema = new MySchema().integer().sanitize()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(13)
+      }, done)
+    })
+
+    it('should check for integer', (done) => {
+      const data = 12
+      const schema = new MySchema().integer()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with float for integer', (done) => {
+      const data = 12.8
+      const schema = new MySchema().integer()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    // remove
+    // todo reference
+    // describe reference
+
+    it('should describe integer', () => {
+      const schema = new MySchema().integer()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
 //
 //  describe('minmax', () => {
 //    it('should be positive', (done) => {
@@ -459,7 +466,7 @@ describe('number', () => {
 //      expect(helper.description(schema)).to.be.a('string')
 //    })
 //  })
-//
+
 //  describe('multiple', () => {
 //    it('should work', (done) => {
 //      const data = 16

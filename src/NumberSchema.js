@@ -16,11 +16,14 @@ const INTTYPE = {
 }
 
 class Round {
-  precision: number
+  precision: number | Reference
   method: 'arithmetic' | 'floor' | 'ceil'
 
-  constructor(precision: number = 0, method: 'arithmetic' | 'floor' | 'ceil' = 'arithmetic') {
-    if (precision < 0) throw new Error('Precision for round should be 0 or greater.')
+  constructor(precision: number | Reference = 0,
+    method: 'arithmetic' | 'floor' | 'ceil' = 'arithmetic') {
+    if (!(precision instanceof Reference) && precision < 0) {
+      throw new Error('Precision for round should be 0 or greater.')
+    }
     this.precision = precision
     this.method = method
   }
@@ -34,16 +37,16 @@ class NumberSchema extends AnySchema {
     this._rules.descriptor.push(
       this._unitDescriptor,
       this._sanitizeDescriptor,
-//      this._roundDescriptor,
-//      this._minmaxDescriptor,
+      this._roundDescriptor,
+      this._minmaxDescriptor,
 //      this._multipleDescriptor,
 //      this._formatDescriptor,
     )
     this._rules.validator.push(
       this._unitValidator,
       this._sanitizeValidator,
-//      this._roundValidator,
-//      this._minmaxValidator,
+      this._roundValidator,
+      this._minmaxValidator,
 //      this._multipleValidator,
 //      this._formatValidator,
     )
@@ -300,109 +303,140 @@ class NumberSchema extends AnySchema {
     return this
   }
 
-//  _minmaxDescriptor() {
-//    const set = this._setting
-//    // optimize
-//    let max
-//    let min
-//    if (set.integer && set.integerType) {
-//      const unsigned = set.positive ? 1 : 0
-//      max = (2 ** ((set.integerType - 1) + unsigned)) - 1
-//      min = (((unsigned - 1) * max) - 1) + unsigned
-//    }
-//    if (min === undefined || !(set.min <= min)) min = set.min
-//    if (max === undefined || !(set.max >= max)) max = set.max
-//    if (min !== undefined && set.greater !== undefined) {
-//      if (set.greater >= min) min = undefined
-//      else delete set.greater
-//    }
-//    if (max !== undefined && set.less !== undefined) {
-//      if (set.less <= max) max = undefined
-//      else delete set.less
-//    }
-//    // get message
-//    let msg = ''
-//    if (set.integer && set.integerType) {
-//      msg += `It has to be an ${set.positive ? 'unsigned ' : ''}\
-// ${set.integerType}-bit integer. `
-//    }
-//    if (set.positive) msg += 'The number should be positive. '
-//    if (set.negative) msg += 'The number should be negative. '
-//    if (min !== undefined) msg += `The value has to be at least \`${set.min}\`. `
-//    if (set.greater !== undefined) {
-//      msg += `The value has to be greater than \`${set.greater}\`. `
-//    }
-//    if (set.less !== undefined) msg += `The value has to be less than \`${set.less}\`. `
-//    if (max !== undefined) msg += `The value has to be at most \`${set.max}\`. `
-//    if ((min !== undefined || set.greater !== undefined)
-//    && (max !== undefined && set.less !== undefined)) {
-//      msg = msg.replace(/(.*)\. The value has to be/, '$1 and')
-//    }
-//    return msg.replace(/ $/, '\n')
-//  }
-//
-//  _minmaxValidator(data: SchemaData): Promise<void> {
-//    // optimize
-//    let max
-//    let min
-//    if (this._integer && this._integerType) {
-//      const unsigned = this._positive ? 1 : 0
-//      max = (2 ** ((this._integerType - 1) + unsigned)) - 1
-//      min = (((unsigned - 1) * max) - 1) + unsigned
-//    }
-//    if (min === undefined || (this._min !== undefined && !(this._min <= min))) min = this._min
-//    if (max === undefined || (this._max !== undefined && !(this._max >= max))) max = this._max
-//    if (min !== undefined && this._greater !== undefined) {
-//      if (this._greater >= min) min = undefined
-//      else delete this._greater
-//    }
-//    if (max !== undefined && this._less !== undefined) {
-//      if (this._less <= max) max = undefined
-//      else delete this._less
-//    }
-//    // check
-//    if (this._positive && data.value < 0) {
-//      return Promise.reject(new SchemaError(this, data,
-//        'The number should be positive.'))
-//    }
-//    if (this._negative && data.value > 0) {
-//      return Promise.reject(new SchemaError(this, data,
-//        'The number should be negative.'))
-//    }
-//    if (min !== undefined && data.value < min) {
-//      return Promise.reject(new SchemaError(this, data,
-//        `The value has to be at least ${min}.`))
-//    }
-//    if (this._greater !== undefined && data.value <= this._greater) {
-//      return Promise.reject(new SchemaError(this, data,
-//        `The value has to be greater than ${this._greater}.`))
-//    }
-//    if (this._less !== undefined && data.value >= this._less) {
-//      return Promise.reject(new SchemaError(this, data,
-//        `The value has to be less than ${this._less}.`))
-//    }
-//    if (max !== undefined && data.value > max) {
-//      return Promise.reject(new SchemaError(this, data,
-//        `The value has to be at least ${max}.`))
-//    }
-//    return Promise.resolve()
-//  }
+  _minmaxDescriptor() {
+    const set = this._setting
+    // optimize
+    let max
+    let min
+    if (set.integer && set.integerType) {
+      const unsigned = set.positive ? 1 : 0
+      max = (2 ** ((set.integerType - 1) + unsigned)) - 1
+      min = (((unsigned - 1) * max) - 1) + unsigned
+    }
+    if (min === undefined || !(set.min <= min)) min = set.min
+    if (max === undefined || !(set.max >= max)) max = set.max
+    if (min !== undefined && set.greater !== undefined) {
+      if (set.greater >= min) min = undefined
+      else delete set.greater
+    }
+    if (max !== undefined && set.less !== undefined) {
+      if (set.less <= max) max = undefined
+      else delete set.less
+    }
+    // get message
+    let msg = ''
+    if (set.integer && set.integerType) {
+      msg += `It has to be an ${set.positive ? 'unsigned ' : ''}\
+ ${set.integerType}-bit integer. `
+    }
+    if (set.positive) msg += 'The number should be positive. '
+    if (set.negative) msg += 'The number should be negative. '
+    if (min !== undefined) msg += `The value has to be at least \`${set.min}\`. `
+    if (set.greater !== undefined) {
+      msg += `The value has to be greater than \`${set.greater}\`. `
+    }
+    if (set.less !== undefined) msg += `The value has to be less than \`${set.less}\`. `
+    if (max !== undefined) msg += `The value has to be at most \`${set.max}\`. `
+    if ((min !== undefined || set.greater !== undefined)
+    && (max !== undefined && set.less !== undefined)) {
+      msg = msg.replace(/(.*)\. The value has to be/, '$1 and')
+    }
+    return msg.replace(/ $/, '\n')
+  }
 
-//  round(precision?: number, method?: 'arithmetic' | 'floor' | 'ceil'): this {
-//    const set = this._setting
-//    if (set.negate) {
-//      delete set.round
-//      set.negate = false
-//    } else {
-//      if (set.integer && !(set.integer instanceof Reference)) {
-//        throw new Error('Rounding not possible because defined as integer')
-//      }
-//      set.round = new Round(precision, method)
-//    }
-//    return this
-//  }
-//
+  _minmaxValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    // optimize
+    let max
+    let min
+    if (check.integer && check.integerType) {
+      const unsigned = check.positive ? 1 : 0
+      max = (2 ** ((check.integerType - 1) + unsigned)) - 1
+      min = (((unsigned - 1) * max) - 1) + unsigned
+    }
+    if (min === undefined || (check.min !== undefined && !(check.min <= min))) min = check.min
+    if (max === undefined || (check.max !== undefined && !(check.max >= max))) max = check.max
+    if (min !== undefined && check.greater !== undefined) {
+      if (check.greater >= min) min = undefined
+      else delete check.greater
+    }
+    if (max !== undefined && check.less !== undefined) {
+      if (check.less <= max) max = undefined
+      else delete check.less
+    }
+    // check
+    if (check.positive && data.value < 0) {
+      return Promise.reject(new SchemaError(this, data,
+        'The number should be positive.'))
+    }
+    if (check.negative && data.value > 0) {
+      return Promise.reject(new SchemaError(this, data,
+        'The number should be negative.'))
+    }
+    if (min !== undefined && data.value < min) {
+      return Promise.reject(new SchemaError(this, data,
+        `The value has to be at least ${min}.`))
+    }
+    if (check.greater !== undefined && data.value <= check.greater) {
+      return Promise.reject(new SchemaError(this, data,
+        `The value has to be greater than ${check.greater}.`))
+    }
+    if (check.less !== undefined && data.value >= check.less) {
+      return Promise.reject(new SchemaError(this, data,
+        `The value has to be less than ${check.less}.`))
+    }
+    if (max !== undefined && data.value > max) {
+      return Promise.reject(new SchemaError(this, data,
+        `The value has to be at least ${max}.`))
+    }
+    return Promise.resolve()
+  }
 
+  round(precision: number | Reference = 0, method?: 'arithmetic' | 'floor' | 'ceil'): this {
+    const set = this._setting
+    if (precision !== undefined) {
+      if (!(precision instanceof Reference)) {
+        if (set.integer && !(set.integer instanceof Reference)) {
+          throw new Error('Rounding not possible because defined as integer')
+        }
+      }
+      set.round = new Round(precision, method)
+    } else delete set.round
+    return this
+  }
+
+  _roundDescriptor() {
+    const set = this._setting
+    if (set.integer && set.sanitize) return 'The value is rounded to an integer.\n'
+    if (set.round && set.integer) {
+      return `The value is rounded to \`${set.round.method}\` to get an integer.\n`
+    }
+    if (set.round) {
+      return `The value is rounded to \`${set.round.method}\` with \
+ ${set.round.precision} digits precision.\n`
+    }
+    if (set.integer && !set.integerType) return 'An integer value is needed.\n'
+    return ''
+  }
+
+  _roundValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    if (check.round) {
+      const exp = check.integer ? 1 : 10 ** check.round.precision
+      let value = data.value * exp
+      if (check.round.method === 'ceil') value = Math.ceil(value)
+      else if (check.round.method === 'floor') value = Math.floor(value)
+      else value = Math.round(value)
+      data.value = value / exp
+    } else if (check.integer && !Number.isInteger(data.value)) {
+      if (check.sanitize) data.value = Math.round(data.value)
+      else {
+        return Promise.reject(new SchemaError(this, data,
+          'The value has to be an integer number.'))
+      }
+    }
+    return Promise.resolve()
+  }
 
 //
 //  multiple(value: number): this {
@@ -430,36 +464,6 @@ class NumberSchema extends AnySchema {
 //  }
 
 
-//  _roundDescriptor() {
-//    if (this._integer && this._sanitize) return 'The value is rounded to an integer.\n'
-//    if (this._round && this._integer) {
-//      return `The value is rounded to \`${this._round.method}\` to get an integer.\n`
-//    }
-//    if (this._round) {
-//      return `The value is rounded to \`${this._round.method}\` with \
-// ${this._round.precision} digits precision.\n`
-//    }
-//    if (this._integer && !this._integerType) return 'An integer value is needed.\n'
-//    return ''
-//  }
-//
-//  _roundValidator(data: SchemaData): Promise<void> {
-//    if (this._round) {
-//      const exp = this._integer ? 1 : 10 ** this._round.precision
-//      let value = data.value * exp
-//      if (this._round.method === 'ceil') value = Math.ceil(value)
-//      else if (this._round.method === 'floor') value = Math.floor(value)
-//      else value = Math.round(value)
-//      data.value = value / exp
-//    } else if (this._integer && !Number.isInteger(data.value)) {
-//      if (this._sanitize) data.value = Math.round(data.value)
-//      else {
-//        return Promise.reject(new SchemaError(this, data,
-//          'The value has to be an integer number.'))
-//      }
-//    }
-//    return Promise.resolve()
-//  }
 //
 //
 //  _multipleDescriptor() {
