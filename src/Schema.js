@@ -59,7 +59,10 @@ class Schema {
       break
     case 'string':
       value = this._check[name].toLowerCase()
-      if (['yes', 1, '1', 'true', 't', '+'].includes(value)) this._check[name] = true
+      if (value === undefined) this._check[name] = false
+      else if (Array.isArray(value)) this._check[name] = value.length > 0
+      else if (typeof value === 'object') this._check[name] = Object.keys(value).length > 0
+      else if (['yes', 1, '1', 'true', 't', '+'].includes(value)) this._check[name] = true
       else if (['no', 0, '0', 'false', 'f', '', '-'].includes(value)) this._check[name] = false
       break
     default:
@@ -74,6 +77,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     const check = this._check
     if (!check[name]) check[name] = []
     else if (check[name] instanceof Set) check[name] = Array.from(check[name])
+    else if (typeof check[name] === 'object') check[name] = Object.keys(check[name])
     else if (!Array.isArray(check[name])) check[name] = [check[name]]
   }
   _checkObject(name: string) {

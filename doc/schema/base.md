@@ -15,6 +15,13 @@ schema.required(false) // to remove this setting
 
 If this method is called with `false` the schema is set to not optional.
 
+```js
+const ref = new Reference(true)
+const schema = new AnySchema().required(ref)
+```
+
+The reference can point to any value which may be converted to true/false.
+
 ## default(any)
 
 The given value is used as a default. The default value will also go through the further rules
@@ -28,6 +35,13 @@ schema.default(false) // to remove this setting
 If this is used the `required` setting don't have to be used because it is automatically set.
 If nothing is given the default value will be removed.
 
+```js
+const ref = new Reference(new Error('Test'))
+const schema = new AnySchema().default(ref)
+```
+
+The reference can point to any value.
+
 ## stripEmpty(bool)
 
 This flag will replace empty values like `null`, `[]`, `{}` or `''` with `undefined`
@@ -40,6 +54,13 @@ schema.stripEmpty(false) // to remove this setting
 ```
 
 If this method is called with `false` the schema is set to not replace empty objects.
+
+```js
+const ref = new Reference(true)
+const schema = new AnySchema().stripEmpty(ref)
+```
+
+The reference can point to any value which may be converted to true/false.
 
 ## clone
 

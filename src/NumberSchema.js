@@ -16,12 +16,12 @@ const INTTYPE = {
 }
 
 class Round {
-  precision: number | Reference
+  precision: number
   method: 'arithmetic' | 'floor' | 'ceil'
 
-  constructor(precision: number | Reference = 0,
+  constructor(precision: number = 0,
     method: 'arithmetic' | 'floor' | 'ceil' = 'arithmetic') {
-    if (!(precision instanceof Reference) && precision < 0) {
+    if (precision < 0) {
       throw new Error('Precision for round should be 0 or greater.')
     }
     this.precision = precision
@@ -392,16 +392,16 @@ class NumberSchema extends AnySchema {
     return Promise.resolve()
   }
 
-  round(precision: number | Reference = 0, method?: 'arithmetic' | 'floor' | 'ceil'): this {
+  round(precision: boolean | number = 0
+    , method?: 'arithmetic' | 'floor' | 'ceil'): this {
     const set = this._setting
-    if (precision !== undefined) {
-      if (!(precision instanceof Reference)) {
-        if (set.integer && !(set.integer instanceof Reference)) {
-          throw new Error('Rounding not possible because defined as integer')
-        }
+    if (typeof precision === 'boolean' && !precision) delete set.round
+    else {
+      if (set.integer && !(set.integer instanceof Reference)) {
+        throw new Error('Rounding not possible because defined as integer')
       }
-      set.round = new Round(precision, method)
-    } else delete set.round
+      set.round = new Round(typeof precision === 'boolean' ? 0 : precision, method)
+    }
     return this
   }
 

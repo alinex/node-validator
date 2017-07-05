@@ -40,3 +40,15 @@ specify it.
 
 One exception is the reference which is a special type which didn't validate but will get the
 value from the defined resource. Read more about this later.
+
+## References
+
+This is a special value which may be used anywhere in the schema definition and points to a value.
+It is a dynamic value which will only be known at validation time. If references are used the checking for correct schema definition can also not be completely done before validation. But it is also checked.
+Read more about it at the end of this chapter with all the possibilities.
+
+Where boolean values are required in the schema definition you can also use:
+- 'yes', 1, '1', 'true', 't', '+', array or object
+- 'no', 0, '0', 'false', 'f', '', '-', undefined, empty array or object
+
+In the next examples only simple references with direct values will be used. But all other work, too.

@@ -29,10 +29,19 @@ like a whitelist.
 
 ```js
 const schema = new AnySchema().allow([5, 10])
-schema.allow()
+schema.allow() // remove the complete list
 ```
 
-> If called without a value or an empty array it will remove the list.
+If called without a value or an empty array it will remove the list.
+
+```js
+const ref = new Reference([1, 2, 3])
+const schema = new AnySchema().allow(ref)
+```
+
+The reference can point to a list of values which are allowed. In case of an object it will take the
+object´s keys. If nothing given the list will be cleared and in all other cases the given element will
+be set as the only one in a new list.
 
 ### disallow(list)
 
@@ -42,9 +51,20 @@ an array of elements. If this is called multiple times it will always replace th
 To add some values `invalid()` may be used multiple times.
 
 ```js
-const schema = new AnySchema().inallow([5, 10])
-schema.inallow()
+const schema = new AnySchema().disallow([5, 10])
+schema.disallow()
 ```
+
+References may be used like for `allow()`.
+
+```js
+const ref = new Reference([1, 2, 3])
+const schema = new AnySchema().disallow(ref)
+```
+
+The reference can point to a list of values which are allowed. In case of an object it will take the
+object´s keys. If nothing given the list will be cleared and in all other cases the given element will
+be set as the only one in a new list.
 
 ### valid(value)
 
@@ -53,10 +73,18 @@ value which is added to the list of allowed values. This is impossible if the co
 set as reference.
 
 ```js
-const schema = new AnySchema().valid(5)
+const schema = new AnySchema().allow([1, 2, 3])
+.valid(5) // now 1, 2, 3 and 5 are valid
 ```
 
-> To remove a single value set it as `invalid` which also removes it from the allowed list.,
+To remove a single value set it as `invalid` which also removes it from the allowed list.,
+
+```js
+const ref = new Reference(5)
+const schema = new AnySchema().valid(ref)
+```
+
+Here the reference presents a single value and it is put into the allowed list as it is.
 
 ### invalid(value)
 
@@ -65,7 +93,15 @@ value which is added to the list of disallowed values. This is impossible if the
 set as reference.
 
 ```js
-const schema = new AnySchema().invalid(5)
+const schema = new AnySchema().disallow([1, 2, 3])
+.invalid(5) // now 1, 2, 3 and 5 are invalid
 ```
 
-> To remove a single value set it as `valid` which also removes it from the allowed list.,
+To remove a single value set it as `valid` which also removes it from the allowed list.,
+
+```js
+const ref = new Reference(5)
+const schema = new AnySchema().invalid(ref)
+```
+
+Here the reference presents a single value and it is put into the disallowed list as it is.

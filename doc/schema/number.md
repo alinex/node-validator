@@ -23,20 +23,35 @@ values in each compatible unit which will automatically recognized and converted
 ```js
 const schema = new NumberSchema().unit('m').toUnit('cm')
 // allows the value to be: '1.28 m', '0.00128 km' or 1.28 => 128
-schema.unit().toUnit() // to remove the settings
+schema.unit().toUnit() // to remove the setting
 ```
 
-### sanitize
+Both may be also given as reference:
+
+```js
+const ref = new Reference('cm')
+const schema = new NumberSchema().unit(ref)
+```
+
+### sanitize(bool)
 
 If this flag is set the first numerical value from the given text will be used.
 That allows any non numerical characters before or after the value, which will be
 stripped away.
 
 ```js
-const Schema = new NumberSchema().sanitize
+const Schema = new NumberSchema().sanitize()
+schema.sanitize(false) // to remove the setting
 ```
 
-> Using the `not` flag it can also be removed later.
+You may use a reference here:
+
+```js
+const ref = new Reference(true)
+const schema = new NumberSchema().sanitize(ref)
+```
+
+The reference can point to any value which may be converted to true/false.
 
 ### round(precision, method)
 
@@ -46,36 +61,52 @@ and a rounding method ('arithmetic', 'floor', 'ceil'). The default is to use
 
 ```js
 const Schema = new NumberSchema().round(2)
+schema.round(false) // to remove the setting
 ```
 
-> Using the `not` flag to remove it later.
+> References are not allowed here but within `integer`.
 
-## integer
+## integer(bool)
 
 The integer flag will check for an integer value. If the sanitize flag is also used it will
 automatically round.
 
 ```js
-const Schema = new NumberSchema().integer.sanitize
+const Schema = new NumberSchema().sanitize().integer()
+schema.integer(false) // to remove the setting
 ```
 
-> Using the `not` flag to remove it later.
+You may use a reference here:
+
+```js
+const ref = new Reference(true)
+const schema = new NumberSchema().sanitize().integer(ref)
+```
+
+The reference can point to any value which may be converted to true/false.
 
 ## Value checks
 
-### positive / negative
+### positive(bool) / negative(bool)
 
 Allow only positive or negative values.
 
 ```js
-const Schema = new NumberSchema().positive
+const Schema = new NumberSchema().positive()
 ```
 
 The corresponding other setting will be removed.
 
-> Using the `not` flag it can also be removed later.
+Both allow references, too:
 
-### min(value / max(value) / greater(value) / less(value)
+```js
+const ref = new Reference(true)
+const schema = new NumberSchema().negative(ref)
+```
+
+The reference can point to any value which may be converted to true/false.
+
+### min(value) / max(value) / greater(value) / less(value)
 
 Define a allowed range of `min`, `max` or `greater`, `less` settings. The given value
 has to be within the defined range which also is involved with `positive` and `negative`.
@@ -85,8 +116,14 @@ will not.
 ```js
 const Schema = new NumberSchema().min(5).less(100)
 ```
+In all of these settings references are allowed:
 
-> Using the `not` flag it can also be removed later.
+```js
+const ref = new Reference(15)
+const schema = new NumberSchema().min(ref)
+```
+
+The reference should point to a numerical value.
 
 ### integerType(type)
 
@@ -103,10 +140,10 @@ This allows to specify a integer bit size by giving one of the following names o
 Use `positive` to make it unsigned.
 
 ```js
-const Schema = new NumberSchema().integerType('byte').positive
+const Schema = new NumberSchema().integerType('byte').positive()
 ```
 
-> Using the `not` flag it can also be removed later.
+> References are not possible here.
 
 ### multiple(value)
 
@@ -116,7 +153,14 @@ The data has to be a multiple of the value set here.
 const Schema = new NumberSchema().multiple(8) // 16 => ok, 12 => fail
 ```
 
-> Using the `not` flag it can also be removed later.
+And with a reference:
+
+```js
+const ref = new Reference(15)
+const schema = new NumberSchema().multiple(ref)
+```
+
+The reference should point to a numerical value.
 
 ### format(string)
 
@@ -157,4 +201,4 @@ const Schema = new NumberSchema().unit('cm').format('0.00 $best')
 // value 16000 -> '160.00 m'
 ```
 
-> Using the `not` flag it can also be removed later.
+> No references are allowed here.
