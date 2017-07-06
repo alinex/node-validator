@@ -490,15 +490,102 @@ describe.only('number', () => {
       helper.validateFail(schema, data, undefined, done)
     })
 
-    // REFERENCE
-
     it('should describe integer type', () => {
       const schema = new MySchema().integerType(8)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    // DESC REFERENCE
+    it('should allow reference for positive', (done) => {
+      const data = -12
+      const ref = new Reference(true)
+      const schema = new MySchema().positive(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference for negative', (done) => {
+      const data = 12
+      const ref = new Reference(true)
+      const schema = new MySchema().negative(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference for min', (done) => {
+      const data = 12
+      const ref = new Reference(16)
+      const schema = new MySchema().min(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference for max', (done) => {
+      const data = 12
+      const ref = new Reference(10)
+      const schema = new MySchema().max(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference for greater', (done) => {
+      const data = -12
+      const ref = new Reference(-12)
+      const schema = new MySchema().greater(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference for less', (done) => {
+      const data = -12
+      const ref = new Reference(-12)
+      const schema = new MySchema().less(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe with reference for positive', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().positive(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference for negative', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().negative(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference for min', () => {
+      const ref = new Reference(5)
+      const schema = new MySchema().min(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference for max', () => {
+      const ref = new Reference(5)
+      const schema = new MySchema().max(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference for greater', () => {
+      const ref = new Reference(5)
+      const schema = new MySchema().greater(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference for less', () => {
+      const ref = new Reference(5)
+      const schema = new MySchema().less(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
   })
 
 //  describe('multiple', () => {
