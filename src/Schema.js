@@ -51,6 +51,9 @@ class Schema {
     else delete this._setting[name]
     return this
   }
+  _isReference(name: string) {
+    return this._setting[name] instanceof Reference
+  }
   _checkBoolean(name: string) {
     let value
     switch (typeof this._check[name]) {
@@ -70,8 +73,19 @@ class Schema {
 ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
     }
   }
-  _isReference(name: string) {
-    return this._setting[name] instanceof Reference
+  _checkString(name: string) {
+    const check = this._check
+    if (check[name] && typeof check[name] !== 'string') {
+      throw new Error(`No string value for \`${name}\` setting given in \
+${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
+    }
+  }
+  _checkNumber(name: string) {
+    const check = this._check
+    if (check[name] && typeof check[name] !== 'number') {
+      throw new Error(`No numerical value for \`${name}\` setting given in \
+${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
+    }
   }
   _checkArray(name: string) {
     const check = this._check
@@ -83,7 +97,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   _checkObject(name: string) {
     const check = this._check
     if (typeof check[name] !== 'object') {
-      throw new Error(`No boolean value for \`${name}\` setting given in \
+      throw new Error(`No object for \`${name}\` setting given in \
 ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
     }
   }

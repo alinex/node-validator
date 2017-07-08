@@ -588,62 +588,117 @@ describe.only('number', () => {
 
   })
 
-//  describe('multiple', () => {
-//    it('should work', (done) => {
-//      const data = 16
-//      const schema = new MySchema().multiple(8)
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail', (done) => {
-//      const data = 12
-//      const schema = new MySchema().multiple(8)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should describe', () => {
-//      const schema = new MySchema().multiple(8)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//  })
-//
-//  describe('format', () => {
-//    it('should work', (done) => {
-//      const data = 16
-//      const schema = new MySchema().format('0.00')
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('16.00')
-//      }, done)
-//    })
-//
-//    it('should work with unit', (done) => {
-//      const data = 16
-//      const schema = new MySchema().unit('cm').format('0.00 $unit')
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('16.00 cm')
-//      }, done)
-//    })
-//
-//    it('should work with best unit', (done) => {
-//      const data = 16000
-//      const schema = new MySchema().unit('cm').format('0.00 $best')
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('160.00 m')
-//      }, done)
-//    })
-//
-//    it('should describe', () => {
-//      const schema = new MySchema().format('0.00')
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//  })
+  describe('multiple', () => {
+
+    it('should work', (done) => {
+      const data = 16
+      const schema = new MySchema().multiple(8)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail', (done) => {
+      const data = 12
+      const schema = new MySchema().multiple(8)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove', (done) => {
+      const data = 12
+      const schema = new MySchema().multiple(8).multiple()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should allow reference', (done) => {
+      const data = 12
+      const ref = new Reference(8)
+      const schema = new MySchema().multiple(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().multiple(8)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference(8)
+      const schema = new MySchema().multiple(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('format', () => {
+
+    it('should work', (done) => {
+      const data = 16
+      const schema = new MySchema().format('0.00')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('16.00')
+      }, done)
+    })
+
+    it('should work with unit', (done) => {
+      const data = 16
+      const schema = new MySchema().unit('cm').format('0.00 $unit')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('16.00 cm')
+      }, done)
+    })
+
+    it('should work with best unit', (done) => {
+      const data = 16000
+      const schema = new MySchema().unit('cm').format('0.00 $best')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('160.00 m')
+      }, done)
+    })
+
+    it('should remove', (done) => {
+      const data = 16
+      const schema = new MySchema().format('0.00').format()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should allow reference', (done) => {
+      const data = 16
+      const ref = new Reference('0.00')
+      const schema = new MySchema().format(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('16.00')
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().format('0.00')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('0.00')
+      const schema = new MySchema().format(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
 })

@@ -39,16 +39,16 @@ class NumberSchema extends AnySchema {
       this._sanitizeDescriptor,
       this._roundDescriptor,
       this._minmaxDescriptor,
-//      this._multipleDescriptor,
-//      this._formatDescriptor,
+      this._multipleDescriptor,
+      this._formatDescriptor,
     )
     this._rules.validator.push(
       this._unitValidator,
       this._sanitizeValidator,
       this._roundValidator,
       this._minmaxValidator,
-//      this._multipleValidator,
-//      this._formatValidator,
+      this._multipleValidator,
+      this._formatValidator,
     )
   }
 
@@ -136,11 +136,13 @@ class NumberSchema extends AnySchema {
     const check = this._check
     if (check.unit) {
       try {
+        this._checkString('unit')
         convert().from(check.unit)
       } catch (e) { throw new Error(`Unit ${check.unit} not recognized`) }
     }
     if (check.toUnit) {
       try {
+        this._checkString('unit')
         convert().from(check.toUnit)
       } catch (e) { throw new Error(`Unit ${check.toUnit} not recognized`) }
     }
@@ -253,35 +255,35 @@ class NumberSchema extends AnySchema {
 
   positive(flag: bool | Reference = true): this {
     const set = this._setting
-    if (flag) {
-      if (!(flag instanceof Reference)) {
-        if (!this._isReference('max') && set.max < 0) {
-          throw new Error('Positive can´t be set because max value is negative')
-        }
-        if (!this._isReference('less') && set.less <= 0) {
-          throw new Error('Positive can´t be set because less value is negative')
-        }
-        if (!this._isReference('negative')) set.negative = false
+    if (flag === 'undefined') delete set.positive
+    else if (flag instanceof Reference) set.positive = flag
+    else {
+      if (!this._isReference('max') && set.max < 0) {
+        throw new Error('Positive can´t be set because max value is negative')
       }
+      if (!this._isReference('less') && set.less <= 0) {
+        throw new Error('Positive can´t be set because less value is negative')
+      }
+      if (!this._isReference('negative')) set.negative = false
       set.positive = true
-    } else delete set.positive
+    }
     return this
   }
 
   negative(flag: bool | Reference = true): this {
     const set = this._setting
-    if (flag) {
-      if (!(flag instanceof Reference)) {
-        if (!this._isReference('min') && set.min > 0) {
-          throw new Error('Negative can´t be set because min value is positive')
-        }
-        if (!this._isReference('greater') && set.greater >= 0) {
-          throw new Error('Negative can´t be set because greater value is positive')
-        }
-        if (!this._isReference('positive')) set.positive = false
+    if (flag === 'undefined') delete set.negative
+    else if (flag instanceof Reference) set.negative = flag
+    else {
+      if (!this._isReference('min') && set.min > 0) {
+        throw new Error('Negative can´t be set because min value is positive')
       }
+      if (!this._isReference('greater') && set.greater >= 0) {
+        throw new Error('Negative can´t be set because greater value is positive')
+      }
+      if (!this._isReference('positive')) set.positive = false
       set.negative = true
-    } else delete set.negative
+    }
     return this
   }
 
@@ -308,35 +310,49 @@ class NumberSchema extends AnySchema {
     // optimize
     let max
     let min
-    if (set.integer && set.integerType) {
+    if (set.integer && !this._isReference('integer') && set.integerType) {
       const unsigned = set.positive ? 1 : 0
       max = (2 ** ((set.integerType - 1) + unsigned)) - 1
       min = (((unsigned - 1) * max) - 1) + unsigned
     }
-    if (min === undefined || !(set.min <= min)) min = set.min
-    if (max === undefined || !(set.max >= max)) max = set.max
-    if (min !== undefined && set.greater !== undefined) {
+    if (min === undefined || !(!this._isReference('min') && set.min <= min)) min = set.min
+    if (max === undefined || !(!this._isReference('max') && set.max >= max)) max = set.max
+    if (min !== undefined && !this._isReference('greater') && set.greater !== undefined) {
       if (set.greater >= min) min = undefined
       else delete set.greater
     }
-    if (max !== undefined && set.less !== undefined) {
+    if (max !== undefined && !this._isReference('less') && set.less !== undefined) {
       if (set.less <= max) max = undefined
       else delete set.less
     }
     // get message
     let msg = ''
-    if (set.integer && set.integerType) {
+    if (this._isReference('integer')) {
+      msg += `The value has to be an integer if specified in ${set.integer.description}. `
+    } else if (set.integer && set.integerType) {
       msg += `It has to be an ${set.positive ? 'unsigned ' : ''}\
  ${set.integerType}-bit integer. `
     }
-    if (set.positive) msg += 'The number should be positive. '
-    if (set.negative) msg += 'The number should be negative. '
-    if (min !== undefined) msg += `The value has to be at least \`${set.min}\`. `
-    if (set.greater !== undefined) {
+    if (this._isReference('positive')) {
+      msg += `The value has to be positive if specified in ${set.positive.description}. `
+    } else if (set.positive) msg += 'The number should be positive. '
+    if (this._isReference('negative')) {
+      msg += `The value has to be negative if specified in ${set.negative.description}. `
+    } else if (set.negative) msg += 'The number should be negative. '
+    if (this._isReference('min')) {
+      msg += `The value has to be at least the number given in ${set.min.description}. `
+    } else if (min !== undefined) msg += `The value has to be at least \`${set.min}\`. `
+    if (this._isReference('greater')) {
+      msg += `The value has to be higher than given in ${set.greater.description}. `
+    } else if (set.greater !== undefined) {
       msg += `The value has to be greater than \`${set.greater}\`. `
     }
-    if (set.less !== undefined) msg += `The value has to be less than \`${set.less}\`. `
-    if (max !== undefined) msg += `The value has to be at most \`${set.max}\`. `
+    if (this._isReference('less')) {
+      msg += `The value has to be at lower than given in ${set.less.description}. `
+    } else if (set.less !== undefined) msg += `The value has to be less than \`${set.less}\`. `
+    if (this._isReference('max')) {
+      msg += `The value has to be at least the number given in ${set.max.description}. `
+    } else if (max !== undefined) msg += `The value has to be at most \`${set.max}\`. `
     if ((min !== undefined || set.greater !== undefined)
     && (max !== undefined && set.less !== undefined)) {
       msg = msg.replace(/(.*)\. The value has to be/, '$1 and')
@@ -346,6 +362,23 @@ class NumberSchema extends AnySchema {
 
   _minmaxValidator(data: SchemaData): Promise<void> {
     const check = this._check
+    try {
+      this._checkNumber('min')
+      this._checkNumber('max')
+      this._checkNumber('greater')
+      this._checkNumber('less')
+      this._checkBoolean('positive')
+      this._checkBoolean('negative')
+      if (check.integerType) {
+        if (INTTYPE[check.integerType]) check.integerType = INTTYPE[check.integerType]
+        this._checkNumber('integerType')
+        if (!Object.values(INTTYPE).includes(check.integerType)) {
+          throw new Error(`Impossible to use ${check.integerType}-bit for integer.`)
+        }
+      }
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
     // optimize
     let max
     let min
@@ -364,7 +397,7 @@ class NumberSchema extends AnySchema {
       if (check.less <= max) max = undefined
       else delete check.less
     }
-    // check
+    // check value
     if (check.positive && data.value < 0) {
       return Promise.reject(new SchemaError(this, data,
         'The number should be positive.'))
@@ -421,91 +454,113 @@ class NumberSchema extends AnySchema {
 
   _roundValidator(data: SchemaData): Promise<void> {
     const check = this._check
-    if (check.round) {
+    try {
+      this._checkBoolean('integer')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.integer && !Number.isInteger(data.value)) {
+      if (check.sanitize) {
+        const method = check.round ? check.round.method : 'arithmetic'
+        if (method === 'ceil') data.value = Math.ceil(data.value)
+        else if (method === 'floor') data.value = Math.floor(data.value)
+        else data.value = Math.round(data.value)
+      } else {
+        return Promise.reject(new SchemaError(this, data,
+          'The value has to be an integer number.'))
+      }
+    } else if (check.round) {
       const exp = check.integer ? 1 : 10 ** check.round.precision
       let value = data.value * exp
       if (check.round.method === 'ceil') value = Math.ceil(value)
       else if (check.round.method === 'floor') value = Math.floor(value)
       else value = Math.round(value)
       data.value = value / exp
-    } else if (check.integer && !Number.isInteger(data.value)) {
-      if (check.sanitize) data.value = Math.round(data.value)
-      else {
-        return Promise.reject(new SchemaError(this, data,
-          'The value has to be an integer number.'))
-      }
     }
     return Promise.resolve()
   }
 
-//
-//  multiple(value: number): this {
-//    const set = this._setting
-//    if (set.negate) {
-//      delete set.multiple
-//      set.negate = false
-//    } else {
-//      if (set.negative && value > 0) throw new Error('Multiplicator has to be negative, too.')
-//      if (set.positive && value < 0) throw new Error('Multiplicator has to be positive, too.')
-//      set.multiple = value
-//    }
-//    return this
-//  }
-//
-//  format(format: string): this {
-//    const set = this._setting
-//    if (set.negate) {
-//      delete set.format
-//      set.negate = false
-//    } else {
-//      set.format = format
-//    }
-//    return this
-//  }
+  multiple(value?: number | Reference): this {
+    const set = this._setting
+    if (value) {
+      if (!(value instanceof Reference)) {
+        if (set.negative && !this._isReference('negative') && value > 0) {
+          throw new Error('Multiplicator has to be negative, too.')
+        }
+        if (set.positive && !this._isReference('positive') && value < 0) {
+          throw new Error('Multiplicator has to be positive, too.')
+        }
+        set.multiple = value
+      } else {
+        set.multiple = value
+      }
+    } else delete set.multiple
+    return this
+  }
 
+  _multipleDescriptor() {
+    const set = this._setting
+    if (set.multiple) {
+      return `The value has to be multiple of \
+${this._isReference('multiple') ? set.multiple.description : set.multiple}.\n`
+    }
+    return ''
+  }
 
-//
-//
-//  _multipleDescriptor() {
-//    if (this._multiple) return `The value has to be multiple of ${this._multiple}.\n`
-//    return ''
-//  }
-//
-//  _multipleValidator(data: SchemaData): Promise<void> {
-//    if (this._multiple && data.value % this._multiple) {
-//      return Promise.reject(new SchemaError(this, data,
-//        `The value has to be a multiple of ${this._multiple}.`))
-//    }
-//    return Promise.resolve()
-//  }
-//
-//  _formatDescriptor() {
-//    if (this._format) {
-//      return `The value will be formatted as string in the form \`${this._format}\`.\n`
-//    }
-//    return ''
-//  }
-//
-//  _formatValidator(data: SchemaData): Promise<void> {
-//    if (this._format) {
-//      const match = this._format.match(/(^.*?)(\s*\$(?:unit|best))/)
-//      let unit = match ? match[2] : ''
-//      if (unit.includes('$best')) {
-//        const quantity = convert(data.value).from(this._toUnit || this._unit).toBest()
-//        data.value = quantity.val
-//        unit = unit.replace('$best', quantity.unit)
-//      }
-//      if (unit.includes('$unit')) unit = unit.replace('$unit', this._toUnit || this._unit || '')
-//      const format = match ? match[1] : this._format
-//      try {
-//        data.value = `${Numeral(data.value).format(format)}${unit}`
-//      } catch (e) {
-//        return Promise.reject(new SchemaError(this, data,
-//          `Could not format value: ${e.message}`))
-//      }
-//    }
-//    return Promise.resolve()
-//  }
+  _multipleValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkNumber('multiple')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.multiple && data.value % check.multiple) {
+      return Promise.reject(new SchemaError(this, data,
+        `The value has to be a multiple of ${check.multiple}.`))
+    }
+    return Promise.resolve()
+  }
+
+  format(format?: string | Reference): this { return this._setAny('format', format) }
+
+  _formatDescriptor() {
+    const set = this._setting
+    if (set.format) {
+      return `The value will be formatted as string in the form of \
+${this._isReference('format') ? set.format.description : set.format}.\n`
+    }
+    return ''
+  }
+
+  _formatValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkString('format')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.format) {
+      const match = check.format.match(/(^.*?)(\s*\$(?:unit|best))/)
+      let unit = match ? match[2] : ''
+      if (unit.includes('$best')) {
+        const quantity = convert(data.value).from(check.toUnit || check.unit).toBest()
+        data.value = quantity.val
+        unit = unit.replace('$best', quantity.unit)
+      }
+      if (unit.includes('$unit')) unit = unit.replace('$unit', check.toUnit || check.unit || '')
+      const format = match ? match[1] : check.format
+      try {
+        data.value = `${Numeral(data.value).format(format)}${unit}`
+      } catch (e) {
+        return Promise.reject(new SchemaError(this, data,
+          `Could not format value: ${e.message}`))
+      }
+    }
+    return Promise.resolve()
+  }
 
 }
 

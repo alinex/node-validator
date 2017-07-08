@@ -40,7 +40,7 @@ That allows any non numerical characters before or after the value, which will b
 stripped away.
 
 ```js
-const Schema = new NumberSchema().sanitize()
+const schema = new NumberSchema().sanitize()
 schema.sanitize(false) // to remove the setting
 ```
 
@@ -60,7 +60,7 @@ and a rounding method ('arithmetic', 'floor', 'ceil'). The default is to use
 0 digits arithmetic rounding if called without any parameter.
 
 ```js
-const Schema = new NumberSchema().round(2)
+const schema = new NumberSchema().round(2)
 schema.round(false) // to remove the setting
 ```
 
@@ -72,7 +72,7 @@ The integer flag will check for an integer value. If the sanitize flag is also u
 automatically round.
 
 ```js
-const Schema = new NumberSchema().sanitize().integer()
+const schema = new NumberSchema().sanitize().integer()
 schema.integer(false) // to remove the setting
 ```
 
@@ -92,7 +92,7 @@ The reference can point to any value which may be converted to true/false.
 Allow only positive or negative values.
 
 ```js
-const Schema = new NumberSchema().positive()
+const schema = new NumberSchema().positive()
 ```
 
 The corresponding other setting will be removed.
@@ -114,7 +114,7 @@ While `min` and `max` also allows the given limit as value `greater` and `less`
 will not.
 
 ```js
-const Schema = new NumberSchema().min(5).less(100)
+const schema = new NumberSchema().min(5).less(100)
 ```
 In all of these settings references are allowed:
 
@@ -140,7 +140,7 @@ This allows to specify a integer bit size by giving one of the following names o
 Use `positive` to make it unsigned.
 
 ```js
-const Schema = new NumberSchema().integerType('byte').positive()
+const schema = new NumberSchema().integerType('byte').positive()
 ```
 
 > References are not possible here.
@@ -150,7 +150,8 @@ const Schema = new NumberSchema().integerType('byte').positive()
 The data has to be a multiple of the value set here.
 
 ```js
-const Schema = new NumberSchema().multiple(8) // 16 => ok, 12 => fail
+const schema = new NumberSchema().multiple(8) // 16 => ok, 12 => fail
+schema.multiple() // to remove setting
 ```
 
 And with a reference:
@@ -191,14 +192,20 @@ By setting one of the following format strings you will get the value back as a 
 You can also add the unit if set earlier by adding `$unit` to the format string.
 
 ```js
-const Schema = new NumberSchema().unit('cm').format('0.00 $unit')
+const schema = new NumberSchema().unit('cm').format('0.00 $unit')
+schema.format() // to remove setting
 ```
 
 And last but not least use `$best` to let the system change the unit to the best selection:
 
 ```js
-const Schema = new NumberSchema().unit('cm').format('0.00 $best')
+const schema = new NumberSchema().unit('cm').format('0.00 $best')
 // value 16000 -> '160.00 m'
 ```
 
-> No references are allowed here.
+The format can also be given as reference:
+
+```js
+const ref = new Reference('0.00 $unit')
+const schema = new NumberSchema().unit('cm').format(ref)
+```
