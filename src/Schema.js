@@ -91,8 +91,10 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     const check = this._check
     if (!check[name]) check[name] = []
     else if (check[name] instanceof Set) check[name] = Array.from(check[name])
-    else if (typeof check[name] === 'object') check[name] = Object.keys(check[name])
-    else if (!Array.isArray(check[name])) check[name] = [check[name]]
+    else if (!Array.isArray(check[name])) {
+      if (typeof check[name] === 'object') check[name] = Object.keys(check[name])
+      else check[name] = [check[name]]
+    }
   }
   _checkObject(name: string) {
     const check = this._check
@@ -220,8 +222,8 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
         }
       } else this._check[key] = set[key]
     }
-    let p = Promise.all(par)
     // optimize check values
+    let p = Promise.all(par)
     this._rules.check.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
     // run the rules seriously
     this._rules.validator.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
