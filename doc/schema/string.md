@@ -7,37 +7,50 @@ of the structure is known. It can also be used to make a loose checking schema
 first and later replace it through detailed specifications.
 
 See at [Any Schema](any.md) for the inherited methods you may call like:
-- `required`
+- `required()`
 - `default()`
-- `stripEmpty`
+- `stripEmpty()`
 - `allow()`
-- `allowAll()`
-- `allowToClear`
+- `disallow()`
+- `valid()`
+- `invalid()`
 
 ## Sanitize
 
-### makeString
+### makeString(bool)
 
 The flag enables automatic string conversion. so each object which is not already
 a string is converted to one. This is done using the `toString()` method which
 works on base data types and all objects implementing this common method.
 
 ```js
-const schema = new StringSchema().makeString
+const schema = new StringSchema().makeString()
+schema.makeString(false) // to remove the setting
 ```
 
-> In combination with `not` this will be disabled.
+It can also be set as reference:
 
-### trim
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().makeString(ref)
+```
+
+### trim(bool)
 
 If this flag is set all whitespace characters will be removed from the begin and
 end of the string.
 
 ```js
-const schema = new StringSchema().trim
+const schema = new StringSchema().trim()
+schema.trim(false) // to remove the setting
 ```
 
-> In combination with `not` this will be disabled.
+And also with reference:
+
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().makeString(ref)
+```
 
 ### replace(match, replace, name)
 
@@ -51,10 +64,14 @@ method using:
 
 ```js
 const schema = new StringSchema().replace(/(\w),\s?/g, '$1 and ', ', to and')
+schema.replace(', to and') // remove one setting
+schema.replace() // remove all setting
 ```
 
-> Using `not.replace()` without parameters will remove all rules while if a before
-> defined name is given only these will be removed.
+> References are not possible here.
+
+
+
 
 ### lowercase(what) / uppercase(what)
 
