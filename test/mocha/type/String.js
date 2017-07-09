@@ -175,69 +175,101 @@ describe.only('string', () => {
 
   })
 
-//  describe('case', () => {
-//
-//    it('should convert to lowercase', (done) => {
-//      const data = 'ABC'
-//      const schema = new MySchema().lowercase()
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('abc')
-//      }, done)
-//    })
-//
-//    it('should convert to uppercase', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().uppercase()
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('ABC')
-//      }, done)
-//    })
-//
-//    it('should convert to lowercase first', (done) => {
-//      const data = 'ABC'
-//      const schema = new MySchema().lowercase('first')
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('aBC')
-//      }, done)
-//    })
-//
-//    it('should convert to uppercase first', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().uppercase('first')
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('Abc')
-//      }, done)
-//    })
-//
-//    it('should convert to lowercase', (done) => {
-//      const data = 'ABC'
-//      const schema = new MySchema().lowercase().not.lowercase()
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should convert to uppercase', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().uppercase().not.uppercase()
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should describe uppercase, lowercase first', () => {
-//      const schema = new MySchema().uppercase().lowercase('first')
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should describe lowercase, uppercase first', () => {
-//      const schema = new MySchema().lowercase().uppercase('first')
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//  })
+  describe('case', () => {
+
+    it('should convert to lowercase', (done) => {
+      const data = 'ABC'
+      const schema = new MySchema().lowercase()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc')
+      }, done)
+    })
+
+    it('should convert to uppercase', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().uppercase()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('ABC')
+      }, done)
+    })
+
+    it('should convert to lowercase first', (done) => {
+      const data = 'ABC'
+      const schema = new MySchema().lowercase('first')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('aBC')
+      }, done)
+    })
+
+    it('should convert to uppercase first', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().uppercase('first')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('Abc')
+      }, done)
+    })
+
+    it('should remove lowercase', (done) => {
+      const data = 'ABC'
+      const schema = new MySchema().lowercase().lowercase(false)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove uppercase', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().uppercase().uppercase(false)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should convert to lowercase with reference', (done) => {
+      const data = 'ABC'
+      const ref = new Reference(true)
+      const schema = new MySchema().lowercase(ref)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc')
+      }, done)
+    })
+
+    it('should convert to uppercase with reference', (done) => {
+      const data = 'abc'
+      const ref = new Reference(true)
+      const schema = new MySchema().uppercase(ref)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('ABC')
+      }, done)
+    })
+
+    it('should describe uppercase, lowercase first', () => {
+      const schema = new MySchema().uppercase().lowercase('first')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe lowercase, uppercase first', () => {
+      const schema = new MySchema().lowercase().uppercase('first')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe uppercase with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().uppercase(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe lowercase with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().lowercase(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
 //
 //  describe('check', () => {
 //

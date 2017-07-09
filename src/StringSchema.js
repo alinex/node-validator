@@ -41,7 +41,7 @@ class StringSchema extends AnySchema {
     this._rules.descriptor.push(
       this._makeStringDescriptor,
       this._replaceDescriptor,
-//      this._caseDescriptor,
+      this._caseDescriptor,
 //      this._checkDescriptor,
 //      this._lengthDescriptor,
 //      this._matchDescriptor,
@@ -49,7 +49,7 @@ class StringSchema extends AnySchema {
     this._rules.validator.push(
       this._makeStringValidator,
       this._replaceValidator,
-//      this._caseValidator,
+      this._caseValidator,
 //      this._checkValidator,
 //      this._lengthValidator,
 //      this._matchValidator,
@@ -136,57 +136,118 @@ class StringSchema extends AnySchema {
     return Promise.resolve()
   }
 
+  uppercase(what: bool | 'all' | 'first' | Reference = 'all') {
+    const set = this._setting
+    if (what === false) delete set.uppercase
+    else {
+      if (set.lowercase === what) delete set.lowercase
+      if (set.uppercase === true) set.uppercase = 'all'
+      else set.uppercase = what
+    }
+    return this
+  }
 
-//  uppercase(what: 'all' | 'first' = 'all') {
-//    if (this._negate) {
-//      delete this._uppercase
-//      this._negate = false
-//    } else if (this._lowercase === what) delete this._lowercase
-//    else this._uppercase = what
-//    return this
-//  }
-//
-//  lowercase(what: 'all' | 'first' = 'all') {
-//    if (this._negate) {
-//      delete this._lowercase
-//      this._negate = false
-//    } else if (this._uppercase === what) delete this._uppercase
-//    else this._lowercase = what
-//    return this
-//  }
-//
-//  get alphanum(): this {
-//    if (!this._negate && this._hex) throw new Error('The value already has to be hexadecimal.')
-//    this._alphanum = !this._negate
-//    this._negate = false
-//    return this
-//  }
-//
-//  get hex(): this {
-//    if (!this._negate) this._alphanum = false
-//    this._hex = !this._negate
-//    this._negate = false
-//    return this
-//  }
-//
-//  get controls(): this {
-//    this._controls = !this._negate
-//    this._negate = false
-//    return this
-//  }
-//
-//  get noHTML(): this {
-//    this._noHTML = !this._negate
-//    this._negate = false
-//    return this
-//  }
-//
-//  get stripDisallowed(): this {
-//    this._stripDisallowed = !this._negate
-//    this._negate = false
-//    return this
-//  }
-//
+  lowercase(what: bool | 'all' | 'first' | Reference = 'all') {
+    const set = this._setting
+    if (what === false) delete set.lowercase
+    else {
+      if (set.uppercase === what) delete set.uppercase
+      if (set.lowercase === true) set.lowercase = 'all'
+      else set.lowercase = what
+    }
+    return this
+  }
+
+  _caseDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.lowercase === 'all') msg += 'Convert the whole text to lowercase. '
+    else if (set.uppercase === 'all') msg += 'Convert the whole text to uppercase. '
+    if (set.lowercase instanceof Reference) {
+      msg += `Lower case is used depending on ${set.lowercase.description}. `
+    } else if (set.uppercase instanceof Reference) {
+      msg += `Upper case is used depending on ${set.uppercase.description}. `
+    }
+    if (set.lowercase === 'first') msg += 'Convert only the first letter to lowercase. '
+    else if (set.uppercase === 'first') msg += 'Convert only the first letter to uppercase. '
+    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
+  }
+
+  _caseValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('lowercase')
+      this._checkBoolean('uppercase')
+    } catch (err) {
+      // no problem
+    }
+    if (check.lowercase === true) check.lowercase = 'all'
+    else if (check.lowercase === false) delete check.lowercase
+    if (check.uppercase === true) check.uppercase = 'all'
+    else if (check.uppercase === false) delete check.uppercase
+    try {
+      this._checkString('lowercase')
+      this._checkString('uppercase')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.lowercase === 'all') data.value = data.value.toLowerCase()
+    else if (check.uppercase === 'all') data.value = data.value.toUpperCase()
+    if (check.lowercase === 'first') {
+      data.value = `${data.value.substr(0, 1).toLowerCase()}${data.value.substr(1)}`
+    } else if (check.uppercase === 'first') {
+      data.value = `${data.value.substr(0, 1).toUpperCase()}${data.value.substr(1)}`
+    }
+    return Promise.resolve()
+  }
+
+  alphanum(flag?: bool | Reference): this { return this._setFlag('alphanum', flag) }
+  hex(flag?: bool | Reference): this { return this._setFlag('hex', flag) }
+  controls(flag?: bool | Reference): this { return this._setFlag('controls', flag) }
+  noHTML(flag?: bool | Reference): this { return this._setFlag('noHTML', flag) }
+  stripDisallowed(flag?: bool | Reference): this { return this._setFlag('stripDisallowed', flag) }
+
+  //  _checkDescriptor() {
+  //    let msg = ''
+  //    if (this._alphanum) msg += 'Only alpha numerical characters are allowed. '
+  //    if (this._hex) msg += 'Only hexa decimal characters are allowed. '
+  //    if (this._controls) msg += 'Control characters are also allowed. '
+  //    if (this._noHTML) msg += 'No HTML tags allowed. '
+  //    if (this._stripDisallowed) msg += 'All not allowed characters will be removed. '
+  //    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
+  //  }
+  //
+  //  _checkValidator(data: SchemaData): Promise<void> {
+  //    if (this._stripDisallowed) {
+  //      if (this._alphanum) data.value = data.value.replace(/\W/g, '')
+  //      if (this._hex) data.value = data.value.replace(/[^a-fA-F0-9]/g, '')
+  //      if (!this._controls) data.value = data.value.replace(/[^\x20-\x7E]/g, '')
+  //      if (this._noHTML) {
+  //        if (!striptags) striptags = require('striptags') // eslint-disable-line global-require
+  //        data.value = striptags(data.value)
+  //      }
+  //    } else {
+  //      if (this._alphanum && data.value.match(/\W/)) {
+  //        return Promise.reject(new SchemaError(this, data,
+  //        'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
+  //      }
+  //      if (this._hex && data.value.match(/[^a-fA-F0-9]/)) {
+  //        return Promise.reject(new SchemaError(this, data,
+  //        'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
+  //      }
+  //      if (!this._controls && data.value.match(/[^\x20-\x7E]/)) {
+  //        return Promise.reject(new SchemaError(this, data,
+  //        'Control characters are not allowed.'))
+  //      }
+  //      if (this._noHTML && data.value.match(/<[\s\S]*>/)) {
+  //        return Promise.reject(new SchemaError(this, data,
+  //        'No tags allowed in this text.'))
+  //      }
+  //    }
+  //    return Promise.resolve()
+  //  }
+
 //  min(limit?: number): this {
 //    if (this._negate || limit === undefined) delete this._min
 //    else {
@@ -261,65 +322,7 @@ class StringSchema extends AnySchema {
 //
 //
 //
-//  _caseDescriptor() {
-//    let msg = ''
-//    if (this._lowercase === 'all') msg += 'Convert the whole text to lowercase. '
-//    else if (this._uppercase === 'all') msg += 'Convert the whole text to uppercase. '
-//    if (this._lowercase === 'first') msg += 'Convert only the first letter to lowercase. '
-//    else if (this._uppercase === 'first') msg += 'Convert only the first letter to uppercase. '
-//    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
-//  }
 //
-//  _caseValidator(data: SchemaData): Promise<void> {
-//    if (this._lowercase === 'all') data.value = data.value.toLowerCase()
-//    else if (this._uppercase === 'all') data.value = data.value.toUpperCase()
-//    if (this._lowercase === 'first') {
-//      data.value = `${data.value.substr(0, 1).toLowerCase()}${data.value.substr(1)}`
-//    } else if (this._uppercase === 'first') {
-//      data.value = `${data.value.substr(0, 1).toUpperCase()}${data.value.substr(1)}`
-//    }
-//    return Promise.resolve()
-//  }
-//
-//  _checkDescriptor() {
-//    let msg = ''
-//    if (this._alphanum) msg += 'Only alpha numerical characters are allowed. '
-//    if (this._hex) msg += 'Only hexa decimal characters are allowed. '
-//    if (this._controls) msg += 'Control characters are also allowed. '
-//    if (this._noHTML) msg += 'No HTML tags allowed. '
-//    if (this._stripDisallowed) msg += 'All not allowed characters will be removed. '
-//    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
-//  }
-//
-//  _checkValidator(data: SchemaData): Promise<void> {
-//    if (this._stripDisallowed) {
-//      if (this._alphanum) data.value = data.value.replace(/\W/g, '')
-//      if (this._hex) data.value = data.value.replace(/[^a-fA-F0-9]/g, '')
-//      if (!this._controls) data.value = data.value.replace(/[^\x20-\x7E]/g, '')
-//      if (this._noHTML) {
-//        if (!striptags) striptags = require('striptags') // eslint-disable-line global-require
-//        data.value = striptags(data.value)
-//      }
-//    } else {
-//      if (this._alphanum && data.value.match(/\W/)) {
-//        return Promise.reject(new SchemaError(this, data,
-//        'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
-//      }
-//      if (this._hex && data.value.match(/[^a-fA-F0-9]/)) {
-//        return Promise.reject(new SchemaError(this, data,
-//        'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
-//      }
-//      if (!this._controls && data.value.match(/[^\x20-\x7E]/)) {
-//        return Promise.reject(new SchemaError(this, data,
-//        'Control characters are not allowed.'))
-//      }
-//      if (this._noHTML && data.value.match(/<[\s\S]*>/)) {
-//        return Promise.reject(new SchemaError(this, data,
-//        'No tags allowed in this text.'))
-//      }
-//    }
-//    return Promise.resolve()
-//  }
 //
 //  _lengthDescriptor() {
 //    let msg = ''

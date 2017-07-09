@@ -70,9 +70,6 @@ schema.replace() // remove all setting
 
 > References are not possible here.
 
-
-
-
 ### lowercase(what) / uppercase(what)
 
 This will change between uppercase and lowercase on the whole text (with no parameter)
@@ -80,11 +77,15 @@ or only on the first with parameter `first`.
 
 ```js
 const schema = new StringSchema().lowercase().uppercase('first')
+schema.lowercase(false).uppercase(false) // remove setting
 ```
 
-This will make everything lowercase but the first character uppercase.
+The first line will make everything lowercase but the first character uppercase.
 
-> The `not` operator is used to remove this settings.
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().lowercase(ref)
+```
 
 ### stripDisallowed
 
@@ -95,7 +96,7 @@ This will remove all disallowed characters defined through the checks:
 - `noHTML`
 
 ```js
-const schema = new StringSchema().alphanum.stripDisallowed
+const schema = new StringSchema().alphanum().stripDisallowed()
 ```
 
 See the description of the check rules below.
