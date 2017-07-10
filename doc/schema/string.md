@@ -90,28 +90,38 @@ const schema = new StringSchema().lowercase(ref)
 ### stripDisallowed
 
 This will remove all disallowed characters defined through the checks:
-- `alphanum`
-- `hex`
-- `controls`
-- `noHTML`
+- `alphanum` - only alphanumeric characters
+- `hex` - only hexadecimal characters
+- `controls` - control characters allowed
+- `noHTML` - no HTML tags allowed
 
 ```js
 const schema = new StringSchema().alphanum().stripDisallowed()
+schema.alphanum(false).stripDisallowed(false) // to remove settings
 ```
 
-See the description of the check rules below.
+All of the flags allow to use references:
 
-> With `not` the flag can be removed again.
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().alphanum(ref)
+```
 
-### truncate
+### truncate(bool)
 
 In combination with `max()` or `length()` it will crop after max characters.
 
 ```js
-const schema = new StringSchema().max(10).truncate
+const schema = new StringSchema().max(10).truncate()
+schema.truncate(false) // remove setting
 ```
 
-> In combination with `not` this will be disabled.
+Like in the other flags references are possible:
+
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().max(10).truncate(ref)
+```
 
 ### pad(side, chars)
 
@@ -124,13 +134,14 @@ too short to reach the minimum length.
 const schema = new StringSchema().min(10).pad() // default will be 'right' with spaces
 const schema = new StringSchema().min(10).pad('left', '-') // will pad with dashes
 const schema = new StringSchema().min(10).pad('both', '-<>-') // will add ---< and >---
+schema.pad(false) // to remove the setting
 ```
 
 If to less characters are given the last (right pad) or first (left pad) will be
 repeated. On both side padding with multiple characters the first half will be used
 on the left, the second half on the right side with possible repeat.
 
-> Use `not` before to remove padding.
+References are not possible here.
 
 ## Checks
 
