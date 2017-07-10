@@ -42,7 +42,7 @@ class StringSchema extends AnySchema {
       this._makeStringDescriptor,
       this._replaceDescriptor,
       this._caseDescriptor,
-//      this._checkDescriptor,
+      this._checkDescriptor,
 //      this._lengthDescriptor,
 //      this._matchDescriptor,
     )
@@ -50,7 +50,7 @@ class StringSchema extends AnySchema {
       this._makeStringValidator,
       this._replaceValidator,
       this._caseValidator,
-//      this._checkValidator,
+      this._checkValidator,
 //      this._lengthValidator,
 //      this._matchValidator,
     )
@@ -208,45 +208,78 @@ class StringSchema extends AnySchema {
   noHTML(flag?: bool | Reference): this { return this._setFlag('noHTML', flag) }
   stripDisallowed(flag?: bool | Reference): this { return this._setFlag('stripDisallowed', flag) }
 
-  //  _checkDescriptor() {
-  //    let msg = ''
-  //    if (this._alphanum) msg += 'Only alpha numerical characters are allowed. '
-  //    if (this._hex) msg += 'Only hexa decimal characters are allowed. '
-  //    if (this._controls) msg += 'Control characters are also allowed. '
-  //    if (this._noHTML) msg += 'No HTML tags allowed. '
-  //    if (this._stripDisallowed) msg += 'All not allowed characters will be removed. '
-  //    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
-  //  }
-  //
-  //  _checkValidator(data: SchemaData): Promise<void> {
-  //    if (this._stripDisallowed) {
-  //      if (this._alphanum) data.value = data.value.replace(/\W/g, '')
-  //      if (this._hex) data.value = data.value.replace(/[^a-fA-F0-9]/g, '')
-  //      if (!this._controls) data.value = data.value.replace(/[^\x20-\x7E]/g, '')
-  //      if (this._noHTML) {
-  //        if (!striptags) striptags = require('striptags') // eslint-disable-line global-require
-  //        data.value = striptags(data.value)
-  //      }
-  //    } else {
-  //      if (this._alphanum && data.value.match(/\W/)) {
-  //        return Promise.reject(new SchemaError(this, data,
-  //        'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
-  //      }
-  //      if (this._hex && data.value.match(/[^a-fA-F0-9]/)) {
-  //        return Promise.reject(new SchemaError(this, data,
-  //        'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
-  //      }
-  //      if (!this._controls && data.value.match(/[^\x20-\x7E]/)) {
-  //        return Promise.reject(new SchemaError(this, data,
-  //        'Control characters are not allowed.'))
-  //      }
-  //      if (this._noHTML && data.value.match(/<[\s\S]*>/)) {
-  //        return Promise.reject(new SchemaError(this, data,
-  //        'No tags allowed in this text.'))
-  //      }
-  //    }
-  //    return Promise.resolve()
-  //  }
+  _checkDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.alphanum instanceof Reference) {
+      msg += `Only alpha numerical characters are allowed depending on \
+${set.alphanum.description}. `
+    } else if (set.alphanum) {
+      msg += 'Only alpha numerical characters are allowed. '
+    } else if (set.hex instanceof Reference) {
+      msg += `Only hexa decimal characters are allowed depending on \
+${set.hex.description}. `
+    } else if (set.hex) {
+      msg += 'Only hexa decimal characters are allowed. '
+    }
+    if (set.controls instanceof Reference) {
+      msg += `Control characters are allowed depending on ${set.controls.description}. `
+    } else if (set.controls) {
+      msg += 'Control characters are allowed. '
+    }
+    if (set.noHTML instanceof Reference) {
+      msg += `No HTML tags are allowed depending on ${set.noHTML.description}. `
+    } else if (set.noHTML) {
+      msg += 'No HTML tags are allowed. '
+    }
+    if (set.stripDisallowed instanceof Reference) {
+      msg += `All not allowed characters will be removed depending on \
+${set.stripDisallowed.description}. `
+    } else if (set.stripDisallowed) {
+      msg += 'All not allowed characters will be removed. '
+    }
+    return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
+  }
+
+  _checkValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('stripDisallowed')
+      this._checkBoolean('alphanum')
+      this._checkBoolean('hex')
+      this._checkBoolean('controls')
+      this._checkBoolean('noHTML')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.stripDisallowed) {
+      if (check.alphanum) data.value = data.value.replace(/\W/g, '')
+      else if (check.hex) data.value = data.value.replace(/[^a-fA-F0-9]/g, '')
+      if (!check.controls) data.value = data.value.replace(/[^\x20-\x7E]/g, '')
+      if (check.noHTML) {
+        if (!striptags) striptags = require('striptags') // eslint-disable-line global-require
+        data.value = striptags(data.value)
+      }
+    } else {
+      if (check.alphanum && data.value.match(/\W/)) {
+        return Promise.reject(new SchemaError(this, data,
+        'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
+      } else if (check.hex && data.value.match(/[^a-fA-F0-9]/)) {
+        return Promise.reject(new SchemaError(this, data,
+        'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
+      }
+      if (!check.controls && data.value.match(/[^\x20-\x7E]/)) {
+        return Promise.reject(new SchemaError(this, data,
+        'Control characters are not allowed.'))
+      }
+      if (check.noHTML && data.value.match(/<[\s\S]*>/)) {
+        return Promise.reject(new SchemaError(this, data,
+        'No tags allowed in this text.'))
+      }
+    }
+    return Promise.resolve()
+  }
 
 //  min(limit?: number): this {
 //    if (this._negate || limit === undefined) delete this._min

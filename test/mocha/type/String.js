@@ -270,127 +270,208 @@ describe.only('string', () => {
     })
 
   })
-//
-//  describe('check', () => {
-//
-//    it('should only allow alphanum characters', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().alphanum
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for non alphanum characters', (done) => {
-//      const data = 'a+bc'
-//      const schema = new MySchema().alphanum
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should remove non alphanum characters', (done) => {
-//      const data = 'a+bc'
-//      const schema = new MySchema().alphanum.stripDisallowed
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('abc')
-//      }, done)
-//    })
-//
-//    it('should describe alphanum chech', () => {
-//      const schema = new MySchema().alphanum.stripDisallowed
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should only allow hexadecimal characters', (done) => {
-//      const data = 'a6c4'
-//      const schema = new MySchema().hex
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for non hexadecimal characters', (done) => {
-//      const data = 'abxy'
-//      const schema = new MySchema().hex
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should remove non hexadecimal characters', (done) => {
-//      const data = 'abxy'
-//      const schema = new MySchema().hex.stripDisallowed
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('ab')
-//      }, done)
-//    })
-//
-//    it('should describe hexadecimal chech', () => {
-//      const schema = new MySchema().hex.stripDisallowed
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should also allow control characters', (done) => {
-//      const data = 'a\bb'
-//      const schema = new MySchema().controls
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for non control characters', (done) => {
-//      const data = 'a\bb'
-//      const schema = new MySchema()
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should remove control characters', (done) => {
-//      const data = 'a\bb'
-//      const schema = new MySchema().stripDisallowed
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('ab')
-//      }, done)
-//    })
-//
-//    it('should describe control chech', () => {
-//      const schema = new MySchema().controls.stripDisallowed
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should allow tags', (done) => {
-//      const data = '<b>abc</b>'
-//      const schema = new MySchema()
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for not allowed tags', (done) => {
-//      const data = '<b>abc</b>'
-//      const schema = new MySchema().noHTML
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should remove html tags', (done) => {
-//      const data = '<b>abc</b>'
-//      const schema = new MySchema().noHTML.stripDisallowed
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('abc')
-//      }, done)
-//    })
-//
-//    it('should describe no HTML', () => {
-//      const schema = new MySchema().noHTML.stripDisallowed
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//  })
-//
+
+  describe('check', () => {
+
+    it('should only allow alphanum characters', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().alphanum()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for non alphanum characters', (done) => {
+      const data = 'a+bc'
+      const schema = new MySchema().alphanum()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove non alphanum characters', (done) => {
+      const data = 'a+bc'
+      const schema = new MySchema().alphanum().stripDisallowed()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc')
+      }, done)
+    })
+
+    it('should remove alphanum setting', (done) => {
+      const data = 'a+bc'
+      const schema = new MySchema().alphanum().alphanum(false)
+      // use schema
+      helper.validateOk(schema, data, undefined, done)
+    })
+
+    it('should allow reference for alphanum', (done) => {
+      const data = 'a+bc'
+      const ref = new Reference(true)
+      const schema = new MySchema().alphanum(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe alphanum chech', () => {
+      const schema = new MySchema().alphanum().stripDisallowed()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe alphanum reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().alphanum(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should only allow hexadecimal characters', (done) => {
+      const data = 'a6c4'
+      const schema = new MySchema().hex()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for non hexadecimal characters', (done) => {
+      const data = 'abxy'
+      const schema = new MySchema().hex()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove non hexadecimal characters', (done) => {
+      const data = 'abxy'
+      const schema = new MySchema().hex().stripDisallowed()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('ab')
+      }, done)
+    })
+
+    it('should remove hexadecimal setting', (done) => {
+      const data = 'abxy'
+      const schema = new MySchema().hex().hex(false)
+      // use schema
+      helper.validateOk(schema, data, undefined, done)
+    })
+
+    it('should allow hexadecimal reference', (done) => {
+      const data = 'abxy'
+      const ref = new Reference(true)
+      const schema = new MySchema().hex(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe hexadecimal chech', () => {
+      const schema = new MySchema().hex().stripDisallowed()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should also allow control characters', (done) => {
+      const data = 'a\bb'
+      const schema = new MySchema().controls()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for non control characters', (done) => {
+      const data = 'a\bb'
+      const schema = new MySchema()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove control characters', (done) => {
+      const data = 'a\bb'
+      const schema = new MySchema().stripDisallowed()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('ab')
+      }, done)
+    })
+
+    it('should remove control setting', (done) => {
+      const data = 'a\bb'
+      const schema = new MySchema().controls().controls(false)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should fail for non control characters', (done) => {
+      const data = 'a\bb'
+      const ref = new Reference(true)
+      const schema = new MySchema().controls(ref)
+      // use schema
+      helper.validateOk(schema, data, undefined, done)
+    })
+
+    it('should describe control chech', () => {
+      const schema = new MySchema().controls().stripDisallowed()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe control reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().controls(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should allow tags', (done) => {
+      const data = '<b>abc</b>'
+      const schema = new MySchema()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for not allowed tags', (done) => {
+      const data = '<b>abc</b>'
+      const schema = new MySchema().noHTML()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove html tags', (done) => {
+      const data = '<b>abc</b>'
+      const schema = new MySchema().noHTML().stripDisallowed()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc')
+      }, done)
+    })
+
+    it('should remove not allowed tags settings', (done) => {
+      const data = '<b>abc</b>'
+      const schema = new MySchema().noHTML().noHTML(true)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should not allowed tags with reference', (done) => {
+      const data = '<b>abc</b>'
+      const ref = new Reference(true)
+      const schema = new MySchema().noHTML(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe no HTML', () => {
+      const schema = new MySchema().noHTML().stripDisallowed()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe no HTML with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().noHTML(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
 //  describe('length', () => {
 //
 //    it('should check for minimal length', (done) => {
