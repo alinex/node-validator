@@ -338,8 +338,10 @@ ${set.stripDisallowed.description}. `
     let msg = ''
     if (set.min instanceof Reference) {
       msg += `Minimun character length depends on ${set.min.description}. `
+    }
     if (set.max instanceof Reference) {
       msg += `Maximun character length depends on ${set.max.description}. `
+    }
     if (!this._isReference('min') && !this._isReference('max') && set.min && set.max) {
       msg = set.min === set.max ? `The string has to contain exactly ${set.min} characters. `
       : `The string can have between ${set.min} and ${set.max} characters. `
