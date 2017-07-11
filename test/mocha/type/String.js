@@ -10,7 +10,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = StringSchema
 
-describe.only('string', () => {
+describe('string', () => {
 
   it('should work without specification', (done) => {
     const data = 'abc'
@@ -736,59 +736,97 @@ describe.only('string', () => {
     })
 
   })
-//
-//  describe('match', () => {
-//
-//    it('should match', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().match(/ab/)
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for match', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().match(/cd/)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should describe match', () => {
-//      const schema = new MySchema().match(/ab/)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should not match', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().not.match(/cd/)
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for not match', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().not.match(/ab/)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should describe not match', () => {
-//      const schema = new MySchema().not.match(/ab/)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should clear match', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().not.match(/ab/).clearMatch
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//  })
+
+  describe('match', () => {
+
+    it('should match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().match(/ab/)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().match(/cd/)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference', (done) => {
+      const data = 'abc'
+      const ref = new Reference(/cd/)
+      const schema = new MySchema().match(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference as string', (done) => {
+      const data = 'abc'
+      const ref = new Reference('/cd/')
+      const schema = new MySchema().match(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe match', () => {
+      const schema = new MySchema().match(/ab/)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe match with reference', () => {
+      const ref = new Reference('/cd/')
+      const schema = new MySchema().match(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should not match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().notMatch(/cd/)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should not match with reference', (done) => {
+      const data = 'abc'
+      const ref = new Reference(/ab/)
+      const schema = new MySchema().notMatch(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should fail for not match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().notMatch(/ab/)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe not match', () => {
+      const schema = new MySchema().notMatch(/ab/)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe not match with reference', () => {
+      const ref = new Reference(/ab/)
+      const schema = new MySchema().notMatch(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should clear match', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().notMatch(/ab/).notMatch()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+  })
 
 })

@@ -44,7 +44,7 @@ class StringSchema extends AnySchema {
       this._caseDescriptor,
       this._checkDescriptor,
       this._lengthDescriptor,
-//      this._matchDescriptor,
+      this._matchDescriptor,
     )
     this._rules.validator.push(
       this._makeStringValidator,
@@ -52,7 +52,7 @@ class StringSchema extends AnySchema {
       this._caseValidator,
       this._checkValidator,
       this._lengthValidator,
-//      this._matchValidator,
+      this._matchValidator,
     )
   }
 
@@ -447,15 +447,15 @@ ${set.stripDisallowed.description}. `
   _matchDescriptor() {
     const set = this._setting
     let msg = ''
-    if (set.match.length || set.notMatch.length) {
+    if ((set.match && set.match.length) || (set.notMatch && set.notMatch.length)) {
       msg += 'The text should:'
-      if (set.match.length) {
+      if (set.match && set.match.length) {
         msg += set.match.map((e) => {
           if (e instanceof Reference) return `\n- match ${e.description}`
           return `\n- match \`${util.inspect(e)}\``
         }).join('')
       }
-      if (set.notMatch.length) {
+      if (set.notMatch && set.notMatch.length) {
         msg += set.notMatch.map((e) => {
           if (e instanceof Reference) return `\n- not match ${e.description}`
           return `\n- not match \`${util.inspect(e)}\``

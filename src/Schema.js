@@ -196,12 +196,13 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     this._check = {}
     const set = this._setting
     for (const key of Object.keys(set)) {
-      if (set[key] instanceof Reference) {
-        par.push(set[key].data
+      let raw = set[key]
+      if (raw instanceof Set) raw = Array.from(raw)
+      if (raw instanceof Reference) {
+        par.push(raw.data
         .then((res) => { this._check[key] = res }))
-      } else if (set[key] instanceof Set) {
+      } else if (Array.isArray(raw)) {
         this._check[key] = []
-        const raw = Array.from(set[key])
         for (const i of raw.keys()) {
           const e = raw[i]
           if (e instanceof Reference) {
@@ -210,17 +211,17 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
             par.push(e.data.then((res) => { this._check[key][i] = res }))
           } else this._check[key].push(e)
         }
-      } else if (set[key] instanceof Map) {
+      } else if (raw instanceof Map) {
         this._check[key] = {}
-        for (const k of set[key].keys()) {
-          const e = set[key].get(k)
+        for (const k of raw.keys()) {
+          const e = raw.get(k)
           if (e instanceof Reference) {
             // preserve position to keep order on async results
             this._check[key][k] = null
             par.push(e.data.then((res) => { this._check[key][k] = res }))
           } else this._check[key][k] = e
         }
-      } else this._check[key] = set[key]
+      } else this._check[key] = raw
     }
     // optimize check values
     let p = Promise.all(par)

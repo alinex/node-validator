@@ -145,57 +145,73 @@ References are not possible here.
 
 ## Checks
 
-### alphanum
+### alphanum(bool)
 
 Only alphanumeric characters are allowed: a-z, A-Z, 0-9 and _
 
 ```js
-const schema = new StringSchema().alphanum
+const schema = new StringSchema().alphanum()
+schema.alphanum(false) // to remove setting
 ```
 
 In combination with `stripDisallowed` invalid characters will be removed to make
 the text passable.
 
-> With `not` the flag can be removed again.
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().alphanum(ref)
+```
 
-### hex
+### hex(bool)
 
 Only hexadecimal characters are allowed: a-f, A-F and 0-9
 
 ```js
-const schema = new StringSchema().hex
+const schema = new StringSchema().hex()
+schema.hex(false) // remove setting
 ```
 
 In combination with `stripDisallowed` invalid characters will be removed to make
 the text passable.
 
-> With `not` the flag can be removed again.
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().hex(ref)
+```
 
-### controls
+### controls(bool)
 
 Allow control characters in text.
 
 ```js
-const schema = new StringSchema().controls
+const schema = new StringSchema().controls()
+schema.controls(false) // remove setting
 ```
 
 In combination with `stripDisallowed` invalid characters will be removed to make
 the text passable.
 
-> With `not` the flag can be removed again.
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().controls(ref)
+```
 
-### noHTML
+### noHTML(bool)
 
 Disallow the use of HTML or XML tags.
 
 ```js
-const schema = new StringSchema().noHTML
+const schema = new StringSchema().noHTML()
+schema.noHTML(false) // remove setting
 ```
 
 In combination with `stripDisallowed` invalid tags will be removed to make
 the text passable.
 
-> With `not` the flag can be removed again.
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().noHTML(ref)
+```
 
 ### min(limit) / max(limit) / length(limit)
 
@@ -204,16 +220,38 @@ Specifies the number of characters the string is allowed to have.
 
 ```js
 const schema = new StringSchema().min(1).max(3)
+schema.min().max() // to remove both settings
 ```
 
-> Using `not` it will remove the specified setting.
+References are also possible:
 
-### match(re) / not.match(re) / clearMatch
+```js
+const ref = new Reference(true)
+const schema = new StringSchema().length(ref)
+```
 
-Set a regular expression which have to match or should not match:
+### match(re) / notMatch(re)
+
+Set a regular expression which have to match:
 
 ```js
 const schema = new StringSchema().match(/ab/)
+schema.match() // to remove all matches
 ```
 
-> To remove positive and negative matches use `clearMatch` instead of not.
+And for negative matches use `notMatch`:
+
+```js
+const schema = new StringSchema().notMatch(/ab/)
+schema.notMatch() // to remove all matches
+```
+
+You may also define multiple matches but an empty call will clear the complete list of positive
+or negative matches.
+
+```js
+const ref = new Reference('/ab/i')
+const schema = new StringSchema().match(ref)
+```
+
+Within the references the match can be defined as regular expression object or in string notation.
