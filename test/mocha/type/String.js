@@ -472,181 +472,270 @@ describe.only('string', () => {
 
   })
 
-//  describe('length', () => {
-//
-//    it('should check for minimal length', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(3)
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for minimal length', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(5)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should describe minimal length', () => {
-//      const schema = new MySchema().min(3)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should check for maximal length', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().max(3)
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for maximal length', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().max(2)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should describe maximal length', () => {
-//      const schema = new MySchema().max(5)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should check for exact length', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().length(3)
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for exact length', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().length(2)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should describe exact length', () => {
-//      const schema = new MySchema().length(5)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should check for range', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(2).max(5)
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail for range', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(4).max(5)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should describe range', () => {
-//      const schema = new MySchema().min(3).max(5)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//  })
-//
-//  describe('pad/truncate', () => {
-//
-//    it('should not pad', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(3).pad()
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should pad', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(5).pad()
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('abc  ')
-//      }, done)
-//    })
-//
-//    it('should pad left', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(5).pad('left')
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('  abc')
-//      }, done)
-//    })
-//
-//    it('should pad both', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(6).pad('both')
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(' abc  ')
-//      }, done)
-//    })
-//
-//    it('should pad right char', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(6).pad('right', '12345')
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('abc345')
-//      }, done)
-//    })
-//
-//    it('should pad left char', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(6).pad('left', '12345')
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('123abc')
-//      }, done)
-//    })
-//
-//    it('should pad both char', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().min(8).pad('both', '-<>-')
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('-<abc>--')
-//      }, done)
-//    })
-//
-//    it('should describe pad', () => {
-//      const schema = new MySchema().min(5).pad()
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should not truncate', (done) => {
-//      const data = 'abc'
-//      const schema = new MySchema().max(3).truncate
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should truncate', (done) => {
-//      const data = 'abcdefg'
-//      const schema = new MySchema().max(3).truncate
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal('abc')
-//      }, done)
-//    })
-//
-//    it('should describe truncate', () => {
-//      const schema = new MySchema().max(5).truncate
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//  })
+  describe('length', () => {
+
+    it('should check for minimal length', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(3)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for minimal length', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(5)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove minimal length setting', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(5).min()
+      // use schema
+      helper.validateOk(schema, data, undefined, done)
+    })
+
+    it('should allow reference for minimal length', (done) => {
+      const data = 'abc'
+      const ref = new Reference(5)
+      const schema = new MySchema().min(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe minimal length', () => {
+      const schema = new MySchema().min(3)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe minimal length with reference', () => {
+      const ref = new Reference(5)
+      const schema = new MySchema().min(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should check for maximal length', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().max(3)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for maximal length', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().max(2)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should remove maximal length setting', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().max(2).max()
+      // use schema
+      helper.validateOk(schema, data, undefined, done)
+    })
+
+    it('should allow reference for maximal length', (done) => {
+      const data = 'abc'
+      const ref = new Reference(2)
+      const schema = new MySchema().max(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe maximal length', () => {
+      const schema = new MySchema().max(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe maximal length with reference', () => {
+      const ref = new Reference(5)
+      const schema = new MySchema().max(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should check for exact length', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().length(3)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for exact length', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().length(2)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow to remove complete length setting', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(12).max(15).length()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should allow reference for exact length', (done) => {
+      const data = 'abc'
+      const ref = new Reference(5)
+      const schema = new MySchema().length(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe exact length', () => {
+      const schema = new MySchema().length(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe exact length with reference', () => {
+      const ref = new Reference(5)
+      const schema = new MySchema().length(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should check for range', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(2).max(5)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail for range', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(4).max(5)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should describe range', () => {
+      const schema = new MySchema().min(3).max(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('pad/truncate', () => {
+
+    it('should not pad', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(3).pad()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should pad', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(5).pad()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc  ')
+      }, done)
+    })
+
+    it('should pad left', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(5).pad('left')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('  abc')
+      }, done)
+    })
+
+    it('should pad both', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(6).pad('both')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(' abc  ')
+      }, done)
+    })
+
+    it('should pad right char', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(6).pad('right', '12345')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc345')
+      }, done)
+    })
+
+    it('should pad left char', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(6).pad('left', '12345')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('123abc')
+      }, done)
+    })
+
+    it('should pad both char', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().min(8).pad('both', '-<>-')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('-<abc>--')
+      }, done)
+    })
+
+    it('should describe pad', () => {
+      const schema = new MySchema().min(5).pad()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should not truncate', (done) => {
+      const data = 'abc'
+      const schema = new MySchema().max(3).truncate()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should truncate', (done) => {
+      const data = 'abcdefg'
+      const schema = new MySchema().max(3).truncate()
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc')
+      }, done)
+    })
+
+    it('should remove truncate setting', (done) => {
+      const data = 'abcdefg'
+      const schema = new MySchema().max(3).truncate().truncate(false)
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow reference for truncate', (done) => {
+      const data = 'abcdefg'
+      const ref = new Reference(true)
+      const schema = new MySchema().max(3).truncate(ref)
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('abc')
+      }, done)
+    })
+
+    it('should describe truncate', () => {
+      const schema = new MySchema().max(5).truncate()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe truncate with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().max(5).truncate(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
 //
 //  describe('match', () => {
 //

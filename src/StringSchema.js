@@ -43,7 +43,7 @@ class StringSchema extends AnySchema {
       this._replaceDescriptor,
       this._caseDescriptor,
       this._checkDescriptor,
-//      this._lengthDescriptor,
+      this._lengthDescriptor,
 //      this._matchDescriptor,
     )
     this._rules.validator.push(
@@ -51,7 +51,7 @@ class StringSchema extends AnySchema {
       this._replaceValidator,
       this._caseValidator,
       this._checkValidator,
-//      this._lengthValidator,
+      this._lengthValidator,
 //      this._matchValidator,
     )
   }
@@ -295,12 +295,12 @@ ${set.stripDisallowed.description}. `
     return this
   }
 
-  max(limit?: number): this {
+  max(limit?: number | Reference): this {
     const set = this._setting
     if (limit) {
       if (!(limit instanceof Reference)) {
-        if (set.min && !this._isReference('min') && limit > set.min) {
-          throw new Error('Max length can´t be greater than min length')
+        if (set.min && !this._isReference('min') && limit < set.min) {
+          throw new Error('Max length can´t be less than min length')
         }
         if (limit < 0) throw new Error('Length for max() has to be positive')
       }
@@ -309,7 +309,7 @@ ${set.stripDisallowed.description}. `
     return this
   }
 
-  length(limit?: number): this {
+  length(limit?: number | Reference): this {
     const set = this._setting
     if (limit) {
       if (!(limit instanceof Reference)) {
@@ -363,54 +363,66 @@ ${set.stripDisallowed.description}. `
     return msg.length ? `${msg.trim()}\n` : msg
   }
 
-  //  _lengthValidator(data: SchemaData): Promise<void> {
-  //    let num = data.value.length
-  //    // pad
-  //    if (this._pad && num < this._min) {
-  //      const add = this._min - num
-  //      let pad = this._pad.char
-  //      let a
-  //      switch (this._pad.type) {
-  //      case 'right':
-  //        if (pad.length < add) pad += pad.slice(-1).repeat(add - pad.length)
-  //        data.value += pad.slice(-add)
-  //        break
-  //      case 'left':
-  //        if (pad.length < add) pad = `${pad.slice(0, 1).repeat(add - pad.length)}${pad}`
-  //        data.value = `${pad.slice(0, add)}${data.value}`
-  //        break
-  //      default:
-  //        a = Math.ceil(add / 2)
-  //        pad = this._pad.char.length > 1
-  //        ? this._pad.char.slice(-Math.ceil(this._pad.char.length / 2)) : this._pad.char
-  //        if (pad.length < a) pad += pad.slice(-1).repeat(a - pad.length)
-  //        data.value += pad.slice(-a)
-  //        pad = this._pad.char.length > 1
-  //        ? this._pad.char.slice(0, Math.ceil(this._pad.char.length / 2)) : this._pad.char
-  //        a = Math.floor(add / 2)
-  //        if (pad.length < a) pad = `${pad.slice(0, 1).repeat(a - pad.length)}${pad}`
-  //        data.value = `${pad.slice(0, a)}${data.value}`
-  //      }
-  //      num = data.value.length
-  //    }
-  //    // truncate
-  //    if (this._truncate && num > this._max) {
-  //      data.value = data.value.substr(0, this._max)
-  //      num = data.value.length
-  //    }
-  //    // check length
-  //    if (this._min && num < this._min) {
-  //      return Promise.reject(new SchemaError(this, data,
-  //      `The string has a length of ${num} characters. \
-  // This is too less, at least ${this._min} are needed.`))
-  //    }
-  //    if (this._max && num > this._max) {
-  //      return Promise.reject(new SchemaError(this, data,
-  //      `The string has a length of ${num} characters. \
-  // This is too much, not more than ${this._max} are allowed.`))
-  //    }
-  //    return Promise.resolve()
-  //  }
+  _lengthValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkNumber('min')
+      this._checkNumber('Max')
+      this._checkBoolean('truncate')
+      if (check.max && check.min && check.min > check.max) {
+        throw new Error('Min length can´t be greater than max length')
+      }
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    let num = data.value.length
+    // pad
+    if (check.pad && num < check.min) {
+      const add = check.min - num
+      let pad = check.pad.char
+      let a
+      switch (check.pad.type) {
+      case 'right':
+        if (pad.length < add) pad += pad.slice(-1).repeat(add - pad.length)
+        data.value += pad.slice(-add)
+        break
+      case 'left':
+        if (pad.length < add) pad = `${pad.slice(0, 1).repeat(add - pad.length)}${pad}`
+        data.value = `${pad.slice(0, add)}${data.value}`
+        break
+      default:
+        a = Math.ceil(add / 2)
+        pad = check.pad.char.length > 1
+        ? check.pad.char.slice(-Math.ceil(check.pad.char.length / 2)) : check.pad.char
+        if (pad.length < a) pad += pad.slice(-1).repeat(a - pad.length)
+        data.value += pad.slice(-a)
+        pad = check.pad.char.length > 1
+        ? check.pad.char.slice(0, Math.ceil(check.pad.char.length / 2)) : check.pad.char
+        a = Math.floor(add / 2)
+        if (pad.length < a) pad = `${pad.slice(0, 1).repeat(a - pad.length)}${pad}`
+        data.value = `${pad.slice(0, a)}${data.value}`
+      }
+      num = data.value.length
+    }
+    // truncate
+    if (check.truncate && num > check.max) {
+      data.value = data.value.substr(0, check.max)
+      num = data.value.length
+    }
+    // check length
+    if (check.min && num < check.min) {
+      return Promise.reject(new SchemaError(this, data,
+      `The string has a length of ${num} characters. \
+ This is too less, at least ${check.min} are needed.`))
+    }
+    if (check.max && num > check.max) {
+      return Promise.reject(new SchemaError(this, data,
+      `The string has a length of ${num} characters. \
+ This is too much, not more than ${check.max} are allowed.`))
+    }
+    return Promise.resolve()
+  }
 
 
 //  match(re: RegExp): this {
