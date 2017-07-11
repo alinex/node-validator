@@ -424,66 +424,95 @@ ${set.stripDisallowed.description}. `
     return Promise.resolve()
   }
 
+  match(re?: RegExp | Reference): this {
+    const set = this._setting
+    if (re === undefined) delete set.match
+    else {
+      if (!set.match) set.match = []
+      set.match.push(re)
+    }
+    return this
+  }
 
-//  match(re: RegExp): this {
-//    if (this._negate) {
-//      this._negate = false
-//      this._notMatch.push(re)
-//    } else this._match.push(re)
-//    return this
-//  }
-//
-//  get clearMatch(): this {
-//    if (this._negate) throw new Error('Negation of clearMatch is not possible')
-//    this._match = []
-//    this._notMatch = []
-//    return this
-//  }
-//
-//  // using schema
-//
-//
-//
-//
-//
-//
-//  _matchDescriptor() {
-//    let msg = ''
-//    if (this._match.length || this._notMatch.length) {
-//      msg += 'The text should:'
-//      if (this._match.length) {
-//        msg += this._match.map(e => `\n- match \`${util.inspect(e)}\``).join('')
-//      }
-//      if (this._notMatch.length) {
-//        msg += this._notMatch.map(e => `\n- match \`${util.inspect(e)}\``).join('')
-//      }
-//      msg += '\n\n'
-//    }
-//    return msg
-//  }
-//
-//  _matchValidator(data: SchemaData): Promise<void> {
-//    if (this._match.length) {
-//      const fail = this._match.filter(e => !data.value.match(e))
-//      .map(e => `\`${util.inspect(e)}\``)
-//      .join(', ').replace(/(.*), /, '$1 and ')
-//      if (fail) {
-//        return Promise.reject(new SchemaError(this, data,
-//          `The text should match: ${fail}`))
-//      }
-//    }
-//    if (this._notMatch.length) {
-//      const fail = this._notMatch.filter(e => data.value.match(e))
-//      .map(e => `\`${util.inspect(e)}\``)
-//      .join(', ').replace(/(.*), /, '$1 and ')
-//      if (fail) {
-//        return Promise.reject(new SchemaError(this, data,
-//          `The text should not match: ${fail}`))
-//      }
-//    }
-//    return Promise.resolve()
-//  }
-//
+  notMatch(re?: RegExp | Reference): this {
+    const set = this._setting
+    if (re === undefined) delete set.notMatch
+    else {
+      if (!set.notMatch) set.notMatch = []
+      set.notMatch.push(re)
+    }
+    return this
+  }
+
+  _matchDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.match.length || set.notMatch.length) {
+      msg += 'The text should:'
+      if (set.match.length) {
+        msg += set.match.map((e) => {
+          if (e instanceof Reference) return `\n- match ${e.description}`
+          return `\n- match \`${util.inspect(e)}\``
+        }).join('')
+      }
+      if (set.notMatch.length) {
+        msg += set.notMatch.map((e) => {
+          if (e instanceof Reference) return `\n- not match ${e.description}`
+          return `\n- not match \`${util.inspect(e)}\``
+        }).join('')
+      }
+      msg += '\n\n'
+    }
+    return msg
+  }
+
+  _matchValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkArray('match')
+      this._checkArray('notMatch')
+      // convert string to regexp
+      check.match = check.match.map((e) => {
+        if (e instanceof RegExp) return e
+        const parts : Array<string> = e.toString().match(/([^\\/]|\\.)+/g)
+        if (parts.length < 1 || parts.length > 2) {
+          throw new Error(`Could not convert ${util.inspect(e)} to regular expression`)
+        }
+        return new RegExp(parts[0], (parts[1]: any))
+      })
+      check.notMatch = check.notMatch.map((e) => {
+        if (e instanceof RegExp) return e
+        const parts : Array<string> = e.toString().match(/([^\\/]|\\.)+/g)
+        if (parts.length < 1 || parts.length > 2) {
+          throw new Error(`Could not convert ${util.inspect(e)} to regular expression`)
+        }
+        return new RegExp(parts[0], (parts[1]: any))
+      })
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.match.length) {
+      const fail = check.match.filter(e => !data.value.match(e))
+      .map(e => `\`${util.inspect(e)}\``)
+      .join(', ').replace(/(.*), /, '$1 and ')
+      if (fail) {
+        return Promise.reject(new SchemaError(this, data,
+          `The text should match: ${fail}`))
+      }
+    }
+    if (check.notMatch.length) {
+      const fail = check.notMatch.filter(e => data.value.match(e))
+      .map(e => `\`${util.inspect(e)}\``)
+      .join(', ').replace(/(.*), /, '$1 and ')
+      if (fail) {
+        return Promise.reject(new SchemaError(this, data,
+          `The text should not match: ${fail}`))
+      }
+    }
+    return Promise.resolve()
+  }
+
 }
 
 export default StringSchema
