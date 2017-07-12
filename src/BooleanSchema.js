@@ -142,6 +142,9 @@ class BooleanSchema extends Schema {
     const check = this._check
     try {
       this._checkObject('format')
+      if (Object.keys(check.format).filter(e => e !== 'true' && e !== 'false').length) {
+        throw new Error('Only `true` and `false` settings are allowed in format()`')
+      }
     } catch (err) {
       return Promise.reject(new SchemaError(this, data, err.message))
     }

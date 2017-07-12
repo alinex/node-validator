@@ -9,7 +9,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = ObjectSchema
 
-describe.only('object', () => {
+describe('object', () => {
 
   it('should work without specification', (done) => {
     const data = { a: 1 }

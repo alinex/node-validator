@@ -469,31 +469,17 @@ ${set.stripDisallowed.description}. `
   _matchValidator(data: SchemaData): Promise<void> {
     const check = this._check
     try {
-      this._checkArray('match')
-      this._checkArray('notMatch')
-      // convert string to regexp
-      check.match = check.match.map((e) => {
-        if (e instanceof RegExp) return e
-        const parts : Array<string> = e.toString().match(/([^\\/]|\\.)+/g)
-        if (parts.length < 1 || parts.length > 2) {
-          throw new Error(`Could not convert ${util.inspect(e)} to regular expression`)
-        }
-        return new RegExp(parts[0], (parts[1]: any))
-      })
-      check.notMatch = check.notMatch.map((e) => {
-        if (e instanceof RegExp) return e
-        const parts : Array<string> = e.toString().match(/([^\\/]|\\.)+/g)
-        if (parts.length < 1 || parts.length > 2) {
-          throw new Error(`Could not convert ${util.inspect(e)} to regular expression`)
-        }
-        return new RegExp(parts[0], (parts[1]: any))
-      })
+      this._checkArrayMatch('match')
+      this._checkArrayMatch('notMatch')
     } catch (err) {
       return Promise.reject(new SchemaError(this, data, err.message))
     }
     // check value
     if (check.match.length) {
-      const fail = check.match.filter(e => !data.value.match(e))
+      const fail = check.match.filter((e) => {
+        if (typeof e === 'string') return !data.value.includes(e)
+        return !data.value.match(e)
+      })
       .map(e => `\`${util.inspect(e)}\``)
       .join(', ').replace(/(.*), /, '$1 and ')
       if (fail) {
@@ -502,7 +488,10 @@ ${set.stripDisallowed.description}. `
       }
     }
     if (check.notMatch.length) {
-      const fail = check.notMatch.filter(e => data.value.match(e))
+      const fail = check.notMatch.filter((e) => {
+        if (typeof e === 'string') return data.value.includes(e)
+        return data.value.match(e)
+      })
       .map(e => `\`${util.inspect(e)}\``)
       .join(', ').replace(/(.*), /, '$1 and ')
       if (fail) {

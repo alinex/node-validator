@@ -31,7 +31,7 @@ class ObjectSchema extends Schema {
     // add check rules
     this._rules.descriptor.push(
       this._typeDescriptor,
-//      this._structureDescriptor,
+      this._structureDescriptor,
 //      this._keysDescriptor,
 //      this._removeDescriptor,
 //      this._keysRequireDescriptor,
@@ -40,7 +40,7 @@ class ObjectSchema extends Schema {
     )
     this._rules.validator.push(
       this._typeValidator,
-//      this._structureValidator,
+      this._structureValidator,
 //      this._keysValidator,
 //      this._removeValidator,
 //      this._keysRequireValidator,
@@ -63,22 +63,19 @@ class ObjectSchema extends Schema {
   }
 
   deepen(value?: string | RegExp | Reference): this { return this._setAny('deepen', value) }
-  flatten(value?: string | RegExp | Reference): this { return this._setAny('flatten', value) }
+  flatten(value?: string | Reference): this { return this._setAny('flatten', value) }
 
   _structureDescriptor() {
     const set = this._setting
     let msg = ''
-    if (set.deeper instanceof Reference) {
-      msg += `Key names will be split on ${set.deeper.description}. `
+    if (set.deepen instanceof Reference) {
+      msg += `Key names will be split on ${set.deepen.description}. `
     } else if (set.deepen) {
       msg += `Key names will be split on \
  \`${typeof set.deepen === 'string' ? set.deepen : util.inspect(set.deepen)}\` \
  into deeper structures. `
     }
-    if (set.flatten instanceof Reference) {
-      msg += `Deep structures will be flattened by combining key names using \
-${set.flatten.description}. `
-    } else if (set.flatten) {
+    if (set.flatten) {
       msg += `Deep structures will be flattened by combining key names using \
  \`${set.flatten}\` as separator. `
     }
@@ -88,8 +85,8 @@ ${set.flatten.description}. `
   _structureValidator(data: SchemaData): Promise<void> {
     const check = this._check
     try {
-      this._checkBoolean('deepen')
-      this._checkBoolean('flatten')
+      this._checkMatch('deepen')
+      this._checkString('flatten')
     } catch (err) {
       return Promise.reject(new SchemaError(this, data, err.message))
     }

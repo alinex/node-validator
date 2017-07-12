@@ -103,6 +103,36 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
 ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
     }
   }
+  _checkMatch(name: string) {
+    const check = this._check
+    if (check[name] === undefined) return
+    if (check[name] instanceof RegExp) return
+    const e = check[name].toString()
+    if (e.match(/^\/([^\\/]|\\.)+\/[gi]*$/)) {
+      const parts : Array<string> = e.match(/([^\\/]|\\.)+/g)
+      if (parts.length < 1 || parts.length > 2) {
+        throw new Error(`Could not convert ${util.inspect(check[name])} to regular expression`)
+      }
+      check[name] = new RegExp(parts[0], (parts[1]: any))
+    }
+    check[name] = check[name].toString()
+  }
+  _checkArrayMatch(name: string) {
+    this._checkArray(name)
+    const check = this._check
+    check[name] = check[name].map((e) => {
+      if (e instanceof RegExp) return e
+      const el = e.toString()
+      if (el.match(/^\/([^\\/]|\\.)+\/[gi]*$/)) {
+        const parts : Array<string> = el.match(/([^\\/]|\\.)+/g)
+        if (parts.length < 1 || parts.length > 2) {
+          throw new Error(`Could not convert ${util.inspect(e)} to regular expression`)
+        }
+        return new RegExp(parts[0], (parts[1]: any))
+      }
+      return el
+    })
+  }
 
   // strip empty values
 
