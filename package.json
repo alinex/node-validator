@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "alinex-util": "^2.5.1",
-    "chalk": "1.x",
+    "chalk": "^2.0.1",
     "convert-units": "^2.3.1",
     "debug": "^2.6.3",
     "numeral": "^2.0.6",
