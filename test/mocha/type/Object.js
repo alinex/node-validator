@@ -1,6 +1,6 @@
 import chai from 'chai'
 
-import { AnySchema, ObjectSchema } from '../../../src/index'
+import { AnySchema, ObjectSchema, Reference } from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -56,45 +56,79 @@ describe('object', () => {
       }, done)
     })
 
-  //    it('should work with flatten as string', (done) => {
-  //      const data = { a: { a: 1, b: 2 }, c: 3 }
-  //      const schema = new MySchema().flatten('.')
-  //      // use schema
-  //      helper.validateOk(schema, data, (res) => {
-  //        expect(res).deep.equal({ 'a.a': 1, 'a.b': 2, c: 3 })
-  //      }, done)
-  //    })
-  //
-  //    it('should remove deepen', (done) => {
-  //      const data = { 'a.a': 1, 'a.b': 2, c: 3 }
-  //      const schema = new MySchema().deepen('.').not.deepen()
-  //      // use schema
-  //      helper.validateOk(schema, data, (res) => {
-  //        expect(res).deep.equal(data)
-  //      }, done)
-  //    })
-  //
-  //    it('should remove flatten', (done) => {
-  //      const data = { a: { a: 1, b: 2 }, c: 3 }
-  //      const schema = new MySchema().flatten('.').not.flatten()
-  //      // use schema
-  //      helper.validateOk(schema, data, (res) => {
-  //        expect(res).deep.equal(data)
-  //      }, done)
-  //    })
-  //
-  //    it('should describe deepen', () => {
-  //      const schema = new MySchema().deepen('.')
-  //      // use schema
-  //      expect(helper.description(schema)).to.be.a('string')
-  //    })
-  //
-  //    it('should describe flatten', () => {
-  //      const schema = new MySchema().flatten('.')
-  //      // use schema
-  //      expect(helper.description(schema)).to.be.a('string')
-  //    })
-  //
+    it('should work with flatten as string', (done) => {
+      const data = { a: { a: 1, b: 2 }, c: 3 }
+      const schema = new MySchema().flatten('.')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ 'a.a': 1, 'a.b': 2, c: 3 })
+      }, done)
+    })
+
+    it('should remove deepen', (done) => {
+      const data = { 'a.a': 1, 'a.b': 2, c: 3 }
+      const schema = new MySchema().deepen('.').deepen()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove flatten', (done) => {
+      const data = { a: { a: 1, b: 2 }, c: 3 }
+      const schema = new MySchema().flatten('.').flatten()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should work with deepen as reference', (done) => {
+      const data = { 'a.a': 1, 'a.b': 2, c: 3 }
+      const ref = new Reference('.')
+      const schema = new MySchema().deepen(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: { a: 1, b: 2 }, c: 3 })
+      }, done)
+    })
+
+    it('should work with flatten as reference', (done) => {
+      const data = { a: { a: 1, b: 2 }, c: 3 }
+      const ref = new Reference('.')
+      const schema = new MySchema().flatten(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ 'a.a': 1, 'a.b': 2, c: 3 })
+      }, done)
+    })
+
+    it('should describe deepen', () => {
+      const schema = new MySchema().deepen('.')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe deepen with reference', () => {
+      const ref = new Reference('.')
+      const schema = new MySchema().deepen(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe flatten', () => {
+      const schema = new MySchema().flatten('.')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe flatten with reference', () => {
+      const ref = new Reference('.')
+      const schema = new MySchema().flatten(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
   })
 
   describe('key', () => {

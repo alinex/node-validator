@@ -131,21 +131,63 @@ class ObjectSchema extends Schema {
     return Promise.resolve()
   }
 
+  key(name?: string | RegExp, check?: Schema): this {
+    const set = this._setting
+    if (name === undefined) delete set.keys
+    else if (check === undefined) set.keys.delete(name)
+    else set.keys.set(name, check)
+    return this
+  }
 
-//  key(name: string|RegExp, check?: Schema): this {
-//    if (this.negate) {
-//      // remove
-//      this._keys.delete(name)
-//    } else if (check) {
-//      this._keys.set(name, check)
-//    } else {
-//      throw new Error(`${typeof name === 'string' ? 'Key' : 'Pattern'} \
-// without schema can´t be defined.`)
-//    }
-//    this._negate = false
-//    return this
-//  }
-//
+  //  _keysDescriptor() {
+  //    let msg = ''
+  //    for (const [key, schema] of this._keys) {
+  //      msg += `- \`${typeof key === 'string' ? key : util.inspect(key)}\`: ${schema.description}\n`
+  //    }
+  //    if (msg.length) msg = `The following keys have a special format:\n${msg}\n`
+  //    return msg
+  //  }
+  //
+  //  _keysValidator(data: SchemaData): Promise<void> {
+  //    // check keys
+  //    const checks = []
+  //    const keys = []
+  //    const sum = {}
+  //    Object.keys(data.value).forEach((key) => {
+  //      const schema = this._keys.get(key)
+  //      if (schema) {
+  //        // against defined keys
+  //        checks.push(schema.validate(data.value[key]))
+  //        keys.push(key)
+  //      } else {
+  //        let found = false
+  //        for (const p of this._keys.entries()) {
+  //          if (typeof p !== 'string' && key.match(p[0])) {
+  //            checks.push(p[1].validate(data.sub(key)))
+  //            keys.push(key)
+  //            found = true
+  //            break
+  //          }
+  //        }
+  //        // not specified keep it without check
+  //        if (!found) {
+  //          if (!data.temp.unchecked) data.temp.unchecked = []
+  //          data.temp.unchecked[key] = true
+  //          sum[key] = data.value[key]
+  //        }
+  //      }
+  //    })
+  //    return Promise.all(checks)
+  //    .catch(err => Promise.reject(err))
+  //    .then((result) => {
+  //      if (result) {
+  //        result.forEach((e: any, i: number) => { sum[keys[i]] = e })
+  //      }
+  //      data.value = sum
+  //      return Promise.resolve()
+  //    })
+  //  }
+
 //  get removeUnknown(): this {
 //    this._removeUnknown = !this._negate
 //    this._negate = false
@@ -261,54 +303,6 @@ class ObjectSchema extends Schema {
 //  // using schema
 //
 //
-//  _keysDescriptor() {
-//    let msg = ''
-//    for (const [key, schema] of this._keys) {
-//      msg += `- \`${typeof key === 'string' ? key : util.inspect(key)}\`: ${schema.description}\n`
-//    }
-//    if (msg.length) msg = `The following keys have a special format:\n${msg}\n`
-//    return msg
-//  }
-//
-//  _keysValidator(data: SchemaData): Promise<void> {
-//    // check keys
-//    const checks = []
-//    const keys = []
-//    const sum = {}
-//    Object.keys(data.value).forEach((key) => {
-//      const schema = this._keys.get(key)
-//      if (schema) {
-//        // against defined keys
-//        checks.push(schema.validate(data.value[key]))
-//        keys.push(key)
-//      } else {
-//        let found = false
-//        for (const p of this._keys.entries()) {
-//          if (typeof p !== 'string' && key.match(p[0])) {
-//            checks.push(p[1].validate(data.sub(key)))
-//            keys.push(key)
-//            found = true
-//            break
-//          }
-//        }
-//        // not specified keep it without check
-//        if (!found) {
-//          if (!data.temp.unchecked) data.temp.unchecked = []
-//          data.temp.unchecked[key] = true
-//          sum[key] = data.value[key]
-//        }
-//      }
-//    })
-//    return Promise.all(checks)
-//    .catch(err => Promise.reject(err))
-//    .then((result) => {
-//      if (result) {
-//        result.forEach((e: any, i: number) => { sum[keys[i]] = e })
-//      }
-//      data.value = sum
-//      return Promise.resolve()
-//    })
-//  }
 //
 //  _removeUnknownDescriptor() {
 //    return this._removeUnknown ? 'Keys not defined with the rules before will be removed. ' : ''
