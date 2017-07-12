@@ -5,9 +5,9 @@ Create a schema that matches any data object which contains key/value pairs.
 The values may be of any other type.
 
 See at [Base Schema](base.md) for the inherited methods you may call like:
-- `required`
+- `required()`
 - `default()`
-- `stripEmpty`
+- `stripEmpty()`
 
 
 ## Sanitize

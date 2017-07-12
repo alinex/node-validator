@@ -65,9 +65,78 @@ class ObjectSchema extends Schema {
   deepen(value?: string | RegExp | Reference): this { return this._setAny('deepen', value) }
   flatten(value?: string | RegExp | Reference): this { return this._setAny('flatten', value) }
 
+  _structureDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.deeper instanceof Reference) {
+      msg += `Key names will be split on ${set.deeper.description}. `
+    } else if (set.deepen) {
+      msg += `Key names will be split on \
+ \`${typeof set.deepen === 'string' ? set.deepen : util.inspect(set.deepen)}\` \
+ into deeper structures. `
+    }
+    if (set.flatten instanceof Reference) {
+      msg += `Deep structures will be flattened by combining key names using \
+${set.flatten.description}. `
+    } else if (set.flatten) {
+      msg += `Deep structures will be flattened by combining key names using \
+ \`${set.flatten}\` as separator. `
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _structureValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('deepen')
+      this._checkBoolean('flatten')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.deepen) {
+      Object.keys(data.value).forEach((key) => {
+        const value = data.value[key]
+        const parts = key.split(check.deepen)
+        if (parts.length > 1) {
+          let obj = data.value
+          const last = parts.pop()
+          parts.forEach((e) => {
+            if (!obj[e]) obj[e] = {}
+            obj = obj[e]
+          })
+          obj[last] = value
+          delete data.value[key]
+        }
+      })
+    }
+    if (check.flatten) {
+      const result = {}
+      const separator = check.flatten
+      function recurse(cur, prop) { // eslint-disable-line no-inner-declarations
+        if (Object(cur) !== cur) {
+          result[prop] = cur
+        } else if (Array.isArray(cur) && cur.length) {
+          for (let i = 0, l = cur.length; i < l; i += 1) recurse(cur[i], `${prop}${separator}${i}`)
+        } else if (Object.keys(cur).length) {
+          for (const p in cur) {
+            if (Object.prototype.hasOwnProperty.call(cur, p)) {
+              recurse(cur[p], prop ? `${prop}${separator}${p}` : p)
+            }
+          }
+        } else { // empty
+          result[prop] = cur
+        }
+      }
+      recurse(data.value, '')
+      data.value = result
+    }
+    return Promise.resolve()
+  }
+
 
 //  key(name: string|RegExp, check?: Schema): this {
-//    if (this._negate) {
+//    if (this.negate) {
 //      // remove
 //      this._keys.delete(name)
 //    } else if (check) {
@@ -194,61 +263,6 @@ class ObjectSchema extends Schema {
 //
 //  // using schema
 //
-//
-//  _structureDescriptor() {
-//    let msg = ''
-//    if (this._deepen) {
-//      msg += `Key names will be split on \
-// \`${typeof this._deepen === 'string' ? this._deepen : util.inspect(this.deepen)}\` \
-// into deeper structures. `
-//    }
-//    if (this._flatten) {
-//      msg += `Deep structures will be flattened by combining key names using \
-// \`${this._flatten}\` as separator. `
-//    }
-//    return msg.length ? `${msg.trim()}\n` : msg
-//  }
-//
-//  _structureValidator(data: SchemaData): Promise<void> {
-//    if (this._deepen) {
-//      Object.keys(data.value).forEach((key) => {
-//        const value = data.value[key]
-//        const parts = key.split(this._deepen)
-//        if (parts.length > 1) {
-//          let obj = data.value
-//          const last = parts.pop()
-//          parts.forEach((e) => {
-//            if (!obj[e]) obj[e] = {}
-//            obj = obj[e]
-//          })
-//          obj[last] = value
-//          delete data.value[key]
-//        }
-//      })
-//    }
-//    if (this._flatten) {
-//      const result = {}
-//      const separator = this._flatten
-//      function recurse(cur, prop) { // eslint-disable-line no-inner-declarations
-//        if (Object(cur) !== cur) {
-//          result[prop] = cur
-//        } else if (Array.isArray(cur) && cur.length) {
-//          for (let i = 0, l = cur.length; i < l; i += 1) recurse(cur[i], `${prop}${separator}${i}`)
-//        } else if (Object.keys(cur).length) {
-//          for (const p in cur) {
-//            if (Object.prototype.hasOwnProperty.call(cur, p)) {
-//              recurse(cur[p], prop ? `${prop}${separator}${p}` : p)
-//            }
-//          }
-//        } else { // empty
-//          result[prop] = cur
-//        }
-//      }
-//      recurse(data.value, '')
-//      data.value = result
-//    }
-//    return Promise.resolve()
-//  }
 //
 //  _keysDescriptor() {
 //    let msg = ''
