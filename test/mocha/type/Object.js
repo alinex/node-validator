@@ -9,7 +9,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = ObjectSchema
 
-describe('object', () => {
+describe.only('object', () => {
 
   it('should work without specification', (done) => {
     const data = { a: 1 }
@@ -133,59 +133,53 @@ describe('object', () => {
 
   describe('key', () => {
 
-//    it('should work with defined keys', (done) => {
-//      const data = { a: 1 }
-//      const schema = new MySchema()
-//      expect(schema).to.be.an('object')
-//      schema.key('a', new AnySchema())
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should describe with defined keys', () => {
-//      const schema = new MySchema()
-//      schema.key('a', new AnySchema())
-//      // use schema
-//      expect(helper.description(schema)).to.equal('It is optional and must not be set.\n\
-// A data object is needed.\n\
-// The following keys have a special format:\n\
-// - `a`: It is optional and must not be set.')
-//    })
-//
-//    it('should work with defined pattern', (done) => {
-//      const data = { name1: 1 }
-//      const schema = new MySchema()
-//      expect(schema).to.be.an('object')
-//      schema.key(/name\d/, new AnySchema())
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should describe with defined pattern', () => {
-//      const schema = new MySchema()
-//      schema.key(/name\d/, new AnySchema())
-//      // use schema
-//      expect(helper.description(schema)).to.equal('It is optional and must not be set.\n\
-// A data object is needed.\n\
-// The following keys have a special format:\n\
-// - `/name\\d/`: It is optional and must not be set.')
-//    })
-//
-//    it('should remove defined keys', (done) => {
-//      const data = { a: 1 }
-//      const schema = new MySchema()
-//      expect(schema).to.be.an('object')
-//      schema.key('a', new AnySchema()).not.key('a')
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//        expect(schema._keys.size).to.equal(0)
-//      }, done)
-//    })
+    it('should work with defined keys', (done) => {
+      const data = { a: 1 }
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      schema.key('a', new AnySchema())
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe with defined keys', () => {
+      const schema = new MySchema()
+      schema.key('a', new AnySchema())
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should work with defined pattern', (done) => {
+      const data = { name1: 1 }
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      schema.key(/name\d/, new AnySchema())
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe with defined pattern', () => {
+      const schema = new MySchema()
+      schema.key(/name\d/, new AnySchema())
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should remove defined keys', (done) => {
+      const data = { a: 1 }
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      schema.key('a', new AnySchema()).key('a')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+        expect(schema._setting.keys.size).to.equal(0)
+      }, done)
+    })
 
   })
 //

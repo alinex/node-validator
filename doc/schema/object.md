@@ -21,6 +21,14 @@ converted into a deep structure. The separator may be given as `string` or `RegE
 // data = {'a.a': 1, 'a.b': 2, c: 3}
 const schema = new ObjectSchema().deepen('.')
 // result = {a: {a: 1, b: 2}, c: 3}
+schema.deepen() // to remove setting
+```
+
+References to regular expression or string:
+
+```js
+const ref = new Reference('.')
+const schema = new ObjectSchema().deepen(ref)
 ```
 
 ### flatten(separator)
@@ -32,6 +40,14 @@ separator which has to be a `string`.
 // data = {a: {a: 1, b: 2}, c: 3}
 const schema = new ObjectSchema().flatten('.')
 // result = {'a.a': 1, 'a.b': 2, c: 3}
+schema.flatten() // to remove setting
+```
+
+References to regular expression or string:
+
+```js
+const ref = new Reference('.')
+const schema = new ObjectSchema().flatten(ref)
 ```
 
 ### removeUnknown
@@ -40,11 +56,20 @@ This will remove all unchecked keys from the object. So only the specified are r
 All elements which has specific checks set via `key` are checked.
 
 ```js
-const schema = new ObjectSchema().removeUnknown
+const schema = new ObjectSchema().removeUnknown()
+.key('one', new AnySchema())
+schema.removeUnknown(false) // to remove setting
+```
+
+This can also be used with nreference:
+
+```js
+const ref = new Reference(true)
+const schema = new ObjectSchema().removeUnknown(ref)
 .key('one', new AnySchema())
 ```
 
-> It may be inverted using `not.required`.
+
 
 
 ## Checking Keys
@@ -176,6 +201,8 @@ __Example__
 const schema = new ObjectSchema()
 .key('one', new AnySchema())
 .key(/number\d/, new AnySchema())
+schema.key() // to remove all keys
+schema.key('one') // to only remove this key
 ```
 
-> It may be removed using `not.key`.
+> References are not possible here.
