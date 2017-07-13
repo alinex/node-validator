@@ -32,8 +32,8 @@ class ObjectSchema extends Schema {
     this._rules.descriptor.push(
       this._typeDescriptor,
       this._structureDescriptor,
-//      this._keysDescriptor,
-//      this._removeDescriptor,
+      this._keysDescriptor,
+      this._removeDescriptor,
 //      this._keysRequireDescriptor,
 //      this._logicDescriptor,
 //      this._lengthDescriptor,
@@ -41,8 +41,8 @@ class ObjectSchema extends Schema {
     this._rules.validator.push(
       this._typeValidator,
       this._structureValidator,
-//      this._keysValidator,
-//      this._removeValidator,
+      this._keysValidator,
+      this._removeValidator,
 //      this._keysRequireValidator,
 //      this._logicValidator,
 //      this._lengthValidator,
@@ -145,18 +145,19 @@ class ObjectSchema extends Schema {
   _keysDescriptor() {
     const set = this._setting
     let msg = ''
-    for (const [key, schema] of set.keys) {
-      msg += `- \`${typeof key === 'string' ? key : util.inspect(key)}\`: ${schema.description}\n`
+    if (set.keys) {
+      for (const [key, schema] of set.keys) {
+        msg += `- \`${typeof key === 'string' ? key : util.inspect(key)}\`: ${schema.description}\n`
+      }
+      if (msg.length) msg = `The following keys have a special format:\n${msg}\n`
     }
-    if (msg.length) msg = `The following keys have a special format:\n${msg}\n`
     return msg
   }
 
   _keysValidator(data: SchemaData): Promise<void> {
     const check = this._check
     try {
-      this._checkMatch('deepen')
-      this._checkString('flatten')
+      this._checkObject('keys')
     } catch (err) {
       return Promise.reject(new SchemaError(this, data, err.message))
     }
@@ -165,19 +166,22 @@ class ObjectSchema extends Schema {
     const keys = []
     const sum = {}
     Object.keys(data.value).forEach((key) => {
-      const schema = check.keys.get(key)
+      const schema = check.keys[key]
       if (schema) {
         // against defined keys
         checks.push(schema.validate(data.value[key]))
         keys.push(key)
       } else {
         let found = false
-        for (const p of check.keys.entries()) {
-          if (typeof p !== 'string' && key.match(p[0])) {
-            checks.push(p[1].validate(data.sub(key)))
-            keys.push(key)
-            found = true
-            break
+        if (Object.keys(check.keys).length > 0) {
+          for (const k of Object.keys(check.keys)) {
+            const p = check.keys[k]
+            if (typeof p !== 'string' && key.match(k)) {
+              checks.push(p.validate(data.sub(key)))
+              keys.push(key)
+              found = true
+              break
+            }
           }
         }
         // not specified keep it without check
@@ -199,12 +203,33 @@ class ObjectSchema extends Schema {
     })
   }
 
-//  get removeUnknown(): this {
-//    this._removeUnknown = !this._negate
-//    this._negate = false
-//    return this
-//  }
-//
+  removeUnknown(flag?: bool | Reference): this { return this._setFlag('removeUnknown', flag) }
+
+  _removeDescriptor() {
+    const set = this._setting
+    if (set.removeUnknown instanceof Reference) {
+      return `Keys not defined with the rules before will be removed depending on \
+${set.removeUnknown.description}.\n`
+    }
+    if (set.removeUnknown) return 'Keys not defined with the rules before will be removed.\n'
+    return ''
+  }
+
+  _removeValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('removeUnknown')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.removeUnknown) {
+      for (const key in data.temp.unchecked) if (key) delete data.value[key]
+    }
+    return Promise.resolve()
+  }
+
+
 //  min(limit?: number): this {
 //    if (this._negate || limit === undefined) delete this._min
 //    else {
@@ -314,17 +339,6 @@ class ObjectSchema extends Schema {
 //  // using schema
 //
 //
-//
-//  _removeUnknownDescriptor() {
-//    return this._removeUnknown ? 'Keys not defined with the rules before will be removed. ' : ''
-//  }
-//
-//  _removeUnknownValidator(data: SchemaData): Promise<void> {
-//    if (this._removeUnknown) {
-//      for (const key in data.temp.unchecked) if (key) delete data.value[key]
-//    }
-//    return Promise.resolve()
-//  }
 //
 //  _lengthDescriptor() {
 //    if (this._min && this._max) {

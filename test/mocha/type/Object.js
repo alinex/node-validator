@@ -182,48 +182,48 @@ describe.only('object', () => {
     })
 
   })
-//
-//  describe('removeUnknown', () => {
-//
-//    it('should work with defined keys', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().removeUnknown
-//      .key('a', new AnySchema())
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal({ a: 1 })
-//      }, done)
-//    })
-//
-//    it('should work with pattern', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().removeUnknown
-//      .key(/[ab]/, new AnySchema())
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal({ a: 1, b: 2 })
-//      }, done)
-//    })
-//
-//    it('should work with negate', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().removeUnknown
-//      .key('a', new AnySchema()).not.removeUnknown
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal({ a: 1, b: 2, c: 3 })
-//      }, done)
-//    })
-//
-//    it('should describe', () => {
-//      const schema = new MySchema().removeUnknown
-//      .key('a', new AnySchema())
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//  })
-//
+
+  describe('removeUnknown', () => {
+
+    it('should work with defined keys', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().removeUnknown()
+      .key('a', new AnySchema())
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1 })
+      }, done)
+    })
+
+    it('should work with pattern', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().removeUnknown()
+      .key(/[ab]/, new AnySchema())
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1, b: 2 })
+      }, done)
+    })
+
+    it('should work with negate', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().removeUnknown()
+      .key('a', new AnySchema()).removeUnknown(faslse)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1, b: 2, c: 3 })
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().removeUnknown()
+      .key('a', new AnySchema())
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
 //  describe('length', () => {
 //
 //    it('should work with min', (done) => {

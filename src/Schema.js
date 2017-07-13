@@ -98,7 +98,8 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   }
   _checkObject(name: string) {
     const check = this._check
-    if (typeof check[name] !== 'object') {
+    if (!check[name]) check[name] = {}
+    else if (typeof check[name] !== 'object') {
       throw new Error(`No object for \`${name}\` setting given in \
 ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
     }
