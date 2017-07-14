@@ -36,7 +36,7 @@ class ObjectSchema extends Schema {
       this._removeDescriptor,
 //      this._keysRequireDescriptor,
 //      this._logicDescriptor,
-//      this._lengthDescriptor,
+      this._lengthDescriptor,
     )
     this._rules.validator.push(
       this._typeValidator,
@@ -45,7 +45,7 @@ class ObjectSchema extends Schema {
       this._removeValidator,
 //      this._keysRequireValidator,
 //      this._logicValidator,
-//      this._lengthValidator,
+      this._lengthValidator,
     )
   }
 
@@ -234,46 +234,98 @@ ${set.removeUnknown.description}.\n`
     return Promise.resolve()
   }
 
+  min(value?: number | Reference): this {
+    const set = this._setting
+    if (value) {
+      if (!(value instanceof Reference)) {
+        const int = parseInt(value, 10)
+        if (int < 0) throw new Error('Length for min() has to be positive')
+        if (set.max && !this._isReference('max') && value > set.max) {
+          throw new Error('Length for min() should be equal or below max')
+        }
+      }
+      set.min = value
+    } else delete set.min
+    return this
+  }
 
-//  min(limit?: number): this {
-//    if (this._negate || limit === undefined) delete this._min
-//    else {
-//      const int = parseInt(limit, 10)
-//      if (int < 0) throw new Error('Length for min() has to be positive')
-//      if (this._max && int > this._max) {
-//        throw new Error('Length for min() should be equal or below max')
-//      }
-//      this._min = int
-//    }
-//    return this
-//  }
-//
-//  max(limit?: number): this {
-//    if (this._negate || limit === undefined) delete this._max
-//    else {
-//      const int = parseInt(limit, 10)
-//      if (int < 0) throw new Error('Length for max() has to be positive')
-//      if (this._min && int < this._min) {
-//        throw new Error('Length for max() should be equal or above min')
-//      }
-//      this._max = int
-//    }
-//    return this
-//  }
-//
-//  length(limit?: number): this {
-//    if (this._negate || limit === undefined) {
-//      delete this._min
-//      delete this._max
-//    } else {
-//      const int = parseInt(limit, 10)
-//      if (int < 0) throw new Error('Length has to be positive')
-//      this._min = int
-//      this._max = int
-//    }
-//    return this
-//  }
-//
+  max(value?: number | Reference): this {
+    const set = this._setting
+    if (value) {
+      if (!(value instanceof Reference)) {
+        const int = parseInt(value, 10)
+        if (int <= 0) throw new Error('Length for max() has to be positive')
+        if (set.min && !this._isReference('min') && value < set.min) {
+          throw new Error('Length for max() should be equal or above min')
+        }
+      }
+      set.max = value
+    } else delete set.max
+    return this
+  }
+
+  length(value?: number | Reference): this {
+    const set = this._setting
+    if (value) {
+      if (!(value instanceof Reference)) {
+        const int = parseInt(value, 10)
+        if (int <= 0) throw new Error('Length has to be positive')
+      }
+      set.min = value
+      set.max = value
+    } else {
+      delete set.min
+      delete set.max
+    }
+    return this
+  }
+
+  _lengthDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.min && set.max) {
+      if (this._isReference('min')) {
+        msg += `The object needs at have at least the specified in ${set.min.description} \
+number of elements. `
+      } else {
+        msg += `The object needs at least ${set.min} elements. `
+      }
+      if (this._isReference('max')) {
+        msg += `The object can't have more than specified in ${set.max.description} \
+elements. `
+      } else {
+        msg += `The object allows up to ${set.min} elements. `
+      }
+      return set.min === set.max ? `The object has to contain exactly ${set.min} elements.\n`
+      : `The object needs between ${set.min} and ${set.max} elements.\n`
+    }
+    return msg.length ? msg.replace(/ $/, '\n') : msg
+  }
+
+  _lengthValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkNumber('min')
+      this._checkNumber('max')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    const num = Object.keys(data.value).length
+    if (check.min && num < check.min) {
+      return Promise.reject(new SchemaError(this, data,
+      `The object has a length of ${num} elements. \
+ This is too less, at least ${check.min} are needed.`))
+    }
+    if (check.max && num > check.max) {
+      return Promise.reject(new SchemaError(this, data,
+      `The object has a length of ${num} elements. \
+ This is too much, not more than ${check.max} are allowed.`))
+    }
+    return Promise.resolve()
+  }
+
+
 //  requiredKeys(...keys: Array<string|Array<string>>): this {
 //    // flatten list
 //    const list = keys.reduce((acc, val) => acc.concat(val), [])
@@ -345,30 +397,6 @@ ${set.removeUnknown.description}.\n`
 //
 //
 //
-//  _lengthDescriptor() {
-//    if (this._min && this._max) {
-//      return this._min === this._max ? `The object has to contain exactly ${this._min} elements.\n`
-//      : `The object needs between ${this._min} and ${this._max} elements.\n`
-//    }
-//    if (this._min) return `The object needs at least ${this._min} elements.\n`
-//    if (this._max) return `The object allows up to ${this._min} elements.\n`
-//    return ''
-//  }
-//
-//  _lengthValidator(data: SchemaData): Promise<void> {
-//    const num = Object.keys(data.value).length
-//    if (this._min && num < this._min) {
-//      return Promise.reject(new SchemaError(this, data,
-//      `The object has a length of ${num} elements. \
-// This is too less, at least ${this._min} are needed.`))
-//    }
-//    if (this._max && num > this._max) {
-//      return Promise.reject(new SchemaError(this, data,
-//      `The object has a length of ${num} elements. \
-// This is too much, not more than ${this._max} are allowed.`))
-//    }
-//    return Promise.resolve()
-//  }
 //
 //  _keysRequiredDescriptor() {
 //    let msg = ''

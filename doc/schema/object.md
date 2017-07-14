@@ -70,8 +70,6 @@ const schema = new ObjectSchema().removeUnknown(ref)
 ```
 
 
-
-
 ## Checking Keys
 
 ### min(limit) / max(limit) / length(limit)

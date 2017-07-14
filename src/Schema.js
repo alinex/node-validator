@@ -17,6 +17,11 @@ class Schema {
     validator: Array<Function>,
   }
   _setting: { [string]: any } // definition of object
+//  _setting: {
+//    stripEmpty?: bool | Reference,
+//    default?: any,
+//    required?: bool | Reference,
+//  }
   _check: { [string]: any } // resolved data
 
   constructor(title?: string, detail?: string) {

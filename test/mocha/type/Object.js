@@ -224,106 +224,136 @@ describe.only('object', () => {
 
   })
 
-//  describe('length', () => {
-//
-//    it('should work with min', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().min(2)
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail with min', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().min(5)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should work with max', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().max(5)
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail with max', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().max(2)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should work with length', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().length(3)
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should fail with length', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().length(2)
-//      // use schema
-//      helper.validateFail(schema, data, undefined, done)
-//    })
-//
-//    it('should work with min and max', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().min(2).max(5)
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should remove min', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().min(5).not.min()
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should remove max', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().max(2).not.max()
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should remove length', (done) => {
-//      const data = { a: 1, b: 2, c: 3 }
-//      const schema = new MySchema().length(5).not.length()
-//      // use schema
-//      helper.validateOk(schema, data, (res) => {
-//        expect(res).deep.equal(data)
-//      }, done)
-//    })
-//
-//    it('should describe length', () => {
-//      const schema = new MySchema().length(4)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//    it('should describe min and max', () => {
-//      const schema = new MySchema().min(2).max(5)
-//      // use schema
-//      expect(helper.description(schema)).to.be.a('string')
-//    })
-//
-//  })
-//
+  describe('length', () => {
+
+    it('should work with min', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().min(2)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with min', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().min(5)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow min with reference', (done) => {
+      const ref = new Reference(5)
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().min(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with max', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().max(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with max', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().max(2)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should allow max with reference', (done) => {
+      const ref = new Reference(2)
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().max(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with length', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().length(3)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should fail with length', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().length(2)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with min and max', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().min(2).max(5)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove min', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().min(5).min()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove max', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().max(2).max()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should remove length', (done) => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().length(5).length()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
+    })
+
+    it('should describe length', () => {
+      const schema = new MySchema().length(4)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe min and max', () => {
+      const schema = new MySchema().min(2).max(5)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe min with reference', () => {
+      const ref = new Reference(4)
+      const schema = new MySchema().min(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe max with reference', () => {
+      const ref = new Reference(4)
+      const schema = new MySchema().max(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
 //  describe('requiredKeys', () => {
 //
 //    it('should work with required key', (done) => {
