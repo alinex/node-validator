@@ -18,7 +18,7 @@ export default function (element: any, type: string = 'test', title?: string) {
       } else debugLog(`Promise failed with ${util.inspect(err)}`)
     })
   } else if (element instanceof Schema) {
-    debugLog(`${element.constructor.name} set up with: %o`, element._setting)
+    debugLog(`${element.constructor.name} set up with: %o`, element)
   } else if (element instanceof SchemaData && element.orig instanceof Reference) {
     debugLog(`Given reference as data: ${element.orig.base} -> ${element.orig.access.join(' -> ')}`)
   } else if (element instanceof SchemaData) {

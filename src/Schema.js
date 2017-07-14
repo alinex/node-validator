@@ -39,6 +39,15 @@ class Schema {
     )
   }
 
+  inspect(depth: number, options: Object): string {
+    const newOptions = Object.assign({}, options, {
+      depth: options.depth === null ? null : options.depth - 1,
+    })
+    const padding = ' '.repeat(5)
+    const inner = util.inspect(this._setting, newOptions).replace(/\n/g, `\n${padding}`)
+    return `${options.stylize(this.constructor.name, 'class')} ${inner} `
+  }
+
   // helper methods
 
   _setFlag(name: string, flag: bool | Reference = true): this {
