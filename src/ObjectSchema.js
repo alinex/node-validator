@@ -166,32 +166,37 @@ class ObjectSchema extends Schema {
     const keys = []
     const sum = {}
     Object.keys(data.value).forEach((key) => {
-      const schema = check.keys[key]
+      let found = false
+      let schema = check.keys[key]
       if (schema) {
         // against defined keys
-        checks.push(schema.validate(data.value[key]))
+        checks.push(schema.validate(data.sub(key)))
         keys.push(key)
-      } else {
-        let found = false
-        if (Object.keys(check.keys).length > 0) {
-          for (const k of Object.keys(check.keys)) {
-            const p = check.keys[k]
-            if (typeof p !== 'string' && key.match(k)) {
-              checks.push(p.validate(data.sub(key)))
+        found = true
+      } else if (Object.keys(check.keys).length > 0) {
+        // agains pattern
+        for (const k of Object.keys(check.keys)) {
+          if (k.match(/^\/([^\\/]|\\.)+\/[gi]*$/)) {
+            const parts : Array<string> = k.match(/([^\\/]|\\.)+/g)
+            const re = new RegExp(parts[0], (parts[1]: any))
+            schema = check.keys[k]
+            if (key.match(re)) {
+              checks.push(schema.validate(data.sub(key)))
               keys.push(key)
               found = true
               break
             }
           }
         }
-        // not specified keep it without check
-        if (!found) {
-          if (!data.temp.unchecked) data.temp.unchecked = []
-          data.temp.unchecked[key] = true
-          sum[key] = data.value[key]
-        }
+      }
+      // not specified keep it without check
+      if (!found) {
+        if (!data.temp.unchecked) data.temp.unchecked = []
+        data.temp.unchecked[key] = true
+        sum[key] = data.value[key]
       }
     })
+    // catch up sub checks
     return Promise.all(checks)
     .catch(err => Promise.reject(err))
     .then((result) => {

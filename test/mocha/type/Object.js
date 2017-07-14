@@ -208,7 +208,7 @@ describe.only('object', () => {
     it('should work with negate', (done) => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown()
-      .key('a', new AnySchema()).removeUnknown(faslse)
+      .key('a', new AnySchema()).removeUnknown(false)
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: 1, b: 2, c: 3 })
