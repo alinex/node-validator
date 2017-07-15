@@ -41,6 +41,9 @@ Within the data structure the references will be resolved also before using them
 value will always be used ignoring the setting in the reference itself. So no problems with circular
 references will be there.
 
+> It is only replaced in parts which are specified with any type of Schema. Parts which are deeper
+and are not specified in Schema will not be replaced.
+
 ## Sources
 
 The references allows to point to

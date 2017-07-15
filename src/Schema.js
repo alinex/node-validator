@@ -265,7 +265,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
           if (e instanceof Reference) {
             // preserve position to keep order on async results
             this._check[key][i] = null
-            par.push(e.data.then((res) => { this._check[key][i] = res }))
+            par.push(e.resolve(data).then((res) => { this._check[key][i] = res }))
           } else this._check[key].push(e)
         }
       } else if (raw instanceof Map) {
@@ -275,7 +275,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
           if (e instanceof Reference) {
             // preserve position to keep order on async results
             this._check[key][k] = null
-            par.push(e.data.then((res) => { this._check[key][k] = res }))
+            par.push(e.resolve(data).then((res) => { this._check[key][k] = res }))
           } else this._check[key][k] = e
         }
       } else this._check[key] = raw

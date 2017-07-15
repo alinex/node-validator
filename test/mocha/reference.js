@@ -13,7 +13,7 @@ import * as helper from './helper'
 const expect = chai.expect
 const debug = Debug('test')
 
-describe.only('reference', () => {
+describe('reference', () => {
 
   it('should get direct value', (done) => {
     const ref = new Reference({ a: 1 })

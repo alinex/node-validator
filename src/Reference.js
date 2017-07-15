@@ -46,7 +46,6 @@ const accessor = {
 
 // range
 // search
-
 // split
 // match
 // parse
@@ -82,8 +81,9 @@ class Reference {
     const padding = ' '.repeat(5)
     const base = this.base ? util.inspect(this.base, newOptions).replace(/\n/g, `\n${padding}`)
     : 'SchemaData'
-    const inner = util.inspect(this.access, newOptions).replace(/\n/g, `\n${padding}`)
-    return `${options.stylize(this.constructor.name, 'class')} ${base} ${inner} `
+    const inner = this.access.map(e => util.inspect(e, newOptions).replace(/\n/g, `\n${padding}`))
+    inner.unshift(base)
+    return `${options.stylize(this.constructor.name, 'class')} ${inner.join(' ➞ ')} `
   }
 
   raw(flag: bool = true): this {
