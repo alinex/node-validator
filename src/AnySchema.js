@@ -33,7 +33,7 @@ class AnySchema extends Schema {
     if (value.length === 1 && value[0] === undefined) delete set.allow
     else if (value.length === 1 && value[0] instanceof Reference) set.allow = value[0]
     else {
-      if (!set.allow) set.allow = new Set()
+      set.allow = new Set()
       for (const e of value) {
         if (value === undefined) set.required = false
         set.allow.add(e)
@@ -48,7 +48,7 @@ class AnySchema extends Schema {
     if (value.length === 1 && value[0] === undefined) delete set.disallow
     else if (value.length === 1 && value[0] instanceof Reference) set.disallow = value[0]
     else {
-      if (!set.disallow) set.disallow = new Set()
+      set.disallow = new Set()
       for (const e of value) {
         if (value === undefined) set.required = true
         set.disallow.add(e)
@@ -64,8 +64,9 @@ class AnySchema extends Schema {
     else if (set.allow instanceof Reference) {
       throw new Error('No single value if complete allow() list is set as reference.')
     } else {
+      if (!set.allow) set.allow = new Set()
       set.allow.add(value)
-      if (!(set.disallow instanceof Reference)) set.disallow.delete(value)
+      if (set.disallow && !(set.disallow instanceof Reference)) set.disallow.delete(value)
     }
     return this
   }
@@ -75,8 +76,9 @@ class AnySchema extends Schema {
     else if (set.disallow instanceof Reference) {
       throw new Error('No single value if complete disallow() list is set as reference.')
     } else {
+      if (!set.disallow) set.disallow = new Set()
       set.disallow.add(value)
-      if (!(set.allow instanceof Reference)) set.allow.delete(value)
+      if (set.allow && !(set.allow instanceof Reference)) set.allow.delete(value)
     }
     return this
   }
