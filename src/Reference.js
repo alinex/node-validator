@@ -33,6 +33,7 @@ class Reference {
 
   base: any
   _raw: bool
+  access: Array<Array<any>>
 
   // direct object
   // file
@@ -40,7 +41,6 @@ class Reference {
   // command
   // fn
 
-  access: Array<Array<any>>
 
   constructor(base: any) {
     this.base = base

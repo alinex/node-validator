@@ -94,6 +94,16 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
 ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
     }
   }
+  _checkArrayString(name: string) {
+    this._checkArray(name)
+    const check = this._check
+    check[name].forEach((e) => {
+      if (typeof e !== 'string') {
+        throw new Error(`No string value for \`${name}\` setting given in \
+  ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
+      }
+    })
+  }
   _checkNumber(name: string) {
     const check = this._check
     if (check[name] && typeof check[name] !== 'number') {

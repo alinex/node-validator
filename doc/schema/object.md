@@ -79,9 +79,16 @@ Specifies the number of keys the object is allowed to have.
 
 ```js
 const schema = new ObjectSchema().min(1).max(3)
+schema.min() // to remove setting, same for max
+schema.length() // to remove min and max setting
 ```
 
-> Using `not` it will remove the specified setting.
+References are possible:
+
+```js
+const ref = new Reference(5)
+const schema = new ObjectSchema().length(ref)
+```
 
 ### requiredKeys(list) / forbiddenKeys(list)
 
@@ -112,13 +119,13 @@ The list of keys can be given as:
 - one or multiple `string`
 - Array of `string`
 
-### not.and(list)
+### nand(list)
 
 With this logic check you ensure that some of the given keys may be set but neither
 all of them.
 
 ```js
-const schema = new ObjectSchema().not.and('a', 'b', 'c')
+const schema = new ObjectSchema().nand('a', 'b', 'c')
 ```
 
 The list of keys can be given as:

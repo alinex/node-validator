@@ -22,20 +22,14 @@ class ObjectSchema extends Schema {
 
   constructor(title?: string, detail?: string) {
     super(title, detail)
-    //    // init settings
-    //    this._keys = new Map()
-    //    this._removeUnknown = false
-    //    this._keysRequired = new Set()
-    //    this._keysForbidden = new Set()
-    //    this._logic = []
     // add check rules
     this._rules.descriptor.push(
       this._typeDescriptor,
       this._structureDescriptor,
       this._keysDescriptor,
       this._removeDescriptor,
-//      this._keysRequireDescriptor,
-//      this._logicDescriptor,
+      this._requiredKeysDescriptor,
+      this._logicDescriptor,
       this._lengthDescriptor,
     )
     this._rules.validator.push(
@@ -43,8 +37,8 @@ class ObjectSchema extends Schema {
       this._structureValidator,
       this._keysValidator,
       this._removeValidator,
-//      this._keysRequireValidator,
-//      this._logicValidator,
+      this._requiredKeysValidator,
+      this._logicValidator,
       this._lengthValidator,
     )
   }
@@ -325,218 +319,242 @@ elements. `
     return Promise.resolve()
   }
 
+  requiredKeys(...values: Array<any>): this {
+    const set = this._setting
+    const value = values.reduce((acc, val) => acc.concat(val), [])
+    if (value.length === 1 && value[0] === undefined) delete set.requiredKeys
+    else if (value.length === 1 && value[0] instanceof Reference) set.requiredKeys = value[0]
+    else {
+      if (!set.requiredKeys) set.requiredKeys = new Set()
+      for (const e of value) {
+        if (value === undefined) set.required = false
+        set.requiredKeys.add(e)
+        if (set.forbiddenKeys) set.forbiddenKeys.delete(e)
+      }
+    }
+    return this
+  }
+  forbiddenKeys(...values: Array<any>): this {
+    const set = this._setting
+    const value = values.reduce((acc, val) => acc.concat(val), [])
+    if (value.length === 1 && value[0] === undefined) delete set.forbiddenKeys
+    else if (value.length === 1 && value[0] instanceof Reference) set.forbiddenKeys = value[0]
+    else {
+      if (!set.forbiddenKeys) set.forbiddenKeys = new Set()
+      for (const e of value) {
+        if (value === undefined) set.required = true
+        set.forbiddenKeys.add(e)
+        if (set.requiredKeys) set.requiredKeys.delete(e)
+      }
+    }
+    return this
+  }
 
-//  requiredKeys(...keys: Array<string|Array<string>>): this {
-//    // flatten list
-//    const list = keys.reduce((acc, val) => acc.concat(val), [])
-//    for (const e of list) {
-//      if (this._negate) this._keysRequired.delete(e)
-//      else if (!this._keysRequired.has(e)) this._keysRequired.add(e)
-//    }
-//    this._negate = false
-//    return this
-//  }
-//
-//  forbiddenKeys(...keys: Array<string|Array<string>>): this {
-//    // flatten list
-//    const list = keys.reduce((acc, val) => acc.concat(val), [])
-//    for (const e of list) {
-//      if (this._negate) this._keysForbidden.delete(e)
-//      else if (!this._keysForbidden.has(e)) this._keysForbidden.add(e)
-//    }
-//    this._negate = false
-//    return this
-//  }
-//
-//  and(...keys: Array<string|Array<string>>): this {
-//    // flatten list
-//    const list = keys.reduce((acc, val) => acc.concat(val), [])
-//    this._logic.push(new Logic(this._negate ? 'nand' : 'and', undefined, list))
-//    this._negate = false
-//    return this
-//  }
-//
-//  or(...keys: Array<string|Array<string>>): this {
-//    // flatten list
-//    const list = keys.reduce((acc, val) => acc.concat(val), [])
-//    if (this._negate) {
-//      this._negate = false
-//      return this.forbiddenKeys(list)
-//    }
-//    this._logic.push(new Logic('or', undefined, list))
-//    return this
-//  }
-//
-//  xor(...keys: Array<string|Array<string>>): this {
-//    // flatten list
-//    const list = keys.reduce((acc, val) => acc.concat(val), [])
-//    if (this._negate) {
-//      this._negate = false
-//      return this.forbiddenKeys(list)
-//    }
-//    this._logic.push(new Logic('xor', undefined, list))
-//    return this
-//  }
-//
-//  with(key: string, ...peers: Array<string|Array<string>>): this {
-//    // flatten list
-//    const list = peers.reduce((acc, val) => acc.concat(val), [])
-//    this._logic.push(new Logic(this._negate ? 'without' : 'with', key, list))
-//    this._negate = false
-//    return this
-//  }
-//
-//  get clearLogic(): this {
-//    // flatten list
-//    this._logic = []
-//    this._negate = false // not supported
-//    return this
-//  }
-//
-//  // using schema
-//
-//
-//
-//
-//  _keysRequiredDescriptor() {
-//    let msg = ''
-//    if (this._keysRequired.size) {
-//      const list = Array.from(this._keysRequired)
-//      .map(e => `\`${e}\``).join(', ')
-//      .replace(/(.*),/, '$1 and')
-//      msg += `The keys ${list} are required. `
-//    }
-//    if (this._keysForbidden.size) {
-//      const list = Array.from(this._keysForbidden)
-//      .map(e => `\`${e}\``).join(', ')
-//      .replace(/(.*),/, '$1 and')
-//      msg += `None of the keys ${list} are allowed.\n`
-//    }
-//    return msg
-//  }
-//
-//  _keysRequiredValidator(data: SchemaData): Promise<void> {
-//    const keys = Object.keys(data.value)
-//    if (this._keysRequired.size) {
-//      for (const check of this._keysRequired) {
-//        if (!keys.includes(check)) {
-//          return Promise.reject(new SchemaError(this, data,
-//            `The key ${check} is missing. `))
-//        }
-//      }
-//    }
-//    if (this._keysForbidden.size) {
-//      for (const check of this._keysForbidden) {
-//        if (keys.includes(check)) {
-//          return Promise.reject(new SchemaError(this, data,
-//            `The key ${check} is not allowed here. `))
-//        }
-//      }
-//    }
-//    return Promise.resolve()
-//  }
-//
-//  _logicDescriptor() {
-//    let msg = ''
-//    if (this._logic.length) {
-//      for (const rule of this._logic) {
-//        if (rule.type === 'and') {
-//          const list = rule.peers.map(e => `\`${e}\``)
-//          .join(', ').replace(/(.*),/, '$1 and')
-//          msg += `All or none of the keys ${list} have to be present. `
-//        } else if (rule.type === 'nand') {
-//          const list = rule.peers.map(e => `\`${e}\``)
-//          .join(', ').replace(/(.*),/, '$1 and')
-//          msg += `Some but not all of the keys ${list} can be present. `
-//        } else if (rule.type === 'or') {
-//          const list = rule.peers.map(e => `\`${e}\``)
-//          .join(', ').replace(/(.*),/, '$1 and')
-//          msg += `At least one of the keys ${list} have to be present. `
-//        } else if (rule.type === 'xor') {
-//          const list = rule.peers.map(e => `\`${e}\``)
-//          .join(', ').replace(/(.*),/, '$1 and')
-//          msg += `Exactly one of the keys ${list} have to be present. `
-//        } else if (rule.type === 'with') {
-//          const list = rule.peers.map(e => `\`${e}\``)
-//          .join(', ').replace(/(.*),/, '$1 and')
-//          msg += `If \`${rule.key}\` is set the keys ${list} have to be present, too. `
-//        } else if (rule.type === 'without') {
-//          const list = rule.peers.map(e => `\`${e}\``)
-//          .join(', ').replace(/(.*),/, '$1 and')
-//          msg += `If \`${rule.key}\` is set the keys ${list} are forbidden. `
-//        }
-//      }
-//    }
-//    return msg.length ? `${msg.trim()}\n` : msg
-//  }
-//
-//  _logicValidator(data: SchemaData): Promise<void> {
-//    if (this._logic.length) {
-//      const keys = Object.keys(data.value)
-//      for (const rule of this._logic) {
-//        if (rule.type === 'and') {
-//          const contained = rule.peers.filter(e => keys.includes(e))
-//          // fail if one but not all
-//          if (contained.length > 0 && contained.length !== rule.peers.length) {
-//            const list = rule.peers.map(e => `\`${e}\``)
-//            .join(', ').replace(/(.*),/, '$1 and')
-//            return Promise.reject(new SchemaError(this, data,
-//              `All or none of the keys ${list} have to be present \
-// but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
-//          }
-//        } else if (rule.type === 'nand') {
-//          const contained = rule.peers.filter(e => keys.includes(e))
-//          // fail if all
-//          if (contained.length === rule.peers.length) {
-//            const list = rule.peers.map(e => `\`${e}\``)
-//            .join(', ').replace(/(.*),/, '$1 and')
-//            return Promise.reject(new SchemaError(this, data,
-//              `Some but not all of the keys ${list} can be present but all are set.`))
-//          }
-//        } else if (rule.type === 'or') {
-//          const contained = rule.peers.filter(e => keys.includes(e))
-//          // fail if not at least one
-//          if (!contained.length) {
-//            const list = rule.peers.map(e => `\`${e}\``)
-//            .join(', ').replace(/(.*),/, '$1 and')
-//            return Promise.reject(new SchemaError(this, data,
-//              `At least one of the keys ${list} have to be present but none are set.`))
-//          }
-//        } else if (rule.type === 'xor') {
-//          const contained = rule.peers.filter(e => keys.includes(e))
-//          // fail if not exactly one
-//          if (contained.length !== 1) {
-//            const list = rule.peers.map(e => `\`${e}\``)
-//            .join(', ').replace(/(.*),/, '$1 and')
-//            return Promise.reject(new SchemaError(this, data,
-//              `Exactly one of the keys ${list} have to be present \
-// but ${contained.length} are set.`))
-//          }
-//        } else if (rule.type === 'with') {
-//          const contained = rule.peers.filter(e => keys.includes(e))
-//          // fail if key is present but not all peers
-//          if (keys.includes(rule.key) && contained.length !== rule.peers.length) {
-//            const list = rule.peers.map(e => `\`${e}\``)
-//            .join(', ').replace(/(.*),/, '$1 and')
-//            return Promise.reject(new SchemaError(this, data,
-//              `If \`${rule.key}\` is set the keys ${list} have to be present \
-// but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
-//          }
-//        } else if (rule.type === 'without') {
-//          const contained = rule.peers.filter(e => keys.includes(e))
-//          // fail if key is present and at least one peer
-//          if (keys.includes(rule.key) && contained.length) {
-//            const list = rule.peers.map(e => `\`${e}\``)
-//            .join(', ').replace(/(.*),/, '$1 and')
-//            return Promise.reject(new SchemaError(this, data,
-//              `If \`${rule.key}\` is set the keys ${list} are forbidden \
-// but ${contained.length} keys are set.`))
-//          }
-//        }
-//      }
-//    }
-//    return Promise.resolve()
-//  }
+  _requiredKeysDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.forbiddenKeys instanceof Reference) {
+      msg += `The keys within ${set.forbiddenKeys.description} are not allowed. `
+    } else if (set.forbiddenKeys && set.forbiddenKeys.size) {
+      msg += `The keys ${Array.from(set.forbiddenKeys).join(', ').replace(/(.*),/, '$1 and')} \
+are not allowed. `
+    }
+    if (set.requiredKeys instanceof Reference) {
+      msg += `Only the keys within ${set.requiredKeys.description} are required. `
+    } else if (set.requiredKeys && set.requiredKeys.size) {
+      msg += `Only the keys ${Array.from(set.requiredKeys).join(', ').replace(/(.*),/, '$1 and')} \
+are allowed. `
+    }
+    return msg.length ? `${msg.trim()}\n` : ''
+  }
+
+  _requiredKeysValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    const keys = Object.keys(data.value)
+    this._checkArrayString('requiredKeys')
+    this._checkArrayString('forbiddenKeys')
+    // check value
+    if (check.forbiddenKeys && check.forbiddenKeys.length) {
+      for (const e of check.forbiddenKeys) {
+        if (keys.includes(e)) {
+          return Promise.reject(new SchemaError(this, data,
+            `The key ${e} is not allowed here. `))
+        }
+      }
+    }
+    if (check.requiredKeys && check.requiredKeys.length) {
+      for (const e of check.requiredKeys) {
+        if (!keys.includes(e)) {
+          return Promise.reject(new SchemaError(this, data,
+            `The key ${e} is missing. `))
+        }
+      }
+    }
+    return Promise.resolve()
+  }
+
+  and(...keys: Array<string|Array<string>>): this {
+    const set = this._setting
+    // flatten list
+    const list = keys.reduce((acc, val) => acc.concat(val), [])
+    if (!set.logic) set.logic = []
+    set.logic.push(new Logic('and', undefined, list))
+    return this
+  }
+
+  nand(...keys: Array<string|Array<string>>): this {
+    const set = this._setting
+    // flatten list
+    const list = keys.reduce((acc, val) => acc.concat(val), [])
+    if (!set.logic) set.logic = []
+    set.logic.push(new Logic('nand', undefined, list))
+    return this
+  }
+
+  or(...keys: Array<string|Array<string>>): this {
+    const set = this._setting
+    // flatten list
+    const list = keys.reduce((acc, val) => acc.concat(val), [])
+    if (!set.logic) set.logic = []
+    set.logic.push(new Logic('or', undefined, list))
+    return this
+  }
+
+  xor(...keys: Array<string|Array<string>>): this {
+    const set = this._setting
+    // flatten list
+    const list = keys.reduce((acc, val) => acc.concat(val), [])
+    if (!set.logic) set.logic = []
+    set.logic.push(new Logic('xor', undefined, list))
+    return this
+  }
+
+  with(key: string, ...peers: Array<string|Array<string>>): this {
+    const set = this._setting
+    // flatten list
+    const list = peers.reduce((acc, val) => acc.concat(val), [])
+    if (!set.logic) set.logic = []
+    set.logic.push(new Logic('with', key, list))
+    return this
+  }
+
+  without(key: string, ...peers: Array<string|Array<string>>): this {
+    const set = this._setting
+    // flatten list
+    const list = peers.reduce((acc, val) => acc.concat(val), [])
+    if (!set.logic) set.logic = []
+    set.logic.push(new Logic('without', key, list))
+    return this
+  }
+
+  clearLogic(): this {
+    delete this._setting.logic
+    return this
+  }
+
+  _logicDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.logic && set.logic.length) {
+      for (const rule of set.logic) {
+        if (rule.type === 'and') {
+          const list = rule.peers.map(e => `\`${e}\``)
+          .join(', ').replace(/(.*),/, '$1 and')
+          msg += `All or none of the keys ${list} have to be present. `
+        } else if (rule.type === 'nand') {
+          const list = rule.peers.map(e => `\`${e}\``)
+          .join(', ').replace(/(.*),/, '$1 and')
+          msg += `Some but not all of the keys ${list} can be present. `
+        } else if (rule.type === 'or') {
+          const list = rule.peers.map(e => `\`${e}\``)
+          .join(', ').replace(/(.*),/, '$1 and')
+          msg += `At least one of the keys ${list} have to be present. `
+        } else if (rule.type === 'xor') {
+          const list = rule.peers.map(e => `\`${e}\``)
+          .join(', ').replace(/(.*),/, '$1 and')
+          msg += `Exactly one of the keys ${list} have to be present. `
+        } else if (rule.type === 'with') {
+          const list = rule.peers.map(e => `\`${e}\``)
+          .join(', ').replace(/(.*),/, '$1 and')
+          msg += `If \`${rule.key}\` is set the keys ${list} have to be present, too. `
+        } else if (rule.type === 'without') {
+          const list = rule.peers.map(e => `\`${e}\``)
+          .join(', ').replace(/(.*),/, '$1 and')
+          msg += `If \`${rule.key}\` is set the keys ${list} are forbidden. `
+        }
+      }
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _logicValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    if (check.logic && check.logic.length) {
+      const keys = Object.keys(data.value)
+      for (const rule of check.logic) {
+        if (rule.type === 'and') {
+          const contained = rule.peers.filter(e => keys.includes(e))
+          // fail if one but not all
+          if (contained.length > 0 && contained.length !== rule.peers.length) {
+            const list = rule.peers.map(e => `\`${e}\``)
+            .join(', ').replace(/(.*),/, '$1 and')
+            return Promise.reject(new SchemaError(this, data,
+              `All or none of the keys ${list} have to be present \
+ but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
+          }
+        } else if (rule.type === 'nand') {
+          const contained = rule.peers.filter(e => keys.includes(e))
+          // fail if all
+          if (contained.length === rule.peers.length) {
+            const list = rule.peers.map(e => `\`${e}\``)
+            .join(', ').replace(/(.*),/, '$1 and')
+            return Promise.reject(new SchemaError(this, data,
+              `Some but not all of the keys ${list} can be present but all are set.`))
+          }
+        } else if (rule.type === 'or') {
+          const contained = rule.peers.filter(e => keys.includes(e))
+          // fail if not at least one
+          if (!contained.length) {
+            const list = rule.peers.map(e => `\`${e}\``)
+            .join(', ').replace(/(.*),/, '$1 and')
+            return Promise.reject(new SchemaError(this, data,
+              `At least one of the keys ${list} have to be present but none are set.`))
+          }
+        } else if (rule.type === 'xor') {
+          const contained = rule.peers.filter(e => keys.includes(e))
+          // fail if not exactly one
+          if (contained.length !== 1) {
+            const list = rule.peers.map(e => `\`${e}\``)
+            .join(', ').replace(/(.*),/, '$1 and')
+            return Promise.reject(new SchemaError(this, data,
+              `Exactly one of the keys ${list} have to be present \
+ but ${contained.length} are set.`))
+          }
+        } else if (rule.type === 'with') {
+          const contained = rule.peers.filter(e => keys.includes(e))
+          // fail if key is present but not all peers
+          if (keys.includes(rule.key) && contained.length !== rule.peers.length) {
+            const list = rule.peers.map(e => `\`${e}\``)
+            .join(', ').replace(/(.*),/, '$1 and')
+            return Promise.reject(new SchemaError(this, data,
+              `If \`${rule.key}\` is set the keys ${list} have to be present \
+ but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
+          }
+        } else if (rule.type === 'without') {
+          const contained = rule.peers.filter(e => keys.includes(e))
+          // fail if key is present and at least one peer
+          if (keys.includes(rule.key) && contained.length) {
+            const list = rule.peers.map(e => `\`${e}\``)
+            .join(', ').replace(/(.*),/, '$1 and')
+            return Promise.reject(new SchemaError(this, data,
+              `If \`${rule.key}\` is set the keys ${list} are forbidden \
+ but ${contained.length} keys are set.`))
+          }
+        }
+      }
+    }
+    return Promise.resolve()
+  }
 
 }
 
