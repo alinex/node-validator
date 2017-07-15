@@ -240,21 +240,23 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
 
   validate(value: any, source?: string, options?: Object): Promise<any> {
     const data = value instanceof SchemaData ? value : new SchemaData(value, source, options)
-    // parallel resolving
-    const par = []
+    let p = Promise.resolve()
     // resolve references in value first
     if (data.value instanceof Reference) {
-      par.push(data.value.raw().data
-      .then((res) => { data.value = res }))
+      p = p.then(() => data.value.raw().resolve(data))
+      .then((res) => {
+        data.value = res
+      })
     }
     // resolve check settings
+    const par = []
     this._check = {}
     const set = this._setting
     for (const key of Object.keys(set)) {
       let raw = set[key]
       if (raw instanceof Set) raw = Array.from(raw)
       if (raw instanceof Reference) {
-        par.push(raw.data
+        par.push(raw.resolve(data)
         .then((res) => { this._check[key] = res }))
       } else if (Array.isArray(raw)) {
         this._check[key] = []
@@ -279,8 +281,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
       } else this._check[key] = raw
     }
     // optimize check values
-    let p = Promise.all(par)
-    this._rules.check.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
+    p = p.then(() => Promise.all(par))
     // run the rules seriously
     this._rules.validator.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
     return p.then(() => {

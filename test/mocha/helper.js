@@ -52,9 +52,9 @@ function description(schema: Schema) {
   return msg
 }
 
-function reference(ref: Reference, cb?: Function, done ?: Function) {
+function reference(ref: Reference, pos?: any, cb?: Function, done ?: Function) {
   debug(ref, ref.constructor.name)
-  const res = ref.data
+  const res = ref.resolve(pos)
   debug(res, ref.constructor.name)
   expect(res, 'reference()').to.be.fulfilled.notify(() => {
     res.then((e) => {

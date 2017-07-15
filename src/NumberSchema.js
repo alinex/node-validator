@@ -1,6 +1,7 @@
 // @flow
 import Numeral from 'numeral'
 import convert from 'convert-units'
+import util from 'alinex-util'
 
 import AnySchema from './AnySchema'
 import SchemaError from './SchemaError'
@@ -75,6 +76,7 @@ class NumberSchema extends AnySchema {
       return Promise.reject(new SchemaError(this, data, err.message))
     }
     // check value
+    const orig = data.value
     if (typeof data.value === 'string') {
       if (check.sanitize) data.value = data.value.replace(/^.*?([-+]?\d+\.?\d*).*?$/, '$1')
       data.value = Number(data.value)
@@ -84,7 +86,7 @@ class NumberSchema extends AnySchema {
       `The given value is of type ${typeof data.value} but a number is needed.`))
     } else if (isNaN(data.value)) {
       return Promise.reject(new SchemaError(this, data,
-      `The given string \`${data.orig}\` is no valid number.`))
+      `The given element \`${util.inspect(orig)}\` is no valid number.`))
     }
     return Promise.resolve()
   }

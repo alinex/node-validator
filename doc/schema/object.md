@@ -182,7 +182,7 @@ With this logic check you ensure that if the given 'key' is set none of the othe
 peers are allowed.
 
 ```js
-const schema = new ObjectSchema().not.with('a', ['b', 'c'])
+const schema = new ObjectSchema().without('a', ['b', 'c'])
 ```
 
 The parameters may be:
