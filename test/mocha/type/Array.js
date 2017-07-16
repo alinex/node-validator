@@ -55,4 +55,31 @@ describe.only('array', () => {
 
   })
 
+  describe('unique', () => {
+
+    it('should work with error', (done) => {
+      const data = [1, 2, 3, 2]
+      const schema = new MySchema().unique()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with sanitize', (done) => {
+      const data = [1, 2, 3, 2]
+      const schema = new MySchema().unique().sanitize()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 2, 3])
+      }, done)
+    })
+
+    it('should describe', () => {
+      const data = [1, 2, 3, 2]
+      const schema = new MySchema().unique().sanitize()
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+  })
+
 })

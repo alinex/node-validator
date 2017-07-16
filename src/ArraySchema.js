@@ -1,5 +1,5 @@
 // @flow
-import util from 'util'
+import util from 'alinex-util'
 
 import Schema from './Schema'
 import SchemaError from './SchemaError'
@@ -15,8 +15,8 @@ class ArraySchema extends Schema {
       this._typeDescriptor,
       this._splitDescriptor,
       this._toArrayDescriptor,
+      this._uniqueDescriptor,
 //      this._keysDescriptor,
-//      this._requiredKeysDescriptor,
 //      this._logicDescriptor,
 //      this._lengthDescriptor,
     )
@@ -24,8 +24,8 @@ class ArraySchema extends Schema {
       this._splitValidator,
       this._toArrayValidator,
       this._typeValidator,
+      this._uniqueValidator,
 //      this._keysValidator,
-//      this._requiredKeysValidator,
 //      this._logicValidator,
 //      this._lengthValidator,
     )
@@ -98,13 +98,52 @@ as separator.\n`
     return Promise.resolve()
   }
 
-
-  // sanitize() -> to change instead of alert on the following
-
+  sanitize(flag?: bool | Reference): this { return this._setFlag('sanitize', flag) }
   unique(flag?: bool | Reference): this { return this._setFlag('unique', flag) }
 
-  // unique
+  _uniqueDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.sanitize instanceof Reference) {
+      msg += `As possible the list will be sanitized depending on ${set.sanitize.description}. `
+    }
+    if (set.sanitize) {
+      msg += 'As possible the list will be sanitized. '
+    }
+    if (set.unique instanceof Reference) {
+      msg += `All elements have to be unique depending on ${set.unique.description}. `
+    }
+    if (set.unique) {
+      msg += 'All elements have to be unique. '
+    }
+    return msg.length ? msg.replace(/ $/, '\n') : ''
+  }
+
+  _uniqueValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('sanitize')
+      this._checkBoolean('unique')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.sanitize) data.value = util.array.unique(data.value)
+    else {
+      const c = new Set()
+      for (const e of data.value) {
+        if (c.has(e)) {
+          return Promise.reject(new SchemaError(this, data,
+            `'No duplicate elements in list allowed: ${util.inspect(e)}'`))
+        }
+        c.add(e)
+      }
+    }
+    return Promise.resolve()
+  }
+
   // shuffle
+  // sort
   // items() check each item against this if required they have to be there
   //   it may contain them
   //   if required it must contain them
