@@ -104,8 +104,6 @@ The list of keys can be given as:
 - one or multiple `string`
 - Array of `string`
 
-> Use `not` to remove them from one of the lists.
-
 ### and(list)
 
 With this logic check you ensure that all of the given keys or none of them are
@@ -145,8 +143,6 @@ The list of keys can be given as:
 - one or multiple `string`
 - Array of `string`
 
-> If you use the `not` operator it is identical to define them as `forbiddenKeys`.
-
 ### xor(list)
 
 With this logic check you ensure that exactly one and not multiple of the given keys are
@@ -159,8 +155,6 @@ const schema = new ObjectSchema().xor('a', 'b', 'c')
 The list of keys can be given as:
 - one or multiple `string`
 - Array of `string`
-
-> If you use the `not` operator it is identical to define them as `forbiddenKeys`.
 
 ### with(key, peers)
 
@@ -176,7 +170,7 @@ The parameters may be:
 - first `string` as the key to check and Array of `string` peers (more clear in
   reading code)
 
-### not.with(key, peers)
+### without(key, peers)
 
 With this logic check you ensure that if the given 'key' is set none of the other
 peers are allowed.

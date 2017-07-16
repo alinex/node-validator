@@ -69,7 +69,10 @@ class ObjectSchema extends Schema {
  \`${typeof set.deepen === 'string' ? set.deepen : util.inspect(set.deepen)}\` \
  into deeper structures. `
     }
-    if (set.flatten) {
+    if (set.flatten instanceof Reference) {
+      msg += `Deep structures will be flattened depending on ${set.flatten.description} \
+as separator. `
+    } else if (set.flatten) {
       msg += `Deep structures will be flattened by combining key names using \
  \`${set.flatten}\` as separator. `
     }
