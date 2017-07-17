@@ -280,7 +280,14 @@ ${set.removeUnknown.description}.\n`
   _lengthDescriptor() {
     const set = this._setting
     let msg = ''
-    if (set.min && set.max) {
+    if (set.min || set.max) {
+      if (set.min === set.max) {
+        if (this._isReference('min')) {
+          return `The object has to contain the number of elements specified in \
+${set.min.description}.\n`
+        }
+        return `The object has to contain exactly ${set.min} elements.\n`
+      }
       if (this._isReference('min')) {
         msg += `The object needs at have at least the specified in ${set.min.description} \
 number of elements. `
@@ -293,8 +300,9 @@ elements. `
       } else {
         msg += `The object allows up to ${set.min} elements. `
       }
-      return set.min === set.max ? `The object has to contain exactly ${set.min} elements.\n`
-      : `The object needs between ${set.min} and ${set.max} elements.\n`
+      if (set.min && set.max && !this._isReference('min') && !this._isReference('max')) {
+        return `The object needs between ${set.min} and ${set.max} elements.\n`
+      }
     }
     return msg.length ? msg.replace(/ $/, '\n') : msg
   }
@@ -311,13 +319,13 @@ elements. `
     const num = Object.keys(data.value).length
     if (check.min && num < check.min) {
       return Promise.reject(new SchemaError(this, data,
-      `The object has a length of ${num} elements. \
- This is too less, at least ${check.min} are needed.`))
+      `The object should has a length of ${num} elements. \
+This is too less, at least ${check.min} are needed.`))
     }
     if (check.max && num > check.max) {
       return Promise.reject(new SchemaError(this, data,
-      `The object has a length of ${num} elements. \
- This is too much, not more than ${check.max} are allowed.`))
+      `The object should has a length of ${num} elements. \
+This is too much, not more than ${check.max} are allowed.`))
     }
     return Promise.resolve()
   }

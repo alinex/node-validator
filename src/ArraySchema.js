@@ -17,8 +17,7 @@ class ArraySchema extends Schema {
       this._toArrayDescriptor,
       this._uniqueDescriptor,
       this._itemsDescriptor,
-//      this._logicDescriptor,
-//      this._lengthDescriptor,
+      this._lengthDescriptor,
     )
     this._rules.validator.push(
       this._splitValidator,
@@ -26,8 +25,7 @@ class ArraySchema extends Schema {
       this._typeValidator,
       this._uniqueValidator,
       this._itemsValidator,
-//      this._logicValidator,
-//      this._lengthValidator,
+      this._lengthValidator,
     )
   }
 
@@ -184,9 +182,105 @@ as separator.\n`
     })
   }
 
-  // min() number of items
-  // max()
-  // length()
+  min(value?: number | Reference): this {
+    const set = this._setting
+    if (value) {
+      if (!(value instanceof Reference)) {
+        const int = parseInt(value, 10)
+        if (int < 0) throw new Error('Length for min() has to be positive')
+        if (set.max && !this._isReference('max') && value > set.max) {
+          throw new Error('Length for min() should be equal or below max')
+        }
+      }
+      set.min = value
+    } else delete set.min
+    return this
+  }
+
+  max(value?: number | Reference): this {
+    const set = this._setting
+    if (value) {
+      if (!(value instanceof Reference)) {
+        const int = parseInt(value, 10)
+        if (int <= 0) throw new Error('Length for max() has to be positive')
+        if (set.min && !this._isReference('min') && value < set.min) {
+          throw new Error('Length for max() should be equal or above min')
+        }
+      }
+      set.max = value
+    } else delete set.max
+    return this
+  }
+
+  length(value?: number | Reference): this {
+    const set = this._setting
+    if (value) {
+      if (!(value instanceof Reference)) {
+        const int = parseInt(value, 10)
+        if (int <= 0) throw new Error('Length has to be positive')
+      }
+      set.min = value
+      set.max = value
+    } else {
+      delete set.min
+      delete set.max
+    }
+    return this
+  }
+
+  _lengthDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.min || set.max) {
+      if (set.min === set.max) {
+        if (this._isReference('min')) {
+          return `The object has to contain the number of items specified in \
+${set.min.description}.\n`
+        }
+        return `The object has to contain exactly ${set.min} items.\n`
+      }
+      if (this._isReference('min')) {
+        msg += `The object needs at have at least the specified in ${set.min.description} \
+number of items. `
+      } else {
+        msg += `The object needs at least ${set.min} items. `
+      }
+      if (this._isReference('max')) {
+        msg += `The object can't have more than specified in ${set.max.description} \
+items. `
+      } else {
+        msg += `The object allows up to ${set.min} items. `
+      }
+      if (set.min && set.max && !this._isReference('min') && !this._isReference('max')) {
+        return `The object needs between ${set.min} and ${set.max} items.\n`
+      }
+    }
+    return msg.length ? msg.replace(/ $/, '\n') : msg
+  }
+
+  _lengthValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkNumber('min')
+      this._checkNumber('max')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    const num = data.value.length
+    if (check.min && num < check.min) {
+      return Promise.reject(new SchemaError(this, data,
+      `The object should has a length of ${num} elements. \
+This is too less, at least ${check.min} are needed.`))
+    }
+    if (check.max && num > check.max) {
+      return Promise.reject(new SchemaError(this, data,
+      `The object should has a length of ${num} elements. \
+This is too much, not more than ${check.max} are allowed.`))
+    }
+    return Promise.resolve()
+  }
+
 
   // format()
 
