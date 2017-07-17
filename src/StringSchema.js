@@ -39,6 +39,7 @@ class StringSchema extends AnySchema {
     super(title, detail)
     // add check rules
     this._rules.descriptor.push(
+      this._typeDescriptor,
       this._makeStringDescriptor,
       this._replaceDescriptor,
       this._caseDescriptor,
@@ -48,6 +49,7 @@ class StringSchema extends AnySchema {
     )
     this._rules.validator.push(
       this._makeStringValidator,
+      this._typeValidator,
       this._replaceValidator,
       this._caseValidator,
       this._checkValidator,
@@ -57,6 +59,17 @@ class StringSchema extends AnySchema {
   }
 
   // setup schema
+
+  _typeDescriptor() { // eslint-disable-line class-methods-use-this
+    return 'It has to be a text string.\n'
+  }
+
+  _typeValidator(data: SchemaData): Promise<void> {
+    if (typeof data.value === 'string') {
+      return Promise.reject(new SchemaError(this, data, 'A text string is needed.'))
+    }
+    return Promise.resolve()
+  }
 
   makeString(flag?: bool | Reference): this { return this._setFlag('makeString', flag) }
 

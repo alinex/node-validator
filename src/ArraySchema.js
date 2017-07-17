@@ -16,7 +16,7 @@ class ArraySchema extends Schema {
       this._splitDescriptor,
       this._toArrayDescriptor,
       this._uniqueDescriptor,
-//      this._keysDescriptor,
+      this._itemsDescriptor,
 //      this._logicDescriptor,
 //      this._lengthDescriptor,
     )
@@ -25,7 +25,7 @@ class ArraySchema extends Schema {
       this._toArrayValidator,
       this._typeValidator,
       this._uniqueValidator,
-//      this._keysValidator,
+      this._itemsValidator,
 //      this._logicValidator,
 //      this._lengthValidator,
     )
@@ -121,6 +121,7 @@ as separator.\n`
 
   _uniqueValidator(data: SchemaData): Promise<void> {
     const check = this._check
+    if (check.unique === undefined) return Promise.resolve()
     try {
       this._checkBoolean('sanitize')
       this._checkBoolean('unique')
@@ -134,7 +135,7 @@ as separator.\n`
       for (const e of data.value) {
         if (c.has(e)) {
           return Promise.reject(new SchemaError(this, data,
-            `'No duplicate elements in list allowed: ${util.inspect(e)}'`))
+            `No duplicate elements in list allowed: '${util.inspect(e)}' found more than once`))
         }
         c.add(e)
       }
@@ -144,10 +145,45 @@ as separator.\n`
 
   // shuffle
   // sort
-  // items() check each item against this if required they have to be there
-  //   it may contain them
-  //   if required it must contain them
-  // ordered() like items but check in order given
+
+  item(check?: Schema): this {
+    const set = this._setting
+    if (check === undefined) delete set.items
+    else {
+      if (!set.items) set.items = []
+      set.items.push(check)
+    }
+    return this
+  }
+
+  _itemsDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.items) {
+      set.items.forEach((schema, i) => (msg += `- ${i}: ${schema.description}\n`))
+      if (msg.length) msg = `The following items have a special format:\n${msg}\n`
+    }
+    return msg
+  }
+
+  _itemsValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    // check value
+    if (!check.items) return Promise.resolve()
+    const checks = []
+    data.value.forEach((e, i) => {
+      const schema = check.items[i] || check.items[check.items.length - 1]
+      checks.push(schema.validate(data.sub(i)))
+    })
+    // catch up sub checks
+    return Promise.all(checks)
+    .catch(err => Promise.reject(err))
+    .then((result) => {
+      data.value = result
+      return Promise.resolve()
+    })
+  }
+
   // min() number of items
   // max()
   // length()

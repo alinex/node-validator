@@ -10,6 +10,7 @@
   - [String](schema/string.md)
   - [Number](schema/number.md)
   - [Object](schema/object.md)
+  - [Array](schema/array.md)
   - [Reference](schema/reference.md)
 
 - [How To](howto.md)

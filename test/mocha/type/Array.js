@@ -1,6 +1,6 @@
 import chai from 'chai'
 
-import { AnySchema, ArraySchema, Reference } from '../../../src/index'
+import { AnySchema, ArraySchema, NumberSchema, Reference } from '../../../src/index'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -47,8 +47,41 @@ describe.only('array', () => {
       }, done)
     })
 
+    it('should work with pattern', (done) => {
+      const data = '1,2-3 -> 4'
+      const schema = new MySchema().split(/\D+/)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(['1', '2', '3', '4'])
+      }, done)
+    })
+
+    it('should remove setting', (done) => {
+      const data = 'a,b,c'
+      const schema = new MySchema().split(',').split()
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with reference', (done) => {
+      const data = 'a,b,c'
+      const ref = new Reference(',')
+      const schema = new MySchema().split(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(['a', 'b', 'c'])
+      }, done)
+    })
+
     it('should describe', () => {
       const schema = new MySchema().split(',')
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference(',')
+      const schema = new MySchema().split(ref)
       // use schema
       expect(helper.description(schema)).to.be.an('string')
     })
@@ -73,9 +106,65 @@ describe.only('array', () => {
       }, done)
     })
 
+    it('should allow remove', (done) => {
+      const data = [1, 2, 3, 2]
+      const schema = new MySchema().unique().unique(false)
+      // use schema
+      helper.validateOk(schema, data, undefined, done)
+    })
+
+    it('should work with reference', (done) => {
+      const data = [1, 2, 3, 2]
+      const ref = new Reference(true)
+      const schema = new MySchema().unique(ref)
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
     it('should describe', () => {
       const data = [1, 2, 3, 2]
       const schema = new MySchema().unique().sanitize()
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+    it('should describe', () => {
+      const data = [1, 2, 3, 2]
+      const ref = new Reference(true)
+      const schema = new MySchema().unique(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+  })
+
+  describe('items ', () => {
+
+    it('should work with one schema for all', (done) => {
+      const data = ['1', '2', 3, 2]
+      const schema = new MySchema()
+      .item(new NumberSchema())
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 2, 3, 2])
+      }, done)
+    })
+
+    it('should work with ordered elements', (done) => {
+      const data = ['1', '2', 3, 2]
+      const schema = new MySchema()
+      .item(new AnySchema())
+      .item(new NumberSchema())
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(['1', 2, 3, 2])
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema()
+      .item(new AnySchema())
+      .item(new NumberSchema())
       // use schema
       expect(helper.description(schema)).to.be.an('string')
     })
