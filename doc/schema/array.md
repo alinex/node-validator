@@ -59,7 +59,7 @@ Remove duplicate elements to get only unique values:
 
 ```js
 const schema = new ArraySchema().sanitize().unique()
-schema.sanitize(false).unique(false) // remove the settings
+schema.sanitize(true).unique(false) // remove the settings
 ```
 
 And references are used on both like:
@@ -67,6 +67,54 @@ And references are used on both like:
 ```js
 const ref = new Reference(true)
 const schema = new ArraySchema().sanizize(ref).unique(ref)
+```
+
+### shuffle(bool)
+
+All list items will be shuffled to get a random order:
+
+```js
+const schema = new ArraySchema().shuffle()
+schema.shuffle(false) // remove the setting
+```
+
+A reference may be used as flag:
+
+```js
+const ref = new Reference(true)
+const schema = new ArraySchema().shuffle(ref)
+```
+
+### sort(bool)
+
+Sort a list alphabetically by it's contents:
+
+```js
+const schema = new ArraySchema().sort()
+schema.sort(false) // remove the setting
+```
+
+A reference may be used as flag:
+
+```js
+const ref = new Reference(true)
+const schema = new ArraySchema().sort(ref)
+```
+
+### reverse(bool)
+
+Additionally to `sort()` or separately the order of the list items will be reversed:
+
+```js
+const schema = new ArraySchema().reverse()
+schema.reverse(false) // remove the settings
+```
+
+A reference may be used as flag:
+
+```js
+const ref = new Reference(true)
+const schema = new ArraySchema().reverse(ref)
 ```
 
 

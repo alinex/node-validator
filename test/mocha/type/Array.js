@@ -138,7 +138,134 @@ describe.only('array', () => {
 
   })
 
-  describe('items ', () => {
+  describe('sort', () => {
+
+    it('should work with shuffle', (done) => {
+      const data = [1, 2, 3, 4, 5]
+      const schema = new MySchema().shuffle()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).not.deep.equal([1, 2, 3, 4, 5])
+      }, done)
+    })
+
+    it('should remove shuffle', (done) => {
+      const data = [1, 2, 3, 4, 5]
+      const schema = new MySchema().shuffle().shuffle(false)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 2, 3, 4, 5])
+      }, done)
+    })
+
+    it('should work with shuffle as reference', (done) => {
+      const data = [1, 2, 3, 4, 5]
+      const ref = new Reference(true)
+      const schema = new MySchema().shuffle(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).not.deep.equal([1, 2, 3, 4, 5])
+      }, done)
+    })
+
+    it('should describe shuffle', () => {
+      const schema = new MySchema().shuffle()
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+    it('should describe shuffle with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().shuffle(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+    it('should work with sort', (done) => {
+      const data = [1, 4, 3, 2, 5]
+      const schema = new MySchema().sort()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 2, 3, 4, 5])
+      }, done)
+    })
+
+    it('should remove sort', (done) => {
+      const data = [1, 4, 3, 2, 5]
+      const schema = new MySchema().sort().sort(false)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 4, 3, 2, 5])
+      }, done)
+    })
+
+    it('should work with sort as reference', (done) => {
+      const data = [1, 4, 3, 2, 5]
+      const ref = new Reference(true)
+      const schema = new MySchema().sort(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 2, 3, 4, 5])
+      }, done)
+    })
+
+    it('should describe sort', () => {
+      const schema = new MySchema().sort()
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+    it('should describe sort with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().sort(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+    it('should work with reverse', (done) => {
+      const data = [1, 2, 3, 4, 5]
+      const schema = new MySchema().reverse()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([5, 4, 3, 2, 1])
+      }, done)
+    })
+
+    it('should remove reverse', (done) => {
+      const data = [1, 2, 3, 4, 5]
+      const schema = new MySchema().reverse().reverse(false)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 2, 3, 4, 5])
+      }, done)
+    })
+
+    it('should work with reverse as reference', (done) => {
+      const data = [1, 2, 3, 4, 5]
+      const ref = new Reference(true)
+      const schema = new MySchema().reverse(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([5, 4, 3, 2, 1])
+      }, done)
+    })
+
+    it('should describe reverse', () => {
+      const schema = new MySchema().reverse()
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+    it('should describe reverse with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().reverse(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+  })
+
+  describe('items', () => {
 
     it('should work with one schema for all', (done) => {
       const data = ['1', '2', 3, 2]

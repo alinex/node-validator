@@ -18,6 +18,7 @@ class ArraySchema extends Schema {
       this._uniqueDescriptor,
       this._itemsDescriptor,
       this._lengthDescriptor,
+      this._sortDescriptor,
     )
     this._rules.validator.push(
       this._splitValidator,
@@ -26,6 +27,7 @@ class ArraySchema extends Schema {
       this._uniqueValidator,
       this._itemsValidator,
       this._lengthValidator,
+      this._sortValidator,
     )
   }
 
@@ -104,14 +106,12 @@ as separator.\n`
     let msg = ''
     if (set.sanitize instanceof Reference) {
       msg += `As possible the list will be sanitized depending on ${set.sanitize.description}. `
-    }
-    if (set.sanitize) {
+    } else if (set.sanitize) {
       msg += 'As possible the list will be sanitized. '
     }
     if (set.unique instanceof Reference) {
       msg += `All elements have to be unique depending on ${set.unique.description}. `
-    }
-    if (set.unique) {
+    } else if (set.unique) {
       msg += 'All elements have to be unique. '
     }
     return msg.length ? msg.replace(/ $/, '\n') : ''
@@ -141,8 +141,88 @@ as separator.\n`
     return Promise.resolve()
   }
 
-  // shuffle
-  // sort
+  shuffle(flag: bool | Reference = true): this {
+    const set = this._setting
+    if (flag === false) delete set.shuffle
+    else if (flag instanceof Reference) set.shuffle = flag
+    else {
+      if (!this._isReference('sort') && set.sort) {
+        throw new Error('Shuffle not possible if list should be sorted')
+      }
+      if (!this._isReference('reverse') && set.reverse >= 0) {
+        throw new Error('Shuffle not possible if list should be reverse sorted')
+      }
+      set.shuffle = true
+    }
+    return this
+  }
+  sort(flag: bool | Reference = true): this {
+    const set = this._setting
+    if (flag === false) delete set.sort
+    else if (flag instanceof Reference) set.sort = flag
+    else {
+      if (!this._isReference('shuffle') && set.shuffle) {
+        throw new Error('Sorting impossible if list should be shuffled')
+      }
+      set.sort = true
+    }
+    return this
+  }
+  reverse(flag: bool | Reference = true): this {
+    const set = this._setting
+    if (flag === false) delete set.reverse
+    else if (flag instanceof Reference) set.reverse = flag
+    else {
+      if (!this._isReference('shuffle') && set.shuffle) {
+        throw new Error('Reverse impossible if list should be shuffled')
+      }
+      set.reverse = true
+    }
+    return this
+  }
+
+  _sortDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.shuffle instanceof Reference) {
+      msg += `All elements have to be shuffle depending on ${set.shuffle.description}. `
+    } else if (set.shuffle) {
+      msg += 'All elements have to be shuffle. '
+    } else {
+      if (set.sort instanceof Reference) {
+        msg += `All elements have to be sort depending on ${set.sort.description}. `
+      } else if (set.sort) {
+        msg += 'All elements have to be sort. '
+      }
+      if (set.reverse instanceof Reference) {
+        msg += `All elements have to be reverse depending on ${set.reverse.description}. `
+      } else if (set.reverse) {
+        msg += 'All elements have to be reverse. '
+      }
+    }
+    return msg
+  }
+
+  _sortValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('shuffle')
+      this._checkBoolean('sort')
+      this._checkBoolean('reverse')
+      if (check.shuffle && (check.sort || check.reverse)) {
+        throw new Error('List cannot be sorted or reversed if it should be shuffled')
+      }
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (check.shuffle) data.value = util.array.shuffle(data.value)
+    else {
+      if (check.sort) data.value.sort()
+      if (check.reverse) data.value.reverse()
+    }
+    return Promise.resolve()
+  }
 
   item(check?: Schema): this {
     const set = this._setting

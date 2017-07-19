@@ -257,7 +257,7 @@ class NumberSchema extends AnySchema {
 
   positive(flag: bool | Reference = true): this {
     const set = this._setting
-    if (flag === 'undefined') delete set.positive
+    if (flag === false) delete set.positive
     else if (flag instanceof Reference) set.positive = flag
     else {
       if (!this._isReference('max') && set.max < 0) {
@@ -274,7 +274,7 @@ class NumberSchema extends AnySchema {
 
   negative(flag: bool | Reference = true): this {
     const set = this._setting
-    if (flag === 'undefined') delete set.negative
+    if (flag === false) delete set.negative
     else if (flag instanceof Reference) set.negative = flag
     else {
       if (!this._isReference('min') && set.min > 0) {
