@@ -11,7 +11,7 @@ class AnySchema extends Schema {
 //    default?: any,
 //    required?: bool | Reference,
 //    allow: Set<any>,
-//    disallow: Set<any>,
+//    deny: Set<any>,
 //  }
 
   constructor(title?: string, detail?: string) {
@@ -37,21 +37,21 @@ class AnySchema extends Schema {
       for (const e of value) {
         if (value === undefined) set.required = false
         set.allow.add(e)
-        if (set.disallow) set.disallow.delete(e)
+        if (set.deny) set.deny.delete(e)
       }
     }
     return this
   }
-  disallow(...values: Array<any>): this {
+  deny(...values: Array<any>): this {
     const set = this._setting
     const value = values.reduce((acc, val) => acc.concat(val), [])
-    if (value.length === 1 && value[0] === undefined) delete set.disallow
-    else if (value.length === 1 && value[0] instanceof Reference) set.disallow = value[0]
+    if (value.length === 1 && value[0] === undefined) delete set.deny
+    else if (value.length === 1 && value[0] instanceof Reference) set.deny = value[0]
     else {
-      set.disallow = new Set()
+      set.deny = new Set()
       for (const e of value) {
         if (value === undefined) set.required = true
-        set.disallow.add(e)
+        set.deny.add(e)
         if (set.allow) set.allow.delete(e)
       }
     }
@@ -66,18 +66,18 @@ class AnySchema extends Schema {
     } else {
       if (!set.allow) set.allow = new Set()
       set.allow.add(value)
-      if (set.disallow && !(set.disallow instanceof Reference)) set.disallow.delete(value)
+      if (set.deny && !(set.deny instanceof Reference)) set.deny.delete(value)
     }
     return this
   }
   invalid(value?: any): this {
     const set = this._setting
     if (value === undefined) set.required = true
-    else if (set.disallow instanceof Reference) {
-      throw new Error('No single value if complete disallow() list is set as reference.')
+    else if (set.deny instanceof Reference) {
+      throw new Error('No single value if complete deny() list is set as reference.')
     } else {
-      if (!set.disallow) set.disallow = new Set()
-      set.disallow.add(value)
+      if (!set.deny) set.deny = new Set()
+      set.deny.add(value)
       if (set.allow && !(set.allow instanceof Reference)) set.allow.delete(value)
     }
     return this
@@ -86,10 +86,10 @@ class AnySchema extends Schema {
   _allowDescriptor() {
     const set = this._setting
     let msg = ''
-    if (set.disallow instanceof Reference) {
-      msg += `The values within ${set.disallow.description} are not allowed. `
-    } else if (set.disallow && set.disallow.size) {
-      msg += `The values ${Array.from(set.disallow).join(', ').replace(/(.*),/, '$1 and')} \
+    if (set.deny instanceof Reference) {
+      msg += `The values within ${set.deny.description} are not allowed. `
+    } else if (set.deny && set.deny.size) {
+      msg += `The values ${Array.from(set.deny).join(', ').replace(/(.*),/, '$1 and')} \
 are not allowed. `
     }
     if (set.allow instanceof Reference) {
@@ -104,13 +104,13 @@ are allowed. `
   _allowValidator(data: SchemaData): Promise<void> {
     const check = this._check
     this._checkArray('allow')
-    this._checkArray('disallow')
+    this._checkArray('deny')
     // reject if marked as invalid
     const datastring = JSON.stringify(data.value)
-    if (check.disallow && check.disallow.length && check.disallow
+    if (check.deny && check.deny.length && check.deny
     .filter(e => datastring === JSON.stringify(e)).length) {
       return Promise.reject(new SchemaError(this, data,
-        'Element found in blacklist (disallowed item).'))
+        'Element found in blacklist (denyed item).'))
     }
     // reject if valid is set but not included
     if (check.allow && check.allow.length && check.allow

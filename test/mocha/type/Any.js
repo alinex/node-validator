@@ -135,12 +135,12 @@ describe('any', () => {
 
   })
 
-  describe('disallow', () => {
+  describe('deny', () => {
 
     it('should allow single value', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.disallow(data)
+      schema.deny(data)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -148,7 +148,7 @@ describe('any', () => {
     it('should allow list', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.disallow(data, 'b')
+      schema.deny(data, 'b')
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -156,15 +156,15 @@ describe('any', () => {
     it('should allow array', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.disallow([data, 'b'])
+      schema.deny([data, 'b'])
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
 
-    it('should work if not in disallowed list', (done) => {
+    it('should work if not in denied list', (done) => {
       const data = 'b'
       const schema = new MySchema()
-      schema.disallow('a')
+      schema.deny('a')
       // use schema
       helper.validateOk(schema, data, undefined, done)
     })
@@ -172,7 +172,7 @@ describe('any', () => {
     it('should overwrite old list', (done) => {
       const data = 'b'
       const schema = new MySchema()
-      schema.disallow('b').disallow('a')
+      schema.deny('b').deny('a')
       // use schema
       helper.validateOk(schema, data, undefined, done)
     })
@@ -180,7 +180,7 @@ describe('any', () => {
     it('should allow remove', (done) => {
       const data = 'a'
       const schema = new MySchema()
-      schema.disallow('b').disallow()
+      schema.deny('b').deny()
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -191,7 +191,7 @@ describe('any', () => {
       const data = 'a'
       const ref = new Reference(['a'])
       const schema = new MySchema()
-      schema.disallow(ref)
+      schema.deny(ref)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -200,7 +200,7 @@ describe('any', () => {
       const data = 'a'
       const ref = new Reference(data)
       const schema = new MySchema()
-      schema.disallow(ref)
+      schema.deny(ref)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -209,14 +209,14 @@ describe('any', () => {
       const data = 'a'
       const ref = new Reference(data)
       const schema = new MySchema()
-      schema.disallow(1, ref)
+      schema.deny(1, ref)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
 
     it('should describe', () => {
       const schema = new MySchema()
-      schema.disallow('a')
+      schema.deny('a')
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -224,7 +224,7 @@ describe('any', () => {
     it('should describe with reference', () => {
       const ref = new Reference('a')
       const schema = new MySchema()
-      schema.disallow(ref)
+      schema.deny(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -251,7 +251,7 @@ describe('any', () => {
       helper.validateFail(schema, data, undefined, done)
     })
 
-    it('should remove from disallow if allowed later', (done) => {
+    it('should remove from deny if allowed later', (done) => {
       const data = 'a'
       const schema = new MySchema()
       schema.invalid(data)
@@ -295,7 +295,7 @@ describe('any', () => {
 
   describe('invalid', () => {
 
-    it('should fail if in disallowed list', (done) => {
+    it('should fail if in denied list', (done) => {
       const data = 'a'
       const schema = new MySchema()
       schema.invalid(data)
@@ -303,7 +303,7 @@ describe('any', () => {
       helper.validateFail(schema, data, undefined, done)
     })
 
-    it('should work if not in disallowed list', (done) => {
+    it('should work if not in denied list', (done) => {
       const data = 'a'
       const schema = new MySchema()
       schema.invalid('b')
@@ -313,7 +313,7 @@ describe('any', () => {
       }, done)
     })
 
-    it('should remove from allow if disallowed later', (done) => {
+    it('should remove from allow if denied later', (done) => {
       const data = 'a'
       const schema = new MySchema()
       schema.valid(data)
@@ -322,7 +322,7 @@ describe('any', () => {
       helper.validateFail(schema, data, undefined, done)
     })
 
-    it('should be required if undefined is disallowed', (done) => {
+    it('should be required if undefined is denied', (done) => {
       const data = undefined
       const schema = new MySchema()
       schema.invalid(undefined)

@@ -43,7 +43,7 @@ The reference can point to a list of values which are allowed. In case of an obj
 object´s keys. If nothing given the list will be cleared and in all other cases the given element will
 be set as the only one in a new list.
 
-### disallow(list)
+### deny(list)
 
 Opposite to `allow()` this allows to specify elements which are not allowed like a blacklist.
 The complete list will be changed by giving a new list as single element, list of elements or
@@ -51,15 +51,15 @@ an array of elements. If this is called multiple times it will always replace th
 To add some values `invalid()` may be used multiple times.
 
 ```js
-const schema = new AnySchema().disallow([5, 10])
-schema.disallow()
+const schema = new AnySchema().deny([5, 10])
+schema.deny()
 ```
 
 References may be used like for `allow()`.
 
 ```js
 const ref = new Reference([1, 2, 3])
-const schema = new AnySchema().disallow(ref)
+const schema = new AnySchema().deny(ref)
 ```
 
 The reference can point to a list of values which are allowed. In case of an object it will take the
@@ -88,12 +88,12 @@ Here the reference presents a single value and it is put into the allowed list a
 
 ### invalid(value)
 
-Instead of `disallow()` this will not replace the disallowed list but add to it. You may give a single
-value which is added to the list of disallowed values. This is impossible if the complete list is
+Instead of `deny()` this will not replace the denied list but add to it. You may give a single
+value which is added to the list of denied values. This is impossible if the complete list is
 set as reference.
 
 ```js
-const schema = new AnySchema().disallow([1, 2, 3])
+const schema = new AnySchema().deny([1, 2, 3])
 .invalid(5) // now 1, 2, 3 and 5 are invalid
 ```
 
@@ -104,4 +104,4 @@ const ref = new Reference(5)
 const schema = new AnySchema().invalid(ref)
 ```
 
-Here the reference presents a single value and it is put into the disallowed list as it is.
+Here the reference presents a single value and it is put into the denied list as it is.

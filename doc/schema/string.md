@@ -11,7 +11,7 @@ See at [Any Schema](any.md) for the inherited methods you may call like:
 - `default()`
 - `stripEmpty()`
 - `allow()`
-- `disallow()`
+- `deny()`
 - `valid()`
 - `invalid()`
 
