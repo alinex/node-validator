@@ -19,6 +19,7 @@ class ArraySchema extends Schema {
       this._itemsDescriptor,
       this._lengthDescriptor,
       this._sortDescriptor,
+      this._formatDescriptor,
     )
     this._rules.validator.push(
       this._splitValidator,
@@ -28,6 +29,7 @@ class ArraySchema extends Schema {
       this._itemsValidator,
       this._lengthValidator,
       this._sortValidator,
+      this._formatValidator,
     )
   }
 
@@ -361,8 +363,38 @@ This is too much, not more than ${check.max} are allowed.`))
     return Promise.resolve()
   }
 
+  format(value?: 'json'|'pretty'|'simple' | RegExp | Reference): this {
+    return this._setAny('format', value)
+  }
 
-  // format()
+  _formatDescriptor() {
+    const set = this._setting
+    if (this._isReference('format')) {
+      return `The list is converted into a list specified by ${set.format.description}. `
+    } else if (set.format) {
+      return `The list is converted into a ${set.format} list. `
+    }
+    return ''
+  }
+
+  _formatValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkString('format')
+      if (check.format && !['json', 'pretty', 'simple', 'human'].includes(check.format)) {
+        throw new Error(`The format ${check.format} is not supported`)
+      }
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // check value
+    if (!check.format) return Promise.resolve()
+    if (check.format === 'json') data.value = JSON.stringify(data.value)
+    else if (check.format === 'pretty') {
+      data.value = data.value.map(e => util.inspect(e)).join(', ').replace(/(.*), /, '$1 and ')
+    } else data.value = data.value.join(', ')
+    return Promise.resolve()
+  }
 
 }
 

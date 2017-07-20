@@ -65,7 +65,7 @@ class StringSchema extends AnySchema {
   }
 
   _typeValidator(data: SchemaData): Promise<void> {
-    if (typeof data.value === 'string') {
+    if (typeof data.value !== 'string') {
       return Promise.reject(new SchemaError(this, data, 'A text string is needed.'))
     }
     return Promise.resolve()

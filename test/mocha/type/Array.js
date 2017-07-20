@@ -9,7 +9,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = ArraySchema
 
-describe.only('array', () => {
+describe('array', () => {
 
   it('should work without specification', (done) => {
     const data = [1, 2]
@@ -442,6 +442,69 @@ describe.only('array', () => {
       const schema = new MySchema().length(ref)
       // use schema
       expect(helper.description(schema)).to.be.an('string')
+    })
+
+  })
+
+  describe('format', () => {
+
+    it('should work with json', (done) => {
+      const data = [1, 2, { a: 1 }]
+      const schema = new MySchema().format('json')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+
+    it('should work with pretty', (done) => {
+      const data = [1, 2, { a: 1 }]
+      const schema = new MySchema().format('pretty')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+
+    it('should work with simple', (done) => {
+      const data = [1, 2, { a: 1 }]
+      const schema = new MySchema().format('simple')
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+
+    it('should remove', (done) => {
+      const data = [1, 2, { a: 1 }]
+      const schema = new MySchema().format('json').format()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).to.not.be.a('string')
+      }, done)
+    })
+
+    it('should work with reference', (done) => {
+      const data = [1, 2, { a: 1 }]
+      const ref = new Reference('json')
+      const schema = new MySchema().format(ref)
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().format('pretty')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('pretty')
+      const schema = new MySchema().format(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
     })
 
   })

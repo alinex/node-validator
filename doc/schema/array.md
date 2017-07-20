@@ -117,6 +117,25 @@ const ref = new Reference(true)
 const schema = new ArraySchema().reverse(ref)
 ```
 
+### format(string)
+
+Convert the list into a text string in one of the following formats:
+- `json` - use standard json format
+- `pretty` - use more readable, human style
+- `simple` - make a comma separated list
+
+```js
+const schema = new ArraySchema().format('simple')
+schema.format() // remove the setting
+```
+
+A reference may be used as flag:
+
+```js
+const ref = new Reference('human')
+const schema = new ArraySchema().format(ref)
+```
+
 
 ## Checking
 
