@@ -11,6 +11,7 @@
   - [Number](schema/number.md)
   - [Object](schema/object.md)
   - [Array](schema/array.md)
+  - [Logic](schema/logic.md)
   - [Reference](schema/reference.md)
 
 - [How To](howto.md)
