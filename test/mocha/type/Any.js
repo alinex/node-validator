@@ -14,7 +14,7 @@ describe('any', () => {
   it('should work without specification', (done) => {
     const data = 5
     const schema = new MySchema()
-    expect(schema, 'schema').to.be.an('object')
+    expect(schema).to.be.an('object')
     // use schema
     helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)

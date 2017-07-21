@@ -15,7 +15,7 @@ function validateOk(schema: Schema, data: any, cb?: Function, done ?: Function) 
   debug(new SchemaData(data), schema.constructor.name)
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
-  expect(res, 'validate()').to.be.fulfilled.notify(() => {
+  expect(res).to.be.fulfilled.notify(() => {
     res.then((e) => {
       debug(schema._check, schema.constructor.name, 'Used checks')
       try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
@@ -32,7 +32,7 @@ function validateFail(schema: Schema, data: any, cb?: Function, done ?: Function
   debug(new SchemaData(data), schema.constructor.name)
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
-  expect(res, 'validate()').to.be.rejectedWith(Error).notify(() => {
+  expect(res).to.be.rejectedWith(Error).notify(() => {
     res.then((e) => {
       debug(schema._check, schema.constructor.name, 'Used checks')
       if (done) done(new Error('it should not be resolved'))
@@ -56,7 +56,7 @@ function reference(ref: Reference, pos?: any, cb?: Function, done ?: Function) {
   debug(ref, ref.constructor.name)
   const res = ref.resolve(pos)
   debug(res, ref.constructor.name)
-  expect(res, 'reference()').to.be.fulfilled.notify(() => {
+  expect(res).to.be.fulfilled.notify(() => {
     res.then((e) => {
       try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
     })

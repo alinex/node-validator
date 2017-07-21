@@ -1,9 +1,8 @@
 // flow-typed signature: 420657486843544ab2e09acc1250ca80
 // flow-typed version: b43dff3e0e/chai_v4.x.x/flow_>=v0.15.0
 
-declare module "chai" {
-
-    declare type ExpectChain<T> = {
+declare module 'chai' {
+  declare type ExpectChain<T> = {
         and: ExpectChain<T>,
         at: ExpectChain<T>,
         be: ExpectChain<T>,
@@ -109,17 +108,18 @@ declare module "chai" {
         resolved: () => Promise<mixed> & ExpectChain<T>,
         rejectedWith: (value: mixed) => Promise<mixed> & ExpectChain<T>,
         rejected: () => Promise<mixed> & ExpectChain<T>,
+        fulfilled: () => Promise<mixed> & ExpectChain<T>,
         notify: (callback: () => mixed) => ExpectChain<T>,
 
         // chai-subset
         containSubset: (obj: Object | Object[]) => ExpectChain<T>
     };
 
-    declare function expect<T>(actual: T): ExpectChain<T>;
+  declare function expect<T>(actual: T): ExpectChain<T>;
 
-    declare function use(plugin: (chai: Object, utils: Object) => void): void;
+  declare function use(plugin: (chai: Object, utils: Object) => void): void;
 
-    declare class assert {
+  declare class assert {
       static(expression: mixed, message?: string): void;
       static fail(actual: mixed, expected: mixed, message?: string, operator?: string): void;
 
@@ -214,7 +214,7 @@ declare module "chai" {
           msg?: string): void;
     }
 
-    declare var config: {
+  declare var config: {
         includeStack: boolean,
         showDiff: boolean,
         truncateThreshold: number
