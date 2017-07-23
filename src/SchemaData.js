@@ -31,6 +31,10 @@ class SchemaData {
     return sub
   }
 
+  get clone(): this {
+    return Object.assign((Object.create(this): any), this)
+  }
+
 }
 
 export default SchemaData

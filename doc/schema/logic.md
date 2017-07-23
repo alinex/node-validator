@@ -47,16 +47,16 @@ does exactly this.
 
 # CODE
 
-set.queue: Set[string, Schema]
+set.logic: Set[string, Schema]
 
 replace Schema.validate(data) ? SchemaData : SchemaError
 
 last = null
-for [op, schema], i of set.queue
+for [op, schema], i of set.logic
   if op is 'and'    
-    set.queue[i][1] = last = schema.validate(last)
+    set.logic[i][1] = last = schema.validate(last)
   else
-    set.queue[i][1] = last = schema.validate(data)
+    set.logic[i][1] = last = schema.validate(data)
 
 reverse reduce and
 reverse reduce or

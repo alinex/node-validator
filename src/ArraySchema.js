@@ -240,7 +240,9 @@ as separator.\n`
     const set = this._setting
     let msg = ''
     if (set.items) {
-      set.items.forEach((schema, i) => (msg += `- ${i}: ${schema.description}\n`))
+      set.items.forEach((schema, i) => {
+        msg += `- ${i}: ${schema.description.replace(/\n/g, '\n  ')}\n`
+      })
       if (msg.length) msg = `The following items have a special format:\n${msg}\n`
     }
     return msg

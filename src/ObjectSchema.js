@@ -144,7 +144,8 @@ as separator. `
     let msg = ''
     if (set.keys) {
       for (const [key, schema] of set.keys) {
-        msg += `- \`${typeof key === 'string' ? key : util.inspect(key)}\`: ${schema.description}\n`
+        msg += `- \`${typeof key === 'string' ? key : util.inspect(key)}\`: \
+${schema.description.replace(/\n/g, '\n  ')}\n`
       }
       if (msg.length) msg = `The following keys have a special format:\n${msg}\n`
     }

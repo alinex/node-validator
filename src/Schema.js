@@ -225,7 +225,6 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   // using schema
 
   get clone(): this {
-    if (this._negate) throw new Error('Impossible tu use `not` with clone method')
     return Object.assign((Object.create(this): any), this)
   }
 
@@ -238,7 +237,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     return msg.trim()
   }
 
-  validate(value: any, source?: string, options?: Object): Promise<any> {
+  _validate(value: any, source?: string, options?: Object): Promise<any> {
     const data = value instanceof SchemaData ? value : new SchemaData(value, source, options)
     let p = Promise.resolve()
     // resolve references in value first
@@ -286,9 +285,14 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     this._rules.validator.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
     return p.then(() => {
       data.done(data.value)
-      return data.value
+      return data
     })
-    .catch(err => (err ? Promise.reject(err) : data.value))
+    .catch(err => (err ? Promise.reject(err) : data))
+  }
+
+  validate(value: any, source?: string, options?: Object): Promise<any> {
+    return this._validate(value, source, options)
+    .then(data => data.value)
   }
 }
 
