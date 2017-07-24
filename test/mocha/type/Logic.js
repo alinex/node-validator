@@ -9,7 +9,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = LogicSchema
 
-describe.only('logic', () => {
+describe('logic', () => {
 
   it('should work without specification', (done) => {
     const data = 5
