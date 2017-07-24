@@ -35,20 +35,24 @@ class NumberSchema extends AnySchema {
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
+    let allow = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._unitDescriptor,
       this._sanitizeDescriptor,
       this._roundDescriptor,
       this._minmaxDescriptor,
       this._multipleDescriptor,
+      allow,
       this._formatDescriptor,
     )
+    allow = this._rules.validator.pop()
     this._rules.validator.push(
       this._unitValidator,
       this._sanitizeValidator,
       this._roundValidator,
       this._minmaxValidator,
       this._multipleValidator,
+      allow,
       this._formatValidator,
     )
   }

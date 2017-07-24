@@ -1,4 +1,6 @@
 // @flow
+import util from 'util'
+
 import Schema from './Schema'
 import SchemaError from './SchemaError'
 import SchemaData from './SchemaData'
@@ -14,6 +16,15 @@ class LogicSchema extends Schema {
     this._rules.validator.push(
       this._logicValidator,
     )
+  }
+
+  inspect(depth: number, options: Object): string {
+    const newOptions = Object.assign({}, options, {
+      depth: options.depth === null ? null : options.depth - 1,
+    })
+    const padding = ' '.repeat(5)
+    const inner = util.inspect(this._setting.logic, newOptions).replace(/\n/g, `\n${padding}`)
+    return `${options.stylize(this.constructor.name, 'class')} ${inner} `
   }
 
   // setup schema
@@ -73,11 +84,19 @@ class LogicSchema extends Schema {
           logic[i][1] = last
           return last
         })
+        .catch((err) => {
+          logic[i][1] = err
+          return undefined
+        })
       } else {
-        p = p.then(() => schema._validate(data))
+        p = p.then(() => schema._validate(data.clone))
         .then((last) => {
           logic[i][1] = last
           return last
+        })
+        .catch((err) => {
+          logic[i][1] = err
+          return undefined
         })
       }
     })
@@ -88,7 +107,7 @@ class LogicSchema extends Schema {
         const [op, res] = v
         if (op === 'and') {
           if (res instanceof SchemaData) logic[last][1] = res
-          else if (logic[last] instanceof SchemaData) logic[last][1] = res
+          else if (logic[last][1] instanceof SchemaData) logic[last][1] = res
           delete logic[i]
         } else last = i
       })
