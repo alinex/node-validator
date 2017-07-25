@@ -1,6 +1,9 @@
-# String Schema
+# Datetime Schema
 
-Create a schema that matches any data type.
+Create a schema that matches date or time values.
+
+It can be used for dates, time, date with time and also ranges of them which consists of a start
+and end date or time.
 
 See at [Any Schema](any.md) for the inherited methods you may call like:
 - `required()`
@@ -10,6 +13,10 @@ See at [Any Schema](any.md) for the inherited methods you may call like:
 - `deny()`
 - `valid()`
 - `invalid()`
+
+
+
+
 
 ## Sanitize
 
