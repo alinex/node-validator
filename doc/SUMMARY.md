@@ -9,7 +9,7 @@
   - [Boolean](schema/boolean.md)
   - [String](schema/string.md)
   - [Number](schema/number.md)
-  - [Datetime](schema/datetime.md)
+  - [Date](schema/date.md)
   - [Object](schema/object.md)
   - [Array](schema/array.md)
   - [Logic](schema/logic.md)
