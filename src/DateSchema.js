@@ -59,7 +59,7 @@ class DateSchema extends AnySchema {
 //      this._replaceDescriptor,
 //      this._caseDescriptor,
 //      this._checkDescriptor,
-//      this._lengthDescriptor,
+      this._rangeDescriptor,
 //      this._matchDescriptor,
       allow,
     )
@@ -70,7 +70,7 @@ class DateSchema extends AnySchema {
 //      this._replaceValidator,
 //      this._caseValidator,
 //      this._checkValidator,
-//      this._lengthValidator,
+      this._rangeValidator,
 //      this._matchValidator,
       this._formatValidator,
       allow,
@@ -131,11 +131,104 @@ It may also be given in string format. `
     return Promise.resolve()
   }
 
+  min(value?: Date | string | Reference): this {
+    const set = this._setting
+    if (value === undefined) delete set.min
+    else if (!(value instanceof Reference)) {
+      if (set.timezone) value = moment.tz(value, set.timezone)
+      else value = moment(value)
+      if (!value.isValid()) {
+        throw new Error('The given text is not parse able as date')
+      }
+      set.min = value
+      if (set.max && !this._isReference('max') && value > set.max) {
+        throw new Error('Min can´t be greater than max value')
+      }
+    } else set.min = value
+    return this
+  }
+
+  max(value?: Date | string | Reference): this {
+    const set = this._setting
+    if (value === undefined) delete set.max
+    else if (!(value instanceof Reference)) {
+      if (set.timezone) value = moment.tz(value, set.timezone)
+      else value = moment(value)
+      if (!value.isValid()) {
+        throw new Error('The given text is not parse able as date')
+      }
+      set.max = value
+      if (set.min && !this._isReference('min') && value < set.min) {
+        throw new Error('Max can´t be less than min value')
+      }
+    } else set.max = value
+    return this
+  }
+
+  _rangeDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.min instanceof Reference) {
+      msg += `Minimum ${set.type} depends on ${set.min.description}. `
+    }
+    if (set.max instanceof Reference) {
+      msg += `Maximum ${set.type} depends on ${set.max.description}. `
+    }
+    if (!this._isReference('min') && !this._isReference('max') && set.min && set.max) {
+      msg = set.min === set.max ? `The ${set.type} has to be after ${set.min}. `
+      : `The ${set.type} should be between ${set.min} and ${set.max}. `
+    } else if (!this._isReference('min') && set.min) {
+      msg = `The ${set.type} needs to be after ${set.min}. `
+    } else if (!this._isReference('max') && set.max) {
+      msg = `The ${set.type} needs to be before ${set.min}. `
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _rangeValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    if (check.min && this._isReference('min')) {
+      if (check.timezone) check.min = moment.tz(check.min, check.timezone)
+      else check.min = moment(check.min)
+      if (!check.min.isValid()) {
+        return Promise.reject(new SchemaError(this, data,
+          `The given text is not parse able as ${check.type}`))
+      }
+      if (data.value < check.min) {
+        return Promise.reject(new SchemaError(this, data,
+          `${check.type} can´t be before min ${check.type}`))
+      }
+    }
+    if (check.max && this._isReference('max')) {
+      if (check.timezone) check.max = moment.tz(check.max, check.timezone)
+      else check.max = moment(check.max)
+      if (!check.max.isValid()) {
+        return Promise.reject(new SchemaError(this, data,
+          `The given text is not parse able as ${check.type}`))
+      }
+      if (data.value > check.max) {
+        return Promise.reject(new SchemaError(this, data,
+          `${check.type} can´t be after min ${check.type}`))
+      }
+    }
+    // check range
+    if (check.min && check.min.isAfter(data.value)) {
+      return Promise.reject(new SchemaError(this, data,
+      `The ${check.type} is before the defined range. It has to be after ${check.min}.`))
+    }
+    if (check.max && check.max.isBefore(data.value)) {
+      return Promise.reject(new SchemaError(this, data,
+      `The ${check.type} is after the defined range. It has to be before ${check.max}.`))
+    }
+    return Promise.resolve()
+  }
+
   _formatValidator(data: SchemaData): Promise<void> {
     const check = this._check
     data.value = data.value.toDate()
     return Promise.resolve()
   }
+
 
 //   # min/max
 //   if @schema.range?

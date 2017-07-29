@@ -78,19 +78,42 @@ schema.type() // to go back to default setting
 
 ### timezone(string)
 
-If range is set two values are needed in the string or as array containing the start and end.
+Set the timezone which is assumed as default if none is given. You may give the short names or the
+complete written names.
 
 ```js
-const schema = new DateSchema().range()
-schema.range(false) // to remove setting
+const schema = new DateSchema().timezone('EST')
+schema.timezone('Eastern Standard Time') // alternative with complete name
+schema.timezone() // to remove setting
+```
+
+References are also possible:
+
+```js
+const ref = new Reference('EST')
+const schema = new DateSchema().timezone(ref)
 ```
 
 
 ## Validation
 
-min()
-max()
-truncate()
+You may give a time frame in which the date may be. The time frame may also be given in the same way
+as the date value. So you can also use the 'now' date.
+
+### min(date)
+
+```js
+const schema = new DateSchema().min('now') // date in the future
+schema.min() // to remove setting
+```
+
+### max(date)
+
+```js
+const schema = new DateSchema().max('now') // date in the past
+schema.max() // to remove setting
+```
+
 
 ## Format
 

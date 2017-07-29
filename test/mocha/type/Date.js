@@ -66,10 +66,18 @@ describe.only('string', () => {
     it('should allow only time', (done) => {
       const schema = new MySchema()
       async.eachSeries([
-         ['9:30', moment(new Date()).hour(9).minute(30).second(0).millisecond(0).toDate()],
-         ['09:30', moment(new Date()).hour(9).minute(30).second(0).millisecond(0).toDate()],
-         ['09:30:26', moment(new Date()).hour(9).minute(30).second(26).millisecond(0).toDate()],
-         ['24:00:00', moment(new Date()).hour(24).minute(0).second(0).millisecond(0).toDate()],
+        ['9:30', moment(new Date()).hour(9).minute(30).second(0)
+         .millisecond(0)
+         .toDate()],
+        ['09:30', moment(new Date()).hour(9).minute(30).second(0)
+         .millisecond(0)
+         .toDate()],
+        ['09:30:26', moment(new Date()).hour(9).minute(30).second(26)
+         .millisecond(0)
+         .toDate()],
+        ['24:00:00', moment(new Date()).hour(24).minute(0).second(0)
+         .millisecond(0)
+         .toDate()],
       ], (check, cb) => {
         helper.validateOk(schema, check[0], (res) => {
           expect(res).deep.equal(check[1])
@@ -111,13 +119,22 @@ describe.only('string', () => {
     it('should allow reference names', (done) => {
       const schema = new MySchema()
       async.eachSeries([
-        ['today', moment(new Date()).hour(12).minute(0).second(0).millisecond(0).toDate()],
-        ['tomorrow', moment(new Date()).add(1, 'day').hour(12).minute(0).second(0)
-        .millisecond(0).toDate()],
-        ['yesterday', moment(new Date()).subtract(1, 'day').hour(12).minute(0).second(0)
-        .millisecond(0).toDate()],
-        ['last friday', moment(new Date()).subtract(7, 'days').day(5).hour(12).minute(0)
-        .second(0).millisecond(0).toDate()],
+        ['today', moment(new Date()).hour(12).minute(0).second(0)
+        .millisecond(0)
+        .toDate()],
+        ['tomorrow', moment(new Date()).add(1, 'day').hour(12).minute(0)
+        .second(0)
+        .millisecond(0)
+        .toDate()],
+        ['yesterday', moment(new Date()).subtract(1, 'day').hour(12).minute(0)
+        .second(0)
+        .millisecond(0)
+        .toDate()],
+        ['last friday', moment(new Date()).subtract(7, 'days').day(5).hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
+        .toDate()],
       ], (check, cb) => {
         helper.validateOk(schema, check[0], (res) => {
           expect(res).deep.equal(check[1])
@@ -153,9 +170,13 @@ describe.only('string', () => {
       const schema = new MySchema()
       async.eachSeries([
         ['This Friday at 13:00', moment(new Date()).day(5).hour(13).minute(0)
-        .second(0).millisecond(0).toDate()],
+        .second(0)
+        .millisecond(0)
+        .toDate()],
         ['5 days ago', moment(new Date()).subtract(5, 'days').hour(12).minute(0)
-        .second(0).millisecond(0).toDate()],
+        .second(0)
+        .millisecond(0)
+        .toDate()],
       ], (check, cb) => {
         helper.validateOk(schema, check[0], (res) => {
           expect(res).deep.equal(check[1])
@@ -169,6 +190,150 @@ describe.only('string', () => {
         const now = new Date().getTime()
         expect(res.getTime()).to.be.within(now - 1000, now)
       }, done)
+    })
+
+  })
+
+  describe('timezone', () => {
+
+    it('should work', (done) => {
+      const schema = new MySchema().timezone('EST')
+      async.eachSeries([
+        ['2013-02-08 09', new Date('2013-02-08 14:00 GMT')],
+        ['2013-02-08T09', new Date('2013-02-08 14:00 GMT')],
+        ['2013-02-08 09:30', new Date('2013-02-08 14:30 GMT')],
+        ['2013-02-08T09:30', new Date('2013-02-08 14:30 GMT')],
+        ['2013-02-08 09:30:26', new Date('2013-02-08 14:30:26 GMT')],
+        ['2013-02-08T09:30:26', new Date('2013-02-08 14:30:26 GMT')],
+        ['2013-02-08 09:30:26.123', new Date('2013-02-08 14:30:26.123 GMT')],
+        ['2013-02-08 24:00:00.00', new Date('2013-02-09 05:00:00 GMT')],
+      ], (check, cb) => {
+        helper.validateOk(schema, check[0], (res) => {
+          expect(res).deep.equal(check[1])
+        }, cb)
+      }, done)
+    })
+
+    it('should allow full name', (done) => {
+      const schema = new MySchema().timezone('Eastern Standard Time')
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2013-02-08 14:30 GMT'))
+      }, done)
+    })
+
+    it('should remove', (done) => {
+      const schema = new MySchema().timezone('EST').timezone()
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2013-02-08 08:30 GMT'))
+      }, done)
+    })
+
+    it('should allow reference', (done) => {
+      const ref = new Reference('EST')
+      const schema = new MySchema().timezone(ref)
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2013-02-08 14:30 GMT'))
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().timezone('EST')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('EST')
+      const schema = new MySchema().timezone(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('range', () => {
+
+    it('should work with min', (done) => {
+      const schema = new MySchema().min('2013-01-01 00:00')
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2013-02-08 09:30'))
+      }, done)
+    })
+
+    it('should fail with min', (done) => {
+      const schema = new MySchema().min('2013-01-01 00:00')
+      helper.validateFail(schema, '2012-02-08 09:30', undefined, done)
+    })
+
+    it('should remove min', (done) => {
+      const schema = new MySchema().min('2013-01-01 00:00').min()
+      helper.validateOk(schema, '2012-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2012-02-08 09:30'))
+      }, done)
+    })
+
+    it('should fail with min as reference', (done) => {
+      const ref = new Reference('2013-01-01 00:00')
+      const schema = new MySchema().min(ref)
+      helper.validateFail(schema, '2012-02-08 09:30', undefined, done)
+    })
+
+    it('should describe min', () => {
+      const schema = new MySchema().min('2013-01-01 00:00')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe min with reference', () => {
+      const ref = new Reference('2013-01-01 00:00')
+      const schema = new MySchema().min(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should work with max', (done) => {
+      const schema = new MySchema().max('2013-01-01 00:00')
+      helper.validateOk(schema, '2012-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2012-02-08 09:30'))
+      }, done)
+    })
+
+    it('should fail with max', (done) => {
+      const schema = new MySchema().max('2013-01-01 00:00')
+      helper.validateFail(schema, '2013-02-08 09:30', undefined, done)
+    })
+
+    it('should remove max', (done) => {
+      const schema = new MySchema().max('2013-01-01 00:00').max()
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2013-02-08 09:30'))
+      }, done)
+    })
+
+    it('should fail with max as reference', (done) => {
+      const ref = new Reference('2012-01-01 00:00')
+      const schema = new MySchema().max(ref)
+      helper.validateFail(schema, '2013-02-08 09:30', undefined, done)
+    })
+
+    it('should describe max', () => {
+      const schema = new MySchema().max('2013-01-01 00:00')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe max with reference', () => {
+      const ref = new Reference('2013-01-01 00:00')
+      const schema = new MySchema().max(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
     })
 
   })

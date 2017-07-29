@@ -6,14 +6,6 @@ import Reference from './Reference'
 
 class AnySchema extends Schema {
 
-//  _setting: {
-//    stripEmpty?: bool | Reference,
-//    default?: any,
-//    required?: bool | Reference,
-//    allow: Set<any>,
-//    deny: Set<any>,
-//  }
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
