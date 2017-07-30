@@ -17,11 +17,6 @@ class Schema {
     validator: Array<Function>,
   }
   _setting: { [string]: any } // definition of object
-//  _setting: {
-//    stripEmpty?: bool | Reference,
-//    default?: any,
-//    required?: bool | Reference,
-//  }
   _check: { [string]: any } // resolved data
 
   constructor(title?: string, detail?: string) {
@@ -97,12 +92,14 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   _checkArrayString(name: string) {
     this._checkArray(name)
     const check = this._check
-    check[name].forEach((e) => {
-      if (typeof e !== 'string') {
-        throw new Error(`No string value for \`${name}\` setting given in \
-  ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
-      }
-    })
+    if (check[name]) {
+      check[name].forEach((e) => {
+        if (typeof e !== 'string') {
+          throw new Error(`No string value for \`${name}\` setting given in \
+    ${(this._setting[name] && this._setting[name].description) || this._setting[name]}`)
+        }
+      })
+    }
   }
   _checkNumber(name: string) {
     const check = this._check
@@ -113,11 +110,12 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   }
   _checkArray(name: string) {
     const check = this._check
-    if (!check[name]) check[name] = []
-    else if (check[name] instanceof Set) check[name] = Array.from(check[name])
-    else if (!Array.isArray(check[name])) {
-      if (typeof check[name] === 'object') check[name] = Object.keys(check[name])
-      else check[name] = [check[name]]
+    if (check[name]) {
+      if (check[name] instanceof Set) check[name] = Array.from(check[name])
+      else if (!Array.isArray(check[name])) {
+        if (typeof check[name] === 'object') check[name] = Object.keys(check[name])
+        else check[name] = [check[name]]
+      }
     }
   }
   _checkObject(name: string) {
@@ -145,6 +143,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   _checkArrayMatch(name: string) {
     this._checkArray(name)
     const check = this._check
+    if (check[name] === undefined) return
     check[name] = check[name].map((e) => {
       if (e instanceof RegExp) return e
       const el = e.toString()

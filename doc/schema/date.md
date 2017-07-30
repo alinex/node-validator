@@ -117,6 +117,56 @@ schema.max() // to remove setting
 
 ## Format
 
-format()
-local()
-toTimezone()
+### format()
+
+Define the format for the output. This may be `unix` to convert to a unix timestamp (number of
+seconds from 1st January 1970) or with a format defined under:
+https://momentjs.com/docs/#/displaying/format/
+
+You may also use some of the predefined formats:
+- ISO8601: `YYYY-MM-DDTHH:mm:ssZ`
+- RFC1123: `ddd, DD MMM YYYY HH:mm:ss z`
+- RFC2822: `ddd, DD MMM YYYY HH:mm:ss ZZ`
+- RFC822: `ddd, DD MMM YY HH:mm:ss ZZ`
+- RFC1036: `ddd, D MMM YY HH:mm:ss ZZ`
+
+```js
+const schema = new DateSchema().format('YYYY-MM-DD HH:mm:ss')
+schema.format() // to remove setting
+```
+
+If no format is given a `Date` object is returned.
+
+```js
+const ref = new Reference('YYYY-MM-DD HH:mm:ss')
+const schema = new DateSchema().format(ref)
+```
+
+### toLocale()
+
+The format can also be converted to other locales (non english). You may also use some special
+localized formats with this.
+
+```js
+const schema = new DateSchema().toLocale('de').format('LLLL')
+schema.toLocale() // to remove locale setting
+```
+
+```js
+const ref = new Reference('de')
+const schema = new DateSchema().toLocale(ref).format('LLLL')
+```
+
+### toTimezone()
+
+This allows to change the timezone of the outcoming time in format:
+
+```js
+const schema = new DateSchema().toTimezone('CET').format('LLLL')
+schema.toTimezone() // to remove setting
+```
+
+```js
+const ref = new Reference('CET')
+const schema = new DateSchema().toTimezone(ref).format('LLLL')
+```

@@ -1,5 +1,4 @@
 // @flow
-import util from 'util'
 import moment from 'moment-timezone'
 import chrono from 'chrono-node'
 
@@ -55,25 +54,16 @@ class DateSchema extends AnySchema {
     let allow = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._typeDescriptor,
-//      this._makeStringDescriptor,
-//      this._replaceDescriptor,
-//      this._caseDescriptor,
-//      this._checkDescriptor,
-      this._rangeDescriptor,
-//      this._matchDescriptor,
       allow,
+      this._rangeDescriptor,
+      this._formatDescriptor,
     )
     allow = this._rules.validator.pop()
     this._rules.validator.push(
-//      this._fromStringValidator,
       this._typeValidator,
-//      this._replaceValidator,
-//      this._caseValidator,
-//      this._checkValidator,
-      this._rangeValidator,
-//      this._matchValidator,
-      this._formatValidator,
       allow,
+      this._rangeValidator,
+      this._formatValidator,
     )
   }
 
@@ -223,82 +213,46 @@ It may also be given in string format. `
     return Promise.resolve()
   }
 
-  _formatValidator(data: SchemaData): Promise<void> {
-    const check = this._check
-    data.value = data.value.toDate()
-    return Promise.resolve()
+  format(value?: string | Reference): this { return this._setAny('format', value) }
+  toLocale(value?: string | Reference): this { return this._setAny('toLocale', value) }
+  toTimezone(value?: string | Reference): this {
+    const set = this._setting
+    if (value === undefined) delete set.toTimezone
+    else if (typeof value === 'string') set.toTimezone = zones[value] || value
+    else set.toTimezone = value
+    return this
   }
 
+  _formatDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.format) {
+      if (this._isReference('format')) {
+        msg += `The ${set.type} will be formatted like defined under ${set.format.description}. `
+      } else msg += `The ${set.type} will be formatted like: ${set.format}. `
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
 
-//   # min/max
-//   if @schema.range?
-//     if @schema.min? and (@value[0] < @schema.min) or @value[1] < @schema.min
-//       return @sendError "The #{@schema.part} has to be at or after #{@schema.min}", cb
-//     if @schema.max? and (@value[0] > @schema.max) or @value[1] > @schema.max
-//       return @sendError "The #{@schema.part} has to be at or before #{@schema.max}", cb
-//   else
-//     if @schema.min? and @value < @schema.min
-//       return @sendError "The #{@schema.part} has to be at or after #{@schema.min}", cb
-// if @schema.max? and @value > @schema.max
-//       return @sendError "The #{@schema.part} has to be at or before #{@schema.max}", cb
-//   # format value
-//   if @schema.toTimezone
-//     @schema.toTimezone = zones[@schema.toTimezone] ? @schema.toTimezone
-//   if @schema.range?
-//     if @schema.format?
-//       if alias[@schema.part]?[@schema.format]?
-//         @schema.format = alias[@schema.part][@schema.format]
-//       for p in [0, 1]
-//         m = moment @value[p]
-//         m = m.tz @schema.timezone if @schema.toTimezone
-//         if @schema.locale?
-//           m.locale @schema.locale
-//         @value[p] = switch @schema.format
-//           when 'unix' then  m.unix()
-//           else m.format @schema.format
-//   else
-//     if @schema.format?
-//       if alias[@schema.part]?[@schema.format]?
-//         @schema.format = alias[@schema.part][@schema.format]
-//       m = moment @value
-//       if @schema.locale?
-//         m.locale @schema.locale
-//       m = m.tz @schema.toTimezone if @schema.toTimezone
-//       @value = switch @schema.format
-//         when 'unix' then  m.unix()
-//         else m.format @schema.format
-//   # done checking and sanuitizing
-// @sendSuccess cb
-
-
-//  makeString(flag?: bool | Reference): this { return this._setFlag('makeString', flag) }
-//
-//  _makeStringDescriptor() {
-//    const set = this._setting
-//    let msg = 'A text is needed. '
-//    if (set.makeString instanceof Reference) {
-//      msg += `It will be converted to string depending on ${set.makeString.description}. `
-//    } else if (set.makeString) {
-//      msg += 'If the value is no string it will be converted to one. '
-//    }
-//    return msg.replace(/ $/, '\n')
-//  }
-//
-//  _makeStringValidator(data: SchemaData): Promise<void> {
-//    const check = this._check
-//    try {
-//      this._checkBoolean('makeString')
-//    } catch (err) {
-//      return Promise.reject(new SchemaError(this, data, err.message))
-//    }
-//    // check value
-//    if (check.makeString && typeof data.value !== 'string') data.value = data.value.toString()
-//    if (typeof data.value !== 'string') {
-//      return Promise.reject(new SchemaError(this, data, 'A `string` value is needed here.'))
-//    }
-//    return Promise.resolve()
-//  }
-
+  _formatValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkString('format')
+      if (alias[check.type] && alias[check.type][check.format]) {
+        check.format = alias[check.type][check.format]
+      }
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    // parse date
+    if (check.toLocale) data.value = data.value.locale(check.toLocale)
+    if (check.toTimezone) data.value = data.value.tz(check.toTimezone)
+    if (check.format) {
+      if (check.format === 'unix') data.value = data.value.unix()
+      else data.value = data.value.format(check.format)
+    } else data.value = data.value.toDate()
+    return Promise.resolve()
+  }
 
 }
 

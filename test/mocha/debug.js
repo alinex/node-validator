@@ -14,7 +14,7 @@ export default function (element: any, type: string = 'test', title?: string) {
     })
     .catch((err) => {
       if (err instanceof Error) {
-        debugLog(`Promise failed with ${err.constructor.name}: ${err.message}`)
+        debugLog(`Promise failed with ${err.constructor.name}: ${err.stack}`)
       } else debugLog(`Promise failed with ${util.inspect(err)}`)
     })
   } else if (element instanceof Schema) {

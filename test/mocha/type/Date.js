@@ -12,7 +12,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = DateSchema
 
-describe.only('string', () => {
+describe('string', () => {
 
   it('should work without specification', (done) => {
     const data = new Date()
@@ -332,6 +332,133 @@ describe.only('string', () => {
     it('should describe max with reference', () => {
       const ref = new Reference('2013-01-01 00:00')
       const schema = new MySchema().max(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('format', () => {
+
+    it('should work', (done) => {
+      const schema = new MySchema().format('YYYY-MM-DD HH:mm:ss')
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal('2013-02-08 09:30:00')
+      }, done)
+    })
+
+    it('should remove', (done) => {
+      const schema = new MySchema().format('YYYY-MM-DD HH:mm:ss').format()
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2013-02-08 09:30'))
+      }, done)
+    })
+
+    it('should allow reference', (done) => {
+      const ref = new Reference('YYYY-MM-DD HH:mm:ss')
+      const schema = new MySchema().format(ref)
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal('2013-02-08 09:30:00')
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().format('YYYY-MM-DD HH:mm:ss')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('YYYY-MM-DD HH:mm:ss')
+      const schema = new MySchema().format(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('toLocale', () => {
+
+    it('should work', (done) => {
+      const schema = new MySchema().toLocale('de').format('LLL')
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal('8. Februar 2013 09:30')
+      }, done)
+    })
+
+    it('should remove', (done) => {
+      const schema = new MySchema().toLocale('de').format('LLL').toLocale()
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal('February 8, 2013 9:30 AM')
+      }, done)
+    })
+
+    it('should allow reference', (done) => {
+      const ref = new Reference('de')
+      const schema = new MySchema().toLocale(ref).format('LLL')
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal('8. Februar 2013 09:30')
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().toLocale('de').format('LLL')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('de')
+      const schema = new MySchema().toLocale(ref).format('LLL')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('toTimezone', () => {
+
+    it('should work', (done) => {
+      const schema = new MySchema().timezone('GMT').toTimezone('EST').format('LLL')
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal('February 8, 2013 4:30 AM')
+      }, done)
+    })
+
+    it('should remove', (done) => {
+      const schema = new MySchema().timezone('GMT').toTimezone('EST').toTimezone()
+      .format('LLL')
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal('February 8, 2013 9:30 AM')
+      }, done)
+    })
+
+    it('should work with reference', (done) => {
+      const ref = new Reference('EST')
+      const schema = new MySchema().timezone('GMT').toTimezone(ref).format('LLL')
+      helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal('February 8, 2013 4:30 AM')
+      }, done)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().toTimezone('EST').format('LLL')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference('EST')
+      const schema = new MySchema().toTimezone(ref).format('LLL')
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

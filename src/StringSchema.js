@@ -492,7 +492,7 @@ ${set.stripDisallowed.description}. `
       return Promise.reject(new SchemaError(this, data, err.message))
     }
     // check value
-    if (check.match.length) {
+    if (check.match && check.match.length) {
       const fail = check.match.filter((e) => {
         if (typeof e === 'string') return !data.value.includes(e)
         return !data.value.match(e)
@@ -504,7 +504,7 @@ ${set.stripDisallowed.description}. `
           `The text should match: ${fail}`))
       }
     }
-    if (check.notMatch.length) {
+    if (check.notMatch && check.notMatch.length) {
       const fail = check.notMatch.filter((e) => {
         if (typeof e === 'string') return data.value.includes(e)
         return data.value.match(e)
