@@ -91,13 +91,10 @@ describe('reference', () => {
       }, done)
     })
 
-    it('should support function', (done) => {
-      function base() {
-        return { a: 1 }
-      }
-      const ref = new Reference(base)
+    it('should support command', (done) => {
+      const ref = new Reference('exec://date')
       helper.reference(ref, undefined, (res) => {
-        expect(res).deep.equal({ a: 1 })
+        expect(res).to.be.a('string')
       }, done)
     })
 

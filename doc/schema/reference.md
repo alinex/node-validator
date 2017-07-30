@@ -83,6 +83,13 @@ const ref = new Reference(source)
 const ref = new Reference('exec://date')
 ```
 
+This can also be used on remote commands:
+
+```js
+const ref = new Reference('ssh://server/date') // server defined for alinex-exec
+const ref = new Reference('ssh://root:password@server/date')
+```
+
 ### Local file
 
 ```js

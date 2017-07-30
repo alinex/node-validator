@@ -1,7 +1,12 @@
 // @flow
+// import URL from 'url'
 import util from 'alinex-util'
+import childProcess from 'child_process'
+import promisify from 'es6-promisify' // may be removed with node util.promisify later
 
 import SchemaData from './SchemaData'
+
+const exec = promisify(childProcess.exec)
 
 function sourceFunction(data: any): any {
   return typeof data === 'function' ? data() : data
@@ -9,7 +14,12 @@ function sourceFunction(data: any): any {
 
 function sourceCommand(data: any): any {
   if (typeof data !== 'string' || !util.string.starts(data, 'exec://')) return data
-  return 'xxx'
+  return exec(data.substring(7))
+}
+
+function sourceSsh(data: any): any {
+  if (typeof data !== 'string' || !util.string.starts(data, 'ssh://')) return data
+  return 'xxx' // new URL(data)
 }
 
 function sourceFile(data: any): any {
@@ -109,6 +119,7 @@ class Reference {
     let p = Promise.resolve(this.base || pos)
     .then(data => sourceFunction(data))
     .then(data => sourceCommand(data))
+    .then(data => sourceSsh(data))
     .then(data => sourceFile(data))
     .then(data => sourceWeb(data))
     // run rules seriously
