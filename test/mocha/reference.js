@@ -91,12 +91,56 @@ describe('reference', () => {
       }, done)
     })
 
-    it('should support command', (done) => {
+    it('should support local command', (done) => {
       const ref = new Reference('exec://date')
       helper.reference(ref, undefined, (res) => {
         expect(res).to.be.a('string')
       }, done)
     })
+
+    it('should support local command with options', (done) => {
+      const ref = new Reference('exec:///bin/date +%Y')
+      helper.reference(ref, undefined, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+
+//    it('should support remote command', (done) => {
+//      const ref = new Reference('ssh://divibib@vs10191 date')
+//      helper.reference(ref, undefined, (res) => {
+//        expect(res).to.be.a('string')
+//      }, done)
+//    })
+
+    it('should support local file', (done) => {
+      const ref = new Reference('file:///proc/version')
+      helper.reference(ref, undefined, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+
+    // web resource
+    it('should support web servcie http', (done) => {
+      const ref = new Reference('http://google.de')
+      helper.reference(ref, undefined, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+    it('should support web servcie https', (done) => {
+      const ref = new Reference('https://google.de')
+      helper.reference(ref, undefined, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+
+    // ftp
+    // sftp
+//    it('should support web servcie ftp', (done) => {
+//      const ref = new Reference('ftp://ftp.avm.de/fritz.box/')
+//      helper.reference(ref, undefined, (res) => {
+//        expect(res).to.be.a('string')
+//      }, done)
+//    })
 
   })
 

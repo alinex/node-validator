@@ -48,6 +48,8 @@
     "es6-promisify": "^5.0.0",
     "moment-timezone": "^0.5.13",
     "numeral": "^2.0.6",
+    "request-promise-native": "^1.0.4",
+    "ssh2": "^0.5.5",
     "striptags": "^3.0.1"
   },
   "devDependencies": {

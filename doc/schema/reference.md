@@ -60,17 +60,25 @@ which contains a we URI there the real data is loaded.
 
 ### Schema Data
 
+This allows you to reference other values within the same schema. This will get the validated value
+of the referenced element:
+
 ```js
 const ref = new Reference() // will use the current schema data element as start
 ```
 
 ### Object Structure
 
+Also a value can be retrieved from any other data structure:
+
 ```js
 const ref = new Reference(data)
 ```
 
 ### Function
+
+For every not as simple things you can also give a function which returns a promise or the base
+value:
 
 ```js
 function source() { ... }
@@ -79,15 +87,19 @@ const ref = new Reference(source)
 
 ### Command
 
+An local command may be also called by giving a command line:
+
 ```js
 const ref = new Reference('exec://date')
+const ref = new Reference('exec:///bin/date +%Y') // with full path and options
 ```
 
 This can also be used on remote commands:
 
 ```js
-const ref = new Reference('ssh://server/date') // server defined for alinex-exec
-const ref = new Reference('ssh://root:password@server/date')
+const ref = new Reference('ssh://server#date') // server defined for alinex-exec
+const ref = new Reference('ssh://root:password@server#date')
+const ref = new Reference('ssh://root@server/home/alex/.ssh/id#date')
 ```
 
 ### Local file

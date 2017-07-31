@@ -3,10 +3,13 @@
 import util from 'alinex-util'
 import childProcess from 'child_process'
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
+import fs from 'fs'
+import request from 'request-promise-native'
 
 import SchemaData from './SchemaData'
 
 const exec = promisify(childProcess.exec)
+const readFile = promisify(fs.readFile)
 
 function sourceFunction(data: any): any {
   return typeof data === 'function' ? data() : data
@@ -20,16 +23,38 @@ function sourceCommand(data: any): any {
 function sourceSsh(data: any): any {
   if (typeof data !== 'string' || !util.string.starts(data, 'ssh://')) return data
   return 'xxx' // new URL(data)
+//   var Client = require('ssh2').Client;
+//
+// var conn = new Client();
+// conn.on('ready', function() {
+//   console.log('Client :: ready');
+//   conn.exec('uptime', function(err, stream) {
+//     if (err) throw err;
+//     stream.on('close', function(code, signal) {
+//       console.log('Stream :: close :: code: ' + code + ', signal: ' + signal);
+//       conn.end();
+//     }).on('data', function(data) {
+//       console.log('STDOUT: ' + data);
+//     }).stderr.on('data', function(data) {
+//       console.log('STDERR: ' + data);
+//     });
+//   });
+// }).connect({
+//   host: '192.168.100.100',
+//   port: 22,
+//   username: 'frylock',
+//   privateKey: require('fs').readFileSync('/here/is/my/key')
+// });
 }
 
 function sourceFile(data: any): any {
   if (typeof data !== 'string' || !util.string.starts(data, 'file://')) return data
-  return 'xxx'
+  return readFile(data.substring(7), 'utf8')
 }
 
 function sourceWeb(data: any): any {
-  if (typeof data !== 'string' || !data.match(/https?:\/\//)) return data
-  return 'xxx'
+  if (typeof data !== 'string' || !data.match(/https?):\/\//)) return data
+  return request(data)
 }
 
 const accessor = {
