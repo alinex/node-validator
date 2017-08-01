@@ -49,7 +49,8 @@ and are not specified in Schema will not be replaced.
 The references allows to point to
 - other parts of the validating structure
 - any other data structure
-- an function returning data directly or by promise
+- a function returning data directly or by promise
+- an environment value
 - a command output
 - a local file content
 - a web resource
@@ -85,6 +86,14 @@ function source() { ... }
 const ref = new Reference(source)
 ```
 
+### Environment Setting
+
+Use a value from the environment.
+
+```js
+const ref = new Reference('env://TEST')
+```
+
 ### Command
 
 An local command may be also called by giving a command line:
@@ -94,7 +103,7 @@ const ref = new Reference('exec://date')
 const ref = new Reference('exec:///bin/date +%Y') // with full path and options
 ```
 
-This can also be used on remote commands:
+This can also be used on remote commands (not implemented yet!):
 
 ```js
 const ref = new Reference('ssh://server#date') // server defined for alinex-exec
@@ -104,20 +113,29 @@ const ref = new Reference('ssh://root@server/home/alex/.ssh/id#date')
 
 ### Local file
 
+The local file is read in as complete text.
+
 ```js
 const ref = new Reference('file:///etc/myconf')
 ```
 
 ### Web resource
 
+The page code or file contents is used as one text element.
+
 ```js
 const ref = new Reference('http://example.com/data')
-const ref = new Reference('http://example.com/data')
+const ref = new Reference('https://example.com/data')
 ```
 
 ## Accessors
 
+The different accessor methods are used to work on the reference value and get the final value out.
+They are added to a queue and are done in the order they are defined.
+
 ### path()
+
+Allows to access specific parts of an object structure:
 
 ```js
 const data = {
@@ -134,20 +152,88 @@ Backreferences are only possible in schema data:
 const ref = new Reference().path('../a') // neighbor element
 ```
 
-### range()
+You can search by using asterisk as directory placeholder or a double asterisk to go multiple level deep:
 
-### search()
+```js
+const ref = new Reference().path('/name/*/min')   // within any subelement
+const ref = new Reference().path('/name/*/*/min') // two level deep
+const ref = new Reference().path('/name/**/min')  // in any depth
+```
 
-### split()
+You may also use regexp notation to find the correct element:
+
+```js
+const ref = new Reference().path('/name/test[AB]/min') // one missing character
+const ref = new Reference().path('/name/test\d+/min')  // multiple missing characters
+```
+
+See the [Mozilla Developer Network](https://developer.mozilla.org/de/docs/Web/ JavaScript/Reference/Global_Objects/RegExp) for the possible syntax but without modifier.
+
+### keys()
+
+Get only the list of keys from an object.
+
+```js
+const data = { one: 1, two: 2 }
+const ref = new Reference(data).keys()
+// value will be ['one', 'two']
+```
+
+### trim()
+
+Starting and ending whitespace which may come from file read or command input will be removed.
+
+```js
+const data = 'Test\n'
+const ref = new Reference(data).trim()
+// value will be 'Test'
+```
+
+This method may also called on arrays or objects which will trim all of their string values.
+
+### split(separator, separator)
+
+    string -> list
 
 ### match()
 
-### parse()
+Alternative to split.
 
-### join()
+    strng -> list
+
+### range()
+
+    line 2..3
+    character 5..
+    multiple 1-3,5-9
+    subelement 2[4-6]
+
+### search()
+
+### join(separator, separator)
+
+    array -> string
+    with separator (multiple)
+
 
 ### filter()
 
+    within list
+    remove not matching
+
 ### addRef()
 
+### parse(format)
+
+The parse method allows to convert a string from a defined format into a data structure. The
+following formats are supported:
+- yaml
+- json
+- xml
+- csv
+
 ### fn()
+
+### or(Reference)
+
+### concat(Reference)

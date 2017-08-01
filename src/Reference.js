@@ -15,6 +15,11 @@ function sourceFunction(data: any): any {
   return typeof data === 'function' ? data() : data
 }
 
+function sourceEnvironment(data: any): any {
+  if (typeof data !== 'string' || !util.string.starts(data, 'env://')) return data
+  return process.env[data.substring(6)]
+}
+
 function sourceCommand(data: any): any {
   if (typeof data !== 'string' || !util.string.starts(data, 'exec://')) return data
   return exec(data.substring(7))
@@ -53,12 +58,14 @@ function sourceFile(data: any): any {
 }
 
 function sourceWeb(data: any): any {
-  if (typeof data !== 'string' || !data.match(/https?):\/\//)) return data
+  if (typeof data !== 'string' || !data.match(/https?:\/\//)) return data
   return request(data)
 }
 
 const accessor = {
+
   path: (data: any, def: string): any => {
+    if (typeof data !== 'object') return data
     // work on SchemaData
     if (data instanceof SchemaData) {
       // back references
@@ -74,9 +81,26 @@ const accessor = {
       data = data.value
     }
     // work on other data structures
-    def = def.replace(/^(\.{,2}\/)+/, '') // no initial back references
-    return util.object.path(data, def)
+    def = def.replace(/[^/]+\/\.\.\//g, '').replace(/^(\.{,2}\/)+/, '')
+    return util.object.pathSearch(data, def)
   },
+
+  keys: (data: any): any => {
+    if (typeof data !== 'object') return data
+    return Object.keys(data)
+  },
+
+  trim: (data: any): any => {
+    if (typeof data === 'string') return data.trim()
+    if (Array.isArray(data)) return data.map(e => accessor.trim(e))
+    if (typeof data === 'object') {
+      const obj = {}
+      for (const key of Object.keys(data)) obj[key] = accessor.trim(data[key])
+      return obj
+    }
+    return data
+  },
+
 }
 
 // range
@@ -133,6 +157,16 @@ class Reference {
     return this
   }
 
+  keys(): this {
+    this.access.push(['keys', true])
+    return this
+  }
+
+  trim(): this {
+    this.access.push(['trim', true])
+    return this
+  }
+
   get description(): string {
     let msg = `reference at ${util.inspect(this.base)}`
     if (this.access.length) msg += ` -> ${this.access.join(' -> ')}`
@@ -143,6 +177,7 @@ class Reference {
     // get base data structure
     let p = Promise.resolve(this.base || pos)
     .then(data => sourceFunction(data))
+    .then(data => sourceEnvironment(data))
     .then(data => sourceCommand(data))
     .then(data => sourceSsh(data))
     .then(data => sourceFile(data))

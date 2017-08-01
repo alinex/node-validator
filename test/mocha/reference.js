@@ -92,6 +92,14 @@ describe('reference', () => {
     })
 
     it('should support local command', (done) => {
+      process.env.TESTENV = '777'
+      const ref = new Reference('env://TESTENV')
+      helper.reference(ref, undefined, (res) => {
+        expect(res).to.be.a('string')
+      }, done)
+    })
+
+    it('should support local command', (done) => {
       const ref = new Reference('exec://date')
       helper.reference(ref, undefined, (res) => {
         expect(res).to.be.a('string')
@@ -144,9 +152,27 @@ describe('reference', () => {
 
   })
 
-  describe('accessors', () => {
+  describe.only('accessors', () => {
 
     describe('path', () => {
+
+      const teams = {
+        europe: {
+          germany: {
+            stuttgart: 'VFB Stuttgart',
+            munich: 'FC Bayern',
+            cologne: 'FC Köln',
+          },
+          spain: {
+            madrid: 'Real Madrid',
+          },
+        },
+        southamerica: {
+          brazil: {
+            saopaulo: 'FC Sao Paulo',
+          },
+        },
+      }
 
       it('should get subelement of object', (done) => {
         const ref = new Reference({ a: 1 }).path('a')
@@ -172,6 +198,109 @@ describe('reference', () => {
         // use schema
         helper.validateOk(schema, data, (res) => {
           expect(res).deep.equal({ a: 2, b: 2 })
+        }, done)
+      })
+
+      it('should find group', (done) => {
+        const ref = new Reference(teams).path('europe/germany')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(teams.europe.germany)
+        }, done)
+      })
+
+      it('should find element', (done) => {
+        const ref = new Reference(teams).path('europe/germany/stuttgart')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(teams.europe.germany.stuttgart)
+        }, done)
+      })
+
+      it('should fail with', (done) => {
+        const ref = new Reference(teams).path('berlin')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).equal(undefined)
+        }, done)
+      })
+
+      it('should allow backreferences in path', (done) => {
+        const ref = new Reference(teams).path('europe/../southamerica')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(teams.southamerica)
+        }, done)
+      })
+
+      it('should allow name with asterisk', (done) => {
+        const ref = new Reference(teams).path('europe/*/munich')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(teams.europe.germany.munich)
+        }, done)
+      })
+
+      it('should allow multilevel asterisk', (done) => {
+        const ref = new Reference(teams).path('**/munich')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(teams.europe.germany.munich)
+        }, done)
+      })
+
+      it('should allow regexp pattern', (done) => {
+        const ref = new Reference(teams).path('**/(munich|stuttgart)')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal([teams.europe.germany.stuttgart, teams.europe.germany.munich])
+        }, done)
+      })
+
+    })
+
+    describe('keys', () => {
+
+      it('should get list', (done) => {
+        const data = { one: 1, two: 2 }
+        const ref = new Reference(data).keys()
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(['one', 'two'])
+        }, done)
+      })
+
+      it('should do nothing on undefined', (done) => {
+        const ref = new Reference(undefined).keys()
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(undefined)
+        }, done)
+      })
+
+    })
+
+    describe('trim', () => {
+
+      it('should work on string', (done) => {
+        const data = 'Test\n'
+        const ref = new Reference(data).trim()
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal('Test')
+        }, done)
+      })
+
+      it('should work on array', (done) => {
+        const data = ['one\n', '   two    ', '\t three']
+        const ref = new Reference(data).trim()
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(['one', 'two', 'three'])
+        }, done)
+      })
+
+      it('should work on object', (done) => {
+        const data = { eins: 'one\n', zwei: '   two    ', drei: '\t three' }
+        const ref = new Reference(data).trim()
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal({ eins: 'one', zwei: 'two', drei: 'three' })
+        }, done)
+      })
+
+      it('should do nothing on undefined', (done) => {
+        const ref = new Reference(undefined).trim()
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(undefined)
         }, done)
       })
 
