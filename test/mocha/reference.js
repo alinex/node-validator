@@ -306,6 +306,30 @@ describe('reference', () => {
 
     })
 
+    describe('split', () => {
+
+      it('should work on string', (done) => {
+        const data = 'One;Eins\nTwo;Zwei\nThree;Drei'
+        const ref = new Reference(data).split('\n', ';')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal([['One', 'Eins'], ['Two', 'Zwei'], ['Three', 'Drei']])
+        }, done)
+      })
+
+    })
+
+    describe('join', () => {
+
+      it('should work on string', (done) => {
+        const data = [['One', 'Eins'], ['Two', 'Zwei'], ['Three', 'Drei']]
+        const ref = new Reference(data).join('\n', ';')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal('One;Eins\nTwo;Zwei\nThree;Drei')
+        }, done)
+      })
+
+    })
+
   })
 
 })

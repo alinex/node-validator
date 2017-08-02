@@ -191,9 +191,38 @@ const ref = new Reference(data).trim()
 
 This method may also called on arrays or objects which will trim all of their string values.
 
-### split(separator, separator)
+### split(separator, separator, separator)
 
-    string -> list
+This allows to split the string element or the array/objects string values by the defined
+separators. Up to three splits may be defined here.
+
+```js
+const data = 'One;Eins\nTwo;Zwei\nThree;Drei'
+const ref = new Reference(data).trim('\n', ';')
+// value will be [['One', 'Eins'], ['Two', 'Zwei'], ['Three', 'Drei']]
+```
+
+If nothing given the newline character is assumed as only separator.
+You may also use regular expressions to separate the string.
+
+### join(separator, separator, separator)
+
+This is the opposite of `split` and will join array maybe with sub arrays together into a single
+string. The first separator is used for the outermost join.
+
+```js
+const data = [['One', 'Eins'], ['Two', 'Zwei'], ['Three', 'Drei']]
+const ref = new Reference(data).join('\n', ';')
+// value will be 'One;Eins\nTwo;Zwei\nThree;Drei'
+```
+
+If no separator given it will join one level deep with newline as separator.
+
+
+
+
+
+
 
 ### match()
 
@@ -209,11 +238,6 @@ Alternative to split.
     subelement 2[4-6]
 
 ### search()
-
-### join(separator, separator)
-
-    array -> string
-    with separator (multiple)
 
 
 ### filter()

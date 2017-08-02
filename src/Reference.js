@@ -101,14 +101,46 @@ const accessor = {
     return data
   },
 
+  split: (data: any, def: Array<string|RegExp>): any => {
+    if (typeof data === 'string') {
+      data = data.split(def[0])
+      if (def[1]) data = data.map(e => e.split(def[1]))
+      if (def[2]) data = data.map(e => e.map(f => f.split(def[2])))
+      return data
+    }
+    if (Array.isArray(data)) return data.map(e => accessor.split(e, def))
+    if (typeof data === 'object') {
+      const obj = {}
+      for (const key of Object.keys(data)) obj[key] = accessor.split(data[key], def)
+      return obj
+    }
+    return data
+  },
+
+  join: (data: any, def: Array<string|RegExp>): any => {
+    if (typeof data === 'string') return data
+    if (Array.isArray(data)) {
+      if (def[2]) {
+        data = data.map(e => (Array.isArray(e)
+        ? e.map(f => (Array.isArray(f) ? f.join(def[2]) : f)) : e))
+      }
+      if (def[1]) data = data.map(e => (Array.isArray(e) ? e.join(def[1]) : e))
+      return data.join(def[0])
+    }
+    if (typeof data === 'object') {
+      const obj = {}
+      for (const key of Object.keys(data)) obj[key] = accessor.join(data[key], def)
+      return obj
+    }
+    return data
+  },
+
 }
 
 // range
 // search
-// split
 // match
 // parse
-// join
 // filter
 // addRef
 // fn
@@ -164,6 +196,18 @@ class Reference {
 
   trim(): this {
     this.access.push(['trim', true])
+    return this
+  }
+
+  split(...def: Array<string|RegExp>): this {
+    if (!def.length) def = ['\n']
+    this.access.push(['split', def])
+    return this
+  }
+
+  join(...def: Array<string>): this {
+    if (!def.length) def = ['\n']
+    this.access.push(['join', def])
     return this
   }
 
