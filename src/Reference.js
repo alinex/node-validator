@@ -135,6 +135,17 @@ const accessor = {
     return data
   },
 
+  match: (data: any, def: RegExp): any => {
+    if (typeof data === 'string') return data.match(def)
+    if (Array.isArray(data)) return data.map(e => accessor.match(e, def))
+    if (typeof data === 'object') {
+      const obj = {}
+      for (const key of Object.keys(data)) obj[key] = accessor.match(data[key], def)
+      return obj
+    }
+    return data
+  },
+
 }
 
 // range
@@ -208,6 +219,11 @@ class Reference {
   join(...def: Array<string>): this {
     if (!def.length) def = ['\n']
     this.access.push(['join', def])
+    return this
+  }
+
+  match(def: RegExp): this {
+    this.access.push(['match', def])
     return this
   }
 

@@ -218,27 +218,33 @@ const ref = new Reference(data).join('\n', ';')
 
 If no separator given it will join one level deep with newline as separator.
 
+### match(regexp)
+
+Run a regular expression on the string and get the found matches back or the match and it's groups
+for single matches.
+
+```js
+const data = 'The house number one is just beside house number three.'
+const ref = new Reference(data).match(/number (\w+)/g)
+// value will be ['number one', 'number three']
+const ref = new Reference(data).match(/number (\w+)/)
+// value will be ['number one', 'one']
+```
+
+For single matches element 0 will be the full match, the groups will follow. If used on object or
+list each element of them will be replaced with the match result.
 
 
 
 
-
-
-### match()
-
-Alternative to split.
-
-    strng -> list
-
-### range()
+### range(from, to)
 
     line 2..3
     character 5..
+    character 5..-3
+    character -3..
     multiple 1-3,5-9
     subelement 2[4-6]
-
-### search()
-
 
 ### filter()
 

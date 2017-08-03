@@ -320,11 +320,31 @@ describe('reference', () => {
 
     describe('join', () => {
 
-      it('should work on string', (done) => {
+      it('should work', (done) => {
         const data = [['One', 'Eins'], ['Two', 'Zwei'], ['Three', 'Drei']]
         const ref = new Reference(data).join('\n', ';')
         helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal('One;Eins\nTwo;Zwei\nThree;Drei')
+        }, done)
+      })
+
+    })
+
+    describe('match', () => {
+
+      it('should work with global match', (done) => {
+        const data = 'The house number one is just beside house number three.'
+        const ref = new Reference(data).match(/number (\w+)/g)
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(['number one', 'number three'])
+        }, done)
+      })
+
+      it('should work with single match', (done) => {
+        const data = 'The house number one is just beside house number three.'
+        const ref = new Reference(data).match(/number (\w+)/)
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(['number one', 'one'])
         }, done)
       })
 
