@@ -179,6 +179,16 @@ const ref = new Reference(data).keys()
 // value will be ['one', 'two']
 ```
 
+### values()
+
+Get only the list of values from an object.
+
+```js
+const data = { one: 1, two: 2 }
+const ref = new Reference(data).values()
+// value will be [1, 2]
+```
+
 ### trim()
 
 Starting and ending whitespace which may come from file read or command input will be removed.
@@ -236,22 +246,37 @@ list each element of them will be replaced with the match result.
 
 
 
+### filter(method, options)
 
-### range(from, to)
+The filter allows to select only some elements of an array or object. Therefor different filter
+objects exists:
 
-    line 2..3
-    character 5..
-    character 5..-3
-    character -3..
-    multiple 1-3,5-9
-    subelement 2[4-6]
+- range: to select by element number
+      [from, to] (multiple)
+      [elem] (multiple)
+      use null to specify open end
+      use negative number to find from end
+- list: Array<string>
+- notList: Array<string>
+- match: Array<RegExp>
+- notMatch: Array<RegExp>
 
-### filter()
+    ```js
+    const data = 'The house number one is just beside house number three.'
+    const ref = new Reference(data).match(/number (\w+)/g)
+    // value will be ['number one', 'number three']
+    const ref = new Reference(data).match(/number (\w+)/)
+    // value will be ['number one', 'one']
+    ```
 
-    within list
-    remove not matching
+### flatten(separator)
 
-### addRef()
+    array
+    object
+
+### deepen(separator)
+
+    string
 
 ### parse(format)
 
@@ -262,8 +287,16 @@ following formats are supported:
 - xml
 - csv
 
-### fn()
+### fn(options)
+
+    call method like internal accessors
 
 ### or(Reference)
 
+    go on if first returns undefined
+
 ### concat(Reference)
+
+    strings
+    arrays
+    objects

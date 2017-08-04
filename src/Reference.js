@@ -90,6 +90,11 @@ const accessor = {
     return Object.keys(data)
   },
 
+  values: (data: any): any => {
+    if (typeof data !== 'object') return data
+    return Object.values(data)
+  },
+
   trim: (data: any): any => {
     if (typeof data === 'string') return data.trim()
     if (Array.isArray(data)) return data.map(e => accessor.trim(e))
@@ -202,6 +207,11 @@ class Reference {
 
   keys(): this {
     this.access.push(['keys', true])
+    return this
+  }
+
+  values(): this {
+    this.access.push(['values', true])
     return this
   }
 

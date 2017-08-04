@@ -271,6 +271,25 @@ describe('reference', () => {
 
     })
 
+    describe('values', () => {
+
+      it('should get list', (done) => {
+        const data = { one: 1, two: 2 }
+        const ref = new Reference(data).values()
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal([1, 2])
+        }, done)
+      })
+
+      it('should do nothing on undefined', (done) => {
+        const ref = new Reference(undefined).values()
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(undefined)
+        }, done)
+      })
+
+    })
+
     describe('trim', () => {
 
       it('should work on string', (done) => {
