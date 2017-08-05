@@ -244,6 +244,25 @@ const ref = new Reference(data).match(/number (\w+)/)
 For single matches element 0 will be the full match, the groups will follow. If used on object or
 list each element of them will be replaced with the match result.
 
+### range(list, list)
+
+The range allows to filter specific elements of an array or object. All other elements will be
+removed.
+
+```js
+const data = [10, 11, 12, 13, 14, 15]
+const ref = new Reference(data).range([1], [3, 5])
+// value will be [11, 13, 14]
+const ref = new Reference(data).range([0, 2], [3, -1])
+// value will be [10, 11, 13, 14]
+```
+
+The lists contain one or two integers defining the element to extract or the range of elements
+to extract. The number `0` defines the start or end of the list. Also negative numbers can be used
+to define the element from the end. If an end number is given all elements till the defined but
+excluding the end number are included.
+
+
 
 
 ### filter(method, options)
@@ -251,15 +270,13 @@ list each element of them will be replaced with the match result.
 The filter allows to select only some elements of an array or object. Therefor different filter
 objects exists:
 
-- range: to select by element number
-      [from, to] (multiple)
-      [elem] (multiple)
-      use null to specify open end
-      use negative number to find from end
 - list: Array<string>
+- match: RegExp
+
+### remove()
+
 - notList: Array<string>
-- match: Array<RegExp>
-- notMatch: Array<RegExp>
+- notMatch: RegExp
 
     ```js
     const data = 'The house number one is just beside house number three.'
@@ -268,6 +285,9 @@ objects exists:
     const ref = new Reference(data).match(/number (\w+)/)
     // value will be ['number one', 'one']
     ```
+
+
+
 
 ### flatten(separator)
 

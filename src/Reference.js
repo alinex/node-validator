@@ -151,6 +151,19 @@ const accessor = {
     return data
   },
 
+  range: (data: any, def: Array<Array<number>>): any => {
+    if (typeof data !== 'object') return data
+    if (!Array.isArray(data)) data = Object.values(data)
+    let obj = []
+    for (const range of def) {
+      let end = range[1]
+      if (end === undefined) end = range[0] + 1
+      if (end === 0) end = data.length
+      obj = obj.concat(data.slice(range[0], end))
+    }
+    return obj
+  },
+
 }
 
 // range
@@ -234,6 +247,11 @@ class Reference {
 
   match(def: RegExp): this {
     this.access.push(['match', def])
+    return this
+  }
+
+  range(...def: Array<Array<number>>): this {
+    this.access.push(['range', def])
     return this
   }
 

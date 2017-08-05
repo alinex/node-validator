@@ -369,6 +369,42 @@ describe('reference', () => {
 
     })
 
+    describe('range', () => {
+
+      it('should work with single element', (done) => {
+        const data = [10, 11, 12, 13, 14, 15]
+        const ref = new Reference(data).range([1], [3])
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal([11, 13])
+        }, done)
+      })
+
+      it('should work with range', (done) => {
+        const data = [10, 11, 12, 13, 14, 15]
+        const ref = new Reference(data).range([1, 4])
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal([11, 12, 13])
+        }, done)
+      })
+
+      it('should work with open end', (done) => {
+        const data = [10, 11, 12, 13, 14, 15]
+        const ref = new Reference(data).range([3, 0])
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal([13, 14, 15])
+        }, done)
+      })
+
+      it('should work with negatives', (done) => {
+        const data = [10, 11, 12, 13, 14, 15]
+        const ref = new Reference(data).range([-3, -1])
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal([13, 14])
+        }, done)
+      })
+
+    })
+
   })
 
 })
