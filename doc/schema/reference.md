@@ -244,7 +244,7 @@ const ref = new Reference(data).match(/number (\w+)/)
 For single matches element 0 will be the full match, the groups will follow. If used on object or
 list each element of them will be replaced with the match result.
 
-### range(list, list)
+### range(list...)
 
 The range allows to filter specific elements of an array or object. All other elements will be
 removed.
@@ -262,29 +262,36 @@ to extract. The number `0` defines the start or end of the list. Also negative n
 to define the element from the end. If an end number is given all elements till the defined but
 excluding the end number are included.
 
+### filter(list|RegExp)
 
+The filter allows to select only some elements of an array or object. Therefor you give a list of
+allowed elements or an expression which must be matched.
 
+```js
+const data = ['number one', 'number two', 'number three', 'number four']
+const ref = new Reference(data).filter('number three', 'number four', 'number five')
+// value will be ['number three', 'number four']
+const ref = new Reference(data).filter(/ t/)
+// value will be ['number two', 'number three']
+```
 
-### filter(method, options)
+Use `exclude()` for negated selection.
 
-The filter allows to select only some elements of an array or object. Therefor different filter
-objects exists:
+### exclude(list|RegExp)
 
-- list: Array<string>
-- match: RegExp
+The exclude allows to select all elements without the defined ones from an array or object. Therefor
+you give a list of disallowed elements or an expression which should not be matched.
 
-### remove()
+```js
+const data = ['number one', 'number two', 'number three', 'number four']
+const ref = new Reference(data).exclude('number three', 'number four', 'number five')
+// value will be ['number one', 'number two']
+const ref = new Reference(data).exclude(/ t/)
+// value will be ['number one', 'number four']
+```
 
-- notList: Array<string>
-- notMatch: RegExp
+Use `filter()` for positive selection.
 
-    ```js
-    const data = 'The house number one is just beside house number three.'
-    const ref = new Reference(data).match(/number (\w+)/g)
-    // value will be ['number one', 'number three']
-    const ref = new Reference(data).match(/number (\w+)/)
-    // value will be ['number one', 'one']
-    ```
 
 
 

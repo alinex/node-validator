@@ -405,6 +405,46 @@ describe('reference', () => {
 
     })
 
+    describe('filter', () => {
+
+      it('should work with list', (done) => {
+        const data = ['number one', 'number two', 'number three', 'number four']
+        const ref = new Reference(data).filter('number three', 'number four', 'number five')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(['number three', 'number four'])
+        }, done)
+      })
+
+      it('should work with regular expression', (done) => {
+        const data = ['number one', 'number two', 'number three', 'number four']
+        const ref = new Reference(data).filter(/ t/)
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(['number two', 'number three'])
+        }, done)
+      })
+
+    })
+
+    describe('exclude', () => {
+
+      it('should work with list', (done) => {
+        const data = ['number one', 'number two', 'number three', 'number four']
+        const ref = new Reference(data).exclude('number three', 'number four', 'number five')
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(['number one', 'number two'])
+        }, done)
+      })
+
+      it('should work with regular expression', (done) => {
+        const data = ['number one', 'number two', 'number three', 'number four']
+        const ref = new Reference(data).exclude(/ t/)
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal(['number one', 'number four'])
+        }, done)
+      })
+
+    })
+
   })
 
 })

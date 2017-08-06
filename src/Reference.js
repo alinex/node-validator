@@ -164,30 +164,47 @@ const accessor = {
     return obj
   },
 
+  filter: (data: any, def: Array<number>|RegExp): any => {
+    if (data === undefined) return data
+    if (typeof data !== 'object') {
+      if (def instanceof RegExp) return data.toString().match(def) ? def : undefined
+      return def.includes(data.toString()) ? data : undefined
+    }
+    if (!Array.isArray(data)) data = Object.values(data)
+    const obj = []
+    for (let check: any of data) {
+      if (typeof check !== 'string') check = check.toString()
+      if (def instanceof RegExp) {
+        if (check.match(def)) obj.push(check)
+      } else if (def.includes(check)) obj.push(check)
+    }
+    return obj
+  },
+
+  exclude: (data: any, def: Array<number>|RegExp): any => {
+    if (data === undefined) return data
+    if (typeof data !== 'object') {
+      if (def instanceof RegExp) return data.toString().match(def) ? undefined : def
+      return def.includes(data.toString()) ? undefined : data
+    }
+    if (!Array.isArray(data)) data = Object.values(data)
+    const obj = []
+    for (let check: any of data) {
+      if (typeof check !== 'string') check = check.toString()
+      if (def instanceof RegExp) {
+        if (!check.match(def)) obj.push(check)
+      } else if (!def.includes(check)) obj.push(check)
+    }
+    return obj
+  },
+
 }
-
-// range
-// search
-// match
-// parse
-// filter
-// addRef
-// fn
-// sort
-
 
 class Reference {
 
   base: any
   _raw: bool
   access: Array<Array<any>>
-
-  // direct object
-  // file
-  // web
-  // command
-  // fn
-
 
   constructor(base?: any) {
     if (base) this.base = base
@@ -252,6 +269,20 @@ class Reference {
 
   range(...def: Array<Array<number>>): this {
     this.access.push(['range', def])
+    return this
+  }
+
+  filter(...def: Array<string|RegExp>): this {
+    let opt = def
+    if (def[0] instanceof RegExp) opt = def[0]
+    this.access.push(['filter', opt])
+    return this
+  }
+
+  exclude(...def: Array<string|RegExp>): this {
+    let opt = def
+    if (def[0] instanceof RegExp) opt = def[0]
+    this.access.push(['exclude', opt])
     return this
   }
 
