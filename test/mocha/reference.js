@@ -445,6 +445,18 @@ describe('reference', () => {
 
     })
 
+    describe('parse', () => {
+
+      it('should work with yaml', (done) => {
+        const data = 'name: Albert\nage: 21'
+        const ref = new Reference(data).parse() // autodetect
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal({ name: 'Albert', age: 21 })
+        }, done)
+      })
+
+    })
+
   })
 
 })

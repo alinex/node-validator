@@ -292,9 +292,26 @@ const ref = new Reference(data).exclude(/ t/)
 
 Use `filter()` for positive selection.
 
+### parse(format)
+
+The parse method allows to convert a string from a defined format into a data structure. All formats from [alinex-format](http://alinex.github.io/node-format/README.md.html)
+are allowed like:
+- yaml
+- json
+- xml
+- csv
+
+```js
+const data = 'name: Albert\nage: 21'
+const ref = new Reference(data).parse() // autodetect
+// value will be {name: 'Albert', age: 21}
+const ref = new Reference(data).parse('yaml')
+// value will be {name: 'Albert', age: 21}
+```
 
 
 
+### stringify(format)
 
 ### flatten(separator)
 
@@ -305,14 +322,6 @@ Use `filter()` for positive selection.
 
     string
 
-### parse(format)
-
-The parse method allows to convert a string from a defined format into a data structure. The
-following formats are supported:
-- yaml
-- json
-- xml
-- csv
 
 ### fn(options)
 

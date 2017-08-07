@@ -8,6 +8,8 @@ import request from 'request-promise-native'
 
 import SchemaData from './SchemaData'
 
+let format = null // load on demand
+
 const exec = promisify(childProcess.exec)
 const readFile = promisify(fs.readFile)
 
@@ -198,6 +200,13 @@ const accessor = {
     return obj
   },
 
+  parse: (data: any, def?: string): any => {
+    if (!format) format = require('alinex-format') // eslint-disable-line global-require
+    const parser = promisify(format.parse)
+    if (typeof data === 'string') return parser(data, def)
+    return data
+  },
+
 }
 
 class Reference {
@@ -283,6 +292,11 @@ class Reference {
     let opt = def
     if (def[0] instanceof RegExp) opt = def[0]
     this.access.push(['exclude', opt])
+    return this
+  }
+
+  parse(def?: string): this {
+    this.access.push(['parse', def])
     return this
   }
 
