@@ -5,9 +5,8 @@ external information.
 
 - class based schema definitions
 - multiple predefined types
-- easy to extend schema types
-- check value against schema
-- supports sanitization and optimization
+- multiple options per type
+- supports sanitation and optimization
 - specialized in deep and complex data structures
 - supports dependency checks with references
 - can give a human readable description

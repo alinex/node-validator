@@ -47,6 +47,8 @@ This is a special value which may be used anywhere in the schema definition and 
 It is a dynamic value which will only be known at validation time. If references are used the checking for correct schema definition can also not be completely done before validation. But it is also checked.
 Read more about it at the end of this chapter with all the possibilities.
 
+## Booleans
+
 Where boolean values are required in the schema definition you can also use:
 - 'yes', 1, '1', 'true', 't', '+', array or object
 - 'no', 0, '0', 'false', 'f', '', '-', undefined, empty array or object

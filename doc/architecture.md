@@ -37,4 +37,26 @@ Mainly you only need the `text` property which will present a markdown formatted
 long text explaining what the problem is and how to correctly define the data structure.
 
 
-## CLI
+## Usage
+
+Generally it can be used in different ways in your application. In all of them it is best practice
+to define your schema in a separate file.
+
+### Validate internal data
+
+Here your application got some data from anywhere and you send them through your schema for
+validation and get some structure back which can be used directly.
+
+### Load data from config
+
+As an extension to the above you can also use the validator to search and load the data from files.
+
+### Only validate config by CLI
+
+If you want to check the config file you can also use the validator to do so after each change.
+
+### Transform config by CLI
+
+To make your application fast and not validate your configuration every time you may transform it
+to an already checked javascript file. So you get your config values by only importing this
+auto created file.

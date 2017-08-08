@@ -1,8 +1,12 @@
 # Alternatives
 
+Beside this module a lot of others exist which do mainly the same. With these pages I will give an
+overview and comparison against them.
+
 
 ## JSON Schema
 
+Some of the validators are based on a schema defined using a JSON structure.
 [JSON Schema](http://json-schema.org/) allows to annotate and validate JSON documents.
 The schema itself is build using JSON like the Alinex Validator did before.
 
@@ -24,14 +28,39 @@ A schema looks like:
 }
 ```
 
-This schema may be interpreted using tools like [Ajv](https://github.com/epoberezkin/ajv).
+### Ajv
+
+[Ajv](https://github.com/epoberezkin/ajv) is known as a very fast implementation of a JSON Schema
+based validation.
 
 ```js
-var Ajv = require('ajv');
-var ajv = new Ajv(); // options can be passed, e.g. {allErrors: true}
-var validate = ajv.compile(schema);
-var valid = validate(data);
-if (!valid) console.log(validate.errors);
+import Ajv from 'ajv'
+
+const schema = ... // load schema definition
+const data = ... // load data structure
+
+const ajv = new Ajv() // options can be passed, e.g. {allErrors: true}
+const validate = ajv.compile(schema)
+const valid = validate(data)
+if (!valid) console.log(validate.errors)
+```
+
+### JSV
+
+[JSV](https://www.npmjs.com/package/JSV) is an extendable JSON Schema compliant implementation.
+
+```js
+import JSV from 'JSV'
+
+const schema = ... // load schema definition
+const data = ... // load data structure
+
+const env = JSV.createEnvironment()
+const report = env.validate(data, schema)
+
+if (report.errors.length === 0) {
+	//JSON is valid against the schema
+}
 ```
 
 
@@ -58,6 +87,22 @@ const result = Joi.validate({ username: 'abc', birthyear: 1994 }, schema);
 
 It has a really good API which is clear to use with lots of possibilities also
 like references.
+
+
+- https://www.npmjs.com/package/async-validator
+- https://www.npmjs.com/package/z-schema
+- https://www.npmjs.com/package/Validator
+- https://www.npmjs.com/package/validator
+- https://www.npmjs.com/package/valida
+- https://www.npmjs.com/package/aproba
+- https://www.npmjs.com/package/object-schemata
+- https://www.npmjs.com/package/validator.js
+- https://www.npmjs.com/package/validatorjs
+
+See the following sections for short descriptions and comparisons.
+
+
+
 
 
 ## Validator.js

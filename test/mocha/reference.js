@@ -152,7 +152,7 @@ describe('reference', () => {
 
   })
 
-  describe.only('accessors', () => {
+  describe('accessors', () => {
 
     describe('path', () => {
 

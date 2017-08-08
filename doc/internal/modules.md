@@ -13,3 +13,9 @@ Within this module especially the following foreign modules are used:
   to transform numbers between different quantities
 - [numeral](http://numeraljs.com/)
   used to format numbers
+- [request-promise-native](https://github.com/request/request-promise-native/blob/master/README.md)
+  to load data from web
+- [alinex-format](http://alinex.github.io/node-format/README.md.html)
+  to load and parse multiple data formats
+- [alinex-util](http://alinex.github.io/node-util/README.md.html)
+  for some functions in array and object manipulation
