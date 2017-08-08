@@ -309,23 +309,17 @@ const ref = new Reference(data).parse('yaml')
 // value will be {name: 'Albert', age: 21}
 ```
 
+### fn(function)
 
+An additional method may be called to work on reference value before it is used:
 
-### stringify(format)
-
-### flatten(separator)
-
-    array
-    object
-
-### deepen(separator)
-
-    string
-
-
-### fn(options)
-
-    call method like internal accessors
+```js
+const crop = function (data) {
+  if (typeof data !== 'string') return data
+  return data.substring(0, 8) // crop to 8 characters
+}
+const ref = new Reference(data).fn(crop)
+```
 
 ### or(Reference)
 

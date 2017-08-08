@@ -207,6 +207,8 @@ const accessor = {
     return data
   },
 
+  fn: (data: any, def: Function): any => def(data),
+
 }
 
 class Reference {
@@ -297,6 +299,11 @@ class Reference {
 
   parse(def?: string): this {
     this.access.push(['parse', def])
+    return this
+  }
+
+  fn(def: Function): this {
+    this.access.push(['fn', def])
     return this
   }
 

@@ -457,6 +457,23 @@ describe('reference', () => {
 
     })
 
+    describe('fn', () => {
+
+      it('should work', (done) => {
+        const crop = (data) => {
+          if (typeof data !== 'string') return data
+          return data.substring(0, 8) // crop to 8 characters
+        }
+        const data = 'The large title to be reduced'
+        const ref = new Reference(data).fn(crop)
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal('The larg')
+        }, done)
+      })
+
+    })
+
   })
+
 
 })
