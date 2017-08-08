@@ -335,6 +335,11 @@ const ref = new Reference(data).or(new Reference('default'))
 
 ### concat(Reference)
 
-    strings
-    arrays
-    objects
+If the outer reference contains an Array or Object like the sub reference both will be
+concatenated. In case of objects the keys of the inner one will overwrite the others.
+
+```js
+const data = [1, 2, 3]
+const ref = new Reference(data).concat(new Reference([6, 7, 8]))
+// value will be [1, 2, 3, 6, 7, 8]
+```

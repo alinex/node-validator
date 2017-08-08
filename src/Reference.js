@@ -167,6 +167,11 @@ class Reference {
     return this
   }
 
+  concat(def: Reference): this {
+    this.access.push(['concat', def])
+    return this
+  }
+
   get description(): string {
     let msg = `reference at ${util.inspect(this.base)}`
     if (this.access.length) msg += ` -> ${this.access.join(' -> ')}`
@@ -183,7 +188,7 @@ class Reference {
     .then(data => sourceFile(data))
     .then(data => sourceWeb(data))
     // run rules seriously
-    this.access.forEach(([fn, def]) => { p = p.then(data => accessor[fn](data, def)) })
+    this.access.forEach(([fn, def]) => { p = p.then(data => accessor[fn](data, def, pos)) })
     return p.then(data => (data instanceof SchemaData ? data.value : data))
     .catch(err => (err instanceof Error ? Promise.reject(err) : err))
   }
@@ -334,8 +339,21 @@ accessor.parse = (data: any, def?: string): any => {
 
 accessor.fn = (data: any, def: Function): any => def(data)
 
-accessor.or = (data: any, def: Reference): any => {
-  if (data === undefined) return def.resolve(data)
+accessor.or = (data: any, def: Reference, pos: any): any => {
+  if (data === undefined) return def.resolve(pos)
+  return data
+}
+
+accessor.concat = async (data: any, def: Reference, pos: any): any => {
+  if (Array.isArray(data)) {
+    const sub = await def.resolve(pos)
+    if (Array.isArray(sub)) return data.concat(sub)
+  } else if (typeof data === 'object') {
+    const sub = await def.resolve(pos)
+    if (typeof sub === 'object') {
+      for (const key of Object.keys(sub)) data[key] = sub[key]
+    }
+  }
   return data
 }
 

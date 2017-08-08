@@ -493,6 +493,26 @@ describe('reference', () => {
 
     })
 
+    describe('concat', () => {
+
+      it('should work with array', (done) => {
+        const data = [1, 2, 3]
+        const ref = new Reference(data).concat(new Reference([6, 7, 8]))
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal([1, 2, 3, 6, 7, 8])
+        }, done)
+      })
+
+      it('should work with object', (done) => {
+        const data = { name: 'alfons', age: 32 }
+        const ref = new Reference(data).concat(new Reference({ age: 35, country: 'germany' }))
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal({ name: 'alfons', age: 35, country: 'germany' })
+        }, done)
+      })
+
+    })
+
   })
 
 
