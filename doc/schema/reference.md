@@ -323,7 +323,15 @@ const ref = new Reference(data).fn(crop)
 
 ### or(Reference)
 
-    go on if first returns undefined
+The `or` accessor allows to define another referenced value which is used if the first one so far
+is not there. The value returned from the second reference will be processed further on in the
+accessor queue of the first one.
+
+```js
+const data = undefined
+const ref = new Reference(data).or(new Reference('default'))
+// value will be 'default'
+```
 
 ### concat(Reference)
 

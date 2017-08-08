@@ -64,152 +64,7 @@ function sourceWeb(data: any): any {
   return request(data)
 }
 
-const accessor = {
-
-  path: (data: any, def: string): any => {
-    if (typeof data !== 'object') return data
-    // work on SchemaData
-    if (data instanceof SchemaData) {
-      // back references
-      while (def[0] === '/' || def[0] === '.') {
-        if (def[0] === '/') {
-          def = def.substring(1)
-          data = data.root
-        } else if (util.string.starts(def, '../')) {
-          def = def.substring(3)
-          data = data.parent
-        }
-      }
-      data = data.value
-    }
-    // work on other data structures
-    def = def.replace(/[^/]+\/\.\.\//g, '').replace(/^(\.{,2}\/)+/, '')
-    return util.object.pathSearch(data, def)
-  },
-
-  keys: (data: any): any => {
-    if (typeof data !== 'object') return data
-    return Object.keys(data)
-  },
-
-  values: (data: any): any => {
-    if (typeof data !== 'object') return data
-    return Object.values(data)
-  },
-
-  trim: (data: any): any => {
-    if (typeof data === 'string') return data.trim()
-    if (Array.isArray(data)) return data.map(e => accessor.trim(e))
-    if (typeof data === 'object') {
-      const obj = {}
-      for (const key of Object.keys(data)) obj[key] = accessor.trim(data[key])
-      return obj
-    }
-    return data
-  },
-
-  split: (data: any, def: Array<string|RegExp>): any => {
-    if (typeof data === 'string') {
-      data = data.split(def[0])
-      if (def[1]) data = data.map(e => e.split(def[1]))
-      if (def[2]) data = data.map(e => e.map(f => f.split(def[2])))
-      return data
-    }
-    if (Array.isArray(data)) return data.map(e => accessor.split(e, def))
-    if (typeof data === 'object') {
-      const obj = {}
-      for (const key of Object.keys(data)) obj[key] = accessor.split(data[key], def)
-      return obj
-    }
-    return data
-  },
-
-  join: (data: any, def: Array<string|RegExp>): any => {
-    if (typeof data === 'string') return data
-    if (Array.isArray(data)) {
-      if (def[2]) {
-        data = data.map(e => (Array.isArray(e)
-        ? e.map(f => (Array.isArray(f) ? f.join(def[2]) : f)) : e))
-      }
-      if (def[1]) data = data.map(e => (Array.isArray(e) ? e.join(def[1]) : e))
-      return data.join(def[0])
-    }
-    if (typeof data === 'object') {
-      const obj = {}
-      for (const key of Object.keys(data)) obj[key] = accessor.join(data[key], def)
-      return obj
-    }
-    return data
-  },
-
-  match: (data: any, def: RegExp): any => {
-    if (typeof data === 'string') return data.match(def)
-    if (Array.isArray(data)) return data.map(e => accessor.match(e, def))
-    if (typeof data === 'object') {
-      const obj = {}
-      for (const key of Object.keys(data)) obj[key] = accessor.match(data[key], def)
-      return obj
-    }
-    return data
-  },
-
-  range: (data: any, def: Array<Array<number>>): any => {
-    if (typeof data !== 'object') return data
-    if (!Array.isArray(data)) data = Object.values(data)
-    let obj = []
-    for (const range of def) {
-      let end = range[1]
-      if (end === undefined) end = range[0] + 1
-      if (end === 0) end = data.length
-      obj = obj.concat(data.slice(range[0], end))
-    }
-    return obj
-  },
-
-  filter: (data: any, def: Array<number>|RegExp): any => {
-    if (data === undefined) return data
-    if (typeof data !== 'object') {
-      if (def instanceof RegExp) return data.toString().match(def) ? def : undefined
-      return def.includes(data.toString()) ? data : undefined
-    }
-    if (!Array.isArray(data)) data = Object.values(data)
-    const obj = []
-    for (let check: any of data) {
-      if (typeof check !== 'string') check = check.toString()
-      if (def instanceof RegExp) {
-        if (check.match(def)) obj.push(check)
-      } else if (def.includes(check)) obj.push(check)
-    }
-    return obj
-  },
-
-  exclude: (data: any, def: Array<number>|RegExp): any => {
-    if (data === undefined) return data
-    if (typeof data !== 'object') {
-      if (def instanceof RegExp) return data.toString().match(def) ? undefined : def
-      return def.includes(data.toString()) ? undefined : data
-    }
-    if (!Array.isArray(data)) data = Object.values(data)
-    const obj = []
-    for (let check: any of data) {
-      if (typeof check !== 'string') check = check.toString()
-      if (def instanceof RegExp) {
-        if (!check.match(def)) obj.push(check)
-      } else if (!def.includes(check)) obj.push(check)
-    }
-    return obj
-  },
-
-  parse: (data: any, def?: string): any => {
-    if (!format) format = require('alinex-format') // eslint-disable-line global-require
-    const parser = promisify(format.parse)
-    if (typeof data === 'string') return parser(data, def)
-    return data
-  },
-
-  fn: (data: any, def: Function): any => def(data),
-
-}
+const accessor = {}
 
 class Reference {
 
@@ -307,6 +162,11 @@ class Reference {
     return this
   }
 
+  or(def: Reference): this {
+    this.access.push(['or', def])
+    return this
+  }
+
   get description(): string {
     let msg = `reference at ${util.inspect(this.base)}`
     if (this.access.length) msg += ` -> ${this.access.join(' -> ')}`
@@ -328,6 +188,155 @@ class Reference {
     .catch(err => (err instanceof Error ? Promise.reject(err) : err))
   }
 
+}
+
+
+accessor.path = (data: any, def: string): any => {
+  if (typeof data !== 'object') return data
+    // work on SchemaData
+  if (data instanceof SchemaData) {
+      // back references
+    while (def[0] === '/' || def[0] === '.') {
+      if (def[0] === '/') {
+        def = def.substring(1)
+        data = data.root
+      } else if (util.string.starts(def, '../')) {
+        def = def.substring(3)
+        data = data.parent
+      }
+    }
+    data = data.value
+  }
+    // work on other data structures
+  def = def.replace(/[^/]+\/\.\.\//g, '').replace(/^(\.{,2}\/)+/, '')
+  return util.object.pathSearch(data, def)
+}
+
+accessor.keys = (data: any): any => {
+  if (typeof data !== 'object') return data
+  return Object.keys(data)
+}
+
+accessor.values = (data: any): any => {
+  if (typeof data !== 'object') return data
+  return Object.values(data)
+}
+
+accessor.trim = (data: any): any => {
+  if (typeof data === 'string') return data.trim()
+  if (Array.isArray(data)) return data.map(e => accessor.trim(e))
+  if (typeof data === 'object') {
+    const obj = {}
+    for (const key of Object.keys(data)) obj[key] = accessor.trim(data[key])
+    return obj
+  }
+  return data
+}
+
+accessor.split = (data: any, def: Array<string|RegExp>): any => {
+  if (typeof data === 'string') {
+    data = data.split(def[0])
+    if (def[1]) data = data.map(e => e.split(def[1]))
+    if (def[2]) data = data.map(e => e.map(f => f.split(def[2])))
+    return data
+  }
+  if (Array.isArray(data)) return data.map(e => accessor.split(e, def))
+  if (typeof data === 'object') {
+    const obj = {}
+    for (const key of Object.keys(data)) obj[key] = accessor.split(data[key], def)
+    return obj
+  }
+  return data
+}
+
+accessor.join = (data: any, def: Array<string|RegExp>): any => {
+  if (typeof data === 'string') return data
+  if (Array.isArray(data)) {
+    if (def[2]) {
+      data = data.map(e => (Array.isArray(e)
+        ? e.map(f => (Array.isArray(f) ? f.join(def[2]) : f)) : e))
+    }
+    if (def[1]) data = data.map(e => (Array.isArray(e) ? e.join(def[1]) : e))
+    return data.join(def[0])
+  }
+  if (typeof data === 'object') {
+    const obj = {}
+    for (const key of Object.keys(data)) obj[key] = accessor.join(data[key], def)
+    return obj
+  }
+  return data
+}
+
+accessor.match = (data: any, def: RegExp): any => {
+  if (typeof data === 'string') return data.match(def)
+  if (Array.isArray(data)) return data.map(e => accessor.match(e, def))
+  if (typeof data === 'object') {
+    const obj = {}
+    for (const key of Object.keys(data)) obj[key] = accessor.match(data[key], def)
+    return obj
+  }
+  return data
+}
+
+accessor.range = (data: any, def: Array<Array<number>>): any => {
+  if (typeof data !== 'object') return data
+  if (!Array.isArray(data)) data = Object.values(data)
+  let obj = []
+  for (const range of def) {
+    let end = range[1]
+    if (end === undefined) end = range[0] + 1
+    if (end === 0) end = data.length
+    obj = obj.concat(data.slice(range[0], end))
+  }
+  return obj
+}
+
+accessor.filter = (data: any, def: Array<number>|RegExp): any => {
+  if (data === undefined) return data
+  if (typeof data !== 'object') {
+    if (def instanceof RegExp) return data.toString().match(def) ? def : undefined
+    return def.includes(data.toString()) ? data : undefined
+  }
+  if (!Array.isArray(data)) data = Object.values(data)
+  const obj = []
+  for (let check: any of data) {
+    if (typeof check !== 'string') check = check.toString()
+    if (def instanceof RegExp) {
+      if (check.match(def)) obj.push(check)
+    } else if (def.includes(check)) obj.push(check)
+  }
+  return obj
+}
+
+accessor.exclude = (data: any, def: Array<number>|RegExp): any => {
+  if (data === undefined) return data
+  if (typeof data !== 'object') {
+    if (def instanceof RegExp) return data.toString().match(def) ? undefined : def
+    return def.includes(data.toString()) ? undefined : data
+  }
+  if (!Array.isArray(data)) data = Object.values(data)
+  const obj = []
+  for (let check: any of data) {
+    if (typeof check !== 'string') check = check.toString()
+    if (def instanceof RegExp) {
+      if (!check.match(def)) obj.push(check)
+    } else if (!def.includes(check)) obj.push(check)
+  }
+  return obj
+}
+
+accessor.parse = (data: any, def?: string): any => {
+  if (!format) format = require('alinex-format') // eslint-disable-line global-require
+  const parser = promisify(format.parse)
+  if (typeof data === 'string') return parser(data, def)
+  return data
+}
+
+accessor.fn = (data: any, def: Function): any => def(data)
+
+accessor.or = (data: any, def: Reference): any => {
+  if (data === undefined) return def.resolve(data)
+  return data
 }
 
 

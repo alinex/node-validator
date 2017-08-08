@@ -473,6 +473,26 @@ describe('reference', () => {
 
     })
 
+    describe('or', () => {
+
+      it('should use sub reference', (done) => {
+        const data = undefined
+        const ref = new Reference(data).or(new Reference('default'))
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal('default')
+        }, done)
+      })
+
+      it('should forget sub reference', (done) => {
+        const data = 'start'
+        const ref = new Reference(data).or(new Reference('default'))
+        helper.reference(ref, undefined, (res) => {
+          expect(res).deep.equal('start')
+        }, done)
+      })
+
+    })
+
   })
 
 
