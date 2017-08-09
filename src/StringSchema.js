@@ -148,7 +148,9 @@ class StringSchema extends AnySchema {
     // check value
     if (check.trim) data.value = data.value.trim()
     if (check.replace && check.replace.length) {
-      check.replace.forEach(e => (data.value = data.value.replace(e.match, e.replace)))
+      check.replace.forEach((e) => {
+        data.value = data.value.replace(e.match, e.replace)
+      })
     }
     return Promise.resolve()
   }
