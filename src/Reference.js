@@ -67,7 +67,6 @@ function sourceWeb(data: any): any {
 const accessor = {}
 
 class Reference {
-
   base: any
   _raw: bool
   access: Array<Array<any>>
@@ -84,7 +83,7 @@ class Reference {
     })
     const padding = ' '.repeat(5)
     const base = this.base ? util.inspect(this.base, newOptions).replace(/\n/g, `\n${padding}`)
-    : 'SchemaData'
+      : 'SchemaData'
     const inner = this.access.map(e => util.inspect(e, newOptions).replace(/\n/g, `\n${padding}`))
     inner.unshift(base)
     return `${options.stylize(this.constructor.name, 'class')} ${inner.join(' ➞ ')} `
@@ -181,26 +180,25 @@ class Reference {
   resolve(pos: any): Promise<any> {
     // get base data structure
     let p = Promise.resolve(this.base || pos)
-    .then(data => sourceFunction(data))
-    .then(data => sourceEnvironment(data))
-    .then(data => sourceCommand(data))
-    .then(data => sourceSsh(data))
-    .then(data => sourceFile(data))
-    .then(data => sourceWeb(data))
+      .then(data => sourceFunction(data))
+      .then(data => sourceEnvironment(data))
+      .then(data => sourceCommand(data))
+      .then(data => sourceSsh(data))
+      .then(data => sourceFile(data))
+      .then(data => sourceWeb(data))
     // run rules seriously
     this.access.forEach(([fn, def]) => { p = p.then(data => accessor[fn](data, def, pos)) })
     return p.then(data => (data instanceof SchemaData ? data.value : data))
-    .catch(err => (err instanceof Error ? Promise.reject(err) : err))
+      .catch(err => (err instanceof Error ? Promise.reject(err) : err))
   }
-
 }
 
 
 accessor.path = (data: any, def: string): any => {
   if (typeof data !== 'object') return data
-    // work on SchemaData
+  // work on SchemaData
   if (data instanceof SchemaData) {
-      // back references
+    // back references
     while (def[0] === '/' || def[0] === '.') {
       if (def[0] === '/') {
         def = def.substring(1)
@@ -212,7 +210,7 @@ accessor.path = (data: any, def: string): any => {
     }
     data = data.value
   }
-    // work on other data structures
+  // work on other data structures
   def = def.replace(/[^/]+\/\.\.\//g, '').replace(/^(\.{,2}\/)+/, '')
   return util.object.pathSearch(data, def)
 }

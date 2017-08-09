@@ -19,7 +19,6 @@ class Logic {
 }
 
 class ObjectSchema extends Schema {
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
@@ -196,14 +195,14 @@ ${schema.description.replace(/\n/g, '\n  ')}\n`
     })
     // catch up sub checks
     return Promise.all(checks)
-    .catch(err => Promise.reject(err))
-    .then((result) => {
-      if (result) {
-        result.forEach((e: any, i: number) => { sum[keys[i]] = e })
-      }
-      data.value = sum
-      return Promise.resolve()
-    })
+      .catch(err => Promise.reject(err))
+      .then((result) => {
+        if (result) {
+          result.forEach((e: any, i: number) => { sum[keys[i]] = e })
+        }
+        data.value = sum
+        return Promise.resolve()
+      })
   }
 
   removeUnknown(flag?: bool | Reference): this { return this._setFlag('removeUnknown', flag) }
@@ -320,12 +319,12 @@ elements. `
     const num = Object.keys(data.value).length
     if (check.min && num < check.min) {
       return Promise.reject(new SchemaError(this, data,
-      `The object should has a length of ${num} elements. \
+        `The object should has a length of ${num} elements. \
 This is too less, at least ${check.min} are needed.`))
     }
     if (check.max && num > check.max) {
       return Promise.reject(new SchemaError(this, data,
-      `The object should has a length of ${num} elements. \
+        `The object should has a length of ${num} elements. \
 This is too much, not more than ${check.max} are allowed.`))
     }
     return Promise.resolve()
@@ -471,27 +470,27 @@ are allowed. `
       for (const rule of set.logic) {
         if (rule.type === 'and') {
           const list = rule.peers.map(e => `\`${e}\``)
-          .join(', ').replace(/(.*),/, '$1 and')
+            .join(', ').replace(/(.*),/, '$1 and')
           msg += `All or none of the keys ${list} have to be present. `
         } else if (rule.type === 'nand') {
           const list = rule.peers.map(e => `\`${e}\``)
-          .join(', ').replace(/(.*),/, '$1 and')
+            .join(', ').replace(/(.*),/, '$1 and')
           msg += `Some but not all of the keys ${list} can be present. `
         } else if (rule.type === 'or') {
           const list = rule.peers.map(e => `\`${e}\``)
-          .join(', ').replace(/(.*),/, '$1 and')
+            .join(', ').replace(/(.*),/, '$1 and')
           msg += `At least one of the keys ${list} have to be present. `
         } else if (rule.type === 'xor') {
           const list = rule.peers.map(e => `\`${e}\``)
-          .join(', ').replace(/(.*),/, '$1 and')
+            .join(', ').replace(/(.*),/, '$1 and')
           msg += `Exactly one of the keys ${list} have to be present. `
         } else if (rule.type === 'with') {
           const list = rule.peers.map(e => `\`${e}\``)
-          .join(', ').replace(/(.*),/, '$1 and')
+            .join(', ').replace(/(.*),/, '$1 and')
           msg += `If \`${rule.key}\` is set the keys ${list} have to be present, too. `
         } else if (rule.type === 'without') {
           const list = rule.peers.map(e => `\`${e}\``)
-          .join(', ').replace(/(.*),/, '$1 and')
+            .join(', ').replace(/(.*),/, '$1 and')
           msg += `If \`${rule.key}\` is set the keys ${list} are forbidden. `
         }
       }
@@ -509,7 +508,7 @@ are allowed. `
           // fail if one but not all
           if (contained.length > 0 && contained.length !== rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
-            .join(', ').replace(/(.*),/, '$1 and')
+              .join(', ').replace(/(.*),/, '$1 and')
             return Promise.reject(new SchemaError(this, data,
               `All or none of the keys ${list} have to be present \
  but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
@@ -519,7 +518,7 @@ are allowed. `
           // fail if all
           if (contained.length === rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
-            .join(', ').replace(/(.*),/, '$1 and')
+              .join(', ').replace(/(.*),/, '$1 and')
             return Promise.reject(new SchemaError(this, data,
               `Some but not all of the keys ${list} can be present but all are set.`))
           }
@@ -528,7 +527,7 @@ are allowed. `
           // fail if not at least one
           if (!contained.length) {
             const list = rule.peers.map(e => `\`${e}\``)
-            .join(', ').replace(/(.*),/, '$1 and')
+              .join(', ').replace(/(.*),/, '$1 and')
             return Promise.reject(new SchemaError(this, data,
               `At least one of the keys ${list} have to be present but none are set.`))
           }
@@ -537,7 +536,7 @@ are allowed. `
           // fail if not exactly one
           if (contained.length !== 1) {
             const list = rule.peers.map(e => `\`${e}\``)
-            .join(', ').replace(/(.*),/, '$1 and')
+              .join(', ').replace(/(.*),/, '$1 and')
             return Promise.reject(new SchemaError(this, data,
               `Exactly one of the keys ${list} have to be present \
  but ${contained.length} are set.`))
@@ -547,7 +546,7 @@ are allowed. `
           // fail if key is present but not all peers
           if (keys.includes(rule.key) && contained.length !== rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
-            .join(', ').replace(/(.*),/, '$1 and')
+              .join(', ').replace(/(.*),/, '$1 and')
             return Promise.reject(new SchemaError(this, data,
               `If \`${rule.key}\` is set the keys ${list} have to be present \
  but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
@@ -557,7 +556,7 @@ are allowed. `
           // fail if key is present and at least one peer
           if (keys.includes(rule.key) && contained.length) {
             const list = rule.peers.map(e => `\`${e}\``)
-            .join(', ').replace(/(.*),/, '$1 and')
+              .join(', ').replace(/(.*),/, '$1 and')
             return Promise.reject(new SchemaError(this, data,
               `If \`${rule.key}\` is set the keys ${list} are forbidden \
  but ${contained.length} keys are set.`))
@@ -567,7 +566,6 @@ are allowed. `
     }
     return Promise.resolve()
   }
-
 }
 
 export default ObjectSchema

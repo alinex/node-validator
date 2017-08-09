@@ -6,7 +6,6 @@ import SchemaError from './SchemaError'
 import SchemaData from './SchemaData'
 
 class LogicSchema extends Schema {
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
@@ -63,7 +62,7 @@ class LogicSchema extends Schema {
     const set = this._setting
     if (!set.logic) return ''
     return set.logic.map(e => `${e[0].toUpperCase()} ${e[1].description.replace(/\n/g, '\n  ')}\n`)
-    .join('- ')
+      .join('- ')
   }
 
   _logicValidator(data: SchemaData): Promise<void> {
@@ -80,24 +79,24 @@ class LogicSchema extends Schema {
           if (last instanceof SchemaData) return schema._validate(last.clone)
           return undefined
         })
-        .then((last) => {
-          logic[i][1] = last
-          return last
-        })
-        .catch((err) => {
-          logic[i][1] = err
-          return undefined
-        })
+          .then((last) => {
+            logic[i][1] = last
+            return last
+          })
+          .catch((err) => {
+            logic[i][1] = err
+            return undefined
+          })
       } else {
         p = p.then(() => schema._validate(data.clone))
-        .then((last) => {
-          logic[i][1] = last
-          return last
-        })
-        .catch((err) => {
-          logic[i][1] = err
-          return undefined
-        })
+          .then((last) => {
+            logic[i][1] = last
+            return last
+          })
+          .catch((err) => {
+            logic[i][1] = err
+            return undefined
+          })
       }
     })
     p = p.then(() => {
@@ -130,7 +129,6 @@ class LogicSchema extends Schema {
     // ok
     return p
   }
-
 }
 
 export default LogicSchema

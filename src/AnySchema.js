@@ -5,7 +5,6 @@ import type SchemaData from './SchemaData'
 import Reference from './Reference'
 
 class AnySchema extends Schema {
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
@@ -100,20 +99,19 @@ are allowed. `
     // reject if marked as invalid
     const datastring = JSON.stringify(data.value)
     if (check.deny && check.deny.length && check.deny
-    .filter(e => datastring === JSON.stringify(e)).length) {
+      .filter(e => datastring === JSON.stringify(e)).length) {
       return Promise.reject(new SchemaError(this, data,
         'Element found in blacklist (denyed item).'))
     }
     // reject if valid is set but not included
     if (check.allow && check.allow.length && check.allow
-    .filter(e => datastring === JSON.stringify(e)).length === 0) {
+      .filter(e => datastring === JSON.stringify(e)).length === 0) {
       return Promise.reject(new SchemaError(this, data,
         'Element not in whitelist (allowed item).'))
     }
     // ok
     return Promise.resolve()
   }
-
 }
 
 export default AnySchema

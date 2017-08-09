@@ -56,7 +56,7 @@ describe('reference', () => {
         const schema = new Schema().default(ref)
         // use schema
         expect(helper.description(schema))
-        .to.equal('It will default to reference at \'abc\' if not set.')
+          .to.equal('It will default to reference at \'abc\' if not set.')
       })
 
     })
@@ -113,12 +113,12 @@ describe('reference', () => {
       }, done)
     })
 
-//    it('should support remote command', (done) => {
-//      const ref = new Reference('ssh://divibib@vs10191 date')
-//      helper.reference(ref, undefined, (res) => {
-//        expect(res).to.be.a('string')
-//      }, done)
-//    })
+    //    it('should support remote command', (done) => {
+    //      const ref = new Reference('ssh://divibib@vs10191 date')
+    //      helper.reference(ref, undefined, (res) => {
+    //        expect(res).to.be.a('string')
+    //      }, done)
+    //    })
 
     it('should support local file', (done) => {
       const ref = new Reference('file:///proc/version')
@@ -143,12 +143,12 @@ describe('reference', () => {
 
     // ftp
     // sftp
-//    it('should support web servcie ftp', (done) => {
-//      const ref = new Reference('ftp://ftp.avm.de/fritz.box/')
-//      helper.reference(ref, undefined, (res) => {
-//        expect(res).to.be.a('string')
-//      }, done)
-//    })
+    //    it('should support web servcie ftp', (done) => {
+    //      const ref = new Reference('ftp://ftp.avm.de/fritz.box/')
+    //      helper.reference(ref, undefined, (res) => {
+    //        expect(res).to.be.a('string')
+    //      }, done)
+    //    })
 
   })
 

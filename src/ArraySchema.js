@@ -7,7 +7,6 @@ import type SchemaData from './SchemaData'
 import Reference from './Reference'
 
 class ArraySchema extends Schema {
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
@@ -259,11 +258,11 @@ as separator.\n`
     })
     // catch up sub checks
     return Promise.all(checks)
-    .catch(err => Promise.reject(err))
-    .then((result) => {
-      data.value = result
-      return Promise.resolve()
-    })
+      .catch(err => Promise.reject(err))
+      .then((result) => {
+        data.value = result
+        return Promise.resolve()
+      })
   }
 
   min(value?: number | Reference): this {
@@ -354,12 +353,12 @@ items. `
     const num = data.value.length
     if (check.min && num < check.min) {
       return Promise.reject(new SchemaError(this, data,
-      `The object should has a length of ${num} elements. \
+        `The object should has a length of ${num} elements. \
 This is too less, at least ${check.min} are needed.`))
     }
     if (check.max && num > check.max) {
       return Promise.reject(new SchemaError(this, data,
-      `The object should has a length of ${num} elements. \
+        `The object should has a length of ${num} elements. \
 This is too much, not more than ${check.max} are allowed.`))
     }
     return Promise.resolve()
@@ -397,7 +396,6 @@ This is too much, not more than ${check.max} are allowed.`))
     } else data.value = data.value.join(', ')
     return Promise.resolve()
   }
-
 }
 
 export default ArraySchema

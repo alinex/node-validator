@@ -5,7 +5,6 @@ import Schema from './Schema'
 import SchemaData from './SchemaData'
 
 class SchemaError extends Error {
-
   schema: Schema
   data: SchemaData
 

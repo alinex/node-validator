@@ -6,7 +6,6 @@ import SchemaError from './SchemaError'
 import Reference from './Reference'
 
 class Schema {
-
   title: string
   detail: string
 
@@ -195,7 +194,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     const set = this._setting
     if (set.default) {
       const value = set.default instanceof Reference
-      ? set.default.description : util.inspect(set.default)
+        ? set.default.description : util.inspect(set.default)
       return `It will default to ${value} if not set.\n`
     }
     if (set.required instanceof Reference) {
@@ -216,7 +215,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     if (data.value !== undefined) return Promise.resolve()
     if (check.required) {
       return Promise.reject(new SchemaError(this, data,
-      'This element is mandatory!'))
+        'This element is mandatory!'))
     }
     return Promise.reject() // stop processing, optional is ok
   }
@@ -242,9 +241,9 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     // resolve references in value first
     if (data.value instanceof Reference) {
       p = p.then(() => data.value.raw().resolve(data))
-      .then((res) => {
-        data.value = res
-      })
+        .then((res) => {
+          data.value = res
+        })
     }
     // resolve check settings
     const par = []
@@ -255,7 +254,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
       if (raw instanceof Set) raw = Array.from(raw)
       if (raw instanceof Reference) {
         par.push(raw.resolve(data)
-        .then((res) => { this._check[key] = res }))
+          .then((res) => { this._check[key] = res }))
       } else if (Array.isArray(raw)) {
         this._check[key] = []
         for (const i of raw.keys()) {
@@ -286,12 +285,12 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
       data.done(data.value)
       return data
     })
-    .catch(err => (err ? Promise.reject(err) : data))
+      .catch(err => (err ? Promise.reject(err) : data))
   }
 
   validate(value: any, source?: string, options?: Object): Promise<any> {
     return this._validate(value, source, options)
-    .then(data => data.value)
+      .then(data => data.value)
   }
 }
 

@@ -9,8 +9,8 @@ import Reference from './Reference'
 let striptags // load on demand
 
 type PadType = 'left' | 'right' | 'both'
-class Pad {
 
+class Pad {
   char: string
   type: PadType
 
@@ -21,7 +21,6 @@ class Pad {
 }
 
 class Replace {
-
   match: RegExp
   replace: string
   name: string
@@ -34,7 +33,6 @@ class Replace {
 }
 
 class StringSchema extends AnySchema {
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
@@ -131,8 +129,9 @@ class StringSchema extends AnySchema {
     }
     if (set.replace && set.replace.length) {
       const list = set.replace
-      .map(e => `- \`${util.inspect(e.match)}\` => \`${e.replace}\`${e.name ? ` (${e.name})` : ''}`)
-      .join('\n')
+        .map(e => `- \`${util.inspect(e.match)}\` =>
+        \`${e.replace}\`${e.name ? ` (${e.name})` : ''}`)
+        .join('\n')
       msg += `The following replacements will be done:\n${list}\n`
     }
     return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
@@ -283,18 +282,18 @@ ${set.stripDisallowed.description}. `
     } else {
       if (check.alphanum && data.value.match(/\W/)) {
         return Promise.reject(new SchemaError(this, data,
-        'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
+          'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
       } else if (check.hex && data.value.match(/[^a-fA-F0-9]/)) {
         return Promise.reject(new SchemaError(this, data,
-        'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
+          'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
       }
       if (!check.controls && data.value.match(/[^\x20-\x7E]/)) {
         return Promise.reject(new SchemaError(this, data,
-        'Control characters are not allowed.'))
+          'Control characters are not allowed.'))
       }
       if (check.noHTML && data.value.match(/<[\s\S]*>/)) {
         return Promise.reject(new SchemaError(this, data,
-        'No tags allowed in this text.'))
+          'No tags allowed in this text.'))
       }
     }
     return Promise.resolve()
@@ -363,7 +362,7 @@ ${set.stripDisallowed.description}. `
     }
     if (!this._isReference('min') && !this._isReference('max') && set.min && set.max) {
       msg = set.min === set.max ? `The string has to contain exactly ${set.min} characters. `
-      : `The string can have between ${set.min} and ${set.max} characters. `
+        : `The string can have between ${set.min} and ${set.max} characters. `
     } else if (!this._isReference('min') && set.min) {
       msg = `The string needs at least ${set.min} characters. `
     } else if (!this._isReference('max') && set.max) {
@@ -413,11 +412,11 @@ ${set.stripDisallowed.description}. `
       default:
         a = Math.ceil(add / 2)
         pad = check.pad.char.length > 1
-        ? check.pad.char.slice(-Math.ceil(check.pad.char.length / 2)) : check.pad.char
+          ? check.pad.char.slice(-Math.ceil(check.pad.char.length / 2)) : check.pad.char
         if (pad.length < a) pad += pad.slice(-1).repeat(a - pad.length)
         data.value += pad.slice(-a)
         pad = check.pad.char.length > 1
-        ? check.pad.char.slice(0, Math.ceil(check.pad.char.length / 2)) : check.pad.char
+          ? check.pad.char.slice(0, Math.ceil(check.pad.char.length / 2)) : check.pad.char
         a = Math.floor(add / 2)
         if (pad.length < a) pad = `${pad.slice(0, 1).repeat(a - pad.length)}${pad}`
         data.value = `${pad.slice(0, a)}${data.value}`
@@ -432,12 +431,12 @@ ${set.stripDisallowed.description}. `
     // check length
     if (check.min && num < check.min) {
       return Promise.reject(new SchemaError(this, data,
-      `The string has a length of ${num} characters. \
+        `The string has a length of ${num} characters. \
  This is too less, at least ${check.min} are needed.`))
     }
     if (check.max && num > check.max) {
       return Promise.reject(new SchemaError(this, data,
-      `The string has a length of ${num} characters. \
+        `The string has a length of ${num} characters. \
  This is too much, not more than ${check.max} are allowed.`))
     }
     return Promise.resolve()
@@ -499,8 +498,8 @@ ${set.stripDisallowed.description}. `
         if (typeof e === 'string') return !data.value.includes(e)
         return !data.value.match(e)
       })
-      .map(e => `\`${util.inspect(e)}\``)
-      .join(', ').replace(/(.*), /, '$1 and ')
+        .map(e => `\`${util.inspect(e)}\``)
+        .join(', ').replace(/(.*), /, '$1 and ')
       if (fail) {
         return Promise.reject(new SchemaError(this, data,
           `The text should match: ${fail}`))
@@ -511,8 +510,8 @@ ${set.stripDisallowed.description}. `
         if (typeof e === 'string') return data.value.includes(e)
         return data.value.match(e)
       })
-      .map(e => `\`${util.inspect(e)}\``)
-      .join(', ').replace(/(.*), /, '$1 and ')
+        .map(e => `\`${util.inspect(e)}\``)
+        .join(', ').replace(/(.*), /, '$1 and ')
       if (fail) {
         return Promise.reject(new SchemaError(this, data,
           `The text should not match: ${fail}`))
@@ -520,7 +519,6 @@ ${set.stripDisallowed.description}. `
     }
     return Promise.resolve()
   }
-
 }
 
 export default StringSchema

@@ -7,7 +7,6 @@ import type SchemaData from './SchemaData'
 import Reference from './Reference'
 
 class BooleanSchema extends Schema {
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // init settings
@@ -102,9 +101,9 @@ class BooleanSchema extends Schema {
     }
     if (check.insensitive) {
       check.truthy = Array.from(check.truthy)
-      .map(e => (typeof e === 'string' ? e.toLowerCase() : e))
+        .map(e => (typeof e === 'string' ? e.toLowerCase() : e))
       check.falsy = Array.from(check.falsy)
-      .map(e => (typeof e === 'string' ? e.toLowerCase() : e))
+        .map(e => (typeof e === 'string' ? e.toLowerCase() : e))
     }
     check.truthy.unshift(true)
     check.falsy.unshift(false)
@@ -114,7 +113,7 @@ class BooleanSchema extends Schema {
     else if (check.falsy.includes(data.value)) data.value = false
     else {
       return Promise.reject(new SchemaError(this, data,
-      'A boolean value is needed but neither `true` nor `false` was given.'))
+        'A boolean value is needed but neither `true` nor `false` was given.'))
     }
     // ok
     return Promise.resolve()
@@ -134,7 +133,7 @@ class BooleanSchema extends Schema {
   _formatDescriptor() {
     const set = this._setting
     return set.format.size ?
-    `Strings are formatted using \`${util.inspect(set.format.get(true))}\` for \
+      `Strings are formatted using \`${util.inspect(set.format.get(true))}\` for \
 \`true\` and \`${util.inspect(set.format.get(false))}\` for \`false\`.\n` : ''
   }
 

@@ -31,7 +31,6 @@ class Round {
 }
 
 class NumberSchema extends AnySchema {
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
@@ -87,10 +86,10 @@ class NumberSchema extends AnySchema {
     }
     if (typeof data.value !== 'number') {
       return Promise.reject(new SchemaError(this, data,
-      `The given value is of type ${typeof data.value} but a number is needed.`))
+        `The given value is of type ${typeof data.value} but a number is needed.`))
     } else if (isNaN(data.value)) {
       return Promise.reject(new SchemaError(this, data,
-      `The given element \`${util.inspect(orig)}\` is no valid number.`))
+        `The given element \`${util.inspect(orig)}\` is no valid number.`))
     }
     return Promise.resolve()
   }
@@ -161,13 +160,13 @@ class NumberSchema extends AnySchema {
         quantity = convert(match[1]).from(match[2])
       } catch (e) {
         return Promise.reject(new SchemaError(this, data,
-        `Could not parse the unit of ${data.value}: ${e.message}`))
+          `Could not parse the unit of ${data.value}: ${e.message}`))
       }
       try {
         data.value = quantity.to(check.unit)
       } catch (e) {
         return Promise.reject(new SchemaError(this, data,
-        `Could not convert to ${check.unit}: ${e.message}`))
+          `Could not convert to ${check.unit}: ${e.message}`))
       }
     }
     if (check.unit && check.toUnit && typeof data.value === 'number') {
@@ -175,7 +174,7 @@ class NumberSchema extends AnySchema {
         data.value = convert(data.value).from(check.unit).to(check.toUnit)
       } catch (e) {
         return Promise.reject(new SchemaError(this, data,
-        `Could not convert ${check.unit} to ${check.toUnit}: ${e.message}`))
+          `Could not convert ${check.unit} to ${check.toUnit}: ${e.message}`))
       }
     }
     return Promise.resolve()
@@ -567,7 +566,6 @@ ${this._isReference('format') ? set.format.description : set.format}.\n`
     }
     return Promise.resolve()
   }
-
 }
 
 export default NumberSchema

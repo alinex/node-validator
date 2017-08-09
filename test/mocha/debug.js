@@ -12,11 +12,11 @@ export default function (element: any, type: string = 'test', title?: string) {
     element.then((data) => {
       debugLog(`Promise succeded with ${util.inspect(data)}`)
     })
-    .catch((err) => {
-      if (err instanceof Error) {
-        debugLog(`Promise failed with ${err.constructor.name}: ${err.stack}`)
-      } else debugLog(`Promise failed with ${util.inspect(err)}`)
-    })
+      .catch((err) => {
+        if (err instanceof Error) {
+          debugLog(`Promise failed with ${err.constructor.name}: ${err.stack}`)
+        } else debugLog(`Promise failed with ${util.inspect(err)}`)
+      })
   } else if (element instanceof Schema) {
     debugLog(`${element.constructor.name} set up with: %o`, element)
   } else if (element instanceof SchemaData && element.orig instanceof Reference) {

@@ -37,8 +37,8 @@ const alias = {
     RFC2822: 'ddd, DD MMM YYYY HH:mm:ss ZZ',
     RFC822: 'ddd, DD MMM YY HH:mm:ss ZZ',
     RFC1036: 'ddd, D MMM YY HH:mm:ss ZZ',
-//    RFC850:  'dddd, D-MMM-ZZ HH:mm:ss Europe/Paris',
-//    COOKIE:  'Friday, 13-Feb-09 14:53:27 Europe/Paris',
+    //    RFC850:  'dddd, D-MMM-ZZ HH:mm:ss Europe/Paris',
+    //    COOKIE:  'Friday, 13-Feb-09 14:53:27 Europe/Paris',
   },
   date: {
     ISO8601: 'YYYY-MM-DD',
@@ -46,7 +46,6 @@ const alias = {
 }
 
 class DateSchema extends AnySchema {
-
   constructor(title?: string, detail?: string) {
     super(title, detail)
     this._setting.type = 'datetime'
@@ -166,7 +165,7 @@ It may also be given in string format. `
     }
     if (!this._isReference('min') && !this._isReference('max') && set.min && set.max) {
       msg = set.min === set.max ? `The ${set.type} has to be after ${set.min}. `
-      : `The ${set.type} should be between ${set.min} and ${set.max}. `
+        : `The ${set.type} should be between ${set.min} and ${set.max}. `
     } else if (!this._isReference('min') && set.min) {
       msg = `The ${set.type} needs to be after ${set.min}. `
     } else if (!this._isReference('max') && set.max) {
@@ -204,11 +203,11 @@ It may also be given in string format. `
     // check range
     if (check.min && check.min.isAfter(data.value)) {
       return Promise.reject(new SchemaError(this, data,
-      `The ${check.type} is before the defined range. It has to be after ${check.min}.`))
+        `The ${check.type} is before the defined range. It has to be after ${check.min}.`))
     }
     if (check.max && check.max.isBefore(data.value)) {
       return Promise.reject(new SchemaError(this, data,
-      `The ${check.type} is after the defined range. It has to be before ${check.max}.`))
+        `The ${check.type} is after the defined range. It has to be before ${check.max}.`))
     }
     return Promise.resolve()
   }
@@ -253,7 +252,6 @@ It may also be given in string format. `
     } else data.value = data.value.toDate()
     return Promise.resolve()
   }
-
 }
 
 export default DateSchema

@@ -20,10 +20,10 @@ function validateOk(schema: Schema, data: any, cb?: Function, done ?: Function) 
       debug(schema._check, schema.constructor.name, 'Used checks')
       try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
     })
-    .catch((e) => {
-      debug(schema._check, schema.constructor.name, 'Used checks')
-      if (done) done(new Error('it should not be rejected'))
-    })
+      .catch((e) => {
+        debug(schema._check, schema.constructor.name, 'Used checks')
+        if (done) done(new Error('it should not be rejected'))
+      })
   })
 }
 
@@ -37,10 +37,10 @@ function validateFail(schema: Schema, data: any, cb?: Function, done ?: Function
       debug(schema._check, schema.constructor.name, 'Used checks')
       if (done) done(new Error('it should not be resolved'))
     })
-    .catch((e) => {
-      debug(schema._check, schema.constructor.name, 'Used checks')
-      try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
-    })
+      .catch((e) => {
+        debug(schema._check, schema.constructor.name, 'Used checks')
+        try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
+      })
   })
 }
 
