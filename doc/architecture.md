@@ -22,7 +22,7 @@ real problem in detail.
 ## Schema
 
 This is the core of this module and defines the concrete checks see more about the possibilities
-in it's own chapter.
+in "Schema Builder" chapter.
 
 The Schema defines what structure is allowed, the allowed values and types of each part
 and also how to sanitize the given values. Also the Schema may contain References to other values

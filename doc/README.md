@@ -10,6 +10,7 @@ external information.
 - specialized in deep and complex data structures
 - supports dependency checks with references
 - can give a human readable description
+- command line interface
 
 The schema based definition using instances of the predefined schema classes gives
 the opportunity to define a detailed structure step by step. Later you can run the
