@@ -22,41 +22,73 @@ real problem in detail.
 ## Schema
 
 This is the core of this module and defines the concrete checks see more about the possibilities
-in the following part.
+in it's own chapter.
 
-![Schema usage](usage.png)
+The Schema defines what structure is allowed, the allowed values and types of each part
+and also how to sanitize the given values. Also the Schema may contain References to other values
+inside or outside of the structure. This references may be used as values or as parameters within
+the Schema definition. That makes it possible to define the allowed value for one part in dependency
+of another element like "must be larger than the other".
 
-The app contains a specific schema as an instance of any Schema class which is set to the data
-structures specifics. After loading this schema instance and the data structure it may be validated
-which process the correctness and optimizes the values like specified in the schema. The resulting data structure can be trusted and used without further checking.
-The schema is checked as possible on definition time, but in case of references this is not possible
-and the checks will be done within the validation process.
+The Schema itself is an instance of a `SchemaType` which is setup by using its methods and maybe
+some other sub Schemas and references.
 
-If an error occurs it will contain the original value and a detailed description beside the error message itself.
-Mainly you only need the `text` property which will present a markdown formatted
-long text explaining what the problem is and how to correctly define the data structure.
+If an error occurs it will contain the original value and a detailed description beside the error
+message itself.
 
 
 ## Usage
 
 Generally it can be used in different ways in your application. In all of them it is best practice
-to define your schema in a separate file.
+to define your schema in a separate file. That's also needed to use the CLI methods.
 
 ### Validate internal data
 
-Here your application got some data from anywhere and you send them through your schema for
-validation and get some structure back which can be used directly.
+Within your code you may use the validator to check and optimize data which comes from untrusted
+sources:
+- file or database
+- user input / form data
+- arguments or query parameters
+- and everything you not already have checked
+
+![Validate Usage](usage-validate.png)
+
+Here you load the schema and data into your application and let the validation run to get a
+reliable structure or error message back. This can be further used.
 
 ### Load data from config
 
-As an extension to the above you can also use the validator to search and load the data from files.
+If you want to validate some configuration files the validator may also
+- search for files in global, user and local directory
+- in case of directories combine all files
+- combine together if multiple files found
+- and at last validate and sanitize them
+
+![Loader Usage](usage-load.png)
+
+As extension to the simple validation you give a file search pattern. The validation itself is the
+same.
 
 ### Only validate config by CLI
 
-If you want to check the config file you can also use the validator to do so after each change.
+If you use config files you may call the validator CLI method to check your configuration changes.
+
+![CLI Check Usage](usage-cli-check.png)
+
+This process is the same as the loading API for configuration files. Only this makes it possible to
+directly use the validator to check the files before the application is reloaded.
 
 ### Transform config by CLI
 
-To make your application fast and not validate your configuration every time you may transform it
-to an already checked javascript file. So you get your config values by only importing this
-auto created file.
+Thats an optimization for configuration files which will give your application simplicity and
+performance without loosing the validator possibilities.
+
+The validator will read the changed configurations like in the methods before and will create a
+javascript file exporting the resulting structure. Your application only needs to import this file
+and will get a proofed structure back.
+
+![Schema usage](usage-cli-transform.png)
+
+Because it is a JavaScript file it also may include some dynamic parts depending on your structure.
+But if you want to keep this files up to date also with changes in external references which you
+don't control, you may recreate this maybe each day and reload or restart your app.
