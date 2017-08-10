@@ -4,16 +4,18 @@ The schema defines how to validate and sanitize the data structures. It is defin
 by using instances of the schema classes and setting their properties.
 
 ```js
-import { Reference, ObjectSchema, AnySchema } from 'alinex-validator'
+import Reference from 'alinex-validator/lib/Reference'
+import ObjectSchema from 'alinex-validator/lib/ObjectSchema'
+import AnySchema from 'alinex-validator/lib/AnySchema'
 
 const schema = new ObjectSchema('MyTest', 'is an easy schema to show it´s use')
-schema.key('one', new Any().optional())
-.key('two', new Any().default(new Reference(schema).path('/one')))
+schema.key('one', new AnySchema().optional())
+.key('two', new AnySchema().default(new Reference(schema).path('/one')))
 
 const data = { one: 1 }
 schema.validate(data)
-.then(res => console.log(res))
-.catch(err => console.error(err.text))
+  .then(res => console.log(res))
+  .catch(err => console.error(err.text))
 // res = { one: 1, two: 2 }
 ```
 
@@ -29,6 +31,26 @@ See the different reference and schema descriptions for their possible settings 
 To see exactly what your schema allows output it's `description` property and you
 will get the resulting configuration explained.
 
+### Complete Schema Loading
+
+It is also possible to load all schema types instead of each one individually. Therefor use the
+builder collection:
+
+```js
+import * as builder from 'alinex-validator/lib/builder'
+
+const schema = new builder.Object('MyTest', 'is an easy schema to show it´s use')
+schema.key('one', new builder.Any().optional())
+.key('two', new builder.Any().default(new builder.Reference(schema).path('/one')))
+
+const data = { one: 1 }
+schema.validate(data)
+  .then(res => console.log(res))
+  .catch(err => console.error(err.text))
+// res = { one: 1, two: 2 }
+```
+
+
 ## Overview
 
 All types are based on the `Schema` class directly or indirectly.
@@ -41,11 +63,13 @@ specify it.
 One exception is the reference which is a special type which didn't validate but will get the
 value from the defined resource. Read more about this later.
 
+
 ## References
 
 This is a special value which may be used anywhere in the schema definition and points to a value.
 It is a dynamic value which will only be known at validation time. If references are used the checking for correct schema definition can also not be completely done before validation. But it is also checked.
 Read more about it at the end of this chapter with all the possibilities.
+
 
 ## Booleans
 

@@ -1,7 +1,8 @@
 // @flow
 import chai from 'chai'
 
-import { BooleanSchema, Reference } from '../../../src/index'
+import Reference from '../../../src/Reference'
+import BooleanSchema from '../../../src/BooleanSchema'
 import * as helper from '../helper'
 
 const expect = chai.expect

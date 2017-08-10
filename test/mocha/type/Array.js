@@ -1,6 +1,9 @@
 import chai from 'chai'
 
-import { AnySchema, ArraySchema, NumberSchema, Reference } from '../../../src/index'
+import Reference from '../../../src/Reference'
+import ArraySchema from '../../../src/ArraySchema'
+import AnySchema from '../../../src/AnySchema'
+import NumberSchema from '../../../src/NumberSchema'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -270,7 +273,7 @@ describe('array', () => {
     it('should work with one schema for all', (done) => {
       const data = ['1', '2', 3, 2]
       const schema = new MySchema()
-      .item(new NumberSchema())
+        .item(new NumberSchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal([1, 2, 3, 2])
@@ -280,8 +283,8 @@ describe('array', () => {
     it('should work with ordered elements', (done) => {
       const data = ['1', '2', 3, 2]
       const schema = new MySchema()
-      .item(new AnySchema())
-      .item(new NumberSchema())
+        .item(new AnySchema())
+        .item(new NumberSchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(['1', 2, 3, 2])
@@ -290,8 +293,8 @@ describe('array', () => {
 
     it('should describe', () => {
       const schema = new MySchema()
-      .item(new AnySchema())
-      .item(new NumberSchema())
+        .item(new AnySchema())
+        .item(new NumberSchema())
       // use schema
       expect(helper.description(schema)).to.be.an('string')
     })

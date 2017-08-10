@@ -1,8 +1,9 @@
 // @flow
 import chai from 'chai'
 
-import { StringSchema, Reference } from '../../../src/index'
 import Schema from '../../../src/Schema'
+import Reference from '../../../src/Reference'
+import StringSchema from '../../../src/StringSchema'
 import * as helper from '../helper'
 
 const expect = chai.expect
@@ -123,7 +124,7 @@ describe('string', () => {
     it('should work', (done) => {
       const data = 'abc'
       const schema = new MySchema()
-      .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
+        .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('123')
       }, done)
@@ -140,7 +141,7 @@ describe('string', () => {
     it('should work with remove', (done) => {
       const data = 'abc'
       const schema = new MySchema()
-      .replace(/a/)
+        .replace(/a/)
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('bc')
       }, done)
@@ -149,8 +150,8 @@ describe('string', () => {
     it('should remove named replace only', (done) => {
       const data = 'abc'
       const schema = new MySchema()
-      .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
-      .replace('b')
+        .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
+        .replace('b')
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('1b3')
       }, done)
@@ -159,8 +160,8 @@ describe('string', () => {
     it('should remove all replaces', (done) => {
       const data = 'abc'
       const schema = new MySchema()
-      .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
-      .replace()
+        .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
+        .replace()
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       }, done)
@@ -168,7 +169,7 @@ describe('string', () => {
 
     it('should describe', () => {
       const schema = new MySchema()
-      .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
+        .replace(/a/, '1', 'a').replace(/b/, '2', 'b').replace(/c/, '3', 'c')
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

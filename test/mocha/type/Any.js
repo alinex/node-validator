@@ -1,7 +1,8 @@
 // @flow
 import chai from 'chai'
 
-import { AnySchema, Reference } from '../../../src/index'
+import Reference from '../../../src/Reference'
+import AnySchema from '../../../src/AnySchema'
 import * as helper from '../helper'
 
 const expect = chai.expect
@@ -255,7 +256,7 @@ describe('any', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.invalid(data)
-      .valid(data)
+        .valid(data)
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -266,7 +267,7 @@ describe('any', () => {
       const data = undefined
       const schema = new MySchema()
       schema.required()
-      .valid(undefined)
+        .valid(undefined)
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -317,7 +318,7 @@ describe('any', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.valid(data)
-      .invalid(data)
+        .invalid(data)
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })

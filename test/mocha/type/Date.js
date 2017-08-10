@@ -3,7 +3,8 @@ import chai from 'chai'
 import async from 'async'
 import moment from 'moment'
 
-import { DateSchema, Reference } from '../../../src/index'
+import Reference from '../../../src/Reference'
+import DateSchema from '../../../src/DateSchema'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -67,17 +68,17 @@ describe('string', () => {
       const schema = new MySchema()
       async.eachSeries([
         ['9:30', moment(new Date()).hour(9).minute(30).second(0)
-         .millisecond(0)
-         .toDate()],
+          .millisecond(0)
+          .toDate()],
         ['09:30', moment(new Date()).hour(9).minute(30).second(0)
-         .millisecond(0)
-         .toDate()],
+          .millisecond(0)
+          .toDate()],
         ['09:30:26', moment(new Date()).hour(9).minute(30).second(26)
-         .millisecond(0)
-         .toDate()],
+          .millisecond(0)
+          .toDate()],
         ['24:00:00', moment(new Date()).hour(24).minute(0).second(0)
-         .millisecond(0)
-         .toDate()],
+          .millisecond(0)
+          .toDate()],
       ], (check, cb) => {
         helper.validateOk(schema, check[0], (res) => {
           expect(res).deep.equal(check[1])
@@ -120,21 +121,21 @@ describe('string', () => {
       const schema = new MySchema()
       async.eachSeries([
         ['today', moment(new Date()).hour(12).minute(0).second(0)
-        .millisecond(0)
-        .toDate()],
+          .millisecond(0)
+          .toDate()],
         ['tomorrow', moment(new Date()).add(1, 'day').hour(12).minute(0)
-        .second(0)
-        .millisecond(0)
-        .toDate()],
+          .second(0)
+          .millisecond(0)
+          .toDate()],
         ['yesterday', moment(new Date()).subtract(1, 'day').hour(12).minute(0)
-        .second(0)
-        .millisecond(0)
-        .toDate()],
+          .second(0)
+          .millisecond(0)
+          .toDate()],
         ['last friday', moment(new Date()).subtract(7, 'days').day(5).hour(12)
-        .minute(0)
-        .second(0)
-        .millisecond(0)
-        .toDate()],
+          .minute(0)
+          .second(0)
+          .millisecond(0)
+          .toDate()],
       ], (check, cb) => {
         helper.validateOk(schema, check[0], (res) => {
           expect(res).deep.equal(check[1])
@@ -170,13 +171,13 @@ describe('string', () => {
       const schema = new MySchema()
       async.eachSeries([
         ['This Friday at 13:00', moment(new Date()).day(5).hour(13).minute(0)
-        .second(0)
-        .millisecond(0)
-        .toDate()],
+          .second(0)
+          .millisecond(0)
+          .toDate()],
         ['5 days ago', moment(new Date()).subtract(5, 'days').hour(12).minute(0)
-        .second(0)
-        .millisecond(0)
-        .toDate()],
+          .second(0)
+          .millisecond(0)
+          .toDate()],
       ], (check, cb) => {
         helper.validateOk(schema, check[0], (res) => {
           expect(res).deep.equal(check[1])
@@ -434,7 +435,7 @@ describe('string', () => {
 
     it('should remove', (done) => {
       const schema = new MySchema().timezone('GMT').toTimezone('EST').toTimezone()
-      .format('LLL')
+        .format('LLL')
       helper.validateOk(schema, '2013-02-08 09:30', (res) => {
         const now = new Date().getTime()
         expect(res).to.deep.equal('February 8, 2013 9:30 AM')

@@ -1,6 +1,8 @@
 import chai from 'chai'
 
-import { AnySchema, ObjectSchema, Reference } from '../../../src/index'
+import Reference from '../../../src/Reference'
+import ObjectSchema from '../../../src/ObjectSchema'
+import AnySchema from '../../../src/AnySchema'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 
@@ -188,7 +190,7 @@ describe('object', () => {
     it('should work with defined keys', (done) => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown()
-      .key('a', new AnySchema())
+        .key('a', new AnySchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: 1 })
@@ -198,7 +200,7 @@ describe('object', () => {
     it('should work with pattern', (done) => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown()
-      .key(/[ab]/, new AnySchema())
+        .key(/[ab]/, new AnySchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: 1, b: 2 })
@@ -208,7 +210,7 @@ describe('object', () => {
     it('should work with negate', (done) => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown()
-      .key('a', new AnySchema()).removeUnknown(false)
+        .key('a', new AnySchema()).removeUnknown(false)
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: 1, b: 2, c: 3 })
@@ -217,7 +219,7 @@ describe('object', () => {
 
     it('should describe', () => {
       const schema = new MySchema().removeUnknown()
-      .key('a', new AnySchema())
+        .key('a', new AnySchema())
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -393,7 +395,7 @@ describe('object', () => {
     it('should allow to remove with forbiddenKeys', (done) => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('a', 'b', 'c', 'd')
-      .forbiddenKeys('d')
+        .forbiddenKeys('d')
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
@@ -462,7 +464,7 @@ describe('object', () => {
     it('should allow to remove with requiredKerys', (done) => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('c', 'd', 'e', 'f')
-      .requiredKeys('c')
+        .requiredKeys('c')
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)

@@ -1,7 +1,10 @@
 // @flow
 import chai from 'chai'
 
-import { NumberSchema, LogicSchema, StringSchema } from '../../../src/index'
+import Reference from '../../../src/Reference'
+import LogicSchema from '../../../src/LogicSchema'
+import NumberSchema from '../../../src/NumberSchema'
+import StringSchema from '../../../src/StringSchema'
 import * as helper from '../helper'
 
 const expect = chai.expect
@@ -32,8 +35,8 @@ describe('logic', () => {
     it('should work', (done) => {
       const data = '5_5'
       const schema = new MySchema()
-      .allow(new StringSchema().replace(/_/g, '', 'remove _'))
-      .and(new NumberSchema())
+        .allow(new StringSchema().replace(/_/g, '', 'remove _'))
+        .and(new NumberSchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(55)
@@ -43,8 +46,8 @@ describe('logic', () => {
     it('should fail', (done) => {
       const data = '5-5'
       const schema = new MySchema()
-      .allow(new StringSchema().replace(/_/g, '', 'remove _'))
-      .and(new NumberSchema())
+        .allow(new StringSchema().replace(/_/g, '', 'remove _'))
+        .and(new NumberSchema())
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -52,8 +55,8 @@ describe('logic', () => {
     it('should deny', (done) => {
       const data = '5_5'
       const schema = new MySchema()
-      .deny(new StringSchema().replace(/_/g, '', 'remove _'))
-      .and(new NumberSchema())
+        .deny(new StringSchema().replace(/_/g, '', 'remove _'))
+        .and(new NumberSchema())
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
@@ -61,8 +64,8 @@ describe('logic', () => {
     it('should work with deny', (done) => {
       const data = '5-5'
       const schema = new MySchema()
-      .deny(new StringSchema().replace(/_/g, '', 'remove _'))
-      .and(new NumberSchema())
+        .deny(new StringSchema().replace(/_/g, '', 'remove _'))
+        .and(new NumberSchema())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('5-5')
@@ -71,8 +74,8 @@ describe('logic', () => {
 
     it('should describe', () => {
       const schema = new MySchema()
-      .allow(new StringSchema().replace(/_/g, '', 'remove _'))
-      .and(new NumberSchema())
+        .allow(new StringSchema().replace(/_/g, '', 'remove _'))
+        .and(new NumberSchema())
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -84,8 +87,8 @@ describe('logic', () => {
     it('should work', (done) => {
       const data = 'one'
       const schema = new MySchema()
-      .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
-      .or(new NumberSchema().positive())
+        .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
+        .or(new NumberSchema().positive())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('1')
@@ -95,8 +98,8 @@ describe('logic', () => {
     it('should work with alternative', (done) => {
       const data = 14
       const schema = new MySchema()
-      .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
-      .or(new NumberSchema().positive())
+        .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
+        .or(new NumberSchema().positive())
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(14)
@@ -106,16 +109,16 @@ describe('logic', () => {
     it('should fail', (done) => {
       const data = 'eins'
       const schema = new MySchema()
-      .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
-      .or(new NumberSchema().positive())
+        .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
+        .or(new NumberSchema().positive())
       // use schema
       helper.validateFail(schema, data, undefined, done)
     })
 
     it('should describe', () => {
       const schema = new MySchema()
-      .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
-      .or(new NumberSchema().positive())
+        .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
+        .or(new NumberSchema().positive())
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

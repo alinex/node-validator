@@ -1,7 +1,8 @@
 // @flow
 import chai from 'chai'
 
-import { NumberSchema, Reference } from '../../../src/index'
+import Reference from '../../../src/Reference'
+import NumberSchema from '../../../src/NumberSchema'
 import Schema from '../../../src/Schema'
 import * as helper from '../helper'
 

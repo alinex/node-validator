@@ -3,7 +3,7 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import Debug from 'debug'
 
-import * as validator from '../../src/index'
+import * as builder from '../../src/builder'
 import SchemaError from '../../src/SchemaError'
 import SchemaData from '../../src/SchemaData'
 
@@ -14,18 +14,18 @@ const debug = Debug('test')
 describe('base', () => {
 
   it('should load validator', () => {
-    expect(validator, 'module').to.be.an('object')
-    expect(validator.AnySchema, 'AnySchema').to.be.a('function')
+    expect(builder).to.be.an('object')
+    expect(builder.Any).to.be.a('function')
   })
 
   it('should describe error', () => {
-    const schema = new validator.AnySchema()
+    const schema = new builder.Any()
     const value = 5
     const data = new SchemaData(value, '/any/path')
     const err = new SchemaError(schema, data, 'Something is wrong.')
     const msg = err.text
     debug(msg)
-    expect(msg, 'detail').to.equal(`__Something is wrong.__
+    expect(msg).to.equal(`__Something is wrong.__
 
 > Given value was: \`5\`
 > At path: \`/any/path\`
