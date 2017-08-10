@@ -55,18 +55,22 @@ schema.validate(data)
 ```
 
 Like seen in this example you can further work with the validated data (it is overloaded here
-to prevent access to the unchecked) and get a detailed description in markdown format using `err.text()` on failures.
+to prevent access to the unchecked) and get a detailed description in markdown format using
+`err.text()` on failures.
 
 
 ## Load
 
+The following code will load configuration data and validates them:
+
 ```js
 import validator from 'alinex-validator'
+
 import schema from './config.schema.js'
+// alternative:
+// const schema = path.resolve(__dirname, 'config.schema.js')
 
-let data = { ... } // any data structure to check
-
-schema.validate(data)
+validator.load('config', schema)
   .then((data) => {
     console.log(data)
   })
@@ -75,7 +79,20 @@ schema.validate(data)
   })
 ```
 
+If you only want to check them through API you won't need the `.then`-clause.
+
+
 ## Check
 
+The check of config files using the CLI:
+
+
+```bash
+$ validator comfig lib/schema.config.js
+```
 
 ## Transform
+
+```bash
+$ validator comfig lib/schema.config.js local/config.js
+```
