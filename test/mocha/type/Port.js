@@ -46,6 +46,15 @@ describe.only('number', () => {
       }, done)
     })
 
+    it('should work with string name', (done) => {
+      const data = 'http'
+      const schema = new MySchema()
+      // use schema
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(80)
+      }, done)
+    })
+
   })
 
   describe('minmax', () => {

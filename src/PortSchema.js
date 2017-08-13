@@ -419,6 +419,45 @@ class PortSchema extends NumberSchema {
   integerType(): this { return this._setError('integerType') }
   round(): this { return this._setError('round') }
   multiple(): this { return this._setError('multiple') }
+
+  // support names and ranges
+  _allowValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    this._checkArray('allow')
+    this._checkArray('deny')
+    // resolve names and ranges
+    if (check.deny) {
+      const numbers = []
+      for (const e of check.deny) {
+        if (typeof e === 'string') {
+          if (portNames[e]) numbers.push(portNames[e])
+          else if (portRanges[e]) {
+            for (let n = portRanges[e][0]; n <= portRanges[e][1]; n += 1) numbers.push(n)
+          }
+        } else {
+          numbers.push(e)
+        }
+      }
+      check.deny = numbers
+    }
+    if (check.allow) {
+      const numbers = []
+      for (const e of check.allow) {
+        if (typeof e === 'string') {
+          if (portNames[e]) numbers.push(portNames[e])
+          else if (portRanges[e]) {
+            for (let n = portRanges[e][0]; n <= portRanges[e][1]; n += 1) numbers.push(n)
+          }
+        } else {
+          numbers.push(e)
+        }
+      }
+      check.allow = numbers
+    }
+    if (check.allow && check.deny) check.deny = check.deny.filter(e => !check.allow.includes(e))
+    // checking
+    return super._allowValidator(data)
+  }
 }
 
 
