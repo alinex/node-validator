@@ -13,11 +13,14 @@
   - [Object](schema/object.md)
   - [Array](schema/array.md)
   - [Logic](schema/logic.md)
+  - [Port](schema/port.md)
   - [Reference](schema/reference.md)
 
 - [How To](howto.md)
 
 - [Examples](examples/README.md)
+
+- [Ideas](ideas.md)
 
 - [Alternatives](alternatives.md)
 

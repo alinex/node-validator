@@ -91,8 +91,32 @@ The check of config files using the CLI:
 $ validator comfig lib/schema.config.js
 ```
 
+That's the same as loading without using the value through API.
+
+
 ## Transform
+
+The transform method can also be called through CLI to write a javascript method exporting the
+data structure:
 
 ```bash
 $ validator comfig lib/schema.config.js local/config.js
+```
+
+To do the same using API use:
+
+```js
+import validator from 'alinex-validator'
+
+import schema from './config.schema.js'
+// alternative:
+// const schema = path.resolve(__dirname, 'config.schema.js')
+
+validator.transform('config', schema, 'local/config.js')
+  .catch((err) => {
+    console.error(err.text())
+  })
+  .then(() => {
+    // go on
+  })
 ```

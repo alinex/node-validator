@@ -63,6 +63,26 @@ if (report.errors.length === 0) {
 }
 ```
 
+### z-schema
+
+[z-schema](https://www.npmjs.com/package/z-schema) is another implementation:
+
+```js
+import ZSchema from 'z-schema'
+
+const validator = new ZSchema()
+validator.validate(json, schema, function (err, valid) {
+    ...
+})
+
+const json = {};
+const schema = { "$ref": "http://json-schema.org/draft-04/schema#" };
+
+const valid = validator.validate(json, schema, (err, valid) => {
+  // do something
+})
+```
+
 
 ## Joi
 
@@ -89,13 +109,37 @@ It has a really good API which is clear to use with lots of possibilities also
 like references.
 
 
+## Object Schema
+
+[Object Schema](https://www.npmjs.com/package/object-schemata) simply validates data objects with
+a schema including:
+- a help message
+- a validator function
+- a transformer function
+
+
+## Typed
+
+[Typed](https://www.npmjs.com/package/fully-typed) basically checks against specific types but has
+also some settings to define value ranges...
+
+
+## Simple Validators
+
+The following validators are very simple and have only some checks:
+
+- https://www.npmjs.com/package/aproba
+- https://www.npmjs.com/package/valida
+
+
+
+
+
+- https://github.com/tmpfs/async-validate
 - https://www.npmjs.com/package/async-validator
-- https://www.npmjs.com/package/z-schema
+
 - https://www.npmjs.com/package/Validator
 - https://www.npmjs.com/package/validator
-- https://www.npmjs.com/package/valida
-- https://www.npmjs.com/package/aproba
-- https://www.npmjs.com/package/object-schemata
 - https://www.npmjs.com/package/validator.js
 - https://www.npmjs.com/package/validatorjs
 
@@ -137,3 +181,10 @@ validate({password: "bad"}, constraints);
 
 This is a more basic way with less possibilities. A lot have to be programmed here
 each time again.
+
+
+## comparison
+
+| Feature       | Alinex 2 | Alinex 3 |
+| ------------- |:--------:|:--------:|
+ 

@@ -49,6 +49,10 @@ class Schema {
 
   // helper methods
 
+  _setError(name: string, msg?: string): this {
+    throw (new Error(msg || `In ${this.constructor.name} you are not allowed to set
+      ${name} manually`))
+  }
   _setFlag(name: string, flag: bool | Reference = true): this {
     if (flag) this._setting[name] = flag
     else delete this._setting[name]

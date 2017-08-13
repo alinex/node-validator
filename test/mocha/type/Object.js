@@ -20,8 +20,7 @@ describe('object', () => {
     // use schema
     helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)
-      done()
-    })
+    }, done)
   })
 
   it('should fail if no object', (done) => {

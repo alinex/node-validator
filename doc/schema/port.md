@@ -1,0 +1,36 @@
+# Port Schema
+
+Create a schema that matches a TCP/UDP port number.
+
+This is a specialization of the `NumberSchema` so some of the methods used there are predefined,
+while you may use others in the same way as in [Number Schema](number.md):
+- `required()`
+- `default()`
+- `stripEmpty()`
+- `allow()`
+- `deny()`
+- `valid()`
+- `invalid()`
+- `min()`
+- `max()`
+- `less()`
+- `greater()`
+- `format()`
+
+Beside the numerical input you may also give port names as known in the /etc/services
+list like: 'ftp', 'http', 'ssh', ... If you do so it will be replaced by their default port numbers.
+
+For validation in `allow()`, `deny()`, `valid()` or `invalid()`
+you can also use the predefined ranges:
+- 'system'
+- 'registered'
+- 'dynamic'
+
+The table shows how the result is detected if a number is within allow/deny lists:
+
+|  has allow  |  has deny | in allow | in deny | in both | in other |
+|-------------|-----------|----------|---------|---------|----------|
+|   no        |   no      |    -     |    -    |    -    |   ok     |
+|   yes       |   no      |    ok    |    -    |    -    |   fail   |
+|   no        |   yes     |    -     |   fail  |    -    |   ok     |
+|   yes       |   yes     |    ok    |   fail  |    ok   |   ok     |
