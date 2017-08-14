@@ -419,42 +419,56 @@ class PortSchema extends NumberSchema {
   integerType(): this { return this._setError('integerType') }
   round(): this { return this._setError('round') }
   multiple(): this { return this._setError('multiple') }
+  format(): this { return this._setError('format') }
 
   // support names and ranges
   _allowValidator(data: SchemaData): Promise<void> {
     const check = this._check
     this._checkArray('allow')
     this._checkArray('deny')
-    // resolve names and ranges
+    // resolve ranges
+    const deny = []
     if (check.deny) {
-      const numbers = []
       for (const e of check.deny) {
-        if (typeof e === 'string') {
-          if (portNames[e]) numbers.push(portNames[e])
-          else if (portRanges[e]) {
-            for (let n = portRanges[e][0]; n <= portRanges[e][1]; n += 1) numbers.push(n)
-          }
-        } else {
-          numbers.push(e)
+        if (portRanges[e]) {
+          for (let n = portRanges[e][0]; n <= portRanges[e][1]; n += 1) deny.push(n)
         }
       }
-      check.deny = numbers
+    }
+    const allow = []
+    if (check.allow) {
+      for (const e of check.allow) {
+        if (portRanges[e]) {
+          for (let n = portRanges[e][0]; n <= portRanges[e][1]; n += 1) allow.push(n)
+        }
+      }
+    }
+    if (allow && deny && allow.length && deny.length) {
+      check.deny = check.deny.filter(e => !check.allow.includes(e))
+    }
+    // resolve names
+    if (check.deny) {
+      for (const e of check.deny) {
+        if (portNames[e]) allow.push(portNames[e])
+        else if (!portRanges[e]) {
+          deny.push(e)
+          const idx = allow.indexOf(e)
+          if (idx > -1) allow.splice(idx, 1)
+        }
+      }
     }
     if (check.allow) {
-      const numbers = []
       for (const e of check.allow) {
-        if (typeof e === 'string') {
-          if (portNames[e]) numbers.push(portNames[e])
-          else if (portRanges[e]) {
-            for (let n = portRanges[e][0]; n <= portRanges[e][1]; n += 1) numbers.push(n)
-          }
-        } else {
-          numbers.push(e)
+        if (portNames[e]) allow.push(portNames[e])
+        else if (!portRanges[e]) {
+          allow.push(e)
+          const idx = deny.indexOf(e)
+          if (idx > -1) deny.splice(idx, 1)
         }
       }
-      check.allow = numbers
     }
-    if (check.allow && check.deny) check.deny = check.deny.filter(e => !check.allow.includes(e))
+    if (check.deny) check.deny = deny
+    if (check.allow) check.allow = allow
     // checking
     return super._allowValidator(data)
   }

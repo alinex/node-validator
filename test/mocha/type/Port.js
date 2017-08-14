@@ -11,7 +11,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = PortSchema
 
-describe.only('number', () => {
+describe('number', () => {
   it('should work with number', (done) => {
     const data = 12
     const schema = new MySchema()
@@ -24,6 +24,14 @@ describe.only('number', () => {
 
   it('should fail with float', (done) => {
     const data = 12.8
+    const schema = new MySchema()
+    expect(schema).to.be.an('object')
+    // use schema
+    helper.validateFail(schema, data, undefined, done)
+  })
+
+  it('should fail with negative value', (done) => {
+    const data = -12
     const schema = new MySchema()
     expect(schema).to.be.an('object')
     // use schema
@@ -216,47 +224,61 @@ describe.only('number', () => {
 
   })
 
-  describe('format', () => {
+  describe('deny', () => {
 
-    it('should work', (done) => {
-      const data = 16
-      const schema = new MySchema().format('0.00')
+    it('should fail on deny', (done) => {
+      const data = 8080
+      const schema = new MySchema().deny([8080, 'system'])
       // use schema
-      helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal('16.00')
-      }, done)
+      helper.validateFail(schema, data, undefined, done)
     })
 
-    it('should remove', (done) => {
-      const data = 16
-      const schema = new MySchema().format('0.00').format()
+    it('should fail on deny range', (done) => {
+      const data = 80
+      const schema = new MySchema().deny([8080, 'system'])
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work with deny range', (done) => {
+      const data = 8081
+      const schema = new MySchema().deny([8080, 'system'])
       // use schema
       helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       }, done)
     })
 
-    it('should allow reference', (done) => {
-      const data = 16
-      const ref = new Reference('0.00')
-      const schema = new MySchema().format(ref)
+    it('should fail on allow', (done) => {
+      const data = 8081
+      const schema = new MySchema().allow([8080, 'system'])
+      // use schema
+      helper.validateFail(schema, data, undefined, done)
+    })
+
+    it('should work on allow', (done) => {
+      const data = 8080
+      const schema = new MySchema().allow([8080, 'system'])
       // use schema
       helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal('16.00')
+        expect(res).deep.equal(data)
       }, done)
     })
 
-    it('should describe', () => {
-      const schema = new MySchema().format('0.00')
+    it('should work with allow range', (done) => {
+      const data = 80
+      const schema = new MySchema().allow([8080, 'system'])
       // use schema
-      expect(helper.description(schema)).to.be.a('string')
+      helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      }, done)
     })
 
-    it('should describe with reference', () => {
-      const ref = new Reference('0.00')
-      const schema = new MySchema().format(ref)
+    it('should fail on allow with deny', (done) => {
+      const data = 80
+      const schema = new MySchema().allow(['system']).deny([80])
       // use schema
-      expect(helper.description(schema)).to.be.a('string')
+      helper.validateFail(schema, data, undefined, done)
     })
 
   })

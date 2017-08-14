@@ -15,7 +15,6 @@ while you may use others in the same way as in [Number Schema](number.md):
 - `max()`
 - `less()`
 - `greater()`
-- `format()`
 
 Beside the numerical input you may also give port names as known in the /etc/services
 list like: 'ftp', 'http', 'ssh', ... If you do so it will be replaced by their default port numbers.
@@ -26,11 +25,4 @@ you can also use the predefined ranges:
 - 'registered'
 - 'dynamic'
 
-The table shows how the result is detected if a number is within allow/deny lists:
-
-|  has allow  |  has deny | in allow | in deny | in both | in other |
-|-------------|-----------|----------|---------|---------|----------|
-|   no        |   no      |    -     |    -    |    -    |   ok     |
-|   yes       |   no      |    ok    |    -    |    -    |   fail   |
-|   no        |   yes     |    -     |   fail  |    -    |   ok     |
-|   yes       |   yes     |    ok    |   fail  |    ok   |   ok     |
+The order is allow is used before deny, direct number or name is used before range.
