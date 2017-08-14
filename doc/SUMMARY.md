@@ -5,7 +5,7 @@
 
 - [Schema Builder](schema/README.md)
   - [Base](schema/base.md)
-  - Types
+  - [Types](schema/types.md)
     - [Any](schema/any.md)
     - [Boolean](schema/boolean.md)
     - [String](schema/string.md)
@@ -14,7 +14,7 @@
     - [Object](schema/object.md)
     - [Array](schema/array.md)
   - [Logic](schema/logic.md)
-  - Special
+  - [Extensions](schema/extensions.md)
     - [Port](schema/port.md)
   - [Reference](schema/reference.md)
 
