@@ -32,6 +32,8 @@
   https://img.shields.io/github/issues/alinex/node-validator.svg?maxAge=86400)](
   https://github.com/alinex/node-validator/issues)
 
+The ultimate validation library for javascript!
+
 This module will help validating complex structures. And should be used on all
 external information.
 

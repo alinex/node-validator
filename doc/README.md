@@ -1,25 +1,27 @@
 # Alinex Validator
 
 This module will help validating complex structures. And should be used on all
-external information.
+external information. Like configuration or user input. It's strength are complex structures.
 
 - class based schema definitions
 - multiple predefined types
 - multiple options per type
-- supports sanitation and optimization
+- check and transform values
 - specialized in deep and complex data structures
 - supports dependency checks with references
 - can give a human readable description
 - command line interface
+- including data loading
 
-The schema based definition using instances of the predefined schema classes gives
-the opportunity to define a detailed structure step by step. Later you can run the
-check of this created schema structure on your data structure.
+The core builds a schema which is build as combination of different type instances from the schema
+classes. This schema builder mechanism allows to setup complex structures with optimizations
+and logical validation. It can be build step by step, cloned and redefined...
 
-This is mostly used in configuration there it will pre-parse all settings and check
-them before running and use them. It will give a detailed description of the problems
-if there are some. It can also save the result as pure JavaScript files to be imported
-at runtime without the necessary to recheck them.
+With such a schema you can directly validate your data structure or use it to load and validate
+data structure or to transform them into optimized js data files using the command line interface.
+A schema can also describe itself human readable for users to describe what is needed.
+If some value failed an error message is given with reference to the original value and the
+description what failed and what is needed.
 
 This library can help you make your life secure and easy but you should have to
 define your data structure deeply, before. If you do so

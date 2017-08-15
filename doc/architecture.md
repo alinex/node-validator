@@ -1,7 +1,19 @@
 # Architecture
 
 The Validator is based on classes which helps you to easily define a specific data
-schema. Therefore the appropriate class is used to create an instance and set it up
+schema (Schema Builder) and the main class with data loading features. Also a CLI is present
+to be used.#
+
+
+## Schema
+
+The Schema defines what structure is allowed, the allowed values and types of each part
+and also how to sanitize the given values. Also the Schema may contain References to other values
+inside or outside of the structure. This references may be used as values or as parameters within
+the Schema definition. That makes it possible to define the allowed value for one part in dependency
+of another element like "must be larger than the other".
+
+Therefore the appropriate class is used to create an instance and set it up
 using it´s methods. This newly created schema may also be a structure and combination
 of different schema class instances.
 
@@ -11,30 +23,14 @@ of different schema class instances.
 - parts can be linked and cloned
 - references are a core element fully supported
 
+Find all information about the [Schema Builder](schema/README.md) classes in the next chapter.
+
 This schema can describe itself human readable and can be given a data structure
 to validate. It will run asynchronously over the data structure to check and optimize
 it. As a result it will return an promise with the resulting data structure.
 
 If the data isn´t valid it will reject with an Error object which can show the
 real problem in detail.
-
-
-## Schema
-
-This is the core of this module and defines the concrete checks see more about the possibilities
-in "Schema Builder" chapter.
-
-The Schema defines what structure is allowed, the allowed values and types of each part
-and also how to sanitize the given values. Also the Schema may contain References to other values
-inside or outside of the structure. This references may be used as values or as parameters within
-the Schema definition. That makes it possible to define the allowed value for one part in dependency
-of another element like "must be larger than the other".
-
-The Schema itself is an instance of a `SchemaType` which is setup by using its methods and maybe
-some other sub Schemas and references.
-
-If an error occurs it will contain the original value and a detailed description beside the error
-message itself.
 
 
 ## Usage
@@ -56,7 +52,7 @@ sources:
 Here you load the schema and data into your application and let the validation run to get a
 reliable structure or error message back. This can be further used.
 
-### Load data from config
+### Load data from file
 
 If you want to validate some configuration files the validator may also
 - search for files in global, user and local directory
@@ -69,7 +65,7 @@ If you want to validate some configuration files the validator may also
 As extension to the simple validation you give a file search pattern. The validation itself is the
 same.
 
-### Only validate config by CLI
+### Only validate file by CLI
 
 If you use config files you may call the validator CLI method to check your configuration changes.
 
@@ -78,7 +74,7 @@ If you use config files you may call the validator CLI method to check your conf
 This process is the same as the loading API for configuration files. Only this makes it possible to
 directly use the validator to check the files before the application is reloaded.
 
-### Transform config by CLI
+### Transform file by CLI
 
 Thats an optimization for configuration files which will give your application simplicity and
 performance without loosing the validator possibilities.

@@ -8,15 +8,23 @@ It is possible to use the same schema in more than one position but you may also
 
 ```js
 // config.schema.js
-import ObjectSchema from 'alinex-validator/lib/ObjectSchema'
-import StringSchema from 'alinex-validator/lib/StringSchema'
-import NumberSchema from 'alinex-validator/lib/NumberSchema'
+
+// @flow
+import ObjectSchema from '../../src/ObjectSchema'
+import StringSchema from '../../src/StringSchema'
+import NumberSchema from '../../src/NumberSchema'
 
 const schema = new ObjectSchema()
-.key('title', new StringSchema().uppercase().min(3).max(30))
-.key('number', new NumberSchema().positive().integer())
+  .key('title', new StringSchema().allow(['Dr.', 'Prof.']))
+  .key('name', new StringSchema().min(3).required())
+  .key('street', new StringSchema().min(3).required())
+  .key('plz', new NumberSchema().required()
+    .positive().max(99999)
+    .format('00000'))
+  .key('city', new StringSchema().required().min(3))
 
-module.exports(schema)
+
+module.exports = schema
 ```
 
 It is also a good idea to pack the schema into it´s own file and make the `schema` the default
