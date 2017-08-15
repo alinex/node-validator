@@ -13,7 +13,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = DateSchema
 
-describe('string', () => {
+describe('date', () => {
 
   it('should work without specification', (done) => {
     const data = new Date()
@@ -227,7 +227,7 @@ describe('string', () => {
       const schema = new MySchema().timezone('EST').timezone()
       helper.validateOk(schema, '2013-02-08 09:30', (res) => {
         const now = new Date().getTime()
-        expect(res).to.deep.equal(new Date('2013-02-08 08:30 GMT'))
+        expect(res).to.deep.equal(new Date('2013-02-08 09:30'))
       }, done)
     })
 
