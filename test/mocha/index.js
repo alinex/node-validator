@@ -13,7 +13,7 @@ chai.use(chaiAsPromised)
 const expect = chai.expect
 const debug = Debug('test')
 
-describe.only('use', () => {
+describe('use', () => {
 
   describe('schema', () => {
 
