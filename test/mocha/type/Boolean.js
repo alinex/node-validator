@@ -12,14 +12,14 @@ const MySchema = BooleanSchema
 
 describe('boolean', () => {
 
-  it('should work without specification', (done) => {
+  it('should work without specification', () => {
     const data = true
     const schema = new MySchema()
     expect(schema).to.be.an('object')
     // use schema
-    helper.validateOk(schema, data, (res) => {
+    return helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)
-    }, done)
+    })
   })
 
   it('should describe', () => {
@@ -30,116 +30,116 @@ describe('boolean', () => {
 
   describe('default parser', () => {
 
-    it('should work for true', (done) => {
+    it('should work for true', () => {
       const data = true
       const schema = new MySchema()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should work for false', (done) => {
+    it('should work for false', () => {
       const data = true
       const schema = new MySchema()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
   })
 
   describe('truthy/falsy', () => {
 
-    it('should work for true with arguments', (done) => {
+    it('should work for true with arguments', () => {
       const data = 1
       const schema = new MySchema().truthy(1, 'yes')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(true)
-      }, done)
+      })
     })
 
-    it('should work for true with list', (done) => {
+    it('should work for true with list', () => {
       const data = 1
       const schema = new MySchema().truthy([1, 'yes'])
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(true)
-      }, done)
+      })
     })
 
-    it('should work for false with list', (done) => {
+    it('should work for false with list', () => {
       const data = 'no'
       const schema = new MySchema().falsy([0, 'no'])
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(false)
-      }, done)
+      })
     })
 
-    it('should work for false with arguments', (done) => {
+    it('should work for false with arguments', () => {
       const data = 'no'
       const schema = new MySchema().falsy(0, 'no')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(false)
-      }, done)
+      })
     })
 
-    it('should allow reference for truthy list', (done) => {
+    it('should allow reference for truthy list', () => {
       const data = 1
       const ref = new Reference([1, 'yes'])
       const schema = new MySchema().truthy(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(true)
-      }, done)
+      })
     })
 
-    it('should allow to remove truthy', (done) => {
+    it('should allow to remove truthy', () => {
       const data = 1
       const schema = new MySchema().truthy(1, 'yes').truthy()
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow to remove falsy', (done) => {
+    it('should allow to remove falsy', () => {
       const data = 0
       const schema = new MySchema().falsy(0, 'no').falsy()
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference in truthy list', (done) => {
+    it('should allow reference in truthy list', () => {
       const data = 1
       const ref = new Reference(1)
       const schema = new MySchema().truthy('yes', ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(true)
-      }, done)
+      })
     })
 
-    it('should allow reference for falsy list', (done) => {
+    it('should allow reference for falsy list', () => {
       const data = 1
       const ref = new Reference([1, 'no'])
       const schema = new MySchema().falsy(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(false)
-      }, done)
+      })
     })
 
-    it('should allow reference in falsy list', (done) => {
+    it('should allow reference in falsy list', () => {
       const data = 1
       const ref = new Reference(1)
       const schema = new MySchema().falsy('no', ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(false)
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -160,29 +160,29 @@ describe('boolean', () => {
 
   describe('tolerant', () => {
 
-    it('should work', (done) => {
+    it('should work', () => {
       const data = 'no'
       const schema = new MySchema().tolerant()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(false)
-      }, done)
+      })
     })
 
-    it('should fail after clear', (done) => {
+    it('should fail after clear', () => {
       const schema = new MySchema().truthy(1).tolerant(false)
       // use schema
-      helper.validateFail(schema, 1, undefined, done)
+      return helper.validateFail(schema, 1, undefined)
     })
 
-    it('should work with reference', (done) => {
+    it('should work with reference', () => {
       const data = 'no'
       const ref = new Reference(true)
       const schema = new MySchema().tolerant(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(false)
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -202,35 +202,35 @@ describe('boolean', () => {
 
   describe('insensitive', () => {
 
-    it('should work', (done) => {
+    it('should work', () => {
       const data = 'NO'
       const schema = new MySchema().tolerant().insensitive()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(false)
-      }, done)
+      })
     })
 
-    it('should fail if case sensitive', (done) => {
+    it('should fail if case sensitive', () => {
       const schema = new MySchema().tolerant()
       // use schema
-      helper.validateFail(schema, 'NO', undefined, done)
+      return helper.validateFail(schema, 'NO', undefined)
     })
 
-    it('should allow to remove', (done) => {
+    it('should allow to remove', () => {
       const schema = new MySchema().tolerant().insensitive().insensitive(false)
       // use schema
-      helper.validateFail(schema, 'NO', undefined, done)
+      return helper.validateFail(schema, 'NO', undefined)
     })
 
-    it('should work with reference', (done) => {
+    it('should work with reference', () => {
       const data = 'NO'
       const ref = new Reference(true)
       const schema = new MySchema().tolerant().insensitive(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(false)
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -250,59 +250,59 @@ describe('boolean', () => {
 
   describe('format', () => {
 
-    it('should work with defined true output', (done) => {
+    it('should work with defined true output', () => {
       const data = true
       const schema = new MySchema().format('JA', 'NEIN')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('JA')
-      }, done)
+      })
     })
 
-    it('should work with defined false object', (done) => {
+    it('should work with defined false object', () => {
       const data = false
       const schema = new MySchema().format('JA', { no: 1 })
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ no: 1 })
-      }, done)
+      })
     })
 
-    it('should work with only true output', (done) => {
+    it('should work with only true output', () => {
       const data = true
       const schema = new MySchema().format('JA')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('JA')
-      }, done)
+      })
     })
 
-    it('should work with only false object', (done) => {
+    it('should work with only false object', () => {
       const data = false
       const schema = new MySchema().format(null, 'NEIN')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('NEIN')
-      }, done)
+      })
     })
 
-    it('should allow to remove', (done) => {
+    it('should allow to remove', () => {
       const data = true
       const schema = new MySchema().format('JA', 'NEIN').format()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(true)
-      }, done)
+      })
     })
 
-    it('should allow reference', (done) => {
+    it('should allow reference', () => {
       const data = true
       const ref = new Reference('JA')
       const schema = new MySchema().format(ref, 'NEIN')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('JA')
-      }, done)
+      })
     })
 
     it('should describe', () => {

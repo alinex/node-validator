@@ -12,14 +12,14 @@ const expect = chai.expect
 const MySchema = NumberSchema
 
 describe('number', () => {
-  it('should work without specification', (done) => {
+  it('should work without specification', () => {
     const data = 12.8
     const schema = new MySchema()
     expect(schema).to.be.an('object')
     // use schema
-    helper.validateOk(schema, data, (res) => {
+    return helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)
-    }, done)
+    })
   })
 
   it('should describe', () => {
@@ -30,90 +30,90 @@ describe('number', () => {
 
   describe('unit', () => {
 
-    it('should work with float', (done) => {
+    it('should work with float', () => {
       const data = 12.8
       const schema = new MySchema().unit('cm')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(12.8)
-      }, done)
+      })
     })
 
-    it('should convert', (done) => {
+    it('should convert', () => {
       const data = '1.28 m'
       const schema = new MySchema().unit('cm')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(128)
-      }, done)
+      })
     })
 
-    it('should convert to other unit', (done) => {
+    it('should convert to other unit', () => {
       const data = 1.28
       const schema = new MySchema().unit('m').toUnit('cm')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(128)
-      }, done)
+      })
     })
 
-    it('should fail with unknown unit', (done) => {
+    it('should fail with unknown unit', () => {
       const data = '12.8 alex'
       const schema = new MySchema().unit('cm')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should fail with not convertable unit', (done) => {
+    it('should fail with not convertable unit', () => {
       const data = '12.8 kg'
       const schema = new MySchema().unit('cm')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should remove unit', (done) => {
+    it('should remove unit', () => {
       const data = '1.28 m'
       const schema = new MySchema().unit('cm').unit()
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should remove toUnit', (done) => {
+    it('should remove toUnit', () => {
       const data = '1.28 m'
       const schema = new MySchema().unit('cm').toUnit('km').toUnit()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(128)
-      }, done)
+      })
     })
 
-    it('should allow reference for unit', (done) => {
+    it('should allow reference for unit', () => {
       const data = '1.28 m'
       const ref = new Reference('cm')
       const schema = new MySchema().unit(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(128)
-      }, done)
+      })
     })
 
-    it('should allow reference to other unit', (done) => {
+    it('should allow reference to other unit', () => {
       const data = 1.28
       const ref = new Reference('cm')
       const schema = new MySchema().unit('m').toUnit(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(128)
-      }, done)
+      })
     })
 
-    it('should convert sanitze, too', (done) => {
+    it('should convert sanitze, too', () => {
       const data = 'the 1.28 m length'
       const schema = new MySchema().unit('cm').sanitize()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(128)
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -133,46 +133,46 @@ describe('number', () => {
   })
 
   describe('sanitize', () => {
-    it('should work with string number', (done) => {
+    it('should work with string number', () => {
       const data = '12.8'
       const schema = new MySchema()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(12.8)
-      }, done)
+      })
     })
 
-    it('should work with additional text', (done) => {
+    it('should work with additional text', () => {
       const data = 'use 12.8 cm'
       const schema = new MySchema().sanitize()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(12.8)
-      }, done)
+      })
     })
 
-    it('should fail with additional text', (done) => {
+    it('should fail with additional text', () => {
       const data = 'use 12.8 cm'
       const schema = new MySchema()
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow remove', (done) => {
+    it('should allow remove', () => {
       const data = 'use 12.8 cm'
       const schema = new MySchema().sanitize().sanitize(false)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference', (done) => {
+    it('should allow reference', () => {
       const data = 'use 12.8 cm'
       const ref = new Reference(true)
       const schema = new MySchema().sanitize(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(12.8)
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -192,40 +192,40 @@ describe('number', () => {
 
   describe('round', () => {
 
-    it('should work with additional text', (done) => {
+    it('should work with additional text', () => {
       const data = 12.8
       const schema = new MySchema().round()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(13)
-      }, done)
+      })
     })
 
-    it('should work with given precision', (done) => {
+    it('should work with given precision', () => {
       const data = 12.876
       const schema = new MySchema().round(2)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(12.88)
-      }, done)
+      })
     })
 
-    it('should work with floor', (done) => {
+    it('should work with floor', () => {
       const data = 12.876
       const schema = new MySchema().round(2, 'floor')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(12.87)
-      }, done)
+      })
     })
 
-    it('should work with ceil', (done) => {
+    it('should work with ceil', () => {
       const data = 12.876
       const schema = new MySchema().round(2, 'ceil')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(12.88)
-      }, done)
+      })
     })
 
     it('should describe round', () => {
@@ -234,55 +234,55 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should round to integer', (done) => {
+    it('should round to integer', () => {
       const data = 12.8
       const schema = new MySchema().integer().sanitize()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(13)
-      }, done)
+      })
     })
 
-    it('should check for integer', (done) => {
+    it('should check for integer', () => {
       const data = 12
       const schema = new MySchema().integer()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with float for integer', (done) => {
+    it('should fail with float for integer', () => {
       const data = 12.8
       const schema = new MySchema().integer()
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should remove round setting', (done) => {
+    it('should remove round setting', () => {
       const data = 12.8
       const schema = new MySchema().round().round(false)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should remove integer setting', (done) => {
+    it('should remove integer setting', () => {
       const data = 12.8
       const schema = new MySchema().integer().integer(false)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should use reference for integer', (done) => {
+    it('should use reference for integer', () => {
       const data = 12.8
       const ref = new Reference(true)
       const schema = new MySchema().integer(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe integer', () => {
@@ -302,20 +302,20 @@ describe('number', () => {
 
   describe('minmax', () => {
 
-    it('should be positive', (done) => {
+    it('should be positive', () => {
       const data = 12
       const schema = new MySchema().positive()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with positive', (done) => {
+    it('should fail with positive', () => {
       const data = -12
       const schema = new MySchema().positive()
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe positive', () => {
@@ -324,20 +324,20 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should be negative', (done) => {
+    it('should be negative', () => {
       const data = -12
       const schema = new MySchema().negative()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with negative', (done) => {
+    it('should fail with negative', () => {
       const data = 12
       const schema = new MySchema().negative()
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe negative', () => {
@@ -346,20 +346,20 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should be positive', (done) => {
+    it('should be positive', () => {
       const data = 12
       const schema = new MySchema().positive()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with positive', (done) => {
+    it('should fail with positive', () => {
       const data = -12
       const schema = new MySchema().positive()
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe positive', () => {
@@ -368,20 +368,20 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should support min', (done) => {
+    it('should support min', () => {
       const data = 12
       const schema = new MySchema().min(5)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with min', (done) => {
+    it('should fail with min', () => {
       const data = -12
       const schema = new MySchema().min(5)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe min', () => {
@@ -390,20 +390,20 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should support greater', (done) => {
+    it('should support greater', () => {
       const data = 12
       const schema = new MySchema().greater(5)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with greater', (done) => {
+    it('should fail with greater', () => {
       const data = 5
       const schema = new MySchema().greater(5)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe greater', () => {
@@ -412,20 +412,20 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should support less', (done) => {
+    it('should support less', () => {
       const data = 4
       const schema = new MySchema().less(5)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with less', (done) => {
+    it('should fail with less', () => {
       const data = 5
       const schema = new MySchema().less(5)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe less', () => {
@@ -434,20 +434,20 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should support max', (done) => {
+    it('should support max', () => {
       const data = 4
       const schema = new MySchema().max(5)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with max', (done) => {
+    it('should fail with max', () => {
       const data = 12
       const schema = new MySchema().max(5)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe max', () => {
@@ -456,38 +456,38 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should support integer type', (done) => {
+    it('should support integer type', () => {
       const data = 4
       const schema = new MySchema().integerType(8)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should support integer type name', (done) => {
+    it('should support integer type name', () => {
       const data = 4
       const schema = new MySchema().integerType('byte')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should support unsigned integer type', (done) => {
+    it('should support unsigned integer type', () => {
       const data = 4
       const schema = new MySchema().integerType(8).positive()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with integer type', (done) => {
+    it('should fail with integer type', () => {
       const data = 12000000
       const schema = new MySchema().integerType(8)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe integer type', () => {
@@ -496,52 +496,52 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should allow reference for positive', (done) => {
+    it('should allow reference for positive', () => {
       const data = -12
       const ref = new Reference(true)
       const schema = new MySchema().positive(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference for negative', (done) => {
+    it('should allow reference for negative', () => {
       const data = 12
       const ref = new Reference(true)
       const schema = new MySchema().negative(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference for min', (done) => {
+    it('should allow reference for min', () => {
       const data = 12
       const ref = new Reference(16)
       const schema = new MySchema().min(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference for max', (done) => {
+    it('should allow reference for max', () => {
       const data = 12
       const ref = new Reference(10)
       const schema = new MySchema().max(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference for greater', (done) => {
+    it('should allow reference for greater', () => {
       const data = -12
       const ref = new Reference(-12)
       const schema = new MySchema().greater(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference for less', (done) => {
+    it('should allow reference for less', () => {
       const data = -12
       const ref = new Reference(-12)
       const schema = new MySchema().less(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe with reference for positive', () => {
@@ -590,37 +590,37 @@ describe('number', () => {
 
   describe('multiple', () => {
 
-    it('should work', (done) => {
+    it('should work', () => {
       const data = 16
       const schema = new MySchema().multiple(8)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail', (done) => {
+    it('should fail', () => {
       const data = 12
       const schema = new MySchema().multiple(8)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should remove', (done) => {
+    it('should remove', () => {
       const data = 12
       const schema = new MySchema().multiple(8).multiple()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow reference', (done) => {
+    it('should allow reference', () => {
       const data = 12
       const ref = new Reference(8)
       const schema = new MySchema().multiple(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe', () => {
@@ -640,50 +640,50 @@ describe('number', () => {
 
   describe('format', () => {
 
-    it('should work', (done) => {
+    it('should work', () => {
       const data = 16
       const schema = new MySchema().format('0.00')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('16.00')
-      }, done)
+      })
     })
 
-    it('should work with unit', (done) => {
+    it('should work with unit', () => {
       const data = 16
       const schema = new MySchema().unit('cm').format('0.00 $unit')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('16.00 cm')
-      }, done)
+      })
     })
 
-    it('should work with best unit', (done) => {
+    it('should work with best unit', () => {
       const data = 16000
       const schema = new MySchema().unit('cm').format('0.00 $best')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('160.00 m')
-      }, done)
+      })
     })
 
-    it('should remove', (done) => {
+    it('should remove', () => {
       const data = 16
       const schema = new MySchema().format('0.00').format()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow reference', (done) => {
+    it('should allow reference', () => {
       const data = 16
       const ref = new Reference('0.00')
       const schema = new MySchema().format(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('16.00')
-      }, done)
+      })
     })
 
     it('should describe', () => {

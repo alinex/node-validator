@@ -13,21 +13,21 @@ const MySchema = ObjectSchema
 
 describe('object', () => {
 
-  it('should work without specification', (done) => {
+  it('should work without specification', () => {
     const data = { a: 1 }
     const schema = new MySchema()
     expect(schema, 'schema').to.be.an('object')
     // use schema
-    helper.validateOk(schema, data, (res) => {
+    return helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)
-    }, done)
+    })
   })
 
-  it('should fail if no object', (done) => {
+  it('should fail if no object', () => {
     const data = 'a'
     const schema = new MySchema()
     // use schema
-    helper.validateFail(schema, data, undefined, done)
+    return helper.validateFail(schema, data, undefined)
   })
 
   it('should describe', () => {
@@ -39,69 +39,69 @@ describe('object', () => {
 
   describe('deepen/flatten', () => {
 
-    it('should work with deepen as string', (done) => {
+    it('should work with deepen as string', () => {
       const data = { 'a.a': 1, 'a.b': 2, c: 3 }
       const schema = new MySchema().deepen('.')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: { a: 1, b: 2 }, c: 3 })
-      }, done)
+      })
     })
 
-    it('should work with deepen as pattern', (done) => {
+    it('should work with deepen as pattern', () => {
       const data = { 'a.a': 1, 'a.b': 2, c: 3 }
       const schema = new MySchema().deepen(/\./)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: { a: 1, b: 2 }, c: 3 })
-      }, done)
+      })
     })
 
-    it('should work with flatten as string', (done) => {
+    it('should work with flatten as string', () => {
       const data = { a: { a: 1, b: 2 }, c: 3 }
       const schema = new MySchema().flatten('.')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ 'a.a': 1, 'a.b': 2, c: 3 })
-      }, done)
+      })
     })
 
-    it('should remove deepen', (done) => {
+    it('should remove deepen', () => {
       const data = { 'a.a': 1, 'a.b': 2, c: 3 }
       const schema = new MySchema().deepen('.').deepen()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should remove flatten', (done) => {
+    it('should remove flatten', () => {
       const data = { a: { a: 1, b: 2 }, c: 3 }
       const schema = new MySchema().flatten('.').flatten()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should work with deepen as reference', (done) => {
+    it('should work with deepen as reference', () => {
       const data = { 'a.a': 1, 'a.b': 2, c: 3 }
       const ref = new Reference('.')
       const schema = new MySchema().deepen(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: { a: 1, b: 2 }, c: 3 })
-      }, done)
+      })
     })
 
-    it('should work with flatten as reference', (done) => {
+    it('should work with flatten as reference', () => {
       const data = { a: { a: 1, b: 2 }, c: 3 }
       const ref = new Reference('.')
       const schema = new MySchema().flatten(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ 'a.a': 1, 'a.b': 2, c: 3 })
-      }, done)
+      })
     })
 
     it('should describe deepen', () => {
@@ -134,15 +134,15 @@ describe('object', () => {
 
   describe('key', () => {
 
-    it('should work with defined keys', (done) => {
+    it('should work with defined keys', () => {
       const data = { a: 1 }
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.key('a', new AnySchema())
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
     it('should describe with defined keys', () => {
@@ -152,15 +152,15 @@ describe('object', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should work with defined pattern', (done) => {
+    it('should work with defined pattern', () => {
       const data = { name1: 1 }
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.key(/name\d/, new AnySchema())
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
     it('should describe with defined pattern', () => {
@@ -170,50 +170,50 @@ describe('object', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should remove defined keys', (done) => {
+    it('should remove defined keys', () => {
       const data = { a: 1 }
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.key('a', new AnySchema()).key('a')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
         expect(schema._setting.keys.size).to.equal(0)
-      }, done)
+      })
     })
 
   })
 
   describe('removeUnknown', () => {
 
-    it('should work with defined keys', (done) => {
+    it('should work with defined keys', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown()
         .key('a', new AnySchema())
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: 1 })
-      }, done)
+      })
     })
 
-    it('should work with pattern', (done) => {
+    it('should work with pattern', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown()
         .key(/[ab]/, new AnySchema())
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: 1, b: 2 })
-      }, done)
+      })
     })
 
-    it('should work with negate', (done) => {
+    it('should work with negate', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().removeUnknown()
         .key('a', new AnySchema()).removeUnknown(false)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal({ a: 1, b: 2, c: 3 })
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -227,104 +227,104 @@ describe('object', () => {
 
   describe('length', () => {
 
-    it('should work with min', (done) => {
+    it('should work with min', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(2)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with min', (done) => {
+    it('should fail with min', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(5)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow min with reference', (done) => {
+    it('should allow min with reference', () => {
       const ref = new Reference(5)
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should work with max', (done) => {
+    it('should work with max', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().max(5)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with max', (done) => {
+    it('should fail with max', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().max(2)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow max with reference', (done) => {
+    it('should allow max with reference', () => {
       const ref = new Reference(2)
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().max(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should work with length', (done) => {
+    it('should work with length', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().length(3)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with length', (done) => {
+    it('should fail with length', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().length(2)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should work with min and max', (done) => {
+    it('should work with min and max', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(2).max(5)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should remove min', (done) => {
+    it('should remove min', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().min(5).min()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should remove max', (done) => {
+    it('should remove max', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().max(2).max()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should remove length', (done) => {
+    it('should remove length', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().length(5).length()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
     it('should describe length', () => {
@@ -357,56 +357,56 @@ describe('object', () => {
 
   describe('requiredKeys', () => {
 
-    it('should work with required key', (done) => {
+    it('should work with required key', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('a')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should work with required key list', (done) => {
+    it('should work with required key list', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('a', 'b', 'c')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should work with required key array', (done) => {
+    it('should work with required key array', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys(['a', 'b', 'c'])
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with required keys', (done) => {
+    it('should fail with required keys', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('d')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow to remove with forbiddenKeys', (done) => {
+    it('should allow to remove with forbiddenKeys', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().requiredKeys('a', 'b', 'c', 'd')
         .forbiddenKeys('d')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow required keys with reference', (done) => {
+    it('should allow required keys with reference', () => {
       const data = { a: 1, b: 2, c: 3 }
       const ref = new Reference('d')
       const schema = new MySchema().requiredKeys(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe', () => {
@@ -426,56 +426,56 @@ describe('object', () => {
 
   describe('forbiddenKeys', () => {
 
-    it('should work with forbidden key', (done) => {
+    it('should work with forbidden key', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('d')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should work with forbidden key list', (done) => {
+    it('should work with forbidden key list', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('d', 'e', 'f')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should work with forbidden key array', (done) => {
+    it('should work with forbidden key array', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys(['d', 'e', 'f'])
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with forbidden keys', (done) => {
+    it('should fail with forbidden keys', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('a')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow to remove with requiredKerys', (done) => {
+    it('should allow to remove with requiredKerys', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().forbiddenKeys('c', 'd', 'e', 'f')
         .requiredKeys('c')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow forbidden keys with reference', (done) => {
+    it('should allow forbidden keys with reference', () => {
       const data = { a: 1, b: 2, c: 3 }
       const ref = new Reference('a')
       const schema = new MySchema().forbiddenKeys(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe', () => {
@@ -495,20 +495,20 @@ describe('object', () => {
 
   describe('logic', () => {
 
-    it('should work with and', (done) => {
+    it('should work with and', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().and('a', 'b', 'c')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with and', (done) => {
+    it('should fail with and', () => {
       const data = { a: 1, b: 2 }
       const schema = new MySchema().and('a', 'b', 'c')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe and', () => {
@@ -517,20 +517,20 @@ describe('object', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should work with nand', (done) => {
+    it('should work with nand', () => {
       const data = { a: 1, b: 2 }
       const schema = new MySchema().nand('a', 'b', 'c')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with nand', (done) => {
+    it('should fail with nand', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().nand('a', 'b', 'c')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe nand', () => {
@@ -539,20 +539,20 @@ describe('object', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should work with or', (done) => {
+    it('should work with or', () => {
       const data = { a: 1, b: 2 }
       const schema = new MySchema().or('a', 'b', 'c')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with or', (done) => {
+    it('should fail with or', () => {
       const data = { d: 1, e: 2 }
       const schema = new MySchema().or('a', 'b', 'c')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe or', () => {
@@ -561,20 +561,20 @@ describe('object', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should work with xor', (done) => {
+    it('should work with xor', () => {
       const data = { a: 1 }
       const schema = new MySchema().xor('a', 'b', 'c')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with xor', (done) => {
+    it('should fail with xor', () => {
       const data = { a: 1, b: 2 }
       const schema = new MySchema().xor('a', 'b', 'c')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe xor', () => {
@@ -583,20 +583,20 @@ describe('object', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should work with with', (done) => {
+    it('should work with with', () => {
       const data = { a: 1, b: 2, c: 3 }
       const schema = new MySchema().with('a', 'b', 'c')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with with', (done) => {
+    it('should fail with with', () => {
       const data = { a: 1, b: 2 }
       const schema = new MySchema().with('a', 'b', 'c')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe with', () => {
@@ -605,20 +605,20 @@ describe('object', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should work with without', (done) => {
+    it('should work with without', () => {
       const data = { a: 1, d: 2, e: 3 }
       const schema = new MySchema().without('a', 'b', 'c')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with without', (done) => {
+    it('should fail with without', () => {
       const data = { a: 1, b: 2 }
       const schema = new MySchema().without('a', 'b', 'c')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe without', () => {
@@ -627,13 +627,13 @@ describe('object', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should allow to clearLogic', (done) => {
+    it('should allow to clearLogic', () => {
       const data = { a: 1, b: 2 }
       const schema = new MySchema().and('a', 'b', 'c').clearLogic()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
   })

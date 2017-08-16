@@ -12,14 +12,13 @@ const MySchema = Schema
 
 describe('schema', () => {
 
-  it('should work without specification', (done) => {
+  it('should work without specification', () => {
     const data = 5
     const schema = new MySchema()
     expect(schema).to.be.an('object')
     // use schema
-    helper.validateOk(schema, data, (res) => {
+    return helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)
-      done()
     })
   })
 
@@ -31,34 +30,34 @@ describe('schema', () => {
 
   describe('required', () => {
 
-    it('should work', (done) => {
+    it('should work', () => {
       const data = 5
       const schema = new MySchema().required()
       expect(schema).to.be.an('object')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail', (done) => {
+    it('should fail', () => {
       const schema = new MySchema().required()
       // use schema
-      helper.validateFail(schema, undefined, undefined, done)
+      return helper.validateFail(schema)
     })
 
-    it('should rallow emove', (done) => {
+    it('should rallow emove', () => {
       const schema = new MySchema().required().required(false)
       expect(schema).to.be.an('object')
       // use schema
-      helper.validateOk(schema, undefined, undefined, done)
+      return helper.validateOk(schema)
     })
 
-    it('should allow references', (done) => {
+    it('should allow references', () => {
       const ref = new Reference(true)
       const schema = new MySchema().required(ref)
       // use schema
-      helper.validateFail(schema, undefined, undefined, done)
+      return helper.validateFail(schema)
     })
 
     it('should describe', () => {
@@ -78,41 +77,41 @@ describe('schema', () => {
 
   describe('default', () => {
 
-    it('should work', (done) => {
+    it('should work', () => {
       const data = 5
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.default(data)
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail with required and undefined default', (done) => {
+    it('should fail with required and undefined default', () => {
       const schema = new MySchema()
       schema.required().default(undefined)
       // use schema
-      helper.validateFail(schema, undefined, undefined, done)
+      return helper.validateFail(schema)
     })
 
-    it('should allow remove', (done) => {
+    it('should allow remove', () => {
       const schema = new MySchema()
       expect(schema).to.be.an('object')
       schema.default(5).default()
       // use schema
-      helper.validateOk(schema, undefined, undefined, done)
+      return helper.validateOk(schema)
     })
 
-    it('should allow references', (done) => {
+    it('should allow references', () => {
       const data = 5
       const ref = new Reference(true)
       const schema = new MySchema()
       schema.default(ref)
       expect(schema).to.be.an('object')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -134,41 +133,41 @@ describe('schema', () => {
 
   describe('stripEmpty', () => {
 
-    it('should fail with null', (done) => {
+    it('should fail with null', () => {
       const schema = new MySchema().required().stripEmpty()
       // use schema
-      helper.validateFail(schema, null, undefined, done)
+      return helper.validateFail(schema, null)
     })
 
-    it('should fail with empty String', (done) => {
+    it('should fail with empty String', () => {
       const schema = new MySchema().required().stripEmpty()
       // use schema
-      helper.validateFail(schema, '', undefined, done)
+      return helper.validateFail(schema, '')
     })
 
-    it('should fail with empty Array', (done) => {
+    it('should fail with empty Array', () => {
       const schema = new MySchema().required().stripEmpty()
       // use schema
-      helper.validateFail(schema, [], undefined, done)
+      return helper.validateFail(schema, [])
     })
 
-    it('should fail with empty Object', (done) => {
+    it('should fail with empty Object', () => {
       const schema = new MySchema().required().stripEmpty()
       // use schema
-      helper.validateFail(schema, {}, undefined, done)
+      return helper.validateFail(schema, {})
     })
 
-    it('should allow remove', (done) => {
+    it('should allow remove', () => {
       const schema = new MySchema().required().stripEmpty(false)
       // use schema
-      helper.validateOk(schema, '', undefined, done)
+      return helper.validateOk(schema, '')
     })
 
-    it('should allow reference', (done) => {
+    it('should allow reference', () => {
       const ref = new Reference(true)
       const schema = new MySchema().required().stripEmpty(ref)
       // use schema
-      helper.validateFail(schema, null, undefined, done)
+      return helper.validateFail(schema, null)
     })
 
     it('should describe', () => {

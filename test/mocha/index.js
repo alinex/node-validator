@@ -2,6 +2,8 @@
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import Debug from 'debug'
+import util from 'util'
+import promisify from 'es6-promisify' // may be removed with node util.promisify later
 
 import validator from '../../src/index'
 import * as builder from '../../src/builder'
@@ -12,6 +14,9 @@ import * as helper from './helper'
 chai.use(chaiAsPromised)
 const expect = chai.expect
 const debug = Debug('test')
+
+
+const validateOk = promisify(helper.validateOk)
 
 describe('use', () => {
 
@@ -42,7 +47,7 @@ It is optional and must not be set.`)
 
   describe('validate', () => {
 
-    it('should work', (done) => {
+    it('should work with require', () => {
       const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
       const data = {
         title: 'Dr.',
@@ -51,10 +56,22 @@ It is optional and must not be set.`)
         plz: '565',
         city: 'Berlin',
       }
-      helper.validateOk(addressSchema, data, undefined, done)
+      return helper.validateOk(addressSchema, data)
     })
 
-    it('should fail', (done) => {
+    it('should work', () => {
+      const data = {
+        title: 'Dr.',
+        name: 'Alfons Ranze',
+        street: 'Im Heubach 3',
+        plz: '565',
+        city: 'Berlin',
+      }
+      return validator.schema(`${__dirname}/../data/address.schema`)
+        .then(addressSchema => validateOk(addressSchema, data))
+    })
+
+    it('should fail', () => {
       const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
       const data = {
         name: 'Alfons Ranze',
@@ -62,12 +79,28 @@ It is optional and must not be set.`)
         plz: '999105',
         city: 'Berlin',
       }
-      helper.validateFail(addressSchema, data, undefined, done)
+      return helper.validateFail(addressSchema, data)
     })
 
   })
 
-  describe('load', () => {
+  describe.skip('load', () => {
+
+    it('should load specific file', () => {
+      const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
+      const goal = {
+        title: 'Dr.',
+        name: 'Alfons Ranze',
+        street: 'Im Heubach 3',
+        plz: '00565',
+        city: 'Berlin',
+      }
+      //      validator.load(`${__dirname}/../data/address.schema`, addressSchema)
+      //        .then((data) => {
+      //          expect(data.name).deep.equal(goal)
+      //          done()
+      //        })
+    })
 
   })
 

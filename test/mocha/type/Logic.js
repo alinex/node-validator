@@ -14,14 +14,14 @@ const MySchema = LogicSchema
 
 describe('logic', () => {
 
-  it('should work without specification', (done) => {
+  it('should work without specification', () => {
     const data = 5
     const schema = new MySchema()
     expect(schema).to.be.an('object')
     // use schema
-    helper.validateOk(schema, data, (res) => {
+    return helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)
-    }, done)
+    })
   })
 
   it('should describe', () => {
@@ -32,44 +32,44 @@ describe('logic', () => {
 
   describe('and', () => {
 
-    it('should work', (done) => {
+    it('should work', () => {
       const data = '5_5'
       const schema = new MySchema()
         .allow(new StringSchema().replace(/_/g, '', 'remove _'))
         .and(new NumberSchema())
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(55)
-      }, done)
+      })
     })
 
-    it('should fail', (done) => {
+    it('should fail', () => {
       const data = '5-5'
       const schema = new MySchema()
         .allow(new StringSchema().replace(/_/g, '', 'remove _'))
         .and(new NumberSchema())
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should deny', (done) => {
+    it('should deny', () => {
       const data = '5_5'
       const schema = new MySchema()
         .deny(new StringSchema().replace(/_/g, '', 'remove _'))
         .and(new NumberSchema())
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should work with deny', (done) => {
+    it('should work with deny', () => {
       const data = '5-5'
       const schema = new MySchema()
         .deny(new StringSchema().replace(/_/g, '', 'remove _'))
         .and(new NumberSchema())
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('5-5')
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -84,35 +84,35 @@ describe('logic', () => {
 
   describe('OR', () => {
 
-    it('should work', (done) => {
+    it('should work', () => {
       const data = 'one'
       const schema = new MySchema()
         .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
         .or(new NumberSchema().positive())
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('1')
-      }, done)
+      })
     })
 
-    it('should work with alternative', (done) => {
+    it('should work with alternative', () => {
       const data = 14
       const schema = new MySchema()
         .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
         .or(new NumberSchema().positive())
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(14)
-      }, done)
+      })
     })
 
-    it('should fail', (done) => {
+    it('should fail', () => {
       const data = 'eins'
       const schema = new MySchema()
         .allow(new StringSchema().replace(/^one$/i, '1').allow('1'))
         .or(new NumberSchema().positive())
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe', () => {

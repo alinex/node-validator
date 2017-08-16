@@ -10,38 +10,30 @@ import SchemaData from '../../src/SchemaData'
 chai.use(chaiAsPromised)
 const expect = chai.expect
 
-function validateOk(schema: Schema, data: any, cb?: Function, done ?: Function) {
+function validateOk(schema: Schema, data: any, cb?: Function): Promise<any> {
   debug(schema, schema.constructor.name)
   debug(new SchemaData(data), schema.constructor.name)
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
-  expect(res).to.be.fulfilled.notify(() => {
-    res.then((e) => {
+  return expect(res).to.be.fulfilled
+    .then(() => res.then((e) => {
       debug(schema._check, schema.constructor.name, 'Used checks')
-      try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
-    })
-      .catch((e) => {
-        debug(schema._check, schema.constructor.name, 'Used checks')
-        if (done) done(new Error('it should not be rejected'))
-      })
-  })
+      if (cb) return cb(e)
+      return undefined
+    }))
 }
 
-function validateFail(schema: Schema, data: any, cb?: Function, done ?: Function) {
+function validateFail(schema: Schema, data: any, cb?: Function): Promise<any> {
   debug(schema, schema.constructor.name)
   debug(new SchemaData(data), schema.constructor.name)
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
-  expect(res).to.be.rejectedWith(Error).notify(() => {
-    res.then((e) => {
+  return expect(res).to.be.rejectedWith(Error)
+    .then(() => res.catch((e) => {
       debug(schema._check, schema.constructor.name, 'Used checks')
-      if (done) done(new Error('it should not be resolved'))
-    })
-      .catch((e) => {
-        debug(schema._check, schema.constructor.name, 'Used checks')
-        try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
-      })
-  })
+      if (cb) return cb(e)
+      return undefined
+    }))
 }
 
 function description(schema: Schema) {

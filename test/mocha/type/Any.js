@@ -12,14 +12,14 @@ const MySchema = AnySchema
 
 describe('any', () => {
 
-  it('should work without specification', (done) => {
+  it('should work without specification', () => {
     const data = 5
     const schema = new MySchema()
     expect(schema).to.be.an('object')
     // use schema
-    helper.validateOk(schema, data, (res) => {
+    return helper.validateOk(schema, data, (res) => {
       expect(res).deep.equal(data)
-    }, done)
+    })
   })
 
   it('should describe', () => {
@@ -30,93 +30,93 @@ describe('any', () => {
 
   describe('allow', () => {
 
-    it('should allow single value', (done) => {
+    it('should allow single value', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.allow(data)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow list', (done) => {
+    it('should allow list', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.allow(data, 'b')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow array', (done) => {
+    it('should allow array', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.allow([data, 'b'])
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail if not in allowed list', (done) => {
+    it('should fail if not in allowed list', () => {
       const data = 'b'
       const schema = new MySchema()
       schema.allow('a')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should overwrite old list', (done) => {
+    it('should overwrite old list', () => {
       const data = 'b'
       const schema = new MySchema()
       schema.allow('b').allow('a')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow remove', (done) => {
+    it('should allow remove', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.allow('b').allow()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow reference as list', (done) => {
+    it('should allow reference as list', () => {
       const data = 'a'
       const ref = new Reference(['a'])
       const schema = new MySchema()
       schema.allow(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow reference as element', (done) => {
+    it('should allow reference as element', () => {
       const data = 'a'
       const ref = new Reference(data)
       const schema = new MySchema()
       schema.allow(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow reference in list', (done) => {
+    it('should allow reference in list', () => {
       const data = 'a'
       const ref = new Reference(data)
       const schema = new MySchema()
       schema.allow(1, ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
     it('should describe', () => {
@@ -138,81 +138,81 @@ describe('any', () => {
 
   describe('deny', () => {
 
-    it('should allow single value', (done) => {
+    it('should allow single value', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.deny(data)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow list', (done) => {
+    it('should allow list', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.deny(data, 'b')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow array', (done) => {
+    it('should allow array', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.deny([data, 'b'])
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should work if not in denied list', (done) => {
+    it('should work if not in denied list', () => {
       const data = 'b'
       const schema = new MySchema()
       schema.deny('a')
       // use schema
-      helper.validateOk(schema, data, undefined, done)
+      return helper.validateOk(schema, data, undefined)
     })
 
-    it('should overwrite old list', (done) => {
+    it('should overwrite old list', () => {
       const data = 'b'
       const schema = new MySchema()
       schema.deny('b').deny('a')
       // use schema
-      helper.validateOk(schema, data, undefined, done)
+      return helper.validateOk(schema, data, undefined)
     })
 
-    it('should allow remove', (done) => {
+    it('should allow remove', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.deny('b').deny()
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow reference as list', (done) => {
+    it('should allow reference as list', () => {
       const data = 'a'
       const ref = new Reference(['a'])
       const schema = new MySchema()
       schema.deny(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference as element', (done) => {
+    it('should allow reference as element', () => {
       const data = 'a'
       const ref = new Reference(data)
       const schema = new MySchema()
       schema.deny(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference in list', (done) => {
+    it('should allow reference in list', () => {
       const data = 'a'
       const ref = new Reference(data)
       const schema = new MySchema()
       schema.deny(1, ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe', () => {
@@ -234,55 +234,55 @@ describe('any', () => {
 
   describe('valid', () => {
 
-    it('should allow specific object', (done) => {
+    it('should allow specific object', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.valid(data)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should fail if not in allowed list', (done) => {
+    it('should fail if not in allowed list', () => {
       const data = 'b'
       const schema = new MySchema()
       schema.valid('a')
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should remove from deny if allowed later', (done) => {
+    it('should remove from deny if allowed later', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.invalid(data)
         .valid(data)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should be optional if undefined is allowed', (done) => {
+    it('should be optional if undefined is allowed', () => {
       const data = undefined
       const schema = new MySchema()
       schema.required()
         .valid(undefined)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should allow reference', (done) => {
+    it('should allow reference', () => {
       const data = 'a'
       const ref = new Reference('a')
       const schema = new MySchema()
       schema.valid(ref)
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
     it('should describe valid', () => {
@@ -296,48 +296,48 @@ describe('any', () => {
 
   describe('invalid', () => {
 
-    it('should fail if in denied list', (done) => {
+    it('should fail if in denied list', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.invalid(data)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should work if not in denied list', (done) => {
+    it('should work if not in denied list', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.invalid('b')
       // use schema
-      helper.validateOk(schema, data, (res) => {
+      return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
-      }, done)
+      })
     })
 
-    it('should remove from allow if denied later', (done) => {
+    it('should remove from allow if denied later', () => {
       const data = 'a'
       const schema = new MySchema()
       schema.valid(data)
         .invalid(data)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should be required if undefined is denied', (done) => {
+    it('should be required if undefined is denied', () => {
       const data = undefined
       const schema = new MySchema()
       schema.invalid(undefined)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
-    it('should allow reference', (done) => {
+    it('should allow reference', () => {
       const data = 'a'
       const ref = new Reference(data)
       const schema = new MySchema()
       schema.invalid(ref)
       // use schema
-      helper.validateFail(schema, data, undefined, done)
+      return helper.validateFail(schema, data, undefined)
     })
 
     it('should describe invalid', () => {
