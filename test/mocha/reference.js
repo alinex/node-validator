@@ -15,18 +15,18 @@ const debug = Debug('test')
 
 describe('reference', () => {
 
-  it('should get direct value', (done) => {
+  it('should get direct value', () => {
     const ref = new Reference({ a: 1 })
-    helper.reference(ref, undefined, (res) => {
+    return helper.reference(ref, undefined, (res) => {
       expect(res).deep.equal({ a: 1 })
-    }, done)
+    })
   })
 
   describe('usage', () => {
 
     describe('in data', () => {
 
-      it('should resolve', (done) => {
+      it('should resolve', () => {
         const data = 'abc'
         const ref = new Reference(data)
         const schema = new Schema()
@@ -40,7 +40,7 @@ describe('reference', () => {
 
     describe('in schema', () => {
 
-      it('should resolve', (done) => {
+      it('should resolve', () => {
         const data = 'abc'
         const ref = new Reference(data)
         const schema = new Schema().default(ref)
@@ -65,89 +65,89 @@ describe('reference', () => {
 
   describe('source', () => {
 
-    it('should support schema data', (done) => {
+    it('should support schema data', () => {
       const data = new SchemaData(1)
       const ref = new Reference()
-      helper.reference(ref, data, (res) => {
+      return helper.reference(ref, data, (res) => {
         expect(res).deep.equal(1)
-      }, done)
+      })
     })
 
-    it('should support object structure', (done) => {
+    it('should support object structure', () => {
       const base = { a: 1 }
       const ref = new Reference(base)
-      helper.reference(ref, undefined, (res) => {
+      return helper.reference(ref, undefined, (res) => {
         expect(res).deep.equal(base)
-      }, done)
+      })
     })
 
-    it('should support function', (done) => {
+    it('should support function', () => {
       function base() {
         return { a: 1 }
       }
       const ref = new Reference(base)
-      helper.reference(ref, undefined, (res) => {
+      return helper.reference(ref, undefined, (res) => {
         expect(res).deep.equal({ a: 1 })
-      }, done)
+      })
     })
 
-    it('should support local command', (done) => {
+    it('should support local command', () => {
       process.env.TESTENV = '777'
       const ref = new Reference('env://TESTENV')
-      helper.reference(ref, undefined, (res) => {
+      return helper.reference(ref, undefined, (res) => {
         expect(res).to.be.a('string')
-      }, done)
+      })
     })
 
-    it('should support local command', (done) => {
+    it('should support local command', () => {
       const ref = new Reference('exec://date')
-      helper.reference(ref, undefined, (res) => {
+      return helper.reference(ref, undefined, (res) => {
         expect(res).to.be.a('string')
-      }, done)
+      })
     })
 
-    it('should support local command with options', (done) => {
+    it('should support local command with options', () => {
       const ref = new Reference('exec:///bin/date +%Y')
-      helper.reference(ref, undefined, (res) => {
+      return helper.reference(ref, undefined, (res) => {
         expect(res).to.be.a('string')
-      }, done)
+      })
     })
 
-    //    it('should support remote command', (done) => {
+    //    it('should support remote command', () => {
     //      const ref = new Reference('ssh://divibib@vs10191 date')
-    //      helper.reference(ref, undefined, (res) => {
+    //      return helper.reference(ref, undefined, (res) => {
     //        expect(res).to.be.a('string')
-    //      }, done)
+    //      })
     //    })
 
-    it('should support local file', (done) => {
+    it('should support local file', () => {
       const ref = new Reference('file:///proc/version')
-      helper.reference(ref, undefined, (res) => {
+      return helper.reference(ref, undefined, (res) => {
         expect(res).to.be.a('string')
-      }, done)
+      })
     })
 
     // web resource
-    it('should support web servcie http', (done) => {
+    it('should support web servcie http', () => {
       const ref = new Reference('http://google.de')
-      helper.reference(ref, undefined, (res) => {
+      return helper.reference(ref, undefined, (res) => {
         expect(res).to.be.a('string')
-      }, done)
+      })
     })
-    it('should support web servcie https', (done) => {
+    it('should support web servcie https', () => {
       const ref = new Reference('https://google.de')
-      helper.reference(ref, undefined, (res) => {
+      return helper.reference(ref, undefined, (res) => {
         expect(res).to.be.a('string')
-      }, done)
+      })
     })
 
     // ftp
     // sftp
-    //    it('should support web servcie ftp', (done) => {
+    //    it('should support web servcie ftp', () => {
     //      const ref = new Reference('ftp://ftp.avm.de/fritz.box/')
-    //      helper.reference(ref, undefined, (res) => {
+    //      return helper.reference(ref, undefined, (res) => {
     //        expect(res).to.be.a('string')
-    //      }, done)
+    //      })
     //    })
 
   })
@@ -174,21 +174,21 @@ describe('reference', () => {
         },
       }
 
-      it('should get subelement of object', (done) => {
+      it('should get subelement of object', () => {
         const ref = new Reference({ a: 1 }).path('a')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(1)
-        }, done)
+        })
       })
 
-      it('should get subelement of object', (done) => {
+      it('should get subelement of object', () => {
         const ref = new Reference({ a: { b: 1 } }).path('a/b')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(1)
-        }, done)
+        })
       })
 
-      it('should get neighbor element', (done) => {
+      it('should get neighbor element', () => {
         const ref = new Reference().path('../b')
         const data = {
           a: ref,
@@ -201,314 +201,314 @@ describe('reference', () => {
         })
       })
 
-      it('should find group', (done) => {
+      it('should find group', () => {
         const ref = new Reference(teams).path('europe/germany')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(teams.europe.germany)
-        }, done)
+        })
       })
 
-      it('should find element', (done) => {
+      it('should find element', () => {
         const ref = new Reference(teams).path('europe/germany/stuttgart')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(teams.europe.germany.stuttgart)
-        }, done)
+        })
       })
 
-      it('should fail with', (done) => {
+      it('should fail with', () => {
         const ref = new Reference(teams).path('berlin')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).equal(undefined)
-        }, done)
+        })
       })
 
-      it('should allow backreferences in path', (done) => {
+      it('should allow backreferences in path', () => {
         const ref = new Reference(teams).path('europe/../southamerica')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(teams.southamerica)
-        }, done)
+        })
       })
 
-      it('should allow name with asterisk', (done) => {
+      it('should allow name with asterisk', () => {
         const ref = new Reference(teams).path('europe/*/munich')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(teams.europe.germany.munich)
-        }, done)
+        })
       })
 
-      it('should allow multilevel asterisk', (done) => {
+      it('should allow multilevel asterisk', () => {
         const ref = new Reference(teams).path('**/munich')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(teams.europe.germany.munich)
-        }, done)
+        })
       })
 
-      it('should allow regexp pattern', (done) => {
+      it('should allow regexp pattern', () => {
         const ref = new Reference(teams).path('**/(munich|stuttgart)')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal([teams.europe.germany.stuttgart, teams.europe.germany.munich])
-        }, done)
+        })
       })
 
     })
 
     describe('keys', () => {
 
-      it('should get list', (done) => {
+      it('should get list', () => {
         const data = { one: 1, two: 2 }
         const ref = new Reference(data).keys()
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(['one', 'two'])
-        }, done)
+        })
       })
 
-      it('should do nothing on undefined', (done) => {
+      it('should do nothing on undefined', () => {
         const ref = new Reference(undefined).keys()
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(undefined)
-        }, done)
+        })
       })
 
     })
 
     describe('values', () => {
 
-      it('should get list', (done) => {
+      it('should get list', () => {
         const data = { one: 1, two: 2 }
         const ref = new Reference(data).values()
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal([1, 2])
-        }, done)
+        })
       })
 
-      it('should do nothing on undefined', (done) => {
+      it('should do nothing on undefined', () => {
         const ref = new Reference(undefined).values()
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(undefined)
-        }, done)
+        })
       })
 
     })
 
     describe('trim', () => {
 
-      it('should work on string', (done) => {
+      it('should work on string', () => {
         const data = 'Test\n'
         const ref = new Reference(data).trim()
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal('Test')
-        }, done)
+        })
       })
 
-      it('should work on array', (done) => {
+      it('should work on array', () => {
         const data = ['one\n', '   two    ', '\t three']
         const ref = new Reference(data).trim()
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(['one', 'two', 'three'])
-        }, done)
+        })
       })
 
-      it('should work on object', (done) => {
+      it('should work on object', () => {
         const data = { eins: 'one\n', zwei: '   two    ', drei: '\t three' }
         const ref = new Reference(data).trim()
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal({ eins: 'one', zwei: 'two', drei: 'three' })
-        }, done)
+        })
       })
 
-      it('should do nothing on undefined', (done) => {
+      it('should do nothing on undefined', () => {
         const ref = new Reference(undefined).trim()
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(undefined)
-        }, done)
+        })
       })
 
     })
 
     describe('split', () => {
 
-      it('should work on string', (done) => {
+      it('should work on string', () => {
         const data = 'One;Eins\nTwo;Zwei\nThree;Drei'
         const ref = new Reference(data).split('\n', ';')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal([['One', 'Eins'], ['Two', 'Zwei'], ['Three', 'Drei']])
-        }, done)
+        })
       })
 
     })
 
     describe('join', () => {
 
-      it('should work', (done) => {
+      it('should work', () => {
         const data = [['One', 'Eins'], ['Two', 'Zwei'], ['Three', 'Drei']]
         const ref = new Reference(data).join('\n', ';')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal('One;Eins\nTwo;Zwei\nThree;Drei')
-        }, done)
+        })
       })
 
     })
 
     describe('match', () => {
 
-      it('should work with global match', (done) => {
+      it('should work with global match', () => {
         const data = 'The house number one is just beside house number three.'
         const ref = new Reference(data).match(/number (\w+)/g)
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(['number one', 'number three'])
-        }, done)
+        })
       })
 
-      it('should work with single match', (done) => {
+      it('should work with single match', () => {
         const data = 'The house number one is just beside house number three.'
         const ref = new Reference(data).match(/number (\w+)/)
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(['number one', 'one'])
-        }, done)
+        })
       })
 
     })
 
     describe('range', () => {
 
-      it('should work with single element', (done) => {
+      it('should work with single element', () => {
         const data = [10, 11, 12, 13, 14, 15]
         const ref = new Reference(data).range([1], [3])
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal([11, 13])
-        }, done)
+        })
       })
 
-      it('should work with range', (done) => {
+      it('should work with range', () => {
         const data = [10, 11, 12, 13, 14, 15]
         const ref = new Reference(data).range([1, 4])
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal([11, 12, 13])
-        }, done)
+        })
       })
 
-      it('should work with open end', (done) => {
+      it('should work with open end', () => {
         const data = [10, 11, 12, 13, 14, 15]
         const ref = new Reference(data).range([3, 0])
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal([13, 14, 15])
-        }, done)
+        })
       })
 
-      it('should work with negatives', (done) => {
+      it('should work with negatives', () => {
         const data = [10, 11, 12, 13, 14, 15]
         const ref = new Reference(data).range([-3, -1])
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal([13, 14])
-        }, done)
+        })
       })
 
     })
 
     describe('filter', () => {
 
-      it('should work with list', (done) => {
+      it('should work with list', () => {
         const data = ['number one', 'number two', 'number three', 'number four']
         const ref = new Reference(data).filter('number three', 'number four', 'number five')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(['number three', 'number four'])
-        }, done)
+        })
       })
 
-      it('should work with regular expression', (done) => {
+      it('should work with regular expression', () => {
         const data = ['number one', 'number two', 'number three', 'number four']
         const ref = new Reference(data).filter(/ t/)
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(['number two', 'number three'])
-        }, done)
+        })
       })
 
     })
 
     describe('exclude', () => {
 
-      it('should work with list', (done) => {
+      it('should work with list', () => {
         const data = ['number one', 'number two', 'number three', 'number four']
         const ref = new Reference(data).exclude('number three', 'number four', 'number five')
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(['number one', 'number two'])
-        }, done)
+        })
       })
 
-      it('should work with regular expression', (done) => {
+      it('should work with regular expression', () => {
         const data = ['number one', 'number two', 'number three', 'number four']
         const ref = new Reference(data).exclude(/ t/)
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal(['number one', 'number four'])
-        }, done)
+        })
       })
 
     })
 
     describe('parse', () => {
 
-      it('should work with yaml', (done) => {
+      it('should work with yaml', () => {
         const data = 'name: Albert\nage: 21'
         const ref = new Reference(data).parse() // autodetect
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal({ name: 'Albert', age: 21 })
-        }, done)
+        })
       })
 
     })
 
     describe('fn', () => {
 
-      it('should work', (done) => {
+      it('should work', () => {
         const crop = (data) => {
           if (typeof data !== 'string') return data
           return data.substring(0, 8) // crop to 8 characters
         }
         const data = 'The large title to be reduced'
         const ref = new Reference(data).fn(crop)
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal('The larg')
-        }, done)
+        })
       })
 
     })
 
     describe('or', () => {
 
-      it('should use sub reference', (done) => {
+      it('should use sub reference', () => {
         const data = undefined
         const ref = new Reference(data).or(new Reference('default'))
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal('default')
-        }, done)
+        })
       })
 
-      it('should forget sub reference', (done) => {
+      it('should forget sub reference', () => {
         const data = 'start'
         const ref = new Reference(data).or(new Reference('default'))
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal('start')
-        }, done)
+        })
       })
 
     })
 
     describe('concat', () => {
 
-      it('should work with array', (done) => {
+      it('should work with array', () => {
         const data = [1, 2, 3]
         const ref = new Reference(data).concat(new Reference([6, 7, 8]))
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal([1, 2, 3, 6, 7, 8])
-        }, done)
+        })
       })
 
-      it('should work with object', (done) => {
+      it('should work with object', () => {
         const data = { name: 'alfons', age: 32 }
         const ref = new Reference(data).concat(new Reference({ age: 35, country: 'germany' }))
-        helper.reference(ref, undefined, (res) => {
+        return helper.reference(ref, undefined, (res) => {
           expect(res).deep.equal({ name: 'alfons', age: 35, country: 'germany' })
-        }, done)
+        })
       })
 
     })

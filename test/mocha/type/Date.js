@@ -35,20 +35,21 @@ describe('date', () => {
 
     it('should allow ISO 8601 date', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['2013-02-08', new Date('2013-02-08 00:00')],
         ['2013-W06-5', new Date('2013-02-08 00:00')],
         ['2013-039', new Date('2013-02-08 00:00')],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow date with time', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['2013-02-08 09', new Date('2013-02-08 09:00')],
         ['2013-02-08T09', new Date('2013-02-08 09:00')],
         ['2013-02-08 09:30', new Date('2013-02-08 09:30')],
@@ -57,16 +58,16 @@ describe('date', () => {
         ['2013-02-08T09:30:26', new Date('2013-02-08 09:30:26')],
         ['2013-02-08 09:30:26.123', new Date('2013-02-08 09:30:26.123')],
         ['2013-02-08 24:00:00.00', new Date('2013-02-09 00:00:0')],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow only time', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['9:30', moment(new Date()).hour(9).minute(30).second(0)
           .millisecond(0)
           .toDate()],
@@ -79,38 +80,37 @@ describe('date', () => {
         ['24:00:00', moment(new Date()).hour(24).minute(0).second(0)
           .millisecond(0)
           .toDate()],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow date parts with time', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['2013-02-08 09', new Date('2013-02-08 09:00')],
         ['2013-W06-5 09', new Date('2013-02-08 09:00')],
         ['2013-039 09', new Date('2013-02-08 09:00')],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow date with time and timezone', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['2013-02-08 09+07:00', new Date('2013-02-08 02:00Z')],
         ['2013-02-08 09-0100', new Date('2013-02-08 10:00Z')],
         ['2013-02-08 09Z', new Date('2013-02-08 09:00Z')],
         ['2013-02-08 09:30:26.123+07:00', new Date('2013-02-08 02:30:26.123Z')],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
   })
@@ -119,7 +119,8 @@ describe('date', () => {
 
     it('should allow reference names', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['today', moment(new Date()).hour(12).minute(0).second(0)
           .millisecond(0)
           .toDate()],
@@ -136,40 +137,40 @@ describe('date', () => {
           .second(0)
           .millisecond(0)
           .toDate()],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow named dates', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['17 August 2013', new Date('2013-08-17 12:00')],
         ['19 Aug 2013', new Date('2013-08-19 12:00')],
         ['20 Aug. 2013', new Date('2013-08-20 12:00')],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow named dates with time', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['Sat Aug 17 2013 18:40:39 GMT+0900 (JST)', new Date('2013-08-17 09:40:39Z')],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow relative date', () => {
       const schema = new MySchema()
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['This Friday at 13:00', moment(new Date()).day(5).hour(13).minute(0)
           .second(0)
           .millisecond(0)
@@ -178,11 +179,10 @@ describe('date', () => {
           .second(0)
           .millisecond(0)
           .toDate()],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow now', () => {
@@ -199,7 +199,8 @@ describe('date', () => {
 
     it('should work', () => {
       const schema = new MySchema().timezone('EST')
-      async.eachSeries([
+      let p = Promise.resolve()
+      for (const e of [
         ['2013-02-08 09', new Date('2013-02-08 14:00 GMT')],
         ['2013-02-08T09', new Date('2013-02-08 14:00 GMT')],
         ['2013-02-08 09:30', new Date('2013-02-08 14:30 GMT')],
@@ -208,11 +209,10 @@ describe('date', () => {
         ['2013-02-08T09:30:26', new Date('2013-02-08 14:30:26 GMT')],
         ['2013-02-08 09:30:26.123', new Date('2013-02-08 14:30:26.123 GMT')],
         ['2013-02-08 24:00:00.00', new Date('2013-02-09 05:00:00 GMT')],
-      ], (check, cb) => {
-        return helper.validateOk(schema, check[0], (res) => {
-          expect(res).deep.equal(check[1])
-        }, cb)
-      })
+      ]) {
+        p = p.then(() => helper.validateOk(schema, e[0], res => expect(res).deep.equal(e[1])))
+      }
+      return p
     })
 
     it('should allow full name', () => {

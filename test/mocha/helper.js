@@ -44,15 +44,15 @@ function description(schema: Schema) {
   return msg
 }
 
-function reference(ref: Reference, pos?: any, cb?: Function, done ?: Function) {
+function reference(ref: Reference, pos?: any, cb?: Function): Promise<any> {
   debug(ref, ref.constructor.name)
   const res = ref.resolve(pos)
   debug(res, ref.constructor.name)
-  expect(res).to.be.fulfilled.notify(() => {
-    res.then((e) => {
-      try { if (cb) cb(e); if (done) done() } catch (error) { if (done) done(error) }
-    })
-  })
+  return expect(res).to.be.fulfilled
+    .then(() => res.then((e) => {
+      if (cb) return cb(e)
+      return undefined
+    }))
 }
 
 export { debug, validateOk, validateFail, description, reference }
