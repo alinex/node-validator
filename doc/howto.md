@@ -31,6 +31,30 @@ It is also a good idea to pack the schema into it´s own file and make the `sche
 export like int his example.
 
 
+## Load Schema
+
+The schema may be loaded in different ways:
+
+```js
+// load schema
+import schema from './config.schema.js'
+schema.validate(data)
+
+// or dynamic load using require
+const schema = require(__dirname + '/../data/address.schema')
+schema.validate(data)
+
+// or using dynamic es6 imports
+import(`${__dirname}/../data/address.schema`)
+  .then(schema => schema.validate(data))
+
+// or use the validator method
+import validator from 'alinex-validator'
+validator.schema(`${__dirname}/../data/address.schema`)
+  .then(schema => schema.validate(data))
+```
+
+
 ## Describe structure
 
 Read the `description` property and you will get the documentation as markdown text. You may
@@ -67,29 +91,6 @@ to prevent access to the unchecked) and get a detailed description in markdown f
 `err.text()` on failures.
 
 
-## Load
-
-The following code will load configuration data and validates them:
-
-```js
-import validator from 'alinex-validator'
-
-import schema from './config.schema.js'
-// alternative:
-// const schema = path.resolve(__dirname, 'config.schema.js')
-
-validator.load('config', schema)
-  .then((data) => {
-    console.log(data)
-  })
-  .catch((err) => {
-    console.error(err.text())
-  })
-```
-
-If you only want to check them through API you won't need the `.then`-clause.
-
-
 ## Check
 
 The check of config files using the CLI:
@@ -99,7 +100,32 @@ The check of config files using the CLI:
 $ validator comfig lib/schema.config.js
 ```
 
-That's the same as loading without using the value through API.
+That's the same as loading without using the value through API:
+
+```js
+import validator from 'alinex-validator'
+
+import schema from './config.schema.js'
+
+validator.check('config', schema)
+  .then((data) => {
+    console.log(data)
+  })
+  .catch((err) => {
+    console.error(err.text())
+  })
+
+// or alternative with loading specific type
+validator.check(validator.load('config', 'yaml'), schema)
+  .then((data) => {
+    console.log(data)
+  })
+  .catch((err) => {
+    console.error(err.text())
+  })
+```
+
+If you only want to check them through API you won't need the `.then`-clause.
 
 
 ## Transform

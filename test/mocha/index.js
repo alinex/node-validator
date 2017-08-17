@@ -18,7 +18,7 @@ const debug = Debug('test')
 
 const validateOk = promisify(helper.validateOk)
 
-describe('use', () => {
+describe.only('use', () => {
 
   describe('schema', () => {
 
@@ -84,7 +84,7 @@ It is optional and must not be set.`)
 
   })
 
-  describe.skip('load', () => {
+  describe('check', () => {
 
     it('should load specific file', () => {
       const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
@@ -95,11 +95,13 @@ It is optional and must not be set.`)
         plz: '00565',
         city: 'Berlin',
       }
-      //      validator.load(`${__dirname}/../data/address.schema`, addressSchema)
-      //        .then((data) => {
-      //          expect(data.name).deep.equal(goal)
-      //          done()
-      //        })
+      validator.check(`${__dirname}/../data/address-ok.yml`, `${__dirname}/../data/address.schema`)
+        .then((data) => {
+          console.log('----------- DATA', data)
+          //          return expect(res).to.be.fulfilled
+          expect(data.name).deep.equal(goal)
+        })
+        .catch(err => console.log(err))
     })
 
   })

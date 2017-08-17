@@ -334,6 +334,14 @@ accessor.parse = (data: any, def?: string): any => {
   if (typeof data === 'string') return parser(data, def)
   return data
 }
+// accessor.parse = (data: any, def?: string): any => {
+//  if (typeof data !== 'string') return data
+//  if (!format) format = import('alinex-format')
+//  return format.then((lib) => {
+//    const parser = promisify(lib.parse)
+//    parser(data, def)
+//  })
+// }
 
 accessor.fn = (data: any, def: Function): any => def(data)
 
