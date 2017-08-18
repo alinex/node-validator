@@ -24,7 +24,8 @@
 
 - [Ideas](ideas.md)
 
-- [Alternatives](alternatives.md)
+- [Alternatives](alternatives/README.md)
+  - [Joi](alternatives/joi.md)
 
 - [Development](internal/README.md)
   - [Architecture](internal/architecture.md)

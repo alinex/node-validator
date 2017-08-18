@@ -84,31 +84,6 @@ const valid = validator.validate(json, schema, (err, valid) => {
 ```
 
 
-## Joi
-
-The validator [Joi](https://github.com/hapijs/joi) comes from the Hapi server
-component. It uses a function based schema creation.
-
-```js
-const Joi = require('joi');
-
-const schema = Joi.object().keys({
-    username: Joi.string().alphanum().min(3).max(30).required(),
-    password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-    access_token: [Joi.string(), Joi.number()],
-    birthyear: Joi.number().integer().min(1900).max(2013),
-    email: Joi.string().email()
-}).with('username', 'birthyear').without('password', 'access_token');
-
-// Return result.
-const result = Joi.validate({ username: 'abc', birthyear: 1994 }, schema);
-// result.error === null -> valid
-```
-
-It has a really good API which is clear to use with lots of possibilities also
-like references.
-
-
 ## Object Schema
 
 [Object Schema](https://www.npmjs.com/package/object-schemata) simply validates data objects with
@@ -187,4 +162,3 @@ each time again.
 
 | Feature       | Alinex 2 | Alinex 3 |
 | ------------- |:--------:|:--------:|
- 

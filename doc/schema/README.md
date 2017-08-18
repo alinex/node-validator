@@ -31,7 +31,7 @@ See the different reference and schema descriptions for their possible settings 
 To see exactly what your schema allows output it's `description` property and you
 will get the resulting configuration explained.
 
-### Complete Schema Loading
+__Complete Schema Loading__
 
 It is also possible to load all schema types instead of each one individually. Therefor use the
 builder collection:

@@ -330,9 +330,9 @@ accessor.exclude = (data: any, def: Array<number>|RegExp): any => {
 
 accessor.parse = (data: any, def?: string): any => {
   if (!format) format = require('alinex-format') // eslint-disable-line global-require
+  if (typeof data !== 'string') return data
   const parser = promisify(format.parse)
-  if (typeof data === 'string') return parser(data, def)
-  return data
+  return parser(data, def)
 }
 // accessor.parse = (data: any, def?: string): any => {
 //  if (typeof data !== 'string') return data
