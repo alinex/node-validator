@@ -36,9 +36,20 @@ like references.
 | reference context | option: `context` | `new Reference(context)` |
 | disable defaults for validation | option: `noDefaults` (false) | - |
 | reference to value | `ref(key)` | `new Reference().path(key)` |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
+| get subschema for path | `reach(schema, path)` | - |
+| any type | `any` | `AnySchema` |
+| any setting: allow | `any.allow(value)` | `anySchema.allow(value)` |
+| any setting: valid | `any.valid(value)` | `anySchema.valid(value)` |
+| any setting: invalid | `any.invalid(value)` | `anySchema.invalid(value)` |
+| any setting: required | `any.required()` | `schema.required()` |
+| any setting: optional | `any.optional()` | true unless `schema.required()` |
+| any setting: forbidden | `any.forbidden()` | - |
+| any setting: strip after validation | `any.strip()` | - |
+| any setting: description | `any.description(value)` | `new Schema(title, description)` |
+| any setting: notes | `any.notes(value)` | - |
+| any setting: tags | `any.tags(value)` | - |
+| any setting: meta | `any.meta(value)` | - |
+| any setting: example | `any.example(value)` | - |
+| any setting: unit | `any.unit(name)` | `numberSchema.unit(name).toUnit(name)` |
+| any setting: options override | `any.options(value)` | - |
+| any setting: default | `any.default(value)` | `schema.default(value)` |
