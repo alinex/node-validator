@@ -77,7 +77,7 @@ class StringSchema extends AnySchema {
 
   _makeStringDescriptor() {
     const set = this._setting
-    let msg = 'A text is needed. '
+    let msg = ''
     if (set.makeString instanceof Reference) {
       msg += `It will be converted to string depending on ${set.makeString.description}. `
     } else if (set.makeString) {

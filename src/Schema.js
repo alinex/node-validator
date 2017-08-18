@@ -240,6 +240,9 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   }
 
   _validate(value: any, source?: string, options?: Object): Promise<any> {
+    //    console.log('++++++++++++++++++++++++++')
+    //    console.log(value)
+    //    console.log('++++++++++++++++++++++++++')
     const data = value instanceof SchemaData ? value : new SchemaData(value, source, options)
     let p = Promise.resolve()
     // resolve references in value first

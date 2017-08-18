@@ -1,6 +1,6 @@
 // @flow
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
-
+import fs from 'fs'
 
 let format = null // load on demand
 
@@ -12,14 +12,15 @@ const schema = (def: string|Object): Promise<Object> => {
 const load = (data: string|Object, def?: string): Promise<any> => {
   if (typeof data === 'string') {
     if (!format) format = require('alinex-format') // eslint-disable-line global-require
+    const reader = promisify(fs.readFile)
     const parser = promisify(format.parse)
-    return parser(data, def)
+    return reader(data).then(content => parser(content, def))
   }
   return Promise.resolve(data)
 }
 
 const check = (data: string|Object, def: string|Object): Promise<any> => {
-  const list = [schema(def)]
+  const list = []
   // support promises
   if (def instanceof Promise) list.push(def)
   else list.push(schema(def))
@@ -27,9 +28,7 @@ const check = (data: string|Object, def: string|Object): Promise<any> => {
   else list.push(load(data))
   // validate after load
   return Promise.all(list)
-    .then((values) => {
-      values[0].validate(values[1], typeof data === 'string' ? data : undefined)
-    })
+    .then(values => values[0].validate(values[1], typeof data === 'string' ? data : undefined))
 }
 
 const write = () => {

@@ -425,7 +425,7 @@ class NumberSchema extends AnySchema {
     }
     if (max !== undefined && data.value > max) {
       return Promise.reject(new SchemaError(this, data,
-        `The value has to be at least ${max}.`))
+        `The value has to be at most ${max}.`))
     }
     return Promise.resolve()
   }

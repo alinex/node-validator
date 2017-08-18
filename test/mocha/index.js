@@ -92,16 +92,16 @@ It is optional and must not be set.`)
         title: 'Dr.',
         name: 'Alfons Ranze',
         street: 'Im Heubach 3',
-        plz: '00565',
+        plz: '10565',
         city: 'Berlin',
       }
-      validator.check(`${__dirname}/../data/address-ok.yml`, `${__dirname}/../data/address.schema`)
+      const schemaFile = `${__dirname}/../data/address-ok.yml`
+      const dataFile = `${__dirname}/../data/address.schema`
+      return validator.check(schemaFile, dataFile)
         .then((data) => {
-          console.log('----------- DATA', data)
-          //          return expect(res).to.be.fulfilled
-          expect(data.name).deep.equal(goal)
+          expect(data).deep.equal(goal)
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log('ERROR', err))
     })
 
   })
