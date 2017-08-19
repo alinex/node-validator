@@ -119,8 +119,8 @@ schema.max() // to remove setting
 
 ### format()
 
-Define the format for the output. This may be `unix` to convert to a unix timestamp (number of
-seconds from 1st January 1970) or with a format defined under:
+Define the format for the output. This may be `milliseconds` or `seconds` (alias `unix`) to convert
+to a unix timestamp (since 1st January 1970) or with a format defined under:
 https://momentjs.com/docs/#/displaying/format/
 
 You may also use some of the predefined formats:

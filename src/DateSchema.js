@@ -212,7 +212,10 @@ It may also be given in string format. `
     return Promise.resolve()
   }
 
-  format(value?: string | Reference): this { return this._setAny('format', value) }
+  format(value?: string | Reference): this {
+    if (value === 'unix') value = 'seconds'
+    return this._setAny('format', value)
+  }
   toLocale(value?: string | Reference): this { return this._setAny('toLocale', value) }
   toTimezone(value?: string | Reference): this {
     const set = this._setting
@@ -247,7 +250,8 @@ It may also be given in string format. `
     if (check.toLocale) data.value = data.value.locale(check.toLocale)
     if (check.toTimezone) data.value = data.value.tz(check.toTimezone)
     if (check.format) {
-      if (check.format === 'unix') data.value = data.value.unix()
+      if (check.format === 'milliseconds') data.value = data.value.valueOf()
+      else if (check.format === 'seconds') data.value = data.value.unix()
       else data.value = data.value.format(check.format)
     } else data.value = data.value.toDate()
     return Promise.resolve()
