@@ -4,10 +4,15 @@ Here you find a collection of further ideas which may be realized as soon as any
 
 General
 - allow using JSON Schema
-- access subschema by path (Joi)
+- RDBMS data loader URI
 
 Reference
-- RDBMS as reference base or as data source
+- RDBMS as reference base
 
-Object Schema
-- allowUnknown (Joi)
+Array
+- array.filter(schema).sanitize() fail or remove all which not validate
+- array.exclude(schema).sanitize() fail or remove all which validate
+
+Object
+- move() change key name (Joi rename)
+- copy()

@@ -42,22 +42,9 @@ does exactly this.
 
 ### and(schema)
 
+Here both schema definitions have to validate. They will run serial so that the later ones get the
+changed values from the earlier.
+
 ### or(schema)
 
-
-# CODE
-
-set.logic: Set[string, Schema]
-
-replace Schema.validate(data) ? SchemaData : SchemaError
-
-last = null
-for [op, schema], i of set.logic
-  if op is 'and'    
-    set.logic[i][1] = last = schema.validate(last)
-  else
-    set.logic[i][1] = last = schema.validate(data)
-
-reverse reduce and
-reverse reduce or
-interpret allow/deny
+At least one of the schema definitions has to validate.

@@ -155,6 +155,23 @@ const ref = new Reference(true)
 const schema = new ArraySchema().unique(ref)
 ```
 
+### min(limit) / max(limit) / length(limit)
+
+Specifies the number of items in the array which are allowed.
+- `limit` gives the `number` of items
+
+```js
+const schema = new ArraySchema().min(1).max(3)
+schema.min().max() // to remove both settings
+```
+
+References are also possible:
+
+```js
+const ref = new Reference(5)
+const schema = new ArraySchema().length(ref)
+```
+
 
 ## Deeper checks
 

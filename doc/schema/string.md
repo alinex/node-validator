@@ -222,7 +222,7 @@ schema.min().max() // to remove both settings
 References are also possible:
 
 ```js
-const ref = new Reference(true)
+const ref = new Reference(5)
 const schema = new StringSchema().length(ref)
 ```
 
