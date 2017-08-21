@@ -8,11 +8,15 @@ class AnySchema extends Schema {
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
+    let raw = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._allowDescriptor,
+      raw,
     )
+    raw = this._rules.validator.pop()
     this._rules.validator.push(
       this._allowValidator,
+      raw,
     )
   }
 

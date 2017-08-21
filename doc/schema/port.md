@@ -7,14 +7,15 @@ while you may use others in the same way as in [Number Schema](number.md):
 - `required()`
 - `default()`
 - `stripEmpty()`
-- `allow()`
-- `deny()`
-- `valid()`
-- `invalid()`
 - `min()`
 - `max()`
 - `less()`
 - `greater()`
+- `allow()`
+- `deny()`
+- `valid()`
+- `invalid()`
+- `raw()`
 
 Beside the numerical input you may also give port names as known in the /etc/services
 list like: 'ftp', 'http', 'ssh', ... If you do so it will be replaced by their default port numbers.

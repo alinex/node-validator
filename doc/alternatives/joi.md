@@ -59,7 +59,7 @@ alinex-validator.
 | any set: concat two schemas | `any.concat(schema)` | `logic.allow(schema1).or(schema2)` |
 | any set: when condition | `any.when` | use alternative schemas with `logic.allow(schema1).or(schema2)` |
 | any set: set label | `any.label(name)` | `new Schema(title)` |
-| any set: return original value | `any.raw()` | - |
+| any set: return original value | `any.raw()` | `schema.raw()` |
 | any set: remove empty values | `any.empty(schema)` | `schema.stripEmpty()` |
 | any set: individual error | `any.error(err)` | - |
 | array type | `array` | `ArraySchema` |

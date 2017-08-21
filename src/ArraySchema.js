@@ -10,6 +10,7 @@ class ArraySchema extends Schema {
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
+    let raw = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._typeDescriptor,
       this._splitDescriptor,
@@ -19,7 +20,9 @@ class ArraySchema extends Schema {
       this._lengthDescriptor,
       this._sortDescriptor,
       this._formatDescriptor,
+      raw,
     )
+    raw = this._rules.validator.pop()
     this._rules.validator.push(
       this._splitValidator,
       this._toArrayValidator,
@@ -29,6 +32,7 @@ class ArraySchema extends Schema {
       this._lengthValidator,
       this._sortValidator,
       this._formatValidator,
+      raw,
     )
   }
 

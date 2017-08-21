@@ -2,6 +2,7 @@
 
 This are the settings which are common for all schema types.
 
+
 ## required(bool)
 
 The validation value may be optional (default), meaning if no value is given it will be set
@@ -21,6 +22,7 @@ const schema = new AnySchema().required(ref)
 ```
 
 The reference can point to any value which may be converted to true/false.
+
 
 ## default(any)
 
@@ -42,6 +44,7 @@ const schema = new AnySchema().default(ref)
 
 The reference can point to any value.
 
+
 ## stripEmpty(bool)
 
 This flag will replace empty values like `null`, `[]`, `{}` or `''` with `undefined`
@@ -61,6 +64,25 @@ const schema = new AnySchema().stripEmpty(ref)
 ```
 
 The reference can point to any value which may be converted to true/false.
+
+
+## raw(bool)
+
+If this flag is set the value is only changed while validating. After done the original value will
+be returned.
+
+```js
+const schema = new StringSchema().trim().max(3).raw() // ' 123 ' validates and the spaces are kept
+schema.raw(false) // to remove this setting
+```
+
+And as always references are possible:
+
+```js
+const ref = new Reference(true)
+const schema = new AnySchema().raw(ref)
+```
+
 
 ## clone
 

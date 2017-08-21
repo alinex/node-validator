@@ -31,10 +31,12 @@ class Schema {
     this._rules.descriptor.push(
       this._emptyDescriptor,
       this._optionalDescriptor,
+      this._rawDescriptor,
     )
     this._rules.validator.push(
       this._emptyValidator,
       this._optionalValidator,
+      this._rawValidator,
     )
   }
 
@@ -222,6 +224,27 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
         'This element is mandatory!'))
     }
     return Promise.reject() // stop processing, optional is ok
+  }
+
+  raw(flag?: bool | Reference): this { return this._setFlag('raw', flag) }
+
+  _rawDescriptor() {
+    const set = this._setting
+    if (set.raw instanceof Reference) {
+      return `The original value is used depending on ${set.raw.description}.\n`
+    }
+    return set.raw ? 'After validation the original value is used.\n' : ''
+  }
+
+  _rawValidator(data: SchemaData): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('raw')
+    } catch (err) {
+      return Promise.reject(new SchemaError(this, data, err.message))
+    }
+    if (check.raw) data.value = data.orig
+    return Promise.resolve()
   }
 
   // using schema

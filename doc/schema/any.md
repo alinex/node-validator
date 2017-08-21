@@ -10,6 +10,7 @@ See at [Base Schema](base.md) for the inherited methods you may call like:
 - `required()`
 - `default()`
 - `stripEmpty()`
+- `raw()`
 
 A lot of other types are also based on this one.
 

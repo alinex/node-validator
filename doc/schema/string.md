@@ -10,6 +10,7 @@ See at [Any Schema](any.md) for the inherited methods you may call like:
 - `deny()`
 - `valid()`
 - `invalid()`
+- `raw()`
 
 ## Sanitize
 

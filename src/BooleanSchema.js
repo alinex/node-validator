@@ -15,13 +15,17 @@ class BooleanSchema extends Schema {
     set.falsy = new Set()
     set.format = new Map()
     // add check rules
+    let raw = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._parserDescriptor,
       this._formatDescriptor,
+      raw,
     )
+    raw = this._rules.validator.pop()
     this._rules.validator.push(
       this._parserValidator,
       this._formatValidator,
+      raw,
     )
   }
 

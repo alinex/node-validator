@@ -22,6 +22,7 @@ class ObjectSchema extends Schema {
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
+    let raw = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._typeDescriptor,
       this._structureDescriptor,
@@ -30,7 +31,9 @@ class ObjectSchema extends Schema {
       this._requiredKeysDescriptor,
       this._logicDescriptor,
       this._lengthDescriptor,
+      raw,
     )
+    raw = this._rules.validator.pop()
     this._rules.validator.push(
       this._typeValidator,
       this._structureValidator,
@@ -39,6 +42,7 @@ class ObjectSchema extends Schema {
       this._requiredKeysValidator,
       this._logicValidator,
       this._lengthValidator,
+      raw,
     )
   }
 

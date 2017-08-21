@@ -2,6 +2,7 @@
 import chai from 'chai'
 
 import Schema from '../../src/Schema'
+import StringSchema from '../../src/StringSchema'
 import Reference from '../../src/Reference'
 import * as helper from './helper'
 
@@ -181,6 +182,44 @@ describe('schema', () => {
       const ref = new Reference(true)
       const schema = new MySchema()
       schema.stripEmpty(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('raw', () => {
+
+    it('should work', () => {
+      const schema = new StringSchema().trim().max(3).raw()
+      const data = ' 123 '
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should allow reference', () => {
+      const ref = new Reference(true)
+      const schema = new StringSchema().trim().max(3).raw(ref)
+      const data = ' 123 '
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema()
+      schema.raw()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema()
+      schema.raw(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

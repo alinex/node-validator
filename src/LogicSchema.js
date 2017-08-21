@@ -9,11 +9,15 @@ class LogicSchema extends Schema {
   constructor(title?: string, detail?: string) {
     super(title, detail)
     // add check rules
+    let raw = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._logicDescriptor,
+      raw,
     )
+    raw = this._rules.validator.pop()
     this._rules.validator.push(
       this._logicValidator,
+      raw,
     )
   }
 

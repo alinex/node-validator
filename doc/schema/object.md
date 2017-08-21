@@ -8,6 +8,7 @@ See at [Base Schema](base.md) for the inherited methods you may call like:
 - `required()`
 - `default()`
 - `stripEmpty()`
+- `raw()`
 
 
 ## Sanitize
