@@ -18,7 +18,7 @@ const debug = Debug('test')
 
 const validateOk = promisify(helper.validateOk)
 
-describe.only('use', () => {
+describe('use', () => {
 
   describe('schema', () => {
 
