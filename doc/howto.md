@@ -130,8 +130,7 @@ If you only want to check them through API you won't need the `.then`-clause.
 
 ## Transform
 
-The transform method can also be called through CLI to write a javascript method exporting the
-data structure:
+The transform method can also be called through CLI to write the data structure using JSON:
 
 ```bash
 $ validator comfig lib/schema.config.js local/config.js
@@ -146,7 +145,7 @@ import schema from './config.schema.js'
 // alternative:
 // const schema = path.resolve(__dirname, 'config.schema.js')
 
-validator.transform('config', schema, 'local/config.js')
+validator.transform('config', schema, 'local/config.json')
   .catch((err) => {
     console.error(err.text())
   })

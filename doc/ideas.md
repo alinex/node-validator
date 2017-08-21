@@ -4,7 +4,7 @@ Here you find a collection of further ideas which may be realized as soon as any
 
 General
 - allow using JSON Schema
-- RDBMS data loader URI
+- RDBMS data loader URIspecific file
 
 Reference
 - RDBMS as reference base
@@ -16,6 +16,9 @@ Array
 Object
 - move() change key name (Joi rename)
 - copy()
+
+Number
+- locale support parse/format
 
 Other
 - email (joi)

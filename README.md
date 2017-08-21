@@ -17,7 +17,7 @@
   https://img.shields.io/npm/l/alinex-validator.svg?maxAge=86400)](
   #license)
 [![Codacy Badge](
-  https://api.codacy.com/project/badge/Grade/d1c3_________________d2522d9e)](
+  https://api.codacy.com/project/badge/Grade/6f53f689f1c447f3a9ce2ee8a3463fcb)](
   https://www.codacy.com/app/alinex/node-validator/dashboard)
 [![Travis status](
   https://img.shields.io/travis/alinex/node-validator.svg?maxAge=86400&label=develop)](

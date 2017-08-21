@@ -95,9 +95,9 @@ It is optional and must not be set.`)
         plz: '10565',
         city: 'Berlin',
       }
-      const schemaFile = `${__dirname}/../data/address-ok.yml`
-      const dataFile = `${__dirname}/../data/address.schema`
-      return validator.check(schemaFile, dataFile)
+      const schemaFile = `${__dirname}/../data/address.schema`
+      const dataFile = `${__dirname}/../data/address-ok.yml`
+      return validator.check(dataFile, schemaFile)
         .then((data) => {
           expect(data).deep.equal(goal)
         })
@@ -107,6 +107,25 @@ It is optional and must not be set.`)
   })
 
   describe('transform', () => {
+
+    it('should load transformed file', () => {
+      const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
+      const goal = {
+        title: 'Dr.',
+        name: 'Alfons Ranze',
+        street: 'Im Heubach 3',
+        plz: '10565',
+        city: 'Berlin',
+      }
+      const schemaFile = `${__dirname}/../data/address.schema`
+      const dataFile = `${__dirname}/../data/address-ok.yml`
+      const outFile = `${__dirname}/../data/address-ok.json`
+      return validator.transform(dataFile, schemaFile, outFile)
+        .then(() => {
+          const d = require(outFile) // eslint-disable-line global-require,import/no-dynamic-require
+          expect(d).deep.equal(goal)
+        })
+    })
 
   })
 

@@ -31,10 +31,14 @@ const check = (data: string|Object, def: string|Object): Promise<any> => {
     .then(values => values[0].validate(values[1], typeof data === 'string' ? data : undefined))
 }
 
-const write = (file: string): Promise<any> => {
+const write = (data: Object, file: string): Promise<any> => {
+  const writer = promisify(fs.writeFile)
+  return writer(file, JSON.stringify(data))
 }
 
-const transform = (data: string|Object, def: string|Object, file: string): Promise<any> => {
-}
+const transform = (data: string|Object, def: string|Object, file: string): Promise<any> =>
+  // combine check and write
+  check(data, def).then(result => write(result, file))
+
 
 export default { schema, load, check, transform }
