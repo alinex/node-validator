@@ -27,7 +27,7 @@ like references.
 The following table shows all Joi features and the identical or nearest way to reach the same using
 alinex-validator.
 
-| Feature | Joi | Alinex |
+| Feature | Joi V 10.6.0 | Alinex |
 | ------- | --- | ------ |
 | stop on error | option: `abortEarly` (true) | true |
 | convert to required type | option: `convert` (true) | schema defined (true) |
@@ -126,14 +126,28 @@ alinex-validator.
 | string set: insensitive matching | `string.insensitive()` | done through regexp |
 | string set: min length | `string.min(limit)` | `string.min(limit)` |
 | string set: max length | `string.max(limit)` | `string.max(limit)` |
-| string set:  | `string` | `string` |
-| string set:  | `string` | `string` |
-| string set:  | `string` | `string` |
-| string set:  | `string` | `string` |
-| string set:  | `string` | `string` |
-| string set:  | `string` | `string` |
-| string set:  | `string` | `string` |
-| string set:  | `string` | `string` |
-|  |  |  |
+| string set: truncate after max | `string.truncate()` | `string.truncate()` |
+| string set: credit card number | `string.creditCard()` | - |
+| string set: length | `string.length(limit)` | `string.length(limit)` |
+| string set: pattern matching | `string.regex(re)` | `string.match(re)` |
+| string set: replace | `string.replace(re, text)` | `string.replace(re, text)` |
+| string set: only alphanumeric | `string.alphanum()` | `string.alphanum()` |
+| string set: token name | `string.token()` | `string.match(/^[A-Za-z0-9_]*$/)` |
+| string set: email | `string.email()` | - |
+| string set: ip | `string.ip()` | - |
+| string set: uri | `string.uri()` | - |
+| string set: guid | `string.guid()` | - |
+| string set: hex | `string.hex()` | `string.hex()` |
+| string set: base64 | `string.base64()` | - |
+| string set: hostname | `string.hostname()` | - |
+| string set: to lowercase | `string.lowercase()` | `string.lowercase()` |
+| string set: to uppercase | `string.uppercase()` | `string.uppercase()` |
+| string set: trim whitespace | `string.trim()` | `string.trim()` |
+| string set: ISO date | `string.isoDate()` | `date.format('ISO8601')` |
+| alternatives set: try | `alternatives.try([schema1, schema2])` | `logic.allow(schema1).or(schema2)` |
+| alternatives set: when | `alternatives.when('b', { is: 5, then: Joi.string(), otherwise: Joi.number() })` | - |
+| alternatives set:  | `alternatives` | `alternatives` |
+| lazy loading for recursion | `lazy(fn)` | naturally possible |
 
-This may help to decide what to use and how to transform a schema.
+This may help to decide what to use and how to transform a schema. Not included is ehat alinex
+can do and Joi can't.

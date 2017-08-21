@@ -50,6 +50,25 @@ See the following sections for short descriptions and comparisons.
 
 
 
+## Comparison
+
+Here a basic comparison of alinex-validator against others is shown. You may also find more detailed
+comparisons under each alternative's description. The values gives a hint, how complete in percent
+the impleentation is.
+
+| Feature  | Alinex | Joi  |
+| -------- | ------:| ----:|
+| Any        | 100% | 100% |
+| Boolean    | 100% | 100% |
+| String     |  90% | 100% |
+| Number     | 100% |  70% |
+| Array      |  80% | 100% |
+| Object     |  80% |  90% |
+| Date       | 100% |  20% |
+| Logic      |  50% | 100% |
+| References | 100% |  20% |
+| Port       | 100% |   0% |
+
 
 
 ## Validator.js

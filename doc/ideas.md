@@ -16,3 +16,11 @@ Array
 Object
 - move() change key name (Joi rename)
 - copy()
+
+Other
+- email (joi)
+- ip (joi)
+- creditcard (joi)
+- uri (joi)
+- hostname (joi)
+- logic.when() (joi alternative.when)
