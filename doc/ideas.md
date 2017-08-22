@@ -8,6 +8,8 @@ General
 
 Reference
 - RDBMS as reference base
+- SFTP as reference base
+- SSH as reference base
 
 Array
 - array.filter(schema).sanitize() fail or remove all which not validate
@@ -20,10 +22,10 @@ Object
 Number
 - locale support parse/format
 
-Other
+Specific Types
 - email (joi)
 - ip (joi)
 - creditcard (joi)
 - uri (joi)
 - hostname (joi)
-- logic.when() (joi alternative.when)
+- logic.when(ref, schemaCheck, ifValue, elseValue) (joi alternative.when)
