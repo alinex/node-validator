@@ -17,7 +17,7 @@ services:
 script: "npm run-script test-travis"
 after_script:
   - "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
-  - "CODACY_PROJECT_TOKEN=bd8def9a2fd646a8aa923053be6ed091 cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
+  - "cat ./coverage/lcov.info | CODACY_PROJECT_TOKEN=bd8def9a2fd646a8aa923053be6ed091 ./node_modules/.bin/codacy-coverage"
 
 # Fix the c++ compiler on Ubuntu 14.04
 env:
