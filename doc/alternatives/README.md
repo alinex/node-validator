@@ -14,9 +14,15 @@ based validation
 - [JSV](https://www.npmjs.com/package/JSV) is an extendable JSON Schema compliant implementation.
 - [z-schema](https://www.npmjs.com/package/z-schema) is another implementation
 
+## String based Schema
+
+[validatorjs](https://www.npmjs.com/package/validatorjs) is defined by a single string definition
+per element
+
 ## Function based
 
-- [Joi](https://github.com/hapijs/joi) comes from the Hapi server component
+[Joi](https://github.com/hapijs/joi) comes from the Hapi server component see more on the next
+pages
 
 ## Other
 
@@ -28,6 +34,9 @@ a schema including:
 
 [Typed](https://www.npmjs.com/package/fully-typed) basically checks against specific types but has
 also some settings to define value ranges...
+
+
+
 
 The following validators are very simple and have only some checks:
 
@@ -44,7 +53,7 @@ The following validators are very simple and have only some checks:
 - https://www.npmjs.com/package/Validator
 - https://www.npmjs.com/package/validator
 - https://www.npmjs.com/package/validator.js
-- https://www.npmjs.com/package/validatorjs
+
 
 See the following sections for short descriptions and comparisons.
 
@@ -66,9 +75,16 @@ the impleentation is.
 | Object     |  80% |  90% |
 | Date       | 100% |  20% |
 | Logic      |  50% | 100% |
-| References | 100% |  20% |
 | Port       | 100% |   0% |
 
+| Feature  | Alinex | Joi  |
+| -------- | ------:| ----:|
+| References | 100% |  20% |
+| -> file    | 100% |   0% |
+| -> cmd     | 100% |   0% |
+| -> web     | 100% |   0% |
+| Loading    | 100% |   0% |
+| -> file    |  20% |   0% |
 
 
 ## Validator.js

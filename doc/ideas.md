@@ -29,3 +29,4 @@ Specific Types
 - uri (joi)
 - hostname (joi)
 - logic.when(ref, schemaCheck, ifValue, elseValue) (joi alternative.when)
+- handlebars

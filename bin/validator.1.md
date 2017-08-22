@@ -37,6 +37,17 @@ You may use environment variables prefixed with 'BUILDER_' to set any of
 the options like 'BUILDER_VERBOSE' to set the verbose level.
 
 
+Benefit of CLI Use
+-------------------------------------------------
+You may always directly load and validate the data structure in your application but it gives you
+more speed and less memory use to call it through CLI before.
+- CLI only transforms if source is changed
+- no pollution of application memory
+- transform may be called on demand manually
+- highest performance in config reading
+- easy import/require like js modules
+
+
 Documentation
 -------------------------------------------------
 See the online [documentation](https://alinex.gitbooks.io/validator) for more information and also

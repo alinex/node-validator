@@ -1,7 +1,7 @@
 # Alinex Validator
 
-This module will help validating complex structures. And should be used on all
-external information. Like configuration or user input. It's strength are complex structures.
+This module will help validating complex structures. And should be used on all external information.
+Like configuration or user input. It's strength are very complex structures.
 
 - class based schema definitions
 - multiple predefined types
