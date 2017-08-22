@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+// process.title = 'alinex-validator'
+require(`${__dirname}/cli.js`) // eslint-disable-line import/no-dynamic-require

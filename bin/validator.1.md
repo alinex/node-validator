@@ -1,0 +1,61 @@
+Alinex Validator
+=================================================
+
+This module will help validating complex structures. And should be used on all external information.
+Like configuration or user input. It's strength are very complex structures.
+
+
+Usage
+-------------------------------------------------
+
+    validator [options]...
+
+You can run two different tasks.
+
+__Only check data structure:__
+
+    validator --input <file-or-dir> --schema <file>
+
+This will validate the data structure and show you possible errors. This may be used every time
+after something is changed.
+
+__Preparse and transform data structure:__
+
+    validator --input <file-or-dir> --schema <file> --output <json-file>
+
+After validation and optimization the resulting data structure will be written as JSON file to
+be easily and fast imported in the program.
+
+General Options:
+
+    --help, -h      Show help                                            [boolean]
+    --nocolors, -C  turn of color output                                 [boolean]
+    --verbose, -v   run in verbose mode (multiple makes more verbose)      [count]
+    --quiet, -q     don't output header and footer                       [boolean]
+
+You may use environment variables prefixed with 'BUILDER_' to set any of
+the options like 'BUILDER_VERBOSE' to set the verbose level.
+
+
+Documentation
+-------------------------------------------------
+See the online [documentation](https://alinex.gitbooks.io/validator) for more information and also
+how to setup the schema and use of API.
+
+
+License
+-------------------------------------------------
+
+(C) Copyright 2014-2017 Alexander Schilling
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+>  <http://www.apache.org/licenses/LICENSE-2.0>
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

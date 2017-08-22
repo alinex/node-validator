@@ -8,7 +8,8 @@
     "check",
     "validate",
     "sanitize",
-    "schema"
+    "schema",
+    "config"
   ],
   "homepage": "http://alinex.github.io/node-validator/",
   "repository": {
@@ -23,6 +24,10 @@
   },
   "contributors": [],
   "license": "Apache-2.0",
+  "bin": {
+    "validator": "./dist/validator"
+  },
+  "man": "./dist/validator.1",
   "main": "./dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.js --exec 'npm run test -s'",
@@ -31,7 +36,7 @@
     "coverage": "nyc --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",
     "lint": "./node_modules/.bin/flow && eslint src --ext .js",
     "test-travis": "nyc --reporter=lcov --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",
-    "build": "babel src -d dist --require babel-polyfill",
+    "build": "babel src -d dist --require babel-polyfill; cp bin/validator dist; node_modules/.bin/marked-man bin/validator.1.md > dist/validator.1",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "flowinstall": "node_modules/.bin/flow-typed install --overwrite",
     "prepublishOnly": "npm run lint -s && npm run build -s"
@@ -40,6 +45,7 @@
     "lib": "./dist"
   },
   "dependencies": {
+    "alinex-core": "^0.2.12",
     "alinex-format": "^1.2.0",
     "alinex-util": "^2.5.1",
     "chalk": "^2.1.0",
@@ -51,7 +57,8 @@
     "numeral": "^2.0.6",
     "request-promise-native": "^1.0.4",
     "ssh2": "^0.5.5",
-    "striptags": "^3.0.1"
+    "striptags": "^3.0.1",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
     "async": "^2.5.0",
@@ -80,6 +87,7 @@
     "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.53.1",
     "flow-typed": "^2.1.5",
+    "marked-man": "^0.2.1",
     "mocha": "^3.5.0",
     "nodemon": "^1.11.0",
     "nyc": "^11.1.0",
