@@ -363,7 +363,7 @@ class NumberSchema extends AnySchema {
       msg += `The value has to be at least the number given in ${set.max.description}. `
     } else if (max !== undefined) msg += `The value has to be at most \`${set.max}\`. `
     if ((min !== undefined || set.greater !== undefined)
-    && (max !== undefined && set.less !== undefined)) {
+    && (max !== undefined || set.less !== undefined)) {
       msg = msg.replace(/(.*)\. The value has to be/, '$1 and')
     }
     return msg.replace(/ $/, '\n')

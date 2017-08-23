@@ -35,6 +35,8 @@ same using alinex-validator.
 | validatorjs V 3.13.3 | Alinex |
 | --- | ------ |
 | `accepted` need boolean true | `boolean.valid(true)` |
+| `after:date` | `date.greater(date)` |
+
 
 This may help to decide what to use and how to transform a schema. Not included is what alinex
 can do and validatorjs can't.

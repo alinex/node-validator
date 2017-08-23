@@ -26,6 +26,7 @@
 
 - [Alternatives](alternatives/README.md)
   - [Joi](alternatives/joi.md)
+  - [validatorjs](alternatives/validatorjs.md)
 
 - [Development](internal/README.md)
   - [Architecture](internal/architecture.md)

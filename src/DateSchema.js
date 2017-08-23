@@ -133,10 +133,16 @@ It may also be given in string format. `
       if (!value.isValid()) {
         throw new Error('The given text is not parse able as date')
       }
-      set.min = value
       if (set.max && !this._isReference('max') && value > set.max) {
         throw new Error('Min can´t be greater than max value')
       }
+      if (set.less && !this._isReference('less') && value >= set.less) {
+        throw new Error('Min can´t be greater or equal less value')
+      }
+      if (set.negative && !this._isReference('negative') && value > 0) {
+        throw new Error('Min can´t be positive, because defined as negative')
+      }
+      set.min = value
     } else set.min = value
     return this
   }
@@ -150,46 +156,99 @@ It may also be given in string format. `
       if (!value.isValid()) {
         throw new Error('The given text is not parse able as date')
       }
-      set.max = value
       if (set.min && !this._isReference('min') && value < set.min) {
         throw new Error('Max can´t be less than min value')
       }
+      if (set.greater && !this._isReference('greater') && value >= set.greater) {
+        throw new Error('Max can´t be less or equal greater value')
+      }
+      if (set.positive && !this._isReference('positive') && value < 0) {
+        throw new Error('Max can´t be negative, because defined as positive')
+      }
+      set.max = value
     } else set.max = value
+    return this
+  }
+
+  less(value?: Date | string | Reference): this {
+    const set = this._setting
+    if (value === undefined) delete set.less
+    else if (!(value instanceof Reference)) {
+      if (set.timezone) value = moment.tz(value, set.timezone)
+      else value = moment(value)
+      if (!value.isValid()) {
+        throw new Error('The given text is not parse able as date')
+      }
+      if (set.min && !this._isReference('min') && value <= set.min) {
+        throw new Error('Less can´t be less than min value')
+      }
+      if (set.greater && !this._isReference('greater') && value <= set.greater) {
+        throw new Error('Less can´t be less or equal greater value')
+      }
+      if (set.positive && !this._isReference('positive') && value <= 0) {
+        throw new Error('Less can´t be negative, because defined as positive')
+      }
+      set.less = value
+    } else set.less = value
+    return this
+  }
+
+  greater(value?: Date | string | Reference): this {
+    const set = this._setting
+    if (value === undefined) delete set.greater
+    else if (!(value instanceof Reference)) {
+      if (set.timezone) value = moment.tz(value, set.timezone)
+      else value = moment(value)
+      if (!value.isValid()) {
+        throw new Error('The given text is not parse able as date')
+      }
+      if (set.max && !this._isReference('max') && value >= set.max) {
+        throw new Error('Greater can´t be greater than max value')
+      }
+      if (set.less && !this._isReference('less') && value >= set.less) {
+        throw new Error('Greater can´t be greater or equal less value')
+      }
+      if (set.negative && !this._isReference('negative') && value >= 0) {
+        throw new Error('Greater can´t be positive, because defined as negative')
+      }
+      set.greater = value
+    } else set.greater = value
     return this
   }
 
   _rangeDescriptor() {
     const set = this._setting
     let msg = ''
-    if (set.min instanceof Reference) {
-      msg += `Minimum ${set.type} depends on ${set.min.description}. `
+    if (this._isReference('min')) {
+      msg += `The ${set.type} has to be at least the number given in ${set.min.description}. `
+    } else if (set.min !== undefined) msg += `The ${set.type} has to be at least \`${set.min}\`. `
+    if (this._isReference('greater')) {
+      msg += `The ${set.type} has to be higher than given in ${set.greater.description}. `
+    } else if (set.greater !== undefined) {
+      msg += `The ${set.type} has to be greater than \`${set.greater}\`. `
     }
-    if (set.max instanceof Reference) {
-      msg += `Maximum ${set.type} depends on ${set.max.description}. `
+    if (this._isReference('less')) {
+      msg += `The ${set.type} has to be at lower than given in ${set.less.description}. `
+    } else if (set.less !== undefined) msg += `The ${set.type} has to be less than \`${set.less}\`. `
+    if (this._isReference('max')) {
+      msg += `The ${set.type} has to be at least the number given in ${set.max.description}. `
+    } else if (set.max !== undefined) msg += `The ${set.type} has to be at most \`${set.max}\`. `
+    if ((set.min !== undefined || set.greater !== undefined)
+    && (set.max !== undefined || set.less !== undefined)) {
+      msg = msg.replace(/(.*)\. The \w+ has to be/, '$1 and')
     }
-    if (!this._isReference('min') && !this._isReference('max') && set.min && set.max) {
-      msg = set.min === set.max ? `The ${set.type} has to be after ${set.min}. `
-        : `The ${set.type} should be between ${set.min} and ${set.max}. `
-    } else if (!this._isReference('min') && set.min) {
-      msg = `The ${set.type} needs to be after ${set.min}. `
-    } else if (!this._isReference('max') && set.max) {
-      msg = `The ${set.type} needs to be before ${set.min}. `
-    }
-    return msg.length ? `${msg.trim()}\n` : msg
+    return msg.replace(/ $/, '\n')
   }
 
   _rangeValidator(data: SchemaData): Promise<void> {
     const check = this._check
+    // optimize
     if (check.min && this._isReference('min')) {
       if (check.timezone) check.min = moment.tz(check.min, check.timezone)
       else check.min = moment(check.min)
       if (!check.min.isValid()) {
         return Promise.reject(new SchemaError(this, data,
           `The given text is not parse able as ${check.type}`))
-      }
-      if (data.value < check.min) {
-        return Promise.reject(new SchemaError(this, data,
-          `${check.type} can´t be before min ${check.type}`))
       }
     }
     if (check.max && this._isReference('max')) {
@@ -199,19 +258,39 @@ It may also be given in string format. `
         return Promise.reject(new SchemaError(this, data,
           `The given text is not parse able as ${check.type}`))
       }
-      if (data.value > check.max) {
+    }
+    if (check.greater && this._isReference('greater')) {
+      if (check.timezone) check.greater = moment.tz(check.greater, check.timezone)
+      else check.greater = moment(check.greater)
+      if (!check.greater.isValid()) {
         return Promise.reject(new SchemaError(this, data,
-          `${check.type} can´t be after min ${check.type}`))
+          `The given text is not parse able as ${check.type}`))
+      }
+    }
+    if (check.less && this._isReference('less')) {
+      if (check.timezone) check.less = moment.tz(check.less, check.timezone)
+      else check.less = moment(check.less)
+      if (!check.less.isValid()) {
+        return Promise.reject(new SchemaError(this, data,
+          `The given text is not parse able as ${check.type}`))
       }
     }
     // check range
-    if (check.min && check.min.isAfter(data.value)) {
+    if (check.min && check.min.isSameOrAfter(data.value)) {
       return Promise.reject(new SchemaError(this, data,
-        `The ${check.type} is before the defined range. It has to be after ${check.min}.`))
+        `The ${check.type} is before the defined range. It has to be ${check.min} or later.`))
     }
-    if (check.max && check.max.isBefore(data.value)) {
+    if (check.max && check.max.isSameOrBefore(data.value)) {
       return Promise.reject(new SchemaError(this, data,
-        `The ${check.type} is after the defined range. It has to be before ${check.max}.`))
+        `The ${check.type} is after the defined range. It has to be ${check.max} or earlier.`))
+    }
+    if (check.greater && check.greater.isAfter(data.value)) {
+      return Promise.reject(new SchemaError(this, data,
+        `The ${check.type} is before the defined range. It has to be after ${check.greater}.`))
+    }
+    if (check.less && check.less.isBefore(data.value)) {
+      return Promise.reject(new SchemaError(this, data,
+        `The ${check.type} is after the defined range. It has to be before ${check.less}.`))
     }
     return Promise.resolve()
   }

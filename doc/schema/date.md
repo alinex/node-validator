@@ -101,19 +101,23 @@ const schema = new DateSchema().timezone(ref)
 You may give a time frame in which the date may be. The time frame may also be given in the same way
 as the date value. So you can also use the 'now' date.
 
-### min(date)
+### min(value) / max(value) / greater(value) / less(value)
+
+Define a allowed range of `min`, `max` or `greater`, `less` settings. The given time/date
+has to be within the defined range.
+While `min` and `max` also includes the given limit as time/date `greater` and `less`
+will not.
 
 ```js
 const schema = new DateSchema().min('now') // date in the future
 schema.min() // to remove setting
+
+const schema = new DateSchema().less('now') // date in the past
+schema.less() // to remove setting
 ```
 
-### max(date)
-
-```js
-const schema = new DateSchema().max('now') // date in the past
-schema.max() // to remove setting
-```
+This method names are used in favoir of before and after to be equivalent to the number type and
+others.
 
 
 ## Format

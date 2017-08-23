@@ -9,7 +9,7 @@
 
   "plugins": [
     "todo", "mermaid-gb3", "puml",
-    "toggle-chapters", "neo-navigator", "downloadpdf"
+    "toggle-chapters", "navigator", "downloadpdf"
   ],
   "pluginsConfig": {
     "downloadpdf": {

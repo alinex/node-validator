@@ -111,7 +111,7 @@ The reference can point to any value which may be converted to true/false.
 
 Define a allowed range of `min`, `max` or `greater`, `less` settings. The given value
 has to be within the defined range which also is involved with `positive` and `negative`.
-While `min` and `max` also allows the given limit as value `greater` and `less`
+While `min` and `max` also include the given limit as value `greater` and `less`
 will not.
 
 ```js

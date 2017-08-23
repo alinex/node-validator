@@ -337,6 +337,86 @@ describe('date', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
+    it('should work with greater', () => {
+      const schema = new MySchema().greater('2013-01-01 00:00')
+      return helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2013-02-08 09:30'))
+      })
+    })
+
+    it('should fail with greater', () => {
+      const schema = new MySchema().greater('2013-01-01 00:00')
+      return helper.validateFail(schema, '2012-02-08 09:30', undefined)
+    })
+
+    it('should remove greater', () => {
+      const schema = new MySchema().greater('2013-01-01 00:00').greater()
+      return helper.validateOk(schema, '2012-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2012-02-08 09:30'))
+      })
+    })
+
+    it('should fail with greater as reference', () => {
+      const ref = new Reference('2013-01-01 00:00')
+      const schema = new MySchema().greater(ref)
+      return helper.validateFail(schema, '2012-02-08 09:30', undefined)
+    })
+
+    it('should describe greater', () => {
+      const schema = new MySchema().greater('2013-01-01 00:00')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe greater with reference', () => {
+      const ref = new Reference('2013-01-01 00:00')
+      const schema = new MySchema().greater(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should work with less', () => {
+      const schema = new MySchema().less('2013-01-01 00:00')
+      return helper.validateOk(schema, '2012-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2012-02-08 09:30'))
+      })
+    })
+
+    it('should fail with less', () => {
+      const schema = new MySchema().less('2013-01-01 00:00')
+      return helper.validateFail(schema, '2013-02-08 09:30', undefined)
+    })
+
+    it('should remove less', () => {
+      const schema = new MySchema().less('2013-01-01 00:00').less()
+      return helper.validateOk(schema, '2013-02-08 09:30', (res) => {
+        const now = new Date().getTime()
+        expect(res).to.deep.equal(new Date('2013-02-08 09:30'))
+      })
+    })
+
+    it('should fail with less as reference', () => {
+      const ref = new Reference('2012-01-01 00:00')
+      const schema = new MySchema().less(ref)
+      return helper.validateFail(schema, '2013-02-08 09:30', undefined)
+    })
+
+    it('should describe less', () => {
+      const schema = new MySchema().less('2013-01-01 00:00')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe less with reference', () => {
+      const ref = new Reference('2013-01-01 00:00')
+      const schema = new MySchema().less(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
   })
 
   describe('format', () => {
