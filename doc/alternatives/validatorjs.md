@@ -36,7 +36,38 @@ same using alinex-validator.
 | --- | ------ |
 | `accepted` need boolean true | `boolean.valid(true)` |
 | `after:date` | `date.greater(date)` |
-
-
-This may help to decide what to use and how to transform a schema. Not included is what alinex
-can do and validatorjs can't.
+| `after_or_equal:date` | `date.min(date)` |
+| `alpha` | `string.match(/^[a-zA-Z]*$/)` |
+| `alpha_dash` | `string.match(/^[a-zA-Z-_]*$/)` |
+| `alpha_num` | `string.alphanum()` |
+| `array` | `array` |
+| `before:date` | `date.less(date)` |
+| `before_or_equal:date` | `date.max(date)` |
+| `between:min,max` for string | `string.min(min).max(max)` |
+| `between:min,max` for number | `number.min(min).max(max)` |
+| `between:min,max` for files | - |
+| `boolean` | `boolean.tolerant()` |
+| `confirmed` need matching field xxx_confirmation | `xxx_confitrmation = any.allow(new Reference().path('xxx'))` |
+| `date` | `date` |
+| `digits:value` | `number.length(value)` |
+| `different:attribute` | `any.deny(new Reference().path(attribute))` |
+| `email` | - |
+| `in:foo,bar,...` | `any.allow([foo,bar])` |
+| `integer` | `number.integer()` |
+| `max:value` | `number.max(value)` |
+| `min:value` | `number.min(value)` |
+| `not_in:foo,bar,...` | `any.deny([foo,bar])` |
+| `numeric` | `number` |
+| `required` | `schema.required()` |
+| `required_if:anotherfield,value` | - |
+| `required_unless:anotherfield,value` | - |
+| `required_with:foo,bar,...` | `object.with(a, [foo,bar])` |
+| `required_with_all:foo,bar,...` | - |
+| `required_without:foo,bar,...` | - |
+| `required_without_all:foo,bar,...` | - |
+| `same:attribute` | `any.allow(new Reference().path(attribute))` |
+| `size:value` for number | number.length(value) |
+| `size:value` for string | string.length(value) |
+| `string` | `string` |
+| `url` | - |
+| `regex:pattern` | `string.match(pattern)` |

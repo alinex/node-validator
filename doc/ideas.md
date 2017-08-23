@@ -22,11 +22,19 @@ Object
 Number
 - locale support parse/format
 
+File
+- min/max/greater/less as filesize (validatorjs)
+
 Specific Types
-- email (joi)
+- email (joi, validatorjs)
 - ip (joi)
 - creditcard (joi)
-- uri (joi)
+- uri (joi, validatorjs)
 - hostname (joi)
-- logic.when(ref, schemaCheck, ifValue, elseValue) (joi alternative.when)
 - handlebars
+
+Logic
+- when(ref, schemaCheck, ifValue, elseValue) (joi alternative.when)
+- object.when(a, v, [b,c]) // if a equal v then b,c required (validatorjs require-if)
+- object.whenNot (validatorjs require-unless)
+- // if any/all of a,b then required or disallowed c,d
