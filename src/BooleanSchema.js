@@ -7,8 +7,8 @@ import type SchemaData from './SchemaData'
 import Reference from './Reference'
 
 class BooleanSchema extends Schema {
-  constructor(title?: string, detail?: string) {
-    super(title, detail)
+  constructor(base?: any) {
+    super(base)
     // init settings
     const set = this._setting
     set.truthy = new Set()

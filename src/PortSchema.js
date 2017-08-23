@@ -365,8 +365,8 @@ const portRanges = {
 }
 
 class PortSchema extends NumberSchema {
-  constructor(title?: string, detail?: string) {
-    super(title, detail)
+  constructor(base?: any) {
+    super(base)
     super.integerType('short')
     super.positive()
   }

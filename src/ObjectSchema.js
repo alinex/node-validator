@@ -19,8 +19,8 @@ class Logic {
 }
 
 class ObjectSchema extends Schema {
-  constructor(title?: string, detail?: string) {
-    super(title, detail)
+  constructor(base?: any) {
+    super(base)
     // add check rules
     let raw = this._rules.descriptor.pop()
     this._rules.descriptor.push(

@@ -3,6 +3,53 @@
 This are the settings which are common for all schema types.
 
 
+## constructor(base)
+
+In some cases you want to work the validation not on the current data value but with an other
+discrete value or referenced value. This is mainly necessary in logical operations described later
+in detail.
+
+```js
+const schema = new ObjectSchema(5)
+  .title('MyTest')
+  .detail('is an easy schema to show it´s use')
+
+const schema = new ObjectSchema()
+  .key('init', new LogicSchema()
+    .allow( new String().stripEmpty() )
+    .and( new NumberSchema( new Reference().path('/start') ).min(1) )
+    .then( new Schema().required() )
+  )
+```
+
+A base value is set for NumberSchema based on a referenced value of another structure field. So that
+'init' may be set but must be set if 'start' is 1 or more.
+
+
+## title(string) / detail(string)
+
+With this methods you may give some meta data for this part of the data structure. This may be a
+title or some informal details which will be used for error messages before the technical description.
+
+```js
+const schema = new ObjectSchema()
+  .title('MyTest')
+  .detail('is an easy schema to show it´s use')
+```
+
+This will bring you an error message like:
+
+```markdown
+__Something is wrong.__
+
+> At path: `/any/path`
+> Given value was: `5`
+
+But __MyTest__ is an easy schema to show it´s use:
+It is optional and must not be set. +3ms
+```
+
+
 ## required(bool)
 
 The validation value may be optional (default), meaning if no value is given it will be set

@@ -6,8 +6,9 @@ import SchemaError from './SchemaError'
 import Reference from './Reference'
 
 class Schema {
-  title: string
-  detail: string
+  _title: string
+  _detail: string
+  base: any
 
   // rules
   _rules: {
@@ -18,9 +19,10 @@ class Schema {
   _setting: { [string]: any } // definition of object
   _check: { [string]: any } // resolved data
 
-  constructor(title?: string, detail?: string) {
-    this.title = title || this.constructor.name.replace(/(.)Schema/, '$1')
-    this.detail = detail || 'should be defined with:'
+  constructor(base?: any) {
+    if (base) this.base = base
+    this._title = this.constructor.name.replace(/(.)Schema/, '$1')
+    this._detail = 'should be defined with'
     this._rules = {
       descriptor: [],
       check: [],
@@ -44,9 +46,19 @@ class Schema {
     const newOptions = Object.assign({}, options, {
       depth: options.depth === null ? null : options.depth - 1,
     })
+    const base = this.base ? `base=${util.inspect(this.base)}` : ''
     const padding = ' '.repeat(5)
     const inner = util.inspect(this._setting, newOptions).replace(/\n/g, `\n${padding}`)
-    return `${options.stylize(this.constructor.name, 'class')} ${inner} `
+    return `${options.stylize(this.constructor.name, 'class')} ${base} ${inner} `
+  }
+
+  title(title: string): this {
+    this._title = title
+    return this
+  }
+  detail(detail: string): this {
+    this._detail = detail
+    return this
   }
 
   // helper methods
@@ -255,6 +267,10 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
 
   get description(): string {
     let msg = ''
+    // support base setting
+    if (this.base) {
+      msg += `Use ${this.base instanceof SchemaData ? this.base.value : this.base} as base for this check. `
+    }
     // create message using the different rules
     this._rules.descriptor.forEach((rule) => {
       if (rule) msg += rule.call(this)
@@ -263,10 +279,10 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   }
 
   _validate(value: any, source?: string, options?: Object): Promise<any> {
-    //    console.log('++++++++++++++++++++++++++')
-    //    console.log(value)
-    //    console.log('++++++++++++++++++++++++++')
     const data = value instanceof SchemaData ? value : new SchemaData(value, source, options)
+    if (this.base) { // use base setting if defined
+      data.value = this.base instanceof SchemaData ? this.base.value : this.base
+    }
     let p = Promise.resolve()
     // resolve references in value first
     if (data.value instanceof Reference) {

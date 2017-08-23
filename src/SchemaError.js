@@ -20,7 +20,7 @@ class SchemaError extends Error {
 > Given value was: \`${util.inspect(this.data.value)}\`
 > At path: \`${this.data.source}\`
 
-But __${this.schema.title}__ ${this.schema.detail}
+But __${this.schema._title}__ ${this.schema._detail}:
 ${this.schema.description}`
   }
 }

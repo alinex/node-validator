@@ -46,8 +46,8 @@ const alias = {
 }
 
 class DateSchema extends AnySchema {
-  constructor(title?: string, detail?: string) {
-    super(title, detail)
+  constructor(base?: any) {
+    super(base)
     this._setting.type = 'datetime'
     // add check rules
     let allow = this._rules.descriptor.pop()

@@ -31,8 +31,8 @@ class Round {
 }
 
 class NumberSchema extends AnySchema {
-  constructor(title?: string, detail?: string) {
-    super(title, detail)
+  constructor(base?: any) {
+    super(base)
     // add check rules
     let allow = this._rules.descriptor.pop()
     let raw = this._rules.descriptor.pop()

@@ -1,12 +1,16 @@
 // @flow
 import chai from 'chai'
+import Debug from 'debug'
 
 import Schema from '../../src/Schema'
 import StringSchema from '../../src/StringSchema'
 import Reference from '../../src/Reference'
+import SchemaData from '../../src/SchemaData'
+import SchemaError from '../../src/SchemaError'
 import * as helper from './helper'
 
 const expect = chai.expect
+const debug = Debug('test')
 
 // to simplify copy and paste in other Schemas
 const MySchema = Schema
@@ -27,6 +31,65 @@ describe('schema', () => {
     const schema = new MySchema()
     // use schema
     expect(helper.description(schema)).to.equal('It is optional and must not be set.')
+  })
+
+  describe('meta', () => {
+
+    it('should describe error', () => {
+      const schema = new MySchema()
+      const value = 5
+      const data = new SchemaData(value, '/any/path')
+      const err = new SchemaError(schema, data, 'Something is wrong.')
+      const msg = err.text
+      debug(msg)
+      expect(msg).to.equal(`__Something is wrong.__
+
+> Given value was: \`5\`
+> At path: \`/any/path\`
+
+But __Schema__ should be defined with:
+It is optional and must not be set.`)
+    })
+
+    it('should describe error with specific title and detail', () => {
+      const schema = new MySchema()
+        .title('Test')
+        .detail('should be used only for simple testing with')
+      const value = 5
+      const data = new SchemaData(value, '/any/path')
+      const err = new SchemaError(schema, data, 'Something is wrong.')
+      const msg = err.text
+      debug(msg)
+      expect(msg).to.equal(`__Something is wrong.__
+
+> Given value was: \`5\`
+> At path: \`/any/path\`
+
+But __Test__ should be used only for simple testing with:
+It is optional and must not be set.`)
+    })
+
+  })
+
+  describe('base', () => {
+
+    it('should work', () => {
+      const data = 5
+      const schema = new MySchema(data)
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, 3, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should describe', () => {
+      const data = 5
+      const schema = new MySchema(data)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
   })
 
   describe('required', () => {
@@ -64,7 +127,7 @@ describe('schema', () => {
     it('should describe', () => {
       const schema = new MySchema().required()
       // use schema
-      expect(helper.description(schema)).to.equal('')
+      expect(helper.description(schema)).to.be.a('string')
     })
 
     it('should describe', () => {

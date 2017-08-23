@@ -7,7 +7,7 @@ As far as possible the schema will be checked against validity while defining it
 invalid setup like `new Number().min(6).max(3)` will directly throw an Error because it can neither
 come to a valid state.
 
- 
+
 ## Overview
 
 All types are based on the `Schema` class directly or indirectly.
@@ -31,7 +31,9 @@ import Reference from 'alinex-validator/lib/Reference'
 import ObjectSchema from 'alinex-validator/lib/ObjectSchema'
 import AnySchema from 'alinex-validator/lib/AnySchema'
 
-const schema = new ObjectSchema('MyTest', 'is an easy schema to show it´s use')
+const schema = new ObjectSchema()
+  .title('MyTest')
+  .detail('is an easy schema to show it´s use')
   .key('one', new AnySchema().optional())
   .key('two', new AnySchema().default(new Reference(schema).path('/one')))
 
@@ -62,7 +64,9 @@ builder collection:
 ```js
 import * as val from 'alinex-validator/lib/builder'
 
-const schema = new val.Object('MyTest', 'is an easy schema to show it´s use')
+const schema = new val.Object()
+  .title('MyTest')
+  .detail('is an easy schema to show it´s use')
   .key('one', new val.Any().optional())
   .key('two', new val.Any().default(new val.Reference(schema).path('/one')))
 
@@ -72,6 +76,9 @@ schema.validate(data)
   .catch(err => console.error(err.text))
 // res = { one: 1, two: 2 }
 ```
+
+In both examples the schema is applied on the value at the current position in the data structure
+but you may also use an other value given as constructor parameter.
 
 
 ## Booleans
