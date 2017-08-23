@@ -32,6 +32,8 @@ multiple rules using '|' as separator and `<rule>:<value>` settings.
 The following table shows all validatorjs features and the identical or nearest way to reach the
 same using alinex-validator.
 
+> The code examples are only pseudo code to make it shorter
+
 | validatorjs V 3.13.3 | Alinex |
 | --- | ------ |
 | `accepted` need boolean true | `boolean.valid(true)` |
@@ -47,10 +49,10 @@ same using alinex-validator.
 | `between:min,max` for number | `number.min(min).max(max)` |
 | `between:min,max` for files | - |
 | `boolean` | `boolean.tolerant()` |
-| `confirmed` need matching field xxx_confirmation | `xxx_confitrmation = any.allow(new Reference().path('xxx'))` |
+| `confirmed` need matching field xxx_confirmation | `xxx_confitrmation = any.allow(ref().path('xxx'))` |
 | `date` | `date` |
 | `digits:value` | `number.length(value)` |
-| `different:attribute` | `any.deny(new Reference().path(attribute))` |
+| `different:attribute` | `any.deny(ref().path(attribute))` |
 | `email` | - |
 | `in:foo,bar,...` | `any.allow([foo,bar])` |
 | `integer` | `number.integer()` |
@@ -65,7 +67,7 @@ same using alinex-validator.
 | `required_with_all:foo,bar,...` | - |
 | `required_without:foo,bar,...` | - |
 | `required_without_all:foo,bar,...` | - |
-| `same:attribute` | `any.allow(new Reference().path(attribute))` |
+| `same:attribute` | `any.allow(ref().path(attribute))` |
 | `size:value` for number | number.length(value) |
 | `size:value` for string | string.length(value) |
 | `string` | `string` |

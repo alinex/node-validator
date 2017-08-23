@@ -5,6 +5,7 @@ Here you find a collection of further ideas which may be realized as soon as any
 General
 - allow using JSON Schema
 - RDBMS data loader URIspecific file
+- value in constructor will be used instead of data.value
 
 Reference
 - RDBMS as reference base
@@ -18,6 +19,8 @@ Array
 Object
 - move() change key name (Joi rename)
 - copy()
+- requiredIf(schema)
+- forbiddenIf(schema)
 
 Number
 - locale support parse/format
@@ -34,7 +37,13 @@ Specific Types
 - handlebars
 
 Logic
-- when(ref, schemaCheck, ifValue, elseValue) (joi alternative.when)
-- object.when(a, v, [b,c]) // if a equal v then b,c required (validatorjs require-if)
-- object.whenNot (validatorjs require-unless)
-- // if any/all of a,b then required or disallowed c,d
+- if(schema) // like and but with different values
+- then(schema)
+- else(schema)
+
+required_if:anotherfield,value
+The field under validation must be present and not empty if the anotherfield field is equal to any value.
+
+logic.allow(schema(ref().path(anotherfield)))
+.if(any.allow(value))
+.then(schema.required())

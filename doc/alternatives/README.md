@@ -65,26 +65,26 @@ Here a basic comparison of alinex-validator against others is shown. You may als
 comparisons under each alternative's description. The values gives a hint, how complete in percent
 the impleentation is.
 
-| Feature  | Alinex | Joi  |
-| -------- | ------:| ----:|
-| Any        | 100% | 100% |
-| Boolean    | 100% | 100% |
-| String     |  90% | 100% |
-| Number     | 100% |  70% |
-| Array      |  80% | 100% |
-| Object     |  80% |  90% |
-| Date       | 100% |  20% |
-| Logic      |  50% | 100% |
-| Port       | 100% |   0% |
+| Feature  | Alinex | Joi  | validatorjs |
+| -------- | ------:| ----:| -----------:|
+| Any        | 100% | 100% |        100% |
+| Boolean    | 100% |  80% |         80% |
+| String     |  90% |  90% |         60% |
+| Number     | 100% |  70% |         40% |
+| Array      |  80% | 100% |         10% |
+| Object     |  80% |  90% |         70% |
+| Date       | 100% |  20% |         30% |
+| Logic      |  50% | 100% |         40% |
+| Port       | 100% |   0% |          0% |
 
-| Feature  | Alinex | Joi  |
-| -------- | ------:| ----:|
-| References | 100% |  20% |
-| -> file    | 100% |   0% |
-| -> cmd     | 100% |   0% |
-| -> web     | 100% |   0% |
-| Loading    | 100% |   0% |
-| -> file    |  20% |   0% |
+| Feature  | Alinex | Joi  | validatorjs |
+| -------- | ------:| ----:| -----------:|
+| References | 100% |  20% |         20% |
+| -> file    | 100% |   0% |          0% |
+| -> cmd     | 100% |   0% |          0% |
+| -> web     | 100% |   0% |          0% |
+| Loading    | 100% |   0% |          0% |
+| -> file    |  20% |   0% |          0% |
 
 
 ## Validator.js

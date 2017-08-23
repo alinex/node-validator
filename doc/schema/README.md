@@ -3,14 +3,37 @@
 The schema defines how to validate and sanitize the data structures. It is defined
 by using instances of the schema classes and setting their properties.
 
+As far as possible the schema will be checked against validity while defining it. So generally
+invalid setup like `new Number().min(6).max(3)` will directly throw an Error because it can neither
+come to a valid state.
+
+ 
+## Overview
+
+All types are based on the `Schema` class directly or indirectly.
+
+![Schema types](schema-types.png)
+
+Each of this classes have different properties and settings which you can use to
+specify it. They mostly inherit the parent methods but sometimes the use of specific parent methods
+are disallowed. See each class's description for more details.
+
+One exception is the reference which is a special type not a subclass of Schema because it
+didn't validate but will get the value from the defined resource. Read more about this later.
+
+
+## General Usage
+
+You may define your schema like below:
+
 ```js
 import Reference from 'alinex-validator/lib/Reference'
 import ObjectSchema from 'alinex-validator/lib/ObjectSchema'
 import AnySchema from 'alinex-validator/lib/AnySchema'
 
 const schema = new ObjectSchema('MyTest', 'is an easy schema to show it´s use')
-schema.key('one', new AnySchema().optional())
-.key('two', new AnySchema().default(new Reference(schema).path('/one')))
+  .key('one', new AnySchema().optional())
+  .key('two', new AnySchema().default(new Reference(schema).path('/one')))
 
 const data = { one: 1 }
 schema.validate(data)
@@ -37,11 +60,11 @@ It is also possible to load all schema types instead of each one individually. T
 builder collection:
 
 ```js
-import * as builder from 'alinex-validator/lib/builder'
+import * as val from 'alinex-validator/lib/builder'
 
-const schema = new builder.Object('MyTest', 'is an easy schema to show it´s use')
-schema.key('one', new builder.Any().optional())
-.key('two', new builder.Any().default(new builder.Reference(schema).path('/one')))
+const schema = new val.Object('MyTest', 'is an easy schema to show it´s use')
+  .key('one', new val.Any().optional())
+  .key('two', new val.Any().default(new val.Reference(schema).path('/one')))
 
 const data = { one: 1 }
 schema.validate(data)
@@ -51,17 +74,11 @@ schema.validate(data)
 ```
 
 
-## Overview
+## Booleans
 
-All types are based on the `Schema` class directly or indirectly.
-
-![Schema types](schema-types.png)
-
-Each of this classes have different properties and settings which you can use to
-specify it.
-
-One exception is the reference which is a special type which didn't validate but will get the
-value from the defined resource. Read more about this later.
+Where boolean values are required in the schema definition you can also use:
+- 'yes', 1, '1', 'true', 't', '+', array or object
+- 'no', 0, '0', 'false', 'f', '', '-', undefined, empty array or object
 
 
 ## References
@@ -70,11 +87,4 @@ This is a special value which may be used anywhere in the schema definition and 
 It is a dynamic value which will only be known at validation time. If references are used the checking for correct schema definition can also not be completely done before validation. But it is also checked.
 Read more about it at the end of this chapter with all the possibilities.
 
-
-## Booleans
-
-Where boolean values are required in the schema definition you can also use:
-- 'yes', 1, '1', 'true', 't', '+', array or object
-- 'no', 0, '0', 'false', 'f', '', '-', undefined, empty array or object
-
-In the next examples only simple references with direct values will be used. But all other work, too.
+In the examples only simple references with direct values will be used. But all other work, too.

@@ -27,6 +27,8 @@ like references.
 The following table shows all Joi features and the identical or nearest way to reach the same using
 alinex-validator.
 
+> The code examples are only pseudo code to make it shorter
+
 | Joi V 10.6.0 | Alinex |
 | --- | ------ |
 | option: `abortEarly` (true) | true |
@@ -36,9 +38,9 @@ alinex-validator.
 | option: `skipFunctions` (true) | - |
 | option: `language` (overwrite errors) | - |
 | option: `presence` (optional) | default always optional |
-| option: `context` | `new Reference(context)` |
+| option: `context` | `ref(context)` |
 | option: `noDefaults` (false) | - |
-| `ref(key)` | `new Reference().path(key)` |
+| `ref(key)` | `ref().path(key)` |
 | `reach(schema, path)` | - |
 | `any` | `Schema` |
 | `any.allow(value)` | `any.allow(value)` |
@@ -48,7 +50,7 @@ alinex-validator.
 | `any.optional()` | true unless `schema.required()` |
 | `any.forbidden()` | - |
 | `any.strip()` | - |
-| `any.description(value)` | `new Schema(title, description)` |
+| `any.description(value)` | `schema(title, description)` |
 | `any.notes(value)` | - |
 | `any.tags(value)` | - |
 | `any.meta(value)` | - |
@@ -58,7 +60,7 @@ alinex-validator.
 | `any.default(value)` | `schema.default(value)` |
 | `any.concat(schema)` | `logic.allow(schema1).or(schema2)` |
 | `any.when` | use alternative schemas with `logic.allow(schema1).or(schema2)` |
-| `any.label(name)` | `new Schema(title)` |
+| `any.label(name)` | `schema(title)` |
 | `any.raw()` | `schema.raw()` |
 | `any.empty(schema)` | `schema.stripEmpty()` |
 | `any.error(err)` | - |
