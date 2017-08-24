@@ -7,6 +7,8 @@ you the possibility to define alternatives or put different schema in queue toge
 sanitization with number conversion.
 
 See at [Base Schema](base.md) for the inherited methods you may call like:
+- `title()`
+- `detail()`
 - `required()`
 - `default()`
 - `stripEmpty()`

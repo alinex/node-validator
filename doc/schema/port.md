@@ -4,6 +4,8 @@ Create a schema that matches a TCP/UDP port number.
 
 This is a specialization of the `NumberSchema` so some of the methods used there are predefined,
 while you may use others in the same way as in [Number Schema](number.md):
+- `title()`
+- `detail()`
 - `required()`
 - `default()`
 - `stripEmpty()`

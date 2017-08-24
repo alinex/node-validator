@@ -7,6 +7,8 @@ of the structure is known. It can also be used to make a loose checking schema
 first and later replace it through detailed specifications.
 
 See at [Base Schema](base.md) for the inherited methods you may call like:
+- `title()`
+- `detail()`
 - `required()`
 - `default()`
 - `stripEmpty()`

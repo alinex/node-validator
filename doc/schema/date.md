@@ -6,6 +6,8 @@ It can be used for dates, time, date with time and also ranges of them which con
 and end date or time.
 
 See at [Any Schema](any.md) for the inherited methods you may call like:
+- `title()`
+- `detail()`
 - `required()`
 - `default()`
 - `stripEmpty()`
