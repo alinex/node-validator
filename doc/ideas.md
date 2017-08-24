@@ -41,6 +41,10 @@ Logic
 - then(schema)
 - else(schema)
 
+- is required and forbidden allowed here?
+
+
+
 required_if:anotherfield,value
 The field under validation must be present and not empty if the anotherfield field is equal to any value.
 

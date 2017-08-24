@@ -10,6 +10,7 @@ class LogicSchema extends Schema {
     super(base)
     // add check rules
     let raw = this._rules.descriptor.pop()
+    //    this.rules = // remove rule #1 with required
     this._rules.descriptor.push(
       this._logicDescriptor,
       raw,
@@ -95,8 +96,8 @@ class LogicSchema extends Schema {
   _logicDescriptor() {
     const set = this._setting
     if (!set.logic) return ''
-    return set.logic.map(e => `${e[0].toUpperCase()} ${e[1].description.replace(/\n/g, '\n ')}\n`)
-      .join('- ')
+    return set.logic.map(e => `- **${e[0].toUpperCase()}**: ${e[1].description.replace(/\n/g, '\n  ')}\n`)
+      .join('')
   }
 
   _logicValidator(data: Data): Promise<void> {

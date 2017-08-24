@@ -295,7 +295,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     let msg = ''
     // support base setting
     if (this.base) {
-      msg += `Use as base: ${util.inspect(this.base instanceof Data ? this.base.value : this.base)}. `
+      msg += `Use as base: ${util.inspect(this.base instanceof Data ? this.base.value : this.base).trim()}. `
     }
     // create message using the different rules
     this._rules.descriptor.forEach((rule) => {

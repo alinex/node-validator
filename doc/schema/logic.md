@@ -16,13 +16,15 @@ See at [Base Schema](base.md) for the inherited methods you may call like:
 - `raw()`
 
 
-## Start the logic queue
+## Schema combination
 
-The logic queue can be started in two ways. As a positive queue using `allow()` to only select the
+It is possible to put multiple schemas together with logical AND and OR.
+
+### allow(schema) / deny(schema)
+
+Such logic queues can be started in two ways. As a positive queue using `allow()` to only select the
 ones which succeeds the logic. Or as a negative queue using `deny()` to only allow the settings
 which will not succeed in logic.
-
-### allow(schema)
 
 ```js
 const schema = new LogicSchema()
@@ -30,7 +32,6 @@ const schema = new LogicSchema()
 .and(new NumberSchema())
 ```
 
-### deny(schema)
 
 ```js
 const schema = new LogicSchema()
@@ -38,17 +39,23 @@ const schema = new LogicSchema()
 .or(new NumberSchema().positive.max(99)) // deny 0..99 (number)
 ```
 
-## Logic operators
+### and(schema) / or(schema)
 
-The logical queue is processed in the following precedence: `AND`, `OR`.
+The logical queue is processed in the following precedence: `AND`, `OR` and top down.
 This is the same as in most programming languages. If you need braces use a sub logic schema which
 does exactly this.
 
-### and(schema)
-
-Here both schema definitions have to validate. They will run serial so that the later ones get the
+You can use both operators multiple times:
+- **AND** here both schema definitions have to validate. They will run serial so that the later ones get the
 changed values from the earlier.
+- **OR** at least one of the schema definitions has to validate.
 
-### or(schema)
 
-At least one of the schema definitions has to validate.
+## Conditionals
+
+It is also possible to use a schema as a conditional operator and decide how to validate depending
+on it's result, if it succeeds or fails. This is in the same way normal if..then..else conditions work.
+
+### if(schema)
+
+This starts the conditional...

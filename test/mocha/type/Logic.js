@@ -128,13 +128,13 @@ describe('logic', () => {
 
   })
 
-  describe.skip('if', () => {
+  describe.only('if', () => {
 
     it('should describe', () => {
       const schema = new LogicSchema()
         .if(new NumberSchema(new Reference().path('/start')).min(1))
         .then(new AnySchema().required())
-      //        .else(new AnySchema().forbidden())
+        .else(new AnySchema().forbidden())
       expect(helper.description(schema)).to.be.a('string')
     })
 
@@ -144,8 +144,8 @@ describe('logic', () => {
           .allow(new StringSchema().stripEmpty())
           .and(new LogicSchema()
             .if(new NumberSchema(new Reference().path('/start')).min(1))
-            .then(new Schema().required()),
-            //    .else(new Schema().forbidden()),
+            .then(new Schema().required())
+            .else(new Schema().forbidden()),
           ),
         )
       expect(helper.description(schema)).to.be.a('string')
