@@ -2,12 +2,12 @@
 import chai from 'chai'
 import Debug from 'debug'
 
-import Schema from '../../src/Schema'
-import StringSchema from '../../src/StringSchema'
-import Reference from '../../src/Reference'
-import SchemaData from '../../src/SchemaData'
-import SchemaError from '../../src/SchemaError'
-import * as helper from './helper'
+import Schema from '../../../src/type/Schema'
+import StringSchema from '../../../src/type/String'
+import Reference from '../../../src/Reference'
+import Data from '../../../src/Data'
+import ValidationError from '../../../src/Error'
+import * as helper from '../helper'
 
 const expect = chai.expect
 const debug = Debug('test')
@@ -38,8 +38,8 @@ describe('schema', () => {
     it('should describe error', () => {
       const schema = new MySchema()
       const value = 5
-      const data = new SchemaData(value, '/any/path')
-      const err = new SchemaError(schema, data, 'Something is wrong.')
+      const data = new Data(value, '/any/path')
+      const err = new ValidationError(schema, data, 'Something is wrong.')
       const msg = err.text
       debug(msg)
       expect(msg).to.equal(`__Something is wrong.__
@@ -56,8 +56,8 @@ It is optional and must not be set.`)
         .title('Test')
         .detail('should be used only for simple testing with')
       const value = 5
-      const data = new SchemaData(value, '/any/path')
-      const err = new SchemaError(schema, data, 'Something is wrong.')
+      const data = new Data(value, '/any/path')
+      const err = new ValidationError(schema, data, 'Something is wrong.')
       const msg = err.text
       debug(msg)
       expect(msg).to.equal(`__Something is wrong.__

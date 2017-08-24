@@ -1,10 +1,10 @@
 // @flow
 import util from 'alinex-util'
 
-import NumberSchema from './NumberSchema'
-import SchemaError from './SchemaError'
-import type SchemaData from './SchemaData'
-import Reference from './Reference'
+import NumberSchema from './Number'
+import ValidationError from '../Error'
+import type Data from '../Data'
+import Reference from '../Reference'
 
 
 const portNames = {
@@ -385,12 +385,12 @@ class PortSchema extends NumberSchema {
     return msg.replace(/ $/, '\n')
   }
 
-  _sanitizeValidator(data: SchemaData): Promise<void> {
+  _sanitizeValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('sanitize')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     const orig = data.value
@@ -402,10 +402,10 @@ class PortSchema extends NumberSchema {
       data.value = Number(data.value)
     }
     if (typeof data.value !== 'number') {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The given value is of type ${typeof data.value} but a number is needed.`))
     } else if (isNaN(data.value)) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The given element \`${util.inspect(orig)}\` is no valid number.`))
     }
     return Promise.resolve()
@@ -422,7 +422,7 @@ class PortSchema extends NumberSchema {
   format(): this { return this._setError('format') }
 
   // support names and ranges
-  _allowValidator(data: SchemaData): Promise<void> {
+  _allowValidator(data: Data): Promise<void> {
     const check = this._check
     this._checkArray('allow')
     this._checkArray('deny')

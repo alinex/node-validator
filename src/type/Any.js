@@ -1,8 +1,8 @@
 // @flow
 import Schema from './Schema'
-import SchemaError from './SchemaError'
-import type SchemaData from './SchemaData'
-import Reference from './Reference'
+import ValidationError from '../Error'
+import type Data from '../Data'
+import Reference from '../Reference'
 
 class AnySchema extends Schema {
   constructor(base?: any) {
@@ -96,7 +96,7 @@ are allowed. `
     return msg.length ? `${msg.trim()}\n` : ''
   }
 
-  _allowValidator(data: SchemaData): Promise<void> {
+  _allowValidator(data: Data): Promise<void> {
     const check = this._check
     this._checkArray('allow')
     this._checkArray('deny')
@@ -104,13 +104,13 @@ are allowed. `
     const datastring = JSON.stringify(data.value)
     if (check.deny && check.deny.length && check.deny
       .filter(e => datastring === JSON.stringify(e)).length) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         'Element found in blacklist (denyed item).'))
     }
     // reject if valid is set but not included
     if (check.allow && check.allow.length && check.allow
       .filter(e => datastring === JSON.stringify(e)).length === 0) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         'Element not in whitelist (allowed item).'))
     }
     // ok

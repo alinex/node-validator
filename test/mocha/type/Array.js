@@ -1,10 +1,10 @@
 import chai from 'chai'
 
 import Reference from '../../../src/Reference'
-import ArraySchema from '../../../src/ArraySchema'
-import AnySchema from '../../../src/AnySchema'
-import NumberSchema from '../../../src/NumberSchema'
-import Schema from '../../../src/Schema'
+import ArraySchema from '../../../src/type/Array'
+import AnySchema from '../../../src/type/Any'
+import NumberSchema from '../../../src/type/Number'
+import Schema from '../../../src/type/Schema'
 import * as helper from '../helper'
 
 const expect = chai.expect

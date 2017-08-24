@@ -1,9 +1,9 @@
 // @flow
 import chai from 'chai'
 
-import Schema from '../../../src/Schema'
+import Schema from '../../../src/type/Schema'
 import Reference from '../../../src/Reference'
-import StringSchema from '../../../src/StringSchema'
+import StringSchema from '../../../src/type/String'
 import * as helper from '../helper'
 
 const expect = chai.expect

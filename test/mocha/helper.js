@@ -3,16 +3,16 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 import debug from './debug'
-import type Schema from '../../src/Schema'
+import type Schema from '../../src/type/Schema'
 import type Reference from '../../src/Reference'
-import SchemaData from '../../src/SchemaData'
+import Data from '../../src/Data'
 
 chai.use(chaiAsPromised)
 const expect = chai.expect
 
 function validateOk(schema: Schema, data: any, cb?: Function): Promise<any> {
   debug(schema, schema.constructor.name)
-  debug(new SchemaData(data), schema.constructor.name)
+  debug(new Data(data), schema.constructor.name)
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
   return expect(res).to.be.fulfilled
@@ -25,7 +25,7 @@ function validateOk(schema: Schema, data: any, cb?: Function): Promise<any> {
 
 function validateFail(schema: Schema, data: any, cb?: Function): Promise<any> {
   debug(schema, schema.constructor.name)
-  debug(new SchemaData(data), schema.constructor.name)
+  debug(new Data(data), schema.constructor.name)
   const res = schema.validate(data)
   debug(res, schema.constructor.name)
   return expect(res).to.be.rejectedWith(Error)

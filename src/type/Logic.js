@@ -2,8 +2,8 @@
 import util from 'util'
 
 import Schema from './Schema'
-import SchemaError from './SchemaError'
-import SchemaData from './SchemaData'
+import ValidationError from '../Error'
+import Data from '../Data'
 
 class LogicSchema extends Schema {
   constructor(base?: any) {
@@ -69,10 +69,10 @@ class LogicSchema extends Schema {
       .join('- ')
   }
 
-  _logicValidator(data: SchemaData): Promise<void> {
+  _logicValidator(data: Data): Promise<void> {
     const check = this._check
     if (!check.logic) return Promise.resolve()
-    // replace Schema.validate(data) ? SchemaData : SchemaError
+    // replace Schema.validate(data) ? Data : ValidationError
     let logic = check.logic.slice(0)
     let p = Promise.resolve()
     logic.forEach((v, i) => {
@@ -80,7 +80,7 @@ class LogicSchema extends Schema {
       if (op === 'and') {
         p = p.then((last) => {
           // clone last
-          if (last instanceof SchemaData) return schema._validate(last.clone)
+          if (last instanceof Data) return schema._validate(last.clone)
           return undefined
         })
           .then((last) => {
@@ -109,25 +109,25 @@ class LogicSchema extends Schema {
       logic.forEach((v, i) => {
         const [op, res] = v
         if (op === 'and') {
-          if (res instanceof SchemaData) logic[last][1] = res
-          else if (logic[last][1] instanceof SchemaData) logic[last][1] = res
+          if (res instanceof Data) logic[last][1] = res
+          else if (logic[last][1] instanceof Data) logic[last][1] = res
           delete logic[i]
         } else last = i
       })
       logic = logic.filter(e => e)
       // reverse reduce or
       for (const v of logic) {
-        if (v[1] instanceof SchemaData) {
+        if (v[1] instanceof Data) {
           logic[0][1] = v[1]
           break
         }
       }
       // interpret allow/deny
       if (logic[0][0] === 'allow') {
-        if (logic[0][1] instanceof SchemaData) data.value = logic[0][1].value
+        if (logic[0][1] instanceof Data) data.value = logic[0][1].value
         else throw logic[0][1]
-      } else if (logic[0][1] instanceof SchemaData) {
-        throw new SchemaError(this, data, 'The element is denied by logic')
+      } else if (logic[0][1] instanceof Data) {
+        throw new ValidationError(this, data, 'The element is denied by logic')
       }
     })
     // ok

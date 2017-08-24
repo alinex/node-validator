@@ -4,8 +4,8 @@ import async from 'async'
 import moment from 'moment'
 
 import Reference from '../../../src/Reference'
-import DateSchema from '../../../src/DateSchema'
-import Schema from '../../../src/Schema'
+import DateSchema from '../../../src/type/Date'
+import Schema from '../../../src/type/Schema'
 import * as helper from '../helper'
 
 const expect = chai.expect

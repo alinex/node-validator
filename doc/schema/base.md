@@ -16,7 +16,7 @@ const schema = new ObjectSchema(5)
 
 const schema = new ObjectSchema()
   .key('init', new LogicSchema()
-    .allow( new String().stripEmpty() )
+    .allow( new StringSchema().stripEmpty() )
     .and( new NumberSchema( new Reference().path('/start') ).min(1) )
     .then( new Schema().required() )
   )

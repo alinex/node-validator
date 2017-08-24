@@ -6,7 +6,7 @@ import promisify from 'es6-promisify' // may be removed with node util.promisify
 import fs from 'fs'
 import request from 'request-promise-native'
 
-import SchemaData from './SchemaData'
+import Data from './Data'
 
 let format = null // load on demand
 
@@ -83,7 +83,7 @@ class Reference {
     })
     const padding = ' '.repeat(5)
     const base = this.base ? util.inspect(this.base, newOptions).replace(/\n/g, `\n${padding}`)
-      : 'SchemaData'
+      : 'Data'
     const inner = this.access.map(e => util.inspect(e, newOptions).replace(/\n/g, `\n${padding}`))
     inner.unshift(base)
     return `${options.stylize(this.constructor.name, 'class')} ${inner.join(' ➞ ')} `
@@ -188,7 +188,7 @@ class Reference {
       .then(data => sourceWeb(data))
     // run rules seriously
     this.access.forEach(([fn, def]) => { p = p.then(data => accessor[fn](data, def, pos)) })
-    return p.then(data => (data instanceof SchemaData ? data.value : data))
+    return p.then(data => (data instanceof Data ? data.value : data))
       .catch(err => (err instanceof Error ? Promise.reject(err) : err))
   }
 }
@@ -196,8 +196,8 @@ class Reference {
 
 accessor.path = (data: any, def: string): any => {
   if (typeof data !== 'object') return data
-  // work on SchemaData
-  if (data instanceof SchemaData) {
+  // work on Data
+  if (data instanceof Data) {
     // back references
     while (def[0] === '/' || def[0] === '.') {
       if (def[0] === '/') {

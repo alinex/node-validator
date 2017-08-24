@@ -2,9 +2,9 @@
 import util from 'util'
 
 import Schema from './Schema'
-import SchemaError from './SchemaError'
-import type SchemaData from './SchemaData'
-import Reference from './Reference'
+import ValidationError from '../Error'
+import type Data from '../Data'
+import Reference from '../Reference'
 
 class Logic {
   type: string
@@ -52,9 +52,9 @@ class ObjectSchema extends Schema {
     return 'A data object is needed.\n'
   }
 
-  _typeValidator(data: SchemaData): Promise<void> {
+  _typeValidator(data: Data): Promise<void> {
     if (typeof data.value !== 'object') {
-      return Promise.reject(new SchemaError(this, data, 'A data object is needed.'))
+      return Promise.reject(new ValidationError(this, data, 'A data object is needed.'))
     }
     return Promise.resolve()
   }
@@ -82,13 +82,13 @@ as separator. `
     return msg.length ? `${msg.trim()}\n` : msg
   }
 
-  _structureValidator(data: SchemaData): Promise<void> {
+  _structureValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkMatch('deepen')
       this._checkString('flatten')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.deepen) {
@@ -155,12 +155,12 @@ ${schema.description.replace(/\n/g, '\n  ')}\n`
     return msg
   }
 
-  _keysValidator(data: SchemaData): Promise<void> {
+  _keysValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkObject('keys')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     const checks = []
@@ -221,12 +221,12 @@ ${set.removeUnknown.description}.\n`
     return ''
   }
 
-  _removeValidator(data: SchemaData): Promise<void> {
+  _removeValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('removeUnknown')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.removeUnknown) {
@@ -311,23 +311,23 @@ elements. `
     return msg.length ? msg.replace(/ $/, '\n') : msg
   }
 
-  _lengthValidator(data: SchemaData): Promise<void> {
+  _lengthValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkNumber('min')
       this._checkNumber('max')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     const num = Object.keys(data.value).length
     if (check.min && num < check.min) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The object should has a length of ${num} elements. \
 This is too less, at least ${check.min} are needed.`))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The object should has a length of ${num} elements. \
 This is too much, not more than ${check.max} are allowed.`))
     }
@@ -383,7 +383,7 @@ are allowed. `
     return msg.length ? `${msg.trim()}\n` : ''
   }
 
-  _requiredKeysValidator(data: SchemaData): Promise<void> {
+  _requiredKeysValidator(data: Data): Promise<void> {
     const check = this._check
     const keys = Object.keys(data.value)
     this._checkArrayString('requiredKeys')
@@ -392,7 +392,7 @@ are allowed. `
     if (check.forbiddenKeys && check.forbiddenKeys.length) {
       for (const e of check.forbiddenKeys) {
         if (keys.includes(e)) {
-          return Promise.reject(new SchemaError(this, data,
+          return Promise.reject(new ValidationError(this, data,
             `The key ${e} is not allowed here. `))
         }
       }
@@ -400,7 +400,7 @@ are allowed. `
     if (check.requiredKeys && check.requiredKeys.length) {
       for (const e of check.requiredKeys) {
         if (!keys.includes(e)) {
-          return Promise.reject(new SchemaError(this, data,
+          return Promise.reject(new ValidationError(this, data,
             `The key ${e} is missing. `))
         }
       }
@@ -502,7 +502,7 @@ are allowed. `
     return msg.length ? `${msg.trim()}\n` : msg
   }
 
-  _logicValidator(data: SchemaData): Promise<void> {
+  _logicValidator(data: Data): Promise<void> {
     const check = this._check
     if (check.logic && check.logic.length) {
       const keys = Object.keys(data.value)
@@ -513,7 +513,7 @@ are allowed. `
           if (contained.length > 0 && contained.length !== rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new SchemaError(this, data,
+            return Promise.reject(new ValidationError(this, data,
               `All or none of the keys ${list} have to be present \
  but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
           }
@@ -523,7 +523,7 @@ are allowed. `
           if (contained.length === rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new SchemaError(this, data,
+            return Promise.reject(new ValidationError(this, data,
               `Some but not all of the keys ${list} can be present but all are set.`))
           }
         } else if (rule.type === 'or') {
@@ -532,7 +532,7 @@ are allowed. `
           if (!contained.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new SchemaError(this, data,
+            return Promise.reject(new ValidationError(this, data,
               `At least one of the keys ${list} have to be present but none are set.`))
           }
         } else if (rule.type === 'xor') {
@@ -541,7 +541,7 @@ are allowed. `
           if (contained.length !== 1) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new SchemaError(this, data,
+            return Promise.reject(new ValidationError(this, data,
               `Exactly one of the keys ${list} have to be present \
  but ${contained.length} are set.`))
           }
@@ -551,7 +551,7 @@ are allowed. `
           if (keys.includes(rule.key) && contained.length !== rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new SchemaError(this, data,
+            return Promise.reject(new ValidationError(this, data,
               `If \`${rule.key}\` is set the keys ${list} have to be present \
  but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
           }
@@ -561,7 +561,7 @@ are allowed. `
           if (keys.includes(rule.key) && contained.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new SchemaError(this, data,
+            return Promise.reject(new ValidationError(this, data,
               `If \`${rule.key}\` is set the keys ${list} are forbidden \
  but ${contained.length} keys are set.`))
           }

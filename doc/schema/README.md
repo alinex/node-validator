@@ -27,9 +27,9 @@ didn't validate but will get the value from the defined resource. Read more abou
 You may define your schema like below:
 
 ```js
-import Reference from 'alinex-validator/lib/Reference'
-import ObjectSchema from 'alinex-validator/lib/ObjectSchema'
-import AnySchema from 'alinex-validator/lib/AnySchema'
+import Reference from 'alinex-validator/dist/Reference'
+import ObjectSchema from 'alinex-validator/dist/type/Object'
+import AnySchema from 'alinex-validator/dist/type/Any'
 
 const schema = new ObjectSchema()
   .title('MyTest')
@@ -62,7 +62,7 @@ It is also possible to load all schema types instead of each one individually. T
 builder collection:
 
 ```js
-import * as val from 'alinex-validator/lib/builder'
+import * as val from 'alinex-validator/dist/builder'
 
 const schema = new val.Object()
   .title('MyTest')

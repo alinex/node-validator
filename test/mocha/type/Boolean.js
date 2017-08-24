@@ -2,7 +2,7 @@
 import chai from 'chai'
 
 import Reference from '../../../src/Reference'
-import BooleanSchema from '../../../src/BooleanSchema'
+import BooleanSchema from '../../../src/type/Boolean'
 import * as helper from '../helper'
 
 const expect = chai.expect

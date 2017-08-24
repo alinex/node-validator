@@ -1,14 +1,14 @@
 // @flow
 import util from 'util'
 
-import Schema from './Schema'
-import SchemaData from './SchemaData'
+import Schema from './type/Schema'
+import Data from './Data'
 
 class SchemaError extends Error {
   schema: Schema
-  data: SchemaData
+  data: Data
 
-  constructor(schema: Schema, data: SchemaData, msg: string) {
+  constructor(schema: Schema, data: Data, msg: string) {
     super(msg)
     this.schema = schema
     if (data) this.data = data

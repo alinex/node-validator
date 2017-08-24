@@ -1,9 +1,9 @@
 import chai from 'chai'
 
 import Reference from '../../../src/Reference'
-import ObjectSchema from '../../../src/ObjectSchema'
-import AnySchema from '../../../src/AnySchema'
-import Schema from '../../../src/Schema'
+import ObjectSchema from '../../../src/type/Object'
+import AnySchema from '../../../src/type/Any'
+import Schema from '../../../src/type/Schema'
 import * as helper from '../helper'
 
 const expect = chai.expect

@@ -10,9 +10,9 @@ It is possible to use the same schema in more than one position but you may also
 // config.schema.js
 
 // @flow
-import ObjectSchema from '../../src/ObjectSchema'
-import StringSchema from '../../src/StringSchema'
-import NumberSchema from '../../src/NumberSchema'
+import ObjectSchema from 'alinex-validator/dist/type/Object'
+import StringSchema from 'alinex-validator/dist/type/String'
+import NumberSchema from 'alinex-validator/dist/type/Number'
 
 const schema = new ObjectSchema()
   .key('title', new StringSchema().allow(['Dr.', 'Prof.']))

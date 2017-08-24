@@ -2,8 +2,8 @@
 import chai from 'chai'
 
 import Reference from '../../../src/Reference'
-import PortSchema from '../../../src/PortSchema'
-import Schema from '../../../src/Schema'
+import PortSchema from '../../../src/type/Port'
+import Schema from '../../../src/type/Schema'
 import * as helper from '../helper'
 
 const expect = chai.expect

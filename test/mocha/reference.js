@@ -3,10 +3,10 @@ import chai from 'chai'
 import Debug from 'debug'
 
 import Reference from '../../src/Reference'
-import SchemaData from '../../src/SchemaData'
-import Schema from '../../src/Schema'
-import ObjectSchema from '../../src/ObjectSchema'
-import NumberSchema from '../../src/NumberSchema'
+import Data from '../../src/Data'
+import Schema from '../../src/type/Schema'
+import ObjectSchema from '../../src/type/Object'
+import NumberSchema from '../../src/type/Number'
 
 import * as helper from './helper'
 
@@ -66,7 +66,7 @@ describe('reference', () => {
   describe('source', () => {
 
     it('should support schema data', () => {
-      const data = new SchemaData(1)
+      const data = new Data(1)
       const ref = new Reference()
       return helper.reference(ref, data, (res) => {
         expect(res).deep.equal(1)

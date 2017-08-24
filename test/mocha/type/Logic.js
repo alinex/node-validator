@@ -2,9 +2,11 @@
 import chai from 'chai'
 
 import Reference from '../../../src/Reference'
-import LogicSchema from '../../../src/LogicSchema'
-import NumberSchema from '../../../src/NumberSchema'
-import StringSchema from '../../../src/StringSchema'
+import LogicSchema from '../../../src/type/Logic'
+import NumberSchema from '../../../src/type/Number'
+import StringSchema from '../../../src/type/String'
+import ObjectSchema from '../../../src/type/Object'
+import Schema from '../../../src/type/Schema'
 import * as helper from '../helper'
 
 const expect = chai.expect
@@ -122,6 +124,21 @@ describe('logic', () => {
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
+
+  })
+
+  describe.skip('IF', () => {
+
+    //    it('should describe', () => {
+    //      const schema = new ObjectSchema()
+    //        .key('init', new LogicSchema()
+    //          .allow(new StringSchema().stripEmpty())
+    //          .and(new NumberSchema(new Reference().path('/start')).min(1))
+    //          .then(new Schema().required()),
+    //          .else(new Schema().forbidden()),
+    //        )
+    //      expect(helper.description(schema)).to.be.a('string')
+    //    })
 
   })
 

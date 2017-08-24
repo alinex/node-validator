@@ -2,10 +2,10 @@
 import moment from 'moment-timezone'
 import chrono from 'chrono-node'
 
-import AnySchema from './AnySchema'
-import SchemaError from './SchemaError'
-import type SchemaData from './SchemaData'
-import Reference from './Reference'
+import ValidationError from '../Error'
+import AnySchema from './Any'
+import type Data from '../Data'
+import Reference from '../Reference'
 
 
 moment.createFromInputFallback = (config) => {
@@ -103,7 +103,7 @@ It may also be given in string format. `
     return msg.replace(/ $/, '\n')
   }
 
-  _typeValidator(data: SchemaData): Promise<void> {
+  _typeValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkString('timezone')
@@ -112,13 +112,13 @@ It may also be given in string format. `
         throw new Error(`Invalid type setting, use one of ${types.join(', ')}`)
       }
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // parse date
     if (check.timezone) data.value = moment.tz(data.value, check.timezone)
     else data.value = moment(data.value)
     if (!data.value.isValid()) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The given text is not parse able as ${check.type}`))
     }
     return Promise.resolve()
@@ -240,14 +240,14 @@ It may also be given in string format. `
     return msg.replace(/ $/, '\n')
   }
 
-  _rangeValidator(data: SchemaData): Promise<void> {
+  _rangeValidator(data: Data): Promise<void> {
     const check = this._check
     // optimize
     if (check.min && this._isReference('min')) {
       if (check.timezone) check.min = moment.tz(check.min, check.timezone)
       else check.min = moment(check.min)
       if (!check.min.isValid()) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           `The given text is not parse able as ${check.type}`))
       }
     }
@@ -255,7 +255,7 @@ It may also be given in string format. `
       if (check.timezone) check.max = moment.tz(check.max, check.timezone)
       else check.max = moment(check.max)
       if (!check.max.isValid()) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           `The given text is not parse able as ${check.type}`))
       }
     }
@@ -263,7 +263,7 @@ It may also be given in string format. `
       if (check.timezone) check.greater = moment.tz(check.greater, check.timezone)
       else check.greater = moment(check.greater)
       if (!check.greater.isValid()) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           `The given text is not parse able as ${check.type}`))
       }
     }
@@ -271,25 +271,25 @@ It may also be given in string format. `
       if (check.timezone) check.less = moment.tz(check.less, check.timezone)
       else check.less = moment(check.less)
       if (!check.less.isValid()) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           `The given text is not parse able as ${check.type}`))
       }
     }
     // check range
     if (check.min && check.min.isSameOrAfter(data.value)) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The ${check.type} is before the defined range. It has to be ${check.min} or later.`))
     }
     if (check.max && check.max.isSameOrBefore(data.value)) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The ${check.type} is after the defined range. It has to be ${check.max} or earlier.`))
     }
     if (check.greater && check.greater.isAfter(data.value)) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The ${check.type} is before the defined range. It has to be after ${check.greater}.`))
     }
     if (check.less && check.less.isBefore(data.value)) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The ${check.type} is after the defined range. It has to be before ${check.less}.`))
     }
     return Promise.resolve()
@@ -319,7 +319,7 @@ It may also be given in string format. `
     return msg.length ? `${msg.trim()}\n` : msg
   }
 
-  _formatValidator(data: SchemaData): Promise<void> {
+  _formatValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkString('format')
@@ -327,7 +327,7 @@ It may also be given in string format. `
         check.format = alias[check.type][check.format]
       }
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // parse date
     if (check.toLocale) data.value = data.value.locale(check.toLocale)

@@ -2,9 +2,9 @@
 import util from 'util'
 
 import Schema from './Schema'
-import SchemaError from './SchemaError'
-import type SchemaData from './SchemaData'
-import Reference from './Reference'
+import ValidationError from '../Error'
+import type Data from '../Data'
+import Reference from '../Reference'
 
 class BooleanSchema extends Schema {
   constructor(base?: any) {
@@ -94,14 +94,14 @@ class BooleanSchema extends Schema {
     return msg.replace(/ $/, '\n')
   }
 
-  _parserValidator(data: SchemaData): Promise<void> {
+  _parserValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkArray('truthy')
       this._checkArray('falsy')
       this._checkBoolean('insensitive')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     if (check.insensitive) {
       check.truthy = Array.from(check.truthy)
@@ -116,7 +116,7 @@ class BooleanSchema extends Schema {
     if (check.truthy.includes(data.value)) data.value = true
     else if (check.falsy.includes(data.value)) data.value = false
     else {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         'A boolean value is needed but neither `true` nor `false` was given.'))
     }
     // ok
@@ -141,7 +141,7 @@ class BooleanSchema extends Schema {
 \`true\` and \`${util.inspect(set.format.get(false))}\` for \`false\`.\n` : ''
   }
 
-  _formatValidator(data: SchemaData): Promise<void> {
+  _formatValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkObject('format')
@@ -149,7 +149,7 @@ class BooleanSchema extends Schema {
         throw new Error('Only `true` and `false` settings are allowed in format()`')
       }
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (Object.keys(check.format).length) data.value = check.format[data.value] || data.value

@@ -1,10 +1,10 @@
 // @flow
 import util from 'util'
 
-import AnySchema from './AnySchema'
-import SchemaError from './SchemaError'
-import type SchemaData from './SchemaData'
-import Reference from './Reference'
+import AnySchema from './Any'
+import ValidationError from '../Error'
+import type Data from '../Data'
+import Reference from '../Reference'
 
 let striptags // load on demand
 
@@ -70,9 +70,9 @@ class StringSchema extends AnySchema {
     return 'It has to be a text string.\n'
   }
 
-  _typeValidator(data: SchemaData): Promise<void> {
+  _typeValidator(data: Data): Promise<void> {
     if (typeof data.value !== 'string') {
-      return Promise.reject(new SchemaError(this, data, 'A text string is needed.'))
+      return Promise.reject(new ValidationError(this, data, 'A text string is needed.'))
     }
     return Promise.resolve()
   }
@@ -90,17 +90,17 @@ class StringSchema extends AnySchema {
     return msg.replace(/ $/, '\n')
   }
 
-  _makeStringValidator(data: SchemaData): Promise<void> {
+  _makeStringValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('makeString')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.makeString && typeof data.value !== 'string') data.value = data.value.toString()
     if (typeof data.value !== 'string') {
-      return Promise.reject(new SchemaError(this, data, 'A `string` value is needed here.'))
+      return Promise.reject(new ValidationError(this, data, 'A `string` value is needed here.'))
     }
     return Promise.resolve()
   }
@@ -141,12 +141,12 @@ class StringSchema extends AnySchema {
     return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
   }
 
-  _replaceValidator(data: SchemaData): Promise<void> {
+  _replaceValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('trim')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.trim) data.value = data.value.trim()
@@ -195,7 +195,7 @@ class StringSchema extends AnySchema {
     return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
   }
 
-  _caseValidator(data: SchemaData): Promise<void> {
+  _caseValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('lowercase')
@@ -211,7 +211,7 @@ class StringSchema extends AnySchema {
       this._checkString('lowercase')
       this._checkString('uppercase')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.lowercase === 'all') data.value = data.value.toLowerCase()
@@ -263,7 +263,7 @@ ${set.stripDisallowed.description}. `
     return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
   }
 
-  _checkValidator(data: SchemaData): Promise<void> {
+  _checkValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('stripDisallowed')
@@ -272,7 +272,7 @@ ${set.stripDisallowed.description}. `
       this._checkBoolean('controls')
       this._checkBoolean('noHTML')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.stripDisallowed) {
@@ -285,18 +285,18 @@ ${set.stripDisallowed.description}. `
       }
     } else {
       if (check.alphanum && data.value.match(/\W/)) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
       } else if (check.hex && data.value.match(/[^a-fA-F0-9]/)) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
       }
       if (!check.controls && data.value.match(/[^\x20-\x7E]/)) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           'Control characters are not allowed.'))
       }
       if (check.noHTML && data.value.match(/<[\s\S]*>/)) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           'No tags allowed in this text.'))
       }
     }
@@ -385,7 +385,7 @@ ${set.stripDisallowed.description}. `
     return msg.length ? `${msg.trim()}\n` : msg
   }
 
-  _lengthValidator(data: SchemaData): Promise<void> {
+  _lengthValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkNumber('min')
@@ -395,7 +395,7 @@ ${set.stripDisallowed.description}. `
         throw new Error('Min length can´t be greater than max length')
       }
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     let num = data.value.length
@@ -434,12 +434,12 @@ ${set.stripDisallowed.description}. `
     }
     // check length
     if (check.min && num < check.min) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The string has a length of ${num} characters. \
  This is too less, at least ${check.min} are needed.`))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The string has a length of ${num} characters. \
  This is too much, not more than ${check.max} are allowed.`))
     }
@@ -488,13 +488,13 @@ ${set.stripDisallowed.description}. `
     return msg
   }
 
-  _matchValidator(data: SchemaData): Promise<void> {
+  _matchValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkArrayMatch('match')
       this._checkArrayMatch('notMatch')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.match && check.match.length) {
@@ -505,7 +505,7 @@ ${set.stripDisallowed.description}. `
         .map(e => `\`${util.inspect(e)}\``)
         .join(', ').replace(/(.*), /, '$1 and ')
       if (fail) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           `The text should match: ${fail}`))
       }
     }
@@ -517,7 +517,7 @@ ${set.stripDisallowed.description}. `
         .map(e => `\`${util.inspect(e)}\``)
         .join(', ').replace(/(.*), /, '$1 and ')
       if (fail) {
-        return Promise.reject(new SchemaError(this, data,
+        return Promise.reject(new ValidationError(this, data,
           `The text should not match: ${fail}`))
       }
     }

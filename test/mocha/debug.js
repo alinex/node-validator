@@ -2,8 +2,8 @@
 import util from 'util'
 import Debug from 'debug'
 
-import Schema from '../../src/Schema'
-import SchemaData from '../../src/SchemaData'
+import Schema from '../../src/type/Schema'
+import Data from '../../src/Data'
 import Reference from '../../src/Reference'
 
 export default function (element: any, type: string = 'test', title?: string) {
@@ -19,9 +19,9 @@ export default function (element: any, type: string = 'test', title?: string) {
       })
   } else if (element instanceof Schema) {
     debugLog(`${element.constructor.name} set up with: %o`, element)
-  } else if (element instanceof SchemaData && element.orig instanceof Reference) {
+  } else if (element instanceof Data && element.orig instanceof Reference) {
     debugLog(`Given reference as data: ${element.orig.base} -> ${element.orig.access.join(' -> ')}`)
-  } else if (element instanceof SchemaData) {
+  } else if (element instanceof Data) {
     debugLog(`Given data: ${util.inspect(element.orig)}`)
   } else {
     debugLog(`${title || 'Returned'}: ${util.inspect(element)}`)

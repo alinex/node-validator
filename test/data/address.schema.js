@@ -1,7 +1,7 @@
 // @flow
-import ObjectSchema from '../../src/ObjectSchema'
-import StringSchema from '../../src/StringSchema'
-import NumberSchema from '../../src/NumberSchema'
+import ObjectSchema from '../../src/type/Object'
+import StringSchema from '../../src/type/String'
+import NumberSchema from '../../src/type/Number'
 
 const schema = new ObjectSchema()
   .key('title', new StringSchema().allow(['Dr.', 'Prof.']))

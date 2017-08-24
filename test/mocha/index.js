@@ -7,8 +7,8 @@ import promisify from 'es6-promisify' // may be removed with node util.promisify
 
 import validator from '../../src/index'
 import * as builder from '../../src/builder'
-import SchemaError from '../../src/SchemaError'
-import SchemaData from '../../src/SchemaData'
+import ValidationError from '../../src/Error'
+import Data from '../../src/Data'
 import * as helper from './helper'
 
 chai.use(chaiAsPromised)
@@ -30,8 +30,8 @@ describe('use', () => {
     it('should describe error', () => {
       const schema = new builder.Any()
       const value = 5
-      const data = new SchemaData(value, '/any/path')
-      const err = new SchemaError(schema, data, 'Something is wrong.')
+      const data = new Data(value, '/any/path')
+      const err = new ValidationError(schema, data, 'Something is wrong.')
       const msg = err.text
       debug(msg)
       expect(msg).to.equal(`__Something is wrong.__

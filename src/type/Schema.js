@@ -1,9 +1,9 @@
 // @flow
 import util from 'util'
 
-import SchemaData from './SchemaData'
-import SchemaError from './SchemaError'
-import Reference from './Reference'
+import Data from '../Data'
+import ValidationError from '../Error'
+import Reference from '../Reference'
 
 class Schema {
   _title: string
@@ -187,12 +187,12 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     return set.stripEmpty ? 'Empty values are set to `undefined`.\n' : ''
   }
 
-  _emptyValidator(data: SchemaData): Promise<void> {
+  _emptyValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('stripEmpty')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     if (check.stripEmpty && (
       data.value === '' || data.value === null || (Array.isArray(data.value) && !data.value.length)
@@ -222,17 +222,17 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     return ''
   }
 
-  _optionalValidator(data: SchemaData): Promise<void> {
+  _optionalValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('required')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     if (data.value === undefined && check.default) data.value = check.default
     if (data.value !== undefined) return Promise.resolve()
     if (check.required) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         'This element is mandatory!'))
     }
     return Promise.reject() // stop processing, optional is ok
@@ -248,12 +248,12 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     return set.raw ? 'After validation the original value is used.\n' : ''
   }
 
-  _rawValidator(data: SchemaData): Promise<void> {
+  _rawValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('raw')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     if (check.raw) data.value = data.orig
     return Promise.resolve()
@@ -269,7 +269,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     let msg = ''
     // support base setting
     if (this.base) {
-      msg += `Use ${this.base instanceof SchemaData ? this.base.value : this.base} as base for this check. `
+      msg += `Use ${this.base instanceof Data ? this.base.value : this.base} as base for this check. `
     }
     // create message using the different rules
     this._rules.descriptor.forEach((rule) => {
@@ -279,9 +279,9 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   }
 
   _validate(value: any, source?: string, options?: Object): Promise<any> {
-    const data = value instanceof SchemaData ? value : new SchemaData(value, source, options)
+    const data = value instanceof Data ? value : new Data(value, source, options)
     if (this.base) { // use base setting if defined
-      data.value = this.base instanceof SchemaData ? this.base.value : this.base
+      data.value = this.base instanceof Data ? this.base.value : this.base
     }
     let p = Promise.resolve()
     // resolve references in value first

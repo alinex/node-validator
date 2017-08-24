@@ -2,9 +2,9 @@
 import util from 'alinex-util'
 
 import Schema from './Schema'
-import SchemaError from './SchemaError'
-import type SchemaData from './SchemaData'
-import Reference from './Reference'
+import ValidationError from '../Error'
+import type Data from '../Data'
+import Reference from '../Reference'
 
 class ArraySchema extends Schema {
   constructor(base?: any) {
@@ -42,9 +42,9 @@ class ArraySchema extends Schema {
     return 'An array list is needed.\n'
   }
 
-  _typeValidator(data: SchemaData): Promise<void> {
+  _typeValidator(data: Data): Promise<void> {
     if (!Array.isArray(data.value)) {
-      return Promise.reject(new SchemaError(this, data, 'An array list is needed.'))
+      return Promise.reject(new ValidationError(this, data, 'An array list is needed.'))
     }
     return Promise.resolve()
   }
@@ -64,12 +64,12 @@ as separator.\n`
     return ''
   }
 
-  _splitValidator(data: SchemaData): Promise<void> {
+  _splitValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkMatch('split')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.split && typeof data.value === 'string') {
@@ -91,12 +91,12 @@ as separator.\n`
     return ''
   }
 
-  _toArrayValidator(data: SchemaData): Promise<void> {
+  _toArrayValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('toArray')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (!Array.isArray(data.value) && check.toArray) data.value = [data.value]
@@ -122,14 +122,14 @@ as separator.\n`
     return msg.length ? msg.replace(/ $/, '\n') : ''
   }
 
-  _uniqueValidator(data: SchemaData): Promise<void> {
+  _uniqueValidator(data: Data): Promise<void> {
     const check = this._check
     if (check.unique === undefined) return Promise.resolve()
     try {
       this._checkBoolean('sanitize')
       this._checkBoolean('unique')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.sanitize) data.value = util.array.unique(data.value)
@@ -137,7 +137,7 @@ as separator.\n`
       const c = new Set()
       for (const e of data.value) {
         if (c.has(e)) {
-          return Promise.reject(new SchemaError(this, data,
+          return Promise.reject(new ValidationError(this, data,
             `No duplicate elements in list allowed: '${util.inspect(e)}' found more than once`))
         }
         c.add(e)
@@ -208,7 +208,7 @@ as separator.\n`
     return msg
   }
 
-  _sortValidator(data: SchemaData): Promise<void> {
+  _sortValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('shuffle')
@@ -218,7 +218,7 @@ as separator.\n`
         throw new Error('List cannot be sorted or reversed if it should be shuffled')
       }
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.shuffle) data.value = util.array.shuffle(data.value)
@@ -251,7 +251,7 @@ as separator.\n`
     return msg
   }
 
-  _itemsValidator(data: SchemaData): Promise<void> {
+  _itemsValidator(data: Data): Promise<void> {
     const check = this._check
     // check value
     if (!check.items) return Promise.resolve()
@@ -345,23 +345,23 @@ items. `
     return msg.length ? msg.replace(/ $/, '\n') : msg
   }
 
-  _lengthValidator(data: SchemaData): Promise<void> {
+  _lengthValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkNumber('min')
       this._checkNumber('max')
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     const num = data.value.length
     if (check.min && num < check.min) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The object should has a length of ${num} elements. \
 This is too less, at least ${check.min} are needed.`))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new SchemaError(this, data,
+      return Promise.reject(new ValidationError(this, data,
         `The object should has a length of ${num} elements. \
 This is too much, not more than ${check.max} are allowed.`))
     }
@@ -382,7 +382,7 @@ This is too much, not more than ${check.max} are allowed.`))
     return ''
   }
 
-  _formatValidator(data: SchemaData): Promise<void> {
+  _formatValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkString('format')
@@ -390,7 +390,7 @@ This is too much, not more than ${check.max} are allowed.`))
         throw new Error(`The format ${check.format} is not supported`)
       }
     } catch (err) {
-      return Promise.reject(new SchemaError(this, data, err.message))
+      return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (!check.format) return Promise.resolve()
