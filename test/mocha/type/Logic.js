@@ -6,6 +6,7 @@ import LogicSchema from '../../../src/type/Logic'
 import NumberSchema from '../../../src/type/Number'
 import StringSchema from '../../../src/type/String'
 import ObjectSchema from '../../../src/type/Object'
+import AnySchema from '../../../src/type/Any'
 import Schema from '../../../src/type/Schema'
 import * as helper from '../helper'
 
@@ -127,18 +128,28 @@ describe('logic', () => {
 
   })
 
-  describe.skip('IF', () => {
+  describe.skip('if', () => {
 
-    //    it('should describe', () => {
-    //      const schema = new ObjectSchema()
-    //        .key('init', new LogicSchema()
-    //          .allow(new StringSchema().stripEmpty())
-    //          .and(new NumberSchema(new Reference().path('/start')).min(1))
-    //          .then(new Schema().required()),
-    //          .else(new Schema().forbidden()),
-    //        )
-    //      expect(helper.description(schema)).to.be.a('string')
-    //    })
+    it('should describe', () => {
+      const schema = new LogicSchema()
+        .if(new NumberSchema(new Reference().path('/start')).min(1))
+        .then(new AnySchema().required())
+      //        .else(new AnySchema().forbidden())
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it.skip('should describe', () => {
+      const schema = new ObjectSchema()
+        .key('init', new LogicSchema()
+          .allow(new StringSchema().stripEmpty())
+          .and(new LogicSchema()
+            .if(new NumberSchema(new Reference().path('/start')).min(1))
+            .then(new Schema().required()),
+            //    .else(new Schema().forbidden()),
+          ),
+        )
+      expect(helper.description(schema)).to.be.a('string')
+    })
 
   })
 

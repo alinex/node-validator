@@ -9,6 +9,7 @@ See at [Any Schema](any.md) for the inherited methods you may call like:
 - `title()`
 - `detail()`
 - `required()`
+- `forbidden()`
 - `default()`
 - `stripEmpty()`
 - `allow()`

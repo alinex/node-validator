@@ -130,9 +130,56 @@ It is optional and must not be set.`)
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should describe', () => {
+    it('should describe with reference', () => {
       const ref = new Reference(true)
       const schema = new MySchema().required(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('forbidden', () => {
+
+    it('should work', () => {
+      const schema = new MySchema().forbidden()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema)
+    })
+
+    it('should fail', () => {
+      const data = 5
+      const schema = new MySchema().forbidden()
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should allow remove', () => {
+      const data = 5
+      const schema = new MySchema().forbidden().forbidden(false)
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data)
+    })
+
+    it('should allow references', () => {
+      const ref = new Reference(true)
+      const data = 5
+      const schema = new MySchema().forbidden(ref)
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().forbidden()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe with reference', () => {
+      const ref = new Reference(true)
+      const schema = new MySchema().forbidden(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })

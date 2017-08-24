@@ -205,37 +205,63 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
 
   // optional
 
-  required(flag?: bool | Reference): this { return this._setFlag('required', flag) }
+  required(flag?: bool | Reference): this {
+    const set = this._setting
+    if (set.forbidden && !this._isReference('forbidden')) {
+      throw new Error('This is already `forbidden` and can´t be also be `required`')
+    }
+    return this._setFlag('required', flag)
+  }
+  forbidden(flag?: bool | Reference): this {
+    const set = this._setting
+    if (set.required && !this._isReference('required')) {
+      throw new Error('This is already `required` and can´t be also be `forbidden`')
+    }
+    return this._setFlag('forbidden', flag)
+  }
   default(value?: any): this { return this._setAny('default', value) }
 
   _optionalDescriptor() {
     const set = this._setting
+    let msg = ''
     if (set.default) {
       const value = set.default instanceof Reference
         ? set.default.description : util.inspect(set.default)
-      return `It will default to ${value} if not set.\n`
+      msg += `It will default to ${value} if not set. `
     }
-    if (set.required instanceof Reference) {
-      return `It is optional depending on ${set.required.description}.\n`
+    if (set.required) {
+      if (set.required instanceof Reference) {
+        msg += `It is required depending on ${set.required.description}. `
+      } else msg += 'It is required and has to be set with a value. '
     }
-    if (!set.required) return 'It is optional and must not be set.\n'
-    return ''
+    if (set.forbidden) {
+      if (set.forbidden instanceof Reference) {
+        msg += `It is forbidden depending on ${set.forbidden.description}. `
+      } else msg += 'It is forbidden and could not contain a value. '
+    }
+    if (!set.default && !set.required && !set.forbidden) msg += 'It is optional and must not be set. '
+    return msg.replace(/ $/, '\n')
   }
 
   _optionalValidator(data: Data): Promise<void> {
     const check = this._check
     try {
       this._checkBoolean('required')
+      this._checkBoolean('forbidden')
     } catch (err) {
       return Promise.reject(new ValidationError(this, data, err.message))
     }
+    // use default
     if (data.value === undefined && check.default) data.value = check.default
-    if (data.value !== undefined) return Promise.resolve()
-    if (check.required) {
-      return Promise.reject(new ValidationError(this, data,
-        'This element is mandatory!'))
+    // check for required
+    if (check.required && data.value === undefined) {
+      return Promise.reject(new ValidationError(this, data, 'This element is mandatory!'))
     }
-    return Promise.reject() // stop processing, optional is ok
+    if (check.forbidden && data.value !== undefined) {
+      return Promise.reject(new ValidationError(this, data, 'This element is forbidden!'))
+    }
+    if (data.value === undefined) return Promise.reject() // stop processing, optional is ok
+    return Promise.resolve()
   }
 
   raw(flag?: bool | Reference): this { return this._setFlag('raw', flag) }
@@ -269,7 +295,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     let msg = ''
     // support base setting
     if (this.base) {
-      msg += `Use ${this.base instanceof Data ? this.base.value : this.base} as base for this check. `
+      msg += `Use as base: ${util.inspect(this.base instanceof Data ? this.base.value : this.base)}. `
     }
     // create message using the different rules
     this._rules.descriptor.forEach((rule) => {

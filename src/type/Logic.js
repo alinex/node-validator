@@ -32,6 +32,36 @@ class LogicSchema extends Schema {
 
   // setup schema
 
+  if(schema: Schema): this {
+    const set = this._setting
+    if (set.logic) throw new Error(`Logic is already started using ${set.logic[0][0]}`)
+    set.logic = []
+    set.logic.push(['if', schema])
+    return this
+  }
+
+  then(schema: Schema): this {
+    const set = this._setting
+    if (!set.logic) throw new Error('Logic is not defined use `if()` first')
+    if (set.logic[0][0] !== 'if') {
+      throw new Error('Logic is not defined as `if()`, only `and` and `or` are allowed here')
+    }
+    if (set.logic[1]) throw new Error('Then condition in logic is already set')
+    set.logic[1] = ['then', schema]
+    return this
+  }
+
+  else(schema: Schema): this {
+    const set = this._setting
+    if (!set.logic) throw new Error('Logic is not defined use `if()` first')
+    if (set.logic[0][0] !== 'if') {
+      throw new Error('Logic is not defined as `if()`, only `and` and `or` are allowed here')
+    }
+    if (set.logic[2]) throw new Error('Then condition in logic is already set')
+    set.logic[2] = ['else', schema]
+    return this
+  }
+
   allow(schema: Schema): this {
     const set = this._setting
     if (set.logic) throw new Error(`Logic is already started using ${set.logic[0][0]}`)
@@ -65,7 +95,7 @@ class LogicSchema extends Schema {
   _logicDescriptor() {
     const set = this._setting
     if (!set.logic) return ''
-    return set.logic.map(e => `${e[0].toUpperCase()} ${e[1].description.replace(/\n/g, '\n  ')}\n`)
+    return set.logic.map(e => `${e[0].toUpperCase()} ${e[1].description.replace(/\n/g, '\n ')}\n`)
       .join('- ')
   }
 

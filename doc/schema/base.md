@@ -50,11 +50,11 @@ It is optional and must not be set. +3ms
 ```
 
 
-## required(bool)
+## required(bool) / forbidden(bool)
 
-The validation value may be optional (default), meaning if no value is given it will be set
-as `undefined`. A value of `null` is considered as a concrete value and won´t trigger
-the optional here.
+The validation value is optional by default, meaning if no value is given it will be set
+as `undefined`. If `required` is set a value has to be set and undefined is not allowed. The
+opposite is the `forbidden` which don't allow any value (needed in logic expressions).
 
 ```js
 const schema = new AnySchema().required()
