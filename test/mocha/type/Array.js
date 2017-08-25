@@ -34,8 +34,7 @@ describe('array', () => {
   it('should describe', () => {
     const schema = new MySchema()
     // use schema
-    expect(helper.description(schema)).to.equal(
-      'It is optional and must not be set.\nAn array list is needed.')
+    expect(helper.description(schema)).to.equal('An array list is needed.')
   })
 
   describe('split', () => {

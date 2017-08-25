@@ -42,29 +42,29 @@ alinex-validator.
 | option: `noDefaults` (false) | - |
 | `ref(key)` | `ref().path(key)` |
 | `reach(schema, path)` | - |
-| `any` | `Schema` |
+| `any` | `any` |
 | `any.allow(value)` | `any.allow(value)` |
 | `any.valid(value)` | `any.valid(value)` |
 | `any.invalid(value)` | `any.invalid(value)` |
-| `any.required()` | `schema.required()` |
-| `any.optional()` | true unless `schema.required()` |
+| `any.required()` | `any.required()` |
+| `any.optional()` | true unless `any.required()` |
 | `any.forbidden()` | - |
 | `any.strip()` | - |
-| `any.description(value)` | `schema(title, description)` |
+| `any.description(value)` | `any(title, description)` |
 | `any.notes(value)` | - |
 | `any.tags(value)` | - |
 | `any.meta(value)` | - |
 | `any.example(value)` | - |
 | `any.unit(name)` | `number.unit(name).toUnit(name)` |
 | `any.options(value)` | - |
-| `any.default(value)` | `schema.default(value)` |
+| `any.default(value)` | `any.default(value)` |
 | `any.concat(schema)` | `logic.allow(schema1).or(schema2)` |
 | `any.when` | use alternative schemas with `logic.allow(schema1).or(schema2)` |
-| `any.label(name)` | `schema(title)` |
-| `any.raw()` | `schema.raw()` |
-| `any.empty(schema)` | `schema.stripEmpty()` |
+| `any.label(name)` | `any(title)` |
+| `any.raw()` | `any.raw()` |
+| `any.empty(schema)` | `any.stripEmpty()` |
 | `any.error(err)` | - |
-| `array` | `ArraySchema` |
+| `array` | `array` |
 | `array.sparse()` | default and can be removed by setting `array.stripEmpty()` |
 | `array.single()` | `array.toArray()` |
 | `array.items(schema)` | `array.item(schema)` |
@@ -146,9 +146,9 @@ alinex-validator.
 | `string.uppercase()` | `string.uppercase()` |
 | `string.trim()` | `string.trim()` |
 | `string.isoDate()` | `date.format('ISO8601')` |
+| `alternatives` | `logic` |
 | `alternatives.try([schema1, schema2])` | `logic.allow(schema1).or(schema2)` |
-| `alternatives.when('b', { is: 5, then: Joi.string(), otherwise: Joi.number() })` | - |
-| `alternatives` | `alternatives` |
+| `alternatives.when('b', { is: 5, then: Joi.string(), otherwise: Joi.number() })` | `logic.if(any(ref.path(b)).allow(5)).then(string).else(number))` |
 | `lazy(fn)` | naturally possible |
 
 This may help to decide what to use and how to transform a schema. Not included is what alinex

@@ -30,7 +30,7 @@ describe('logic', () => {
   it('should describe', () => {
     const schema = new MySchema()
     // use schema
-    expect(helper.description(schema)).to.equal('It is optional and must not be set.')
+    expect(helper.description(schema)).to.equal('')
   })
 
   describe('and', () => {
@@ -128,9 +128,9 @@ describe('logic', () => {
 
   })
 
-  describe.only('if', () => {
+  describe('if', () => {
 
-    it('should work with positive', () => {
+    it('should work with then', () => {
       const schema = new LogicSchema()
         .if(new NumberSchema().max(500))
         .then(new NumberSchema().unit('cm').format('0.00 $best'))
@@ -139,7 +139,7 @@ describe('logic', () => {
       return helper.validateOk(schema, 150)
     })
 
-    it('should work with positive', () => {
+    it('should work with else', () => {
       const schema = new LogicSchema()
         .if(new NumberSchema().max(500))
         .then(new NumberSchema().unit('cm').format('0.00 $best'))
@@ -148,7 +148,7 @@ describe('logic', () => {
       return helper.validateOk(schema, 5000)
     })
 
-    it('should work with positive', () => {
+    it('should work allow complex', () => {
       const schema = new ObjectSchema()
         .key('init',
           new LogicSchema()
@@ -163,38 +163,11 @@ describe('logic', () => {
       return helper.validateFail(schema, data)
     })
 
-    it('should work with negative', () => {
-      const schema = new ObjectSchema()
-        .key('init',
-          new LogicSchema()
-            .if(new NumberSchema(new Reference().path('/start')).min(1))
-            .then(new AnySchema().forbidden())
-            .else(new AnySchema().required()),
-        )
-      const data = {
-        start: 0,
-      }
-      return helper.validateFail(schema, data)
-    })
-
     it('should describe', () => {
       const schema = new LogicSchema()
         .if(new NumberSchema(new Reference().path('/start')).min(1))
         .then(new AnySchema().required())
         .else(new AnySchema().forbidden())
-      expect(helper.description(schema)).to.be.a('string')
-    })
-
-    it.skip('should describe', () => {
-      const schema = new ObjectSchema()
-        .key('init', new LogicSchema()
-          .allow(new StringSchema().stripEmpty())
-          .and(new LogicSchema()
-            .if(new NumberSchema(new Reference().path('/start')).min(1))
-            .then(new Schema().required())
-            .else(new Schema().forbidden()),
-          ),
-        )
       expect(helper.description(schema)).to.be.a('string')
     })
 

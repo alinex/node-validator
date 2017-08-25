@@ -54,6 +54,25 @@ changed values from the earlier.
 It is also possible to use a schema as a conditional operator and decide how to validate depending
 on it's result, if it succeeds or fails. This is in the same way normal if..then..else conditions work.
 
+```js
+const schema = new ObjectSchema()
+  .key('init',
+    new LogicSchema()
+      .if(new NumberSchema(new Reference().path('/start')).min(1))
+      .then(new AnySchema().forbidden())
+      .else(new AnySchema().required()),
+  )
+const data = {
+  start: 3,
+  init: 'already running',
+}
+```
+
 ### if(schema)
 
-This starts the conditional...
+This starts the conditional check with a schema which may validate or not. The concrete result data
+doesn't matter because it is only used to decide which part is used.
+
+### then(schema) / else(schema)
+
+Depending if the `if(schema)` succeeds the `then` or the `else` part is used on the original data.

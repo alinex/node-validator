@@ -49,7 +49,7 @@ same using alinex-validator.
 | `between:min,max` for number | `number.min(min).max(max)` |
 | `between:min,max` for files | - |
 | `boolean` | `boolean.tolerant()` |
-| `confirmed` need matching field xxx_confirmation | `xxx_confitrmation = any.allow(ref().path('xxx'))` |
+| `confirmed` need matching field xxx_confirmation | `xxx_confirmation = any.allow(ref().path('../xxx'))` |
 | `date` | `date` |
 | `digits:value` | `number.length(value)` |
 | `different:attribute` | `any.deny(ref().path(attribute))` |
@@ -60,13 +60,13 @@ same using alinex-validator.
 | `min:value` | `number.min(value)` |
 | `not_in:foo,bar,...` | `any.deny([foo,bar])` |
 | `numeric` | `number` |
-| `required` | `schema.required()` |
-| `required_if:anotherfield,value` | - |
-| `required_unless:anotherfield,value` | - |
-| `required_with:foo,bar,...` | `object.with(a, [foo,bar])` |
-| `required_with_all:foo,bar,...` | - |
-| `required_without:foo,bar,...` | - |
-| `required_without_all:foo,bar,...` | - |
+| `required` | `any.required()` |
+| `required_if:anotherfield,value` | `logic.if(any(ref.path(anotherfield)).allow(value)).then(any.required())` |
+| `required_unless:anotherfield,value` | `logic.if(any(ref.path(anotherfield)).deny(value)).then(any.required())` |
+| `required_with:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).required()).or(any(ref.path(bar)).required()) ).then(any.required())` |
+| `required_with_all:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).required()).and(any(ref.path(bar)).required()) ).then(any.required())` |
+| `required_without:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).forbidden()).or(any(ref.path(bar)).forbidden()) ).then(any.required())` |
+| `required_without_all:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).forbidden()).and(any(ref.path(bar)).forbidden()) ).then(any.required())` |
 | `same:attribute` | `any.allow(ref().path(attribute))` |
 | `size:value` for number | number.length(value) |
 | `size:value` for string | string.length(value) |

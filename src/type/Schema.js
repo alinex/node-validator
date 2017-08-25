@@ -321,6 +321,7 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
       p = p.then(() => data.value.raw().resolve(data))
         .then((res) => {
           data.value = res
+          if (this.debug.enabled) this.debug(`   Use base: ${util.inspect(data)}`)
         })
     }
     // resolve check settings

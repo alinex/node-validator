@@ -25,7 +25,7 @@ describe('any', () => {
   it('should describe', () => {
     const schema = new MySchema()
     // use schema
-    expect(helper.description(schema)).to.equal('It is optional and must not be set.')
+    expect(helper.description(schema)).to.equal('')
   })
 
   describe('allow', () => {

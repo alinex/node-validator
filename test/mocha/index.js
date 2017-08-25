@@ -40,7 +40,7 @@ describe('use', () => {
 > At path: \`/any/path\`
 
 But __Any__ should be defined with:
-It is optional and must not be set.`)
+`)
     })
 
   })

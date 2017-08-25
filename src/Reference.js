@@ -95,7 +95,7 @@ class Reference {
   }
 
   path(def: string): this {
-    def = def.replace(/\/\.\//g, '/').replace(/^\.?\//, '')
+    def = def.replace(/\/\.\//g, '/').replace(/^\.\//, '')
     this.access.push(['path', def])
     return this
   }

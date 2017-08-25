@@ -30,7 +30,7 @@ describe('schema', () => {
   it('should describe', () => {
     const schema = new MySchema()
     // use schema
-    expect(helper.description(schema)).to.equal('It is optional and must not be set.')
+    expect(helper.description(schema)).to.be.a('string')
   })
 
   describe('meta', () => {
@@ -48,7 +48,7 @@ describe('schema', () => {
 > At path: \`/any/path\`
 
 But __Schema__ should be defined with:
-It is optional and must not be set.`)
+`)
     })
 
     it('should describe error with specific title and detail', () => {
@@ -66,7 +66,7 @@ It is optional and must not be set.`)
 > At path: \`/any/path\`
 
 But __Test__ should be used only for simple testing with:
-It is optional and must not be set.`)
+`)
     })
 
   })

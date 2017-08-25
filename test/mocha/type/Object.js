@@ -34,7 +34,7 @@ describe('object', () => {
     const schema = new MySchema()
     // use schema
     expect(helper.description(schema)).to.equal(
-      'It is optional and must not be set.\nA data object is needed.')
+      'A data object is needed.')
   })
 
   describe('deepen/flatten', () => {
