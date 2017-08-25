@@ -22,6 +22,9 @@ class LogicSchema extends Schema {
     )
   }
 
+  required(): this { return this._setError('required') }
+  forbidden(): this { return this._setError('forbidden') }
+
   inspect(depth: number, options: Object): string {
     const newOptions = Object.assign({}, options, {
       depth: options.depth === null ? null : options.depth - 1,
@@ -96,20 +99,28 @@ class LogicSchema extends Schema {
   _logicDescriptor() {
     const set = this._setting
     if (!set.logic) return ''
-    return set.logic.map(e => `- **${e[0].toUpperCase()}**: ${e[1].description.replace(/\n/g, '\n  ')}\n`)
+    const msg = 'The validation depends on the following logic:\n'
+    return msg + set.logic.map(e => `- **${e[0].toUpperCase()}**: ${e[1].description.replace(/\n/g, '\n  ')}\n`)
       .join('')
   }
 
   _logicValidator(data: Data): Promise<void> {
     const check = this._check
     if (!check.logic) return Promise.resolve()
+    let logic = check.logic.slice(0) // clone
+    // conditionals
+    if (logic[0][0] === 'if') {
+      // check if/then/else
+      return logic[0][1]._validate(data.clone)
+        .then(() => (logic[1] ? logic[1][1]._validate(data) : data))
+        .catch(() => (logic[2] ? logic[2][1]._validate(data) : data))
+    }
     // replace Schema.validate(data) ? Data : ValidationError
-    let logic = check.logic.slice(0)
     let p = Promise.resolve()
     logic.forEach((v, i) => {
       const [op, schema] = v
       if (op === 'and') {
-        p = p.then((last) => {
+        p = p.then((last) => { // last comes from allow, deny...
           // clone last
           if (last instanceof Data) return schema._validate(last.clone)
           return undefined
@@ -122,7 +133,7 @@ class LogicSchema extends Schema {
             logic[i][1] = err
             return undefined
           })
-      } else {
+      } else { // allow, deny, or
         p = p.then(() => schema._validate(data.clone))
           .then((last) => {
             logic[i][1] = last
@@ -134,6 +145,7 @@ class LogicSchema extends Schema {
           })
       }
     })
+    // reverse reduce logic operators
     p = p.then(() => {
       // reverse reduce and
       let last = 0

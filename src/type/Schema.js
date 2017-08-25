@@ -239,7 +239,6 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
         msg += `It is forbidden depending on ${set.forbidden.description}. `
       } else msg += 'It is forbidden and could not contain a value. '
     }
-    if (!set.default && !set.required && !set.forbidden) msg += 'It is optional and must not be set. '
     return msg.replace(/ $/, '\n')
   }
 

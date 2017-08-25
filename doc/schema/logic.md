@@ -9,8 +9,6 @@ sanitization with number conversion.
 See at [Base Schema](base.md) for the inherited methods you may call like:
 - `title()`
 - `detail()`
-- `required()`
-- `forbidden()`
 - `default()`
 - `stripEmpty()`
 - `raw()`
