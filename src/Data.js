@@ -1,4 +1,6 @@
 // @flow
+import util from 'util'
+
 class Data {
   value: any // current value (will change while validating)
   orig: any // original value for reporting
@@ -20,6 +22,14 @@ class Data {
     this.status = new Promise((resolve) => {
       this.done = resolve
     })
+  }
+
+  inspect(depth: number, options: Object): string {
+    const newOptions = Object.assign({}, options, {
+      depth: options.depth === null ? null : options.depth - 1,
+    })
+    const inner = util.inspect(this.value, newOptions)
+    return `${options.stylize(this.constructor.name, 'class')} at ${this.source} ${inner} `
   }
 
   sub(key: string): Data {

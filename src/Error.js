@@ -14,6 +14,10 @@ class SchemaError extends Error {
     if (data) this.data = data
   }
 
+  inspect(): string {
+    return `Error at ${this.data.source}: ${this.message} `
+  }
+
   get text(): string {
     return `__${this.message}__
 

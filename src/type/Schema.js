@@ -1,5 +1,6 @@
 // @flow
 import util from 'util'
+import debug from 'debug'
 
 import Data from '../Data'
 import ValidationError from '../Error'
@@ -9,6 +10,7 @@ class Schema {
   _title: string
   _detail: string
   base: any
+  debug: debug
 
   // rules
   _rules: {
@@ -21,6 +23,7 @@ class Schema {
 
   constructor(base?: any) {
     if (base) this.base = base
+    this.debug = debug(`validator:${this.constructor.name.replace(/Schema/, '').toLowerCase()}`)
     this._title = this.constructor.name.replace(/(.)Schema/, '$1')
     this._detail = 'should be defined with'
     this._rules = {
@@ -46,10 +49,10 @@ class Schema {
     const newOptions = Object.assign({}, options, {
       depth: options.depth === null ? null : options.depth - 1,
     })
-    const base = this.base ? `base=${util.inspect(this.base)}` : ''
+    const base = this.base ? `base=${util.inspect(this.base)} ` : ''
     const padding = ' '.repeat(5)
     const inner = util.inspect(this._setting, newOptions).replace(/\n/g, `\n${padding}`)
-    return `${options.stylize(this.constructor.name, 'class')} ${base} ${inner} `
+    return `${options.stylize(this.constructor.name, 'class')} ${base}${inner} `
   }
 
   title(title: string): this {
@@ -304,6 +307,10 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
   }
 
   _validate(value: any, source?: string, options?: Object): Promise<any> {
+    if (this.debug.enabled) {
+      this.debug(util.inspect(value))
+      this.debug(`   ${util.inspect(this)}`)
+    }
     const data = value instanceof Data ? value : new Data(value, source, options)
     if (this.base) { // use base setting if defined
       data.value = this.base instanceof Data ? this.base.value : this.base
@@ -353,10 +360,17 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     // run the rules seriously
     this._rules.validator.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
     return p.then(() => {
+      if (this.debug.enabled) this.debug(`=> ${util.inspect(data)}`)
       data.done(data.value)
       return data
     })
-      .catch(err => (err ? Promise.reject(err) : data))
+      .catch((err) => {
+        if (this.debug.enabled) {
+          if (err) this.debug(`=> ${util.inspect(err)}`)
+          else this.debug(`=> ${util.inspect(data)}`)
+        }
+        return (err ? Promise.reject(err) : data)
+      })
   }
 
   validate(value: any, source?: string, options?: Object): Promise<any> {

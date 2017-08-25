@@ -130,6 +130,53 @@ describe('logic', () => {
 
   describe.only('if', () => {
 
+    it('should work with positive', () => {
+      const schema = new LogicSchema()
+        .if(new NumberSchema().max(500))
+        .then(new NumberSchema().unit('cm').format('0.00 $best'))
+        .else(new NumberSchema().unit('g').format('0.00 $best'),
+        )
+      return helper.validateOk(schema, 150)
+    })
+
+    it('should work with positive', () => {
+      const schema = new LogicSchema()
+        .if(new NumberSchema().max(500))
+        .then(new NumberSchema().unit('cm').format('0.00 $best'))
+        .else(new NumberSchema().unit('g').format('0.00 $best'),
+        )
+      return helper.validateOk(schema, 5000)
+    })
+
+    it('should work with positive', () => {
+      const schema = new ObjectSchema()
+        .key('init',
+          new LogicSchema()
+            .if(new NumberSchema(new Reference().path('/start')).min(1))
+            .then(new AnySchema().forbidden())
+            .else(new AnySchema().required()),
+        )
+      const data = {
+        start: 3,
+        init: 'already running',
+      }
+      return helper.validateFail(schema, data)
+    })
+
+    it('should work with negative', () => {
+      const schema = new ObjectSchema()
+        .key('init',
+          new LogicSchema()
+            .if(new NumberSchema(new Reference().path('/start')).min(1))
+            .then(new AnySchema().forbidden())
+            .else(new AnySchema().required()),
+        )
+      const data = {
+        start: 0,
+      }
+      return helper.validateFail(schema, data)
+    })
+
     it('should describe', () => {
       const schema = new LogicSchema()
         .if(new NumberSchema(new Reference().path('/start')).min(1))
