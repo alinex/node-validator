@@ -130,9 +130,51 @@ describe('array', () => {
     })
 
     it('should describe', () => {
-      const data = [1, 2, 3, 2]
       const ref = new Reference(true)
       const schema = new MySchema().unique(ref)
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+  })
+
+  describe('filter', () => {
+
+    it('should work with empty filter', () => {
+      const data = [1, null, 2, undefined, 3]
+      const schema = new MySchema().filter()
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 2, 3])
+      })
+    })
+
+    it('should work with schema filter', () => {
+      const data = [1, 'test', 2, [4], 3]
+      const schema = new MySchema().filter(new NumberSchema())
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal([1, 2, 3])
+      })
+    })
+
+    it('should remove setting', () => {
+      const data = [1, null, 2, undefined, 3]
+      const schema = new MySchema().filter().filter(false)
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should describe with empty filter', () => {
+      const schema = new MySchema().filter()
+      // use schema
+      expect(helper.description(schema)).to.be.an('string')
+    })
+
+    it('should describe with schema filter', () => {
+      const schema = new MySchema().filter(new NumberSchema())
       // use schema
       expect(helper.description(schema)).to.be.an('string')
     })

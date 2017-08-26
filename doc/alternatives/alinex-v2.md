@@ -12,7 +12,7 @@ also the few changes below:
 | `and` |  `logic.allow(schema1).and(schema2)` |
 | `any` | `any` |
 | `array` | `array` |
-| `array.notEmpty=true` | - |
+| `array.notEmpty=true` | `array.filter()` |
 | `array.minLength=length` | `array.min(length)` |
 | `array.maxLength=length` | `array.max(length)` |
 | `array.toArray=true` | `array.toArray()` |

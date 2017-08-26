@@ -16,6 +16,7 @@ class ArraySchema extends Schema {
       this._splitDescriptor,
       this._toArrayDescriptor,
       this._uniqueDescriptor,
+      this._filterDescriptor,
       this._itemsDescriptor,
       this._lengthDescriptor,
       this._sortDescriptor,
@@ -28,6 +29,7 @@ class ArraySchema extends Schema {
       this._toArrayValidator,
       this._typeValidator,
       this._uniqueValidator,
+      this._filterValidator,
       this._itemsValidator,
       this._lengthValidator,
       this._sortValidator,
@@ -142,6 +144,44 @@ as separator.\n`
         }
         c.add(e)
       }
+    }
+    return Promise.resolve()
+  }
+
+  filter(schema?: Schema|bool): this {
+    const set = this._setting
+    if (schema instanceof Schema) set.filter = schema
+    else if (schema === false) delete set.filter
+    else set.filter = true
+    return this
+  }
+
+  _filterDescriptor() {
+    const set = this._setting
+    if (set.filter === true) {
+      return 'Undefined or empty values are removed.\n'
+    }
+    if (set.filter) {
+      return `Elements will be removed if not passing: ${set.filter.description}`
+    }
+    return ''
+  }
+
+  _filterValidator(data: Data): Promise<void> {
+    const check = this._check
+    // check value
+    if (check.filter) {
+      const filter = check.filter === true
+        ? new Schema().stripEmpty().required()
+        : check.filter
+      const p = []
+      for (const v of data.value) {
+        p.push(filter._validate(v).then(() => v).catch(() => null))
+      }
+      return Promise.all(p).then((res) => {
+        data.value = res.filter(e => e)
+        return undefined
+      })
     }
     return Promise.resolve()
   }

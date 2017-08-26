@@ -65,12 +65,12 @@ alinex-validator.
 | `any.empty(schema)` | `any.stripEmpty()` |
 | `any.error(err)` | - |
 | `array` | `array` |
-| `array.sparse()` | default and can be removed by setting `array.stripEmpty()` |
+| `array.sparse()` | default and can be removed by setting `array.filter()` |
 | `array.single()` | `array.toArray()` |
 | `array.items(schema)` | `array.item(schema)` |
 | `array.items(schema, schema)` | `array.unordered().item(schema).item(schema)` |
 | `array.ordered(schema, schema)` | `array.item(schema).item(schema)` |
-| array min elements | `array.min(limit)` | `array.min(limit)` |
+| `array.min(limit)` | `array.min(limit)` |
 | `array.max(limit)` | `array.max(limit)` |
 | `array.length(limit)` | `array.length(limit)` |
 | `array.unique(comparator)` | `array.unique()` |

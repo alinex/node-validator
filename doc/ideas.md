@@ -12,11 +12,6 @@ Reference
 - SFTP as reference base
 - SSH as reference base
 
-Array
-- array.filter(any().stripEmpty().required()) // (v2 noEmpty)
-- array.filter(schema).sanitize() fail or remove all which not validate
-- array.exclude(schema).sanitize() fail or remove all which validate
-
 Object
 - move() change key name (Joi rename)
 - copy()

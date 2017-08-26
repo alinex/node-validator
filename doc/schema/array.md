@@ -73,6 +73,17 @@ const ref = new Reference(true)
 const schema = new ArraySchema().sanizize(ref).unique(ref)
 ```
 
+### filter(bool) / filter(Schema)
+
+Filter the list of elements to remove all empty elements or all that don't match the given schema
+definition.
+
+```js
+const schema = new ArraySchema().filter() // remove empty elements
+const schema = new ArraySchema().filter(new NumberSchema()) // only numbers are allowed
+schema.filter(false) // to remove the setting
+```
+
 ### shuffle(bool)
 
 All list items will be shuffled to get a random order:
