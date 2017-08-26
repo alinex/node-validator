@@ -117,7 +117,7 @@ alinex-validator.
 | `object.with(key, peers)` | `object.with(key, peers)` |
 | `object.without(key, peers)` | `object.without(key, peers)` |
 | `object.rename(from, to)` | - |
-| `object.assert(ref, schema)` | - |
+| `object.assert(ref, schema)` | `logic.if(schema(ref))` |
 | `object.unknown()` | `object.removeUnknown()` |
 | `object.type(constructor)` | - |
 | `object.schema()` | - |
@@ -148,7 +148,7 @@ alinex-validator.
 | `string.isoDate()` | `date.format('ISO8601')` |
 | `alternatives` | `logic` |
 | `alternatives.try([schema1, schema2])` | `logic.allow(schema1).or(schema2)` |
-| `alternatives.when('b', { is: 5, then: Joi.string(), otherwise: Joi.number() })` | `logic.if(any(ref.path(b)).allow(5)).then(string).else(number))` |
+| `alternatives.when('b', { is: 5, then: Joi.string(), otherwise: Joi.number() })` | `logic.if(any(ref.path(b)).allow(5)) .then(string).else(number))` |
 | `lazy(fn)` | naturally possible |
 
 This may help to decide what to use and how to transform a schema. Not included is what alinex

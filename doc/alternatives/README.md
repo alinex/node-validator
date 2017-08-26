@@ -74,7 +74,7 @@ the impleentation is.
 | Array      |  80% | 100% |         10% |
 | Object     |  80% |  90% |         70% |
 | Date       | 100% |  20% |         30% |
-| Logic      |  50% | 100% |         40% |
+| Logic      | 100% |  80% |         40% |
 | Port       | 100% |   0% |          0% |
 
 | Feature  | Alinex | Joi  | validatorjs |

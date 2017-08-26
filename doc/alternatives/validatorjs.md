@@ -61,12 +61,12 @@ same using alinex-validator.
 | `not_in:foo,bar,...` | `any.deny([foo,bar])` |
 | `numeric` | `number` |
 | `required` | `any.required()` |
-| `required_if:anotherfield,value` | `logic.if(any(ref.path(anotherfield)).allow(value)).then(any.required())` |
-| `required_unless:anotherfield,value` | `logic.if(any(ref.path(anotherfield)).deny(value)).then(any.required())` |
-| `required_with:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).required()).or(any(ref.path(bar)).required()) ).then(any.required())` |
-| `required_with_all:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).required()).and(any(ref.path(bar)).required()) ).then(any.required())` |
-| `required_without:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).forbidden()).or(any(ref.path(bar)).forbidden()) ).then(any.required())` |
-| `required_without_all:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).forbidden()).and(any(ref.path(bar)).forbidden()) ).then(any.required())` |
+| `required_if:anotherfield,value` | `logic.if(any(ref.path(anotherfield)).allow(value)) .then(any.required())` |
+| `required_unless:anotherfield,value` | `logic.if(any(ref.path(anotherfield)).deny(value)) .then(any.required())` |
+| `required_with:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).required()) .or(any(ref.path(bar)).required())) .then(any.required())` |
+| `required_with_all:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).required()) .and(any(ref.path(bar)).required())) .then(any.required())` |
+| `required_without:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).forbidden()) .or(any(ref.path(bar)).forbidden())) .then(any.required())` |
+| `required_without_all:foo,bar,...` | `logic.if( logic.allow(any(ref.path(foo)).forbidden()) .and(any(ref.path(bar)).forbidden())) .then(any.required())` |
 | `same:attribute` | `any.allow(ref().path(attribute))` |
 | `size:value` for number | number.length(value) |
 | `size:value` for string | string.length(value) |
