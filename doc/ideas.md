@@ -13,6 +13,7 @@ Reference
 - SSH as reference base
 
 Array
+- array.filter(any().stripEmpty().required()) // (v2 noEmpty)
 - array.filter(schema).sanitize() fail or remove all which not validate
 - array.exclude(schema).sanitize() fail or remove all which validate
 
@@ -28,10 +29,17 @@ Number
 File
 - min/max/greater/less as filesize (validatorjs)
 
+String
+- startsWich (v2)
+- endsWith (v2)
+
 Specific Types
-- email (joi, validatorjs)
+- email (joi, validatorjs, v2)
 - ip (joi)
 - creditcard (joi)
-- uri (joi, validatorjs)
-- hostname (joi)
-- handlebars
+- uri (joi, validatorjs, v2)
+- hostname (joi, v2)
+- handlebars (v2)
+- function (v2)
+- interval
+- regexp

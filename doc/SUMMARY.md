@@ -25,6 +25,7 @@
 - [Ideas](ideas.md)
 
 - [Alternatives](alternatives/README.md)
+  - [Alinex V2](alternatives/alinex-v2.md)
   - [Joi](alternatives/joi.md)
   - [validatorjs](alternatives/validatorjs.md)
 

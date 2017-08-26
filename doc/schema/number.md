@@ -70,7 +70,7 @@ schema.round(false) // to remove the setting
 
 > References are not allowed here but within `integer`.
 
-## integer(bool)
+### integer(bool)
 
 The integer flag will check for an integer value. If the sanitize flag is also used it will
 automatically round.
