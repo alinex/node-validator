@@ -5,7 +5,6 @@ Here you find a collection of further ideas which may be realized as soon as any
 General
 - allow using JSON Schema
 - RDBMS data loader URIspecific file
-- value in constructor will be used instead of data.value
 
 Reference
 - RDBMS as reference base
@@ -24,17 +23,13 @@ Number
 File
 - min/max/greater/less as filesize (validatorjs)
 
-String
-- startsWich (v2)
-- endsWith (v2)
-
 Specific Types
+- function (v2)
 - email (joi, validatorjs, v2)
 - ip (joi)
-- creditcard (joi)
-- uri (joi, validatorjs, v2)
 - hostname (joi, v2)
-- handlebars (v2)
-- function (v2)
+- uri (joi, validatorjs, v2)
 - interval
 - regexp
+- handlebars (v2)
+- creditcard (joi)

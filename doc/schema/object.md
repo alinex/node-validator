@@ -65,7 +65,7 @@ const schema = new ObjectSchema().removeUnknown()
 schema.removeUnknown(false) // to remove setting
 ```
 
-This can also be used with nreference:
+This can also be used with reference:
 
 ```js
 const ref = new Reference(true)
@@ -75,6 +75,25 @@ const schema = new ObjectSchema().removeUnknown(ref)
 
 
 ## Checking Keys
+
+### denyUnknown
+
+By default unknown keys (keys which aren't defined explicitly) are allowed but with this setting
+you may forbid this.
+
+```js
+const schema = new ObjectSchema().denyUnknown()
+.key('one', new AnySchema())
+schema.denyUnknown(false) // to deny setting
+```
+
+This can also be used with reference:
+
+```js
+const ref = new Reference(true)
+const schema = new ObjectSchema().denyUnknown(ref)
+.key('one', new AnySchema())
+```
 
 ### min(limit) / max(limit) / length(limit)
 

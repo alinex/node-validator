@@ -48,7 +48,7 @@ alinex-validator.
 | `any.invalid(value)` | `any.invalid(value)` |
 | `any.required()` | `any.required()` |
 | `any.optional()` | true unless `any.required()` |
-| `any.forbidden()` | - |
+| `any.forbidden()` | maybe use `any.denyUnknown()` |
 | `any.strip()` | - |
 | `any.description(value)` | `any(title, description)` |
 | `any.notes(value)` | - |
@@ -123,7 +123,7 @@ alinex-validator.
 | `object.schema()` | - |
 | `object.requiredKeys()` | `object.requiredKeys()` |
 | `object.forbiddenKeys()` | `object.forbiddenKeys()` |
-| `object.optionalKeys()` | - |
+| `object.optionalKeys()` | define keys and use `object.denyUnknown()` |
 | `string` | `string` |
 | `string.insensitive()` | done through regexp |
 | `string.min(limit)` | `string.min(limit)` |

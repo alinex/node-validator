@@ -171,7 +171,7 @@ ${schema.description.replace(/\n/g, '\n  ')}\n`
       let schema = check.keys[key]
       if (schema) {
         // against defined keys
-        checks.push(schema.validate(data.sub(key)))
+        checks.push(schema._validate(data.sub(key)))
         keys.push(key)
         found = true
       } else if (Object.keys(check.keys).length > 0) {
@@ -182,7 +182,7 @@ ${schema.description.replace(/\n/g, '\n  ')}\n`
             const re = new RegExp(parts[0], (parts[1]: any))
             schema = check.keys[k]
             if (key.match(re)) {
-              checks.push(schema.validate(data.sub(key)))
+              checks.push(schema._validate(data.sub(key)))
               keys.push(key)
               found = true
               break
@@ -202,7 +202,7 @@ ${schema.description.replace(/\n/g, '\n  ')}\n`
       .catch(err => Promise.reject(err))
       .then((result) => {
         if (result) {
-          result.forEach((e: any, i: number) => { sum[keys[i]] = e })
+          result.forEach((e: any, i: number) => { sum[keys[i]] = e.value })
         }
         data.value = sum
         return Promise.resolve()
@@ -210,6 +210,7 @@ ${schema.description.replace(/\n/g, '\n  ')}\n`
   }
 
   removeUnknown(flag?: bool | Reference): this { return this._setFlag('removeUnknown', flag) }
+  denyUnknown(flag?: bool | Reference): this { return this._setFlag('denyUnknown', flag) }
 
   _removeDescriptor() {
     const set = this._setting
@@ -225,12 +226,21 @@ ${set.removeUnknown.description}.\n`
     const check = this._check
     try {
       this._checkBoolean('removeUnknown')
+      this._checkBoolean('denyUnknown')
     } catch (err) {
       return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
     if (check.removeUnknown) {
       for (const key in data.temp.unchecked) if (key) delete data.value[key]
+    }
+    if (check.denyUnknown) {
+      for (const key in data.temp.unchecked) {
+        if (key) {
+          return Promise.reject(new ValidationError(this, data,
+            `The key ${key} is not defined and therefore denied here.`))
+        }
+      }
     }
     return Promise.resolve()
   }

@@ -71,7 +71,7 @@ the impleentation is.
 | Boolean    | 100% |  80% |         80% |
 | String     |  90% |  90% |         60% |
 | Number     | 100% |  70% |         40% |
-| Array      |  80% | 100% |         10% |
+| Array      | 100% | 100% |         10% |
 | Object     |  80% |  90% |         70% |
 | Date       | 100% |  20% |         30% |
 | Logic      | 100% |  80% |         40% |

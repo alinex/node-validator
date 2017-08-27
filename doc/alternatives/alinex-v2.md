@@ -90,10 +90,10 @@ also the few changes below:
 | `object` | `object` |
 | `object.flatten=true` | `object.flatten()` |
 | `object.instanceOf=class` | - |
-| `object.mandatoryKeys=true` | - |
+| `object.mandatoryKeys=true` | set each one as required |
 | `object.mandatoryKeys=list` | `object.requiredKeys(list)` |
-| `object.allowedKeys=true` | - |
-| `object.allowedKeys=list` | - |
+| `object.allowedKeys=true` | `object.denyUnknown()` |
+| `object.allowedKeys=list` | define them and use `object.denyUnknown()` |
 | `object.entries=schema` | `object.key(/./, schema)` |
 | `object.keys=map` | `object.key(name, schema)` |
 | `or=foo,bar` | `logic.allow(foo).or(bar)` |
@@ -116,7 +116,7 @@ also the few changes below:
 | `string.minLength=num` | `string.min(num)` |
 | `string.maxLength=num` | `string.max(num)` |
 | `string.values=list` | `string.allow(list)` |
-| `string.startsWith=text` | - |
-| `string.endsWith=text` | - |
+| `string.startsWith=text` | `string.match(/^text/)` |
+| `string.endsWith=text` | `string.match(/text$/)` |
 | `string.match=match` | `string.match(match)` |
 | `string.matchNot=match` | `string.notMatch(match)` |

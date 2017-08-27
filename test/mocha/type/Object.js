@@ -225,6 +225,37 @@ describe('object', () => {
 
   })
 
+  describe('denyUnknown', () => {
+
+    it('should work with defined keys', () => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().denyUnknown()
+        .key('a', new AnySchema())
+        .key('b', new AnySchema())
+        .key('c', new AnySchema())
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should for undefined key', () => {
+      const data = { a: 1, b: 2, c: 3 }
+      const schema = new MySchema().denyUnknown()
+        .key(/[ab]/, new AnySchema())
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().denyUnknown()
+        .key('a', new AnySchema())
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
   describe('length', () => {
 
     it('should work with min', () => {
