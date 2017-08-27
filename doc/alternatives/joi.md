@@ -89,10 +89,10 @@ alinex-validator.
 | `date.iso()` | `date.format('ISO8601')` |
 | `date.timestamp()` | `date.format('milliseconds')` |
 | `date.timestamp('unix')` | `date.format('seconds')` |
-| `func` | - |
-| `func.arity` | - |
-| `func.minArity` | - |
-| func max number of arguments | `func.maxArity` | - |
+| `func` | `function` |
+| `func.arity(length)` | `function.length(limit)` |
+| `func.minArity(length)` | `function.min(length)` |
+| `func.maxArity(length)` | `function.max(length)` |
 | `func.ref()` | - |
 | `number` | `number` |
 | `number.min(limit)` | `number.min(limit)` |

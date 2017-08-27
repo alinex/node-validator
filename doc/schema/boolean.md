@@ -1,6 +1,6 @@
 # Boolean Schema
 
-Create a schema that matches any data type.
+Create a schema that matches a boolean value.
 
 See at [Base Schema](base.md) for the inherited methods you may call like:
 - `title()`

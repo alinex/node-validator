@@ -389,7 +389,7 @@ ${set.stripDisallowed.description}. `
     const check = this._check
     try {
       this._checkNumber('min')
-      this._checkNumber('Max')
+      this._checkNumber('max')
       this._checkBoolean('truncate')
       if (check.max && check.min && check.min > check.max) {
         throw new Error('Min length can´t be greater than max length')

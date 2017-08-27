@@ -13,6 +13,7 @@
     - [Date](schema/date.md)
     - [Object](schema/object.md)
     - [Array](schema/array.md)
+    - [Function](schema/function.md)
   - [Logic](schema/logic.md)
   - [Extensions](schema/extensions.md)
     - [Port](schema/port.md)

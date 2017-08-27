@@ -1,6 +1,6 @@
 # String Schema
 
-Create a schema that matches any data type.
+Create a schema that matches a string type.
 
 See at [Any Schema](any.md) for the inherited methods you may call like:
 - `title()`

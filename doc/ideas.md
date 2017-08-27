@@ -24,7 +24,6 @@ File
 - min/max/greater/less as filesize (validatorjs)
 
 Specific Types
-- function (v2)
 - email (joi, validatorjs, v2)
 - ip (joi)
 - hostname (joi, v2)

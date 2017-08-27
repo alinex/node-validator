@@ -59,7 +59,7 @@ also the few changes below:
 | `float.toUnit=unit` | `number.toUnit(unit)` |
 | `float.format=fmt` | `number.format(fmt)` |
 | `float.locale=ll` | - |
-| `function` | - |
+| `function` | `function` |
 | `handlebars` | - |
 | `hostname` | - |
 | `integer` | `number.integer()` |
