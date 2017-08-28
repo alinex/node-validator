@@ -132,7 +132,7 @@ describe('object', () => {
 
   })
 
-  describe.only('copy/move', () => {
+  describe('copy/move', () => {
 
     it('should copy one key', () => {
       const data = { a: 1 }

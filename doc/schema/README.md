@@ -16,7 +16,11 @@ All types are based on the `Schema` class directly or indirectly.
 
 Each of this classes have different properties and settings which you can use to
 specify it. They mostly inherit the parent methods but sometimes the use of specific parent methods
-are disallowed. See each class's description for more details.
+are disallowed.
+Mostly the different validation settings you give are done in a predefined order, not always in the
+order you define it.
+
+See each class's description for more details.
 
 One exception is the reference which is a special type not a subclass of Schema because it
 didn't validate but will get the value from the defined resource. Read more about this later.
