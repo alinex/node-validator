@@ -26,6 +26,7 @@ class ObjectSchema extends Schema {
     this._rules.descriptor.push(
       this._typeDescriptor,
       this._structureDescriptor,
+      this._copyDescriptor,
       this._keysDescriptor,
       this._removeDescriptor,
       this._requiredKeysDescriptor,
@@ -37,6 +38,7 @@ class ObjectSchema extends Schema {
     this._rules.validator.push(
       this._typeValidator,
       this._structureValidator,
+      this._copyValidator,
       this._keysValidator,
       this._removeValidator,
       this._requiredKeysValidator,
@@ -127,6 +129,76 @@ as separator. `
       }
       recurse(data.value, '')
       data.value = result
+    }
+    return Promise.resolve()
+  }
+
+  copy(from?: string|Reference, to?: string|Reference, force: boolean = false): this {
+    const set = this._setting
+    if (from === undefined && to) throw new Error('Always two key names are required for copy')
+    if (to === undefined && from) throw new Error('Always two key names are required for copy')
+    if (from === undefined) delete set.copy
+    else {
+      if (!set.copy) set.copy = []
+      set.copy.push([from, to, false, force])
+    }
+    return this
+  }
+
+  move(from?: string|Reference, to?: string|Reference, force: boolean = false): this {
+    const set = this._setting
+    if (from === undefined && to) throw new Error('Always two key names are required for move')
+    if (to === undefined && from) throw new Error('Always two key names are required for move')
+    if (from === undefined) delete set.copy
+    else {
+      if (!set.copy) set.copy = []
+      set.copy.push([from, to, true, force])
+    }
+    return this
+  }
+
+  _copyDescriptor() {
+    const set = this._setting
+    let msg = ''
+    // copy
+    if (set.copy) {
+      msg += 'It will be copied/moved to:\n'
+      for (const rule of set.copy) {
+        msg += `- ${rule[2] ? 'move' : 'copy'} \
+${rule[0] instanceof Reference ? rule[0].description : rule[0]} to \
+${rule[1] instanceof Reference ? rule[1].description : rule[1]} \
+${rule[3] ? '(overwrite existing)' : '(if not exists)'}\n`
+      }
+    }
+    return `${msg}\n`
+  }
+
+  _copyValidator(data: Data): Promise<void> {
+    const check = this._check
+    try {
+      if (check.copy) {
+        check.copy.forEach((e, i) => {
+          if (typeof e[0] !== 'string') {
+            throw new Error(`No string value for from \`key\` setting given in \
+      ${(this._setting.copy[i] && this._setting.copy[i].description) || this._setting.copy[i]}`)
+          }
+          if (typeof e[1] !== 'string') {
+            throw new Error(`No string value for to \`key\` setting given in \
+      ${(this._setting.copy[i] && this._setting.copy[i].description) || this._setting.copy[i]}`)
+          }
+        })
+      }
+    } catch (err) {
+      return Promise.reject(new ValidationError(this, data, err.message))
+    }
+    // check value
+    if (check.copy) {
+      for (const rule of check.copy) {
+        if (rule[3] || !data.value[rule[1]]) {
+          data.value[rule[1]] = data.value[rule[0]]
+          if (rule[2]) delete data.value[rule[0]]
+        }
+      }
     }
     return Promise.resolve()
   }

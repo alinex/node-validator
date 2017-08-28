@@ -14,6 +14,9 @@ Reference
 Object
 - move() change key name (Joi rename)
 - copy()
+-> only if exists
+-> force to overwrite
+
 - requiredIf(schema)
 - forbiddenIf(schema)
 

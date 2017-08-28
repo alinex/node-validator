@@ -342,6 +342,16 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
             // preserve position to keep order on async results
             this._check[key][i] = null
             par.push(e.resolve(data).then((res) => { this._check[key][i] = res }))
+          } else if (Array.isArray(e)) {
+            this._check[key][i] = []
+            for (const j of e.keys()) {
+              const sub = e[j]
+              if (sub instanceof Reference) {
+                // preserve position to keep order on async results
+                this._check[key][i][j] = null
+                par.push(sub.resolve(data).then((res) => { this._check[key][i][j] = res }))
+              } else this._check[key][i][j] = sub
+            }
           } else this._check[key].push(e)
         }
       } else if (raw instanceof Map) {

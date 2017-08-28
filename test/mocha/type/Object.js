@@ -132,6 +132,112 @@ describe('object', () => {
 
   })
 
+  describe.only('copy/move', () => {
+
+    it('should copy one key', () => {
+      const data = { a: 1 }
+      const schema = new MySchema().copy('a', 'b')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1, b: 1 })
+      })
+    })
+
+    it('should copy multiple key', () => {
+      const data = { a: 1, b: 2 }
+      const schema = new MySchema().copy('a', 'b')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1, b: 2 })
+      })
+    })
+
+    it('should copy multiple key with force', () => {
+      const data = { a: 1, b: 2 }
+      const schema = new MySchema().copy('a', 'b', true)
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1, b: 1 })
+      })
+    })
+
+    it('should remove copy setting', () => {
+      const data = { a: 1 }
+      const schema = new MySchema().copy('a', 'b').copy()
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1 })
+      })
+    })
+
+    it('should use reference to copy to', () => {
+      const data = { a: 1, b: 2 }
+      const ref = new Reference('c')
+      const schema = new MySchema().copy('a', ref)
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1, b: 2, c: 1 })
+      })
+    })
+
+    it('should use reference as copy from', () => {
+      const data = { a: 1, b: 2 }
+      const ref = new Reference('b')
+      const schema = new MySchema().copy(ref, 'c')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 1, b: 2, c: 2 })
+      })
+    })
+
+    it('should move key', () => {
+      const data = { a: 1, b: 2 }
+      const schema = new MySchema().move('a', 'c')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ b: 2, c: 1 })
+      })
+    })
+
+    it('should move key by force', () => {
+      const data = { a: 1, b: 2 }
+      const schema = new MySchema().move('a', 'b', true)
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ b: 1 })
+      })
+    })
+
+    it('should move multiple in order', () => {
+      const data = { a: 1, b: 2 }
+      const schema = new MySchema().move('a', 'c').move('b', 'a').move('c', 'b')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal({ a: 2, b: 1 })
+      })
+    })
+
+    it('should describe copy', () => {
+      const schema = new MySchema().copy('a', 'b')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe move', () => {
+      const schema = new MySchema().move('a', 'b')
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+    it('should describe copy with reference', () => {
+      const ref = new Reference('b')
+      const schema = new MySchema().copy('a', ref)
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
   describe('key', () => {
 
     it('should work with defined keys', () => {

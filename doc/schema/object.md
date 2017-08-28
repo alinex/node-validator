@@ -54,6 +54,37 @@ const ref = new Reference('.')
 const schema = new ObjectSchema().flatten(ref)
 ```
 
+### copy(from, to, overwrite) / move(from, to, overwrite)
+
+This two methods allows you to copy, move and exchange the keys. It can be given multiple times
+and will be run in order. So also a switch is possible with the use of a temporary key.
+
+```js
+const schema = new ObjectSchema().copy('a', 'x') // x will be like a
+const schema = new ObjectSchema().move('a', 'x') // a will be renamed to x
+const schema = new ObjectSchema().copy('a', 'x', true) // x will be like a and also overwrite x if exists
+const schema = new ObjectSchema().move('a', 'x', true) // a will be renamed to x and also overwrite x if exists
+schema.copy() // to remove setting
+```
+
+The remove of the setting will always remove all copy and move entries regardless of which method is
+called. This can also be used with reference:
+
+```js
+const ref1 = new Reference('a')
+const ref2 = new Reference('b')
+const schema = new ObjectSchema().copy(ref1, ref2)
+```
+
+A switch may be done like:
+
+```js
+const schema = new ObjectSchema() // given a, b
+.move('a', 'temp') // now having b, temp
+.move('b', 'a') // now having a, temp
+.move('temp', 'b') /// now again a, b with switched values
+```
+
 ### removeUnknown
 
 This will remove all unchecked keys from the object. So only the specified are returned.

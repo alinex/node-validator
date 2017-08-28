@@ -116,7 +116,7 @@ alinex-validator.
 | `object.xor(peers)` | `object.xor(peers)` |
 | `object.with(key, peers)` | `object.with(key, peers)` |
 | `object.without(key, peers)` | `object.without(key, peers)` |
-| `object.rename(from, to)` | - |
+| `object.rename(from, to)` | `object.move(from, to)` |
 | `object.assert(ref, schema)` | `logic.if(schema(ref))` |
 | `object.unknown()` | `object.removeUnknown()` |
 | `object.type(constructor)` | - |

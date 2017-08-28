@@ -37,7 +37,7 @@ the impleentation is.
 | String     |  90% |  90% |         60% |
 | Number     | 100% |  70% |         40% |
 | Array      | 100% | 100% |         10% |
-| Object     |  80% |  90% |         70% |
+| Object     |  90% |  90% |         70% |
 | Function   | 100% | 100% |          0% |
 | Date       | 100% |  20% |         30% |
 | Logic      | 100% |  80% |         40% |
