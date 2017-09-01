@@ -17,6 +17,7 @@
   - [Logic](schema/logic.md)
   - [Extensions](schema/extensions.md)
     - [Port](schema/port.md)
+    - [IP](schema/ip.md)
   - [Reference](schema/reference.md)
 
 - [How To](howto.md)

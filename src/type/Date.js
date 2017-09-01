@@ -50,8 +50,8 @@ class DateSchema extends AnySchema {
     super(base)
     this._setting.type = 'datetime'
     // add check rules
-    let allow = this._rules.descriptor.pop()
     let raw = this._rules.descriptor.pop()
+    let allow = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._typeDescriptor,
       allow,

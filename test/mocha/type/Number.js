@@ -130,6 +130,15 @@ describe('number', () => {
       expect(helper.description(schema)).to.be.a('string')
     })
 
+    it('should allow byte', () => {
+      const data = 4096
+      const schema = new MySchema().unit('B').format('0$best')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('4KB')
+      })
+    })
+
   })
 
   describe('sanitize', () => {

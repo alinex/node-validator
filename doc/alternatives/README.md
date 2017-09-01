@@ -42,6 +42,7 @@ the impleentation is.
 | Date       | 100% |  20% |         30% |
 | Logic      | 100% |  80% |         40% |
 | Port       | 100% |   0% |          0% |
+| IP         | 100% |  10% |          0% |
 
 | Feature  | Alinex | Joi  | validatorjs |
 | -------- | ------:| ----:| -----------:|
