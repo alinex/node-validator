@@ -21,9 +21,10 @@ Number
 File
 - min/max/greater/less as filesize (validatorjs)
 
+Email (joi, validatorjs, v2)
+
 Specific Types
 - hostname (joi, v2)
-- email (joi, validatorjs, v2)
 - uri (joi, validatorjs, v2)
 - interval
 - regexp
