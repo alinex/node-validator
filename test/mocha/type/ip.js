@@ -11,7 +11,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = IPSchema
 
-describe.only('ip', () => {
+describe('ip', () => {
 
   describe('simple', () => {
 
