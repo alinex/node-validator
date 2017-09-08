@@ -249,7 +249,7 @@ class IPSchema extends AnySchema {
     let msg = ''
     if (set.format) {
       if (this._isReference('format')) {
-        msg += `The ip address will be formatted like defined under //${set.format.description}. `
+        msg += `The ip address will be formatted like defined under ${set.format.description}. `
       } else msg += `The ip address will be formatted in ${set.format} form. `
     }
     return msg.length ? `${msg.trim()}\n` : msg
