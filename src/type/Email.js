@@ -59,6 +59,62 @@ chars max per specification)'))
     return Promise.resolve()
   }
 
+  _allowValidator(data: Data): Promise<void> {
+    const check = this._check
+    this._checkArray('allow')
+    this._checkArray('deny')
+    // checking
+    let denyPriority = 0
+    let allowPriority = 0
+    if (check.deny && check.deny.length) {
+      const email = `${data.value.local}@${data.value.domain || 'localhost'}`.toLowerCase()
+      for (const e of check.deny) {
+        const match = e.match(/^(.*\S)\s+<(.*)>\s*$/)
+        let full = (match ? match[2] : e).trim().toLowerCase()
+        const at = full.lastIndexOf('@')
+        let domain = null
+        if (at === -1) {
+          domain = full
+          full = undefined
+        } else domain = full.substring(at + 1)
+        if (email === full) {
+          denyPriority = 99
+          break
+        }
+        if (domain.endsWith(`.${domain}`) || domain.endsWith(`@${domain}`)) {
+          const level = domain.match(/\./g)
+          if (level > denyPriority) denyPriority = level
+        }
+      }
+    }
+    if (check.allow && check.allow.length) {
+      const email = `${data.value.local}@${data.value.domain || 'localhost'}`.toLowerCase()
+      for (const e of check.allow) {
+        const match = e.match(/^(.*\S)\s+<(.*)>\s*$/)
+        let full = (match ? match[2] : e).trim().toLowerCase()
+        const at = full.lastIndexOf('@')
+        let domain = null
+        if (at === -1) {
+          domain = full
+          full = undefined
+        } else domain = full.substring(at + 1)
+        if (email === full) {
+          allowPriority = 99
+          break
+        }
+        if (domain.endsWith(`.${domain}`) || domain.endsWith(`@${domain}`)) {
+          const level = domain.match(/\./g)
+          if (level > allowPriority) allowPriority = level
+        }
+      }
+    }
+    if (denyPriority > allowPriority) {
+      return Promise.reject(new ValidationError(this, data,
+        'Element found in blacklist (denied item).'))
+    }
+    return Promise.resolve()
+  }
+
   withName(flag?: bool | Reference): this { return this._setFlag('withName', flag) }
   lowercase(flag?: bool | Reference): this { return this._setFlag('lowercase', flag) }
 
