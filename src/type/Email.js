@@ -81,8 +81,9 @@ chars max per specification)'))
           denyPriority = 99
           break
         }
-        if (domain.endsWith(`.${domain}`) || domain.endsWith(`@${domain}`)) {
-          const level = domain.match(/\./g)
+        if (email.endsWith(`.${domain}`) || email.endsWith(`@${domain}`)) {
+          const m = domain.match(/\./g)
+          const level = m ? m.length + 1 : 1
           if (level > denyPriority) denyPriority = level
         }
       }
@@ -102,8 +103,9 @@ chars max per specification)'))
           allowPriority = 99
           break
         }
-        if (domain.endsWith(`.${domain}`) || domain.endsWith(`@${domain}`)) {
-          const level = domain.match(/\./g)
+        if (email.endsWith(`.${domain}`) || email.endsWith(`@${domain}`)) {
+          const m = domain.match(/\./g)
+          const level = m ? m.length + 1 : 1
           if (level > allowPriority) allowPriority = level
         }
       }

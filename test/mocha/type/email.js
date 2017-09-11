@@ -54,6 +54,83 @@ describe.only('email', () => {
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
+
+  })
+
+  describe('allow', () => {
+
+    it('should work with email', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().allow(data)
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should fail with email', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().deny(data)
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should work with domain', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().allow('alinex.de')
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should fail with domain', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().deny('alinex.de')
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should work with TLD', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().allow('de')
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should fail with TLD', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().deny('de')
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should work with email althought domain is denied', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().deny('alinex.de').allow(data)
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should fail with email althought domain is allowed', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().deny(data).allow('alinex.de')
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
   })
 
   describe('lowercase', () => {
