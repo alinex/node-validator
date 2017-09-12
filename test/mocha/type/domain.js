@@ -119,4 +119,28 @@ be a valid domain name and so should be rejected because it can not be a domain 
 
   })
 
+  describe('punycode', () => {
+
+    it('should keep unicode if not set', () => {
+      const data = 'lügen.de'
+      const schema = new MySchema()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should transform to ascii', () => {
+      const data = 'lügen.de'
+      const schema = new MySchema().punycode()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('xn--lgen-0ra.de')
+      })
+    })
+
+  })
+
 })

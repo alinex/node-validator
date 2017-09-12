@@ -24,7 +24,6 @@ File
 Email (joi, validatorjs, v2)
 
 Specific Types
-- hostname (joi, v2)
 - uri (joi, validatorjs, v2)
 - interval
 - regexp

@@ -30,7 +30,7 @@ Here a basic comparison of alinex-validator against others is shown. You may als
 comparisons under each alternative's description. The values gives a hint, how complete in percent
 the impleentation is.
 
-| Feature  | Alinex | Joi  | validatorjs |
+| Type     | Alinex | Joi  | validatorjs |
 | -------- | ------:| ----:| -----------:|
 | Any        | 100% | 100% |        100% |
 | Boolean    | 100% |  80% |         80% |
@@ -43,6 +43,7 @@ the impleentation is.
 | Logic      | 100% |  80% |         40% |
 | Port       | 100% |   0% |          0% |
 | IP         | 100% |  10% |          0% |
+| Domain     | 100% |  10% |          0% |
 
 | Feature  | Alinex | Joi  | validatorjs |
 | -------- | ------:| ----:| -----------:|

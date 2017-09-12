@@ -55,12 +55,12 @@ The length here works on the number of labels within the domain name. Thats the 
 
 ## Formatting
 
-### lowercase
+### punycode
 
-This flag will turn the address part completely into lowercase. This is possible because the case
-is irrelevant for email addresses.
+The punycode is an ASCII presentation of international domain names. This is the form which is used
+internally in the DNS while the browser accepts and displays the unicode representation of it.
 
 ```js
-const schema = new DomainSchema().lowercase()
-schema.lowercase(false) // to remove settings
+const schema = new DomainSchema().punycode() // lügen.de -> xn--lgen-0ra.de
+schema.punycode(false) // to remove settings
 ```

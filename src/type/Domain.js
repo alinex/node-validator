@@ -1,6 +1,7 @@
 // @flow
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
 import util from 'util'
+import punycode from 'punycode'
 
 import StringSchema from './String'
 import ValidationError from '../Error'
@@ -14,17 +15,13 @@ class DomainSchema extends StringSchema {
     super(base)
     // add check rules
     let raw = this._rules.descriptor.pop()
-    let allow = this._rules.descriptor.pop()
     this._rules.descriptor.push(
-      //      this._typeDescriptor,
-      allow,
+      this._formatDescriptor,
       raw,
     )
     raw = this._rules.validator.pop()
-    allow = this._rules.validator.pop()
     this._rules.validator.push(
-      //      this._xxxValidator,
-      allow,
+      this._formatValidator,
       raw,
     )
     super.stripEmpty()
@@ -42,6 +39,9 @@ class DomainSchema extends StringSchema {
     if (typeof data.value !== 'string') {
       return Promise.reject(new ValidationError(this, data, 'A text string is needed.'))
     }
+    // convert iinternational domains
+    data.value = punycode.toASCII(data.value)
+    // check domain
     for (const p of data.value.split('.')) {
       if (p.length > 63) {
         return Promise.reject(new ValidationError(this, data, `Each label within the domain name \
@@ -51,6 +51,10 @@ should be smaller than 64 characters: '${p}' is to large`))
     if (data.value.length > 253) {
       return Promise.reject(new ValidationError(this, data, 'The full domain name is too large, such \
 names are not allowed in DNS'))
+    }
+    if (!data.value.match(/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/)) {
+      return Promise.reject(new ValidationError(this, data, 'Invalid domain name, only a-z, 0-9 and \
+`-` is allowed'))
     }
     return Promise.resolve()
   }
@@ -62,15 +66,15 @@ names are not allowed in DNS'))
     // checking
     let denyPriority = 0
     let allowPriority = 0
-    const domain = data.value.toLowerCase()
     if (check.deny && check.deny.length) {
       for (const e of check.deny) {
-        if (domain === e) {
+        const domain = punycode.toASCII(e)
+        if (data.value === domain) {
           denyPriority = 99
           break
         }
-        if (domain.endsWith(`.${e}`)) {
-          const m = e.match(/\./g)
+        if (data.value.endsWith(`.${domain}`)) {
+          const m = domain.match(/\./g)
           const level = m ? m.length + 1 : 1
           if (level > denyPriority) denyPriority = level
         }
@@ -78,12 +82,13 @@ names are not allowed in DNS'))
     }
     if (check.allow && check.allow.length) {
       for (const e of check.allow) {
-        if (domain === e) {
+        const domain = punycode.toASCII(e)
+        if (data.value === domain) {
           allowPriority = 99
           break
         }
-        if (domain.endsWith(`.${e}`)) {
-          const m = e.match(/\./g)
+        if (data.value.endsWith(`.${domain}`)) {
+          const m = domain.match(/\./g)
           const level = m ? m.length + 1 : 1
           if (level > allowPriority) allowPriority = level
         }
@@ -139,6 +144,32 @@ names are not allowed in DNS'))
         `The string has ${num} labels. \
  This is too much, not more than ${check.max} labels are allowed.`))
     }
+    return Promise.resolve()
+  }
+
+  punycode(flag?: bool | Reference): this { return this._setFlag('punycode', flag) }
+
+  _formatDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.punycode) {
+      if (this._isReference('punycode')) {
+        msg += `The domain is converted into its ASCII presentation if defined under \
+${set.punycode.description}. `
+      } else msg += 'The domain is converted to its ASCII presentation. '
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _formatValidator(data: Data): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('punycode')
+    } catch (err) {
+      return Promise.reject(new ValidationError(this, data, err.message))
+    }
+    // format
+    if (!check.punycode) data.value = punycode.toUnicode(data.value)
     return Promise.resolve()
   }
 }

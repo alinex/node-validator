@@ -61,7 +61,7 @@ also the few changes below:
 | `float.locale=ll` | - |
 | `function` | `function` |
 | `handlebars` | - |
-| `hostname` | - |
+| `hostname` | `domain` |
 | `integer` | `number.integer()` |
 | `integer.sanitize=true` | `number.sanitize()` |
 | `integer.unit=unit` | `number.unit(unit)` |
