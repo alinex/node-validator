@@ -66,8 +66,8 @@ chars max per specification)'))
     // checking
     let denyPriority = 0
     let allowPriority = 0
+    const email = `${data.value.local}@${data.value.domain || 'localhost'}`.toLowerCase()
     if (check.deny && check.deny.length) {
-      const email = `${data.value.local}@${data.value.domain || 'localhost'}`.toLowerCase()
       for (const e of check.deny) {
         const match = e.match(/^(.*\S)\s+<(.*)>\s*$/)
         let full = (match ? match[2] : e).trim().toLowerCase()
@@ -89,7 +89,6 @@ chars max per specification)'))
       }
     }
     if (check.allow && check.allow.length) {
-      const email = `${data.value.local}@${data.value.domain || 'localhost'}`.toLowerCase()
       for (const e of check.allow) {
         const match = e.match(/^(.*\S)\s+<(.*)>\s*$/)
         let full = (match ? match[2] : e).trim().toLowerCase()
@@ -112,7 +111,7 @@ chars max per specification)'))
     }
     if (denyPriority > allowPriority) {
       return Promise.reject(new ValidationError(this, data,
-        'Element found in blacklist (denied item).'))
+        'Email found in blacklist (denied item).'))
     }
     return Promise.resolve()
   }
