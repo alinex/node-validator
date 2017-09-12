@@ -18,9 +18,9 @@ And the methods from [String Schema](string.md):
 - `makeString()`
 - `trim`
 - `replace()`
-- `lowercase()`
-- `uppercase()`
-- `alphanum`
+- `lowerCase()`
+- `upperCase()`
+- `alphaNum`
 - `hex`
 - `allowControls`
 - `noHTML`

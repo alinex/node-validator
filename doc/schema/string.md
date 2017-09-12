@@ -70,41 +70,41 @@ schema.replace() // remove all setting
 
 > References are not possible here.
 
-### lowercase(what) / uppercase(what)
+### lowerCase(what) / upperCase(what)
 
-This will change between uppercase and lowercase on the whole text (with no parameter)
+This will change between upper case and lower case on the whole text (with no parameter)
 or only on the first with parameter `first`.
 
 ```js
-const schema = new StringSchema().lowercase().uppercase('first')
-schema.lowercase(false).uppercase(false) // remove setting
+const schema = new StringSchema().lowerCase().upperCase('first')
+schema.lowerCase(false).upperCase(false) // remove setting
 ```
 
-The first line will make everything lowercase but the first character uppercase.
+The first line will make everything lower case but the first character upper case.
 
 ```js
 const ref = new Reference(true)
-const schema = new StringSchema().lowercase(ref)
+const schema = new StringSchema().lowerCase(ref)
 ```
 
 ### stripDisallowed
 
 This will remove all disallowed characters defined through the checks:
-- `alphanum` - only alphanumeric characters
+- `alphaNum` - only alpha numeric characters
 - `hex` - only hexadecimal characters
 - `controls` - control characters allowed
 - `noHTML` - no HTML tags allowed
 
 ```js
-const schema = new StringSchema().alphanum().stripDisallowed()
-schema.alphanum(false).stripDisallowed(false) // to remove settings
+const schema = new StringSchema().alphaNum().stripDisallowed()
+schema.alphaNum(false).stripDisallowed(false) // to remove settings
 ```
 
 All of the flags allow to use references:
 
 ```js
 const ref = new Reference(true)
-const schema = new StringSchema().alphanum(ref)
+const schema = new StringSchema().alphaNum(ref)
 ```
 
 ### truncate(bool)
@@ -145,13 +145,13 @@ References are not possible here.
 
 ## Checks
 
-### alphanum(bool)
+### alphaNum(bool)
 
-Only alphanumeric characters are allowed: a-z, A-Z, 0-9 and _
+Only alphaNumeric characters are allowed: a-z, A-Z, 0-9 and _
 
 ```js
-const schema = new StringSchema().alphanum()
-schema.alphanum(false) // to remove setting
+const schema = new StringSchema().alphaNum()
+schema.alphaNum(false) // to remove setting
 ```
 
 In combination with `stripDisallowed` invalid characters will be removed to make
@@ -159,7 +159,7 @@ the text passable.
 
 ```js
 const ref = new Reference(true)
-const schema = new StringSchema().alphanum(ref)
+const schema = new StringSchema().alphaNum(ref)
 ```
 
 ### hex(bool)

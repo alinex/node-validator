@@ -158,24 +158,24 @@ class StringSchema extends AnySchema {
     return Promise.resolve()
   }
 
-  uppercase(what: bool | 'all' | 'first' | Reference = 'all') {
+  upperCase(what: bool | 'all' | 'first' | Reference = 'all') {
     const set = this._setting
-    if (what === false) delete set.uppercase
+    if (what === false) delete set.upperCase
     else {
-      if (set.lowercase === what) delete set.lowercase
-      if (set.uppercase === true) set.uppercase = 'all'
-      else set.uppercase = what
+      if (set.lowerCase === what) delete set.lowerCase
+      if (set.upperCase === true) set.upperCase = 'all'
+      else set.upperCase = what
     }
     return this
   }
 
-  lowercase(what: bool | 'all' | 'first' | Reference = 'all') {
+  lowerCase(what: bool | 'all' | 'first' | Reference = 'all') {
     const set = this._setting
-    if (what === false) delete set.lowercase
+    if (what === false) delete set.lowerCase
     else {
-      if (set.uppercase === what) delete set.uppercase
-      if (set.lowercase === true) set.lowercase = 'all'
-      else set.lowercase = what
+      if (set.upperCase === what) delete set.upperCase
+      if (set.lowerCase === true) set.lowerCase = 'all'
+      else set.lowerCase = what
     }
     return this
   }
@@ -183,48 +183,48 @@ class StringSchema extends AnySchema {
   _caseDescriptor() {
     const set = this._setting
     let msg = ''
-    if (set.lowercase === 'all') msg += 'Convert the whole text to lowercase. '
-    else if (set.uppercase === 'all') msg += 'Convert the whole text to uppercase. '
-    if (set.lowercase instanceof Reference) {
-      msg += `Lower case is used depending on ${set.lowercase.description}. `
-    } else if (set.uppercase instanceof Reference) {
-      msg += `Upper case is used depending on ${set.uppercase.description}. `
+    if (set.lowerCase === 'all') msg += 'Convert the whole text to lowerCase. '
+    else if (set.upperCase === 'all') msg += 'Convert the whole text to upperCase. '
+    if (set.lowerCase instanceof Reference) {
+      msg += `Lower case is used depending on ${set.lowerCase.description}. `
+    } else if (set.upperCase instanceof Reference) {
+      msg += `Upper case is used depending on ${set.upperCase.description}. `
     }
-    if (set.lowercase === 'first') msg += 'Convert only the first letter to lowercase. '
-    else if (set.uppercase === 'first') msg += 'Convert only the first letter to uppercase. '
+    if (set.lowerCase === 'first') msg += 'Convert only the first letter to lowerCase. '
+    else if (set.upperCase === 'first') msg += 'Convert only the first letter to upperCase. '
     return msg.length ? `${msg.replace(/ $/, '')}\n` : msg
   }
 
   _caseValidator(data: Data): Promise<void> {
     const check = this._check
     try {
-      this._checkBoolean('lowercase')
-      this._checkBoolean('uppercase')
+      this._checkBoolean('lowerCase')
+      this._checkBoolean('upperCase')
     } catch (err) {
       // no problem
     }
-    if (check.lowercase === true) check.lowercase = 'all'
-    else if (check.lowercase === false) delete check.lowercase
-    if (check.uppercase === true) check.uppercase = 'all'
-    else if (check.uppercase === false) delete check.uppercase
+    if (check.lowerCase === true) check.lowerCase = 'all'
+    else if (check.lowerCase === false) delete check.lowerCase
+    if (check.upperCase === true) check.upperCase = 'all'
+    else if (check.upperCase === false) delete check.upperCase
     try {
-      this._checkString('lowercase')
-      this._checkString('uppercase')
+      this._checkString('lowerCase')
+      this._checkString('upperCase')
     } catch (err) {
       return Promise.reject(new ValidationError(this, data, err.message))
     }
     // check value
-    if (check.lowercase === 'all') data.value = data.value.toLowerCase()
-    else if (check.uppercase === 'all') data.value = data.value.toUpperCase()
-    if (check.lowercase === 'first') {
+    if (check.lowerCase === 'all') data.value = data.value.toLowerCase()
+    else if (check.upperCase === 'all') data.value = data.value.toUpperCase()
+    if (check.lowerCase === 'first') {
       data.value = `${data.value.substr(0, 1).toLowerCase()}${data.value.substr(1)}`
-    } else if (check.uppercase === 'first') {
+    } else if (check.upperCase === 'first') {
       data.value = `${data.value.substr(0, 1).toUpperCase()}${data.value.substr(1)}`
     }
     return Promise.resolve()
   }
 
-  alphanum(flag?: bool | Reference): this { return this._setFlag('alphanum', flag) }
+  alphaNum(flag?: bool | Reference): this { return this._setFlag('alphaNum', flag) }
   hex(flag?: bool | Reference): this { return this._setFlag('hex', flag) }
   controls(flag?: bool | Reference): this { return this._setFlag('controls', flag) }
   noHTML(flag?: bool | Reference): this { return this._setFlag('noHTML', flag) }
@@ -233,10 +233,10 @@ class StringSchema extends AnySchema {
   _checkDescriptor() {
     const set = this._setting
     let msg = ''
-    if (set.alphanum instanceof Reference) {
+    if (set.alphaNum instanceof Reference) {
       msg += `Only alpha numerical characters are allowed depending on \
-${set.alphanum.description}. `
-    } else if (set.alphanum) {
+${set.alphaNum.description}. `
+    } else if (set.alphaNum) {
       msg += 'Only alpha numerical characters are allowed. '
     } else if (set.hex instanceof Reference) {
       msg += `Only hexa decimal characters are allowed depending on \
@@ -267,7 +267,7 @@ ${set.stripDisallowed.description}. `
     const check = this._check
     try {
       this._checkBoolean('stripDisallowed')
-      this._checkBoolean('alphanum')
+      this._checkBoolean('alphaNum')
       this._checkBoolean('hex')
       this._checkBoolean('controls')
       this._checkBoolean('noHTML')
@@ -276,7 +276,7 @@ ${set.stripDisallowed.description}. `
     }
     // check value
     if (check.stripDisallowed) {
-      if (check.alphanum) data.value = data.value.replace(/\W/g, '')
+      if (check.alphaNum) data.value = data.value.replace(/\W/g, '')
       else if (check.hex) data.value = data.value.replace(/[^a-fA-F0-9]/g, '')
       if (!check.controls) data.value = data.value.replace(/[^\x20-\x7E]/g, '')
       if (check.noHTML) {
@@ -284,7 +284,7 @@ ${set.stripDisallowed.description}. `
         data.value = striptags(data.value)
       }
     } else {
-      if (check.alphanum && data.value.match(/\W/)) {
+      if (check.alphaNum && data.value.match(/\W/)) {
         return Promise.reject(new ValidationError(this, data,
           'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
       } else if (check.hex && data.value.match(/[^a-fA-F0-9]/)) {

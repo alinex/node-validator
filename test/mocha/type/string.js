@@ -178,94 +178,94 @@ describe('string', () => {
 
   describe('case', () => {
 
-    it('should convert to lowercase', () => {
+    it('should convert to lowerCase', () => {
       const data = 'ABC'
-      const schema = new MySchema().lowercase()
+      const schema = new MySchema().lowerCase()
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('abc')
       })
     })
 
-    it('should convert to uppercase', () => {
+    it('should convert to upperCase', () => {
       const data = 'abc'
-      const schema = new MySchema().uppercase()
+      const schema = new MySchema().upperCase()
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('ABC')
       })
     })
 
-    it('should convert to lowercase first', () => {
+    it('should convert to lowerCase first', () => {
       const data = 'ABC'
-      const schema = new MySchema().lowercase('first')
+      const schema = new MySchema().lowerCase('first')
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('aBC')
       })
     })
 
-    it('should convert to uppercase first', () => {
+    it('should convert to upperCase first', () => {
       const data = 'abc'
-      const schema = new MySchema().uppercase('first')
+      const schema = new MySchema().upperCase('first')
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('Abc')
       })
     })
 
-    it('should remove lowercase', () => {
+    it('should remove lowerCase', () => {
       const data = 'ABC'
-      const schema = new MySchema().lowercase().lowercase(false)
+      const schema = new MySchema().lowerCase().lowerCase(false)
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       })
     })
 
-    it('should remove uppercase', () => {
+    it('should remove upperCase', () => {
       const data = 'abc'
-      const schema = new MySchema().uppercase().uppercase(false)
+      const schema = new MySchema().upperCase().upperCase(false)
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       })
     })
 
-    it('should convert to lowercase with reference', () => {
+    it('should convert to lowerCase with reference', () => {
       const data = 'ABC'
       const ref = new Reference(true)
-      const schema = new MySchema().lowercase(ref)
+      const schema = new MySchema().lowerCase(ref)
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('abc')
       })
     })
 
-    it('should convert to uppercase with reference', () => {
+    it('should convert to upperCase with reference', () => {
       const data = 'abc'
       const ref = new Reference(true)
-      const schema = new MySchema().uppercase(ref)
+      const schema = new MySchema().upperCase(ref)
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('ABC')
       })
     })
 
-    it('should describe uppercase, lowercase first', () => {
-      const schema = new MySchema().uppercase().lowercase('first')
+    it('should describe upperCase, lowerCase first', () => {
+      const schema = new MySchema().upperCase().lowerCase('first')
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should describe lowercase, uppercase first', () => {
-      const schema = new MySchema().lowercase().uppercase('first')
+    it('should describe lowerCase, upperCase first', () => {
+      const schema = new MySchema().lowerCase().upperCase('first')
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should describe uppercase with reference', () => {
+    it('should describe upperCase with reference', () => {
       const ref = new Reference(true)
-      const schema = new MySchema().uppercase(ref)
+      const schema = new MySchema().upperCase(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should describe lowercase with reference', () => {
+    it('should describe lowerCase with reference', () => {
       const ref = new Reference(true)
-      const schema = new MySchema().lowercase(ref)
+      const schema = new MySchema().lowerCase(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -274,53 +274,53 @@ describe('string', () => {
 
   describe('check', () => {
 
-    it('should only allow alphanum characters', () => {
+    it('should only allow alphaNum characters', () => {
       const data = 'abc'
-      const schema = new MySchema().alphanum()
+      const schema = new MySchema().alphaNum()
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       })
     })
 
-    it('should fail for non alphanum characters', () => {
+    it('should fail for non alphaNum characters', () => {
       const data = 'a+bc'
-      const schema = new MySchema().alphanum()
+      const schema = new MySchema().alphaNum()
       // use schema
       return helper.validateFail(schema, data, undefined)
     })
 
-    it('should remove non alphanum characters', () => {
+    it('should remove non alphaNum characters', () => {
       const data = 'a+bc'
-      const schema = new MySchema().alphanum().stripDisallowed()
+      const schema = new MySchema().alphaNum().stripDisallowed()
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('abc')
       })
     })
 
-    it('should remove alphanum setting', () => {
+    it('should remove alphaNum setting', () => {
       const data = 'a+bc'
-      const schema = new MySchema().alphanum().alphanum(false)
+      const schema = new MySchema().alphaNum().alphaNum(false)
       // use schema
       return helper.validateOk(schema, data, undefined)
     })
 
-    it('should allow reference for alphanum', () => {
+    it('should allow reference for alphaNum', () => {
       const data = 'a+bc'
       const ref = new Reference(true)
-      const schema = new MySchema().alphanum(ref)
+      const schema = new MySchema().alphaNum(ref)
       // use schema
       return helper.validateFail(schema, data, undefined)
     })
 
-    it('should describe alphanum chech', () => {
-      const schema = new MySchema().alphanum().stripDisallowed()
+    it('should describe alphaNum chech', () => {
+      const schema = new MySchema().alphaNum().stripDisallowed()
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
 
-    it('should describe alphanum reference', () => {
+    it('should describe alphaNum reference', () => {
       const ref = new Reference(true)
-      const schema = new MySchema().alphanum(ref)
+      const schema = new MySchema().alphaNum(ref)
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
