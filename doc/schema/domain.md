@@ -52,6 +52,27 @@ const schema = new DomainSchema()
 
 The length here works on the number of labels within the domain name. Thats the structural depth of it.
 
+### checkDNS(type)
+
+You can check that the server name is registered in the DNS. It is also possible to allow only names with specific entries if `type` is given. The type may be a list of, default is 'ANY':
+- 'A'	IPv4 addresses
+- 'AAAA'	IPv6 addresses
+- 'CNAME'	canonical name records
+- 'MX'	mail exchange records
+- 'NAPTR'	name authority pointer records
+- 'NS'	name server records
+- 'PTR'	pointer records
+- 'SOA'	start of authority records
+- 'SRV'	service records
+- 'TXT'	text records
+- 'ANY'	any records
+
+```js
+const schema = new DomainSchema().checkDNS() // check for any record
+const schema = new DomainSchema().checkDNS('MX') // check for mx record
+schema.checkDNS(false) // to remove settings
+```
+
 
 ## Formatting
 
@@ -63,4 +84,13 @@ internally in the DNS while the browser accepts and displays the unicode represe
 ```js
 const schema = new DomainSchema().punycode() // lügen.de -> xn--lgen-0ra.de
 schema.punycode(false) // to remove settings
+```
+
+### resolve
+
+If this flag is set the domain will be resolved to its IP which is given back.
+
+```js
+const schema = new DomainSchema().resolve() // alinex.de -> 95.173.102.23
+schema.resolve(false) // to remove settings
 ```

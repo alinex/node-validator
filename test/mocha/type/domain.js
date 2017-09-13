@@ -11,7 +11,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = DomainSchema
 
-describe.skip('domain', () => {
+describe('domain', () => {
 
   describe('simple', () => {
 
@@ -119,6 +119,53 @@ be a valid domain name and so should be rejected because it can not be a domain 
 
   })
 
+  describe('dns', function dnstest() {
+    this.timeout(5000)
+
+    it('should work with domain', () => {
+      const data = 'alinex.de'
+      const schema = new MySchema().dns()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should fail with domain', () => {
+      const data = 'alex.alinex'
+      const schema = new MySchema().dns()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should work with MX check', () => {
+      const data = 'alinex.de'
+      const schema = new MySchema().dns('MX')
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should fail with MX check', () => {
+      const data = 'www.alinex.de'
+      const schema = new MySchema().dns('MX')
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().dns()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
   describe('punycode', () => {
 
     it('should keep unicode if not set', () => {
@@ -139,6 +186,32 @@ be a valid domain name and so should be rejected because it can not be a domain 
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal('xn--lgen-0ra.de')
       })
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().punycode()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('resolve', () => {
+
+    it('should work', () => {
+      const data = 'alinex.de'
+      const schema = new MySchema().resolve()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('95.173.102.23')
+      })
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().resolve()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
     })
 
   })

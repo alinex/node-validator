@@ -2,6 +2,7 @@
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
 import util from 'util'
 import punycode from 'punycode'
+// load on demand: dns
 
 import StringSchema from './String'
 import ValidationError from '../Error'
@@ -16,11 +17,13 @@ class DomainSchema extends StringSchema {
     // add check rules
     let raw = this._rules.descriptor.pop()
     this._rules.descriptor.push(
+      this._dnsDescriptor,
       this._formatDescriptor,
       raw,
     )
     raw = this._rules.validator.pop()
     this._rules.validator.push(
+      this._dnsValidator,
       this._formatValidator,
       raw,
     )
@@ -147,7 +150,60 @@ names are not allowed in DNS'))
     return Promise.resolve()
   }
 
+  dns(type?: string | Array<string> | Reference | Boolean): this {
+    const set = this._setting
+    if (type === false) delete set.dns
+    else if (typeof type === 'string') set.dns = [type]
+    else set.dns = type || true
+    return this
+  }
+
+  _dnsDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.dns) {
+      if (this._isReference('dns')) {
+        msg += `The domain should has a valid record if set under \
+${set.dns.description}. `
+      } else if (set.dns === true) msg += 'The domain should has at least one DNS entry. '
+      else msg += `The domain should has at least one DNS record of type ${set.dns.join(', ')}. `
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _dnsValidator(data: Data): Promise<void> {
+    const check = this._check
+    if (check.dns) {
+      if (check.dns === true) check.dns = ['ANY']
+      else if (typeof check.dns === 'string') check.dns = [check.dns]
+      else if (!Array.isArray(check.dns)) {
+        return Promise.reject(new ValidationError(this, data, 'The dns setting is no string or string array'))
+      }
+    }
+    // run dns check
+    if (check.dns) {
+      return import('dns')
+        .then((dns) => {
+          const resolve = promisify(dns.resolve)
+          const p = check.dns.map((e) => {
+            const r = e === 'ANY' ? resolve(data.value) : resolve(data.value, e)
+            return r.catch(() => undefined)
+          })
+          return Promise.all(p).then((list) => {
+            const success = list.filter(e => Array.isArray(e) && e.length).length
+            if (!success) {
+              return Promise.reject(new ValidationError(this, data, `No DNS record of type \
+${check.dns.join(', ')} found`))
+            }
+            return Promise.resolve()
+          })
+        })
+    }
+    return Promise.resolve()
+  }
+
   punycode(flag?: bool | Reference): this { return this._setFlag('punycode', flag) }
+  resolve(flag?: bool | Reference): this { return this._setFlag('resolve', flag) }
 
   _formatDescriptor() {
     const set = this._setting
@@ -158,6 +214,12 @@ names are not allowed in DNS'))
 ${set.punycode.description}. `
       } else msg += 'The domain is converted to its ASCII presentation. '
     }
+    if (set.resolve) {
+      if (this._isReference('resolve')) {
+        msg += `The domain is resolved into its IP address if defined under \
+${set.resolve.description}. `
+      } else msg += 'The domain is resolved into its IP address. '
+    }
     return msg.length ? `${msg.trim()}\n` : msg
   }
 
@@ -165,11 +227,20 @@ ${set.punycode.description}. `
     const check = this._check
     try {
       this._checkBoolean('punycode')
+      this._checkBoolean('resolve')
     } catch (err) {
       return Promise.reject(new ValidationError(this, data, err.message))
     }
     // format
     if (!check.punycode) data.value = punycode.toUnicode(data.value)
+    if (check.resolve) {
+      return import('dns')
+        .then(dns => promisify(dns.lookup)(data.value)
+          .then((resolved) => {
+            data.value = resolved
+            return true
+          }))
+    }
     return Promise.resolve()
   }
 }
