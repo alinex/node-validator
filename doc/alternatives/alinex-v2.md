@@ -35,10 +35,10 @@ also the few changes below:
 | `datetime.format=fmt` | `date.format(fmt)` |
 | `datetime.locale=ll` | `date.toLocale(ll)` |
 | `datetime.toTimezine=tz` | `date.timezone(tz)` |
-| `email` | - |
-| `email.lowerCase=true` | - |
+| `email` | `email` |
+| `email.lowerCase=true` | `email.lowerCase()` |
 | `email.normalize=true` | - |
-| `email.checkServer=true` | - |
+| `email.checkServer=true` | `email.dns()` |
 | `email.checkBlacklisted=true` | - |
 | `email.checkGraylisted=true` | - |
 | `file` | - |
