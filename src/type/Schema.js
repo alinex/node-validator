@@ -370,6 +370,12 @@ ${(this._setting[name] && this._setting[name].description) || this._setting[name
     p = p.then(() => Promise.all(par))
     // run the rules seriously
     this._rules.validator.forEach((rule) => { p = p.then(() => rule.call(this, data)) })
+    //    this._rules.validator.forEach((rule) => {
+    //      p = p.then(() => {
+    //        console.log(rule)
+    //        return rule.call(this, data)
+    //      })
+    //    })
     return p.then(() => {
       if (this.debug.enabled) this.debug(`=> ${util.inspect(data)}`)
       data.done(data.value)

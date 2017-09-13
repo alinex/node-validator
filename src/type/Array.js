@@ -302,7 +302,6 @@ as separator.\n`
     })
     // catch up sub checks
     return Promise.all(checks)
-      .catch(err => Promise.reject(err))
       .then((result) => {
         data.value = result
         return Promise.resolve()

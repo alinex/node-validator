@@ -34,8 +34,8 @@ class NumberSchema extends AnySchema {
   constructor(base?: any) {
     super(base)
     // add check rules
-    let allow = this._rules.descriptor.pop()
     let raw = this._rules.descriptor.pop()
+    let allow = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._unitDescriptor,
       this._sanitizeDescriptor,
@@ -46,8 +46,8 @@ class NumberSchema extends AnySchema {
       this._formatDescriptor,
       raw,
     )
-    allow = this._rules.validator.pop()
     raw = this._rules.validator.pop()
+    allow = this._rules.validator.pop()
     this._rules.validator.push(
       this._unitValidator,
       this._sanitizeValidator,

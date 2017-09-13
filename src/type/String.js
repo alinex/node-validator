@@ -36,8 +36,8 @@ class StringSchema extends AnySchema {
   constructor(base?: any) {
     super(base)
     // add check rules
-    let allow = this._rules.descriptor.pop()
     let raw = this._rules.descriptor.pop()
+    let allow = this._rules.descriptor.pop()
     this._rules.descriptor.push(
       this._typeDescriptor,
       this._makeStringDescriptor,
@@ -49,8 +49,8 @@ class StringSchema extends AnySchema {
       allow,
       raw,
     )
-    allow = this._rules.validator.pop()
     raw = this._rules.validator.pop()
+    allow = this._rules.validator.pop()
     this._rules.validator.push(
       this._makeStringValidator,
       this._typeValidator,

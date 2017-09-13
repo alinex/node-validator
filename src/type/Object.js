@@ -271,7 +271,6 @@ ${schema.description.replace(/\n/g, '\n  ')}\n`
     })
     // catch up sub checks
     return Promise.all(checks)
-      .catch(err => Promise.reject(err))
       .then((result) => {
         if (result) {
           result.forEach((e: any, i: number) => { sum[keys[i]] = e.value })

@@ -11,7 +11,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = EmailSchema
 
-describe.skip('email', () => {
+describe.only('email', () => {
 
   describe('simple', () => {
 
@@ -51,6 +51,34 @@ describe.skip('email', () => {
 
     it('should describe with name', () => {
       const schema = new MySchema().withName()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('dns', () => {
+
+    it('should check', () => {
+      const data = 'Alex <alex@alinex.de>'
+      const schema = new MySchema().dns()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('alex@alinex.de')
+      })
+    })
+
+    it('should fail', () => {
+      const data = 'Alex <alex@www.alinex.de>'
+      const schema = new MySchema().dns()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().dns()
       // use schema
       expect(helper.description(schema)).to.be.a('string')
     })
@@ -131,35 +159,6 @@ describe.skip('email', () => {
       return helper.validateFail(schema, data)
     })
 
-  })
-
-  describe('lowercase', () => {
-
-    it('should convert email', () => {
-      const data = 'Alex <Alex@Alinex.DE>'
-      const schema = new MySchema().lowercase()
-      expect(schema).to.be.an('object')
-      // use schema
-      return helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal('alex@alinex.de')
-      })
-    })
-
-    it('should only work on mail part', () => {
-      const data = 'Alex <Alex@Alinex.DE>'
-      const schema = new MySchema().withName().lowercase()
-      expect(schema).to.be.an('object')
-      // use schema
-      return helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal('Alex <alex@alinex.de>')
-      })
-    })
-
-    it('should describe', () => {
-      const schema = new MySchema().lowercase()
-      // use schema
-      expect(helper.description(schema)).to.be.a('string')
-    })
   })
 
   describe.skip('local', () => {

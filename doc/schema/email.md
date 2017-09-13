@@ -9,14 +9,35 @@ This is a specialization of the `AnySchema` the methods used there are used in t
 - `forbidden()`
 - `default()`
 - `stripEmpty()`
-- `allow()`
-- `deny()`
-- `valid()`
-- `invalid()`
 - `raw()`
+
+And the methods from [String Schema](string.md):
+- `makeString()`
+- `trim`
+- `replace()`
+- `lowerCase()`
+- `upperCase()`
+- `alphaNum`
+- `hex`
+- `allowControls`
+- `noHTML`
+- `stripDisallowed`
+- `min()`
+- `max()`
+- `length()`
+- `match()`
+- `notMatch()`
+
+And the methods from [Domain Schema](domain.md):
+- `punycode()`
+- `resolve()`
 
 
 ## Checking
+
+### dns
+
+The dns flag here will trigger a `dns('MX')` check on the domain part of the email address.
 
 ### allow(list) / deny(list)
 
@@ -28,16 +49,6 @@ element has precedence over the more general ones.
 
 
 ## Formatting
-
-### lowercase
-
-This flag will turn the address part completely into lowercase. This is possible because the case
-is irrelevant for email addresses.
-
-```js
-const schema = new EmailSchema().lowercase()
-schema.lowercase(false) // to remove settings
-```
 
 ### withName
 

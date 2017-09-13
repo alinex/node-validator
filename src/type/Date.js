@@ -59,8 +59,8 @@ class DateSchema extends AnySchema {
       this._formatDescriptor,
       raw,
     )
-    allow = this._rules.validator.pop()
     raw = this._rules.validator.pop()
+    allow = this._rules.validator.pop()
     this._rules.validator.push(
       this._typeValidator,
       allow,
