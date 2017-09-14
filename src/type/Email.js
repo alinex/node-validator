@@ -1,13 +1,86 @@
 // @flow
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
 
+// load on demand: request-promise-native, dns, net
+
 import StringSchema from './String'
 import DomainSchema from './Domain'
+import IPSchema from './IP'
 import ValidationError from '../Error'
 import type Data from '../Data'
 import Reference from '../Reference'
 
-// load on demand: dns
+
+let myIP = null
+function getMyIP(): Promise<any> {
+  if (myIP) return Promise.resolve(myIP)
+  return import('request-promise-native')
+    .then((request: any) => request('http://ipinfo.io/ip'))
+    .then(html => new IPSchema().validate(html))
+    .then((ip) => {
+      myIP = ip
+      return ip
+    })
+    .catch((err) => {
+      Promise.reject(new Error(`Could not get own IP address (needed for further checks): ${err.message}`))
+    })
+}
+
+function connect(record: Object): Promise<bool> {
+  return import('net')
+    .then(net => new Promise((resolve, reject) => {
+      const domain = record.exchange
+      console.log(domain)
+      const client = net.createConnection(25, domain, () => {
+        console.log('send')
+        client.write('HELO #{ip}\r\n')
+        client.end()
+      })
+      console.log('+++++++')
+      let res = ''
+      client.on('data', (data) => {
+        console.log('data', data)
+        res += data.toString()
+      })
+      client.on('error', (err) => {
+        console.log('error', err)
+        reject(err)
+      })
+      client.on('end', () => {
+        console.log('----', res)
+        if (res.length) resolve(true)
+        reject(new Error('No response from server'))
+      })
+    }).catch(() => false)
+      .then((res) => {
+        console.log('========')
+        return res
+      }),
+    )
+}
+
+//     async.detect list, (domain, cb) =>
+//       if @debug.enabled
+//         @debug chalk.grey "#{@name}: check mail server under #{domain}"
+//       res = ''
+//       client = net.connect
+//         port: 25
+//         host: domain
+//       , ->
+//         client.write "HELO #{ip}\r\n"
+//         client.end()
+//       client.on 'data', (data) ->
+//   res += data.toString()
+//       client.on 'error', (err) =>
+//         if @debug.enabled
+//           @debug chalk.magenta err
+//       client.on 'end', =>
+//         if @debug.enabled
+//           @debug chalk.grey l for l in res.split /\n/
+//         cb null, res?.length > 0
+//     , (err, res) ->
+//       return cb() if res
+//       cb new Error "No correct responding mail server could be detected for this domain"
 
 class EmailSchema extends StringSchema {
   constructor(base?: any) {
@@ -18,6 +91,7 @@ class EmailSchema extends StringSchema {
     this._rules.descriptor.push(
       this._structDescriptor,
       allow,
+      this._connectDescriptor,
       this._formatDescriptor,
       raw,
     )
@@ -26,6 +100,7 @@ class EmailSchema extends StringSchema {
     this._rules.validator.push(
       this._structValidator,
       allow,
+      this._connectValidator,
       this._formatValidator,
       raw,
     )
@@ -143,6 +218,42 @@ chars max per specification)'))
     if (denyPriority > allowPriority) {
       return Promise.reject(new ValidationError(this, data,
         'Email found in blacklist (denied item).'))
+    }
+    return Promise.resolve()
+  }
+
+  connect(flag?: bool | Reference): this { return this._setFlag('connect', flag) }
+
+  _connectDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.connect) {
+      if (this._isReference('connect')) {
+        msg += `Check if a handshake with the mailserver is possible if set under \
+${set.connect.description}. `
+      } else msg += 'Check if a handshake with the mailserver is possible. '
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _connectValidator(data: Data): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('connect')
+    } catch (err) {
+      return Promise.reject(new ValidationError(this, data, err.message))
+    }
+    // format
+    if (check.connect) {
+      return import('dns')
+        // get all mx record
+        .then(dns => promisify(dns.resolve)(data.value.domain, 'MX'))
+        .then(list => Promise.all(list.map(e => connect(e)))
+          .then((res) => {
+            console.log('done', res)
+            if (res.filter(e => e).length) return undefined
+            return Promise.reject(new Error('No correct responding mail server could be detected for this domain'))
+          }))
     }
     return Promise.resolve()
   }

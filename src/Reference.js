@@ -4,7 +4,8 @@ import util from 'alinex-util'
 import childProcess from 'child_process'
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
 import fs from 'fs'
-import request from 'request-promise-native'
+
+// load on demand: request-promise-native
 
 import Data from './Data'
 
@@ -61,7 +62,8 @@ function sourceFile(data: any): any {
 
 function sourceWeb(data: any): any {
   if (typeof data !== 'string' || !data.match(/https?:\/\//)) return data
-  return request(data)
+  return import('request-promise-native')
+    .then((request: any) => request(data))
 }
 
 const accessor = {}

@@ -11,7 +11,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = EmailSchema
 
-describe.only('email', () => {
+describe('email', () => {
 
   describe('simple', () => {
 
@@ -161,30 +161,16 @@ describe.only('email', () => {
 
   })
 
-  describe.skip('local', () => {
+  describe.only('connect', () => {
 
-    it('should work with local ipv4', () => {
-      const data = '127.0.0.1'
-      const schema = new MySchema()
+    it('should work', () => {
+      const data = 'alex@alinex.de'
+      const schema = new MySchema().connect()
       expect(schema).to.be.an('object')
       // use schema
       return helper.validateOk(schema, data, (res) => {
         expect(res).deep.equal(data)
       })
-    })
-
-    it('should fail for invalid ip', () => {
-      const data = '300.92.16.2'
-      const schema = new MySchema()
-      expect(schema).to.be.an('object')
-      // use schema
-      return helper.validateFail(schema, data)
-    })
-
-    it('should describe', () => {
-      const schema = new MySchema()
-      // use schema
-      expect(helper.description(schema)).to.be.a('string')
     })
 
   })
