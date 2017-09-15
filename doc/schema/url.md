@@ -31,11 +31,26 @@ And the methods from [String Schema](string.md):
 
 ## Checking
 
+### dns
 
-In advance to the pure dns checking `dns()` this really connects to the server and checks so if
-a real mailserver is running under this domain. It will not validate the local part.
+The dns flag here will trigger a `dns()` check on the domain part of the URL.
+
+### allow(list) / deny(list)
+
+In principal this is identical to the any type and also `valid(item)` and `invalid(item)` may be used
+but the matching is a way complexer.
+
+You can give
+- protocol - `http:`
+- protocol with host - `http://alinex.de`
+- path - `/index.html`
+- complete url
+
+### resolve(base)
+
+For relative URLs this gives a base to resolve them to a full URL.
 
 ```js
-const schema = new EmailSchema().connect()
-schema.connect(false) // to remove settings
+const schema = new URLSchema().resolve('https://alinex.github.io')
+schema.resolve() // to remove settings
 ```

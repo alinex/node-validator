@@ -120,3 +120,10 @@ also the few changes below:
 | `string.endsWith=text` | `string.match(/text$/)` |
 | `string.match=match` | `string.match(match)` |
 | `string.matchNot=match` | `string.notMatch(match)` |
+| `url` | `url` |
+| `url.toAbsoluteBase=href` | `url.resolve(href)` |
+| `url.removeQuery` | - |
+| `url.hostsAllowed=list` | `url.allow(list)` |
+| `url.hostsDenied=list` | `url.deny(list)` |
+| `url.allowProtocols=list` | `url.allow(list)` |
+| `url.allowRelative=true` | - |

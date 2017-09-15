@@ -86,14 +86,14 @@ ${set.resolve.description}. `
       // get lists
       const list = check.deny.map(e => url.parse(e))
       const protocol = list.map(e => e.protocol)
-        .filter(e => e.length && data.value.protocol === e)
+        .filter(e => e && e.length && data.value.protocol === e)
       const host = list.map(e => e.host)
-        .filter(e => e.length && data.value.host === e)
+        .filter(e => e && e.length && data.value.host === e)
       const hostname = list.map(e => e.hostname)
-        .filter(e => e.length && data.value.hostname === e)
+        .filter(e => e && e.length && data.value.hostname === e)
       const path = list.map(e => e.path)
-        .filter(e => e.length && data.value.path.includes(e))
-      if (protocol || hostname || host || path) {
+        .filter(e => e && e.length && data.value.path.includes(e))
+      if (protocol.length || hostname.length || host.length || path.length) {
         return Promise.reject(new ValidationError(this, data,
           'URL found in blacklist (denied item).'))
       }
@@ -102,14 +102,14 @@ ${set.resolve.description}. `
       // get lists
       const list = check.allow.map(e => url.parse(e))
       const protocol = list.map(e => e.protocol)
-        .filter(e => !e.length || data.value.protocol === e)
+        .filter(e => !e || !e.length || data.value.protocol === e)
       const host = list.map(e => e.host)
-        .filter(e => !e.length || data.value.host === e)
+        .filter(e => !e || !e.length || data.value.host === e)
       const hostname = list.map(e => e.hostname)
-        .filter(e => !e.length || data.value.hostname === e)
+        .filter(e => !e || !e.length || data.value.hostname === e)
       const path = list.map(e => e.path)
-        .filter(e => !e.length || data.value.path.includes(e))
-      if (!protocol || !hostname || !host || !path) {
+        .filter(e => !e || !e.length || data.value.path.includes(e))
+      if (!protocol.length || !hostname.length || !host.length || !path.length) {
         return Promise.reject(new ValidationError(this, data,
           'URL not found in whitelist (allowed item).'))
       }

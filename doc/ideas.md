@@ -22,7 +22,6 @@ File
 - min/max/greater/less as filesize (validatorjs)
 
 Specific Types
-- uri (joi, validatorjs, v2)
 - interval
 - regexp
 - handlebars (v2)

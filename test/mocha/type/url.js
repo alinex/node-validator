@@ -41,7 +41,7 @@ describe.only('url', () => {
       expect(schema).to.be.an('object')
       // use schema
       return helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal('http://alinex.github.io/')
+        expect(res).deep.equal('https://alinex.github.io/')
       })
     })
 

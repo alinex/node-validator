@@ -71,5 +71,5 @@ same using alinex-validator.
 | `size:value` for number | number.length(value) |
 | `size:value` for string | string.length(value) |
 | `string` | `string` |
-| `url` | - |
+| `url` | `url` |
 | `regex:pattern` | `string.match(pattern)` |
