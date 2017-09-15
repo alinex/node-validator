@@ -53,7 +53,7 @@ same using alinex-validator.
 | `date` | `date` |
 | `digits:value` | `number.length(value)` |
 | `different:attribute` | `any.deny(ref().path(attribute))` |
-| `email` | - |
+| `email` | `email` |
 | `in:foo,bar,...` | `any.allow([foo,bar])` |
 | `integer` | `number.integer()` |
 | `max:value` | `number.max(value)` |

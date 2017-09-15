@@ -57,7 +57,7 @@ describe('email', () => {
 
   })
 
-  describe.only('normalize', () => {
+  describe('normalize', () => {
 
     it('should optimize google server name', () => {
       const data = 'alex@googlemail.com'

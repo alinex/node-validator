@@ -135,7 +135,7 @@ alinex-validator.
 | `string.replace(re, text)` | `string.replace(re, text)` |
 | `string.alphanum()` | `string.alphanum()` |
 | `string.token()` | `string.match(/^[A-Za-z0-9_]*$/)` |
-| `string.email()` | - |
+| `string.email()` | `email` |
 | `string.ip()` | `ip` |
 | `string.uri()` | - |
 | `string.guid()` | - |

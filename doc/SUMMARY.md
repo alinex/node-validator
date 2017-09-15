@@ -20,6 +20,7 @@
     - [Email](schema/email.md)
     - [IP](schema/ip.md)
     - [Port](schema/port.md)
+    - [URL](schema/url.md)
   - [Reference](schema/reference.md)
 
 - [How To](howto.md)

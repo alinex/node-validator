@@ -176,8 +176,8 @@ chars max per specification)'))
 
   _allowValidator(data: Data): Promise<void> {
     const check = this._check
-    this._checkArray('allow')
-    this._checkArray('deny')
+    this._checkArrayString('allow')
+    this._checkArrayString('deny')
     // checking
     let denyPriority = 0
     let allowPriority = 0
