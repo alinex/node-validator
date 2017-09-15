@@ -37,10 +37,10 @@ also the few changes below:
 | `datetime.toTimezine=tz` | `date.timezone(tz)` |
 | `email` | `email` |
 | `email.lowerCase=true` | `email.lowerCase()` |
-| `email.normalize=true` | - |
+| `email.normalize=true` | `email.normalize` |
 | `email.checkServer=true` | `email.dns()` |
-| `email.checkBlacklisted=true` | - |
-| `email.checkGraylisted=true` | - |
+| `email.checkBlacklisted=true` | `email.blackList` |
+| `email.checkGraylisted=true` | `email.greyList` |
 | `file` | - |
 | `file.basedir=dir` | - |
 | `file.resolve=true` | - |

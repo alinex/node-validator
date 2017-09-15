@@ -47,8 +47,47 @@ but the matching is a way complexer.
 You can give complete email addresses, sub domains, domains or TLD in the list. The more precise
 element has precedence over the more general ones.
 
+### connect
+
+In advance to the pure dns checking `dns()` this really connects to the server and checks so if
+a real mailserver is running under this domain. It will not validate the local part.
+
+```js
+const schema = new EmailSchema().connect()
+schema.connect(false) // to remove settings
+```
+
+### blackList / greyList
+
+In advance the mail server can be checked to not be on a
+- blacklist for abusive use
+- greylist for untrusted mail accounts
+
+```js
+const schema = new EmailSchema()
+.blackList() // check for black listed (Spammer)
+.greyList()  // check for grey listed (One time accounts...)
+schema.blackList(false).greyList(false) // to remove settings
+```
+
 
 ## Formatting
+
+### normalize
+
+Extended formats like additional domains, sub domains and tags which mostly belong to the same mailbox
+will be removed.
+
+```js
+const schema = new EmailSchema().normalize()
+schema.normalize(false) // to remove settings
+```
+
+Beispiele:
+- `alex@googlemail.com` -> `alex@gmail.com`
+- `a.l.e.x@gmail.com` -> `alex@gmail.com`
+- `alex+spam@gmail.com` -> `alex@gmail.com`
+- `a.l.e.x@facebook.com` -> `alex@facebook.com`
 
 ### withName
 

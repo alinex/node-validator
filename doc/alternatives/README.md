@@ -44,6 +44,7 @@ the impleentation is.
 | Port       | 100% |   0% |          0% |
 | IP         | 100% |  10% |          0% |
 | Domain     | 100% |  10% |          0% |
+| Email      | 100% |  20% |         20% |
 
 | Feature  | Alinex | Joi  | validatorjs |
 | -------- | ------:| ----:| -----------:|

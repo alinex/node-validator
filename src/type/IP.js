@@ -107,6 +107,7 @@ class IPSchema extends AnySchema {
                   }))
             }
           }
+          if (!ip) return Promise.reject(new Error('The given value could not be parsed as any valid IP address'))
           data.value = ip
           return Promise.resolve()
         }

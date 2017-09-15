@@ -1,5 +1,6 @@
 // @flow
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
+import Debug from 'debug'
 
 // load on demand: request-promise-native, dns, net
 
@@ -10,77 +11,59 @@ import ValidationError from '../Error'
 import type Data from '../Data'
 import Reference from '../Reference'
 
+const debug = Debug('validator:email')
 
-let myIP = null
+let myIP: string = ''
 function getMyIP(): Promise<any> {
-  if (myIP) return Promise.resolve(myIP)
+  if (myIP.length) return Promise.resolve(myIP)
   return import('request-promise-native')
     .then((request: any) => request('http://ipinfo.io/ip'))
-    .then(html => new IPSchema().validate(html))
+    .then(html => new IPSchema().validate(html.trim()))
     .then((ip) => {
       myIP = ip
       return ip
     })
-    .catch((err) => {
-      Promise.reject(new Error(`Could not get own IP address (needed for further checks): ${err.message}`))
-    })
+    .catch(err => Promise.reject(new Error(`Could not get own IP address (needed for further checks): ${err.message}`)))
 }
 
 function connect(record: Object): Promise<bool> {
-  return import('net')
-    .then(net => new Promise((resolve, reject) => {
-      const domain = record.exchange
-      console.log(domain)
+  const domain = record.exchange
+  return getMyIP()
+    .then(() => import('net'))
+    .then(net => new Promise((resolve) => {
       const client = net.createConnection(25, domain, () => {
-        console.log('send')
-        client.write('HELO #{ip}\r\n')
+        debug('Send HELO command to mailserver...')
+        client.write(`HELO ${myIP}\r\n`)
+        client.write('QUIT\r\n')
         client.end()
       })
-      console.log('+++++++')
       let res = ''
       client.on('data', (data) => {
-        console.log('data', data)
         res += data.toString()
       })
       client.on('error', (err) => {
-        console.log('error', err)
-        reject(err)
+        debug(`Error from server ${domain}: ${err.message}`)
+        resolve(false)
       })
       client.on('end', () => {
-        console.log('----', res)
-        if (res.length) resolve(true)
-        reject(new Error('No response from server'))
+        if (res.length) {
+          debug(`Server ${domain} responded with:\n${res.trim()}`)
+          return resolve(true)
+        }
+        debug(`No valid response from server ${domain}`)
+        return resolve(false)
       })
-    }).catch(() => false)
-      .then((res) => {
-        console.log('========')
-        return res
-      }),
-    )
+    }))
 }
 
-//     async.detect list, (domain, cb) =>
-//       if @debug.enabled
-//         @debug chalk.grey "#{@name}: check mail server under #{domain}"
-//       res = ''
-//       client = net.connect
-//         port: 25
-//         host: domain
-//       , ->
-//         client.write "HELO #{ip}\r\n"
-//         client.end()
-//       client.on 'data', (data) ->
-//   res += data.toString()
-//       client.on 'error', (err) =>
-//         if @debug.enabled
-//           @debug chalk.magenta err
-//       client.on 'end', =>
-//         if @debug.enabled
-//           @debug chalk.grey l for l in res.split /\n/
-//         cb null, res?.length > 0
-//     , (err, res) ->
-//       return cb() if res
-//       cb new Error "No correct responding mail server could be detected for this domain"
+function checklist(name: string, access: Object, record: Object): Promise<string> {
+  const domain = record.exchange
+  const reverse = `${domain.split('.').reverse().join('.')}.${access.zone}`
+  return import('dns')
+    .then(dns => promisify(dns.resolve)(reverse))
+    .then(() => name)
+    .catch(() => '')
+}
 
 class EmailSchema extends StringSchema {
   constructor(base?: any) {
@@ -92,6 +75,8 @@ class EmailSchema extends StringSchema {
       this._structDescriptor,
       allow,
       this._connectDescriptor,
+      this._blacklistDescriptor,
+      this._greylistDescriptor,
       this._formatDescriptor,
       raw,
     )
@@ -101,6 +86,8 @@ class EmailSchema extends StringSchema {
       this._structValidator,
       allow,
       this._connectValidator,
+      this._blacklistValidator,
+      this._greylistValidator,
       this._formatValidator,
       raw,
     )
@@ -119,13 +106,25 @@ class EmailSchema extends StringSchema {
     return 'It has to be a reasonable email address with optional descriptive part.\n'
   }
 
+  normalize(flag?: bool | Reference): this { return this._setFlag('normalize', flag) }
+
   _structDescriptor() {
     const set = this._setting
+    let msg = ''
+    if (set.normalize) {
+      if (this._isReference('normalize')) {
+        msg += `Extended formats like additional domains, sub domains and tags which mostly belong to \
+the same mailbox will be removed. if set under ${set.normalize.description}. `
+      } else {
+        msg += 'Extended formats like additional domains, sub domains and tags which mostly belong \
+to the same mailbox will be removed. '
+      }
+    }
     const schema = new DomainSchema()
     if (set.dns) schema.dns('MX')
     if (set.punycode) schema.punycode()
     else if (set.resolve) schema.resolve()
-    return `- domain part: ${schema.description}\n`
+    return `${msg}- domain part: ${schema.description}\n\n`
   }
 
   _structValidator(data: Data): Promise<void> {
@@ -143,6 +142,16 @@ class EmailSchema extends StringSchema {
       result.domain = full.substring(at + 1)
     }
     data.value = result
+    // normalize
+    if (check.normalize) {
+      if (result.domain.match(/^g(oogle)?mail\.com$/i)) {
+        result.local = result.local.replace(/\.|\+.*$/g, '') // dots or +... are removed
+        result.domain = 'gmail.com'
+      }
+      if (result.domain.match(/^facebook\.com$/i)) {
+        result.local = result.local.replace(/\./g, '') // dots are removed
+      }
+    }
     // check parts
     if (!data.value.domain) {
       return Promise.reject(new ValidationError(this, data, 'The email address is missing the server \
@@ -229,9 +238,9 @@ chars max per specification)'))
     let msg = ''
     if (set.connect) {
       if (this._isReference('connect')) {
-        msg += `Check if a handshake with the mailserver is possible if set under \
+        msg += `A handshake with the mail server should be possible possible if set under \
 ${set.connect.description}. `
-      } else msg += 'Check if a handshake with the mailserver is possible. '
+      } else msg += 'A handshake with the mail server should be possible. '
     }
     return msg.length ? `${msg.trim()}\n` : msg
   }
@@ -248,12 +257,93 @@ ${set.connect.description}. `
       return import('dns')
         // get all mx record
         .then(dns => promisify(dns.resolve)(data.value.domain, 'MX'))
-        .then(list => Promise.all(list.map(e => connect(e)))
-          .then((res) => {
-            console.log('done', res)
-            if (res.filter(e => e).length) return undefined
-            return Promise.reject(new Error('No correct responding mail server could be detected for this domain'))
-          }))
+        .then(list => Promise.all(list.map(e => connect(e))))
+        .then((res) => {
+          if (res.filter(e => e).length) return undefined
+          return Promise.reject(new Error('No correct responding mail server could be detected for this domain'))
+        })
+    }
+    return Promise.resolve()
+  }
+
+  blackList(flag?: bool | Reference): this { return this._setFlag('blackList', flag) }
+
+  _blacklistDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.blackList) {
+      if (this._isReference('blackList')) {
+        msg += `The mail server should not be on any black list if set under \
+${set.blackList.description}. `
+      } else msg += 'The mail server should not be on any black list. '
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _blacklistValidator(data: Data): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('blackList')
+    } catch (err) {
+      return Promise.reject(new ValidationError(this, data, err.message))
+    }
+    // format
+    if (check.blackList) {
+      return import('../../config/blacklists.json')
+        .then(list => Promise.all(Object.keys(list).map((k) => {
+          debug(`check in blacklist: ${k}`)
+          return import('dns')
+            // get all mx record
+            .then(dns => promisify(dns.resolve)(data.value.domain, 'MX'))
+            .then(addr => Promise.all(addr.map(e => checklist(k, list[k], e))))
+            .then((res) => {
+              const found = res.filter(e => !e)
+              if (found.length) return undefined
+              return Promise.reject(new Error(`Found on the blacklists: ${found.join(', ')}`))
+            })
+        })))
+        .then()
+    }
+    return Promise.resolve()
+  }
+
+  greyList(flag?: bool | Reference): this { return this._setFlag('greyList', flag) }
+
+  _greylistDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.greyList) {
+      if (this._isReference('greyList')) {
+        msg += `The mail server should not be on any black list if set under \
+${set.greyList.description}. `
+      } else msg += 'The mail server should not be on any black list. '
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _greylistValidator(data: Data): Promise<void> {
+    const check = this._check
+    try {
+      this._checkBoolean('greyList')
+    } catch (err) {
+      return Promise.reject(new ValidationError(this, data, err.message))
+    }
+    // format
+    if (check.greyList) {
+      return import('../../config/greylists.json')
+        .then(list => Promise.all(Object.keys(list).map((k) => {
+          debug(`check in greylist: ${k}`)
+          return import('dns')
+            // get all mx record
+            .then(dns => promisify(dns.resolve)(data.value.domain, 'MX'))
+            .then(addr => Promise.all(addr.map(e => checklist(k, list[k], e))))
+            .then((res) => {
+              const found = res.filter(e => !e)
+              if (found.length) return undefined
+              return Promise.reject(new Error(`Found on the greylists: ${found.join(', ')}`))
+            })
+        })))
+        .then()
     }
     return Promise.resolve()
   }

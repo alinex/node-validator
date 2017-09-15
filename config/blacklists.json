@@ -1,0 +1,51 @@
+{
+  "0spam DNSBL": {
+    "zone": "0spam.fusionzero.com",
+    "url": "http://0spam.fusionzero.com/",
+    "desc": "blacklist IP or ranges detected by spam traps"
+  },
+  "abuse.ch ZeuS Tracker IP": {
+    "zone": "ipbl.zeustracker.abuse.ch",
+    "url": "https://zeustracker.abuse.ch/",
+    "desc": "ZeuS Bot infected IPs"
+  },
+  "abuse.ro IP RBL": {
+    "zone": "rbl.abuse.ro",
+    "url": "http://www.abuse.ro/",
+    "desc": "Spam trap based blacklisting"
+  },
+  "anonmails.de DNSBL": {
+    "zone": "spam.dnsbl.anonmails.de",
+    "url": "http://www.anonmails.de/dnsbl.php"
+  },
+  "Barracuda Reputation Block List": {
+    "zone": "b.barracudacentral.org",
+    "url": "http://www.barracudacentral.org/rbl/",
+    "desc": "IP addresses known to send spam"
+  },
+  "Spamhaus SBL Spamhaus Block List": {
+    "zone": "sbl.spamhaus.org",
+    "url": "http://www.spamhaus.org/sbl/",
+    "desc": "a database of IP addresses from which Spamhaus does not recommend the acceptance of electronic mai"
+  },
+  "Spamhaus XBL Exploits Block List": {
+    "zone": "xbl.spamhaus.org",
+    "url": "http://www.spamhaus.org/xbl/",
+    "desc": "IP addresses of hijacked PCs infected by illegal 3rd party exploits, including open proxies, worms/viruses with built-in spam engines, and other types of trojan-horse exploits"
+  },
+  "UCEPROTECT Level 1": {
+    "zone": "dnsbl-1.uceprotect.net",
+    "url": "http://www.uceprotect.net/en/index.php?m=3&s=3",
+    "desc": "single IP addresses which were used by spammers / abusers"
+  },
+  "UCEPROTECT Level 2": {
+    "zone": "dnsbl-2.uceprotect.net",
+    "url": "http://www.uceprotect.net/en/index.php?m=3&s=4",
+    "desc": "IP addresses within a net block, then it is either several compromised computers within the IP pool or the IP range of a spam company"
+  },
+  "UCEPROTECT Level 3": {
+    "zone": "dnsbl-3.uceprotect.net",
+    "url": "http://www.uceprotect.net/en/index.php?m=3&s=5",
+    "desc": "all IP's within an ASN except those approved and clean IP's that are registered at ips.whitelisted.org if more than 100 IP's, but also a minimum of 0.2% of all IP's allocated to this ASN got Level 1 listed within the last 7 days"
+  }
+}

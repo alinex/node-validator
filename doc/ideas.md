@@ -21,8 +21,6 @@ Number
 File
 - min/max/greater/less as filesize (validatorjs)
 
-Email (joi, validatorjs, v2)
-
 Specific Types
 - uri (joi, validatorjs, v2)
 - interval

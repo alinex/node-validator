@@ -5,7 +5,7 @@ module.exports = {
   parser: "babel-eslint",
   parserOptions: { sourceType: 'module' },
   rules: {
-    'max-len': [ 'warn', 100 ],
+    'max-len': [ 'warn', 120 ],
     'indent': [ 'error', 2 ],
     'linebreak-style': [ 'error', 'unix' ],
     'semi': [ 'warn', 'never' ],
