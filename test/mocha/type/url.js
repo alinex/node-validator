@@ -11,7 +11,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = URLSchema
 
-describe.only('url', () => {
+describe('url', () => {
 
   describe('simple', () => {
 
@@ -51,6 +51,54 @@ describe.only('url', () => {
       expect(schema).to.be.an('object')
       // use schema
       return helper.validateFail(schema, data)
+    })
+
+  })
+
+  describe('dns', () => {
+
+    it('should work', () => {
+      const data = 'http://alinex.github.io'
+      const schema = new MySchema().dns()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('http://alinex.github.io/')
+      })
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().dns()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
+    })
+
+  })
+
+  describe('exists', () => {
+
+    it('should work', () => {
+      const data = 'http://alinex.github.io'
+      const schema = new MySchema().exists()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal('http://alinex.github.io/')
+      })
+    })
+
+    it('should fail', () => {
+      const data = 'https://alinex.github.de'
+      const schema = new MySchema().exists()
+      expect(schema).to.be.an('object')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should describe', () => {
+      const schema = new MySchema().exists()
+      // use schema
+      expect(helper.description(schema)).to.be.a('string')
     })
 
   })

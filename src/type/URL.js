@@ -1,5 +1,4 @@
 // @flow
-import promisify from 'es6-promisify' // may be removed with node util.promisify later
 import url from 'url'
 
 // load on demand: request-promise-native, dns, net
@@ -18,8 +17,10 @@ class URLSchema extends StringSchema {
     let raw = this._rules.descriptor.pop()
     let allow = this._rules.descriptor.pop()
     this._rules.descriptor.push(
+      this._structDescriptor,
       this._resolveDescriptor,
       allow,
+      this._existsDescriptor,
       raw,
     )
     raw = this._rules.validator.pop()
@@ -28,6 +29,7 @@ class URLSchema extends StringSchema {
       this._structValidator,
       this._resolveValidator,
       allow,
+      this._existsValidator,
       this._formatValidator,
       raw,
     )
@@ -44,11 +46,21 @@ class URLSchema extends StringSchema {
     return 'It has to be a valid URI address.\n'
   }
 
+  _structDescriptor() {
+    const set = this._setting
+    const schema = new DomainSchema()
+    if (set.dns) schema.dns()
+    return `- domain part: ${schema.description}\n\n`
+  }
+
   _structValidator(data: Data): Promise<void> {
     const check = this._check
     // split address
     data.value = url.parse(data.value)
-    return Promise.resolve()
+    // check domain
+    const schema = new DomainSchema().raw()
+    if (check.dns) schema.dns()
+    return schema._validate(data.sub('host'))
   }
 
   resolve(base?: string | Reference): this { return this._setAny('resolve', base) }
@@ -117,8 +129,36 @@ ${set.resolve.description}. `
     return Promise.resolve()
   }
 
-  _formatValidator(data: Data): Promise<void> {
+  exists(flag?: bool | Reference): this { return this._setFlag('exists', flag) }
+
+  _existsDescriptor() {
+    const set = this._setting
+    let msg = ''
+    if (set.exists) {
+      if (this._isReference('exists')) {
+        msg += `The URL have to exist and be accessible if defined under \
+${set.exists.description}. `
+      } else msg += 'The URL have to exist and be accessible. '
+    }
+    return msg.length ? `${msg.trim()}\n` : msg
+  }
+
+  _existsValidator(data: Data): Promise<void> {
     const check = this._check
+    try {
+      this._checkBoolean('exists')
+    } catch (err) {
+      return Promise.reject(new ValidationError(this, data, err.message))
+    }
+    // format
+    if (check.exists) {
+      return import('request-promise-native')
+        .then((request: any) => request(data.value.href))
+    }
+    return Promise.resolve()
+  }
+
+  _formatValidator(data: Data): Promise<void> { // eslint-disable-line class-methods-use-this
     // split address
     data.value = data.value.href
     return Promise.resolve()

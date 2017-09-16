@@ -54,3 +54,12 @@ For relative URLs this gives a base to resolve them to a full URL.
 const schema = new URLSchema().resolve('https://alinex.github.io')
 schema.resolve() // to remove settings
 ```
+
+### exists
+
+Check if the URL really exists and is accessible.
+
+```js
+const schema = new URLSchema().exists()
+schema.exists() // to remove settings
+```

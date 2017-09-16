@@ -1,6 +1,5 @@
 // @flow
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
-import util from 'util'
 import punycode from 'punycode'
 // load on demand: dns
 
