@@ -46,6 +46,7 @@ the impleentation is.
 | Domain     | 100% |  10% |          0% |
 | Email      | 100% |  20% |         20% |
 | URL        | 100% |  40% |         40% |
+| RegExp     | 100% |   0% |          0% |
 
 | Feature  | Alinex | Joi  | validatorjs |
 | -------- | ------:| ----:| -----------:|

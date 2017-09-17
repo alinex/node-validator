@@ -13,6 +13,7 @@ export { default as Logic } from './type/Logic'
 export { default as Number } from './type/Number'
 export { default as Object } from './type/Object'
 export { default as Port } from './type/Port'
+export { default as RegExp } from './type/RegExp'
 export { default as String } from './type/String'
 export { default as URL } from './type/URL'
 // references to use in schema or value

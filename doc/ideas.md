@@ -14,6 +14,7 @@ Reference
 Object
 - requiredIf(schema)
 - forbiddenIf(schema)
+- instance(class|string)
 
 Number
 - locale support parse/format
@@ -22,7 +23,5 @@ File
 - min/max/greater/less as filesize (validatorjs)
 
 Specific Types
-- interval
-- regexp
 - handlebars (v2)
 - creditcard (joi)

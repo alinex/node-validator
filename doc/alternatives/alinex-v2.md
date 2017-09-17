@@ -75,12 +75,12 @@ also the few changes below:
 | `integer.toUnit=unit` | `number.toUnit(unit)` |
 | `integer.format=fmt` | `number.format(fmt)` |
 | `integer.locale=ll` | - |
-| `interval` | - |
-| `interval.unit=unit` | - |
-| `interval.round=true` | - |
-| `interval.decimals=num` | - |
-| `interval.min=val` | - |
-| `interval.max=val` | - |
+| `interval` | `number` |
+| `interval.unit=unit` | `number.unit(unit)` |
+| `interval.round=true` | `number.round` |
+| `interval.decimals=num` | `number.round(num)` |
+| `interval.min=val` | `number.min` |
+| `interval.max=val` | `number.max` |
 | `ipaddr` | `ip` |
 | `ipaddr.version='ipv4'` | `ip.version(4)` |
 | `ipaddr.allow=list` | `ip.allow(list)` |
@@ -101,7 +101,7 @@ also the few changes below:
 | `port` | `port` |
 | `port.allow=list` | `port.allow(list)` |
 | `port.deny=list` | `port.deny(list)` |
-| `regexp` | - |
+| `regexp` | `regexp` |
 | `string` | `string` |
 | `string.makeString=true` | `string.makeString()` |
 | `string.allowControls=true` | `string.controls()` |
