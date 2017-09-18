@@ -22,6 +22,7 @@
     - [Port](schema/port.md)
     - [RegExp](schema/regexp.md)
     - [URL](schema/url.md)
+  - [Presets](schema/presets.md)
   - [Reference](schema/reference.md)
 
 - [How To](howto.md)

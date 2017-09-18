@@ -20,11 +20,17 @@ const validateOk = promisify(helper.validateOk)
 
 describe('use', () => {
 
-  describe('schema', () => {
+  describe.only('schema', () => {
 
     it('should load complete builder', () => {
       expect(builder).to.be.an('object')
       expect(builder.Any).to.be.a('function')
+    })
+
+    it('should load presets', () => {
+      expect(builder).to.be.an('object')
+      const schema = builder.preset.plz()
+      return helper.validateOk(schema, 123)
     })
 
     it('should describe error', () => {
