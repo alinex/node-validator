@@ -51,7 +51,7 @@ const transform = (data: string|Object, def: string|Object, file: string, opt?: 
   return p
     .then(() => check(data, def))
     .then(result => write(result, file))
-    .catch(() => Promise.resolve())
+    .catch(() => Promise.reject(new Error('No need to create configuration again because it\'s up to date.')))
 }
 
 export default { schema, load, check, transform }
