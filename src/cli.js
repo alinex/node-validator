@@ -44,6 +44,11 @@ yargs.usage('\nUsage: $0 [options]')
       describe: 'file to write resulting data structure to',
       type: 'string',
     },
+    force: {
+      alias: 'f',
+      describe: 'force recreating configuration also if up to date',
+      type: 'boolean',
+    },
     // general options
     verbose: {
       alias: 'v',

@@ -109,7 +109,6 @@ But __Any__ should be defined with:
   describe('transform', () => {
 
     it('should load transformed file', () => {
-      const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
       const goal = {
         title: 'Dr.',
         name: 'Alfons Ranze',
@@ -117,10 +116,10 @@ But __Any__ should be defined with:
         plz: '10565',
         city: 'Berlin',
       }
-      const schemaFile = `${__dirname}/../data/address.schema`
+      const schemaFile = `${__dirname}/../data/address.schema.js`
       const dataFile = `${__dirname}/../data/address-ok.yml`
       const outFile = `${__dirname}/../data/address-ok.json`
-      return validator.transform(dataFile, schemaFile, outFile)
+      return validator.transform(dataFile, schemaFile, outFile, { force: true })
         .then(() => {
           const d = require(outFile) // eslint-disable-line global-require,import/no-dynamic-require
           expect(d).deep.equal(goal)
