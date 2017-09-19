@@ -12,7 +12,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = FileSchema
 
-describe.only('file', () => {
+describe('file', () => {
 
   describe('simple', () => {
 
