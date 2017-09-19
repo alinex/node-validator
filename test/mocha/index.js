@@ -20,7 +20,7 @@ const validateOk = promisify(helper.validateOk)
 
 describe('use', () => {
 
-  describe.only('schema', () => {
+  describe('schema', () => {
 
     it('should load complete builder', () => {
       expect(builder).to.be.an('object')

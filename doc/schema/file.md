@@ -31,6 +31,16 @@ And the methods from [String Schema](string.md):
 
 ## Checking
 
+### baseDir(dir)
+
+If not set or if this directory is relative the  base will be the current working directory.
+Which mostly is the directory the application is started from.
+
+```js
+const schema = new URLSchema().baseDir('/data') // resolve files from this directory
+schema.baseDir() // to remove settings
+```
+
 ### allow(list) / deny(list)
 
 In principal this is identical to the any type and also `valid(item)` and `invalid(item)` may be used
@@ -42,20 +52,35 @@ You can give
 - path - `/index.html`
 - complete url
 
-### resolve(base)
+### exists / readable / writable
 
-For relative URLs this gives a base to resolve them to a full URL.
+Check if the URL really exists and/or is accessible for reading or writing. Using multiple of them is
+the same as using only the highest order (write > read > exists). It is also possible that a location
+really exists but is not visible to the current process id, so it is assumed as non-existent.
+
+```js
+const schema = new URLSchema().exists()
+schema.exists(false) // to remove settings
+```
+
+```js
+const schema = new URLSchema().readable()
+schema.readable(false) // to remove settings
+```
+
+```js
+const schema = new URLSchema().writable()
+schema.writable(false) // to remove settings
+```
+
+
+## Optimizing
+
+### resolve
+
+For relative URLs this will return the absolute path.
 
 ```js
 const schema = new URLSchema().resolve('https://alinex.github.io')
 schema.resolve() // to remove settings
-```
-
-### exists
-
-Check if the URL really exists and is accessible.
-
-```js
-const schema = new URLSchema().exists()
-schema.exists() // to remove settings
 ```
