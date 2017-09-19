@@ -27,6 +27,7 @@
   - [Reference](schema/reference.md)
 
 - [How To](howto.md)
+- [Debugging](debug.md)
 
 - [Examples](examples/README.md)
 

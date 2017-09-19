@@ -153,3 +153,20 @@ validator.transform('config', schema, 'local/config.json')
     // go on
   })
 ```
+
+
+## CLI Usage
+
+__Only check data structure:__
+
+    validator --input <file-or-dir> --schema <file>
+
+This will validate the data structure and show you possible errors. This may be used every time
+after something is changed.
+
+__Preparse and transform data structure:__
+
+    validator --input <file-or-dir> --schema <file> --output <json-file>
+
+After validation and optimization the resulting data structure will be written as JSON file to
+be easily and fast imported in the program.
