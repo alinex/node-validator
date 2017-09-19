@@ -10,7 +10,7 @@ const expect = chai.expect
 // to simplify copy and paste in other Schemas
 const MySchema = RegExpSchema
 
-describe.only('regexp', () => {
+describe('regexp', () => {
 
   it('should work with object', () => {
     const data = /abc/

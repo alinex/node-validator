@@ -18,6 +18,7 @@
   - [Extensions](schema/extensions.md)
     - [Domain](schema/domain.md)
     - [Email](schema/email.md)
+    - [File](schema/file.md)
     - [IP](schema/ip.md)
     - [Port](schema/port.md)
     - [RegExp](schema/regexp.md)
