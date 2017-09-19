@@ -3,6 +3,8 @@ import yargs from 'yargs'
 import alinex from 'alinex-core'
 import chalk from 'chalk'
 
+import validator from './index'
+
 // Support quiet mode through switch
 let quiet = false
 for (const a of ['--get-yargs-completions', 'bashrc', '-q', '--quiet']) {
@@ -44,6 +46,11 @@ yargs.usage('\nUsage: $0 [options]')
       describe: 'file to write resulting data structure to',
       type: 'string',
     },
+    force: {
+      alias: 'f',
+      describe: 'force recreating configuration also if up to date',
+      type: 'boolean',
+    },
     // general options
     verbose: {
       alias: 'v',
@@ -84,4 +91,11 @@ For more information, look into the man page.')
 
 // now parse the arguments
 const argv = yargs.argv
-console.log(argv)
+
+// run commands
+if (argv.output) {
+  validator.transform(argv.input, argv.schema, argv.output, argv)
+    .catch((err) => {
+      console.log(err.message) // eslint-disable-line
+    })
+} else validator.check(argv.input, argv.schema)

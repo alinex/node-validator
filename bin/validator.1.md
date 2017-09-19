@@ -2,7 +2,7 @@ Alinex Validator
 =================================================
 
 This module will help validating complex structures. And should be used on all external information.
-Like configuration or user input. It's strength are very complex structures.
+Like configuration or user input. It's strength are very complex structures and detailed checks.
 
 
 Usage
@@ -26,12 +26,19 @@ __Preparse and transform data structure:__
 After validation and optimization the resulting data structure will be written as JSON file to
 be easily and fast imported in the program.
 
+Options:
+
+    --input, -i     file or directory to read data from       [string] [mandatory]
+    --schema, -s    schema to use for validation              [string] [mandatory]
+    --output, -o    file to write resulting data structure to             [string]
+    --force, -f     force recreating configuration also if up to date    [boolean]
+
 General Options:
 
-    --help, -h      Show help                                            [boolean]
-    --nocolors, -C  turn of color output                                 [boolean]
     --verbose, -v   run in verbose mode (multiple makes more verbose)      [count]
     --quiet, -q     don't output header and footer                       [boolean]
+    --nocolors, -C  turn of color output                                 [boolean]
+    --help, -h      Show help                                            [boolean]
 
 You may use environment variables prefixed with 'BUILDER_' to set any of
 the options like 'BUILDER_VERBOSE' to set the verbose level.

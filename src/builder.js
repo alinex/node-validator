@@ -19,3 +19,5 @@ export { default as String } from './type/String'
 export { default as URL } from './type/URL'
 // references to use in schema or value
 export { default as Reference } from './Reference'
+// load presets
+export { default as preset } from './presets'

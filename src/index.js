@@ -36,9 +36,22 @@ const write = (data: Object, file: string): Promise<any> => {
   return writer(file, JSON.stringify(data))
 }
 
-const transform = (data: string|Object, def: string|Object, file: string): Promise<any> =>
+const transform = (data: string|Object, def: string|Object, file: string, opt?: Object): Promise<any> => {
+  // check date
+  const stat = promisify(fs.stat)
+  let p = Promise.resolve()
+  if (typeof data === 'string' && typeof def === 'string' && !(opt && opt.force)) {
+    const list = [data, def, file].map(e => stat(e).catch(() => false))
+    p = p
+      .then(() => Promise.all(list))
+      .then(res => ((res[0] && res[1] && res[2] && res[0].mtime < res[2].mtime && res[1].mtime < res[2].mtime)
+        ? Promise.reject() : Promise.resolve()))
+  }
   // combine check and write
-  check(data, def).then(result => write(result, file))
-
+  return p
+    .then(() => check(data, def))
+    .then(result => write(result, file))
+    .catch(() => Promise.reject(new Error('No need to create configuration again because it\'s up to date.')))
+}
 
 export default { schema, load, check, transform }
