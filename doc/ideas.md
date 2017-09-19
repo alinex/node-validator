@@ -23,7 +23,6 @@ File
 5- filetype
 4- allow/deny extension/file/path
 6- min/max/greater/less as filesize (validatorjs)
-3- exists
 
 Specific Types
 - handlebars (v2)
