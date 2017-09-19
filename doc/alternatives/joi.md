@@ -41,7 +41,7 @@ alinex-validator.
 | option: `context` | `ref(context)` |
 | option: `noDefaults` (false) | - |
 | `ref(key)` | `ref().path(key)` |
-| `reach(schema, path)` | - |
+| `reach(schema, path)` | `schema(path)` |
 | `any` | `any` |
 | `any.allow(value)` | `any.allow(value)` |
 | `any.valid(value)` | `any.valid(value)` |

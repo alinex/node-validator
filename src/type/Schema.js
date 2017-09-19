@@ -63,6 +63,16 @@ class Schema {
     this._detail = detail
     return this
   }
+  schema(path: string): Schema {
+    let obj = this
+    for (const key of path.split(/\//)) {
+      if (obj instanceof Schema) obj = obj._setting[key]
+      else if (obj instanceof Map) obj = obj.get(key)
+      else obj = (obj: Object)[key]
+    }
+    if (!(obj instanceof Schema)) throw new Error(`No schema element under ${path} found`)
+    return obj
+  }
 
   // helper methods
 

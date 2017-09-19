@@ -131,6 +131,17 @@ const schema = new AnySchema().raw(ref)
 ```
 
 
+## schema(path)
+
+It is possible to access any sub schema by it's path.
+
+```js
+const schema = new ObjectSchema()
+  .key('name', new StringSchema())
+const sub = schema.schema('keys/name') // get reference to StringSchema
+```
+
+
 ## clone
 
 Get a clone of this schema to use it elsewhere with some changes. It is a shallow clone so if you

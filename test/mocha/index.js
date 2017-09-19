@@ -20,7 +20,7 @@ const validateOk = promisify(helper.validateOk)
 
 describe('use', () => {
 
-  describe('schema', () => {
+  describe.only('schema', () => {
 
     it('should load complete builder', () => {
       expect(builder).to.be.an('object')
@@ -47,6 +47,12 @@ describe('use', () => {
 
 But __Any__ should be defined with:
 `)
+    })
+
+    it('should access sub schema', () => {
+      const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
+      debug(addressSchema.schema('keys/name'))
+      return true
     })
 
   })
