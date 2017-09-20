@@ -88,13 +88,12 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.3.0",
     "eslint-plugin-standard": "^3.0.1",
-    "flow-bin": "^0.54.1",
+    "flow-bin": "^0.55.0",
     "flow-typed": "^2.1.5",
     "marked-man": "^0.2.1",
     "mocha": "^3.5.3",
     "nodemon": "^1.12.1",
-    "nyc": "^11.2.1",
-    "request": "^2.81.0"
+    "nyc": "^11.2.1"
   },
   "engines": {
     "node": ">=6"

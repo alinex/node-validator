@@ -5,6 +5,10 @@ Here you find a collection of further ideas which may be realized as soon as any
 General
 - allow using JSON Schema
 - RDBMS data loader URIspecific file
+- support search paths
+
+Schema
+- defaultOnFailure
 
 Reference
 - RDBMS as reference base
@@ -18,6 +22,9 @@ Object
 
 Number
 - locale support parse/format
+
+Array
+- unordered() - items should be validated but not in the order defined
 
 File
 5- filetype
