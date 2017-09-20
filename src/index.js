@@ -1,20 +1,58 @@
 // @flow
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
 import fs from 'fs'
+import path from 'path'
+import glob from 'glob'
+import util from 'alinex-util'
+import Debug from 'debug'
 
-let format = null // load on demand
+const debug = Debug('validator')
 
 const schema = (def: string|Object): Promise<Object> => {
   if (typeof def === 'string') return import(def)
   return Promise.resolve(def)
 }
 
-const load = (data: string|Object, def?: string): Promise<any> => {
+function sharedStart(array) {
+  const A = array.concat().sort()
+  const a1 = A[0]
+  const a2 = A[A.length - 1]
+  const L = a1.length
+  let i = 0
+  while (i < L && a1.charAt(i) === a2.charAt(i)) i += 1
+  return a1.substring(0, i)
+}
+
+const load = (data: string|Object): Promise<any> => {
   if (typeof data === 'string') {
-    if (!format) format = require('alinex-format') // eslint-disable-line global-require
-    const reader = promisify(fs.readFile)
-    const parser = promisify(format.parse)
-    return reader(data).then(content => parser(content, def))
+    debug(`search for data files at ${data}`)
+    return import('alinex-format')
+      .then((format) => {
+        const reader = promisify(fs.readFile)
+        const parser = promisify(format.parse)
+        return promisify(glob)(data)
+          .then((files) => {
+            for (const f of files) debug(`found data file at ${f}`)
+            return files
+          })
+          .then((files) => {
+            const base = sharedStart(files.map(e => path.dirname(e)))
+            return Promise.all(files.map(file => reader(file)
+              .then(content => parser(content))
+              .then((content) => {
+                const dir = path.dirname(file).substr(base.length + 1)
+                if (dir) {
+                  for (const e of dir.split('/')) {
+                    const obj = {}
+                    obj[e] = content
+                    content = obj
+                  }
+                }
+                return content
+              })))
+          })
+          .then(list => list.reduce((acc, val) => util.extend(acc, val), {}))
+      })
   }
   return Promise.resolve(data)
 }

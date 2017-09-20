@@ -90,6 +90,10 @@ Like seen in this example you can further work with the validated data (it is ov
 to prevent access to the unchecked) and get a detailed description in markdown format using
 `err.text()` on failures.
 
+The `data` reference can also be a filename which will be loaded and parsed automatically.
+Also glob patterns like in the shell are possible to select multiple files which will be merged together
+before validating.
+
 
 ## Check
 
@@ -156,6 +160,10 @@ validator.transform('config', schema, 'local/config.json')
 
 
 ## CLI Usage
+
+As also possible in the API you may give a relative path which is resolved from the current directory
+(mostly the application base directory). And you may use glob patterns but you have to mask them so
+that they will be interpreted in the validator, not the shell.
 
 __Only check data structure:__
 

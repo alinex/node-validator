@@ -20,7 +20,7 @@ const validateOk = promisify(helper.validateOk)
 
 describe('use', () => {
 
-  describe.only('schema', () => {
+  describe('schema', () => {
 
     it('should load complete builder', () => {
       expect(builder).to.be.an('object')
@@ -54,6 +54,25 @@ But __Any__ should be defined with:
       debug(addressSchema.schema('keys/name'))
       return true
     })
+
+  })
+
+  describe('loader', () => {
+
+    it('should work with direct file', () => validator.load('test/data/address-ok.yml')
+      .then((data) => {
+        debug('got', util.inspect(data).replace(/\s*\n\s*/g, ' '))
+      }))
+
+    it('should work with glob', () => validator.load('test/data/*.yml')
+      .then((data) => {
+        debug('got', util.inspect(data).replace(/\s*\n\s*/g, ' '))
+      }))
+
+    it('should work recursive', () => validator.load('test/**/*.yml')
+      .then((data) => {
+        debug('got', util.inspect(data).replace(/\s*\n\s*/g, ' '))
+      }))
 
   })
 
