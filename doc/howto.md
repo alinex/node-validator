@@ -68,6 +68,17 @@ console.log(msg)
 ```
 
 
+## Load Data
+
+The validator may also load configuration files from filesystem:
+
+```js
+import validator from 'alinex-validator'
+
+const data = validator.load('config/**/*.yml') // alternatively may load an array
+```
+
+
 ## Validate
 
 To really check the data structure call the `validate` method.
@@ -162,8 +173,7 @@ validator.transform('config', schema, 'local/config.json')
 ## CLI Usage
 
 As also possible in the API you may give a relative path which is resolved from the current directory
-(mostly the application base directory). And you may use glob patterns but you have to mask them so
-that they will be interpreted in the validator, not the shell.
+(mostly the application base directory). And you may use glob patterns in the shell.
 
 __Only check data structure:__
 

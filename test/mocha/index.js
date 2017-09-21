@@ -57,7 +57,12 @@ But __Any__ should be defined with:
 
   })
 
-  describe('loader', () => {
+  describe.only('loader', () => {
+
+    it('should work with multifile', () => validator.load(['test/data/address-fail.yml', 'test/data/address-ok.yml'])
+      .then((data) => {
+        debug('got', util.inspect(data).replace(/\s*\n\s*/g, ' '))
+      }))
 
     it('should work with direct file', () => validator.load('test/data/address-ok.yml')
       .then((data) => {
@@ -117,6 +122,23 @@ But __Any__ should be defined with:
 
   describe('check', () => {
 
+    it('should work with data', () => {
+      const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
+      const goal = {
+        title: 'Dr.',
+        name: 'Alfons Ranze',
+        street: 'Im Heubach 3',
+        plz: '10565',
+        city: 'Berlin',
+      }
+      const schemaFile = `${__dirname}/../data/address.schema`
+      return validator.check(goal, schemaFile)
+        .then((res) => {
+          expect(res).deep.equal(goal)
+        })
+        .catch(err => console.log('ERROR', err))
+    })
+
     it('should load specific file', () => {
       const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
       const goal = {
@@ -127,10 +149,10 @@ But __Any__ should be defined with:
         city: 'Berlin',
       }
       const schemaFile = `${__dirname}/../data/address.schema`
-      const dataFile = `${__dirname}/../data/address-ok.yml`
-      return validator.check(dataFile, schemaFile)
-        .then((data) => {
-          expect(data).deep.equal(goal)
+      const data = validator.load(`${__dirname}/../data/address-ok.yml`)
+      return validator.check(data, schemaFile)
+        .then((res) => {
+          expect(res).deep.equal(goal)
         })
         .catch(err => console.log('ERROR', err))
     })
@@ -139,7 +161,7 @@ But __Any__ should be defined with:
 
   describe('transform', () => {
 
-    it('should load transformed file', () => {
+    it('should transform and load created file', () => {
       const goal = {
         title: 'Dr.',
         name: 'Alfons Ranze',
@@ -148,9 +170,9 @@ But __Any__ should be defined with:
         city: 'Berlin',
       }
       const schemaFile = `${__dirname}/../data/address.schema.js`
-      const dataFile = `${__dirname}/../data/address-ok.yml`
+      const data = validator.load(`${__dirname}/../data/address-ok.yml`)
       const outFile = `${__dirname}/../data/address-ok.json`
-      return validator.transform(dataFile, schemaFile, outFile, { force: true })
+      return validator.transform(data, schemaFile, outFile, { force: true })
         .then(() => {
           const d = require(outFile) // eslint-disable-line global-require,import/no-dynamic-require
           expect(d).deep.equal(goal)

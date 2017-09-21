@@ -30,7 +30,7 @@ Array
 
 File
 5- filetype
-4- allow/deny extension/file/path
+4- allow/deny extension/file/path using minimatch (glob like)
 6- min/max/greater/less as filesize (validatorjs)
 
 Specific Types

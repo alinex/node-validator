@@ -33,6 +33,7 @@ yargs.usage('\nUsage: $0 [options]')
       alias: 'i',
       describe: 'file or directory to read data from',
       type: 'string',
+      array: true,
       demand: true,
     },
     schema: {

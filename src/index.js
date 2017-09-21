@@ -23,38 +23,39 @@ function sharedStart(array) {
   return a1.substring(0, i)
 }
 
-const load = (data: string|Object): Promise<any> => {
-  if (typeof data === 'string') {
-    debug(`search for data files at ${data}`)
-    return import('alinex-format')
-      .then((format) => {
-        const reader = promisify(fs.readFile)
-        const parser = promisify(format.parse)
-        return promisify(glob)(data)
-          .then((files) => {
-            for (const f of files) debug(`found data file at ${f}`)
-            return files
-          })
-          .then((files) => {
-            const base = sharedStart(files.map(e => path.dirname(e)))
-            return Promise.all(files.map(file => reader(file)
-              .then(content => parser(content))
-              .then((content) => {
-                const dir = path.dirname(file).substr(base.length + 1)
-                if (dir) {
-                  for (const e of dir.split('/')) {
-                    const obj = {}
-                    obj[e] = content
-                    content = obj
-                  }
+const load = (data: string|Array<string>): Promise<any> => {
+  debug(`search for data files at ${util.inspect(data)}`)
+  return import('alinex-format')
+    .then((format) => {
+      const reader = promisify(fs.readFile)
+      const parser = promisify(format.parse)
+      const search = promisify(glob)
+      const dataList = typeof data === 'string' ? [data] : data
+      return Promise.all(dataList.map(e => search(e)))
+        .then(res => res.reduce((acc, val) => acc.concat(val), []))
+      //      return search(data)
+        .then((files) => {
+          for (const f of files) debug(`found data file at ${f}`)
+          return files
+        })
+        .then((files) => {
+          const base = sharedStart(files.map(e => path.dirname(e)))
+          return Promise.all(files.map(file => reader(file)
+            .then(content => parser(content))
+            .then((content) => {
+              const dir = path.dirname(file).substr(base.length + 1)
+              if (dir) {
+                for (const e of dir.split('/')) {
+                  const obj = {}
+                  obj[e] = content
+                  content = obj
                 }
-                return content
-              })))
-          })
-          .then(list => list.reduce((acc, val) => util.extend(acc, val), {}))
-      })
-  }
-  return Promise.resolve(data)
+              }
+              return content
+            })))
+        })
+        .then(list => list.reduce((acc, val) => util.extend(acc, val), {}))
+    })
 }
 
 const check = (data: string|Object, def: string|Object): Promise<any> => {
@@ -63,10 +64,10 @@ const check = (data: string|Object, def: string|Object): Promise<any> => {
   if (def instanceof Promise) list.push(def)
   else list.push(schema(def))
   if (data instanceof Promise) list.push(data)
-  else list.push(load(data))
+  else list.push(data)
   // validate after load
   return Promise.all(list)
-    .then(values => values[0].validate(values[1], typeof data === 'string' ? data : undefined))
+    .then(values => (values[0]: any).validate(values[1], typeof data === 'string' ? data : undefined))
 }
 
 const write = (data: Object, file: string): Promise<any> => {
