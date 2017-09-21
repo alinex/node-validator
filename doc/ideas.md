@@ -14,6 +14,8 @@ Reference
 - RDBMS as reference base
 - SFTP as reference base
 - SSH as reference base
+- support of glob in reference base
+- string representation (in config files)
 
 Object
 - requiredIf(schema)
