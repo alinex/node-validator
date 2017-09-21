@@ -19,15 +19,41 @@ based validation
 [validatorjs](https://www.npmjs.com/package/validatorjs) is defined by a single string definition
 per element
 
-## Function based
+## Method based
 
 [Joi](https://github.com/hapijs/joi) comes from the Hapi server component see more on the next
 pages
 
-## Comparison
+## Object based
+
+[Validate.js](https://validatejs.org/) uses a constraint setting as JavaScript
+Object including injected reporting functions.
+
+## Function based
+
+[Object Schema](https://www.npmjs.com/package/object-schemata) simply validates data objects with
+a schema including:
+- a help message
+- a user defined validator function
+- a user defined transformer function
+
+## Simple Validators
+
+[Typed](https://www.npmjs.com/package/fully-typed) basically checks against specific types but has
+also some settings to define value ranges...
+
+[Valida](https://www.npmjs.com/package/valida) a collection of a few validation methods.
+
+[Aproba](https://www.npmjs.com/package/aproba)
+
+[Valido](https://www.npmjs.com/package/valido)
+
+[Validotron](https://www.npmjs.com/package/validotron)
+
+## Comparison Overview
 
 Here a basic comparison of alinex-validator against others is shown. You may also find more detailed
-comparisons under each alternative's description. The values gives a hint, how complete in percent
+comparisons under each alternative's description (sub page). The values gives a hint, how complete in percent
 the impleentation is.
 
 | Type     | Alinex | Joi  | validatorjs |
@@ -55,4 +81,4 @@ the impleentation is.
 | -> cmd     | 100% |   0% |          0% |
 | -> web     | 100% |   0% |          0% |
 | Loading    | 100% |   0% |          0% |
-| -> file    |  20% |   0% |          0% |
+| -> file    | 100% |   0% |          0% |

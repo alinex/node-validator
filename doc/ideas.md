@@ -1,6 +1,6 @@
 # Ideas
 
-Here you find a collection of further ideas which may be realized as soon as anybody needs them.
+Here you find a collection of further ideas which may be realized as soon as anybody really needs them.
 
 General
 - allow using JSON Schema
@@ -34,5 +34,6 @@ File
 6- min/max/greater/less as filesize (validatorjs)
 
 Specific Types
+- isHash preset.md5, preset.sha1
 - handlebars (v2)
 - creditcard (joi)

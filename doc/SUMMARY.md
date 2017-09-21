@@ -36,6 +36,7 @@
 - [Alternatives](alternatives/README.md)
   - [Alinex V2](alternatives/alinex-v2.md)
   - [Joi](alternatives/joi.md)
+  - [validate.js](alternatives/validate.js.md)
   - [validatorjs](alternatives/validatorjs.md)
 
 - [Development](internal/README.md)

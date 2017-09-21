@@ -84,29 +84,7 @@ const valid = validator.validate(json, schema, (err, valid) => {
 ```
 
 
-## Object Schema
-
-[Object Schema](https://www.npmjs.com/package/object-schemata) simply validates data objects with
-a schema including:
-- a help message
-- a validator function
-- a transformer function
-
-
-## Typed
-
-[Typed](https://www.npmjs.com/package/fully-typed) basically checks against specific types but has
-also some settings to define value ranges...
-
-
 ## Simple Validators
-
-The following validators are very simple and have only some checks:
-
-- https://www.npmjs.com/package/aproba
-- https://www.npmjs.com/package/valida
-
-
 
 
 
@@ -119,43 +97,6 @@ The following validators are very simple and have only some checks:
 - https://www.npmjs.com/package/validatorjs
 
 See the following sections for short descriptions and comparisons.
-
-
-
-
-
-## Validator.js
-
-[Validator.js](https://validatejs.org/) uses a constraint setting as JavaScript
-Object including injected reporting functions.
-
-```js
-var constraints = {
-  username: {
-    presence: true,
-    exclusion: {
-      within: ["nicklas"],
-      message: "'%{value}' is not allowed"
-    }
-  },
-  password: {
-    presence: true,
-    length: {
-      minimum: 6,
-      message: "must be at least 6 characters"
-    }
-  }
-};
-
-validate({password: "bad"}, constraints);
-// => {
-//   "username": ["Username can't be blank"],
-//   "password": ["Password must be at least 6 characters"]
-// }
-```
-
-This is a more basic way with less possibilities. A lot have to be programmed here
-each time again.
 
 
 ## comparison

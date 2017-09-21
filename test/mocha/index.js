@@ -57,7 +57,7 @@ But __Any__ should be defined with:
 
   })
 
-  describe.only('loader', () => {
+  describe('loader', () => {
 
     it('should work with multifile', () => validator.load(['test/data/address-fail.yml', 'test/data/address-ok.yml'])
       .then((data) => {
