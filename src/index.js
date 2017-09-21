@@ -1,6 +1,7 @@
 // @flow
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
 import fs from 'fs'
+import os from 'os'
 import path from 'path'
 import glob from 'glob'
 import util from 'alinex-util'
@@ -23,15 +24,27 @@ function sharedStart(array) {
   return a1.substring(0, i)
 }
 
+const search = ['']
+const searchApp = (name: string): void => {
+  search.push(`/etc/${name}/`)
+  search.push(`${os.homedir()}/.${name}/`)
+}
+
 const load = (data: string|Array<string>): Promise<any> => {
   debug(`search for data files at ${util.inspect(data)}`)
+  // extend search for relative paths
+  // const dataList = typeof data === 'string' ? [data] : data
+  const dataList = []
+  for (const e of (typeof data === 'string' ? [data] : data)) {
+    for (const t of search) dataList.push(`${t}${e}`)
+  }
+  // search and load
   return import('alinex-format')
     .then((format) => {
       const reader = promisify(fs.readFile)
       const parser = promisify(format.parse)
-      const search = promisify(glob)
-      const dataList = typeof data === 'string' ? [data] : data
-      return Promise.all(dataList.map(e => search(e)))
+      const searchGlob = promisify(glob)
+      return Promise.all(dataList.map(e => searchGlob(e)))
         .then(res => res.reduce((acc, val) => acc.concat(val), []))
       //      return search(data)
         .then((files) => {
@@ -93,4 +106,4 @@ const transform = (data: string|Object, def: string|Object, file: string, opt?: 
     .catch(() => Promise.reject(new Error('No need to create configuration again because it\'s up to date.')))
 }
 
-export default { schema, load, check, transform }
+export default { schema, search, searchApp, load, check, transform }

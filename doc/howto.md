@@ -78,6 +78,15 @@ import validator from 'alinex-validator'
 const data = validator.load('config/**/*.yml') // alternatively may load an array
 ```
 
+You can also define there to search for relative paths:
+
+```js
+import validator from 'alinex-validator'
+
+validator.searchApp('myApp') // search under /etc/myApp an home-dir/.myApp
+const data = validator.load('config/**/*.yml')
+```
+
 
 ## Validate
 
