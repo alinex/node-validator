@@ -221,14 +221,16 @@ As also possible in the API you may give a relative path which is resolved from 
 
 __Only check data structure:__
 
-    validator --input <file-or-dir> --schema <file>
+    # validator --input <file-or-dir> --schema <file>
+    validator -i *.yml -s schema.js
 
 This will validate the data structure and show you possible errors. This may be used every time
 after something is changed.
 
 __Preparse and transform data structure:__
 
-    validator --input <file-or-dir> --schema <file> --output <json-file>
+    # validator --input <file-or-dir> --schema <file> --output <json-file>
+    validator -i *.yml -s schema.js -o config.json
 
 After validation and optimization the resulting data structure will be written as JSON file to
 be easily and fast imported in the program.

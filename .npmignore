@@ -22,6 +22,8 @@ bower_components
 .npm
 /*.tgz
 .yarn-integrity
+.babelrc
+.eslintrc.js
 
 # Other caching like eslint or repl
 .eslintcache
@@ -37,7 +39,9 @@ doc
 book.json
 src
 test
+bin
 /.*
+.travis.yml
 
 # Runtime data
 local

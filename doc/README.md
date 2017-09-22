@@ -13,6 +13,7 @@ with simple things. It's the best validator ever, see the comparison with others
 - can give a human readable description
 - command line interface (cli)
 - including data loading
+- precompile JSON config for any system
 
 The core builds a __schema__ which is build as combination of different type instances from the schema
 classes. This schema builder mechanism allows to setup complex structures with optimizations
@@ -28,3 +29,6 @@ This library can help you make your life secure and easy but you should have to
 define your data structure deeply, before. If you do so
 you can trust and use the values as they are without further checks.
 And you'll get the benefit of automatically optimized values and easy to use configuration files back.
+
+You may also split up complex configuration files for any system into multiple files which are
+combined together by the validator after each change.
