@@ -43,14 +43,8 @@ schema.baseDir() // to remove settings
 
 ### allow(list) / deny(list)
 
-In principal this is identical to the any type and also `valid(item)` and `invalid(item)` may be used
-but the matching is a way complexer.
-
-You can give
-- protocol - `http:`
-- protocol with host - `http://alinex.de`
-- path - `/index.html`
-- complete url
+In principal this is identical to the [any](any.md) type and also `valid(item)` and `invalid(item)` may be used
+but the matching allows glob patterns.
 
 ### exists / readable / writable
 

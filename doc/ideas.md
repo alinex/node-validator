@@ -29,11 +29,8 @@ Array
 - unordered() - items should be validated but not in the order defined
 
 File
-5- filetype
-4- allow/deny extension/file/path using minimatch (glob like)
-6- min/max/greater/less as filesize (validatorjs)
+- min/max/greater/less as filesize (validatorjs)
 
 Specific Types
-- isHash preset.md5, preset.sha1
 - handlebars (v2)
 - creditcard (joi)

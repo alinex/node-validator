@@ -55,6 +55,7 @@
     "es6-promisify": "^5.0.0",
     "glob": "^7.1.2",
     "ipaddr.js": "^1.5.2",
+    "minimatch": "^3.0.4",
     "moment-timezone": "^0.5.13",
     "numeral": "^2.0.6",
     "punycode": "^2.1.0",

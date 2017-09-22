@@ -71,6 +71,42 @@ describe('file', () => {
 
   })
 
+  describe('allow', () => {
+
+    it('should work with complete file', () => {
+      const data = 'package.json'
+      const schema = new MySchema().allow(data)
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should fail with complete file', () => {
+      const data = 'package.json'
+      const schema = new MySchema().deny(data)
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+    it('should work with glob', () => {
+      const data = 'package.json'
+      const schema = new MySchema().allow('*.json')
+      // use schema
+      return helper.validateOk(schema, data, (res) => {
+        expect(res).deep.equal(data)
+      })
+    })
+
+    it('should fail with glob', () => {
+      const data = 'package.json'
+      const schema = new MySchema().deny('*.json')
+      // use schema
+      return helper.validateFail(schema, data)
+    })
+
+  })
+
   describe('access', () => {
 
     it('should work with exists', () => {

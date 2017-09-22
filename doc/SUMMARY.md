@@ -2,6 +2,7 @@
 
 - [Introduction](README.md)
 - [Architecture](architecture.md)
+- [How To](howto.md)
 
 - [Schema Builder](schema/README.md)
   - [Base](schema/base.md)
@@ -26,12 +27,8 @@
   - [Presets](schema/presets.md)
   - [Reference](schema/reference.md)
 
-- [How To](howto.md)
 - [Debugging](debug.md)
-
 - [Examples](examples/README.md)
-
-- [Ideas](ideas.md)
 
 - [Alternatives](alternatives/README.md)
   - [Alinex V2](alternatives/alinex-v2.md)
@@ -43,4 +40,5 @@
   - [Architecture](internal/architecture.md)
   - [Technologies](internal/modules.md)
 
+- [Ideas](ideas.md)
 - [Further Informations](info.md)

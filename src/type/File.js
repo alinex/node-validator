@@ -3,6 +3,7 @@ import promisify from 'es6-promisify' // may be removed with node util.promisify
 import url from 'url'
 import path from 'path'
 import fs from 'fs'
+import minimatch from 'minimatch'
 // load on demand: request-promise-native, dns, net
 
 import StringSchema from './String'
@@ -71,37 +72,21 @@ ${set.baseDir.description}. `
 
   _allowValidator(data: Data): Promise<void> {
     const check = this._check
-    this._checkArrayString('allow')
-    this._checkArrayString('deny')
-    // checking
-    if (check.deny && check.deny.length) {
-      // get lists
-      const list = check.deny.map(e => url.parse(e))
-      const protocol = list.map(e => e.protocol)
-        .filter(e => e && e.length && data.value.protocol === e)
-      const host = list.map(e => e.host)
-        .filter(e => e && e.length && data.value.host === e)
-      const hostname = list.map(e => e.hostname)
-        .filter(e => e && e.length && data.value.hostname === e)
-      if (protocol.length || hostname.length || host.length) {
-        return Promise.reject(new ValidationError(this, data,
-          'URL found in blacklist (denied item).'))
-      }
+    this._checkArray('allow')
+    this._checkArray('deny')
+    // reject if marked as invalid
+    if (check.deny && check.deny.length && check.deny
+      .filter(e => minimatch(data.value, e)).length) {
+      return Promise.reject(new ValidationError(this, data,
+        'Element found in blacklist (denyed item).'))
     }
-    if (check.allow && check.allow.length) {
-      // get lists
-      const list = check.allow.map(e => url.parse(e))
-      const protocol = list.map(e => e.protocol)
-        .filter(e => !e || !e.length || data.value.protocol === e)
-      const host = list.map(e => e.host)
-        .filter(e => !e || !e.length || data.value.host === e)
-      const hostname = list.map(e => e.hostname)
-        .filter(e => !e || !e.length || data.value.hostname === e)
-      if (!protocol.length || !hostname.length || !host.length) {
-        return Promise.reject(new ValidationError(this, data,
-          'URL not found in whitelist (allowed item).'))
-      }
+    // reject if valid is set but not included
+    if (check.allow && check.allow.length && check.allow
+      .filter(e => minimatch(data.value, e)).length === 0) {
+      return Promise.reject(new ValidationError(this, data,
+        'Element not in whitelist (allowed item).'))
     }
+    // ok
     return Promise.resolve()
   }
 
