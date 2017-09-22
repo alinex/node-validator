@@ -11,7 +11,6 @@
     "schema",
     "config"
   ],
-  "homepage": "http://alinex.github.io/node-validator/",
   "repository": {
     "type": "git",
     "url": "https://github.com/alinex/node-validator"
