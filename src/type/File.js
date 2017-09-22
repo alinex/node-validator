@@ -1,6 +1,5 @@
 // @flow
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
-import url from 'url'
 import path from 'path'
 import fs from 'fs'
 import minimatch from 'minimatch'

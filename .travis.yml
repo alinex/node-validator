@@ -1,17 +1,12 @@
 language: node_js
 node_js:
-#  - "4"  # LTS   from 2015-10 maintenance till 2018-04
   - "6"  # LTS   from 2016-10 maintenance till 2019-04
   - "7"  # devel from 2016-10
-#  - "8"  # LTS   from 2017-10 maintenance till 2019-12
+  - "8"  # LTS   from 2017-10 maintenance till 2019-12
 #  - "9"  # devel from 2017-10
 os:
   - linux
-#  - osx   # not possible because of mongodb service
-
-# Additional services
-services:
-  - mongodb
+  - osx
 
 # run with coveralls integration
 script: "npm run-script test-travis"

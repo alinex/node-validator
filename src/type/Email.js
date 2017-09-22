@@ -31,6 +31,7 @@ function connect(record: Object): Promise<bool> {
   return getMyIP()
     .then(() => import('net'))
     .then(net => new Promise((resolve) => {
+      let timer
       const client = net.createConnection(25, domain, () => {
         debug('Send HELO command to mailserver...')
         client.write(`HELO ${myIP}\r\n`)
@@ -39,13 +40,16 @@ function connect(record: Object): Promise<bool> {
       })
       let res = ''
       client.on('data', (data) => {
+        clearTimeout(timer)
         res += data.toString()
       })
       client.on('error', (err) => {
+        clearTimeout(timer)
         debug(`Error from server ${domain}: ${err.message}`)
         resolve(false)
       })
       client.on('end', () => {
+        clearTimeout(timer)
         if (res.length) {
           debug(`Server ${domain} responded with:\n${res.trim()}`)
           return resolve(true)
@@ -53,6 +57,11 @@ function connect(record: Object): Promise<bool> {
         debug(`No valid response from server ${domain}`)
         return resolve(false)
       })
+      timer = setTimeout(() => {
+        debug('Attempt at connection exceeded timeout value')
+        client.end()
+        resolve(false)
+      }, 5000)
     }))
 }
 
