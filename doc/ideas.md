@@ -5,7 +5,8 @@ Here you find a collection of further ideas which may be realized as soon as any
 General
 - allow using JSON Schema
 - RDBMS data loader URIspecific file
-- support search paths
+- internationalization of failure messages
+- internationalization of description
 
 Schema
 - defaultOnFailure

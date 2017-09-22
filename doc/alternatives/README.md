@@ -50,7 +50,7 @@ also some settings to define value ranges...
 
 [Validotron](https://www.npmjs.com/package/validotron)
 
-## Comparison Overview
+## Comparison Top 3
 
 Here a basic comparison of alinex-validator against others is shown. You may also find more detailed
 comparisons under each alternative's description (sub page). The values gives a hint, how complete in percent
@@ -82,3 +82,7 @@ the impleentation is.
 | -> web     | 100% |   0% |          0% |
 | Loading    | 100% |   0% |          0% |
 | -> file    | 100% |   0% |          0% |
+| i18n       |   5% |    ? |           ? |
+
+The percentage values are an assumption how far the support of some type in comparison to the
+complete possibilities in any of them goes.

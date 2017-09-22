@@ -33,7 +33,7 @@ If the data isn´t valid it will reject with an Error object which can show the
 real problem in detail.
 
 
-## Usage
+## Validation
 
 Generally it can be used in different ways in your application. In all of them it is best practice
 to define your schema in a separate file. That's also needed to use the CLI methods.
@@ -88,3 +88,17 @@ and will get a proofed structure back.
 Because it is a JavaScript file it also may include some dynamic parts depending on your structure.
 But if you want to keep this files up to date also with changes in external references which you
 don't control, you may recreate this maybe each day and reload or restart your app.
+
+
+## File Loading
+
+The file loading will work with __multiple files__ and also allows to find and combine files from
+different locations. Therefore the app will register their name in the validator and it will look
+for configuration files in the following order:
+- in the __current working directory__ (should be the applications home)
+- maybe some more directories if specifically added by your app
+- in the __global configuration__ like `/etc/myApp`
+- in the __user configuration__ (under the users home folder: `.myApp`)
+
+All found files in any of this locations matching the glob or given path will be loaded and combined
+in the above given order. Tha last will have precedence over the previous destinations.

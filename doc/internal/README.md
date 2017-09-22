@@ -5,7 +5,7 @@ structure and want to contribute. You may add more type schemas or enhance some
 of the existing ones.
 
 
-## Environment
+__Environment__
 
 See the [Alinex NodeJS Modules Book](https://alinex.gitbooks.io/nodejs) for a detailed
 description.

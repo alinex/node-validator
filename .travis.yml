@@ -6,7 +6,7 @@ node_js:
 #  - "9"  # devel from 2017-10
 os:
   - linux
-  - osx
+#  - osx # some fs tests are not cross os compatible
 
 # run with coveralls integration
 script: "npm run-script test-travis"
