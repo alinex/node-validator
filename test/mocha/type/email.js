@@ -7,6 +7,7 @@ import Schema from '../../../src/type/Schema'
 import * as helper from '../helper'
 
 const expect = chai.expect
+const notTravisIt = process.env.TRAVIS ? it.skip : it
 
 // to simplify copy and paste in other Schemas
 const MySchema = EmailSchema
@@ -205,7 +206,8 @@ describe('email', () => {
   describe('connect', function connecttest() {
     this.timeout(10000)
 
-    it('should work', () => {
+    // test not possible on travis
+    notTravisIt('should work', () => {
       const data = 'alex@alinex.de'
       const schema = new MySchema().connect()
       expect(schema).to.be.an('object')
