@@ -233,4 +233,8 @@ __Preparse and transform data structure:__
     validator -i *.yml -s schema.js -o config.json
 
 After validation and optimization the resulting data structure will be written as JSON file to
-be easily and fast imported in the program.
+be easily and fast imported in the program. If you want to use this in JavaScript you can use:
+
+```js
+import config from './config.json'
+```

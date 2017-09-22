@@ -34,33 +34,38 @@
 
 The ultimate validation library for javascript!
 
-This module will help validating complex structures. And should be used on all
-external information.
+This module will help validating complex structures. And should be used on all external information.
+Like configuration or user input. It's strength are very complex structures but as easily it works
+with simple things. It's the best validator ever, see the comparison with others later.
 
-- easy build class based schema definitions
+- class based schema definitions
 - multiple predefined types
-- easy to extend schema types
-- check value against schema
-- supports sanitization and optimization
-- also possible in deep and complex data structures
+- multiple options per type
+- __check and transform__ values
+- specialized in deep and complex data structures
+- supports __dependency checks__ with references
 - can give a human readable description
-- supports dependency checks
-- transform schema and values
+- command line interface (cli)
+- including data loading
+- precompile JSON config for any system
 
-The schema based definition using instances of the predefined schema classes gives
-the opportunity to define a detailed structure step by step. Later you can run the
-check of this created schema structure on your data structure.
+The core builds a __schema__ which is build as combination of different type instances from the schema
+classes. This schema builder mechanism allows to setup complex structures with optimizations
+and logical validation. It can be build step by step, cloned and redefined...
 
-This is mostly used in configuration there it will preparse all settings and check
-them before running and use them. It will give a detailed description of the problems
-if there are some. It can also save the result as pure JavaScript files to be imported
-at runtime without the necessary to recheck them.
+With such a schema you can directly __validate__ your data structure or use it to load and validate
+data structure or to transform them into optimized JSON data files using the command line interface.
+A schema can also describe itself human readable for users to describe what is needed.
+If some value failed an error message is given with reference to the original value and the
+description what failed and what is needed.
 
-This library can help you make your life secure and easy but you have to run
-every external data through it using a detailed data description. If you do so
+This library can help you make your life secure and easy but you should have to
+define your data structure deeply, before. If you do so
 you can trust and use the values as they are without further checks.
-And you'll get the benefit of automatically optimized values like for `handlebars`
-type you get a ready to use handlebar function back.
+And you'll get the benefit of automatically optimized values and easy to use configuration files back.
+
+You may also split up complex configuration files for any system into multiple files which are
+combined together by the validator after each change.
 
 __Read the complete documentation under
 [https://alinex.gitbooks.io/validator](https://alinex.gitbooks.io/validator)__
@@ -68,7 +73,73 @@ __Read the complete documentation under
 
 ## Usage
 
-Coming soon...
+Install to use as module:
+
+    npm install alinex-validator
+
+or install it globally:
+
+    npm install -g alinex-validator
+
+
+### Create Schema
+
+Now you can define your schema specification like:
+
+```js
+// config.schema.js
+
+// @flow
+import * as val from 'alinex-validator/dist/builder'
+
+const schema = new val.Object()
+  .key('title', new val.String().allow(['Dr.', 'Prof.']))
+  .key('name', new val.String().min(3).required())
+  .key('street', new val.String().min(3).required())
+  .key('plz', new val.Number().required()
+    .positive().max(99999)
+    .format('00000'))
+  .key('city', new val.String().required().min(3))
+
+module.exports = schema
+```
+
+### Validating using API
+
+```js
+import validator from 'alinex-validator'
+
+import schema from './config.schema.js'
+
+validator.searchApp('myApp') // search in /etc/myApp or ~/.myApp
+const data = validator.load('config/**/*.yml')
+
+schema.validate(data)
+  .then((data) => {
+    console.log(data)
+  })
+  .catch((err) => {
+    console.error(err.text())
+  })
+```
+
+### Use the CLI
+
+Transform into an optimized JSON structure:
+
+    validator -i *.yml -s schema.js -o config.json
+
+This will load all *.yml files in the current directory, validate it through the given schema and
+store the resulting data structure to a JSON file.
+
+This can be used to validate and optimize a configuration before using them. If you want to use this
+in JavaScript you can use:
+
+```js
+import config from './config.json'
+```
+
+Read more in the complete [manual](https://alinex.gitbooks.io/validator)...
 
 
 ## License
