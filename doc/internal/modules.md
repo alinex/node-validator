@@ -49,3 +49,5 @@ Structural helper:
   colorful output
 - [es6-promisify](https://www.npmjs.com/package/es6-promisify)
   support for `util.promisify` which comes with NodeJS 8
+
+Seldom or only for specific options used modules are loaded on demand instead of on initializing.
