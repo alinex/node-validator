@@ -203,7 +203,7 @@ describe('email', () => {
   })
 
   describe('connect', function connecttest() {
-    this.timeout(5000)
+    this.timeout(20000)
 
     it('should work', () => {
       const data = 'alex@alinex.de'

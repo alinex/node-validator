@@ -63,7 +63,8 @@ describe('reference', () => {
 
   })
 
-  describe('source', () => {
+  describe('source', function sourcetest() {
+    this.timeout(5000)
 
     it('should support schema data', () => {
       const data = new Data(1)
@@ -91,7 +92,7 @@ describe('reference', () => {
       })
     })
 
-    it('should support local command', () => {
+    it('should support environment', () => {
       process.env.TESTENV = '777'
       const ref = new Reference('env://TESTENV')
       return helper.reference(ref, undefined, (res) => {
