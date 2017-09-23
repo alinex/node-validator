@@ -219,6 +219,9 @@ validator.transform('config', schema, 'local/config.json')
 As also possible in the API you may give a relative path which is resolved from the current directory
 (mostly the application base directory). And you may use glob patterns in the shell.
 
+But why should you do that? For the validation you may need some modules you neither need in your program.
+To not pollute memory with them you can run this step in another process through the CLI.
+
 __Only check data structure:__
 
     # validator --input <file-or-dir> --schema <file>
