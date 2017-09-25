@@ -84,7 +84,6 @@ But __Any__ should be defined with:
   describe('validate', () => {
 
     it('should work with require', () => {
-      const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
       const data = {
         title: 'Dr.',
         name: 'Alfons Ranze',
@@ -92,7 +91,20 @@ But __Any__ should be defined with:
         plz: '565',
         city: 'Berlin',
       }
+      const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
       return helper.validateOk(addressSchema, data)
+    })
+
+    it('should work with include', () => {
+      const data = {
+        title: 'Dr.',
+        name: 'Alfons Ranze',
+        street: 'Im Heubach 3',
+        plz: '565',
+        city: 'Berlin',
+      }
+      return import('../data/address.schema')
+        .then((addressSchema: any) => helper.validateOk(addressSchema, data))
     })
 
     it('should work', () => {

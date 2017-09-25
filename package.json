@@ -29,15 +29,15 @@
   "man": "./dist/validator.1",
   "main": "./dist/index.js",
   "scripts": {
+    "flowinstall": "node_modules/.bin/flow-typed install --overwrite",
     "dev": "nodemon src/index.js --exec 'npm run test -s'",
+    "lint": "node_modules/.bin/flow && node_modules/.bin/eslint src --ext .js",
     "test": "npm run lint -s && npm run unit -s",
     "unit": "mocha --require babel-core/register --require babel-polyfill test/mocha --recursive -b",
     "coverage": "nyc --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",
-    "lint": "./node_modules/.bin/flow && eslint src --ext .js",
     "test-travis": "nyc --reporter=lcov --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",
     "build": "rm -r dist; babel src -d dist --require babel-polyfill; cp bin/validator dist; node_modules/.bin/marked-man bin/validator.1.md > dist/validator.1",
     "start": "cross-env NODE_ENV=production node dist/index.js",
-    "flowinstall": "node_modules/.bin/flow-typed install --overwrite",
     "prepublishOnly": "npm run lint -s && npm run build -s"
   },
   "directories": {
