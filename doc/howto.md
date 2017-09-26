@@ -84,8 +84,8 @@ import(`${__dirname}/../data/address.schema`)
   .then(schema => schema.validate(data))
 
 // or use the validator internal loader
-import validator from 'alinex-validator'
-validator.schema(`${__dirname}/../data/address.schema`)
+import Validator from 'alinex-validator'
+new Validator().schema(`${__dirname}/../data/address.schema`)
   .then(schema => schema.validate(data))
 ```
 
@@ -108,17 +108,17 @@ console.log(msg)
 The validator may also load configuration files from filesystem:
 
 ```js
-import validator from 'alinex-validator'
+import Validator from 'alinex-validator'
 
-const data = validator.load('config/**/*.yml') // alternatively may load an array
+const data = new Validator().load('config/**/*.yml') // alternatively may load an array
 ```
 
 You can also define there to search for relative paths:
 
 ```js
-import validator from 'alinex-validator'
+import Validator from 'alinex-validator'
 
-validator.searchApp('myApp') // search under /etc/myApp an home-dir/.myApp
+validator = new Validator().searchApp('myApp') // search under /etc/myApp an home-dir/.myApp
 const data = validator.load('config/**/*.yml')
 ```
 
@@ -152,21 +152,14 @@ before validating.
 
 ## Check
 
-The check of config files using the CLI:
-
-
-```bash
-$ validator comfig lib/schema.config.js
-```
-
 That's the same as loading without using the value through API:
 
 ```js
-import validator from 'alinex-validator'
+import Validator from 'alinex-validator'
 
 import schema from './config.schema.js'
 
-validator.check('config', schema)
+new Validator().check('config', schema)
   .then((data) => {
     console.log(data)
   })
@@ -175,6 +168,7 @@ validator.check('config', schema)
   })
 
 // or alternative with loading specific type
+const validator = new Validator()
 validator.check(validator.load('config', 'yaml'), schema)
   .then((data) => {
     console.log(data)
@@ -198,13 +192,13 @@ $ validator comfig lib/schema.config.js local/config.js
 To do the same using API use:
 
 ```js
-import validator from 'alinex-validator'
+import Validator from 'alinex-validator'
 
 import schema from './config.schema.js'
 // alternative:
 // const schema = path.resolve(__dirname, 'config.schema.js')
 
-validator.transform('config', schema, 'local/config.json')
+new Validator().transform('config', schema, 'local/config.json')
   .catch((err) => {
     console.error(err.text())
   })
