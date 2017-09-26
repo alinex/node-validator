@@ -6,7 +6,7 @@ import util from 'util'
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
 import fs from 'fs'
 
-import validator from '../../src/index'
+import Validator from '../../src/index'
 import * as builder from '../../src/builder'
 import ValidationError from '../../src/Error'
 import Data from '../../src/Data'
@@ -60,22 +60,23 @@ But __Any__ should be defined with:
 
   describe('loader', () => {
 
-    it('should work with multifile', () => validator.load(['test/data/address-fail.yml', 'test/data/address-ok.yml'])
+    it('should work with multifile', () => new Validator()
+      .load(['test/data/address-fail.yml', 'test/data/address-ok.yml'])
       .then((data) => {
         debug('got', util.inspect(data).replace(/\s*\n\s*/g, ' '))
       }))
 
-    it('should work with direct file', () => validator.load('test/data/address-ok.yml')
+    it('should work with direct file', () => new Validator().load('test/data/address-ok.yml')
       .then((data) => {
         debug('got', util.inspect(data).replace(/\s*\n\s*/g, ' '))
       }))
 
-    it('should work with glob', () => validator.load('test/data/*.yml')
+    it('should work with glob', () => new Validator().load('test/data/*.yml')
       .then((data) => {
         debug('got', util.inspect(data).replace(/\s*\n\s*/g, ' '))
       }))
 
-    it('should work recursive', () => validator.load('test/**/*.yml')
+    it('should work recursive', () => new Validator().load('test/**/*.yml')
       .then((data) => {
         debug('got', util.inspect(data).replace(/\s*\n\s*/g, ' '))
       }))
@@ -116,7 +117,7 @@ But __Any__ should be defined with:
         plz: '565',
         city: 'Berlin',
       }
-      return validator.schema(`${__dirname}/../data/address.schema`)
+      return new Validator().schema(`${__dirname}/../data/address.schema`)
         .then(addressSchema => validateOk(addressSchema, data))
     })
 
@@ -145,7 +146,7 @@ But __Any__ should be defined with:
         city: 'Berlin',
       }
       const schemaFile = `${__dirname}/../data/address.schema`
-      return validator.check(Promise.resolve(goal), schemaFile)
+      return new Validator().check(Promise.resolve(goal), schemaFile)
         .then((res) => {
           expect(res).deep.equal(goal)
         })
@@ -162,8 +163,8 @@ But __Any__ should be defined with:
         city: 'Berlin',
       }
       const schemaFile = `${__dirname}/../data/address.schema`
-      const data = validator.load(`${__dirname}/../data/address-ok.yml`)
-      return validator.check(data, schemaFile)
+      const data = new Validator().load(`${__dirname}/../data/address-ok.yml`)
+      return new Validator().check(data, schemaFile)
         .then((res) => {
           expect(res).deep.equal(goal)
         })
@@ -181,7 +182,7 @@ But __Any__ should be defined with:
       }
       const schemaFile = `${__dirname}/../data/address.schema`
       const dataFile = `${__dirname}/../data/address-ok.yml`
-      return validator.check(dataFile, schemaFile)
+      return new Validator().check(dataFile, schemaFile)
         .then((res) => {
           expect(res).deep.equal(goal)
         })
@@ -205,7 +206,7 @@ But __Any__ should be defined with:
 
     it('should transform and load created file', () => promisify(fs.unlink)(dataJSON)
       .catch(() => true)
-      .then(() => validator.transform(dataFile, schemaFile, dataJSON, { force: true }))
+      .then(() => new Validator().transform(dataFile, schemaFile, dataJSON, { force: true }))
       .then(() => {
         const d = require(dataJSON) // eslint-disable-line global-require,import/no-dynamic-require
         expect(d).deep.equal(goal)

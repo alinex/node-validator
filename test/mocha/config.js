@@ -7,7 +7,7 @@ import promisify from 'es6-promisify' // may be removed with node util.promisify
 import childProcess from 'child_process'
 import fs from 'fs'
 
-import validator from '../../src/index'
+import Validator from '../../src/index'
 import * as builder from '../../src/builder'
 import ValidationError from '../../src/Error'
 import Data from '../../src/Data'
@@ -34,7 +34,7 @@ describe('config', () => {
   const fileJSON = `${__dirname}/../data/address-ok.json`
 
   it('should validate file',
-    () => validator.check(fileData, fileSchema)
+    () => new Validator().check(fileData, fileSchema)
       .then(res => expect(res).deep.equal(goal)))
 
   //  it('should validate using fork', () => new Promise((resolve) => {
@@ -46,7 +46,7 @@ describe('config', () => {
   //  }))
 
   it('should transform if neccessary',
-    () => validator.transform(fileData, fileSchema, fileJSON)
+    () => new Validator().transform(fileData, fileSchema, fileJSON)
       .catch(err => promisify(fs.readFile)(fileJSON).then(res => JSON.parse(res)))
       .then(res => expect(res).deep.equal(goal)))
 

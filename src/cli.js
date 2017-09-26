@@ -3,7 +3,7 @@ import yargs from 'yargs'
 import alinex from 'alinex-core'
 import chalk from 'chalk'
 
-import validator from './index'
+import Validator from './index'
 
 // Support quiet mode through switch
 let quiet = false
@@ -95,8 +95,8 @@ const argv = yargs.argv
 
 // run commands
 if (argv.output) {
-  validator.transform(argv.input, argv.schema, argv.output, argv)
+  new Validator().transform(argv.input, argv.schema, argv.output, argv)
     .catch((err) => {
       console.log(err.message) // eslint-disable-line
     })
-} else validator.check(argv.input, argv.schema)
+} else new Validator().check(argv.input, argv.schema)
