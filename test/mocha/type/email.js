@@ -234,7 +234,7 @@ describe('email', () => {
   })
 
   describe('blacklist', function blacklisttest() {
-    this.timeout(5000)
+    this.timeout(30000)
 
     it('should work', () => {
       const data = 'alex@alinex.de'

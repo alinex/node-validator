@@ -55,7 +55,8 @@ describe('url', () => {
 
   })
 
-  describe('dns', () => {
+  describe('dns', function dnstest() {
+    this.timeout(5000)
 
     it('should work', () => {
       const data = 'http://alinex.github.io'

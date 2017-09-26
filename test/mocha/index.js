@@ -4,6 +4,7 @@ import chaiAsPromised from 'chai-as-promised'
 import Debug from 'debug'
 import util from 'util'
 import promisify from 'es6-promisify' // may be removed with node util.promisify later
+import fs from 'fs'
 
 import validator from '../../src/index'
 import * as builder from '../../src/builder'
@@ -144,7 +145,7 @@ But __Any__ should be defined with:
         city: 'Berlin',
       }
       const schemaFile = `${__dirname}/../data/address.schema`
-      return validator.check(goal, schemaFile)
+      return validator.check(Promise.resolve(goal), schemaFile)
         .then((res) => {
           expect(res).deep.equal(goal)
         })
@@ -169,11 +170,8 @@ But __Any__ should be defined with:
         .catch(err => console.log('ERROR', err))
     })
 
-  })
-
-  describe('transform', () => {
-
-    it('should transform and load created file', () => {
+    it('should load by file name', () => {
+      const addressSchema = require('../data/address.schema') // eslint-disable-line global-require
       const goal = {
         title: 'Dr.',
         name: 'Alfons Ranze',
@@ -181,15 +179,37 @@ But __Any__ should be defined with:
         plz: '10565',
         city: 'Berlin',
       }
-      const schemaFile = `${__dirname}/../data/address.schema.js`
-      const data = validator.load(`${__dirname}/../data/address-ok.yml`)
-      const outFile = `${__dirname}/../data/address-ok.json`
-      return validator.transform(data, schemaFile, outFile, { force: true })
-        .then(() => {
-          const d = require(outFile) // eslint-disable-line global-require,import/no-dynamic-require
-          expect(d).deep.equal(goal)
+      const schemaFile = `${__dirname}/../data/address.schema`
+      const dataFile = `${__dirname}/../data/address-ok.yml`
+      return validator.check(dataFile, schemaFile)
+        .then((res) => {
+          expect(res).deep.equal(goal)
         })
+        .catch(err => console.log('ERROR', err))
     })
+
+  })
+
+  describe('transform', () => {
+
+    const goal = {
+      title: 'Dr.',
+      name: 'Alfons Ranze',
+      street: 'Im Heubach 3',
+      plz: '10565',
+      city: 'Berlin',
+    }
+    const schemaFile = `${__dirname}/../data/address.schema.js`
+    const dataFile = `${__dirname}/../data/address-ok.yml`
+    const dataJSON = `${__dirname}/../data/address-ok.json`
+
+    it('should transform and load created file', () => promisify(fs.unlink)(dataJSON)
+      .catch(() => true)
+      .then(() => validator.transform(dataFile, schemaFile, dataJSON, { force: true }))
+      .then(() => {
+        const d = require(dataJSON) // eslint-disable-line global-require,import/no-dynamic-require
+        expect(d).deep.equal(goal)
+      }))
 
   })
 

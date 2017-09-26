@@ -214,6 +214,42 @@ validator.transform('config', schema, 'local/config.json')
 ```
 
 
+## Config Loader
+
+To work with configuration files you may create a `config.js` like:
+
+```js
+import Validator from 'alinex-validator'
+
+const fileSearch = '**/*.yml'
+const fileSchema = `${__dirname}/config.schema.js`
+const fileJSON = `${__dirname}/../var/temp/config.json`
+
+const validator = new Validator().searchApp('myApp', 'config')
+
+export default validator.transform(fileSearch, fileSchema, fileJSON)
+  .catch(err => promisify(fs.readFile)(fileJSON).then(res => JSON.parse(res)))
+```
+
+This will do all the magic for you:
+- search for data files
+- load all data and combine together
+- load and create schema
+- validate
+- return a promise with the resulting data structure
+- if already transformed in temporary file speed up by using this
+
+So in your app you only have to:
+
+```js
+import configLoader from './config'
+
+configLoader.then((config) => {
+  // do something
+})
+```
+
+
 ## CLI Usage
 
 As also possible in the API you may give a relative path which is resolved from the current directory

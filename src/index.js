@@ -25,15 +25,17 @@ function sharedStart(array) {
 }
 
 const search = ['']
-const searchApp = (name: string): void => {
-  search.push(`/etc/${name}/`)
-  search.push(`${os.homedir()}/.${name}/`)
+const searchApp = (name: string, sub: string = 'config'): void => {
+  const gpath = sub === 'config' ? `/etc/${name}/` : `/var/lib/${name}/${sub}/`
+  const upath = `${os.homedir()}/.${name}/${sub}/`
+  search.push(gpath)
+  search.push(upath)
+  debug(`Search path for ${sub} is set to ${gpath} and ${upath}`)
 }
 
 const load = (data: string|Array<string>): Promise<any> => {
   debug(`search for data files at ${util.inspect(data)}`)
   // extend search for relative paths
-  // const dataList = typeof data === 'string' ? [data] : data
   const dataList = []
   for (const e of (typeof data === 'string' ? [data] : data)) {
     for (const t of search) dataList.push(`${t}${e}`)
@@ -71,13 +73,14 @@ const load = (data: string|Array<string>): Promise<any> => {
     })
 }
 
-const check = (data: string|Object, def: string|Object): Promise<any> => {
+const check = (data: string|Array<string>|Promise<any>,
+  def: string|Object|Promise<Object>): Promise<any> => {
   const list = []
   // support promises
   if (def instanceof Promise) list.push(def)
   else list.push(schema(def))
   if (data instanceof Promise) list.push(data)
-  else list.push(data)
+  else list.push(load(data))
   // validate after load
   return Promise.all(list)
     .then(values => (values[0]: any).validate(values[1], typeof data === 'string' ? data : undefined))
@@ -88,22 +91,39 @@ const write = (data: Object, file: string): Promise<any> => {
   return writer(file, JSON.stringify(data))
 }
 
-const transform = (data: string|Object, def: string|Object, file: string, opt?: Object): Promise<any> => {
+const transform = (data: string|Array<string>,
+  def: string|Object|Promise<Object>,
+  file: string, opt?: Object): Promise<any> => {
   // check date
   const stat = promisify(fs.stat)
   let p = Promise.resolve()
-  if (typeof data === 'string' && typeof def === 'string' && !(opt && opt.force)) {
-    const list = [data, def, file].map(e => stat(e).catch(() => false))
+  if (!(opt && opt.force)) {
+    // extend search for relative paths
+    const dataList = []
+    for (const e of (typeof data === 'string' ? [data] : data)) {
+      for (const t of search) dataList.push(`${t}${e}`)
+    }
+    // check against others
+    const list = [def, file].map(e => stat(e).catch(() => false))
+    // get newest file date
+    list.unshift(Promise.all(dataList.map(e => stat(e).catch(() => false)))
+      .then(res => res.reduce((acc, val) => (!acc || val.mtime > acc ? val : acc), false)))
     p = p
       .then(() => Promise.all(list))
-      .then(res => ((res[0] && res[1] && res[2] && res[0].mtime < res[2].mtime && res[1].mtime < res[2].mtime)
-        ? Promise.reject() : Promise.resolve()))
+      .then((res) => {
+        if (!res[0] || !res[2] || res[0].mtime > res[2].mtime) return Promise.resolve()
+        if (def instanceof Promise || !res[1] || res[1].mtime > res[2].mtime) return Promise.resolve()
+        return Promise.reject()
+      })
   }
   // combine check and write
   return p
     .then(() => check(data, def))
-    .then(result => write(result, file))
-    .catch(() => Promise.reject(new Error('No need to create configuration again because it\'s up to date.')))
+    .then(result => write(result, file).then(() => result))
+    .catch(() => {
+      debug('JSON file found and newer than data and definition')
+      return Promise.reject(new Error('No need to create configuration again because it\'s up to date.'))
+    })
 }
 
 export default { schema, search, searchApp, load, check, transform }
