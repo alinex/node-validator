@@ -50,7 +50,7 @@ describe('config', () => {
       .catch(err => promisify(fs.readFile)(fileJSON).then(res => JSON.parse(res)))
       .then(res => expect(res).deep.equal(goal)))
 
-  noTravisIt('should transform with spawn',
+  notTravisIt('should transform with spawn',
     () => promisify(childProcess.exec)(`${__dirname}/../../bin/validator -i ${fileData} \
 -s ${fileSchema} -o ${fileJSON}`)
       .then(() => promisify(fs.readFile)(fileJSON))
