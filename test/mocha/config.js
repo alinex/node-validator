@@ -51,7 +51,8 @@ describe('config', () => {
       .then(res => expect(res).deep.equal(goal)))
 
   it('should transform with spawn',
-    () => promisify(childProcess.exec)(`bin/validator -i ${fileData} -s ${fileSchema} -o ${fileJSON}`)
+    () => promisify(childProcess.exec)(`${__dirname}/../../bin/validator -i ${fileData} \
+-s ${fileSchema} -o ${fileJSON}`)
       .then(() => promisify(fs.readFile)(fileJSON))
       .then(res => JSON.parse(res))
       .then((res) => {
