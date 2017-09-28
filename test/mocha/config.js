@@ -16,7 +16,7 @@ import * as helper from './helper'
 chai.use(chaiAsPromised)
 const expect = chai.expect
 const debug = Debug('test')
-
+const notTravisIt = process.env.TRAVIS ? it.skip : it
 
 const validateOk = promisify(helper.validateOk)
 
@@ -50,7 +50,7 @@ describe('config', () => {
       .catch(err => promisify(fs.readFile)(fileJSON).then(res => JSON.parse(res)))
       .then(res => expect(res).deep.equal(goal)))
 
-  it('should transform with spawn',
+  noTravisIt('should transform with spawn',
     () => promisify(childProcess.exec)(`${__dirname}/../../bin/validator -i ${fileData} \
 -s ${fileSchema} -o ${fileJSON}`)
       .then(() => promisify(fs.readFile)(fileJSON))
