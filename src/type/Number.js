@@ -20,8 +20,10 @@ class Round {
   precision: number
   method: 'arithmetic' | 'floor' | 'ceil'
 
-  constructor(precision: number = 0,
-    method: 'arithmetic' | 'floor' | 'ceil' = 'arithmetic') {
+  constructor(
+    precision: number = 0,
+    method: 'arithmetic' | 'floor' | 'ceil' = 'arithmetic',
+  ) {
     if (precision < 0) {
       throw new Error('Precision for round should be 0 or greater.')
     }
@@ -89,11 +91,15 @@ class NumberSchema extends AnySchema {
       data.value = Number(data.value)
     }
     if (typeof data.value !== 'number') {
-      return Promise.reject(new ValidationError(this, data,
-        `The given value is of type ${typeof data.value} but a number is needed.`))
-    } else if (isNaN(data.value)) {
-      return Promise.reject(new ValidationError(this, data,
-        `The given element \`${util.inspect(orig)}\` is no valid number.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The given value is of type ${typeof data.value} but a number is needed.`,
+      ))
+    } else if (Number.isNaN(data.value)) {
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The given element \`${util.inspect(orig)}\` is no valid number.`,
+      ))
     }
     return Promise.resolve()
   }
@@ -163,22 +169,28 @@ class NumberSchema extends AnySchema {
         const match = data.value.match(/(^[-+]?\d+\.?\d*)\s*(\S*)/)
         quantity = convert(match[1]).from(match[2])
       } catch (e) {
-        return Promise.reject(new ValidationError(this, data,
-          `Could not parse the unit of ${data.value}: ${e.message}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `Could not parse the unit of ${data.value}: ${e.message}`,
+        ))
       }
       try {
         data.value = quantity.to(check.unit)
       } catch (e) {
-        return Promise.reject(new ValidationError(this, data,
-          `Could not convert to ${check.unit}: ${e.message}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `Could not convert to ${check.unit}: ${e.message}`,
+        ))
       }
     }
     if (check.unit && check.toUnit && typeof data.value === 'number') {
       try {
         data.value = convert(data.value).from(check.unit).to(check.toUnit)
       } catch (e) {
-        return Promise.reject(new ValidationError(this, data,
-          `Could not convert ${check.unit} to ${check.toUnit}: ${e.message}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `Could not convert ${check.unit} to ${check.toUnit}: ${e.message}`,
+        ))
       }
     }
     return Promise.resolve()
@@ -408,34 +420,48 @@ class NumberSchema extends AnySchema {
     }
     // check value
     if (check.positive && data.value < 0) {
-      return Promise.reject(new ValidationError(this, data,
-        'The number should be positive.'))
+      return Promise.reject(new ValidationError(
+        this, data,
+        'The number should be positive.',
+      ))
     }
     if (check.negative && data.value > 0) {
-      return Promise.reject(new ValidationError(this, data,
-        'The number should be negative.'))
+      return Promise.reject(new ValidationError(
+        this, data,
+        'The number should be negative.',
+      ))
     }
     if (min !== undefined && data.value < min) {
-      return Promise.reject(new ValidationError(this, data,
-        `The value has to be at least ${min}.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The value has to be at least ${min}.`,
+      ))
     }
     if (check.greater !== undefined && data.value <= check.greater) {
-      return Promise.reject(new ValidationError(this, data,
-        `The value has to be greater than ${check.greater}.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The value has to be greater than ${check.greater}.`,
+      ))
     }
     if (check.less !== undefined && data.value >= check.less) {
-      return Promise.reject(new ValidationError(this, data,
-        `The value has to be less than ${check.less}.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The value has to be less than ${check.less}.`,
+      ))
     }
     if (max !== undefined && data.value > max) {
-      return Promise.reject(new ValidationError(this, data,
-        `The value has to be at most ${max}.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The value has to be at most ${max}.`,
+      ))
     }
     return Promise.resolve()
   }
 
-  round(precision: boolean | number = 0
-    , method?: 'arithmetic' | 'floor' | 'ceil'): this {
+  round(
+    precision: boolean | number = 0
+    , method?: 'arithmetic' | 'floor' | 'ceil',
+  ): this {
     const set = this._setting
     if (typeof precision === 'boolean' && !precision) delete set.round
     else {
@@ -476,8 +502,10 @@ class NumberSchema extends AnySchema {
         else if (method === 'floor') data.value = Math.floor(data.value)
         else data.value = Math.round(data.value)
       } else {
-        return Promise.reject(new ValidationError(this, data,
-          'The value has to be an integer number.'))
+        return Promise.reject(new ValidationError(
+          this, data,
+          'The value has to be an integer number.',
+        ))
       }
     } else if (check.round) {
       const exp = check.integer ? 1 : 10 ** check.round.precision
@@ -526,8 +554,10 @@ ${this._isReference('multiple') ? set.multiple.description : set.multiple}.\n`
     }
     // check value
     if (check.multiple && data.value % check.multiple) {
-      return Promise.reject(new ValidationError(this, data,
-        `The value has to be a multiple of ${check.multiple}.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The value has to be a multiple of ${check.multiple}.`,
+      ))
     }
     return Promise.resolve()
   }
@@ -564,8 +594,10 @@ ${this._isReference('format') ? set.format.description : set.format}.\n`
       try {
         data.value = `${Numeral(data.value).format(format)}${unit}`
       } catch (e) {
-        return Promise.reject(new ValidationError(this, data,
-          `Could not format value: ${e.message}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `Could not format value: ${e.message}`,
+        ))
       }
     }
     return Promise.resolve()

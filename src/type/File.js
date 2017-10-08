@@ -76,14 +76,18 @@ ${set.baseDir.description}. `
     // reject if marked as invalid
     if (check.deny && check.deny.length && check.deny
       .filter(e => minimatch(data.value, e)).length) {
-      return Promise.reject(new ValidationError(this, data,
-        'Element found in blacklist (denyed item).'))
+      return Promise.reject(new ValidationError(
+        this, data,
+        'Element found in blacklist (denyed item).',
+      ))
     }
     // reject if valid is set but not included
     if (check.allow && check.allow.length && check.allow
       .filter(e => minimatch(data.value, e)).length === 0) {
-      return Promise.reject(new ValidationError(this, data,
-        'Element not in whitelist (allowed item).'))
+      return Promise.reject(new ValidationError(
+        this, data,
+        'Element not in whitelist (allowed item).',
+      ))
     }
     // ok
     return Promise.resolve()

@@ -119,14 +119,18 @@ is allowed, a ${typeof data.value} is given here`))
     const num = (new RegExp(`${data.value.toString()}|`)).exec('').length - 1
     // check length
     if (check.min && num < check.min) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The function has ${num} matched groups. \
-   This is too less, at least ${check.min} are needed.`))
+   This is too less, at least ${check.min} are needed.`,
+      ))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The function has ${num} matched groups. \
-   This is too much, not more than ${check.max} are allowed.`))
+   This is too much, not more than ${check.max} are allowed.`,
+      ))
     }
     return Promise.resolve()
   }

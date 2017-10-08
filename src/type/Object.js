@@ -308,8 +308,10 @@ ${set.removeUnknown.description}.\n`
     if (check.denyUnknown) {
       for (const key in data.temp.unchecked) {
         if (key) {
-          return Promise.reject(new ValidationError(this, data,
-            `The key ${key} is not defined and therefore denied here.`))
+          return Promise.reject(new ValidationError(
+            this, data,
+            `The key ${key} is not defined and therefore denied here.`,
+          ))
         }
       }
     }
@@ -403,14 +405,18 @@ elements. `
     // check value
     const num = Object.keys(data.value).length
     if (check.min && num < check.min) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The object should has a length of ${num} elements. \
-This is too less, at least ${check.min} are needed.`))
+This is too less, at least ${check.min} are needed.`,
+      ))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The object should has a length of ${num} elements. \
-This is too much, not more than ${check.max} are allowed.`))
+This is too much, not more than ${check.max} are allowed.`,
+      ))
     }
     return Promise.resolve()
   }
@@ -473,16 +479,20 @@ are allowed. `
     if (check.forbiddenKeys && check.forbiddenKeys.length) {
       for (const e of check.forbiddenKeys) {
         if (keys.includes(e)) {
-          return Promise.reject(new ValidationError(this, data,
-            `The key ${e} is not allowed here. `))
+          return Promise.reject(new ValidationError(
+            this, data,
+            `The key ${e} is not allowed here. `,
+          ))
         }
       }
     }
     if (check.requiredKeys && check.requiredKeys.length) {
       for (const e of check.requiredKeys) {
         if (!keys.includes(e)) {
-          return Promise.reject(new ValidationError(this, data,
-            `The key ${e} is missing. `))
+          return Promise.reject(new ValidationError(
+            this, data,
+            `The key ${e} is missing. `,
+          ))
         }
       }
     }
@@ -594,9 +604,11 @@ are allowed. `
           if (contained.length > 0 && contained.length !== rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new ValidationError(this, data,
+            return Promise.reject(new ValidationError(
+              this, data,
               `All or none of the keys ${list} have to be present \
- but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
+ but there are only ${contained.length} of the ${rule.peers.length} keys present.`,
+            ))
           }
         } else if (rule.type === 'nand') {
           const contained = rule.peers.filter(e => keys.includes(e))
@@ -604,8 +616,10 @@ are allowed. `
           if (contained.length === rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new ValidationError(this, data,
-              `Some but not all of the keys ${list} can be present but all are set.`))
+            return Promise.reject(new ValidationError(
+              this, data,
+              `Some but not all of the keys ${list} can be present but all are set.`,
+            ))
           }
         } else if (rule.type === 'or') {
           const contained = rule.peers.filter(e => keys.includes(e))
@@ -613,8 +627,10 @@ are allowed. `
           if (!contained.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new ValidationError(this, data,
-              `At least one of the keys ${list} have to be present but none are set.`))
+            return Promise.reject(new ValidationError(
+              this, data,
+              `At least one of the keys ${list} have to be present but none are set.`,
+            ))
           }
         } else if (rule.type === 'xor') {
           const contained = rule.peers.filter(e => keys.includes(e))
@@ -622,9 +638,11 @@ are allowed. `
           if (contained.length !== 1) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new ValidationError(this, data,
+            return Promise.reject(new ValidationError(
+              this, data,
               `Exactly one of the keys ${list} have to be present \
- but ${contained.length} are set.`))
+ but ${contained.length} are set.`,
+            ))
           }
         } else if (rule.type === 'with') {
           const contained = rule.peers.filter(e => keys.includes(e))
@@ -632,9 +650,11 @@ are allowed. `
           if (keys.includes(rule.key) && contained.length !== rule.peers.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new ValidationError(this, data,
+            return Promise.reject(new ValidationError(
+              this, data,
               `If \`${rule.key}\` is set the keys ${list} have to be present \
- but there are only ${contained.length} of the ${rule.peers.length} keys present.`))
+ but there are only ${contained.length} of the ${rule.peers.length} keys present.`,
+            ))
           }
         } else if (rule.type === 'without') {
           const contained = rule.peers.filter(e => keys.includes(e))
@@ -642,9 +662,11 @@ are allowed. `
           if (keys.includes(rule.key) && contained.length) {
             const list = rule.peers.map(e => `\`${e}\``)
               .join(', ').replace(/(.*),/, '$1 and')
-            return Promise.reject(new ValidationError(this, data,
+            return Promise.reject(new ValidationError(
+              this, data,
               `If \`${rule.key}\` is set the keys ${list} are forbidden \
- but ${contained.length} keys are set.`))
+ but ${contained.length} keys are set.`,
+            ))
           }
         }
       }

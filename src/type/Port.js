@@ -402,11 +402,15 @@ class PortSchema extends NumberSchema {
       data.value = Number(data.value)
     }
     if (typeof data.value !== 'number') {
-      return Promise.reject(new ValidationError(this, data,
-        `The given value is of type ${typeof data.value} but a number is needed.`))
-    } else if (isNaN(data.value)) {
-      return Promise.reject(new ValidationError(this, data,
-        `The given element \`${util.inspect(orig)}\` is no valid number.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The given value is of type ${typeof data.value} but a number is needed.`,
+      ))
+    } else if (Number.isNaN(data.value)) {
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The given element \`${util.inspect(orig)}\` is no valid number.`,
+      ))
     }
     return Promise.resolve()
   }

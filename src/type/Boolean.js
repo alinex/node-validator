@@ -116,8 +116,10 @@ class BooleanSchema extends Schema {
     if (check.truthy.includes(data.value)) data.value = true
     else if (check.falsy.includes(data.value)) data.value = false
     else {
-      return Promise.reject(new ValidationError(this, data,
-        'A boolean value is needed but neither `true` nor `false` was given.'))
+      return Promise.reject(new ValidationError(
+        this, data,
+        'A boolean value is needed but neither `true` nor `false` was given.',
+      ))
     }
     // ok
     return Promise.resolve()

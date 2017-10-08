@@ -112,8 +112,10 @@ class LogicSchema extends Schema {
     if (logic[0][0] === 'if') {
       // check if/then/else
       return logic[0][1]._validate(data.clone)
-        .then(() => (logic[1] ? logic[1][1]._validate(data) : data),
-          () => (logic[2] ? logic[2][1]._validate(data) : data))
+        .then(
+          () => (logic[1] ? logic[1][1]._validate(data) : data),
+          () => (logic[2] ? logic[2][1]._validate(data) : data),
+        )
     }
     // replace Schema.validate(data) ? Data : ValidationError
     let p = Promise.resolve()

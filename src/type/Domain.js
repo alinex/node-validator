@@ -97,8 +97,10 @@ names are not allowed in DNS'))
       }
     }
     if (denyPriority > allowPriority) {
-      return Promise.reject(new ValidationError(this, data,
-        'Domain found in blacklist (denied item).'))
+      return Promise.reject(new ValidationError(
+        this, data,
+        'Domain found in blacklist (denied item).',
+      ))
     }
     return Promise.resolve()
   }
@@ -137,14 +139,18 @@ names are not allowed in DNS'))
     // check length
     const num = data.value.split('.').length
     if (check.min && num < check.min) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The string has ${num} labels. \
- This is too less, at least ${check.min} labesl are needed.`))
+ This is too less, at least ${check.min} labesl are needed.`,
+      ))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The string has ${num} labels. \
- This is too much, not more than ${check.max} labels are allowed.`))
+ This is too much, not more than ${check.max} labels are allowed.`,
+      ))
     }
     return Promise.resolve()
   }

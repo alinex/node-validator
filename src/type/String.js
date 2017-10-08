@@ -285,19 +285,27 @@ ${set.stripDisallowed.description}. `
       }
     } else {
       if (check.alphaNum && data.value.match(/\W/)) {
-        return Promise.reject(new ValidationError(this, data,
-          'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.'))
+        return Promise.reject(new ValidationError(
+          this, data,
+          'Only alpha numerical characters (a-z, A-Z, 0-9 and _) are allowed.',
+        ))
       } else if (check.hex && data.value.match(/[^a-fA-F0-9]/)) {
-        return Promise.reject(new ValidationError(this, data,
-          'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.'))
+        return Promise.reject(new ValidationError(
+          this, data,
+          'Only hexa decimal characters (a-f, A-F and 0-9) are allowed.',
+        ))
       }
       if (!check.controls && data.value.match(/[^\x20-\x7E]/)) {
-        return Promise.reject(new ValidationError(this, data,
-          'Control characters are not allowed.'))
+        return Promise.reject(new ValidationError(
+          this, data,
+          'Control characters are not allowed.',
+        ))
       }
       if (check.noHTML && data.value.match(/<[\s\S]*>/)) {
-        return Promise.reject(new ValidationError(this, data,
-          'No tags allowed in this text.'))
+        return Promise.reject(new ValidationError(
+          this, data,
+          'No tags allowed in this text.',
+        ))
       }
     }
     return Promise.resolve()
@@ -434,14 +442,18 @@ ${set.stripDisallowed.description}. `
     }
     // check length
     if (check.min && num < check.min) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The string has a length of ${num} characters. \
- This is too less, at least ${check.min} are needed.`))
+ This is too less, at least ${check.min} are needed.`,
+      ))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The string has a length of ${num} characters. \
- This is too much, not more than ${check.max} are allowed.`))
+ This is too much, not more than ${check.max} are allowed.`,
+      ))
     }
     return Promise.resolve()
   }
@@ -505,8 +517,10 @@ ${set.stripDisallowed.description}. `
         .map(e => `\`${util.inspect(e)}\``)
         .join(', ').replace(/(.*), /, '$1 and ')
       if (fail) {
-        return Promise.reject(new ValidationError(this, data,
-          `The text should match: ${fail}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `The text should match: ${fail}`,
+        ))
       }
     }
     if (check.notMatch && check.notMatch.length) {
@@ -517,8 +531,10 @@ ${set.stripDisallowed.description}. `
         .map(e => `\`${util.inspect(e)}\``)
         .join(', ').replace(/(.*), /, '$1 and ')
       if (fail) {
-        return Promise.reject(new ValidationError(this, data,
-          `The text should not match: ${fail}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `The text should not match: ${fail}`,
+        ))
       }
     }
     return Promise.resolve()

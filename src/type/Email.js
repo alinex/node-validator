@@ -234,8 +234,10 @@ chars max per specification)'))
       }
     }
     if (denyPriority > allowPriority) {
-      return Promise.reject(new ValidationError(this, data,
-        'Email found in blacklist (denied item).'))
+      return Promise.reject(new ValidationError(
+        this, data,
+        'Email found in blacklist (denied item).',
+      ))
     }
     return Promise.resolve()
   }

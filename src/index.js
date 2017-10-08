@@ -94,8 +94,10 @@ class Validator {
       })
   }
 
-  check(data: string|Array<string>|Promise<any>,
-    def: string|Object|Promise<Object>): Promise<any> {
+  check(
+    data: string|Array<string>|Promise<any>,
+    def: string|Object|Promise<Object>,
+  ): Promise<any> {
     const list = []
     // support promises
     if (def instanceof Promise) list.push(def)
@@ -107,9 +109,11 @@ class Validator {
       .then(values => (values[0]: any).validate(values[1], typeof data === 'string' ? data : undefined))
   }
 
-  transform(data: string|Array<string>,
+  transform(
+    data: string|Array<string>,
     def: string|Object|Promise<Object>,
-    file: string, opt?: Object): Promise<any> {
+    file: string, opt?: Object,
+  ): Promise<any> {
     // check date
     const stat = promisify(fs.stat)
     let p = Promise.resolve()

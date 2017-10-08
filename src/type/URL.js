@@ -106,8 +106,10 @@ ${set.resolve.description}. `
       const path = list.map(e => e.path)
         .filter(e => e && e.length && data.value.path.includes(e))
       if (protocol.length || hostname.length || host.length || path.length) {
-        return Promise.reject(new ValidationError(this, data,
-          'URL found in blacklist (denied item).'))
+        return Promise.reject(new ValidationError(
+          this, data,
+          'URL found in blacklist (denied item).',
+        ))
       }
     }
     if (check.allow && check.allow.length) {
@@ -122,8 +124,10 @@ ${set.resolve.description}. `
       const path = list.map(e => e.path)
         .filter(e => !e || !e.length || data.value.path.includes(e))
       if (!protocol.length || !hostname.length || !host.length || !path.length) {
-        return Promise.reject(new ValidationError(this, data,
-          'URL not found in whitelist (allowed item).'))
+        return Promise.reject(new ValidationError(
+          this, data,
+          'URL not found in whitelist (allowed item).',
+        ))
       }
     }
     return Promise.resolve()

@@ -139,8 +139,10 @@ as separator.\n`
       const c = new Set()
       for (const e of data.value) {
         if (c.has(e)) {
-          return Promise.reject(new ValidationError(this, data,
-            `No duplicate elements in list allowed: '${util.inspect(e)}' found more than once`))
+          return Promise.reject(new ValidationError(
+            this, data,
+            `No duplicate elements in list allowed: '${util.inspect(e)}' found more than once`,
+          ))
         }
         c.add(e)
       }
@@ -395,14 +397,18 @@ items. `
     // check value
     const num = data.value.length
     if (check.min && num < check.min) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The object should has a length of ${num} elements. \
-This is too less, at least ${check.min} are needed.`))
+This is too less, at least ${check.min} are needed.`,
+      ))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The object should has a length of ${num} elements. \
-This is too much, not more than ${check.max} are allowed.`))
+This is too much, not more than ${check.max} are allowed.`,
+      ))
     }
     return Promise.resolve()
   }

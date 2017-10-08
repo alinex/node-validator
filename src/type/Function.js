@@ -114,14 +114,18 @@ ${typeof data.value} is given here`))
     const num = data.value.length
     // check length
     if (check.min && num < check.min) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The function has ${num} arguments. \
- This is too less, at least ${check.min} are needed.`))
+ This is too less, at least ${check.min} are needed.`,
+      ))
     }
     if (check.max && num > check.max) {
-      return Promise.reject(new ValidationError(this, data,
+      return Promise.reject(new ValidationError(
+        this, data,
         `The function has ${num} arguments. \
- This is too much, not more than ${check.max} are allowed.`))
+ This is too much, not more than ${check.max} are allowed.`,
+      ))
     }
     return Promise.resolve()
   }

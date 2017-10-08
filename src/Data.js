@@ -33,8 +33,10 @@ class Data {
   }
 
   sub(key: string): Data {
-    const sub = new Data(this.value[key],
-      `${this.source.replace(/\/$/, '')}/${key}`, this.options)
+    const sub = new Data(
+      this.value[key],
+      `${this.source.replace(/\/$/, '')}/${key}`, this.options,
+    )
     sub.parent = this
     sub.root = this.root
     return sub

@@ -18,6 +18,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-restricted-syntax': 'off',
     'no-multi-str': 'off',
-    'no-param-reassign': 'off'
+    'no-param-reassign': 'off',
+    'prefer-destructuring': 'off'
   }
 };

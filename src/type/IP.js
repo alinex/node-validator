@@ -111,8 +111,10 @@ class IPSchema extends AnySchema {
           data.value = ip
           return Promise.resolve()
         }
-        return Promise.reject(new ValidationError(this, data,
-          `An ${typeof data.value} could not be transformed to an IP address`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `An ${typeof data.value} could not be transformed to an IP address`,
+        ))
       })
   }
 
@@ -156,7 +158,7 @@ class IPSchema extends AnySchema {
             }
             if (data.value.match(range)) {
               let bits = n.length < e.length ? 1 : range[1]
-              if (isNaN(bits)) bits = 0
+              if (Number.isNaN(bits)) bits = 0
               if (bits > denyBits) denyBits = bits
             }
           }
@@ -174,15 +176,17 @@ class IPSchema extends AnySchema {
             }
             if (data.value.match(range)) {
               let bits = n.length < e.length ? 1 : range[1]
-              if (isNaN(bits)) bits = 0
+              if (Number.isNaN(bits)) bits = 0
               if (bits > allowBits) allowBits = bits
             }
           }
         }
         //        console.log(denyBits, allowBits)
         if (denyBits > allowBits) {
-          return Promise.reject(new ValidationError(this, data,
-            'Element found in blacklist (denied item).'))
+          return Promise.reject(new ValidationError(
+            this, data,
+            'Element found in blacklist (denied item).',
+          ))
         }
         return Promise.resolve()
       })
@@ -226,15 +230,19 @@ class IPSchema extends AnySchema {
         if (data.value.kind() === 'ipv6') {
           if (check.mapping && data.value.isIPv4MappedAddress()) data.value = data.value.toIPv4Address()
           else {
-            return Promise.reject(new ValidationError(this, data,
-              `The given value is no valid IPv${check.version} address`))
+            return Promise.reject(new ValidationError(
+              this, data,
+              `The given value is no valid IPv${check.version} address`,
+            ))
           }
         }
       } else if (data.value.kind() === 'ipv4') {
         if (check.mapping) data.value = data.value.toIPv4MappedAddress()
         else {
-          return Promise.reject(new ValidationError(this, data,
-            `The given value is no valid IPv${check.version} address`))
+          return Promise.reject(new ValidationError(
+            this, data,
+            `The given value is no valid IPv${check.version} address`,
+          ))
         }
       }
     }

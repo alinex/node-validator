@@ -141,14 +141,14 @@ class Reference {
 
   filter(...def: Array<string|RegExp>): this {
     let opt = def
-    if (def[0] instanceof RegExp) opt = def[0]
+    if (def[0] instanceof RegExp) [opt] = def
     this.access.push(['filter', opt])
     return this
   }
 
   exclude(...def: Array<string|RegExp>): this {
     let opt = def
-    if (def[0] instanceof RegExp) opt = def[0]
+    if (def[0] instanceof RegExp) [opt] = def
     this.access.push(['exclude', opt])
     return this
   }

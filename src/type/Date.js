@@ -118,8 +118,10 @@ It may also be given in string format. `
     if (check.timezone) data.value = moment.tz(data.value, check.timezone)
     else data.value = moment(data.value)
     if (!data.value.isValid()) {
-      return Promise.reject(new ValidationError(this, data,
-        `The given text is not parse able as ${check.type}`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The given text is not parse able as ${check.type}`,
+      ))
     }
     return Promise.resolve()
   }
@@ -247,50 +249,66 @@ It may also be given in string format. `
       if (check.timezone) check.min = moment.tz(check.min, check.timezone)
       else check.min = moment(check.min)
       if (!check.min.isValid()) {
-        return Promise.reject(new ValidationError(this, data,
-          `The given text is not parse able as ${check.type}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `The given text is not parse able as ${check.type}`,
+        ))
       }
     }
     if (check.max && this._isReference('max')) {
       if (check.timezone) check.max = moment.tz(check.max, check.timezone)
       else check.max = moment(check.max)
       if (!check.max.isValid()) {
-        return Promise.reject(new ValidationError(this, data,
-          `The given text is not parse able as ${check.type}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `The given text is not parse able as ${check.type}`,
+        ))
       }
     }
     if (check.greater && this._isReference('greater')) {
       if (check.timezone) check.greater = moment.tz(check.greater, check.timezone)
       else check.greater = moment(check.greater)
       if (!check.greater.isValid()) {
-        return Promise.reject(new ValidationError(this, data,
-          `The given text is not parse able as ${check.type}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `The given text is not parse able as ${check.type}`,
+        ))
       }
     }
     if (check.less && this._isReference('less')) {
       if (check.timezone) check.less = moment.tz(check.less, check.timezone)
       else check.less = moment(check.less)
       if (!check.less.isValid()) {
-        return Promise.reject(new ValidationError(this, data,
-          `The given text is not parse able as ${check.type}`))
+        return Promise.reject(new ValidationError(
+          this, data,
+          `The given text is not parse able as ${check.type}`,
+        ))
       }
     }
     // check range
     if (check.min && check.min.isSameOrAfter(data.value)) {
-      return Promise.reject(new ValidationError(this, data,
-        `The ${check.type} is before the defined range. It has to be ${check.min} or later.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The ${check.type} is before the defined range. It has to be ${check.min} or later.`,
+      ))
     }
     if (check.max && check.max.isSameOrBefore(data.value)) {
-      return Promise.reject(new ValidationError(this, data,
-        `The ${check.type} is after the defined range. It has to be ${check.max} or earlier.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The ${check.type} is after the defined range. It has to be ${check.max} or earlier.`,
+      ))
     }
     if (check.greater && check.greater.isAfter(data.value)) {
-      return Promise.reject(new ValidationError(this, data,
-        `The ${check.type} is before the defined range. It has to be after ${check.greater}.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The ${check.type} is before the defined range. It has to be after ${check.greater}.`,
+      ))
     }
     if (check.less && check.less.isBefore(data.value)) {
-      return Promise.reject(new ValidationError(this, data,
-        `The ${check.type} is after the defined range. It has to be before ${check.less}.`))
+      return Promise.reject(new ValidationError(
+        this, data,
+        `The ${check.type} is after the defined range. It has to be before ${check.less}.`,
+      ))
     }
     return Promise.resolve()
   }
