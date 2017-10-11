@@ -13,7 +13,7 @@ import Data from '../../src/Data'
 import * as helper from './helper'
 
 chai.use(chaiAsPromised)
-const expect = chai.expect
+const { expect } = chai
 const debug = Debug('test')
 
 
