@@ -25,9 +25,6 @@
 [![Coverage status](
   https://img.shields.io/coveralls/alinex/node-validator.svg?maxAge=86400)](
   https://coveralls.io/r/alinex/node-validator)
-[![Gemnasium status](
-  https://img.shields.io/gemnasium/alinex/node-validator.svg?maxAge=86400)](
-  https://gemnasium.com/alinex/node-validator)
 [![GitHub issues](
   https://img.shields.io/github/issues/alinex/node-validator.svg?maxAge=86400)](
   https://github.com/alinex/node-validator/issues)
