@@ -13,7 +13,7 @@ script: "npm run-script test-travis"
 #script: "nyc --reporter=lcov --require babel-core/register --require babel-polyfill _mocha test/mocha --recursive"
 after_script:
   - "pwd"
-  - "ls -al"
+  - "ls -al "
   - "cat ./coverage/lcov.info"
   - "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   - "cat ./coverage/lcov.info | CODACY_PROJECT_TOKEN=bd8def9a2fd646a8aa923053be6ed091 ./node_modules/.bin/codacy-coverage"
