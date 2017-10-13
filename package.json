@@ -35,8 +35,8 @@
     "lint": "node_modules/.bin/flow && node_modules/.bin/eslint src --ext .js",
     "test": "npm run lint -s && npm run build && npm run unit -s",
     "unit": "mocha --require babel-core/register --require babel-polyfill test/mocha --recursive -b",
-    "coverage": "nyc --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",
-    "test-travis": "nyc --reporter=lcov --require babel-core/register --require babel-polyfill mocha test/mocha --recursive",
+    "coverage": "nyc --require babel-core/register --require babel-polyfill _mocha test/mocha --recursive",
+    "test-travis": "nyc --reporter=lcov --require babel-core/register --require babel-polyfill _mocha test/mocha --recursive",
     "build": "rm -r dist; babel src -d dist --require babel-polyfill; cp bin/validator dist; node_modules/.bin/marked-man bin/validator.1.md > dist/validator.1",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "prepublishOnly": "npm run lint -s && npm run build -s"
