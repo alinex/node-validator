@@ -11,6 +11,7 @@ os:
 # run with coveralls integration
 script: "npm run-script test-travis"
 after_script:
+  - "cat ./coverage/lcov.info"
   - "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   - "cat ./coverage/lcov.info | CODACY_PROJECT_TOKEN=bd8def9a2fd646a8aa923053be6ed091 ./node_modules/.bin/codacy-coverage"
 
