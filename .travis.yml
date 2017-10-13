@@ -10,7 +10,7 @@ os:
 
 # run with coveralls integration
 #script: "npm run-script test-travis"
-script: "nyc --reporter=lcov --require babel-core/register --require babel-polyfill _mocha test/mocha --recursive"
+script: "node_modules/.bin/nyc --reporter=lcov --require babel-core/register --require babel-polyfill node_modules/.bin/_mocha test/mocha --recursive"
 after_script:
   - "pwd"
   - "ls -al coverage"
