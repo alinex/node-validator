@@ -1,6 +1,6 @@
 {
   "name": "alinex-validator",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Data validator with additional sanitize of simple and complex values used as schema validation for any imported data structure.",
   "copyright": "Alexander Schilling 2014-2017",
   "private": false,

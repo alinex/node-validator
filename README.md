@@ -139,6 +139,13 @@ import config from './config.json'
 Read more in the complete [manual](https://alinex.gitbooks.io/validator)...
 
 
+## Changelog
+
+__V3.0.1__ Bug fixes: file.exists, CLI calls
+
+__V3.0.0__ Complete rewrite with class structure
+
+
 ## License
 
 (C) Copyright 2014-2017 Alexander Schilling
