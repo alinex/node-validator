@@ -9,12 +9,9 @@ os:
 #  - osx # some fs tests are not cross os compatible
 
 # run with coveralls integration
-#script: "npm run-script test-travis"
-script: "node_modules/.bin/nyc --reporter=lcov --require babel-core/register --require babel-polyfill node_modules/.bin/_mocha test/mocha --recursive"
+script: "npm run-script test-travis"
 after_script:
-  - "pwd"
   - "ls -al coverage"
-  - "cat coverage/lcov.info"
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   - "cat coverage/lcov.info | CODACY_PROJECT_TOKEN=bd8def9a2fd646a8aa923053be6ed091 ./node_modules/.bin/codacy-coverage"
 
