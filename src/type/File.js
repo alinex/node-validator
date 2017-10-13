@@ -19,7 +19,7 @@ class FileSchema extends StringSchema {
     this._rules.descriptor.push(
       this._baseDescriptor,
       allow,
-      //      this._existsDescriptor,
+      this._existsDescriptor,
       this._resolveDescriptor,
       raw,
     )
@@ -28,7 +28,7 @@ class FileSchema extends StringSchema {
     this._rules.validator.push(
       this._baseValidator,
       allow,
-      //      this._existsValidator,
+      this._existsValidator,
       this._resolveValidator,
       raw,
     )
@@ -127,9 +127,9 @@ ${set.baseDir.description}. `
     }
     // format
     let p = Promise.resolve()
-    if (check.readable) p = p.then(() => promisify(fs.access)(data.temp.location, fs.R_OK))
-    else if (check.writable) p = p.then(() => promisify(fs.access)(data.temp.location, fs.W_OK))
-    else if (check.exists) p = p.then(() => promisify(fs.access)(data.temp.location, fs.F_OK))
+    if (check.readable) p = p.then(() => promisify(fs.access)(data.temp.resolved, fs.R_OK))
+    else if (check.writable) p = p.then(() => promisify(fs.access)(data.temp.resolved, fs.W_OK))
+    else if (check.exists) p = p.then(() => promisify(fs.access)(data.temp.resolved, fs.F_OK))
     return p
   }
 
