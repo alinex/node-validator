@@ -10,7 +10,7 @@ import NumberSchema from '../../src/type/Number'
 
 import * as helper from './helper'
 
-const expect = chai.expect
+const { expect } = chai
 const debug = Debug('test')
 
 describe('reference', () => {

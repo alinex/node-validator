@@ -8,7 +8,7 @@ import type Reference from '../../src/Reference'
 import Data from '../../src/Data'
 
 chai.use(chaiAsPromised)
-const expect = chai.expect
+const { expect } = chai
 
 function validateOk(schema: Schema, data: any, cb?: Function): Promise<any> {
   debug(schema, schema.constructor.name)

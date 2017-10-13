@@ -14,13 +14,14 @@ import Data from '../../src/Data'
 import * as helper from './helper'
 
 chai.use(chaiAsPromised)
-const expect = chai.expect
+const { expect } = chai
 const debug = Debug('test')
 const notTravisIt = process.env.TRAVIS ? it.skip : it
 
 const validateOk = promisify(helper.validateOk)
 
-describe('config', () => {
+describe('config', function configtest() {
+  this.timeout(5000)
 
   const goal = {
     title: 'Dr.',
@@ -33,9 +34,11 @@ describe('config', () => {
   const fileSchema = `${__dirname}/../data/address.schema.js`
   const fileJSON = `${__dirname}/../data/address-ok.json`
 
-  it('should validate file',
+  it(
+    'should validate file',
     () => new Validator().check(fileData, fileSchema)
-      .then(res => expect(res).deep.equal(goal)))
+      .then(res => expect(res).deep.equal(goal)),
+  )
 
   //  it('should validate using fork', () => new Promise((resolve) => {
   //    const forked = childProcess.fork('test/data/config-fork.js', { execPath: "node_modules/.bin/babel-node" })
@@ -45,19 +48,23 @@ describe('config', () => {
   //    })
   //  }))
 
-  it('should transform if neccessary',
+  it(
+    'should transform if neccessary',
     () => new Validator().transform(fileData, fileSchema, fileJSON)
       .catch(err => promisify(fs.readFile)(fileJSON).then(res => JSON.parse(res)))
-      .then(res => expect(res).deep.equal(goal)))
+      .then(res => expect(res).deep.equal(goal)),
+  )
 
-  notTravisIt('should transform with spawn',
+  notTravisIt(
+    'should transform with spawn',
     () => promisify(childProcess.exec)(`${__dirname}/../../bin/validator -i ${fileData} \
 -s ${fileSchema} -o ${fileJSON}`)
       .then(() => promisify(fs.readFile)(fileJSON))
       .then(res => JSON.parse(res))
       .then((res) => {
         expect(res).deep.equal(goal)
-      }))
+      }),
+  )
 
   it('done', () => true)
 })

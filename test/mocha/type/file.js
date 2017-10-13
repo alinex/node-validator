@@ -7,7 +7,7 @@ import FileSchema from '../../../src/type/File'
 import Schema from '../../../src/type/Schema'
 import * as helper from '../helper'
 
-const expect = chai.expect
+const { expect } = chai
 
 // to simplify copy and paste in other Schemas
 const MySchema = FileSchema

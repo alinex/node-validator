@@ -64,4 +64,50 @@ describe('regexp', () => {
       return helper.validateFail(schema, data, undefined)
     })
   })
+
+  it('should work with max', () => {
+    const data = /a(b|c)/
+    const schema = new MySchema().max(1)
+    expect(schema).to.be.an('object')
+    // use schema
+    return helper.validateOk(schema, data, (res) => {
+      expect(res).deep.equal(data)
+    })
+  })
+
+  it('should fail for max', () => {
+    const data = /a(b)(c)/
+    const schema = new MySchema().max(1)
+    // use schema
+    return helper.validateFail(schema, data, undefined)
+  })
+
+  it('should work with length', () => {
+    const data = /a(b|c)/
+    const schema = new MySchema().length(1)
+    expect(schema).to.be.an('object')
+    // use schema
+    return helper.validateOk(schema, data, (res) => {
+      expect(res).deep.equal(data)
+    })
+  })
+
+  it('should fail for length', () => {
+    const data = /a(b)(c)/
+    const schema = new MySchema().length(1)
+    // use schema
+    return helper.validateFail(schema, data, undefined)
+  })
+
+  it('should describe length', () => {
+    const schema = new MySchema().length(1)
+    // use schema
+    expect(helper.description(schema)).to.be.a('string')
+  })
+
+  it('should describe min/max', () => {
+    const schema = new MySchema().min(1).max(3)
+    // use schema
+    expect(helper.description(schema)).to.be.a('string')
+  })
 })
