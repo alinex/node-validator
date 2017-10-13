@@ -184,30 +184,30 @@ describe('array', () => {
   describe('sort', () => {
 
     it('should work with shuffle', () => {
-      const data = [1, 2, 3, 4, 5]
+      const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
       const schema = new MySchema().shuffle()
       // use schema
       return helper.validateOk(schema, data, (res) => {
-        expect(res).not.deep.equal([1, 2, 3, 4, 5])
+        expect(res).not.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22])
       })
     })
 
     it('should remove shuffle', () => {
-      const data = [1, 2, 3, 4, 5]
+      const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
       const schema = new MySchema().shuffle().shuffle(false)
       // use schema
       return helper.validateOk(schema, data, (res) => {
-        expect(res).deep.equal([1, 2, 3, 4, 5])
+        expect(res).deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22])
       })
     })
 
     it('should work with shuffle as reference', () => {
-      const data = [1, 2, 3, 4, 5]
+      const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
       const ref = new Reference(true)
       const schema = new MySchema().shuffle(ref)
       // use schema
       return helper.validateOk(schema, data, (res) => {
-        expect(res).not.deep.equal([1, 2, 3, 4, 5])
+        expect(res).not.deep.equal([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22])
       })
     })
 
