@@ -33,7 +33,9 @@ const write = (data: Object, file: string): Promise<any> => {
 }
 
 const schema = (def: string|Object): Promise<Object> => {
-  if (typeof def === 'string') return import(def)
+  if (typeof def === 'string') {
+    return import(path.resolve(def))
+  }
   return Promise.resolve(def)
 }
 
@@ -117,6 +119,7 @@ class Validator {
     // check date
     const stat = promisify(fs.stat)
     let p = Promise.resolve()
+    console.log('-----', !(opt && opt.force))
     if (!(opt && opt.force)) {
       // extend search for relative paths
       const dataList = resolveSearch(data, this.search)
@@ -135,9 +138,15 @@ class Validator {
     }
     // combine check and write
     return p
+      .then(() => {
+        console.log('DO IT !!!!!!!!!!!!!!!!!!!!!!')
+      })
       .then(() => this.check(data, def))
+      .catch((e) => {
+        console.log(e)
+      })
       .then(result => write(result, file).then(() => result))
-      .catch(() => {
+      .catch((e) => {
         debug('JSON file found and newer than data and definition')
         return Promise.reject(new Error('No need to create configuration again because it\'s up to date.'))
       })

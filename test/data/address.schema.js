@@ -1,7 +1,10 @@
 // @flow
-import ObjectSchema from '../../src/type/Object'
-import StringSchema from '../../src/type/String'
-import NumberSchema from '../../src/type/Number'
+// import ObjectSchema from '../../src/type/Object'
+// import StringSchema from '../../src/type/String'
+// import NumberSchema from '../../src/type/Number'
+const ObjectSchema = require('../../dist/type/Object').default
+const StringSchema = require('../../dist/type/String').default
+const NumberSchema = require('../../dist/type/Number').default
 
 const schema = new ObjectSchema()
   .key('title', new StringSchema().allow(['Dr.', 'Prof.']))
